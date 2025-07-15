@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Votação PC7</title>
+  <style>
+    body {
+      margin: 15px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #1e1e1e;
+      padding: 29px;
+      border-radius: 14px;
+      width: 95%;
+      max-width: 700px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .5);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 26px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      background: #2d2d2d;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .25s;
+    }
+    .option:hover { filter: brightness(1.08); }
+    .option input { display: none; }
+    .option img {
+      width: 130px;
+      height: 85px;
+      object-fit: cover;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+    .option span {
+      flex: 1;
+      padding: 0 20px;
+      font-size: 18px;
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .option.selected {
+      border-color: #00aaff;
+      box-shadow: 0 0 8px #00aaff88;
+    }
+    .popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .popup-content {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+    }
+    .popup-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .image-options img {
+      width: 80px;
+      height: 80px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .image-options img.correct { border-color: #28a745; }
+    .image-options img.incorrect { border-color: #dc3545; }
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #ff6600;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover:not(:disabled) { background: #e65c00; }
+    button:disabled { background: #a1a1a1; cursor: not-allowed; }
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+      min-height: 15px;
+      text-align: center;
+      color: #ff6666;
+    }
+    .confirm {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .confirm img {
+      width: 165px;
+      height: 165px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 22px 0;
+    }
+    #botaoCaptcha {
+      display: inline-flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #d3d6db;
+      border-radius: 4px;
+      padding: 0 12px 0 0;
+      cursor: pointer;
+      user-select: none;
+      height: 80px;
+      box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      font-family: Roboto, Arial, sans-serif;
+      color: #3c4043;
+      font-size: 14px;
+      font-weight: 400;
+      outline: none;
+      margin-top: 20px;
+    }
+    .recaptcha-checkbox {
+      width: 33px;
+      height: 33px;
+      background: white;
+      border: 2px solid #d3d6db;
+      border-radius: 1px;
+      margin: 8px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+      background-color: #4285f4;
+      border-color: #4285f4;
+    }
+    #botaoCaptcha[aria-pressed="true"] .checkmark {
+      display: block;
+      stroke: white;
+    }
+    .recaptcha-label {
+      user-select: none;
+      line-height: 1;
+      padding-right: 10px;
+    }
+    .checkmark {
+      width: 28px;
+      height: 28px;
+      display: none;
+    }
+    .recaptcha-icon {
+      width: 70px;
+      height: 70px;
+      margin-left: auto;
+      margin-right: 10px;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="votoTela">
+    <h1>9º Roça - Quem você quer que Fique?</h1>
+    <label class="option">
+      <input type="radio" name="vote" value="Rodrigo" />
+      <img src="https://imagem.natelinha.uol.com.br/original/vinicius-nascimento-revela-que-quer-distancia-de-alguns-nomes-do-bbb-25-nao-quero-cruzar_66.jpeg" alt="Rodrigo" />
+      <span>Rodrigo</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="João" />
+      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/QEQFOT2E55BH7EJJPL5OMJCQY4.jpeg?auth=9c7a6b0638b4f88554d5d9a1a1e68b4e01c851a02019b359bda9acd853b372ff&width=771&height=419" alt="João" />
+      <span>João</span>
+    </label>
+    <button id="botaoCaptcha" onclick="abrirCaptcha()" aria-pressed="false">
+      <span class="recaptcha-checkbox" aria-hidden="true">
+        <svg class="checkmark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12l6 6 10-10" />
+        </svg>
+      </span>
+      <span class="recaptcha-label">Não sou um robô</span>
+      <img class="recaptcha-icon" src="https://media.discordapp.net/attachments/1343188963820699739/1393322736914268250/Design_sem_nome_20250711_163915_0000.png?ex=6872c06b&is=68716eeb&hm=2b12c9b02f0b209df007d40bd29bd6c99380389a55633683b3fd4b1599ff8393&=&format=webp&quality=lossless&width=823&height=823" alt="Logo personalizada" />
+    </button>
+    <div class="result" id="resultado"></div>
+    <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
+  </div>
+
+  <div class="popup" id="popupCaptcha">
+    <div class="popup-content">
+      <div class="popup-close" onclick="fecharCaptcha()">&times;</div>
+      <div class="captcha-prompt" id="captchaPrompt"></div>
+      <div class="image-options" id="imageContainer"></div>
+    </div>
+  </div>
+
+  <div class="container confirm" id="confirmTela">
+    <h2 id="nomeConfirm"></h2>
+    <img id="fotoConfirm" src="" alt="Participante escolhido" />
+    <p>✅ Seu voto foi registrado com sucesso!</p>
+    <button onclick="voltar()">Votar novamente</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaqaMMgo3xjLmWe63ML4iHI6EAk0PO4hY",
+      authDomain: "votacao-reality.firebaseapp.com",
+      databaseURL: "https://votacao-reality-default-rtdb.firebaseio.com",
+      projectId: "votacao-reality",
+      storageBucket: "votacao-reality.appspot.com",
+      messagingSenderId: "456185990252",
+      appId: "1:456185990252:web:27f08c7ba273a41d025c49"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const votacaoAtiva = true;
+
+    if (!votacaoAtiva) {
+      document.getElementById("votoTela").innerHTML = `
+        <h1>🛑 Votação Encerrada</h1>
+        <p style="font-size: 20px; color: red; font-weight: bold; margin-top: 40px;">
+          A votação foi encerrada. Obrigado por participar!
+        </p>
+      `;
+    }
+
+    const imagens = [
+      { nome: 'gato', url: 'https://www.petlove.com.br/images/breeds/202905/profile/original/vira-lata-p.jpg' },
+      { nome: 'cachorro', url: 'https://www.purina.pt/sites/default/files/styles/ttt_image_510/public/2024-01/sitesdefaultfilesstylessquare_medium_440x440public2022-09Pug.jpg' },
+      { nome: 'pássaro', url: 'https://avicoladeseleccion.es/1573/75.jpg' }
+    ];
+    let imagemAlvo = null;
+
+    window.abrirCaptcha = function () {
+      document.getElementById("popupCaptcha").style.display = "flex";
+      gerarCaptcha();
+    };
+    window.fecharCaptcha = function () {
+      document.getElementById("popupCaptcha").style.display = "none";
+    };
+
+    function gerarCaptcha() {
+      const container = document.getElementById("imageContainer");
+      const prompt = document.getElementById("captchaPrompt");
+      container.innerHTML = "";
+      imagemAlvo = imagens[Math.floor(Math.random() * imagens.length)];
+      prompt.innerHTML = `Clique na imagem do <strong>${imagemAlvo.nome}</strong>:`;  
+      imagens.sort(() => 0.5 - Math.random()).forEach(img => {
+        const el = document.createElement('img');
+        el.src = img.url;
+        el.alt = img.nome;
+        el.onclick = () => verificarCaptcha(img.nome);
+        container.appendChild(el);
+      });
+    }
+
+    function verificarCaptcha(resposta) {
+      const resultado = document.getElementById("resultado");
+      const imagensEl = document.querySelectorAll(".image-options img");
+      imagensEl.forEach(img => img.classList.remove("selected", "correct", "incorrect"));
+      const clicada = [...imagensEl].find(i => i.alt === resposta);
+      if (resposta === imagemAlvo.nome) {
+        clicada.classList.add("correct");
+        resultado.textContent = "";
+        fecharCaptcha();
+        document.getElementById("botaoVotar").disabled = false;
+        const botaoCaptcha = document.getElementById("botaoCaptcha");
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoCaptcha.disabled = true;
+      } else {
+        clicada.classList.add("incorrect");
+        resultado.textContent = "❌ Resposta incorreta.";
+      }
+    }
+
+    window.enviarVoto = function () {
+      const radios = document.getElementsByName("vote");
+      let escolhido = [...radios].find(r => r.checked)?.value;
+      if (!escolhido) return alert("Escolha um participante antes de votar.");
+      document.getElementById("nomeConfirm").textContent = escolhido;
+      const img = [...document.querySelectorAll(".option input")].find(r => r.checked).closest("label").querySelector("img").src;
+      document.getElementById("fotoConfirm").src = img;
+      document.getElementById("votoTela").style.display = "none";
+      document.getElementById("confirmTela").style.display = "flex";
+      push(ref(db, 'votos/'), { participante: escolhido, data: new Date().toISOString() });
+    };
+
+    // ✅ Aqui está a alteração que você pediu
+    window.voltar = function () {
+      location.reload();
+    };
+
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+  </script>
+</body>
+</html>
