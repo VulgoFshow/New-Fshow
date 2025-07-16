@@ -242,7 +242,7 @@
   const supabase   = createClient(supabaseUrl, supabaseKey);
 
   /* mostra mensagem se votação encerrada */
-  const votacaoAtiva = true;
+  const votacaoAtiva = false;
   if (!votacaoAtiva) {
     document.getElementById("votoTela").innerHTML = `
       <h1>🛑 Votação Encerrada</h1>
