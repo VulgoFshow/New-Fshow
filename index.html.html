@@ -195,16 +195,16 @@
 </head>
 <body>
   <div class="container" id="votoTela">
-    <h1>9º Roça - Quem você quer que Fique?</h1>
+    <h1>10º Roça - Quem você quer que Fique?</h1>
     <label class="option">
-      <input type="radio" name="vote" value="Rodrigo" />
-      <img src="https://www.rbsdirect.com.br/filestore/3/0/1/4/3/2/5_b58d9e69b4790c3/5234103_9009d24ffcb1c05.jpg?w=3840&format=webp" alt="Rodrigo" />
-      <span>Rodrigo</span>
+      <input type="radio" name="vote" value="Lua" />
+      <img src="https://f.i.uol.com.br/fotografia/2022/10/28/1667006117635c7ea5839e9_1667006117_3x2_md.jpg" alt="Lua" />
+      <span>Lua</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="João" />
-      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/QEQFOT2E55BH7EJJPL5OMJCQY4.jpeg?auth=9c7a6b0638b4f88554d5d9a1a1e68b4e01c851a02019b359bda9acd853b372ff&width=771&height=419" alt="João" />
-      <span>João</span>
+      <input type="radio" name="vote" value="Yasmin" />
+      <img src="https://jpimg.com.br/uploads/2022/09/ingrid-ohara_010_antonio-chahestian-4-e1664421824706-535x450.jpg" alt="Yasmin" />
+      <span>Yasmin</span>
     </label>
     <button id="botaoCaptcha" onclick="abrirCaptcha()" aria-pressed="false">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -213,7 +213,7 @@
         </svg>
       </span>
       <span class="recaptcha-label">Não sou um robô</span>
-      <img class="recaptcha-icon" src="https://imgur.com/a/ML45y6L" alt="Logo personalizada" />
+      <img class="recaptcha-icon" src="https://i.imgur.com/4hyQKhS.png" alt="Logo personalizada" />
     </button>
     <div class="result" id="resultado"></div>
     <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
@@ -235,106 +235,93 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBaqaMMgo3xjLmWe63ML4iHI6EAk0PO4hY",
-      authDomain: "votacao-reality.firebaseapp.com",
-      databaseURL: "https://votacao-reality-default-rtdb.firebaseio.com",
-      projectId: "votacao-reality",
-      storageBucket: "votacao-reality.appspot.com",
-      messagingSenderId: "456185990252",
-      appId: "1:456185990252:web:27f08c7ba273a41d025c49"
-    };
+  const supabaseUrl = 'https://maroopnrcrpoizpjhmss.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw';
+  const supabase   = createClient(supabaseUrl, supabaseKey);
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  /* mostra mensagem se votação encerrada */
+  const votacaoAtiva = true;
+  if (!votacaoAtiva) {
+    document.getElementById("votoTela").innerHTML = `
+      <h1>🛑 Votação Encerrada</h1>
+      <p style="font-size:20px;color:red;font-weight:bold;margin-top:40px;">
+        A votação foi encerrada. Obrigado por participar!
+      </p>`;
+  }
 
-    const votacaoAtiva = false;
+  /* ---------- CAPTCHA ---------- */
+  const imagens = [
+    { nome:'gato',    url:'https://www.petlove.com.br/images/breeds/202905/profile/original/vira-lata-p.jpg' },
+    { nome:'cachorro',url:'https://www.purina.pt/sites/default/files/styles/ttt_image_510/public/2024-01/sitesdefaultfilesstylessquare_medium_440x440public2022-09Pug.jpg' },
+    { nome:'pássaro', url:'https://avicoladeseleccion.es/1573/75.jpg' }
+  ];
+  let imagemAlvo=null;
 
-    if (!votacaoAtiva) {
-      document.getElementById("votoTela").innerHTML = `
-        <h1>🛑 Votação Encerrada</h1>
-        <p style="font-size: 20px; color: red; font-weight: bold; margin-top: 40px;">
-          A votação foi encerrada. Obrigado por participar!
-        </p>
-      `;
-    }
+  window.abrirCaptcha = ()=>{ document.getElementById("popupCaptcha").style.display="flex"; gerarCaptcha(); };
+  window.fecharCaptcha = ()=>{ document.getElementById("popupCaptcha").style.display="none"; };
 
-    const imagens = [
-      { nome: 'gato', url: 'https://www.petlove.com.br/images/breeds/202905/profile/original/vira-lata-p.jpg' },
-      { nome: 'cachorro', url: 'https://www.purina.pt/sites/default/files/styles/ttt_image_510/public/2024-01/sitesdefaultfilesstylessquare_medium_440x440public2022-09Pug.jpg' },
-      { nome: 'pássaro', url: 'https://avicoladeseleccion.es/1573/75.jpg' }
-    ];
-    let imagemAlvo = null;
-
-    window.abrirCaptcha = function () {
-      document.getElementById("popupCaptcha").style.display = "flex";
-      gerarCaptcha();
-    };
-    window.fecharCaptcha = function () {
-      document.getElementById("popupCaptcha").style.display = "none";
-    };
-
-    function gerarCaptcha() {
-      const container = document.getElementById("imageContainer");
-      const prompt = document.getElementById("captchaPrompt");
-      container.innerHTML = "";
-      imagemAlvo = imagens[Math.floor(Math.random() * imagens.length)];
-      prompt.innerHTML = `Clique na imagem do <strong>${imagemAlvo.nome}</strong>:`;  
-      imagens.sort(() => 0.5 - Math.random()).forEach(img => {
-        const el = document.createElement('img');
-        el.src = img.url;
-        el.alt = img.nome;
-        el.onclick = () => verificarCaptcha(img.nome);
-        container.appendChild(el);
-      });
-    }
-
-    function verificarCaptcha(resposta) {
-      const resultado = document.getElementById("resultado");
-      const imagensEl = document.querySelectorAll(".image-options img");
-      imagensEl.forEach(img => img.classList.remove("selected", "correct", "incorrect"));
-      const clicada = [...imagensEl].find(i => i.alt === resposta);
-      if (resposta === imagemAlvo.nome) {
-        clicada.classList.add("correct");
-        resultado.textContent = "";
-        fecharCaptcha();
-        document.getElementById("botaoVotar").disabled = false;
-        const botaoCaptcha = document.getElementById("botaoCaptcha");
-        botaoCaptcha.setAttribute("aria-pressed", "true");
-        botaoCaptcha.disabled = true;
-      } else {
-        clicada.classList.add("incorrect");
-        resultado.textContent = "❌ Resposta incorreta.";
-      }
-    }
-
-    window.enviarVoto = function () {
-      const radios = document.getElementsByName("vote");
-      let escolhido = [...radios].find(r => r.checked)?.value;
-      if (!escolhido) return alert("Escolha um participante antes de votar.");
-      document.getElementById("nomeConfirm").textContent = escolhido;
-      const img = [...document.querySelectorAll(".option input")].find(r => r.checked).closest("label").querySelector("img").src;
-      document.getElementById("fotoConfirm").src = img;
-      document.getElementById("votoTela").style.display = "none";
-      document.getElementById("confirmTela").style.display = "flex";
-      push(ref(db, 'votos/'), { participante: escolhido, data: new Date().toISOString() });
-    };
-
-    // ✅ Aqui está a alteração que você pediu
-    window.voltar = function () {
-      location.reload();
-    };
-
-    document.querySelectorAll(".option").forEach(label => {
-      label.addEventListener("click", () => {
-        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
-        label.classList.add("selected");
-        label.querySelector("input").checked = true;
-      });
+  function gerarCaptcha(){
+    const cont   = document.getElementById("imageContainer");
+    const prompt = document.getElementById("captchaPrompt");
+    cont.innerHTML="";
+    imagemAlvo = imagens[Math.floor(Math.random()*imagens.length)];
+    prompt.innerHTML = `Clique na imagem do <strong>${imagemAlvo.nome}</strong>:`;  
+    imagens.sort(()=>0.5-Math.random()).forEach(img=>{
+      const el = document.createElement('img');
+      el.src = img.url; el.alt = img.nome;
+      el.onclick = () => verificarCaptcha(img.nome);
+      cont.appendChild(el);
     });
-  </script>
-</body>
-</html>
+  }
+
+  function verificarCaptcha(resposta){
+    const res = document.getElementById("resultado");
+    document.querySelectorAll(".image-options img").forEach(i=>i.classList.remove("correct","incorrect"));
+    const clicada = [...document.querySelectorAll(".image-options img")].find(i=>i.alt===resposta);
+    if(resposta===imagemAlvo.nome){
+      clicada.classList.add("correct");
+      res.textContent="";
+      fecharCaptcha();
+      document.getElementById("botaoVotar").disabled=false;
+      document.getElementById("botaoCaptcha").setAttribute("aria-pressed","true");
+    }else{
+      clicada.classList.add("incorrect");
+      res.textContent="❌ Resposta incorreta.";
+    }
+  }
+
+  /* ---------- Enviar voto ---------- */
+  window.enviarVoto = async ()=>{
+    const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r=>r.checked)?.value;
+    if(!escolhido){ alert("Escolha um participante antes de votar."); return; }
+
+    document.getElementById("nomeConfirm").textContent = escolhido;
+    document.getElementById("fotoConfirm").src =
+      document.querySelector(".option.selected img").src;
+    document.getElementById("votoTela").style.display="none";
+    document.getElementById("confirmTela").style.display="flex";
+
+    const { error } = await supabase
+      .from('votos')
+      .insert({ participante:escolhido });
+
+    if(error){
+      alert('❌ Erro ao registrar voto: '+error.message);
+      console.error(error);
+    }
+  };
+
+  /* votar novamente */
+  window.voltar = ()=>location.reload();
+
+  /* seleção visual */
+  document.querySelectorAll(".option").forEach(label=>{
+    label.addEventListener("click",()=>{
+      document.querySelectorAll(".option").forEach(l=>l.classList.remove("selected"));
+      label.classList.add("selected");
+      label.querySelector("input").checked = true;
+    });
+  });
+</script>
