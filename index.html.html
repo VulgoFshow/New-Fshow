@@ -195,16 +195,31 @@
 </head>
 <body>
   <div class="container" id="votoTela">
-    <h1>10º Roça - Quem você quer que Fique?</h1>
+    <h1>11º Roça - Quem você quer que Fique?</h1>
     <label class="option">
-      <input type="radio" name="vote" value="Lua" />
-      <img src="https://f.i.uol.com.br/fotografia/2022/10/28/1667006117635c7ea5839e9_1667006117_3x2_md.jpg" alt="Lua" />
-      <span>Lua</span>
+      <input type="radio" name="vote" value="Bryan" />
+      <img src="https://f.i.uol.com.br/fotografia/2024/09/26/172740554366f61de7057fa_1727405543_3x2_xl.jpg" alt="Bryan" />
+      <span>Bryan</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Yasmin" />
-      <img src="https://jpimg.com.br/uploads/2022/09/ingrid-ohara_010_antonio-chahestian-4-e1664421824706-535x450.jpg" alt="Yasmin" />
-      <span>Yasmin</span>
+      <input type="radio" name="vote" value="Eueu" />
+      <img src="https://portalpopline.com.br/wp-content/uploads/2022/12/Deolane.png" alt="Eueu" />
+      <span>Eueu</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Koyuh" />
+      <img src="https://img.nsctotal.com.br/wp-content/uploads/2025/01/Eva-do-BBB-25.-Foto-Reproducao-Instagram.png" alt="Koyuh" />
+      <span>Koyuh</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Luca" />
+      <img src="https://portalpopline.com.br/wp-content/uploads/2021/09/dayane-mello-a-fazenda-13.jpg" alt="Luca" />
+      <span>Luca</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Vitor" />
+      <img src="https://i0.statig.com.br/bancodeimagens/5t/zp/xl/5tzpxloemfgyxe9m2clkzjzi9.jpg" alt="Vitor" />
+      <span>Vitor</span>
     </label>
     <button id="botaoCaptcha" onclick="abrirCaptcha()" aria-pressed="false">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -242,7 +257,7 @@
   const supabase   = createClient(supabaseUrl, supabaseKey);
 
   /* mostra mensagem se votação encerrada */
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
   if (!votacaoAtiva) {
     document.getElementById("votoTela").innerHTML = `
       <h1>🛑 Votação Encerrada</h1>
