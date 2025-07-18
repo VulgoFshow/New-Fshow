@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fshow</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <style>
     body {
       margin: 15px;
@@ -125,10 +125,10 @@
       <span>Nick</span>
     </label>
 
-    <!-- CAPTCHA corrigido -->
+    <!-- hCAPTCHA substituindo reCAPTCHA -->
     <div style="display: flex; justify-content: center; margin-top: 20px;">
-      <div class="g-recaptcha"
-           data-sitekey="6Len9IYrAAAAAF0GoJldCR8EhneruVBdWD2NII-4"
+      <div class="h-captcha"
+           data-sitekey="a9085de8-0e04-42d2-8c34-81a63df0c3f4"
            data-callback="captchaValido">
       </div>
     </div>
@@ -159,12 +159,11 @@
         </p>`;
     }
 
-    // Função chamada pelo reCAPTCHA
+    // Função chamada quando o hCaptcha é resolvido
     window.captchaValido = () => {
       document.getElementById("botaoVotar").disabled = false;
     };
 
-    // Enviar voto
     window.enviarVoto = async () => {
       const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
       if (!escolhido) {
@@ -189,10 +188,8 @@
       }
     };
 
-    // Votar novamente
     window.voltar = () => location.reload();
 
-    // Seleção visual
     document.querySelectorAll(".option").forEach(label => {
       label.addEventListener("click", () => {
         document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
