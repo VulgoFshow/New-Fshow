@@ -1,7 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"
      crossorigin="anonymous"></script>
 
@@ -9,7 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fshow</title>
 
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <!-- hCaptcha -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
   <style>
     body {
@@ -126,10 +127,10 @@
       <span>Nick</span>
     </label>
 
-    <!-- Google reCAPTCHA widget -->
+    <!-- hCaptcha -->
     <div style="display: flex; justify-content: center; margin-top: 20px;">
-  <div class="g-recaptcha" data-sitekey="6LfN-YYrAAAAAPYc01QofF04QYvjdPYLQE5qr_Ns" data-callback="captchaValido"></div>
-</div>
+      <div class="h-captcha" data-sitekey="fe4a0e66-c0a6-408c-b680-8ee478b65cac" data-callback="captchaValido"></div>
+    </div>
 
     <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
   </div>
@@ -148,7 +149,6 @@
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw';
   const supabase   = createClient(supabaseUrl, supabaseKey);
 
-  /* mostra mensagem se votação encerrada */
   const votacaoAtiva = true;
   if (!votacaoAtiva) {
     document.getElementById("votoTela").innerHTML = `
@@ -158,12 +158,10 @@
       </p>`;
   }
 
-  // Função chamada pelo reCAPTCHA quando validado com sucesso
   window.captchaValido = () => {
     document.getElementById("botaoVotar").disabled = false;
   };
 
-  /* ---------- Enviar voto ---------- */
   window.enviarVoto = async ()=>{
     const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r=>r.checked)?.value;
     if(!escolhido){ alert("Escolha um participante antes de votar."); return; }
@@ -184,10 +182,8 @@
     }
   };
 
-  /* votar novamente */
   window.voltar = ()=>location.reload();
 
-  /* seleção visual */
   document.querySelectorAll(".option").forEach(label=>{
     label.addEventListener("click",()=>{
       document.querySelectorAll(".option").forEach(l=>l.classList.remove("selected"));
