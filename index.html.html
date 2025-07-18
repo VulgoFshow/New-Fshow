@@ -1,184 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206" crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fshow</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    body {
+      margin: 15px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: #1e1e1e;
+      padding: 29px;
+      border-radius: 14px;
+      width: 95%;
+      max-width: 700px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .5);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 26px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      background: #2d2d2d;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .25s;
+    }
+    .option:hover { filter: brightness(1.08); }
+    .option input { display: none; }
+    .option img {
+      width: 130px;
+      height: 85px;
+      object-fit: cover;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+    .option span {
+      flex: 1;
+      padding: 0 20px;
+      font-size: 18px;
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .option.selected {
+      border-color: #00aaff;
+      box-shadow: 0 0 8px #00aaff88;
+    }
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #ff6600;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover:not(:disabled) { background: #e65c00; }
+    button:disabled { background: #a1a1a1; cursor: not-allowed; }
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+      min-height: 15px;
+      text-align: center;
+      color: #ff6666;
+    }
+    .confirm {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .confirm img {
+      width: 165px;
+      height: 165px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 22px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="votoTela">
+    <h1>11º Roça - Quem você quer que Fique?</h1>
 
-<!DOCTYPE html>  <html lang="pt-BR">  
-<head>    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"  
-     crossorigin="anonymous"></script>    <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
-  <title>Fshow</title>    <script src="https://www.google.com/recaptcha/api.js" async defer></script>    <style>  
-    body {  
-      margin: 15px;  
-      font-family: Arial, sans-serif;  
-      background: #111;  
-      color: #fff;  
-      display: flex;  
-      align-items: center;  
-      justify-content: center;  
-      min-height: 100vh;  
-    }  
-    .container {  
-      background: #1e1e1e;  
-      padding: 29px;  
-      border-radius: 14px;  
-      width: 95%;  
-      max-width: 700px;  
-      box-shadow: 0 4px 10px rgba(0, 0, 0, .5);  
-    }  
-    h1 {  
-      text-align: center;  
-      margin-bottom: 25px;  
-      font-size: 26px;  
-    }  
-    .option {  
-      display: flex;  
-      align-items: center;  
-      margin-bottom: 8px;  
-      background: #2d2d2d;  
-      border: 2px solid transparent;  
-      border-radius: 10px;  
-      overflow: hidden;  
-      cursor: pointer;  
-      transition: border-color .25s;  
-    }  
-    .option:hover { filter: brightness(1.08); }  
-    .option input { display: none; }  
-    .option img {  
-      width: 130px;  
-      height: 85px;  
-      object-fit: cover;  
-      flex-shrink: 0;  
-      pointer-events: none;  
-    }  
-    .option span {  
-      flex: 1;  
-      padding: 0 20px;  
-      font-size: 18px;  
-      font-weight: 600;  
-      pointer-events: none;  
-    }  
-    .option.selected {  
-      border-color: #00aaff;  
-      box-shadow: 0 0 8px #00aaff88;  
-    }  
-    button {  
-      width: 100%;  
-      margin-top: 24px;  
-      padding: 14px 0;  
-      font-size: 16px;  
-      border: none;  
-      border-radius: 10px;  
-      background: #ff6600;  
-      color: #fff;  
-      cursor: pointer;  
-      transition: background-color 0.3s;  
-    }  
-    button:hover:not(:disabled) { background: #e65c00; }  
-    button:disabled { background: #a1a1a1; cursor: not-allowed; }  
-    .result {  
-      margin-top: 10px;  
-      font-weight: bold;  
-      min-height: 15px;  
-      text-align: center;  
-      color: #ff6666;  
-    }  
-    .confirm {  
-      display: none;  
-      flex-direction: column;  
-      align-items: center;  
-      text-align: center;  
-    }  
-    .confirm img {  
-      width: 165px;  
-      height: 165px;  
-      object-fit: cover;  
-      border-radius: 10px;  
-      margin: 22px 0;  
-    }  
-  </style>  </head>  
-<body>  
-  <div class="container" id="votoTela">  
-    <h1>11º Roça - Quem você quer que Fique?</h1>  
-    <label class="option">  
-      <input type="radio" name="vote" value="Gean" />  
-      <img src="https://contigo.com.br/media/_versions/2024/02/ex-de-mussunzinho-karoline-menezes-fica-noiva-e-planeja-filhos_widelg.jpg" alt="Gean" />  
-      <span>Gean</span>  
-    </label>  
-    <label class="option">  
-      <input type="radio" name="vote" value="Lua" />  
-      <img src="https://f.i.uol.com.br/fotografia/2022/10/28/1667006117635c7ea5839e9_1667006117_3x2_md.jpg" alt="Lua" />  
-      <span>Lua</span>  
-    </label>  
-    <label class="option">  
-      <input type="radio" name="vote" value="Lucas" />  
-      <img src="https://f.i.uol.com.br/fotografia/2023/09/28/1695913166651594ceee325_1695913166_3x2_md.jpg" alt="Lucas" />  
-      <span>Lucas</span>  
-    </label>  
-    <label class="option">  
-      <input type="radio" name="vote" value="Nick" />  
-      <img src="https://f.i.uol.com.br/fotografia/2021/05/02/1619996287608f2e7fed26a_1619996287_3x2_md.jpg" alt="Nick" />  
-      <span>Nick</span>  
-    </label>  <!-- Google reCAPTCHA widget -->  
-<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <label class="option">
+      <input type="radio" name="vote" value="Gean" />
+      <img src="https://contigo.com.br/media/_versions/2024/02/ex-de-mussunzinho-karoline-menezes-fica-noiva-e-planeja-filhos_widelg.jpg" alt="Gean" />
+      <span>Gean</span>
+    </label>
 
-  <div class="g-recaptcha" data-sitekey="6Len9IYrAAAAAF0GoJldCR8EhneruVBdWD2NII-4"captchaValido"></div>  
-</div>  <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
+    <label class="option">
+      <input type="radio" name="vote" value="Lua" />
+      <img src="https://f.i.uol.com.br/fotografia/2022/10/28/1667006117635c7ea5839e9_1667006117_3x2_md.jpg" alt="Lua" />
+      <span>Lua</span>
+    </label>
 
-  </div>    <div class="container confirm" id="confirmTela">  
-    <h2 id="nomeConfirm"></h2>  
-    <img id="fotoConfirm" src="" alt="Participante escolhido" />  
-    <p>✅ Seu voto foi registrado com sucesso!</p>  
-    <button onclick="voltar()">Votar novamente</button>  
-  </div>    <script type="module">  
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js';  
-  
-  const supabaseUrl = 'https://maroopnrcrpoizpjhmss.supabase.co';  
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw';  
-  const supabase   = createClient(supabaseUrl, supabaseKey);  
-  
-  /* mostra mensagem se votação encerrada */  
-  const votacaoAtiva = true;  
-  if (!votacaoAtiva) {  
-    document.getElementById("votoTela").innerHTML = `  
-      <h1>🛑 Votação Encerrada</h1>  
-      <p style="font-size:20px;color:red;font-weight:bold;margin-top:40px;">  
-        A votação foi encerrada. Obrigado por participar!  
-      </p>`;  
-  }  
-  
-  // Função chamada pelo reCAPTCHA quando validado com sucesso  
-  window.captchaValido = () => {  
-    document.getElementById("botaoVotar").disabled = false;  
-  };  
-  
-  /* ---------- Enviar voto ---------- */  
-  window.enviarVoto = async ()=>{  
-    const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r=>r.checked)?.value;  
-    if(!escolhido){ alert("Escolha um participante antes de votar."); return; }  
-  
-    document.getElementById("nomeConfirm").textContent = escolhido;  
-    document.getElementById("fotoConfirm").src =  
-      document.querySelector(".option.selected img").src;  
-    document.getElementById("votoTela").style.display="none";  
-    document.getElementById("confirmTela").style.display="flex";  
-  
-    const { error } = await supabase  
-      .from('votos')  
-      .insert({ participante:escolhido });  
-  
-    if(error){  
-      alert('❌ Erro ao registrar voto: '+error.message);  
-      console.error(error);  
-    }  
-  };  
-  
-  /* votar novamente */  
-  window.voltar = ()=>location.reload();  
-  
-  /* seleção visual */  
-  document.querySelectorAll(".option").forEach(label=>{  
-    label.addEventListener("click",()=>{  
-      document.querySelectorAll(".option").forEach(l=>l.classList.remove("selected"));  
-      label.classList.add("selected");  
-      label.querySelector("input").checked = true;  
-    });  
-  });  
-  </script>  </body>  
+    <label class="option">
+      <input type="radio" name="vote" value="Lucas" />
+      <img src="https://f.i.uol.com.br/fotografia/2023/09/28/1695913166651594ceee325_1695913166_3x2_md.jpg" alt="Lucas" />
+      <span>Lucas</span>
+    </label>
+
+    <label class="option">
+      <input type="radio" name="vote" value="Nick" />
+      <img src="https://f.i.uol.com.br/fotografia/2021/05/02/1619996287608f2e7fed26a_1619996287_3x2_md.jpg" alt="Nick" />
+      <span>Nick</span>
+    </label>
+
+    <!-- CAPTCHA corrigido -->
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+      <div class="g-recaptcha"
+           data-sitekey="6Len9IYrAAAAAF0GoJldCR8EhneruVBdWD2NII-4"
+           data-callback="captchaValido">
+      </div>
+    </div>
+
+    <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
+  </div>
+
+  <div class="container confirm" id="confirmTela">
+    <h2 id="nomeConfirm"></h2>
+    <img id="fotoConfirm" src="" alt="Participante escolhido" />
+    <p>✅ Seu voto foi registrado com sucesso!</p>
+    <button onclick="voltar()">Votar novamente</button>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+    const supabaseUrl = 'https://maroopnrcrpoizpjhmss.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const votacaoAtiva = true;
+    if (!votacaoAtiva) {
+      document.getElementById("votoTela").innerHTML = `
+        <h1>🛑 Votação Encerrada</h1>
+        <p style="font-size:20px;color:red;font-weight:bold;margin-top:40px;">
+          A votação foi encerrada. Obrigado por participar!
+        </p>`;
+    }
+
+    // Função chamada pelo reCAPTCHA
+    window.captchaValido = () => {
+      document.getElementById("botaoVotar").disabled = false;
+    };
+
+    // Enviar voto
+    window.enviarVoto = async () => {
+      const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
+      if (!escolhido) {
+        alert("Escolha um participante antes de votar.");
+        return;
+      }
+
+      document.getElementById("nomeConfirm").textContent = escolhido;
+      document.getElementById("fotoConfirm").src =
+        document.querySelector(".option.selected img").src;
+
+      document.getElementById("votoTela").style.display = "none";
+      document.getElementById("confirmTela").style.display = "flex";
+
+      const { error } = await supabase
+        .from('votos')
+        .insert({ participante: escolhido });
+
+      if (error) {
+        alert('❌ Erro ao registrar voto: ' + error.message);
+        console.error(error);
+      }
+    };
+
+    // Votar novamente
+    window.voltar = () => location.reload();
+
+    // Seleção visual
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+  </script>
+</body>
 </html>
