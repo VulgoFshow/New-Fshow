@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206" crossorigin="anonymous"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fshow</title>
-  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+  <!-- hCaptcha visual -->
+  <script src="https://hcaptcha.com/1/api.js" async defer></script>
+
   <style>
     body {
       margin: 15px;
@@ -106,30 +108,27 @@
       <img src="https://contigo.com.br/media/_versions/2024/02/ex-de-mussunzinho-karoline-menezes-fica-noiva-e-planeja-filhos_widelg.jpg" alt="Gean" />
       <span>Gean</span>
     </label>
-
     <label class="option">
       <input type="radio" name="vote" value="Lua" />
       <img src="https://f.i.uol.com.br/fotografia/2022/10/28/1667006117635c7ea5839e9_1667006117_3x2_md.jpg" alt="Lua" />
       <span>Lua</span>
     </label>
-
     <label class="option">
       <input type="radio" name="vote" value="Lucas" />
       <img src="https://f.i.uol.com.br/fotografia/2023/09/28/1695913166651594ceee325_1695913166_3x2_md.jpg" alt="Lucas" />
       <span>Lucas</span>
     </label>
-
     <label class="option">
       <input type="radio" name="vote" value="Nick" />
       <img src="https://f.i.uol.com.br/fotografia/2021/05/02/1619996287608f2e7fed26a_1619996287_3x2_md.jpg" alt="Nick" />
       <span>Nick</span>
     </label>
 
-    <!-- hCAPTCHA substituindo reCAPTCHA -->
+    <!-- hCaptcha -->
     <div style="display: flex; justify-content: center; margin-top: 20px;">
       <div class="h-captcha"
-           data-sitekey="a9085de8-0e04-42d2-8c34-81a63df0c3f4"
-           data-callback="captchaValido">
+        data-sitekey="7f923220-ad3a-4dce-ac7e-cecca72a233a"
+        data-callback="captchaValido">
       </div>
     </div>
 
@@ -146,11 +145,13 @@
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
-    const supabaseUrl = 'https://maroopnrcrpoizpjhmss.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw';
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(
+      'https://maroopnrcrpoizpjhmss.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
+    );
 
     const votacaoAtiva = true;
+
     if (!votacaoAtiva) {
       document.getElementById("votoTela").innerHTML = `
         <h1>🛑 Votação Encerrada</h1>
@@ -159,7 +160,6 @@
         </p>`;
     }
 
-    // Função chamada quando o hCaptcha é resolvido
     window.captchaValido = () => {
       document.getElementById("botaoVotar").disabled = false;
     };
@@ -174,7 +174,6 @@
       document.getElementById("nomeConfirm").textContent = escolhido;
       document.getElementById("fotoConfirm").src =
         document.querySelector(".option.selected img").src;
-
       document.getElementById("votoTela").style.display = "none";
       document.getElementById("confirmTela").style.display = "flex";
 
