@@ -1,26 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  
-   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"
-     crossorigin="anonymous"></script>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fshow</title>
-  
-  <!-- hCaptcha visual -->
-  <script src="https://hcaptcha.com/1/api.js" async defer></script>
-
   <style>
     body {
       margin: 15px;
       font-family: Arial, sans-serif;
       background: #111;
-      color: #fff;
+      color: #eee;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      overflow-x: hidden;
     }
     .container {
       background: #1e1e1e;
@@ -28,7 +22,8 @@
       border-radius: 14px;
       width: 95%;
       max-width: 700px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, .5);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .7);
+      color: #eee;
     }
     h1 {
       text-align: center;
@@ -45,8 +40,9 @@
       overflow: hidden;
       cursor: pointer;
       transition: border-color .25s;
+      user-select: none;
     }
-    .option:hover { filter: brightness(1.08); }
+    .option:hover { filter: brightness(1.1); }
     .option input { display: none; }
     .option img {
       width: 130px;
@@ -54,6 +50,7 @@
       object-fit: cover;
       flex-shrink: 0;
       pointer-events: none;
+      user-select: none;
     }
     .option span {
       flex: 1;
@@ -64,7 +61,7 @@
     }
     .option.selected {
       border-color: #00aaff;
-      box-shadow: 0 0 8px #00aaff88;
+      box-shadow: 0 0 10px #00aaffbb;
     }
     button {
       width: 100%;
@@ -77,21 +74,175 @@
       color: #fff;
       cursor: pointer;
       transition: background-color 0.3s;
+      user-select: none;
     }
     button:hover:not(:disabled) { background: #e65c00; }
-    button:disabled { background: #a1a1a1; cursor: not-allowed; }
-    .result {
-      margin-top: 10px;
-      font-weight: bold;
-      min-height: 15px;
+    button:disabled { background: #555; cursor: not-allowed; }
+
+   #botaoCaptcha {
+  display: flex;                /* flex para alinhar itens dentro */
+  align-items: center;          /* vertical center */
+  justify-content: flex-start;  /* conteúdo dentro alinhado à esquerda */
+  
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 0 15px;
+  cursor: pointer;
+  user-select: none;
+  height: 70px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 400;
+
+  margin: 20px auto 0;       /* margem automática nas laterais para centralizar */
+  max-width: 320px;           /* limite máximo de largura */
+  width: 320px;               /* largura fixa para garantir centralização */
+  
+  gap: 12px;
+}
+
+.recaptcha-checkbox {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: #111;
+  border: 2px solid #444;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+  background-color: #00aaff;
+  border-color: #00aaff;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  display: none;
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#botaoCaptcha[aria-pressed="true"] .checkmark {
+  display: block;
+}
+
+.recaptcha-label {
+  user-select: none;
+  line-height: 1;
+  flex-grow: 1;                /* faz o texto ocupar o espaço entre checkbox e ícone */
+}
+
+.recaptcha-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: contain;
+  filter: brightness(0.7);
+  flex-shrink: 0;
+}
+
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1500;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .popup.active {
+      display: flex;
+    }
+    .captcha-box {
+      background: #222;
+      padding: 20px 30px;
+      box-shadow: 0 0 20px #00aaffaa;
+      border-radius: 10px;
+      width: 340px;
+      max-width: 100%;
       text-align: center;
-      color: #ff6666;
+      color: #eee;
+      user-select: none;
+    }
+    .captcha-box h3 {
+      font-size: 17px;
+      margin-bottom: 18px;
+      color: #00aaff;
+      user-select: text;
+    }
+    .captcha-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    .captcha-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.25s;
+      border-radius: 6px;
+      user-select: none;
+    }
+    .captcha-img.selected {
+      border-color: #00aaff;
+      box-shadow: 0 0 8px #00aaffcc;
+    }
+    .captcha-footer {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .captcha-btn {
+      background: #00aaff;
+      color: #111;
+      border: none;
+      padding: 9px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      user-select: none;
+      flex: 1;
+      max-width: 140px;
+    }
+    .captcha-btn:hover:not(:disabled) {
+      background: #008ecc;
+    }
+    .captcha-btn:disabled {
+      background: #004466;
+      cursor: not-allowed;
+    }
+    .captcha-status {
+      margin-top: 10px;
+      font-size: 14px;
+      min-height: 20px;
+      color: #eee;
+      user-select: none;
     }
     .confirm {
       display: none;
       flex-direction: column;
       align-items: center;
       text-align: center;
+      color: #eee;
     }
     .confirm img {
       width: 165px;
@@ -104,47 +255,38 @@
 </head>
 <body>
   <div class="container" id="votoTela">
-    <h1>14º Roça - Quem você quer que vá para a final?</h1>
+    <h1>Final - Quem deve VENCER?</h1>
 
-     <label class="option">
-      <input type="radio" name="vote" value="Dynamite" />
-      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/FGZKKU5R6RBF7PYCYRMJ6TTURI.png?auth=9bd77116e9a553d34fd89c4ae8d02f81732062f987c972d7745103d58deff613&width=677&height=369" alt="Dynamite" />
-      <span>Dynamite</span>
-        </label>
     <label class="option">
       <input type="radio" name="vote" value="Eueu" />
-      <img src="https://portalpopline.com.br/wp-content/uploads/2022/12/Deolane.png" alt="Eueu" />
+      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/6L2UUUQLTZIHDAIFTZ435BNSAI.jpg?auth=b3a7729c462bc3315b89a9ce58959f9175b6a999d1be330d3cb056f4507aacc8&width=747&height=420" alt="Eueu" />
       <span>Eueu</span>
     </label>
-    </label>
     <label class="option">
-      <input type="radio" name="vote" value="Lua" />
-      <img src="https://f.i.uol.com.br/fotografia/2022/10/28/1667006117635c7ea5839e9_1667006117_3x2_md.jpg" alt="Lua" />
-      <span>Lua</span>
-    </label>
-    <label class="option">
-      <input type="radio" name="vote" value="Luca" />
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJFLU_hOfPgJDJj_LUDX2BRj5GJ4MpWgCdzsu1XAh42sgFtTmorQ1km5OJ&s=10" alt="Luca" />
-      <span>Luca</span>
-    </label>
-<label class="option">
       <input type="radio" name="vote" value="Koyuh" />
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAKB30C0Yo7Sfb7ghAHPEB0LS71A65bQQ5M88DjRZEQtYLyU1p8wfbW7J&s=10" alt="Koyuh" />
+      <img src="https://f.i.uol.com.br/fotografia/2025/03/18/174235144167da2c51e9b0f_1742351441_3x2_xs.jpg" alt="Koyuh" />
       <span>Koyuh</span>
     </label>
     <label class="option">
+      <input type="radio" name="vote" value="Luca" />
+      <img src="https://f.i.uol.com.br/fotografia/2021/11/15/16370145956192dc43dda3d_1637014595_3x2_xl.jpg" alt="Luca" />
+      <span>Luca</span>
+    </label>
+    <label class="option">
       <input type="radio" name="vote" value="Victor" />
-      <img src="https://f.i.uol.com.br/fotografia/2024/10/03/172801027666ff58249159b_1728010276_3x2_xl.jpg" alt="Victor" />
+      <img src="https://s2-gshow.glbimg.com/_tkyMN_c-RW_V43pizV8oer4wJg=/336x191/top/smart/https://s2.glbimg.com/hh79s0TatCbYbbX21Bc8hT1oJU0=/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2022/C/1/kWj9J6Q7mYboVvtieczg/larissa-pagina.png" alt="Victor" />
       <span>Victor</span>
     </label>
 
-    <!-- hCaptcha -->
-    <div style="display: flex; justify-content: center; margin-top: 20px;">
-      <div class="h-captcha"
-        data-sitekey="7f923220-ad3a-4dce-ac7e-cecca72a233a"
-        data-callback="captchaValido">
-      </div>
-    </div>
+    <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
+      <span class="recaptcha-checkbox" aria-hidden="true">
+        <svg class="checkmark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12l6 6 10-10" />
+        </svg>
+      </span>
+      <span class="recaptcha-label">Não sou um robô</span>
+      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="Logo personalizada" />
+    </button>
 
     <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
   </div>
@@ -156,6 +298,19 @@
     <button onclick="voltar()">Votar novamente</button>
   </div>
 
+  <div class="popup" id="popupCaptcha" role="dialog" aria-modal="true" aria-labelledby="captcha-instruction">
+    <div class="captcha-box">
+      <button class="captcha-close" aria-label="Fechar CAPTCHA" style="float:right; font-size: 24px; color:#aaa; background:none; border:none; cursor:pointer;" onclick="fecharCaptcha()">&times;</button>
+      <h3 id="captcha-instruction">Carregando...</h3>
+      <div class="captcha-grid" id="captcha-grid"></div>
+      <div class="captcha-footer">
+        <button class="captcha-btn" id="refresh-btn" type="button">Atualizar</button>
+        <button class="captcha-btn" id="verify-btn" type="button" disabled>Enviar</button>
+      </div>
+      <div class="captcha-status" id="captcha-status"></div>
+    </div>
+  </div>
+
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
@@ -164,8 +319,7 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
 
-    const votacaoAtiva = false
-      ;
+    const votacaoAtiva = true;
 
     if (!votacaoAtiva) {
       document.getElementById("votoTela").innerHTML = `
@@ -175,22 +329,177 @@
         </p>`;
     }
 
-    window.captchaValido = () => {
-      document.getElementById("botaoVotar").disabled = false;
-    };
+    const prompts = [
+      {
+        label: "Clique nas imagens contendo um mamífero",
+        correctTag: "mamifero",
+        images: [
+          { src: "https://s2-oglobo.glbimg.com/ai7z4jjEFHPzK4944T77pdhgq40=/0x0:2070x1380/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_da025474c0c44edd99332dddb09cabe8/internal_photos/bs/2024/h/o/dMQCzaTBuX7KyQz7g0EA/photo-1631925834699-74cd2a5ad762.jpg", tag: "mamifero" }, //Cachorro
+          { src: "https://www.petz.com.br/blog/wp-content/uploads/2019/07/vida-de-gato.jpg", tag: "mamifero" }, //Gato
+          { src: "https://guiadoestudante.abril.com.br/wp-content/uploads/sites/4/2025/07/masculino-de-capivara.jpg?quality=70&strip=info&w=1024", tag: "mamifero" }, //Capivara
+          { src: "https://i0.wp.com/xapuri.info/wp-content/uploads/2023/03/aa-guaxini-e1724117955946.jpeg", tag: "mamifero" }, //Guaxinim
+          { src: "https://i.pinimg.com/originals/2c/ac/ae/2cacae63626e91d6887608bf51217907.jpg", tag: "ave" }, //Pato
+          { src: "https://galapagosconservation.org.uk/wp-content/uploads/2023/02/Flamingo-%C2%A9-Jonathan-Green-1024x683.jpg", tag: "ave" }, //Flamingo
+          { src: "https://cdn0.peritoanimal.com.br/pt/posts/8/6/7/a_alimentacao_do_pinguim_20768_600.jpg", tag: "ave" }, //Pinguim
+          { src: "https://s2-g1.glbimg.com/rSIg3rSxVskSFRTZGRNNff3fAho=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2023/R/2/SoA89SRBStrtkbDpjuqw/aviao-c919.jpg", tag: "outro" }, //Avião
+          { src: "https://www.helisul.com/wp-content/uploads/2025/06/DSC08572-1024x576.jpg", tag: "outro" } //Helicóptero 
+        ]
+      },
+      {
+        label: "Clique nas imagens contendo uma ave",
+        correctTag: "ave",
+        images: [
+          { src: "https://i.pinimg.com/originals/2c/ac/ae/2cacae63626e91d6887608bf51217907.jpg", tag: "ave" }, //Pato
+          { src: "https://static.wixstatic.com/media/d4a2eb_28f0a32efcbd444ebee67f1bfac48b4b~mv2.jpg/v1/fill/w_900,h_675,al_c,q_85,enc_auto/Flamingo.jpg", tag: "ave" }, //Flamingo
+          { src: "https://www.greenpeace.org/static/planet4-brasil-stateless/2018/07/pinguim-de-barbicha2.jpg", tag: "ave" }, //Pinguim
+          { src: "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/169F6/production/_91026629_gettyimages-519508400.jpg.webp", tag: "mamifero" },
+          { src: "https://www.petz.com.br/blog/wp-content/uploads/2019/12/caes-braquicefalicos-pet-1280x720.jpg", tag: "mamifero" }, //Cachorro
+          { src: "https://www.petz.com.br/blog/wp-content/uploads/2019/07/vida-de-gato.jpg", tag: "mamifero" }, //Gato
+          { src: "https://hvlevet.com.br/wp-content/uploads/2021/02/2020-10-16-problemas-de-pele-em-gatos-802x506-1.jpg", tag: "mamifero" }, //Capivara
+          { src: "https://i0.wp.com/xapuri.info/wp-content/uploads/2023/03/aa-guaxini-e1724117955946.jpeg", tag: "mamifero" }, //Guaxinim
+          { src: "https://media.gazetadopovo.com.br/2018/06/abdd21f568bb5288b929b00571b6ba16-gpMedium.jpg", tag: "outro" } 
+          //Helicóptero
+        ]
+      }
+    ];
 
+    // Shuffle helper
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Variables for CAPTCHA
+    const captchaGrid = document.getElementById("captcha-grid");
+    const captchaInstruction = document.getElementById("captcha-instruction");
+    const verifyBtn = document.getElementById("verify-btn");
+    const refreshBtn = document.getElementById("refresh-btn");
+    const statusEl = document.getElementById("captcha-status");
+    const popupCaptcha = document.getElementById("popupCaptcha");
+    const botaoCaptcha = document.getElementById("botaoCaptcha");
+    const botaoVotar = document.getElementById("botaoVotar");
+    const votoTela = document.getElementById("votoTela");
+    const confirmTela = document.getElementById("confirmTela");
+    const nomeConfirm = document.getElementById("nomeConfirm");
+    const fotoConfirm = document.getElementById("fotoConfirm");
+
+    // Contador de votos para decidir quando mostrar o CAPTCHA
+    const maxVotosAntesCaptcha = 5;
+    let contadorVotos = Number(sessionStorage.getItem('contadorVotos')) || 0;
+
+    function generateCaptcha() {
+      captchaGrid.innerHTML = "";
+      statusEl.textContent = "";
+      verifyBtn.disabled = true;
+
+      const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+      const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
+      const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
+
+      const correctCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 corretas
+      const selectedCorrect = shuffle(correctImages).slice(0, correctCount);
+      const remaining = 9 - correctCount;
+      const selectedWrong = shuffle(wrongImages).slice(0, remaining);
+
+      const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+
+      captchaInstruction.textContent = prompt.label;
+
+      allImages.forEach(img => {
+        const imgEl = document.createElement("img");
+        imgEl.src = img.src;
+        imgEl.classList.add("captcha-img");
+        imgEl.dataset.correct = img.tag === prompt.correctTag;
+        imgEl.addEventListener("click", () => {
+          imgEl.classList.toggle("selected");
+          // Habilitar botão se alguma imagem selecionada
+          verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
+          statusEl.textContent = "";
+        });
+        captchaGrid.appendChild(imgEl);
+      });
+    }
+
+    function abrirCaptcha() {
+      generateCaptcha();
+      popupCaptcha.classList.add("active");
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      botaoVotar.disabled = true;
+      statusEl.textContent = "";
+    }
+
+    function fecharCaptcha() {
+      popupCaptcha.classList.remove("active");
+    }
+
+    // Evento do botão "Não sou um robô"
+    botaoCaptcha.addEventListener("click", () => {
+      if (botaoCaptcha.getAttribute("aria-pressed") === "true") return; // já validado
+
+      contadorVotos++;
+      sessionStorage.setItem('contadorVotos', contadorVotos);
+
+      if (contadorVotos % maxVotosAntesCaptcha === 0) {
+        // Mostrar CAPTCHA a cada 5 votos
+        abrirCaptcha();
+      } else {
+        // Aceita direto (conta como humano)
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoVotar.disabled = false;
+      }
+    });
+
+    // Botão verificar CAPTCHA
+    verifyBtn.addEventListener("click", () => {
+      let sucesso = true;
+      const imgs = document.querySelectorAll(".captcha-img");
+
+      imgs.forEach(img => {
+        const correto = img.dataset.correct === "true";
+        const selecionado = img.classList.contains("selected");
+        if (correto !== selecionado) {
+          sucesso = false;
+        }
+      });
+
+      if (sucesso) {
+        statusEl.textContent = "✅ Você passou no CAPTCHA!";
+        statusEl.style.color = "#00aaff";
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoVotar.disabled = false;
+        fecharCaptcha();
+      } else {
+        statusEl.textContent = "❌ Tente novamente.";
+        statusEl.style.color = "#ff5555";
+        setTimeout(() => {
+          generateCaptcha();
+        }, 1000);
+      }
+    });
+
+    // Botão atualizar CAPTCHA
+    refreshBtn.addEventListener("click", generateCaptcha);
+
+    // Função enviar voto
     window.enviarVoto = async () => {
       const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
       if (!escolhido) {
         alert("Escolha um participante antes de votar.");
         return;
       }
+      if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+        alert("Por favor, confirme que você não é um robô.");
+        return;
+      }
 
-      document.getElementById("nomeConfirm").textContent = escolhido;
-      document.getElementById("fotoConfirm").src =
-        document.querySelector(".option.selected img").src;
-      document.getElementById("votoTela").style.display = "none";
-      document.getElementById("confirmTela").style.display = "flex";
+      nomeConfirm.textContent = escolhido;
+      fotoConfirm.src = document.querySelector(".option.selected img").src;
+
+      votoTela.style.display = "none";
+      confirmTela.style.display = "flex";
 
       const { error } = await supabase
         .from('votos')
@@ -202,8 +511,16 @@
       }
     };
 
-    window.voltar = () => location.reload();
+    // Botão votar novamente, só reseta interface
+    window.voltar = () => {
+      confirmTela.style.display = "none";
+      votoTela.style.display = "block";
+      botaoVotar.disabled = true;
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      statusEl.textContent = "";
+    };
 
+    // Seleção visual das opções
     document.querySelectorAll(".option").forEach(label => {
       label.addEventListener("click", () => {
         document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
@@ -214,3 +531,4 @@
   </script>
 </body>
 </html>
+
