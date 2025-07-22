@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Resultados da Votação</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+
+    body {
+
+      margin: 0;
+
+      padding: 40px 20px;
+
+      background-color: #111;
+
+      font-family: Arial, sans-serif;
+
+      color: #fff;
+
+      text-align: center;
+
+    }
+
+    canvas {
+
+      max-width: 400px;
+
+      margin: 0 auto;
+
+    }
+
+    #totalVotos {
+
+      font-size: 18px;
+
+      margin-top: 20px;
+
+      font-weight: bold;
+
+    }
+
+    #porcentagens {
+
+      margin-top: 10px;
+
+      font-size: 15px;
+
+      line-height: 1.4;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <h1 style="margin-bottom: 30px;">Resultado Parcial</h1>
+
+  <canvas id="grafico" width="400" height="400"></canvas>
+
+  <div id="totalVotos"></div>
+
+  <div id="porcentagens"></div>
+
+  <script type="module">
+
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+    const supabaseUrl = 'https://maroopnrcrpoizpjhmss.supabase.co';
+
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw';
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const ctx = document.getElementById("grafico").getContext("2d");
+
+    let chart = new Chart(ctx, {
+
+      type: "pie",
+
+      data: {
+
+        labels: [],
+
+        datasets: [{
+
+          label: "Votos",
+
+          data: [],
+
+          backgroundColor: [
+
+            "#e74c3c", "#3498db", "#f1c40f", "#2ecc71",
+
+            "#9b59b6", "#e67e22", "#1abc9c", "#ff6384"
+
+          ]
+
+        }]
+
+      },
+
+      options: {
+
+        responsive: true,
+
+        plugins: {
+
+          legend: {
+
+            labels: {
+
+              color: "#fff"
+
+            }
+
+          }
+
+        }
+
+      }
+
+    });
+
+    function atualizarGrafico(labels, dados) {
+
+      chart.data.labels = labels;
+
+      chart.data.datasets[0].data = dados;
+
+      chart.update();
+
+    }
+
+    async function carregarTodosVotos() {
+
+      const limitePorPagina = 1000;
+
+      let pagina = 0;
+
+      let todosVotos = [];
+
+      let continuar = true;
+
+      while (continuar) {
+
+        const { data, error } = await supabase
+
+          .from('votos')
+
+          .select('participante')
+
+          .range(pagina * limitePorPagina, (pagina + 1) * limitePorPagina - 1);
+
+        if (error) {
+
+          console.error("Erro ao buscar votos:", error);
+
+          break;
+
+        }
+
+        if (data.length === 0) {
+
+          continuar = false;
+
+        } else {
+
+          todosVotos = todosVotos.concat(data);
+
+          pagina++;
+
+          if (data.length < limitePorPagina) {
+
+            continuar = false;
+
+          }
+
+        }
+
+      }
+
+      return todosVotos;
+
+    }
+
+    async function carregarVotos() {
+
+      const data = await carregarTodosVotos();
+
+      if (!data || data.length === 0) {
+
+        atualizarGrafico([], []);
+
+        document.getElementById("totalVotos").textContent = "Nenhum voto registrado ainda.";
+
+        document.getElementById("porcentagens").innerHTML = "";
+
+        return;
+
+      }
+
+      const contagem = {};
+
+      let total = 0;
+
+      data.forEach(voto => {
+
+        const nome = voto.participante;
+
+        if (nome) {
+
+          contagem[nome] = (contagem[nome] || 0) + 1;
+
+          total++;
+
+        }
+
+      });
+
+      const labels = Object.keys(contagem);
+
+      const valores = Object.values(contagem);
+
+      atualizarGrafico(labels, valores);
+
+      document.getElementById("totalVotos").textContent = `Total de votos: ${total}`;
+
+      document.getElementById("porcentagens").innerHTML = labels.map((nome, i) => {
+
+        const perc = ((valores[i] / total) * 100).toFixed(2);
+
+        return `<p>${nome}: ${perc}%</p>`;
+
+      }).join("");
+
+    }
+
+    carregarVotos();
+
+    setInterval(carregarVotos, 1000);
+
+  </script>
+
+</body>
+
+</html>
