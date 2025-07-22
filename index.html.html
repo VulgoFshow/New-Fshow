@@ -79,77 +79,76 @@
     button:hover:not(:disabled) { background: #e65c00; }
     button:disabled { background: #555; cursor: not-allowed; }
 
-   #botaoCaptcha {
-  display: flex;                /* flex para alinhar itens dentro */
-  align-items: center;          /* vertical center */
-  justify-content: flex-start;  /* conteúdo dentro alinhado à esquerda */
-  
-  background: #222;
-  border: 1px solid #444;
-  border-radius: 6px;
-  padding: 0 15px;
-  cursor: pointer;
-  user-select: none;
-  height: 70px;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
-  transition: border-color 0.3s, box-shadow 0.3s;
-  color: #ccc;
-  font-size: 14px;
-  font-weight: 400;
+    /* Estilo botão captcha */
+    #botaoCaptcha {
+      display: flex;               
+      align-items: center;         
+      justify-content: flex-start; 
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 0 15px;
+      cursor: pointer;
+      user-select: none;
+      height: 70px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      color: #ccc;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 20px auto 0;       
+      max-width: 320px;          
+      width: 320px;              
+      gap: 12px;
+    }
 
-  margin: 20px auto 0;       /* margem automática nas laterais para centralizar */
-  max-width: 320px;           /* limite máximo de largura */
-  width: 320px;               /* largura fixa para garantir centralização */
-  
-  gap: 12px;
-}
+    .recaptcha-checkbox {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      background: #111;
+      border: 2px solid #444;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.recaptcha-checkbox {
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  background: #111;
-  border: 2px solid #444;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+      background-color: #00aaff;
+      border-color: #00aaff;
+    }
 
-#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
-  background-color: #00aaff;
-  border-color: #00aaff;
-}
+    .checkmark {
+      width: 18px;
+      height: 18px;
+      display: none;
+      stroke: white;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
-.checkmark {
-  width: 18px;
-  height: 18px;
-  display: none;
-  stroke: white;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
+    #botaoCaptcha[aria-pressed="true"] .checkmark {
+      display: block;
+    }
 
-#botaoCaptcha[aria-pressed="true"] .checkmark {
-  display: block;
-}
+    .recaptcha-label {
+      user-select: none;
+      line-height: 1;
+      flex-grow: 1;              
+    }
 
-.recaptcha-label {
-  user-select: none;
-  line-height: 1;
-  flex-grow: 1;                /* faz o texto ocupar o espaço entre checkbox e ícone */
-}
+    .recaptcha-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      object-fit: contain;
+      filter: brightness(0.7);
+      flex-shrink: 0;
+    }
 
-.recaptcha-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  object-fit: contain;
-  filter: brightness(0.7);
-  flex-shrink: 0;
-}
-
+    /* Popup do CAPTCHA */
     .popup {
       display: none;
       position: fixed;
@@ -278,6 +277,7 @@
       <span>Victor</span>
     </label>
 
+    <!-- Botão do CAPTCHA -->
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
         <svg class="checkmark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -312,202 +312,226 @@
   </div>
 
   <script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
-  const supabase = createClient(
-    'https://maroopnrcrpoizpjhmss.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
-  );
+    const supabase = createClient(
+      'https://maroopnrcrpoizpjhmss.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
+    );
 
-  const votacaoAtiva = true;
+    const votacaoAtiva = true;
 
-  if (!votacaoAtiva) {
-    document.getElementById("votoTela").innerHTML = `
-      <h1>🛑 Votação Encerrada</h1>
-      <p style="font-size:20px;color:red;font-weight:bold;margin-top:40px;">
-        A votação foi encerrada. Obrigado por participar!
-      </p>`;
-  }
-
-  const prompts = [
-    // seus prompts aqui (mantidos iguais)
-  ];
-
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+    if (!votacaoAtiva) {
+      document.getElementById("votoTela").innerHTML = `
+        <h1>🛑 Votação Encerrada</h1>
+        <p style="font-size:20px;color:red;font-weight:bold;margin-top:40px;">
+          A votação foi encerrada. Obrigado por participar!
+        </p>`;
     }
-    return array;
-  }
 
-  const captchaGrid = document.getElementById("captcha-grid");
-  const captchaInstruction = document.getElementById("captcha-instruction");
-  const verifyBtn = document.getElementById("verify-btn");
-  const refreshBtn = document.getElementById("refresh-btn");
-  const statusEl = document.getElementById("captcha-status");
-  const popupCaptcha = document.getElementById("popupCaptcha");
-  const botaoCaptcha = document.getElementById("botaoCaptcha");
-  const botaoVotar = document.getElementById("botaoVotar");
-  const votoTela = document.getElementById("votoTela");
-  const confirmTela = document.getElementById("confirmTela");
-  const nomeConfirm = document.getElementById("nomeConfirm");
-  const fotoConfirm = document.getElementById("fotoConfirm");
+    const prompts = [
+      {
+        label: "Clique nas imagens contendo um mamífero",
+        correctTag: "mamifero",
+        images: [
+          { src: "https://s2-oglobo.glbimg.com/ai7z4jjEFHPzK4944T77pdhgq40=/0x0:2070x1380/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_da025474c0c44edd99332dddb09cabe8/internal_photos/bs/2024/h/o/dMQCzaTBuX7KyQz7g0EA/photo-1631925834699-74cd2a5ad762.jpg", tag: "mamifero" }, //Cachorro
+          { src: "https://www.petz.com.br/blog/wp-content/uploads/2019/07/vida-de-gato.jpg", tag: "mamifero" }, //Gato
+          { src: "https://guiadoestudante.abril.com.br/wp-content/uploads/sites/4/2025/07/masculino-de-capivara.jpg?quality=70&strip=info&w=1024", tag: "mamifero" }, //Capivara
+          { src: "https://i0.wp.com/xapuri.info/wp-content/uploads/2023/03/aa-guaxini-e1724117955946.jpeg", tag: "mamifero" }, //Guaxinim
+          { src: "https://i.pinimg.com/originals/2c/ac/ae/2cacae63626e91d6887608bf51217907.jpg", tag: "ave" }, //Pato
+          { src: "https://galapagosconservation.org.uk/wp-content/uploads/2023/02/Flamingo-%C2%A9-Jonathan-Green-1024x683.jpg", tag: "ave" }, //Flamingo
+          { src: "https://cdn0.peritoanimal.com.br/pt/posts/8/6/7/a_alimentacao_do_pinguim_20768_600.jpg", tag: "ave" }, //Pinguim
+          { src: "https://s2-g1.glbimg.com/rSIg3rSxVskSFRTZGRNNff3fAho=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2023/R/2/SoA89SRBStrtkbDpjuqw/aviao-c919.jpg", tag: "outro" }, //Avião
+          { src: "https://www.helisul.com/wp-content/uploads/2025/06/DSC08572-1024x576.jpg", tag: "outro" } //Helicóptero 
+        ]
+      },
+      {
+        label: "Clique nas imagens contendo uma ave",
+        correctTag: "ave",
+        images: [
+          { src: "https://i.pinimg.com/originals/2c/ac/ae/2cacae63626e91d6887608bf51217907.jpg", tag: "ave" }, //Pato
+          { src: "https://static.wixstatic.com/media/d4a2eb_28f0a32efcbd444ebee67f1bfac48b4b~mv2.jpg/v1/fill/w_900,h_675,al_c,q_85,enc_auto/Flamingo.jpg", tag: "ave" }, //Flamingo
+          { src: "https://www.greenpeace.org/static/planet4-brasil-stateless/2018/07/pinguim-de-barbicha2.jpg", tag: "ave" }, //Pinguim
+          { src: "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/169F6/production/_91026629_gettyimages-519508400.jpg.webp", tag: "mamifero" },
+          { src: "https://www.petz.com.br/blog/wp-content/uploads/2019/12/caes-braquicefalicos-pet-1280x720.jpg", tag: "mamifero" }, //Cachorro
+          { src: "https://www.petz.com.br/blog/wp-content/uploads/2019/07/vida-de-gato.jpg", tag: "mamifero" }, //Gato
+          { src: "https://hvlevet.com.br/wp-content/uploads/2021/02/2020-10-16-problemas-de-pele-em-gatos-802x506-1.jpg", tag: "mamifero" }, //Capivara
+          { src: "https://i0.wp.com/xapuri.info/wp-content/uploads/2023/03/aa-guaxini-e1724117955946.jpeg", tag: "mamifero" }, //Guaxinim
+          { src: "https://s2-g1.glbimg.com/rSIg3rSxVskSFRTZGRNNff3fAho=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2023/R/2/SoA89SRBStrtkbDpjuqw/aviao-c919.jpg", tag: "outro" } //Avião
+        ]
+      }
+    ];
 
-  const maxVotosAntesCaptcha = 5;
-  let contadorVotos = Number(sessionStorage.getItem('contadorVotos')) || 0;
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
 
-  function generateCaptcha() {
-    captchaGrid.innerHTML = "";
-    statusEl.textContent = "";
-    verifyBtn.disabled = true;
+    const captchaGrid = document.getElementById("captcha-grid");
+    const captchaInstruction = document.getElementById("captcha-instruction");
+    const verifyBtn = document.getElementById("verify-btn");
+    const refreshBtn = document.getElementById("refresh-btn");
+    const statusEl = document.getElementById("captcha-status");
+    const popupCaptcha = document.getElementById("popupCaptcha");
+    const botaoCaptcha = document.getElementById("botaoCaptcha");
+    const botaoVotar = document.getElementById("botaoVotar");
+    const votoTela = document.getElementById("votoTela");
+    const confirmTela = document.getElementById("confirmTela");
+    const nomeConfirm = document.getElementById("nomeConfirm");
+    const fotoConfirm = document.getElementById("fotoConfirm");
 
-    const prompt = prompts[Math.floor(Math.random() * prompts.length)];
-    const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
-    const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
+    const maxVotosAntesCaptcha = 5;
+    let contadorVotos = Number(sessionStorage.getItem('contadorVotos')) || 0;
 
-    const correctCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 corretas
-    const selectedCorrect = shuffle(correctImages).slice(0, correctCount);
-    const remaining = 9 - correctCount;
-    const selectedWrong = shuffle(wrongImages).slice(0, remaining);
+    function generateCaptcha() {
+      captchaGrid.innerHTML = "";
+      statusEl.textContent = "";
+      verifyBtn.disabled = true;
 
-    const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+      const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+      const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
+      const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
 
-    captchaInstruction.textContent = prompt.label;
+      const correctCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 corretas
+      const selectedCorrect = shuffle(correctImages).slice(0, correctCount);
+      const remaining = 9 - correctCount;
+      const selectedWrong = shuffle(wrongImages).slice(0, remaining);
 
-    allImages.forEach(img => {
-      const imgEl = document.createElement("img");
-      imgEl.src = img.src;
-      imgEl.classList.add("captcha-img");
-      imgEl.dataset.correct = img.tag === prompt.correctTag ? "true" : "false";
-      imgEl.addEventListener("click", () => {
-        imgEl.classList.toggle("selected");
-        verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
-        statusEl.textContent = "";
+      const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+
+      captchaInstruction.textContent = prompt.label;
+
+      allImages.forEach(img => {
+        const imgEl = document.createElement("img");
+        imgEl.src = img.src;
+        imgEl.classList.add("captcha-img");
+        imgEl.dataset.correct = img.tag === prompt.correctTag ? "true" : "false";
+        imgEl.addEventListener("click", () => {
+          imgEl.classList.toggle("selected");
+          verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
+          statusEl.textContent = "";
+        });
+        captchaGrid.appendChild(imgEl);
       });
-      captchaGrid.appendChild(imgEl);
-    });
-  }
-
-  function abrirCaptcha() {
-    generateCaptcha();
-    popupCaptcha.classList.add("active");
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    botaoVotar.disabled = true;
-    statusEl.textContent = "";
-  }
-
-  function fecharCaptcha() {
-    popupCaptcha.classList.remove("active");
-  }
-
-  botaoCaptcha.addEventListener("click", () => {
-    if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
-
-    contadorVotos++;
-    sessionStorage.setItem('contadorVotos', contadorVotos);
-
-    if (contadorVotos % maxVotosAntesCaptcha === 0) {
-      abrirCaptcha();
-    } else {
-      botaoCaptcha.setAttribute("aria-pressed", "true");
-      botaoVotar.disabled = false;
     }
-  });
 
-  verifyBtn.addEventListener("click", () => {
-    let sucesso = true;
-    const imgs = document.querySelectorAll(".captcha-img");
+    function abrirCaptcha() {
+      generateCaptcha();
+      popupCaptcha.classList.add("active");
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      botaoVotar.disabled = true;
+      statusEl.textContent = "";
+    }
 
-    imgs.forEach(img => {
-      const correto = img.dataset.correct === "true";
-      const selecionado = img.classList.contains("selected");
-      if (correto !== selecionado) {
-        sucesso = false;
+    function fecharCaptcha() {
+      popupCaptcha.classList.remove("active");
+    }
+
+    botaoCaptcha.addEventListener("click", () => {
+      if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
+
+      contadorVotos++;
+      sessionStorage.setItem('contadorVotos', contadorVotos);
+
+      if (contadorVotos % maxVotosAntesCaptcha === 0) {
+        abrirCaptcha();
+      } else {
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoVotar.disabled = false;
       }
     });
 
-    if (sucesso) {
-      statusEl.textContent = "✅ Você passou no CAPTCHA!";
-      statusEl.style.color = "#00aaff";
-      botaoCaptcha.setAttribute("aria-pressed", "true");
-      botaoVotar.disabled = false;
-      fecharCaptcha();
-    } else {
-      statusEl.textContent = "❌ Tente novamente.";
-      statusEl.style.color = "#ff5555";
-      setTimeout(() => {
-        generateCaptcha();
-      }, 1000);
-    }
-  });
+    verifyBtn.addEventListener("click", () => {
+      let sucesso = true;
+      const imgs = document.querySelectorAll(".captcha-img");
 
-  refreshBtn.addEventListener("click", generateCaptcha);
+      imgs.forEach(img => {
+        const correto = img.dataset.correct === "true";
+        const selecionado = img.classList.contains("selected");
+        if (correto !== selecionado) {
+          sucesso = false;
+        }
+      });
 
-  window.enviarVoto = async () => {
-    const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
-    if (!escolhido) {
-      alert("Escolha um participante antes de votar.");
-      return;
-    }
-    if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
-      alert("Por favor, confirme que você não é um robô.");
-      return;
-    }
-
-    const selecionadoLabel = document.querySelector(".option.selected");
-    if (!selecionadoLabel) {
-      alert("Erro interno: participante não selecionado visualmente.");
-      return;
-    }
-
-    nomeConfirm.textContent = escolhido;
-    fotoConfirm.src = selecionadoLabel.querySelector("img").src;
-
-    votoTela.style.display = "none";
-    confirmTela.style.display = "flex";
-
-    const { error } = await supabase
-      .from('votos')
-      .insert({ participante: escolhido });
-
-    if (error) {
-      alert('❌ Erro ao registrar voto: ' + error.message);
-      console.error(error);
-    }
-  };
-
-  function resetarEstado() {
-    votoTela.style.display = "block";
-    confirmTela.style.display = "none";
-    botaoVotar.disabled = true;
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    statusEl.textContent = "";
-    // Remover seleção visual
-    document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
-    // Desmarcar radios
-    document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
-  }
-
-  // Evento do botão "Votar novamente"
-  window.voltar = () => {
-    resetarEstado();
-  };
-
-  // Seleção visual das opções
-  document.querySelectorAll(".option").forEach(label => {
-    label.addEventListener("click", () => {
-      document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
-      label.classList.add("selected");
-      label.querySelector("input").checked = true;
+      if (sucesso) {
+        statusEl.textContent = "✅ Você passou no CAPTCHA!";
+        statusEl.style.color = "#00aaff";
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoVotar.disabled = false;
+        fecharCaptcha();
+      } else {
+        statusEl.textContent = "❌ Tente novamente.";
+        statusEl.style.color = "#ff5555";
+        setTimeout(() => {
+          generateCaptcha();
+        }, 1000);
+      }
     });
-  });
 
-  // Resetar estado ao carregar
-  resetarEstado();
+    refreshBtn.addEventListener("click", generateCaptcha);
 
-</script>
+    window.enviarVoto = async () => {
+      const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
+      if (!escolhido) {
+        alert("Escolha um participante antes de votar.");
+        return;
+      }
+      if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+        alert("Por favor, confirme que você não é um robô.");
+        return;
+      }
 
+      const selecionadoLabel = document.querySelector(".option.selected");
+      if (!selecionadoLabel) {
+        alert("Erro interno: participante não selecionado visualmente.");
+        return;
+      }
+
+      nomeConfirm.textContent = escolhido;
+      fotoConfirm.src = selecionadoLabel.querySelector("img").src;
+
+      votoTela.style.display = "none";
+      confirmTela.style.display = "flex";
+
+      const { error } = await supabase
+        .from('votos')
+        .insert({ participante: escolhido });
+
+      if (error) {
+        alert('❌ Erro ao registrar voto: ' + error.message);
+        console.error(error);
+      }
+    };
+
+    function resetarEstado() {
+      votoTela.style.display = "block";
+      confirmTela.style.display = "none";
+      botaoVotar.disabled = true;
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      statusEl.textContent = "";
+      // Remove seleção visual
+      document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+      // Desmarca radios
+      document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
+    }
+
+    window.voltar = () => {
+      resetarEstado();
+    };
+
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+
+    resetarEstado();
+
+  </script>
 </body>
 </html>
-
