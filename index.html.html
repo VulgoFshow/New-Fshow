@@ -79,6 +79,56 @@
     button:hover:not(:disabled) { background: #e65c00; }
     button:disabled { background: #555; cursor: not-allowed; }
 
+    /* ANIMAÇÕES */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.option {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+.option:nth-child(2) { animation-delay: 0.05s; }
+.option:nth-child(3) { animation-delay: 0.1s; }
+.option:nth-child(4) { animation-delay: 0.15s; }
+.option:nth-child(5) { animation-delay: 0.2s; }
+
+button,
+#botaoCaptcha {
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+button:hover:not(:disabled),
+#botaoCaptcha:hover {
+  transform: scale(1.03);
+}
+
+.popup.active .captcha-box {
+  animation: popupFade 0.4s ease-out;
+}
+
     /* Estilo botão captcha */
     #botaoCaptcha {
       display: flex;               
@@ -250,6 +300,24 @@
       border-radius: 10px;
       margin: 22px 0;
     }
+    @keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-out {
+  animation: fadeOut 0.4s ease forwards;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
   </style>
 </head>
 <body>
@@ -467,44 +535,57 @@
         statusEl.style.color = "#ff5555";
         setTimeout(() => {
           generateCaptcha();
-        }, 1000);
+        }, 2000);
       }
     });
 
     refreshBtn.addEventListener("click", generateCaptcha);
 
     window.enviarVoto = async () => {
-      const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
-      if (!escolhido) {
-        alert("Escolha um participante antes de votar.");
-        return;
-      }
-      if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
-        alert("Por favor, confirme que você não é um robô.");
-        return;
-      }
+  const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
+  if (!escolhido) {
+    alert("Escolha um participante antes de votar.");
+    return;
+  }
+  if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+    alert("Por favor, confirme que você não é um robô.");
+    return;
+  }
 
-      const selecionadoLabel = document.querySelector(".option.selected");
-      if (!selecionadoLabel) {
-        alert("Erro interno: participante não selecionado visualmente.");
-        return;
-      }
+  const selecionadoLabel = document.querySelector(".option.selected");
+  if (!selecionadoLabel) {
+    alert("Erro interno: participante não selecionado visualmente.");
+    return;
+  }
 
-      nomeConfirm.textContent = escolhido;
-      fotoConfirm.src = selecionadoLabel.querySelector("img").src;
+  nomeConfirm.textContent = escolhido;
+  fotoConfirm.src = selecionadoLabel.querySelector("img").src;
 
-      votoTela.style.display = "none";
-      confirmTela.style.display = "flex";
+  // Aplica fade-out na tela de voto
+  votoTela.classList.add("fade-out");
 
-      const { error } = await supabase
-        .from('votos')
-        .insert({ participante: escolhido });
+  setTimeout(() => {
+    votoTela.style.display = "none";
+    votoTela.classList.remove("fade-out");
 
-      if (error) {
-        alert('❌ Erro ao registrar voto: ' + error.message);
-        console.error(error);
-      }
-    };
+    confirmTela.style.display = "flex";
+    confirmTela.classList.add("fade-in");
+
+    setTimeout(() => {
+      confirmTela.classList.remove("fade-in");
+    }, 200);
+  }, 200); // Tempo da animação
+  
+
+  const { error } = await supabase
+    .from('votos')
+    .insert({ participante: escolhido });
+
+  if (error) {
+    alert('❌ Erro ao registrar voto: ' + error.message);
+    console.error(error);
+  }
+};
 
     function resetarEstado() {
       votoTela.style.display = "block";
@@ -519,8 +600,8 @@
     }
 
     window.voltar = () => {
-  location.reload();
-};
+      resetarEstado();
+    };
 
     document.querySelectorAll(".option").forEach(label => {
       label.addEventListener("click", () => {
