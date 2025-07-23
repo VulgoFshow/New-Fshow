@@ -599,9 +599,9 @@ button:hover:not(:disabled),
       document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
     }
 
-    window.voltar = () => {
-      resetarEstado();
-    };
+   window.voltar = () => {
+  location.reload();
+};
 
     document.querySelectorAll(".option").forEach(label => {
       label.addEventListener("click", () => {
