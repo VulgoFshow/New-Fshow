@@ -13,6 +13,18 @@
       overflow-x: hidden;
     }
 
+    /* BORDAS VISUAIS PARA DEBUG OU ESTILO */
+.topo,
+.carousel-item,
+.votacao,
+.ultimas-noticias,
+.noticia-bloco,
+.noticia-item,
+.noticia-bloco img,
+.noticia-bloco .conteudo {
+  border: 1px solid #fb352a; /* Cor suave, visível */
+}
+
     .topo {
       background-color: #5c699c;
       display: flex;
@@ -78,20 +90,20 @@
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      padding: 30px 15px 20px;
-      gap: 15px;
+      padding: 7px 7px 7px;
+      gap: 10px;
     }
 
     .carousel-item {
       flex: 0 0 auto;
       width: 320px;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
       position: relative;
       scroll-snap-align: start;
       cursor: pointer;
       transition: transform 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(237, 247, 251, 1);
     }
 
     .carousel-item:hover {
@@ -153,23 +165,19 @@
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       gap: 12px;
-      padding: 20px 15px;
-      margin-top: 24px;
+      padding: 12px 10px;
+      margin-top: 1px;
       flex-wrap: nowrap;
     }
 
-    .bolinhas-container::-webkit-scrollbar {
-      height: 8px;
-    }
+    .bolinhas-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
 
-    .bolinhas-container::-webkit-scrollbar-thumb {
-      background-color: #999;
-      border-radius: 4px;
-    }
-
-    .bolinhas-container::-webkit-scrollbar-track {
-      background-color: #2c2c2c;
-    }
+.bolinhas-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 
     .bolinha {
       width: 75px;
@@ -259,14 +267,14 @@
 <body>
 
   <header class="topo">
-    <div class="topo-esquerda">
-      <span class="logo">Fshow</span>
-      <a class="canal" href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank">Canal</a>
-    </div>
-    <a class="imagem-topo" href="https://seulink.com/promocao" target="_blank">
-      <img src="https://i.imgur.com/orZDpuE.png" alt="Promoção">
-    </a>
-  </header>
+  <a class="imagem-topo" href="https://seulink.com/promocao" target="_blank">
+    <img src="https://i.imgur.com/orZDpuE.png" alt="Promoção">
+  </a>
+  <div class="topo-esquerda">
+    <span class="logo">Fshow</span>
+    <a class="canal" href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank">Canal</a>
+  </div>
+</header>
 
   <div class="banner">
     <img src="https://yt3.googleusercontent.com/hmcYwDAhvOugp5HG8wMdxV_YQyqX99l_cl9O3YLkHUVT_tQtEB2HpN2JUB3hnJJy4VJplhpV=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" alt="Imagem de topo">
