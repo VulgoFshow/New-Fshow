@@ -601,4 +601,19 @@ button:hover:not(:disabled),
     }
 
    window.voltar = () => {
-  location
+  location.reload();
+};
+
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+
+    resetarEstado();
+
+  </script>
+</body>
+</html>
