@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blocos de Notícias</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --card-bg:#4a4a4a; /* painel direito */
+      --label:#c9c9c9;
+      --title:#ffffff;
+      --radius:18px;
+      --gap:20px;
+      --shadow: 0 6px 18px rgba(0,0,0,0.12);
+      --card-height:110px;
+      --image-width:220px;
+    }
+
+    /* reset simples */
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--bg);
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding:32px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:#222;
+    }
+
+    .container{
+      max-width:920px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+    }
+
+    .news-card{
+      display:flex;
+      align-items:stretch;
+      background:transparent;
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      height:var(--card-height);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .news-card:hover{
+      transform:translateY(-6px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+    }
+
+    /* área da imagem */
+    .news-image{
+      width:var(--image-width);
+      min-width:140px;
+      height:100%;
+      display:block;
+      flex-shrink:0;
+      position:relative;
+      overflow:hidden;
+      background:#000;
+    }
+    .news-image img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition:transform .35s ease;
+    }
+    .news-card:hover .news-image img{
+      transform:scale(1.03);
+    }
+    /* painel direito */
+    .news-panel{
+      flex:1;
+      background:var(--card-bg);
+      padding:18px 22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .label{
+      color:var(--label);
+      font-size:14px;
+      margin-bottom:8px;
+      opacity:0.95;
+    }
+    .title{
+      color:var(--title);
+      font-size:22px;
+      line-height:1.18;
+      font-weight:600;
+      text-decoration:none;
+      max-height:3.6em;
+      overflow:hidden;
+    }
+
+    /* links visuais (imagem e título são separados) */
+    a.image-link, a.text-link{
+      display:block;
+      height:100%;
+      width:100%;
+      text-decoration:none;
+      color:inherit;
+    }
+    a.text-link:focus, a.image-link:focus{
+      outline:3px solid rgba(255,255,255,0.18);
+      outline-offset:3px;
+    }
+
+    /* mobile adjustments */
+    @media (max-width:700px){
+      :root{ --image-width:140px; --card-height:120px }
+      .news-card{ flex-direction:row; }
+      .title{ font-size:18px }
+    }
+
+    @media (max-width:520px){
+      .news-card{
+        flex-direction:column;
+        height:auto;
+      }
+      .news-image{ width:100%; height:180px; min-width:0; }
+      .news-panel{ padding:14px; }
+    }
+
+    /* small helper for demo-only (remove if quiser) */
+    .hint{ margin:12px 0 24px; color:#666; font-size:14px }
+  </style>
+</head>
+<body>
+  
+  <h1>Livros</h1>
+  
+  <main class="container">
+
+    <!-- Card 1 -->
+    <article class="news-card" aria-label="Notícia 1">
+      <!-- imagem clicável -->
+      <a class="image-link news-image" href="https://www.wattpad.com/story/398732648-jogo-da-lula-brasil" target="_blank" rel="noopener noreferrer" aria-label="Ler Squid Game">
+        <img src="https://sdmntprwestus2.oaiusercontent.com/files/00000000-d340-61f8-995c-539c6d444a68/raw?se=2025-08-11T23%3A59%3A48Z&sp=r&sv=2024-08-04&sr=b&scid=95f5c496-6cb4-589a-9056-ed1e71e08e2f&skoid=9ccea605-1409-4478-82eb-9c83b25dc1b0&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-11T19%3A05%3A00Z&ske=2025-08-12T19%3A05%3A00Z&sks=b&skv=2024-08-04&sig=9FsruVJ4u%2B3w7TB/hNbOOEIXDfERCB5kJR9hk6lSz8U%3D" alt="Jogo da Lula" />
+      </a>
+
+      <!-- painel de texto, com texto clicável -->
+      <div class="news-panel">
+        <div class="label">Livros</div>
+        <a class="text-link" href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank" rel="noopener noreferrer" aria-label="Jogo da Lula">
+          <div class="title">Squid Game - Acompanhe a série</div>
+        </a>
+      </div>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="news-card" aria-label="Notícia 2">
+      <a class="image-link news-image" href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank" rel="noopener noreferrer" aria-label="Ir para Squid Game Brasil">
+        <img src="https://i.ibb.co/MxkKWycC/Chat-GPT-Image-18-de-jul-de-2025-22-34-43.png" alt="Capa ComeBack" />
+      </a>
+
+      <div class="news-panel">
+        <div class="label">Livros</div>
+        <a class="text-link" href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank" rel="noopener noreferrer" aria-label="Ler: Squid Game Brasil - Acompanhe o início">
+          <div class="title">ComeBack - Terceiro capítulo disponível</div>
+        </a>
+      </div>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="news-card" aria-label="Notícia 3">
+      <a class="image-link news-image" href="https://www.wattpad.com/story/399523629-premoni%C3%A7%C3%A3o-1-a-morte-te-engana" target="_blank" rel="noopener noreferrer" aria-label="Ir para Power Couple">
+        <img src="https://img.wattpad.com/story_parts/1566839679/images/18598919f1f7e984464341546336.jpg" alt="Premonição 1" />
+      </a>
+
+      <div class="news-panel">
+        <div class="label">Parceiros</div>
+        <a class="text-link" href="https://www.wattpad.com/story/399523629-premoni%C3%A7%C3%A3o-1-a-morte-te-engana" target="_blank" rel="noopener noreferrer" aria-label="Ver porcentagens do Power Couple">
+          <div class="title">Premonição 1 | A morte engana (By deadl0vexz)</div>
+        </a>
+      </div>
+    </article>
+    
+  </main>
+</body>
+</html>
