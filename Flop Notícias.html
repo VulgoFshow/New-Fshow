@@ -1,597 +1,195 @@
 <!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Notícia Farm17</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"
-     crossorigin="anonymous"></script>
-  
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Flop</title>
-
-  <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="/favicon.png">
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+  <title>Fazenda 17 - Suposta Lista Vazada</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    /* Paleta (variáveis) */
-    :root{
-      --bg: #f9f9f9; /* fundo principal claro */
-      --bg-2: #ffffff; /* fundo secundário */
-      --text: #121212; /* texto principal escuro */
-      --accent-pink: #FF0055; /* destaque 1 */
-      --accent-yellow: #FFD600; /* destaque 2 */
-      --accent-blue: #005fbb; /* links / hover */
-      --muted: #777777;
-      --card-radius: 10px;
-      --space: 16px;
-      --shadow: 0 6px 18px rgba(0,0,0,0.12);
-    }
-
-    /* Reset básico */
-    *{box-sizing: border-box}
-    html,body{height:100%;}
     body {
-      margin: 0;
-      font-family: 'Roboto', Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-x: hidden;
-      line-height: 1.4;
+      font-family: 'Arial', sans-serif;
+      background-color: #fdfdfd;
+      color: #333;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.2em;
+    }
+    h2 {
+      font-size: 1.2em;
+      color: #666;
+      margin-top: 0;
     }
 
-    a {
-      color: var(--accent-blue);
-      text-decoration: none;
-      cursor: pointer;
-    }
-    a:hover {
-      color: var(--accent-pink);
-    }
-
-    /* Header fixo */
-    .topo {
-      position: sticky;
-      top: 0;
-      z-index: 999;
-      background: linear-gradient(90deg, rgba(249,249,249,0.95), rgba(255,255,255,0.95));
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:12px 20px;
-      gap:12px;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      backdrop-filter: blur(4px);
-      box-shadow: var(--shadow);
-    }
-
-    .topo-esquerda {
-      display:flex;
-      align-items:center;
-      gap:16px;
-      position: relative;
-    }
-
-    .logo {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 800;
-      font-size: 20px;
-      color: var(--text);
-      user-select: none;
-    }
-
-    /* Botão PF clicável */
-    .logo .mark {
-      width:44px;
-      height:44px;
-      border-radius:8px;
-      background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      color:#121212;
-      font-weight:700;
-      font-size:18px;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      position: relative;
-      transition: filter 0.2s ease;
-    }
-    .logo .mark:hover {
-      filter: brightness(1.1);
-    }
-
-    /* Dropdown Menu */
-    .dropdown-menu {
-      position: absolute;
-      top: 52px;
-      left: 0;
-      background: var(--bg-2);
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: var(--card-radius);
-      box-shadow: var(--shadow);
-      width: 180px;
-      display: none;
-      flex-direction: column;
-      padding: 8px 0;
-      z-index: 1000;
-    }
-
-    .dropdown-menu.active {
-      display: flex;
-    }
-
-    .dropdown-menu a {
-      padding: 10px 20px;
-      font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-      transition: background-color 0.15s ease;
-    }
-
-    .dropdown-menu a:hover {
-      background-color: var(--accent-pink);
-      color: #fff;
-    }
-
-    .topo .mark-container {
-      position: relative;
-    }
-
-    .canal {
-      color: var(--muted);
-      font-size: 14px;
-      padding: 6px 8px;
-      border-radius: 6px;
-      transition: all .15s ease;
-      display: inline-block;
-    }
-    .canal:hover {
-      color: var(--text);
-      background: rgba(0,0,0,0.03);
-    }
-
-    .imagem-topo img {
-      height: 44px;
+    .img-wrapper {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
       border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      margin: 20px 0 5px 0;
     }
 
-    /* Banner */
-    .banner-r7 {
-  width: 140vw;
-  height: 140px;
-  background-color: #004fff;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    .img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .img-credit {
+      font-size: 0.85em;
+      color: #777;
+      margin-bottom: 20px;
+      text-align: right;
+    }
+
+    strong {
+      color: #000;
+    }
+
+    em {
+      color: #555;
+    }
+
+    .credit {
+      font-size: 0.9em;
+      color: #888;
+    }
+    
+    .video-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  margin: 20px 0 5px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
 }
 
-    .banner img {
-      width: 100%;
-      height: 320px;
-      object-fit: cover;
-      display: block;
-    }
+.video-wrapper iframe,
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  display: block;
+}
 
-    /* Container geral */
-    .container {
-      max-width: 1100px;
-      margin: 28px auto;
-      padding: 0 18px;
-    }
-
-    /* Carrossel */
-    .carousel-container {
-      display: flex;
-      gap: 14px;
-      overflow-x: auto;
-      padding: 8px 0;
-      scroll-snap-type: x mandatory;
-    }
-    .carousel-item {
-      flex: 0 0 320px;
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      scroll-snap-align: start;
-      box-shadow: var(--shadow);
-      background: var(--bg-2);
-      transition: transform .22s ease;
-    }
-    .carousel-item:hover {
-      transform: translateY(-6px);
-    }
-    .carousel-item img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .category-label {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 12px;
-      color: #fff;
-      user-select: none;
-    }
-    .category-label.real {
-      background: var(--accent-pink);
-    }
-    .category-label.purple {
-      background: #c5007f;
-    }
-    .title-label {
-      position: absolute;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
-      background: rgba(0,0,0,0.45);
-      padding: 8px;
-      border-radius: 6px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      color: #fff;
-      user-select: none;
-    }
-
-    /* Bolinhas (seletor/programas) */
-    .bolinhas-container {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 12px 4px;
-      margin: 18px 0;
-    }
-    .bolinha {
-      width: 75px;
-      height: 75px;
-      border-radius: 50%;
-      border: 3px solid rgba(0,0,0,0.06);
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-      flex: 0 0 auto;
-      transition: transform .18s;
-      cursor: pointer;
-    }
-    .bolinha:hover {
-      transform: scale(1.06);
-    }
-
-    /* Cards de notícias */
-    .card {
-      display: flex;
-      gap: 14px;
-      background: var(--bg-2);
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform .18s;
-      cursor: pointer;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-    }
-    .card img {
-      width: 150px;
-      height: 100px;
-      object-fit: cover;
-      user-select: none;
-    }
-    .card .conteudo {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .card .meta {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      user-select: none;
-    }
-    .card a.title {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      color: var(--text);
-      font-size: 16px;
-    }
-    .card a.title:hover {
-      color: var(--accent-pink);
-    }
-
-    /* Badges */
-    .badge {
-      display: inline-block;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.75rem;
-      color: #121212;
-      margin-right: 8px;
-      user-select: none;
-    }
-    .badge.pink {
-      background: var(--accent-pink);
-      color: #fff;
-    }
-    .badge.yellow {
-      background: var(--accent-yellow);
-      color: #121212;
-    }
-
-    /* Headings */
-    h2.section-title {
-      font-family: 'Montserrat', sans-serif;
-      color: var(--accent-pink);
-      margin: 8px 0 18px;
-      user-select: none;
-    }
-
-    /* Responsividade */
-    @media (max-width:900px) {
-      .container {
-        padding: 0 12px;
-      }
-      .carousel-item {
-        flex: 0 0 280px;
-      }
-      .card img {
-        width: 120px;
-      }
-    }
-
-    @media (max-width:520px) {
-      .topo {
-        padding: 10px;
-      }
-      .logo {
-        font-size: 18px;
-      }
-      .carousel-item {
-        flex: 0 0 220px;
-      }
-      .banner img {
-        height: 200px;
-      }
-      .card {
-        flex-direction: column;
-      }
-      .card img {
-        width: 100%;
-        height: 160px;
-      }
-    }
-
-    /* Utility */
-    .muted {
-      color: var(--muted);
-    }
-    .spacer {
-      height: 18px;
-    }
-
-    /* Small accessibility tweak for focus outlines */
-    a:focus {
-      outline: 3px solid rgba(0,194,255,0.12);
-      outline-offset: 2px;
-    }
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJJZ3SH3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
-  <header class="topo">
-    <div class="topo-esquerda">
-      <div class="logo">
-        <div class="mark" id="pfButton" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="pfMenu">PF</div>
-        <div>
-          <div style="line-height:1">Portal Flop</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Notícias | Enquetes | Ao vivo</div>
-        </div>
-      </div>
-      <!-- Dropdown menu -->
-      <nav class="dropdown-menu" id="pfMenu" role="menu" aria-label="Menu principal Portal Flop">
-        <a href="#" role="menuitem" tabindex="-1">Home</a>
-        <a href="#" role="menuitem" tabindex="-1">Realities</a>
-        <a href="#" role="menuitem" tabindex="-1">Enquetes</a>
-        <a href="#" role="menuitem" tabindex="-1">Canal</a>
-        <a href="#" role="menuitem" tabindex="-1">Whatpadd</a>
-      </nav>
-    </div>
+  <h1>A Fazenda 17: Veja suposta lista vazada</h1>
+  <h2>Acompanhe 10 nomes cotados pro reality</h2>
 
-    <div style="display:flex;align-items:center;gap:12px">
-      <a class="canal" href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank">Canal</a>
-      <a class="imagem-topo" href="https://seulink.com/promocao" target="_blank" aria-label="Promoção">
-        <img src="https://i.imgur.com/orZDpuE.png" alt="Promoção">
-      </a>
-    </div>
-  </header>
+  <div class="img-wrapper">
+    <img src="https://fly.metroimg.com/upload/q_85,w_700/https://uploads.metroimg.com/wp-content/uploads/2025/07/01073008/1-3070.jpg" alt="Imagem da Fazenda 17">
+  </div>
+  <div class="img-credit">Crédito da imagem: Divulgação - Portal Metrópoles</div>
 
-<header class="banner-r7" style="background-image: url('https://i.imgur.com/HK0Hvwl.png'); background-size: cover; background-position: center;">
-  <div style="height: 200px;"></div>
-</header>
+  <p>
+    A décima sétima edição do reality show <strong>A Fazenda</strong>, da TV Record, está prestes a começar, e os rumores sobre o elenco não param de surgir. Nos últimos dias, uma <strong>suposta lista de participantes</strong> começou a circular em redes sociais e sites especializados.
+  </p>
 
-<style>
-  .banner-r7 {
-    background-color: #004fff; /* azul vibrante do banner */
-    width: 100vw;
-    padding: 10px 0 20px 0;
-    box-sizing: border-box;
-  }
-  .banner-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .banner-img {
-    height: 140px;
-    object-fit: contain;
-  }
-  .banner-logo {
-    height: 110px;
-    object-fit: contain;
-  }
-  .banner-menu {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .banner-menu button {
-    background: transparent;
-    border: 1.5px solid white;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.25s, color 0.25s;
-  }
-  .banner-menu button:hover {
-    background-color: white;
-    color: #004fff;
-  }
-  @media (max-width: 600px) {
-    .banner-content {
-      flex-direction: column;
-      gap: 12px;
-    }
-    .banner-img, .banner-logo {
-      height: 100px;
-    }
-  }
-</style>
+  <p>
+    Um dos nomes mais comentados é o de <strong>Alexandre Frota</strong>, ex-deputado federal e conhecido por sua participação em realities anteriores, como a <em>Casa dos Artistas</em>. Segundo informações divulgadas por <em>Leo Dias</em> e <em>Fábia Oliveira</em>, do portal <strong>Metrópoles</strong>, Frota já teria assinado contrato com a emissora e estaria pronto para o confinamento.
+  </p>
 
+  <div class="img-wrapper">
+    <img src="https://s2-g1.glbimg.com/KMbkVOpuINdCb5ocpQ341jkoBRw=/0x0:1700x1065/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2019/E/R/ZWOASoR1CLQ2l9YLxATA/frota.jpg" alt="Alexandre Frota">
+  </div>
+  <div class="img-credit">Crédito da imagem: Michel Jesus/Câmara dos Deputados</div>
 
-    <div class="spacer"></div>
+  <p>
+    Segundo a lista do portal Léo Dias, outro nome certo no elenco é o de <strong>Davi Brito.</strong> O campeão da 24° edição do Big Brother Brasil (Globo), foi citado como um dos principais interesses da Record para a nova temporada. Será que ele vem?
+  </p>
 
-    <!-- Bolinhas (programas / categorias) -->
-     <div class="bolinhas-container">
-  <div class="bolinha" style="background-image: url('https://i.postimg.cc/qMm87wGj/Picsart-25-07-25-11-41-07-120.png');"></div> 
-  <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-17-02-364.png');"></div> 
-  <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-15-49-190.png');"></div> 
-  <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-17-53-855.png');"></div>
-  <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-19-01-149.png');"></div>
-  <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_11-47-56-120.png');"></div>
-  <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-19-30-703.png');"></div>
- <div class="bolinha" style="background-image: url('https://i.postimg.cc/FFVyMNkt/Picsart-25-07-25-11-42-19-191.jpg');"></div>
-  <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-20-02-192.jpg');"></div>
-    </div>
+  <div class="img-wrapper">
+    <img src="https://istoe.com.br/wp-content/uploads/2025/05/SaveClip.App_496770074_178437426.jpg?ims=778x438/filters:quality(85)" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: Reprodução / Instagram: @daviooficialll</div>
+  
+  <p>
+    Campeã da sexta temporada do Power Couple, <strong>Brenda Paixão</strong> aparece na lista como destaque. Segundo a fonte, Brenda está em negociações avançadas com a emissora.
+  </p>
 
-    <!-- Carrossel de Destaques -->
-    <section class="carousel-container" aria-label="destaques">
-      <a class="carousel-item" href="Vota.html" target="_blank">
-        <img src="https://i.ibb.co/SDC62X6Z/Grid-Art-20250728-211053778.jpg" alt="Notícia 1">
-        <div class="category-label real">Realities</div>
-        <div class="title-label">Primeira Roça Formada! Vote Agora!</div>
-      </a>
+  <div class="img-wrapper">
+    <img src="https://jpimg.com.br/uploads/2023/11/snapinsta.app_387265023_814146647354288_4343866529951440309_n_1080-1-750x450.jpg" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: Reprodução / Instagram: @paixao_brenda </div>
+  
+  <p>
+    O ex ator global, <strong>Rafael Cardoso</strong>, é apontado na lista como possível participante. Envolvido em várias polêmicas, o ator falido <strong>(Por nomenclatura própria)</strong>, estaria já de contrato fechado.  </p>
 
-      <a class="carousel-item" href="Flop Notícias.html" target="_blank">
-        <img src="https://i.ibb.co/ZpmPGLjB/Chat-GPT-Image-29-de-jul-de-2025-10-51-52.png" alt="Notícia 3">
-        <div class="category-label purple">A Fazenda 17</div>
-        <div class="title-label">Veja a suposta lista vazada da Fazenda 17</div>
-      </a>
+  <div class="img-wrapper">
+    <img src="https://s2.glbimg.com/8G6LSBgGLeiP0Eib791uSSSbBBI=/640x424/top/i.glbimg.com/og/ig/infoglobo/f/original/2020/11/17/rafaelcardoso.jpg" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: João Miguel Júnior / TV Globo</div>
+  
+  <p>
+    Outro nome praticamente confirmado, é o de <strong>Yuri Fulý</strong>, ex No Limite Amazônia. O seu nome ganhou força após vídeo postado em seu instagram, em que aparece se despedindo da família.</p>
 
-      <a class="carousel-item" href="https://fshownoticias.blogspot.com/2025/07/veja-os-resultados-das-rocas-da-f8.html" target="_blank">
-        <img src="https://i.ibb.co/BKncRKdJ/file-0000000042b861f69bb327e7ad3f833a-1.png" alt="Notícia 2">
-        <div class="category-label real">Realities</div>
-        <div class="title-label">Tá revelado! Veja as porcentagens das roças da F8!</div>
-      </a>
-    </section>
+  <div class="img-wrapper">
+    <img src="https://s2-gshow.glbimg.com/7MAC5b7BU2WM4pNFMQ-oiwE2PwY=/0x0:4000x2667/1008x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2023/t/W/eIijKMRv6pmGyb5E8ofQ/yuri-fuly-e-participante-do-no-limite-amazonia.jpg" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: Mauricio Fidalgo / Globo</div>
+  
+  <p>
+    Na cota cantor, está o Ex BBB <strong>Mc Guimê</strong>, Expulso do BBB23, Guimê supostamente estaria sendo sondado pelo Record, e estaria avaliando o convite.</p>
 
-    <div class="spacer"></div>
+  <div class="img-wrapper">
+    <img src="https://i0.wp.com/newsondemand.com.br/wp-content/uploads/2023/03/MC-Guime-Lider.jpg?fit=768%2C432&ssl=1" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: Globo</div>
+  
+  <p>
+    Já o próximo nome não apareceu em nenhuma das listas citadas acima. O nome em questão, é da jornalista <strong>Soyara Almeida</strong>, que se tornou meme recentemente. A apresentadora Maranhense da Tv Guará (Afiliada da RedeTv), poderia estar na lista de futuros interesses da Record.</p>
 
-    <!-- SEÇÃO DE NOTÍCIAS ESTILO GSHOW -->
-    <section>
-      <h2 class="section-title">Projetos</h2>
+  <div class="img-wrapper">
+    <img src="https://i.ibb.co/TDZCQ7ZN/Captura-de-tela-2025-07-29-101816.png" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: instagram: @soyaraalmeida</div>
+  
+  <p>
+    Segundo o Portal Leo Dias, jornalista e ex apresentador da RedeTv, e Tv Gazeta, Fefito, já teria aceitado o convite pro reality. As suspeitas aumentaram após o jornalista ser flagrado em visitas pontuais a sedde da Record.</p>
 
-      <article class="card">
-        <img src="https://i.ibb.co/fdqZp5Xp/Logo-Come-Back.jpg" alt="Final surpreende">
-        <div class="conteudo">
-          <div class="meta">Lívros • <span class="muted">Watpadd</span></div>
-          <a class="title" href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank">Terceiro capítulo já está disponível! Clique e leia já!</a>
-        </div>
-      </article>
+  <div class="img-wrapper">
+    <img src="https://imagem.natelinha.uol.com.br/original/fefito-novo-apresentador-tv-fama-despede-tv-gazeta_731.jpeg" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: instagram: @fefito</div>
+  
+  <p>
+    Outro nome praticamente confirmado, é o da Ex BBB <strong>Eva Pacheco.</strong> Dupla de Renata Saldanha, Campeã da edição em questão, o nome de Eva vem sendo comentado dês de sua eliminação do reality global, e ganhou força após sua mudança para São Paulo. </p>
 
-      <div style="height:14px"></div>
+  <div class="img-wrapper">
+    <img src="https://s2-quem.glbimg.com/8bLPyXjcPWW55EbpwwmmY4KlK2c=/0x0:2048x1365/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_b0f0e84207c948ab8b8777be5a6a4395/internal_photos/bs/2025/F/4/YFBtsFTCCO1F3B5ghMfA/eva-pacheco-3-.jpg" alt="Participante cotado">
+  </div>
+  <div class="img-credit">Crédito da imagem: Leo Franco e Natália Rampinelli / AgNews</div>
 
-      <article class="card">
-        <img src="https://i.ibb.co/tTY6WXx8/O-Jogo-Da-Lula-Apostas-Mortais.png" alt="Votação histórica">
-        <div class="conteudo">
-          <div class="meta">Lívros • <span class="muted">Watpadd</span></div>
-          <a class="title" href="https://www.wattpad.com/story/398732648-jogo-da-lula-brasil" target="_blank">Squid Game Brasil - Acompanhe o início</a>
-        </div>
-      </article>
+  <p class="credit">
+    Fonte: Portal Leo Dias / Coluna Fábia Oliveira - Metrópoles
+  </p>
 
-      <div style="height:14px"></div>
-
-      <article class="card">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/b/bf/Power_Couple_Brasil.jpg" alt="Treta ao vivo">
-        <div class="conteudo">
-          <div class="meta">Canal • <span class="muted">YouTube</span></div>
-          <a class="title" href="https://youtu.be/l1HGeR5NR1s?si=hvV8PduhC1sWRkU_" target="_blank">Power Couple - Veja as porcentagens</a>
-          </a>
-        </div>
-      </article>
-
-    </section>
-
-  </main>
-
-  <script>
-    // Toggle menu dropdown
-    const pfButton = document.getElementById('pfButton');
-    const pfMenu = document.getElementById('pfMenu');
-
-    pfButton.addEventListener('click', () => {
-      const expanded = pfButton.getAttribute('aria-expanded') === 'true' || false;
-      pfButton.setAttribute('aria-expanded', !expanded);
-      pfMenu.classList.toggle('active');
-    });
-
-    // Fechar menu ao clicar fora
-    document.addEventListener('click', (e) => {
-      if (!pfButton.contains(e.target) && !pfMenu.contains(e.target)) {
-        pfMenu.classList.remove('active');
-        pfButton.setAttribute('aria-expanded', false);
-      }
-    });
-
-    // Acessibilidade: fechar menu com ESC
-    document.addEventListener('keydown', (e) => {
-      if(e.key === "Escape"){
-        pfMenu.classList.remove('active');
-        pfButton.setAttribute('aria-expanded', false);
-        pfButton.focus();
-      }
-    });
-  </script>
+  <p id="currentTime"></p>
+  <script src="script.js"></script>
+  
+</body>
+</html>
+<!-- partial -->
+  
 </body>
 </html>
