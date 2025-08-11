@@ -1,127 +1,217 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"
+  
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"
      crossorigin="anonymous"></script>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Flop</title>
 
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <!-- Caso use PNG, troque pela linha abaixo -->
-  <!-- <link rel="icon" href="/favicon.png" type="image/png"> -->
-  <link rel="apple-touch-icon" href="https://imgur.com/orZDpuE">
+  <link rel="apple-touch-icon" href="/favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      color: #fff;
-      overflow-x: hidden;
+    /* Paleta (variáveis) */
+    :root{
+      --bg: #f9f9f9; /* fundo principal claro */
+      --bg-2: #ffffff; /* fundo secundário */
+      --text: #121212; /* texto principal escuro */
+      --accent-pink: #FF0055; /* destaque 1 */
+      --accent-yellow: #FFD600; /* destaque 2 */
+      --accent-blue: #005fbb; /* links / hover */
+      --muted: #777777;
+      --card-radius: 10px;
+      --space: 16px;
+      --shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
 
-    /* BORDAS VISUAIS PARA DEBUG OU ESTILO */
-.topo,
-.carousel-item,
-.votacao,
-.ultimas-noticias,
-.noticia-bloco,
-.noticia-item,
-.noticia-bloco img,
-.noticia-bloco .conteudo {
-  border: 1px solid #fb352a; /* Cor suave, visível */
-}
+    /* Reset básico */
+    *{box-sizing: border-box}
+    html,body{height:100%;}
+    body {
+      margin: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
 
+    a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    a:hover {
+      color: var(--accent-pink);
+    }
+
+    /* Header fixo */
     .topo {
-      background-color: #ff4dff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 24px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: linear-gradient(90deg, rgba(249,249,249,0.95), rgba(255,255,255,0.95));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 20px;
+      gap:12px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow);
     }
 
     .topo-esquerda {
+      display:flex;
+      align-items:center;
+      gap:16px;
+      position: relative;
+    }
+
+    .logo {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--text);
+      user-select: none;
+    }
+
+    /* Botão PF clicável */
+    .logo .mark {
+      width:44px;
+      height:44px;
+      border-radius:8px;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-yellow));
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#121212;
+      font-weight:700;
+      font-size:18px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      position: relative;
+      transition: filter 0.2s ease;
+    }
+    .logo .mark:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 52px;
+      left: 0;
+      background: var(--bg-2);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      width: 180px;
+      display: none;
+      flex-direction: column;
+      padding: 8px 0;
+      z-index: 1000;
+    }
+
+    .dropdown-menu.active {
       display: flex;
-      align-items: center;
-      gap: 20px;
     }
 
-    .topo .logo {
-      font-weight: bold;
-      font-size: 24px;
-      background: white;
-      color: #5c699c;
-      padding: 6px 12px;
-      border-radius: 8px;
+    .dropdown-menu a {
+      padding: 10px 20px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      transition: background-color 0.15s ease;
     }
 
-    .topo .canal {
+    .dropdown-menu a:hover {
+      background-color: var(--accent-pink);
       color: #fff;
-      font-size: 16px;
-      text-decoration: none;
-      transition: color 0.3s ease;
     }
 
-    .topo .canal:hover {
-      color: #ffcc00;
+    .topo .mark-container {
+      position: relative;
+    }
+
+    .canal {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      transition: all .15s ease;
+      display: inline-block;
+    }
+    .canal:hover {
+      color: var(--text);
+      background: rgba(0,0,0,0.03);
     }
 
     .imagem-topo img {
-      height: 48px;
-      transition: transform 0.3s ease;
+      height: 44px;
+      border-radius: 8px;
     }
 
-    .imagem-topo img:hover {
-      transform: scale(1.05);
-    }
-
-    @media (max-width: 600px) {
-      .imagem-topo {
-        display: none;
-      }
-    }
-
+    /* Banner */
     .banner {
       width: 100%;
       max-height: 320px;
       overflow: hidden;
+      border-bottom: 4px solid rgba(0,0,0,0.05);
     }
-
     .banner img {
       width: 100%;
+      height: 320px;
       object-fit: cover;
+      display: block;
     }
 
+    /* Container geral */
+    .container {
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 0 18px;
+    }
+
+    /* Carrossel */
     .carousel-container {
       display: flex;
+      gap: 14px;
       overflow-x: auto;
+      padding: 8px 0;
       scroll-snap-type: x mandatory;
-      padding: 7px 7px 7px;
-      gap: 10px;
     }
-
     .carousel-item {
-      flex: 0 0 auto;
-      width: 320px;
-      border-radius: 12px;
+      flex: 0 0 320px;
+      border-radius: var(--card-radius);
       overflow: hidden;
       position: relative;
-      scroll-snap-align: start;
       cursor: pointer;
-      transition: transform 0.3s ease;
-      box-shadow: 0 4px 10px rgba(237, 247, 251, 1);
+      scroll-snap-align: start;
+      box-shadow: var(--shadow);
+      background: var(--bg-2);
+      transition: transform .22s ease;
     }
-
     .carousel-item:hover {
-      transform: scale(1.03);
+      transform: translateY(-6px);
     }
-
     .carousel-item img {
       width: 100%;
-      height: auto;
+      height: 200px;
+      object-fit: cover;
       display: block;
     }
 
@@ -129,172 +219,220 @@
       position: absolute;
       top: 10px;
       left: 10px;
-      background-color: #e60000;
-      padding: 5px 10px;
-      border-radius: 5px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
       font-size: 12px;
-      text-transform: uppercase;
-      color: #fff !important;
-      font-weight: bold;
+      color: #fff;
+      user-select: none;
     }
-
+    .category-label.real {
+      background: var(--accent-pink);
+    }
     .category-label.purple {
-      background-color: #c5007f;
+      background: #c5007f;
     }
-
     .title-label {
       position: absolute;
-      bottom: 10px;
       left: 10px;
       right: 10px;
-      background-color: rgb(51, 51, 204);
+      bottom: 10px;
+      background: rgba(0,0,0,0.45);
       padding: 8px;
       border-radius: 6px;
-      font-size: 14px;
-      color: #fff !important;
-      font-weight: 500;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      user-select: none;
     }
 
-    .votacao {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-
-    .votacao img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
+    /* Bolinhas (seletor/programas) */
     .bolinhas-container {
       display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
       gap: 12px;
-      padding: 12px 10px;
-      margin-top: 1px;
-      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 12px 4px;
+      margin: 18px 0;
     }
-
-    .bolinhas-container {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .bolinhas-container::-webkit-scrollbar {
-      display: none;
-    }
-
     .bolinha {
       width: 75px;
       height: 75px;
       border-radius: 50%;
-      border: 2px solid #ff5a00;
+      border: 3px solid rgba(0,0,0,0.06);
       background-size: cover;
       background-position: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      flex: 0 0 auto;
+      transition: transform .18s;
       cursor: pointer;
-      transition: transform 0.3s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      scroll-snap-align: start;
-      flex-shrink: 0;
     }
-
     .bolinha:hover {
-      transform: scale(1.08);
+      transform: scale(1.06);
     }
 
-    .seta {
-      font-size: 25px;
-      user-select: none;
-      color: #ccc;
-    }
-
-    .ultimas-noticias {
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .ultimas-noticias h2 {
-      color: #5c699c;
-      font-family: Arial, sans-serif;
-      margin-bottom: 20px;
-      font-size: 24px;
-    }
-
-    .noticia-bloco {
+    /* Cards de notícias */
+    .card {
       display: flex;
-      gap: 15px;
-      margin-bottom: 20px;
-      background: #2c2c2c;
-      border-radius: 10px;
+      gap: 14px;
+      background: var(--bg-2);
+      border-radius: var(--card-radius);
       overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
+      box-shadow: var(--shadow);
+      transition: transform .18s;
+      cursor: pointer;
     }
-
-    .noticia-bloco:hover {
-      transform: translateY(-3px);
+    .card:hover {
+      transform: translateY(-6px);
     }
-
-    .noticia-bloco img {
+    .card img {
       width: 150px;
       height: 100px;
       object-fit: cover;
+      user-select: none;
     }
-
-    .noticia-bloco .conteudo {
-      padding: 10px;
+    .card .conteudo {
+      padding: 12px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-
-    .noticia-bloco .conteudo div {
+    .card .meta {
       font-size: 12px;
-      color: #bbb;
-      margin-bottom: 6px;
+      color: var(--muted);
       text-transform: uppercase;
+      margin-bottom: 6px;
+      user-select: none;
     }
-
-    .noticia-bloco .conteudo a {
-      color: #fff;
+    .card a.title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: var(--text);
       font-size: 16px;
-      text-decoration: none;
-      line-height: 1.4;
-      transition: color 0.3s ease;
+    }
+    .card a.title:hover {
+      color: var(--accent-pink);
     }
 
-    .noticia-bloco .conteudo a:hover {
-      color: #ffcc00;
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: #121212;
+      margin-right: 8px;
+      user-select: none;
+    }
+    .badge.pink {
+      background: var(--accent-pink);
+      color: #fff;
+    }
+    .badge.yellow {
+      background: var(--accent-yellow);
+      color: #121212;
+    }
+
+    /* Headings */
+    h2.section-title {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--accent-pink);
+      margin: 8px 0 18px;
+      user-select: none;
+    }
+
+    /* Responsividade */
+    @media (max-width:900px) {
+      .container {
+        padding: 0 12px;
+      }
+      .carousel-item {
+        flex: 0 0 280px;
+      }
+      .card img {
+        width: 120px;
+      }
+    }
+
+    @media (max-width:520px) {
+      .topo {
+        padding: 10px;
+      }
+      .logo {
+        font-size: 18px;
+      }
+      .carousel-item {
+        flex: 0 0 220px;
+      }
+      .banner img {
+        height: 200px;
+      }
+      .card {
+        flex-direction: column;
+      }
+      .card img {
+        width: 100%;
+        height: 160px;
+      }
+    }
+
+    /* Utility */
+    .muted {
+      color: var(--muted);
+    }
+    .spacer {
+      height: 18px;
+    }
+
+    /* Small accessibility tweak for focus outlines */
+    a:focus {
+      outline: 3px solid rgba(0,194,255,0.12);
+      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
-  
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJJZ3SH3"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJJZ3SH3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <header class="topo">
-  <a class="imagem-topo" href="https://seulink.com/promocao" target="_blank">
-    <img src="https://i.imgur.com/orZDpuE.png" alt="Promoção">
-  </a>
-  <div class="topo-esquerda">
-    <span class="logo">Portal Flop</span>
-    <a class="canal" href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank">Canal</a>
-  </div>
-</header>
-    
-  <div class="banner">
-    <img src="https://yt3.googleusercontent.com/hmcYwDAhvOugp5HG8wMdxV_YQyqX99l_cl9O3YLkHUVT_tQtEB2HpN2JUB3hnJJy4VJplhpV=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" alt="Imagem de topo">
-  </div>
+    <div class="topo-esquerda">
+      <div class="logo">
+        <div class="mark" id="pfButton" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="pfMenu">PF</div>
+        <div>
+          <div style="line-height:1">Portal Flop</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Notícias | Enquetes | Ao vivo</div>
+        </div>
+      </div>
+      <!-- Dropdown menu -->
+      <nav class="dropdown-menu" id="pfMenu" role="menu" aria-label="Menu principal Portal Flop">
+        <a href="#" role="menuitem" tabindex="-1">Home</a>
+        <a href="#" role="menuitem" tabindex="-1">Realities</a>
+        <a href="#" role="menuitem" tabindex="-1">Enquetes</a>
+        <a href="#" role="menuitem" tabindex="-1">Canal</a>
+        <a href="#" role="menuitem" tabindex="-1">Whatpadd</a>
+      </nav>
+    </div>
 
-  <div class="bolinhas-container">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a class="canal" href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank">Canal</a>
+      <a class="imagem-topo" href="https://seulink.com/promocao" target="_blank" aria-label="Promoção">
+        <img src="https://i.imgur.com/orZDpuE.png" alt="Promoção">
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="banner">
+      <img src="https://yt3.googleusercontent.com/hmcYwDAhvOugp5HG8wMdxV_YQyqX99l_cl9O3YLkHUVT_tQtEB2HpN2JUB3hnJJy4VJplhpV=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" alt="Imagem de topo">
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- Bolinhas (programas / categorias) -->
+     <div class="bolinhas-container">
   <div class="bolinha" style="background-image: url('https://i.postimg.cc/qMm87wGj/Picsart-25-07-25-11-41-07-120.png');"></div> 
   <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-17-02-364.png');"></div> 
   <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-15-49-190.png');"></div> 
@@ -304,61 +442,95 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-19-30-703.png');"></div>
  <div class="bolinha" style="background-image: url('https://i.postimg.cc/FFVyMNkt/Picsart-25-07-25-11-42-19-191.jpg');"></div>
   <div class="bolinha" style="background-image: url('https://uploads.onecompiler.io/43rrpszsa/43rrpsnbt/Picsart_25-07-25_14-20-02-192.jpg');"></div>
-</div>
-
-  </div>
-  <!-- CARROSSEL DE DESTAQUES -->
-  <div class="carousel-container">
-    <a class="carousel-item" href="Vota.html" target="_blank">
-      <img src="https://i.ibb.co/SDC62X6Z/Grid-Art-20250728-211053778.jpg" alt="Notícia 1">
-      <div class="category-label">Realities</div>
-      <div class="title-label">Primeira Roça Formada! Vote Agora!</div>
-    </a>    
-    <a class="carousel-item" href="Flop Notícias.html" target="_blank">
-      <img src="https://i.ibb.co/ZpmPGLjB/Chat-GPT-Image-29-de-jul-de-2025-10-51-52.png" alt="Notícia 3">
-      <div class="category-label purple">A Fazenda 17</div>
-      <div class="title-label">Veja a suposta lista vazada da Fazenda 17</div>
-    </a>
-    <a class="carousel-item" href="https://fshownoticias.blogspot.com/2025/07/veja-os-resultados-das-rocas-da-f8.html" target="_blank">
-      <img src="https://i.ibb.co/BKncRKdJ/file-0000000042b861f69bb327e7ad3f833a-1.png" alt="Notícia 2">
-      <div class="category-label">Realities</div>
-      <div class="title-label">Tá revelado! Veja as porcentagens das roças da F8!</div>
-    </a>
-
-  </div>
-
-  <!-- SEÇÃO DE NOTÍCIAS ESTILO GSHOW -->
-  <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
-    <h2 style="color: #5c699c; font-family: Arial, sans-serif; margin-bottom: 20px;">Projetos</h2>
-
-    <div style="display: flex; gap: 15px; margin-bottom: 20px; background: #404040; border-radius: 10px; overflow: hidden;">
-      <img src="https://i.ibb.co/fdqZp5Xp/Logo-Come-Back.jpg" alt="Final surpreende" style="width: 150px; height: 100px; object-fit: cover;">
-      <div style="padding: 10px;">
-        <div style="font-size: 12px; color: #aaa; margin-bottom: 5px;">Lívros</div>
-        <a href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank" style="color: #fff; font-size: 16px; text-decoration: none;">
-          Terceiro capítulo já está disponível! Clique e leia já!
-        </a> 
-      </div>
     </div>
 
-    <div style="display: flex; gap: 15px; margin-bottom: 20px; background: #404040; border-radius: 10px; overflow: hidden;">
-      <img src="https://i.ibb.co/tTY6WXx8/O-Jogo-Da-Lula-Apostas-Mortais.png" alt="Votação histórica" style="width: 150px; height: 100px; object-fit: cover;">
-      <div style="padding: 10px;">
-        <div style="font-size: 12px; color: #aaa; margin-bottom: 5px;">Lívros</div>
-        <a href="https://www.wattpad.com/story/398732648-jogo-da-lula-brasil" target="_blank" style="color: #fff; font-size: 16px; text-decoration: none;">
-          Squid Game Brasil - Acompanhe o início
-        </a>
-      </div>
-    </div>
+    <!-- Carrossel de Destaques -->
+    <section class="carousel-container" aria-label="destaques">
+      <a class="carousel-item" href="Vota.html" target="_blank">
+        <img src="https://i.ibb.co/SDC62X6Z/Grid-Art-20250728-211053778.jpg" alt="Notícia 1">
+        <div class="category-label real">Realities</div>
+        <div class="title-label">Primeira Roça Formada! Vote Agora!</div>
+      </a>
 
-    <div style="display: flex; gap: 15px; margin-bottom: 20px; background: #404040; border-radius: 10px; overflow: hidden;">
-      <img src="https://upload.wikimedia.org/wikipedia/pt/b/bf/Power_Couple_Brasil.jpg" alt="Treta ao vivo" style="width: 150px; height: 100px; object-fit: cover;">
-      <div style="padding: 10px;">
-        <div style="font-size: 12px; color: #aaa; margin-bottom: 5px;">Canal</div>
-        <a href="https://youtu.be/l1HGeR5NR1s?si=hvV8PduhC1sWRkU_" target="_blank" style="color: #fff; font-size: 16px; text-decoration: none;">
-          Power Couple - Veja as porcentagens
-        </a>
-      </div>
-    </div>
+      <a class="carousel-item" href="Flop Notícias.html" target="_blank">
+        <img src="https://i.ibb.co/ZpmPGLjB/Chat-GPT-Image-29-de-jul-de-2025-10-51-52.png" alt="Notícia 3">
+        <div class="category-label purple">A Fazenda 17</div>
+        <div class="title-label">Veja a suposta lista vazada da Fazenda 17</div>
+      </a>
+
+      <a class="carousel-item" href="https://fshownoticias.blogspot.com/2025/07/veja-os-resultados-das-rocas-da-f8.html" target="_blank">
+        <img src="https://i.ibb.co/BKncRKdJ/file-0000000042b861f69bb327e7ad3f833a-1.png" alt="Notícia 2">
+        <div class="category-label real">Realities</div>
+        <div class="title-label">Tá revelado! Veja as porcentagens das roças da F8!</div>
+      </a>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- SEÇÃO DE NOTÍCIAS ESTILO GSHOW -->
+    <section>
+      <h2 class="section-title">Projetos</h2>
+
+      <article class="card">
+        <img src="https://i.ibb.co/fdqZp5Xp/Logo-Come-Back.jpg" alt="Final surpreende">
+        <div class="conteudo">
+          <div class="meta">Lívros • <span class="muted">Watpadd</span></div>
+          <a class="title" href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank">Terceiro capítulo já está disponível! Clique e leia já!</a>
+        </div>
+      </article>
+
+      <div style="height:14px"></div>
+
+      <article class="card">
+        <img src="https://i.ibb.co/tTY6WXx8/O-Jogo-Da-Lula-Apostas-Mortais.png" alt="Votação histórica">
+        <div class="conteudo">
+          <div class="meta">Lívros • <span class="muted">Watpadd</span></div>
+          <a class="title" href="https://www.wattpad.com/story/398732648-jogo-da-lula-brasil" target="_blank">Squid Game Brasil - Acompanhe o início</a>
+        </div>
+      </article>
+
+      <div style="height:14px"></div>
+
+      <article class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/b/bf/Power_Couple_Brasil.jpg" alt="Treta ao vivo">
+        <div class="conteudo">
+          <div class="meta">Canal • <span class="muted">YouTube</span></div>
+          <a class="title" href="https://youtu.be/l1HGeR5NR1s?si=hvV8PduhC1sWRkU_" target="_blank">Power Couple - Veja as porcentagens</a>
+          </a>
+        </div>
+      </article>
+
+    </section>
+
+  </main>
+
+  <script>
+    // Toggle menu dropdown
+    const pfButton = document.getElementById('pfButton');
+    const pfMenu = document.getElementById('pfMenu');
+
+    pfButton.addEventListener('click', () => {
+      const expanded = pfButton.getAttribute('aria-expanded') === 'true' || false;
+      pfButton.setAttribute('aria-expanded', !expanded);
+      pfMenu.classList.toggle('active');
+    });
+
+    // Fechar menu ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!pfButton.contains(e.target) && !pfMenu.contains(e.target)) {
+        pfMenu.classList.remove('active');
+        pfButton.setAttribute('aria-expanded', false);
+      }
+    });
+
+    // Acessibilidade: fechar menu com ESC
+    document.addEventListener('keydown', (e) => {
+      if(e.key === "Escape"){
+        pfMenu.classList.remove('active');
+        pfButton.setAttribute('aria-expanded', false);
+        pfButton.focus();
+      }
+    });
+  </script>
 </body>
 </html>
