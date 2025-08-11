@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo da Cobrinha</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    #container {
+      position: relative;
+    }
+
+    canvas {
+      border: 3px solid #00ff00;
+      background: #000;
+      display: block;
+    }
+
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      font-weight: bold;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 5px 15px;
+      border-radius: 10px;
+      border: 1px solid #0f0;
+    }
+
+    /* Controles para celular */
+    #controls {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: 60px 60px 60px;
+      grid-template-rows: 60px 60px;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .btn {
+      width: 60px;
+      height: 60px;
+      background: #222;
+      color: white;
+      font-size: 24px;
+      border-radius: 50%;
+      border: 2px solid #0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .btn:active {
+      background: #0f0;
+      color: black;
+    }
+
+    .empty {
+      pointer-events: none;
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="score">Pontos: 0</div>
+    <canvas width="400" height="400" id="game"></canvas>
+
+    <!-- Controles para celular -->
+    <div id="controls">
+      <div class="empty"></div>
+      <div class="btn" id="btn-up">↑</div>
+      <div class="empty"></div>
+      <div class="btn" id="btn-left">←</div>
+      <div class="btn" id="btn-down">↓</div>
+      <div class="btn" id="btn-right">→</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const context = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('score');
+
+    const grid = 16;
+    let count = 0;
+    let points = 0;
+
+    let snake = {
+      x: 160,
+      y: 160,
+      dx: grid,
+      dy: 0,
+      cells: [],
+      maxCells: 4
+    };
+
+    let apple = {
+      x: 320,
+      y: 320
+    };
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function resetGame() {
+      snake.x = 160;
+      snake.y = 160;
+      snake.cells = [];
+      snake.maxCells = 4;
+      snake.dx = grid;
+      snake.dy = 0;
+      apple.x = getRandomInt(0, 25) * grid;
+      apple.y = getRandomInt(0, 25) * grid;
+      points = 0;
+      updateScore();
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = 'Pontos: ' + points;
+    }
+
+    function loop() {
+      requestAnimationFrame(loop);
+      if (++count < 4) return;
+      count = 0;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      snake.x += snake.dx;
+      snake.y += snake.dy;
+
+      if (snake.x < 0) snake.x = canvas.width - grid;
+      else if (snake.x >= canvas.width) snake.x = 0;
+
+      if (snake.y < 0) snake.y = canvas.height - grid;
+      else if (snake.y >= canvas.height) snake.y = 0;
+
+      snake.cells.unshift({ x: snake.x, y: snake.y });
+
+      if (snake.cells.length > snake.maxCells) {
+        snake.cells.pop();
+      }
+
+      context.fillStyle = 'red';
+      context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+
+      context.fillStyle = 'lime';
+      snake.cells.forEach(function(cell, index) {
+        context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+
+        if (cell.x === apple.x && cell.y === apple.y) {
+          snake.maxCells++;
+          points++;
+          updateScore();
+          apple.x = getRandomInt(0, 25) * grid;
+          apple.y = getRandomInt(0, 25) * grid;
+        }
+
+        for (let i = index + 1; i < snake.cells.length; i++) {
+          if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+            resetGame();
+          }
+        }
+      });
+    }
+
+    // Teclado
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft' && snake.dx === 0) {
+        snake.dx = -grid;
+        snake.dy = 0;
+      } else if (e.key === 'ArrowUp' && snake.dy === 0) {
+        snake.dy = -grid;
+        snake.dx = 0;
+      } else if (e.key === 'ArrowRight' && snake.dx === 0) {
+        snake.dx = grid;
+        snake.dy = 0;
+      } else if (e.key === 'ArrowDown' && snake.dy === 0) {
+        snake.dy = grid;
+        snake.dx = 0;
+      }
+    });
+
+    // Controles para celular
+    document.getElementById('btn-left').addEventListener('click', () => {
+      if (snake.dx === 0) {
+        snake.dx = -grid;
+        snake.dy = 0;
+      }
+    });
+
+    document.getElementById('btn-up').addEventListener('click', () => {
+      if (snake.dy === 0) {
+        snake.dy = -grid;
+        snake.dx = 0;
+      }
+    });
+
+    document.getElementById('btn-right').addEventListener('click', () => {
+      if (snake.dx === 0) {
+        snake.dx = grid;
+        snake.dy = 0;
+      }
+    });
+
+    document.getElementById('btn-down').addEventListener('click', () => {
+      if (snake.dy === 0) {
+        snake.dy = grid;
+        snake.dx = 0;
+      }
+    });
+
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
