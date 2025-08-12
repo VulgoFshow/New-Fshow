@@ -1,104 +1,193 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blocos de Notícias</title>
   <style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"
-     crossorigin="anonymous"></script>
+    :root{
+      --bg:#ffffff;
+      --card-bg:#4a4a4a; /* painel direito */
+      --label:#c9c9c9;
+      --title:#ffffff;
+      --radius:18px;
+      --gap:20px;
+      --shadow: 0 6px 18px rgba(0,0,0,0.12);
+      --card-height:110px;
+      --image-width:220px;
+    }
+
+    /* reset simples */
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--bg);
+      font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding:32px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:#222;
+    }
+
+    .container{
+      max-width:920px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+    }
+
+    .news-card{
+      display:flex;
+      align-items:stretch;
+      background:transparent;
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      height:var(--card-height);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .news-card:hover{
+      transform:translateY(-6px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+    }
+
+    /* área da imagem */
+    .news-image{
+      width:var(--image-width);
+      min-width:140px;
+      height:100%;
+      display:block;
+      flex-shrink:0;
+      position:relative;
+      overflow:hidden;
+      background:#000;
+    }
+    .news-image img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition:transform .35s ease;
+    }
+    .news-card:hover .news-image img{
+      transform:scale(1.03);
+    }
+    /* painel direito */
+    .news-panel{
+      flex:1;
+      background:var(--card-bg);
+      padding:18px 22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .label{
+      color:var(--label);
+      font-size:14px;
+      margin-bottom:8px;
+      opacity:0.95;
+    }
+    .title{
+      color:var(--title);
+      font-size:22px;
+      line-height:1.18;
+      font-weight:600;
+      text-decoration:none;
+      max-height:3.6em;
+      overflow:hidden;
+    }
+
+    /* links visuais (imagem e título são separados) */
+    a.image-link, a.text-link{
+      display:block;
+      height:100%;
+      width:100%;
+      text-decoration:none;
+      color:inherit;
+    }
+    a.text-link:focus, a.image-link:focus{
+      outline:3px solid rgba(255,255,255,0.18);
+      outline-offset:3px;
+    }
+
+    /* mobile adjustments */
+    @media (max-width:700px){
+      :root{ --image-width:140px; --card-height:120px }
+      .news-card{ flex-direction:row; }
+      .title{ font-size:18px }
+    }
+
+    @media (max-width:520px){
+      .news-card{
+        flex-direction:column;
+        height:auto;
+      }
+      .news-image{ width:100%; height:180px; min-width:0; }
+      .news-panel{ padding:14px; }
+    }
+
+    /* small helper for demo-only (remove if quiser) */
+    .hint{ margin:12px 0 24px; color:#666; font-size:14px }
+  </style>
+</head>
+<body>
   
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Flop - Games</title>
+  <h1>Livros</h1>
+  
+  <main class="container">
 
-/* Cards de notícias */
-    .card {
-      display: flex;
-      gap: 1px;
-      background: var(--bg-2);
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform .18s;
-      cursor: pointer;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-    }
-    .card img {
-      width: 150px;
-      height: 100px;
-      object-fit: cover;
-      user-select: none;
-    }
-    .card .conteudo {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .card .meta {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      user-select: none;
-    }
-    .card a.title {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      color: var(--text);
-      font-size: 16px;
-    }
-    .card a.title:hover {
-      color: var(--accent-pink);
-    }
+    <!-- Card 1 -->
+    <article class="news-card" aria-label="Subway Surfers">
+      <!-- imagem clicável -->
+      <a class="image-link news-image" href="sub.html" target="_blank" rel="noopener noreferrer" aria-label="jogar">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRS5xpxv9mSlSym44R6rOL4xlGv1QHMA7x5T2znCCaFGqVwcl8Zdaei8akk&s=10" alt="Jogo da Lula" />
+      </a>
+
+      <!-- painel de texto, com texto clicável -->
+      <div class="news-panel">
+        <div class="label">Jogos</div>
+        <a class="text-link" href="sub.html" target="_blank" rel="noopener noreferrer" aria-label="Jogo da Lula">
+          <div class="title">Subway Surfers - Jogar</div>
+        </a>
+      </div>
+    </article>
+
+<script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
     
-    .card img {
-        width: 120px;
-      }
-    }
+    <!-- Card 2 -->
+    <article class="news-card" aria-label="Snake">
+      <a class="image-link news-image" href="snake.html" target="_blank" rel="noopener noreferrer" aria-label="Ir para Squid Game Brasil">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXIZCJif8YqJ1wUROPAz4LaiXxhzjDteaPtA&s" alt="Capa ComeBack" />
+      </a>
+
+      <div class="news-panel">
+        <div class="label">Jogos</div>
+        <a class="text-link" href="snake.html" target="_blank" rel="noopener noreferrer" aria-label="Ler: Squid Game Brasil - Acompanhe o início">
+          <div class="title">Snake - Jogar</div>
+        </a>
+      </div>
+    </article>
+
+<script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
     
-    .card {
-        flex-direction: column;
-      }
-      .card img {
-        width: 100%;
-        height: 160px;
-      }
-    }
-    </style>
+    <!-- Card 3 -->
+    <article class="news-card" aria-label="Notícia 3">
+      <a class="image-link news-image" href="https://www.wattpad.com/story/399523629-premoni%C3%A7%C3%A3o-1-a-morte-te-engana" target="_blank" rel="noopener noreferrer" aria-label="Ir para Power Couple">
+        <img src="https://img.wattpad.com/story_parts/1566839679/images/18598919f1f7e984464341546336.jpg" alt="Premonição 1" />
+      </a>
+
+      <div class="news-panel">
+        <div class="label">Parceiros</div>
+        <a class="text-link" href="https://www.wattpad.com/story/399523629-premoni%C3%A7%C3%A3o-1-a-morte-te-engana" target="_blank" rel="noopener noreferrer" aria-label="Ver porcentagens do Power Couple">
+          <div class="title">Premonição 1 | A morte te engana (By deadl0vexz)</div>
+        </a>
+      </div>
+    </article>
+
+    <script type='text/javascript' src='//pl27399084.profitableratecpm.com/f0/77/71/f07771a638efa8ae03478ed4743de85e.js'></script>
     
- <section>
-      <h2 class="section-title">Flop Games</h2>
-
-      <article class="card">
-        <img src="https://img.gamepix.com/games/snake-game-online/cover/snake-game-online.png?w=400&ar=16:10" alt="Final surpreende">
-        <div class="conteudo">
-          <div class="meta">Jogos<span class="muted"><div>
-          <a class="title" href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank">Snake</a>
-        </div>
-      </article>
-
-      <div style="height:14px"></div>
-
-      <article class="card">
-        <img src="https://www.adrenaline.com.br/wp-content/uploads/2024/06/novo-jogo-tetris-mobile-912x569.jpg" alt="Votação histórica">
-        <div class="conteudo">
-          <div class="meta">Jogos<span class="muted"><div>
-          <a class="title" href="tetris.html" target="_blank">Tetris</a>
-        </div>
-      </article>
-
-      <div style="height:14px"></div>
-
-      <article class="card">
-        <img src="https://repository-images.githubusercontent.com/361434013/3d83c000-a5aa-11eb-84c9-70f0a3879c26" alt="Treta ao vivo">
-        <div class="conteudo">
-          <div class="meta">Jogos<span class="muted"></span></div>
-          <a class="title" href="Funkin-main.html" target="_blank">Friday Night Funking</a>
-          </a>
-        </div>
-      </article>
-
-    </section>
-
   </main>
+</body>
+</html>
