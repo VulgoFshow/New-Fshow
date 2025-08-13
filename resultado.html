@@ -17,21 +17,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 30px 20px;
+      padding: 40px 20px;
       min-height: 100vh;
     }
 
     h1 {
-      font-size: 20px;
+      font-size: 26px;
       color: #222;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       text-align: center;
     }
 
     .total-votos {
-      font-size: 15px;
+      font-size: 18px;
       color: #666;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
 
     #lista-participantes {
@@ -47,10 +47,10 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
       display: flex;
       align-items: center;
-      padding: 20px 24px;
-      margin-bottom: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
       transition: transform 0.2s ease;
     }
 
@@ -59,11 +59,11 @@
     }
 
     .card img {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       object-fit: cover;
       border-radius: 10px;
-      margin-right: 20px;
+      margin-right: 24px;
     }
 
     .card-info {
@@ -71,32 +71,33 @@
     }
 
     .card-info span {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 600;
       color: #111;
     }
 
     .card-info small {
-      font-size: 14px;
+      font-size: 16px;
       color: #777;
     }
 
     .card-percent {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
       color: #007bff;
-      margin-left: 12px;
+      margin-left: 16px;
       white-space: nowrap;
     }
 
     .botao-votar {
-      margin-top: 30px;
-      padding: 12px 24px;
+      margin-top: 40px;
+      padding: 16px 32px;
       background-color: #007bff;
       color: white;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 600;
+      font-size: 18px;
       transition: background-color 0.2s ease;
     }
 
@@ -109,16 +110,31 @@
         flex-direction: column;
         align-items: flex-start;
         text-align: left;
-        padding: 16px;
+        padding: 20px;
       }
 
       .card img {
-        margin: 0 0 12px 0;
+        margin: 0 0 16px 0;
+        width: 100%;
+        height: auto;
       }
 
       .card-percent {
-        margin-top: 10px;
+        margin-top: 12px;
         margin-left: 0;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .total-votos {
+        font-size: 16px;
+      }
+
+      .botao-votar {
+        width: 100%;
+        text-align: center;
       }
     }
   </style>
@@ -139,10 +155,20 @@
     );
 
     const fotos = {
-      "Victor": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdsG6u0fu_mksmbtc6yQom3DiaZntmlyRkLw&s",
-      "Luca": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/NU5IXMZHUFMIFJRTIVSB523KUM.jpg?auth=e348fc894ddc35f9989397735016deea81778c473928b0564cb8527acf91bbc3&width=550&height=310",
-      "Koyuh": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/KXCTCRPBINHBJGYRNMJEPDFKRQ.png?auth=fa2d603dc3aa15eed5cf42ec5c79480537fc443e9a455190635983dde7d82634&width=677&height=369",
-      "Eueu": "https://www.estrelando.com.br/uploads/2025/05/02/ana-paula-antony-nota-1746155214.jpg"
+      "Bea": "/Estrela/bea.webp",
+      "Biahh": "/Estrela/biahh.webp",
+      "Brenno": "/Estrela/brenno.webp",
+      "Camille": "/Estrela/camille.webp",
+      "Daniel": "/Estrela/daniel.webp",
+      "Gabriel": "/Estrela/gabriel.webp",
+      "Hanii": "/Estrela/hanii.webp",
+      "Janicio": "/Estrela/janicio.webp",
+      "Juceir": "/Estrela/juceir.webp",
+      "Nirah": "/Estrela/nirah.webp",
+      "Rauma": "/Estrela/rauma.webp",
+      "Saudario": "/Estrela/saudario.webp",
+      "Taliz": "/Estrela/taliz.webp",
+      "Thaina": "/Estrela/thaina.webp"
     };
 
     async function carregarResultados() {
