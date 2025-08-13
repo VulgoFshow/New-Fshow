@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Resultado</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
@@ -17,21 +17,23 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      padding: 50px 20px;
       min-height: 100vh;
     }
 
     h1 {
-      font-size: 26px;
+      font-size: 32px;
       color: #222;
-      margin-bottom: 12px;
+      margin-bottom: 20px;
       text-align: center;
+      line-height: 1.2;
     }
 
     .total-votos {
-      font-size: 18px;
+      font-size: 22px;
       color: #666;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
+      font-weight: 600;
     }
 
     #lista-participantes {
@@ -43,27 +45,28 @@
 
     .card {
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
       display: flex;
       align-items: center;
-      padding: 24px;
-      margin-bottom: 20px;
+      padding: 32px 28px;
+      margin-bottom: 28px;
       width: 100%;
-      max-width: 700px;
+      max-width: 720px;
       transition: transform 0.2s ease;
     }
 
     .card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
     }
 
     .card img {
-      width: 100px;
-      height: 100px;
+      width: 130px;
+      height: 130px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-right: 24px;
+      border-radius: 14px;
+      margin-right: 28px;
+      flex-shrink: 0;
     }
 
     .card-info {
@@ -71,34 +74,40 @@
     }
 
     .card-info span {
-      font-size: 22px;
-      font-weight: 600;
+      font-size: 26px;
+      font-weight: 700;
       color: #111;
+      display: block;
+      margin-bottom: 8px;
     }
 
     .card-info small {
-      font-size: 16px;
-      color: #777;
+      font-size: 18px;
+      color: #555;
+      font-weight: 600;
     }
 
     .card-percent {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 24px;
+      font-weight: 700;
       color: #007bff;
-      margin-left: 16px;
+      margin-left: 20px;
       white-space: nowrap;
+      min-width: 80px;
+      text-align: right;
     }
 
     .botao-votar {
-      margin-top: 40px;
-      padding: 16px 32px;
+      margin-top: 50px;
+      padding: 20px 40px;
       background-color: #007bff;
       color: white;
       text-decoration: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 22px;
       transition: background-color 0.2s ease;
+      user-select: none;
     }
 
     .botao-votar:hover {
@@ -106,35 +115,54 @@
     }
 
     @media (max-width: 600px) {
+      body {
+        padding: 40px 15px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .total-votos {
+        font-size: 20px;
+        margin-bottom: 30px;
+      }
+
       .card {
         flex-direction: column;
         align-items: flex-start;
         text-align: left;
-        padding: 20px;
+        padding: 28px 20px;
       }
 
       .card img {
-        margin: 0 0 16px 0;
         width: 100%;
         height: auto;
+        margin: 0 0 20px 0;
+        border-radius: 12px;
       }
 
-      .card-percent {
-        margin-top: 12px;
-        margin-left: 0;
-      }
-
-      h1 {
+      .card-info span {
         font-size: 24px;
       }
 
-      .total-votos {
+      .card-info small {
         font-size: 16px;
+      }
+
+      .card-percent {
+        margin-top: 16px;
+        margin-left: 0;
+        font-size: 22px;
+        text-align: left;
+        min-width: auto;
       }
 
       .botao-votar {
         width: 100%;
-        text-align: center;
+        font-size: 24px;
+        padding: 22px 0;
+        border-radius: 16px;
       }
     }
   </style>
@@ -144,8 +172,11 @@
   <div class="total-votos" id="total-votos">Carregando votos...</div>
   <div id="lista-participantes"></div>
 
-  <a href="/enquete.html" class="botao-votar">Votar novamente</a>
+  <a href="/votacao.html" class="botao-votar">Votar novamente</a>
 
+<script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+  
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
@@ -170,7 +201,7 @@
       "Taliz": "/Estrela/taliz.webp",
       "Thaina": "/Estrela/thaina.webp"
     };
-
+    
     async function carregarResultados() {
       const { data, error } = await supabase
         .from('evotos')
@@ -208,7 +239,12 @@
     }
 
     carregarResultados();
+
+    <script type='text/javascript' src='//pl27406163.profitableratecpm.com/d3/25/1a/d3251a0f9688a2269fea89fd6bca851b.js'></script>
+
+  <script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+  
   </script>
 </body>
 </html>
-
