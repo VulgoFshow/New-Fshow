@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 20px;
+      color: #222;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .total-votos {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    #lista-participantes {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 20px 24px;
+      margin-bottom: 18px;
+      width: 100%;
+      max-width: 600px;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+
+    .card-info {
+      flex: 1;
+    }
+
+    .card-info span {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .card-info small {
+      font-size: 14px;
+      color: #777;
+    }
+
+    .card-percent {
+      font-size: 18px;
+      font-weight: 600;
+      color: #007bff;
+      margin-left: 12px;
+      white-space: nowrap;
+    }
+
+    .botao-votar {
+      margin-top: 30px;
+      padding: 12px 24px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+    }
+
+    .botao-votar:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        padding: 16px;
+      }
+
+      .card img {
+        margin: 0 0 12px 0;
+      }
+
+      .card-percent {
+        margin-top: 10px;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Qual seu participante favorito do Estrela da Casa?</h1>
+  <div class="total-votos" id="total-votos">Carregando votos...</div>
+  <div id="lista-participantes"></div>
+
+  <a href="/votacao.html" class="botao-votar">Votar novamente</a>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+    const supabase = createClient(
+      'https://maroopnrcrpoizpjhmss.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
+    );
+
+    const fotos = {
+      "Victor": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdsG6u0fu_mksmbtc6yQom3DiaZntmlyRkLw&s",
+      "Luca": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/NU5IXMZHUFMIFJRTIVSB523KUM.jpg?auth=e348fc894ddc35f9989397735016deea81778c473928b0564cb8527acf91bbc3&width=550&height=310",
+      "Koyuh": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/KXCTCRPBINHBJGYRNMJEPDFKRQ.png?auth=fa2d603dc3aa15eed5cf42ec5c79480537fc443e9a455190635983dde7d82634&width=677&height=369",
+      "Eueu": "https://www.estrelando.com.br/uploads/2025/05/02/ana-paula-antony-nota-1746155214.jpg"
+    };
+
+    async function carregarResultados() {
+      const { data, error } = await supabase
+        .from('evotos')
+        .select('participante');
+
+      if (error) {
+        alert('Erro ao buscar resultados: ' + error.message);
+        return;
+      }
+
+      const contagem = {};
+      data.forEach(voto => {
+        contagem[voto.participante] = (contagem[voto.participante] || 0) + 1;
+      });
+
+      const total = Object.values(contagem).reduce((a, b) => a + b, 0);
+      document.getElementById("total-votos").textContent = `Total de votos: ${total}`;
+
+      const lista = document.getElementById('lista-participantes');
+      lista.innerHTML = '';
+
+      Object.entries(contagem).sort((a, b) => b[1] - a[1]).forEach(([nome, votos]) => {
+        const percent = ((votos / total) * 100).toFixed(2);
+        lista.innerHTML += `
+          <div class="card">
+            <img src="${fotos[nome]}" alt="${nome}">
+            <div class="card-info">
+              <span>${nome}</span>
+              <small>${votos} votos</small>
+            </div>
+            <div class="card-percent">${percent}%</div>
+          </div>
+        `;
+      });
+    }
+
+    carregarResultados();
+  </script>
+</body>
+</html>
