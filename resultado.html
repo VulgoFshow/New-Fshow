@@ -5,175 +5,164 @@
   <title>Resultado</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    <style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f0f2f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 50px 20px;
-      min-height: 90vh;
-    }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f8f9fb, #e9ecf3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+    min-height: 100vh;
+    color: #222;
+  }
 
+  h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .total-votos {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 40px;
+    font-weight: 600;
+    background: #fff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  #lista-participantes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 720px;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: #007bff33;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  }
+
+  .card img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+
+  .card-info {
+    flex: 1;
+  }
+
+  .card-info span {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .card-info small {
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .card-percent {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #007bff, #00b4ff);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 12px;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .botao-votar {
+    margin-top: 40px;
+    padding: 16px 36px;
+    background: linear-gradient(90deg, #007bff, #00b4ff);
+    color: white;
+    text-decoration: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 20px;
+    box-shadow: 0 4px 14px rgba(0, 123, 255, 0.4);
+    transition: all 0.25s ease;
+  }
+
+  .botao-votar:hover {
+    background: linear-gradient(90deg, #0062cc, #008dd4);
+    transform: scale(1.04);
+  }
+
+  @media (max-width: 600px) {
     h1 {
-      font-size: 32px;
-      color: #222;
-      margin-bottom: 20px;
-      text-align: center;
-      line-height: 1.2;
+      font-size: 28px;
     }
-
     .total-votos {
-      font-size: 22px;
-      color: #666;
-      margin-bottom: 40px;
-      font-weight: 600;
+      font-size: 18px;
     }
-
-    #lista-participantes {
-      display: flex;
+    .card {
       flex-direction: column;
       align-items: center;
-      width: 100%;
+      text-align: center;
     }
-
-    .card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-      display: flex;
-      align-items: center;
-      padding: 32px 28px;
-      margin-bottom: 28px;
-      width: 100%;
-      max-width: 720px;
-      transition: transform 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-    }
-
     .card img {
-      width: 130px;
-      height: 130px;
-      object-fit: cover;
-      border-radius: 14px;
-      margin-right: 28px;
-      flex-shrink: 0;
+      margin: 0 0 14px 0;
+      width: 100%;
+      height: auto;
+      max-height: 220px;
     }
-
-    .card-info {
-      flex: 1;
-    }
-
-    .card-info span {
-      font-size: 26px;
-      font-weight: 700;
-      color: #111;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .card-info small {
-      font-size: 18px;
-      color: #555;
-      font-weight: 600;
-    }
-
     .card-percent {
-      font-size: 24px;
-      font-weight: 700;
-      color: #007bff;
-      margin-left: 20px;
-      white-space: nowrap;
-      min-width: 80px;
-      text-align: right;
+      margin-top: 12px;
+      font-size: 18px;
     }
-
     .botao-votar {
-      margin-top: 50px;
-      padding: 20px 40px;
-      background-color: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 22px;
-      transition: background-color 0.2s ease;
-      user-select: none;
+      width: 100%;
+      font-size: 20px;
+      padding: 18px 0;
     }
-
-    .botao-votar:hover {
-      background-color: #0056b3;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 40px 15px;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-
-      .total-votos {
-        font-size: 20px;
-        margin-bottom: 30px;
-      }
-
-      .card {
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-        padding: 28px 20px;
-      }
-
-      .card img {
-        width: 100%;
-        height: auto;
-        margin: 0 0 20px 0;
-        border-radius: 12px;
-      }
-
-      .card-info span {
-        font-size: 24px;
-      }
-
-      .card-info small {
-        font-size: 16px;
-      }
-
-      .card-percent {
-        margin-top: 16px;
-        margin-left: 0;
-        font-size: 22px;
-        text-align: left;
-        min-width: auto;
-      }
-
-      .botao-votar {
-        width: 100%;
-        font-size: 24px;
-        padding: 22px 0;
-        border-radius: 16px;
-      }
-    }
+  }
+</style>
   </style>
 </head>
 <body>
   <h1>Qual seu participante favorito do Estrela da Casa?</h1>
   <div class="total-votos" id="total-votos">Carregando votos...</div>
   <div id="lista-participantes"></div>
-
   <a href="/enquete.html" class="botao-votar">Votar novamente</a>
-  
+
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
@@ -181,31 +170,30 @@
       'https://maroopnrcrpoizpjhmss.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
-    
+
     const fotos = {
-      "Bea": "/Estrela/bea.webp",
-      "Biahh": "/Estrela/biahh.webp",
-      "Brenno": "/Estrela/brenno.webp",
-      "Camille": "/Estrela/camille.webp",
-      "Daniel": "/Estrela/daniel.webp",
-      "Gabriel": "/Estrela/gabriel.webp",
-      "Hanii": "/Estrela/hanii.webp",
-      "Janicio": "/Estrela/janicio.webp",
-      "Juceir": "/Estrela/juceir.webp",
-      "Nirah": "/Estrela/nirah.webp",
-      "Rauma": "/Estrela/rauma.webp",
-      "Saudario": "/Estrela/saudario.webp",
-      "Taliz": "/Estrela/taliz.webp",
-      "Thaina": "/Estrela/thaina.webp"
+      "Bea": "/Estrela/bea.webp", "Biahh": "/Estrela/biahh.webp",
+      "Brenno": "/Estrela/brenno.webp", "Camille": "/Estrela/camille.webp",
+      "Daniel": "/Estrela/daniel.webp", "Gabriel": "/Estrela/gabriel.webp",
+      "Hanii": "/Estrela/hanii.webp", "Janicio": "/Estrela/janicio.webp",
+      "Juceir": "/Estrela/juceir.webp", "Nirah": "/Estrela/nirah.webp",
+      "Rauma": "/Estrela/rauma.webp", "Saudario": "/Estrela/saudario.webp",
+      "Taliz": "/Estrela/taliz.webp", "Thaina": "/Estrela/thaina.webp"
     };
-    
+
     async function carregarResultados() {
       const { data, error } = await supabase
         .from('evotos')
         .select('participante');
 
       if (error) {
-        alert('Erro ao buscar resultados: ' + error.message);
+        document.getElementById("total-votos").textContent = 'Erro ao carregar resultados.';
+        console.error(error);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        document.getElementById("total-votos").textContent = 'Nenhum voto registrado ainda.';
         return;
       }
 
@@ -220,29 +208,28 @@
       const lista = document.getElementById('lista-participantes');
       lista.innerHTML = '';
 
-      Object.entries(contagem).sort((a, b) => b[1] - a[1]).forEach(([nome, votos]) => {
-        const percent = ((votos / total) * 100).toFixed(2);
-        lista.innerHTML += `
-          <div class="card">
-            <img src="${fotos[nome]}" alt="${nome}">
-            <div class="card-info">
-              <span>${nome}</span>
-              <small>${votos} votos</small>
+      Object.entries(contagem)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([nome, votos]) => {
+          const percent = ((votos / total) * 100).toFixed(2);
+          lista.innerHTML += `
+            <div class="card">
+              <img src="${fotos[nome] || '/Estrela/default.webp'}" alt="${nome}">
+              <div class="card-info">
+                <span>${nome}</span>
+                <small>${votos} votos</small>
+              </div>
+              <div class="card-percent">${percent}%</div>
             </div>
-            <div class="card-percent">${percent}%</div>
-          </div>
-        `;
-      });
+          `;
+        });
     }
 
     carregarResultados();
-
-  <script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
-<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
-  
   </script>
+
+  <!-- Script do anúncio separado -->
+  <script async src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+  <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
 </body>
 </html>
-
-
-
