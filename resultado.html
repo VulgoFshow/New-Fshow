@@ -2,387 +2,135 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Resultado</title>
-  
-<link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon">
-  <link rel="apple-touch-icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp">
-  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #f8f9fb, #e9ecf3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 50px 20px;
-    min-height: 100vh;
-    color: #222;
-  }
-
-  h1 {
-    font-size: 34px;
-    font-weight: 800;
-    color: #1a1a1a;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-
-  .total-votos {
-    font-size: 20px;
-    color: #555;
-    margin-bottom: 40px;
-    font-weight: 600;
-    background: #fff;
-    padding: 12px 24px;
-    border-radius: 50px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  #lista-participantes {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    gap: 20px;
-  }
-
-  .card {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    width: 100%;
-    max-width: 720px;
-    transition: all 0.25s ease;
-    border: 1px solid transparent;
-  }
-
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: #007bff33;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-  }
-
-  .card img {
-    width: 110px;
-    height: 110px;
-    object-fit: cover;
-    border-radius: 14px;
-    margin-right: 20px;
-    flex-shrink: 0;
-  }
-
-  .card-info {
-    flex: 1;
-  }
-
-  .card-info span {
-    font-size: 22px;
-    font-weight: 700;
-    color: #222;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .card-info small {
-    font-size: 16px;
-    color: #666;
-    font-weight: 500;
-  }
-
-  .card-percent {
-    font-size: 20px;
-    font-weight: 700;
-    background: linear-gradient(90deg, #007bff, #00b4ff);
-    color: #fff;
-    padding: 8px 14px;
-    border-radius: 12px;
-    min-width: 80px;
-    text-align: center;
-  }
-
-  .botao-votar {
-    margin-top: 40px;
-    padding: 16px 36px;
-    background: linear-gradient(90deg, #007bff, #00b4ff);
-    color: white;
-    text-decoration: none;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 20px;
-    box-shadow: 0 4px 14px rgba(0, 123, 255, 0.4);
-    transition: all 0.25s ease;
-  }
-
-  .botao-votar:hover {
-    background: linear-gradient(90deg, #0062cc, #008dd4);
-    transform: scale(1.04);
-  }
-
-  @media (max-width: 600px) {
-    h1 {
-      font-size: 28px;
-    }
-    .total-votos {
-      font-size: 18px;
-    }
-    .card {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    .card img {
-      margin: 0 0 14px 0;
-      width: 100%;
-      height: auto;
-      max-height: 220px;
-    }
-    .card-percent {
-      margin-top: 12px;
-      font-size: 18px;
-    }
-    .botao-votar {
-      width: 100%;
-      font-size: 20px;
-      padding: 18px 0;
-    }
-  }
-</style>
-  </style>
-</head>
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fshow/Votação</title>
-  <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f1f1f1;
+      padding: 40px 20px;
       color: #222;
-      overflow-x: hidden;
-    }
-
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 14px;
-      width: 95%;
-      max-width: 600px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
-      margin: 20px auto;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: clamp(20px, 5vw, 26px);
-    }
-
-    .option {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      margin-bottom: 10px;
-      background: #f0f0f0;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color .25s, box-shadow .25s;
     }
 
-    .option:hover { filter: brightness(1.05); }
-    .option input { display: none; }
-    .option img {
-      width: 40%;
-      max-width: 120px;
-      aspect-ratio: 4 / 3;
+    /* Botão fechar (X) */
+    .fechar {
+      position: fixed;
+      top: 10px;
+      right: 16px;
+      background: #ff3b3b;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .cabecalho-total {
+      background: #1E9BFF;
+      color: white;
+      padding: 14px 24px;
+      font-size: 20px;
+      font-weight: 700;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 720px;
+      text-align: center;
+    }
+
+    .card {
+      display: flex;
+      align-items: stretch;
+      background: #f5f5f5;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      width: 100%;
+      max-width: 720px;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .card img {
+      width: 120px;
+      height: 100%;
       object-fit: cover;
       flex-shrink: 0;
     }
-    .option span {
+
+    .card-info {
       flex: 1;
-      padding: 0 10px;
-      font-size: clamp(16px, 4vw, 18px);
-      font-weight: 600;
-    }
-    .option.selected {
-      border-color: #00aaff;
-      box-shadow: 0 0 10px #00aaff99;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px 0;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      background: #00aaff;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s ease;
-    }
-
-    button:hover:not(:disabled) {
-      background: #008ecc;
-      transform: scale(1.03);
-    }
-
-    button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    /* Botão CAPTCHA fake */
-    #botaoCaptcha {
+      padding: 16px;
       display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      background: #e6e6e6;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 0 10px;
-      cursor: pointer;
-      height: 60px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-      color: #111;
-      font-size: 14px;
-      font-weight: 400;
-      margin: 20px auto 0;
-      width: 100%;
-      gap: 10px;
-      box-sizing: border-box;
-    }
-
-    .recaptcha-checkbox {
-      flex-shrink: 0;
-      width: 26px;
-      height: 26px;
-      background: white;
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
     }
 
-    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
-      background-color: #00aaff;
-      border-color: #00aaff;
+    .card-info span {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
     }
 
-    .checkmark {
-      width: 16px;
-      height: 16px;
-      display: none;
-      stroke: white;
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+    .card-info small {
+      font-size: 14px;
+      color: #666;
     }
 
-    #botaoCaptcha[aria-pressed="true"] .checkmark {
-      display: block;
+    .card-percent {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1E9BFF;
+      text-align: right;
+      padding-right: 16px;
+      display: flex;
+      align-items: center;
     }
 
-    .recaptcha-label { flex-grow: 1; }
-    .recaptcha-icon {
-      width: 30px;
-      height: 30px;
-      object-fit: contain;
+    @media (max-width: 600px) {
+      .card {
+        flex-direction: column;
+      }
+
+      .card img {
+        width: 100%;
+        height: auto;
+      }
+
+      .card-percent {
+        justify-content: center;
+        padding-right: 0;
+        margin-top: 8px;
+      }
+
+      .fechar {
+        top: 8px;
+        right: 8px;
+      }
     }
   </style>
 </head>
 
-  <!-- JS -->
-<script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-
-    const supabase = createClient(
-      'https://maroopnrcrpoizpjhmss.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
-    );
-
-    const botaoCaptcha = document.getElementById("botaoCaptcha");
-    const botaoVotar = document.getElementById("botaoVotar");
-
-    // Clique alterna o estado do CAPTCHA
-    botaoCaptcha.addEventListener("click", () => {
-      const marcado = botaoCaptcha.getAttribute("aria-pressed") === "true";
-      if (marcado) {
-        botaoCaptcha.setAttribute("aria-pressed", "false");
-        botaoVotar.disabled = true;
-      } else {
-        botaoCaptcha.setAttribute("aria-pressed", "true");
-        botaoVotar.disabled = false;
-      }
-    });
-
-    // Função de voto
-    window.enviarVoto = async () => {
-      const escolhido = [...document.querySelectorAll("input[name='vote']")]
-        .find(r => r.checked)?.value;
-
-      if (!escolhido) {
-        alert("Escolha um participante antes de votar.");
-        return;
-      }
-      if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
-        alert("Confirme que você não é um robô.");
-        return;
-      }
-
-      const { error } = await supabase
-        .from('evotos')
-        .insert({ participante: escolhido });
-
-      if (error) {
-        alert('❌ Erro ao registrar voto: ' + error.message);
-        console.error(error);
-        return;
-      }
-
-      // ✅ Redireciona para resultado.html
-      setTimeout(() => {
-        window.location.href = "resultado.html";
-      }, 500);
-    };
-
-    // Seleção visual dos cards
-    document.querySelectorAll(".option").forEach(label => {
-      label.addEventListener("click", () => {
-        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
-        label.classList.add("selected");
-        label.querySelector("input").checked = true;
-      });
-    });
-  </script>
-</body>
-</html>
-
-  
 <body>
-  <h1>Qual seu participante favorito do Estrela da Casa?</h1>
-  <div class="total-votos" id="total-votos">Carregando votos...</div>
+  <button class="fechar" onclick="fecharPagina()">×</button>
+
+  <div class="cabecalho-total" id="total-votos">Carregando votos...</div>
   <div id="lista-participantes"></div>
-  <a href="/enquete.html" class="botao-votar">Votar novamente</a>
 
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
@@ -424,7 +172,7 @@
       });
 
       const total = Object.values(contagem).reduce((a, b) => a + b, 0);
-      document.getElementById("total-votos").textContent = `Total de votos: ${total}`;
+      document.getElementById("total-votos").textContent = `${total} Votos`;
 
       const lista = document.getElementById('lista-participantes');
       lista.innerHTML = '';
@@ -447,11 +195,11 @@
     }
 
     carregarResultados();
-  </script>
 
-  <!-- Script do anúncio separado -->
-  <script async src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
-  <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+    // Função do botão fechar
+    window.fecharPagina = () => {
+      window.close();
+    };
+  </script>
 </body>
 </html>
-
