@@ -161,6 +161,311 @@
 </style>
   </style>
 </head>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fshow/Votação</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      overflow-x: hidden;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      width: 95%;
+      max-width: 600px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+      margin: 20px auto;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: clamp(20px, 5vw, 26px);
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      background: #f0f0f0;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .25s, box-shadow .25s;
+    }
+
+    .option:hover { filter: brightness(1.05); }
+    .option input { display: none; }
+    .option img {
+      width: 40%;
+      max-width: 120px;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .option span {
+      flex: 1;
+      padding: 0 10px;
+      font-size: clamp(16px, 4vw, 18px);
+      font-weight: 600;
+    }
+    .option.selected {
+      border-color: #00aaff;
+      box-shadow: 0 0 10px #00aaff99;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #00aaff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: #008ecc;
+      transform: scale(1.03);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Botão CAPTCHA fake */
+    #botaoCaptcha {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      background: #e6e6e6;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 0 10px;
+      cursor: pointer;
+      height: 60px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      color: #111;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 20px auto 0;
+      width: 100%;
+      gap: 10px;
+      box-sizing: border-box;
+    }
+
+    .recaptcha-checkbox {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+      background-color: #00aaff;
+      border-color: #00aaff;
+    }
+
+    .checkmark {
+      width: 16px;
+      height: 16px;
+      display: none;
+      stroke: white;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #botaoCaptcha[aria-pressed="true"] .checkmark {
+      display: block;
+    }
+
+    .recaptcha-label { flex-grow: 1; }
+    .recaptcha-icon {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="votoTela">
+    <h1>Quem é o seu favorito do Estrela da Casa?</h1>
+
+    <label class="option">
+      <input type="radio" name="vote" value="Bea" />
+      <img src="https://s2-gshow.glbimg.com/Op8qjPAeeGGrWfsupJeMJpphTg0=/0x0:1112x627/600x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2025/J/T/hAmNxORlex1owJoEhzTg/estrela-bea.jpg" alt="Bea" />
+      <span>Bea</span>
+    </label>
+<label class="option">
+      <input type="radio" name="vote" value="Biahh" />
+      <img src="https://s2-gshow.glbimg.com/syyencASMkN17d4jgWqn1D573JQ=/0x0:1112x627/600x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2025/v/A/CLZcSeTXiAZvcrvGLb6w/estrela-biahh.jpg" alt="Biahh" />
+      <span>Biahh</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Brenno" />
+      <img src="https://s2-gshow.glbimg.com/lTIvAp5_1SVHEkvyZaL66ACgUDU=/0x0:1112x627/600x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2025/J/8/UdEOhAQYCljGZEvegb4A/quem-e-brenno-casagrande-do-estrela-da-casa-conheca-representante-do-mpb.jpg" alt="Brenno" />
+      <span>Brenno</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Camille" />
+      <img src="https://s2-gshow.glbimg.com/6qe6bLnZjqR0TcDmSk-0Qnk4fIE=/0x0:1112x627/600x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2025/p/B/8ECfOHTYAeWzAWWV2aGw/estrela-camille.jpg" alt="Camille" />
+      <span>Camille</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Daniel" />
+      <img src="https://s2-gshow.glbimg.com/XLypsaVfNXDYQxn6OyM7mVwbxkA=/0x0:1112x627/600x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2025/I/2/y87eKwTGKv5kXyrnAukQ/estrela-daniel.jpg" alt="Daniel" />
+      <span>Daniel</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Gabriel" />
+      <img src="/Estrela/gabriel.webp" alt="Gabriel" />
+      <span>Gabriel</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Hanii" />
+      <img src="/Estrela/hanii.webp" alt="Hanii" />
+      <span>Hanii</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Janicio" />
+        <img src="/Estrela/janicio.webp" alt="Janicio" />
+      <span>Janicio</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="juceir" />
+      <img src="/Estrela/juceir.webp" alt="Juceir" />
+      <span>Juceir</span>
+    </label>
+    <label class="option">
+        <input type="radio" name="vote" value="Nirah" />
+      <img src="/Estrela/nirah.webp" alt="Nirah" />
+      <span>Nirah</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Rauma" />
+      <img src="/Estrela/rauma.webp" alt="Rauma" />
+      <span>Rauma</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Saudario" />
+      <img src="/Estrela/saudario.webp" alt="span" />
+      <span>Saudario</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Taliz" />
+      <img src="/Estrela/taliz.webp" alt="Taliz" />
+      <span>Taliz</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Thaina" />
+      <img src="/Estrela/thaina.webp" alt="Thaina" />
+      <span>Thaina</span>
+    </label>
+    
+    <!-- CAPTCHA -->
+    <button id="botaoCaptcha" aria-pressed="false" type="button">
+      <span class="recaptcha-checkbox">
+        <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 12l6 6 10-10" />
+        </svg>
+      </span>
+      <span class="recaptcha-label">Não sou um robô</span>
+      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="Captcha logo" />
+    </button>
+
+    <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
+  </div>
+
+  <!-- JS -->
+<script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+    const supabase = createClient(
+      'https://maroopnrcrpoizpjhmss.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
+    );
+
+    const botaoCaptcha = document.getElementById("botaoCaptcha");
+    const botaoVotar = document.getElementById("botaoVotar");
+
+    // Clique alterna o estado do CAPTCHA
+    botaoCaptcha.addEventListener("click", () => {
+      const marcado = botaoCaptcha.getAttribute("aria-pressed") === "true";
+      if (marcado) {
+        botaoCaptcha.setAttribute("aria-pressed", "false");
+        botaoVotar.disabled = true;
+      } else {
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoVotar.disabled = false;
+      }
+    });
+
+    // Função de voto
+    window.enviarVoto = async () => {
+      const escolhido = [...document.querySelectorAll("input[name='vote']")]
+        .find(r => r.checked)?.value;
+
+      if (!escolhido) {
+        alert("Escolha um participante antes de votar.");
+        return;
+      }
+      if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+        alert("Confirme que você não é um robô.");
+        return;
+      }
+
+      const { error } = await supabase
+        .from('evotos')
+        .insert({ participante: escolhido });
+
+      if (error) {
+        alert('❌ Erro ao registrar voto: ' + error.message);
+        console.error(error);
+        return;
+      }
+
+      // ✅ Redireciona para resultado.html
+      setTimeout(() => {
+        window.location.href = "resultado.html";
+      }, 500);
+    };
+
+    // Seleção visual dos cards
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+  </script>
+</body>
+</html>
+
+  
 <body>
   <h1>Qual seu participante favorito do Estrela da Casa?</h1>
   <div class="total-votos" id="total-votos">Carregando votos...</div>
@@ -237,4 +542,5 @@
   <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
 </body>
 </html>
+
 
