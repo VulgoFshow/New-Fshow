@@ -146,6 +146,186 @@
     }
   </style>
 </head>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    overflow-x: hidden; /* impede rolagem lateral */
+  }
+
+  .container {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    width: 95%;
+    max-width: 600px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+    color: #222;
+    animation: fadeInUp 0.6s ease-out;
+    margin: 20px auto;
+    box-sizing: border-box;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: clamp(20px, 5vw, 26px); /* responsivo */
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background: #f0f0f0;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .25s, box-shadow .25s;
+    user-select: none;
+  }
+
+  .option:hover { filter: brightness(1.05); }
+  .option input { display: none; }
+  .option img {
+    width: 40%; /* adaptável à tela */
+    max-width: 120px;
+    height: auto; /* mantém proporção */
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .option span {
+    flex: 1;
+    padding: 0 10px;
+    font-size: clamp(16px, 4vw, 18px);
+    font-weight: 600;
+    word-break: break-word;
+  }
+  .option.selected {
+    border-color: #00aaff;
+    box-shadow: 0 0 10px #00aaff99;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #00aaff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+  }
+
+  button:hover:not(:disabled) {
+    background: #008ecc;
+    transform: scale(1.03);
+  }
+
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+  /* Botão CAPTCHA */
+  #botaoCaptcha {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: #e6e6e6;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0 10px;
+    cursor: pointer;
+    height: 60px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    color: #111;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 20px auto 0;
+    width: 100%;       /* ocupa toda a largura do container */
+    max-width: 100%;   /* evita passar da tela */
+    gap: 10px;
+    box-sizing: border-box;
+  }
+
+  .recaptcha-checkbox {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+    background-color: #00aaff;
+    border-color: #00aaff;
+  }
+
+  .checkmark {
+    width: 16px;
+    height: 16px;
+    display: none;
+    stroke: white;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  #botaoCaptcha[aria-pressed="true"] .checkmark {
+    display: block;
+  }
+
+  .recaptcha-label { flex-grow: 1; }
+  .recaptcha-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    object-fit: contain;
+  }
+
+  /* Popup CAPTCHA */
+  .popup {
+    display: none;
+    position: fixed;
+    z-index: 1500;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .popup.active { display: flex; }
+
+  .captcha-box {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 20px #00aaff66;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+    color: #222;
+    box-sizing: border-box;
+  }
+    </style>
+  
+  
 <body>
   <div class="container" id="votoTela">
     <h1>Quem é o seu favorito do Estrela da Casa?</h1>
