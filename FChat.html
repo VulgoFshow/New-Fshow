@@ -1,0 +1,19 @@
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/connectycube@4/dist/connectycube.min.js"></script>
+<script src="https://unpkg.com/@connectycube/chat-widget@latest/dist/index.umd.js"></script>
+
+<script>
+const chatWidgetContainer = document.createElement('div');
+chatWidgetContainer.id = 'ConnectyCube_chat-widget';
+document.body.appendChild(chatWidgetContainer);
+const props = {
+  appId: 9452,
+  authKey: '3286B545-55BD-418A-95A3-8EC1FA0DD8B8',
+  userId: '45', // a User Id from your system
+  userName: 'Samuel', // how other users will see your user name
+  showOnlineUsersTab: false,
+  splitView: true,
+};
+ReactDOM.createRoot(chatWidgetContainer).render(React.createElement(ConnectyCubeChatWidget, props));
+  </script>
