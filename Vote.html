@@ -48,7 +48,7 @@
       align-items: center;
       margin-bottom: 8px;
       background: #2d2d2d;
-      border: 2px solid transparent;
+      border: 2px solid #444;
       border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
@@ -339,28 +339,23 @@ button:hover:not(:disabled),
 <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
   
   <div class="container" id="votoTela">
-    <h1>Final - Quem deve VENCER?</h1>
+    <h1>Quem Você quer que <strong>FIQUE?</strong></h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Eueu" />
-      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/6L2UUUQLTZIHDAIFTZ435BNSAI.jpg?auth=b3a7729c462bc3315b89a9ce58959f9175b6a999d1be330d3cb056f4507aacc8&width=747&height=420" alt="Eueu" />
-      <span>Eueu</span>
+      <input type="radio" name="vote" value="Dynamite" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/dynamite.jpg?raw=true" alt="Dynamite" />
+      <span>Dynamite</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Koyuh" />
-      <img src="https://f.i.uol.com.br/fotografia/2025/03/18/174235144167da2c51e9b0f_1742351441_3x2_xs.jpg" alt="Koyuh" />
-      <span>Koyuh</span>
+      <input type="radio" name="vote" value="Guilherme" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/guilherme.jpg?raw=true" alt="Guilherme" />
+      <span>Guilherme</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Luca" />
-      <img src="https://f.i.uol.com.br/fotografia/2021/11/15/16370145956192dc43dda3d_1637014595_3x2_xl.jpg" alt="Luca" />
-      <span>Luca</span>
-    </label>
-    <label class="option">
-      <input type="radio" name="vote" value="Victor" />
-      <img src="https://s2-gshow.glbimg.com/_tkyMN_c-RW_V43pizV8oer4wJg=/336x191/top/smart/https://s2.glbimg.com/hh79s0TatCbYbbX21Bc8hT1oJU0=/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2022/C/1/kWj9J6Q7mYboVvtieczg/larissa-pagina.png" alt="Victor" />
-      <span>Victor</span>
-    </label>
+      <input type="radio" name="vote" value="Larissa" />
+      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/4OYYTOLNPFNHFPSO2NY5BDEMLI.jpg?auth=c10bcd5d6507e54d17312eecbfd50bf564d14ae9a8fe4c48c47415b12758f6ca&width=550&height=310" alt="Larissa" />
+      <span>Larissa</span>
+      </label>
 
     <!-- Botão do CAPTCHA -->
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -407,7 +402,7 @@ button:hover:not(:disabled),
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
 
-    const votacaoAtiva = false;
+    const votacaoAtiva = true;
 
     if (!votacaoAtiva) {
       document.getElementById("votoTela").innerHTML = `
