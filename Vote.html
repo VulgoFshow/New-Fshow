@@ -593,7 +593,7 @@ button:hover:not(:disabled),
   
 
   const { error } = await supabase
-    .from('votos')
+    .from('fvotos')
     .insert({ participante: escolhido });
 
   if (error) {
