@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Votação Encerrada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #111;
+      color: #fff;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .card {
+      display: flex;
+      align-items: stretch;
+      background: #1c1c1c;
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 720px;
+      margin: 20px auto;
+      border: 1px solid #333;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .card img {
+      width: 120px;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .card-info {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
+    }
+
+    .card-info span {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .card-info small {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .card-percent {
+      font-size: 18px;
+      font-weight: 700;
+      color: 	#e60000;
+      text-align: right;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .card-percent .eliminado-label {
+      background: #ff3b3b;
+      color: white;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        flex-direction: column;
+      }
+
+      .card img {
+        width: 100%;
+        height: auto;
+      }
+
+      .card-percent {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 16px;
+        align-items: center;
+      }
+    }
+     footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #777;
+    }
+    
+    <!-- TOPO -->
+<header class="topo">
+  <div class="topo-esquerda">
+    <div class="logo">
+      <div class="mark" id="pfButton" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="pfMenu">PF</div>
+      <div>
+        <div style="line-height:1">Portal Flop</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Notícias | Enquetes | Realities</div>
+      </div>
+    </div>
+
+    <!-- Dropdown -->
+    <nav class="dropdown-menu" id="pfMenu" role="menu" aria-label="Menu principal">
+      <a href="index.html" role="menuitem">Home</a>
+      <a href="#" role="menuitem">Realities</a>
+      <a href="snake.html" role="menuitem">Snake</a>
+      <a href="https://www.youtube.com/@Vulgo_Flop/featured" role="menuitem">Canal</a>
+      <a href="whatpadd.html" role="menuitem">Whatpadd</a>
+    </nav>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="canal" href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank">Canal</a>
+    <a class="imagem-topo" href="https://x.com/Euu_Phillip?t=4caOBuQFfgm39uJj_DR7Kw&s=09" target="_blank" aria-label="Twitter">
+      <img src="https://i.ibb.co/FLFt2pH7/Background-Eraser-20250811-121607446.png" alt="Twitter">
+    </a>
+  </div>
+</header>
+
+<!-- CSS TOPO -->
+<style>
+:root {
+  --bg:#f9f9f9;
+  --bg-2:#ffffff;
+  --text:#121212;
+  --accent-pink:#FF0055;
+  --accent-yellow:#FFD600;
+  --accent-blue:#005fbb;
+  --muted:#777777;
+  --card-radius:10px;
+  --shadow:0 6px 18px rgba(0,0,0,0.12);
+}
+
+.topo {
+  position:sticky;
+  top:0;
+  z-index:999;
+  background:linear-gradient(90deg,rgba(249,249,249,.95),rgba(255,255,255,.95));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 20px;
+  gap:12px;
+  border-bottom:1px solid rgba(0,0,0,.06);
+  backdrop-filter:blur(4px);
+  box-shadow:var(--shadow);
+}
+
+.topo-esquerda {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  position:relative;
+}
+
+.logo {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:Montserrat,sans-serif;
+  font-weight:800;
+  font-size:20px;
+  color:var(--text);
+  user-select:none;
+}
+
+.logo .mark {
+  width:44px;
+  height:44px;
+  border-radius:8px;
+  background:linear-gradient(135deg,var(--accent-pink),var(--accent-yellow));
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:#121212;
+  font-weight:700;
+  font-size:18px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition:filter .2s ease;
+}
+
+.logo .mark:hover { filter:brightness(1.1); }
+
+.dropdown-menu {
+  position:absolute;
+  top:52px;
+  left:0;
+  background:var(--bg-2);
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:var(--card-radius);
+  box-shadow:var(--shadow);
+  width:180px;
+  display:none;
+  flex-direction:column;
+  padding:8px 0;
+  z-index:1000;
+}
+
+.dropdown-menu.active { display:flex; }
+
+.dropdown-menu a {
+  padding:10px 20px;
+  font-weight:600;
+  color:var(--text);
+  white-space:nowrap;
+  transition:background-color .15s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color:var(--accent-pink);
+  color:#fff;
+}
+
+.canal {
+  color:var(--muted);
+  font-size:14px;
+  padding:6px 8px;
+  border-radius:6px;
+  transition:all .15s ease;
+  display:inline-block;
+}
+.canal:hover {
+  color:var(--text);
+  background:rgba(0,0,0,.03);
+}
+
+.imagem-topo img {
+  height:44px;
+  border-radius:8px;
+}
+</style>
+
+</head>
+<body>
+  <div id="votoTela"></div>
+
+  <script>
+    const votacaoAtiva = false;
+
+    if (!votacaoAtiva) {
+      document.getElementById("votoTela").innerHTML = `
+        <h1>🛑 Votação Encerrada</h1>
+        <p style="font-size:20px;color:red;font-weight:bold;margin-top:40px;">
+          A votação foi encerrada. Obrigado por participar!
+        </p>
+
+        <div class="card">
+          <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/dynamite.jpg?raw=true" alt="Dynamite">
+          <div class="card-info">
+            <span>Dynamite</span>
+            <small>78 votos</small>
+          </div>
+          <div class="card-percent">
+            10,80% <span class="eliminado-label">Eliminado</span>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+
+  <script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+
+  <script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+
+  <footer>
+    © 2025 Portal Flop / Fshow - Todos os direitos reservados.
+  </footer>
+  
+</body>
+</html>
