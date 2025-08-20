@@ -402,15 +402,11 @@ button:hover:not(:disabled),
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
 
-    const votacaoAtiva = false;
+  const votacaoAtiva = false;
 
-    if (!votacaoAtiva) {
-      document.getElementById("votoTela").innerHTML = `
-        <h1>🛑 Votação Encerrada</h1>
-        <p style="font-size:20px;color:red;font-weight:bold;margin-top:40px;">
-          A votação foi encerrada. Obrigado por participar!
-        </p>`;
-    }
+if (!votacaoAtiva) {
+  window.location.href = "Votação Encerrada.html"; 
+}
 
     const prompts = [
       {
