@@ -160,7 +160,7 @@
     };
 
     async function carregarResultados() {
-      const { data, error } = await supabase.from('fvotos').select('participante');
+      const { data, error } = await supabase.from('roça2').select('participante');
 
       if (error) {
         document.getElementById("total-votos").textContent = 'Erro ao carregar resultados.';
