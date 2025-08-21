@@ -160,7 +160,10 @@
     };
 
     async function carregarResultados() {
-      const { data, error } = await supabase.from('roça2').select('participante');
+      const { data, error } = await supabase
+        .from('roça2')
+        .select('participante')
+        .range(0, 999999); // removendo limite de 1000 votos
 
       if (error) {
         document.getElementById("total-votos").textContent = 'Erro ao carregar resultados.';
@@ -203,7 +206,7 @@
 
     carregarResultados();
 
-    // Escutar inserções na tabela "fvotos" em tempo real
+    // Escutar inserções na tabela "roça2" em tempo real
     supabase
       .channel('votos-atualizacao')
       .on(
