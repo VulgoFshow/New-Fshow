@@ -1,229 +1,257 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Resultado</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Resultados da Votação</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: #f1f1f1;
+
+      margin: 0;
+
       padding: 40px 20px;
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
 
-    .fechar {
-      position: fixed;
-      top: 10px;
-      right: 16px;
-      background: #ff3b3b;
-      color: white;
-      font-weight: bold;
-      font-size: 20px;
-      border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      cursor: pointer;
-      z-index: 999;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
+      background-color: #111;
 
-    .cabecalho-total {
-      background: #1E9BFF;
-      color: white;
-      padding: 14px 24px;
-      font-size: 20px;
-      font-weight: 700;
-      border-radius: 10px;
-      margin-bottom: 24px;
-      width: 100%;
-      max-width: 720px;
+      font-family: Arial, sans-serif;
+
+      color: #fff;
+
       text-align: center;
+
     }
 
-    .card {
-      display: flex;
-      align-items: stretch;
-      background: #f5f5f5;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 16px;
-      width: 100%;
-      max-width: 720px;
-      border: 1px solid #ddd;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    canvas {
+
+      max-width: 400px;
+
+      margin: 0 auto;
+
     }
 
-    .card img {
-      width: 120px;
-      height: 100%;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
+    #totalVotos {
 
-    .card-info {
-      flex: 1;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .card-info span {
       font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 6px;
+
+      margin-top: 20px;
+
+      font-weight: bold;
+
     }
 
-    .card-info small {
-      font-size: 14px;
-      color: #666;
+    #porcentagens {
+
+      margin-top: 10px;
+
+      font-size: 15px;
+
+      line-height: 1.4;
+
     }
 
-    .card-percent {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1E9BFF;
-      text-align: right;
-      padding-right: 16px;
-      display: flex;
-      align-items: center;
-    }
-
-    @media (max-width: 600px) {
-      .card {
-        flex-direction: column;
-      }
-      .card img {
-        width: 100%;
-        height: auto;
-      }
-      .card-percent {
-        justify-content: center;
-        padding-right: 0;
-        margin-top: 8px;
-      }
-      .fechar {
-        top: 8px;
-        right: 8px;
-      }
-    }
   </style>
-</head>
-<body>
-  <button class="fechar" onclick="fecharPagina()">×</button>
 
-  <div class="cabecalho-total" id="total-votos">Carregando votos...</div>
-  <div id="lista-participantes"></div>
-  <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+</head>
+
+<body>
+
+  <h1 style="margin-bottom: 30px;">Resultado Parcial</h1>
+
+  <canvas id="grafico" width="400" height="400"></canvas>
+
+  <div id="totalVotos"></div>
+
+  <div id="porcentagens"></div>
 
   <script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
-  const supabase = createClient(
-    'https://maroopnrcrpoizpjhmss.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
-  );
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
-  const fotos = {
-    "Adnilton": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/adnilton.jpg?raw=true",
-    "Arthur": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/arthur.jpg?raw=true",
-    "Dynamite": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/dynamite.jpg?raw=true",
-    "Gabriela": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gabriela.jpg?raw=true",
-    "Gean": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gean.jpg?raw=true",
-    "Gih": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gih.jpg?raw=true",
-    "Gina": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gina.jpg?raw=true",
-    "Guilherme": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/guilherme.jpg?raw=true",
-    "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/joao.jpg?raw=true",
-    "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/koyuh.jpg?raw=true",
-    "Larissa": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/4OYYTOLNPFNHFPSO2NY5BDEMLI.jpg?auth=c10bcd5d6507e54d17312eecbfd50bf564d14ae9a8fe4c48c47415b12758f6ca&width=550&height=310",
-    "Lua": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/lua.png?raw=true",
-    "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/lucas.jpg?raw=true",
-    "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/mariana.jpg?raw=true",
-    "Mira": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/mira.jpg?raw=true",
-    "Pedro": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/pedro.jpg?raw=true",
-    "Quim": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/quim.jpg?raw=true",
-    "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/renata.jpg?raw=true",
-    "Victor": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/victor.jpg?raw=true",
-    "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/vitor.jpg?raw=true"
-  };
+    const supabaseUrl = 'https://maroopnrcrpoizpjhmss.supabase.co';
 
-  async function carregarResultados() {
-    // Consulta agrupada por participante
-    const { data, error } = await supabase
-      .from('roça3')
-      .select('participante, count:participante', { count: 'exact', head: false })
-      .group('participante');
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw';
 
-    if (error) {
-      document.getElementById("total-votos").textContent = 'Erro ao carregar resultados.';
-      console.error(error);
-      return;
-    }
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    if (!data || data.length === 0) {
-      document.getElementById("total-votos").textContent = 'Nenhum voto registrado ainda.';
-      return;
-    }
+    const ctx = document.getElementById("grafico").getContext("2d");
 
-    // Transformar em objeto {participante: votos}
-    const contagem = {};
-    let total = 0;
-    data.forEach(item => {
-      contagem[item.participante] = item.count;
-      total += item.count;
+    let chart = new Chart(ctx, {
+
+      type: "pie",
+
+      data: {
+
+        labels: [],
+
+        datasets: [{
+
+          label: "Votos",
+
+          data: [],
+
+          backgroundColor: [
+
+            "#e74c3c", "#3498db", "#f1c40f", "#2ecc71",
+
+            "#9b59b6", "#e67e22", "#1abc9c", "#ff6384"
+
+          ]
+
+        }]
+
+      },
+
+      options: {
+
+        responsive: true,
+
+        plugins: {
+
+          legend: {
+
+            labels: {
+
+              color: "#fff"
+
+            }
+
+          }
+
+        }
+
+      }
+
     });
 
-    document.getElementById("total-votos").textContent = `${total} Votos`;
+    function atualizarGrafico(labels, dados) {
 
-    const lista = document.getElementById('lista-participantes');
-    lista.innerHTML = '';
+      chart.data.labels = labels;
 
-    Object.entries(contagem)
-      .sort((a, b) => b[1] - a[1])
-      .forEach(([nome, votos]) => {
-        const percent = ((votos / total) * 100).toFixed(2);
-        lista.innerHTML += `
-          <div class="card">
-            <img src="${fotos[nome] || '/Estrela/default.webp'}" alt="${nome}">
-            <div class="card-info">
-              <span>${nome}</span>
-              <small>${votos} votos</small>
-            </div>
-            <div class="card-percent">${percent}%</div>
-          </div>
-        `;
+      chart.data.datasets[0].data = dados;
+
+      chart.update();
+
+    }
+
+    async function carregarTodosVotos() {
+
+      const limitePorPagina = 1000;
+
+      let pagina = 0;
+
+      let todosVotos = [];
+
+      let continuar = true;
+
+      while (continuar) {
+
+        const { data, error } = await supabase
+
+          .from('roça3')
+
+          .select('participante')
+
+          .range(pagina * limitePorPagina, (pagina + 1) * limitePorPagina - 1);
+
+        if (error) {
+
+          console.error("Erro ao buscar votos:", error);
+
+          break;
+
+        }
+
+        if (data.length === 0) {
+
+          continuar = false;
+
+        } else {
+
+          todosVotos = todosVotos.concat(data);
+
+          pagina++;
+
+          if (data.length < limitePorPagina) {
+
+            continuar = false;
+
+          }
+
+        }
+
+      }
+
+      return todosVotos;
+
+    }
+
+    async function carregarVotos() {
+
+      const data = await carregarTodosVotos();
+
+      if (!data || data.length === 0) {
+
+        atualizarGrafico([], []);
+
+        document.getElementById("totalVotos").textContent = "Nenhum voto registrado ainda.";
+
+        document.getElementById("porcentagens").innerHTML = "";
+
+        return;
+
+      }
+
+      const contagem = {};
+
+      let total = 0;
+
+      data.forEach(voto => {
+
+        const nome = voto.participante;
+
+        if (nome) {
+
+          contagem[nome] = (contagem[nome] || 0) + 1;
+
+          total++;
+
+        }
+
       });
-  }
 
-  carregarResultados();
+      const labels = Object.keys(contagem);
 
-  // Escutar inserções em tempo real
-  supabase
-    .channel('votos-atualizacao')
-    .on(
-      'postgres_changes',
-      {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'roça2',
-      },
-      () => carregarResultados()
-    )
-    .subscribe();
+      const valores = Object.values(contagem);
 
-  window.fecharPagina = () => {
-    window.close();
-  };
+      atualizarGrafico(labels, valores);
+
+      document.getElementById("totalVotos").textContent = `Total de votos: ${total}`;
+
+      document.getElementById("porcentagens").innerHTML = labels.map((nome, i) => {
+
+        const perc = ((valores[i] / total) * 100).toFixed(2);
+
+        return `<p>${nome}: ${perc}%</p>`;
+
+      }).join("");
+
+    }
+
+    carregarVotos();
+
+    setInterval(carregarVotos, 1000);
+
   </script>
+
+</body>
+
+</html>
