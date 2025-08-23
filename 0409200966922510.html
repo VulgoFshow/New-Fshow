@@ -162,7 +162,7 @@
   async function carregarResultados() {
     // Consulta agrupada por participante
     const { data, error } = await supabase
-      .from('roça2')
+      .from('roça3')
       .select('participante, count:participante', { count: 'exact', head: false })
       .group('participante');
 
