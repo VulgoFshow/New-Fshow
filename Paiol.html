@@ -604,7 +604,7 @@ if (!votacaoAtiva) {
   
 
   const { error } = await supabase
-    .from('fvotos')
+    .from('paiol')
     .insert({ participante: escolhido });
 
   if (error) {
