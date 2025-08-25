@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Fshow/Votação</title>
+
+  <link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp">
+  
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fshow</title>
+  <style>
+    body {
+      margin: 15px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .container {
+      background: #1e1e1e;
+      padding: 29px;
+      border-radius: 14px;
+      width: 95%;
+      max-width: 700px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, .7);
+      color: #eee;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 26px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      background: #2d2d2d;
+      border: 2px solid #444;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .25s;
+      user-select: none;
+    }
+    .option:hover { filter: brightness(1.1); }
+    .option input { display: none; }
+    .option img {
+      width: 130px;
+      height: 85px;
+      object-fit: cover;
+      flex-shrink: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+    .option span {
+      flex: 1;
+      padding: 0 20px;
+      font-size: 18px;
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .option.selected {
+      border-color: #00aaff;
+      box-shadow: 0 0 10px #00aaffbb;
+    }
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #ff6600;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+    button:hover:not(:disabled) { background: #e65c00; }
+    button:disabled { background: #555; cursor: not-allowed; }
+
+    /* ANIMAÇÕES */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.option {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+.option:nth-child(2) { animation-delay: 0.05s; }
+.option:nth-child(3) { animation-delay: 0.1s; }
+.option:nth-child(4) { animation-delay: 0.15s; }
+.option:nth-child(5) { animation-delay: 0.2s; }
+
+button,
+#botaoCaptcha {
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+button:hover:not(:disabled),
+#botaoCaptcha:hover {
+  transform: scale(1.03);
+}
+
+.popup.active .captcha-box {
+  animation: popupFade 0.4s ease-out;
+}
+
+    /* Estilo botão captcha */
+    #botaoCaptcha {
+      display: flex;               
+      align-items: center;         
+      justify-content: flex-start; 
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 0 15px;
+      cursor: pointer;
+      user-select: none;
+      height: 70px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      color: #ccc;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 20px auto 0;       
+      max-width: 320px;          
+      width: 320px;              
+      gap: 12px;
+    }
+
+    .recaptcha-checkbox {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      background: #111;
+      border: 2px solid #444;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+      background-color: #00aaff;
+      border-color: #00aaff;
+    }
+
+    .checkmark {
+      width: 18px;
+      height: 18px;
+      display: none;
+      stroke: white;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #botaoCaptcha[aria-pressed="true"] .checkmark {
+      display: block;
+    }
+
+    .recaptcha-label {
+      user-select: none;
+      line-height: 1;
+      flex-grow: 1;              
+    }
+
+    .recaptcha-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      object-fit: contain;
+      filter: brightness(0.7);
+      flex-shrink: 0;
+    }
+
+    /* Popup do CAPTCHA */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1500;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .popup.active {
+      display: flex;
+    }
+    .captcha-box {
+      background: #222;
+      padding: 20px 30px;
+      box-shadow: 0 0 20px #00aaffaa;
+      border-radius: 10px;
+      width: 340px;
+      max-width: 100%;
+      text-align: center;
+      color: #eee;
+      user-select: none;
+    }
+    .captcha-box h3 {
+      font-size: 17px;
+      margin-bottom: 18px;
+      color: #00aaff;
+      user-select: text;
+    }
+    .captcha-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    .captcha-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.25s;
+      border-radius: 6px;
+      user-select: none;
+    }
+    .captcha-img.selected {
+      border-color: #00aaff;
+      box-shadow: 0 0 8px #00aaffcc;
+    }
+    .captcha-footer {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .captcha-btn {
+      background: #00aaff;
+      color: #111;
+      border: none;
+      padding: 9px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      user-select: none;
+      flex: 1;
+      max-width: 140px;
+    }
+    .captcha-btn:hover:not(:disabled) {
+      background: #008ecc;
+    }
+    .captcha-btn:disabled {
+      background: #004466;
+      cursor: not-allowed;
+    }
+    .captcha-status {
+      margin-top: 10px;
+      font-size: 14px;
+      min-height: 20px;
+      color: #eee;
+      user-select: none;
+    }
+    .confirm {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      color: #eee;
+    }
+    .confirm img {
+      width: 165px;
+      height: 165px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 22px 0;
+    }
+    @keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-out {
+  animation: fadeOut 0.4s ease forwards;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+  </style>
+</head>
+<body>
+  
+  <div class="container" id="votoTela">
+    <h1>Quem Você quer que <strong>FIQUE?</strong></h1>
+
+    <label class="option">
+      <input type="radio" name="vote" value="Gabriela" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gabriela.jpg?raw=true" alt="Gabriela" />
+      <span>Gabriela</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Gean" />
+      <img src="https://i0.wp.com/recordeuropa.com/wp-content/uploads/2024/05/baronesa-e-a-primeira-expulsa-de-a-grande-conquista.jpg?fit=1920%2C1280&quality=100&ssl=1" alt="Gean" />
+      <span>Gean</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Renata" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/renata.jpg?raw=true" alt="Renata" />
+      <span>Renata</span>
+      </label>
+
+    <!-- Botão do CAPTCHA -->
+    <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
+      <span class="recaptcha-checkbox" aria-hidden="true">
+        <svg class="checkmark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12l6 6 10-10" />
+        </svg>
+      </span>
+      <span class="recaptcha-label">Não sou um robô</span>
+      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="Logo personalizada" />
+    </button>
+
+    <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
+  </div>
+
+  <div class="container confirm" id="confirmTela">
+    <h2 id="nomeConfirm"></h2>
+    <img id="fotoConfirm" src="" alt="Participante escolhido" />
+    <p>✅ Seu voto foi registrado com sucesso!</p>
+    <button onclick="voltar()">Votar novamente</button>
+  </div>
+
+  <div class="popup" id="popupCaptcha" role="dialog" aria-modal="true" aria-labelledby="captcha-instruction">
+    <div class="captcha-box">
+      <button class="captcha-close" aria-label="Fechar CAPTCHA" style="float:right; font-size: 24px; color:#aaa; background:none; border:none; cursor:pointer;" onclick="fecharCaptcha()">&times;</button>
+      <h3 id="captcha-instruction">Carregando...</h3>
+      <div class="captcha-grid" id="captcha-grid"></div>
+      <div class="captcha-footer">
+        <button class="captcha-btn" id="refresh-btn" type="button">Atualizar</button>
+        <button class="captcha-btn" id="verify-btn" type="button" disabled>Enviar</button>
+      </div>
+      <div class="captcha-status" id="captcha-status"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+
+    const supabase = createClient(
+      'https://maroopnrcrpoizpjhmss.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
+    );
+
+  const votacaoAtiva = false;
+
+if (!votacaoAtiva) {
+  window.location.href = "Votação Encerrada.html"; 
+}
+
+    const prompts = [
+      {
+        label: "Clique nas imagens contendo um mamífero",
+        correctTag: "mamifero",
+        images: [
+          { src: "https://media.istockphoto.com/id/1589824836/pt/foto/cute-brown-dog-that-smiles-isolated-background.jpg?s=612x612&w=0&k=20&c=6XY-uqPQZ3XkDHUJGk5oJJ0wv7Ez3Rt4dxEV0Bao8bI=", tag: "mamifero" }, //Cachorro
+          { src: "https://media.istockphoto.com/id/1164946759/pt/foto/cute-grey-cat.jpg?s=612x612&w=0&k=20&c=shwthP3leH6C3A8tKrrFsjUSUXr7UlynbEqweinNBa8=", tag: "mamifero" }, //Gato
+          { src: "https://media.istockphoto.com/id/177228186/pt/foto/jovem-capivara.jpg?s=612x612&w=0&k=20&c=HIaHC5JhfE3zobczCLIEY6bdy2NdOLq0sskZkuXsM9w=", tag: "mamifero" }, //Capivara
+          { src: "https://media.istockphoto.com/id/514622028/pt/foto/pouco-guaxinim-em-%C3%A1rvore.jpg?s=612x612&w=0&k=20&c=QFycBBdmOcjYxtRh4rP20QmBYyynMk6CuduLHpcidFw=", tag: "mamifero" }, //Guaxinim
+          { src: "https://media.istockphoto.com/id/1588317860/pt/foto/three-domestic-ducks-walk-along-a-green-lawn-next-to-a-pond.jpg?s=612x612&w=0&k=20&c=3QOjjJDeo0gRB52A_Pgtj3SF6WiD5LbLvo8311MKv6Q=", tag: "ave" }, //Pato
+          { src: "https://media.istockphoto.com/id/508496270/pt/foto/flamingo-chileno.jpg?s=612x612&w=0&k=20&c=xEiq9i8dm48y4_Q5BIiW-7sUx2Qxbp7dtbRUn-47a0U=", tag: "ave" }, //Flamingo
+          { src: "https://media.istockphoto.com/id/533995902/pt/foto/pinguim-papu-andar-na-neve-na-ant%C3%A1rctida.jpg?s=612x612&w=0&k=20&c=1-B5YRTVdsbX-B2bQB6ZEpbgxG1vUx2rJOXfq8FimL4=", tag: "ave" }, //Pinguim
+          { src: "https://media.istockphoto.com/id/166006960/pt/foto/lado-do-passageiro-avi%C3%A3o-a-jato-f%C3%A1cil-de-cortar.jpg?s=612x612&w=0&k=20&c=b58Lh4rrG-YkDPrOgg2r4yvfhaFf_vzzncTeGzZirSM=", tag: "outro" }, //Avião
+          { src: "https://media.istockphoto.com/id/485462644/pt/foto/helic%C3%B3ptero-em-v%C3%B4o-isolado-contra-branco.jpg?s=612x612&w=0&k=20&c=tjUUsm7JQ4kZ3RUr2v2HQP2v1J4qkw5y6Jd3NeJxwG8=", tag: "outro" } //Helicóptero 
+        ]
+      },
+      {
+        label: "Clique nas imagens contendo uma ave",
+        correctTag: "ave",
+        images: [
+          { src: "https://media.istockphoto.com/id/464988959/pt/foto/pato-real-com-tra%C3%A7ado-de-recorte.jpg?s=612x612&w=0&k=20&c=SUhSeo67zEVs8bgUm0K-OrMDD4iQ5s75CxaOG4gBI1Y=", tag: "ave" }, //Pato
+          { src: "https://media.istockphoto.com/id/1716227735/pt/foto/beautiful-white-domestic-goose.jpg?s=612x612&w=0&k=20&c=vUNR9WIh00uE5wYRJJpxR0DyVqXi5kC4ZJ-5OeBhdIM=", tag: "ave" }, //Ganso
+          { src: "https://media.istockphoto.com/id/178625595/pt/foto/spheniscus-demersus-pinguim-africano-isolado-no-branco.jpg?s=612x612&w=0&k=20&c=Kv8Vfj3MbeoyiHtCseaPivn6FbxjEAFf4h-TDqrUngo=", tag: "ave" }, //Pinguim
+          { src: "https://media.istockphoto.com/id/1512660779/pt/foto/close-up-giant-panda-in-republic-of-korea.jpg?s=612x612&w=0&k=20&c=cts2W9bJ7Ru7H3ncxhSqqtVYAgvuZsT1gdVgwS5Rbz0=", tag: "mamifero" }, //Panda
+          { src: "https://media.istockphoto.com/id/1551607933/pt/foto/golden-retriever-dog-doing-trick.jpg?s=612x612&w=0&k=20&c=ERFmdd13iFS2hdG7Rof27T1YnSxwENsJM0ZrB57yUdk=", tag: "mamifero" }, //Cachorro
+          { src: "https://media.istockphoto.com/id/1361956153/pt/foto/black-cat-sticking-out-tongue-funny-portrait.jpg?s=612x612&w=0&k=20&c=3dOtmpKZFzQeGbLTYpOWypzxDISUJWZa5-i4K653iKM=", tag: "mamifero" }, //Gato
+          { src: "https://media.istockphoto.com/id/1408679386/pt/foto/capybara.jpg?s=612x612&w=0&k=20&c=rIsVTCUlZCeGF0Npz8guQLwnBquLaobfFC4Q39LcnWo=", tag: "mamifero" }, //Capivara
+          { src: "https://media.istockphoto.com/id/1047163322/pt/foto/racoon-in-the-trash.jpg?s=612x612&w=0&k=20&c=c2TZ9ajlaKFBmvTd_TARVdNakiNkUQ2FEuL-mN4zSSY=", tag: "mamifero" }, //Guaxinim
+          { src: "https://media.istockphoto.com/id/157430678/pt/foto/tr%C3%AAs-batatas.jpg?s=612x612&w=0&k=20&c=BoUCWwC1mWkz2JzT8K0RLaJSYfRPEWWPRSMXL36pI9Q=", tag: "outro" } //Avião
+        ]
+      }
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    const captchaGrid = document.getElementById("captcha-grid");
+    const captchaInstruction = document.getElementById("captcha-instruction");
+    const verifyBtn = document.getElementById("verify-btn");
+    const refreshBtn = document.getElementById("refresh-btn");
+    const statusEl = document.getElementById("captcha-status");
+    const popupCaptcha = document.getElementById("popupCaptcha");
+    const botaoCaptcha = document.getElementById("botaoCaptcha");
+    const botaoVotar = document.getElementById("botaoVotar");
+    const votoTela = document.getElementById("votoTela");
+    const confirmTela = document.getElementById("confirmTela");
+    const nomeConfirm = document.getElementById("nomeConfirm");
+    const fotoConfirm = document.getElementById("fotoConfirm");
+
+    const maxVotosAntesCaptcha = 5;
+    let contadorVotos = Number(sessionStorage.getItem('contadorVotos')) || 0;
+
+    function generateCaptcha() {
+      captchaGrid.innerHTML = "";
+      statusEl.textContent = "";
+      verifyBtn.disabled = true;
+
+      const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+      const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
+      const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
+
+      const correctCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 corretas
+      const selectedCorrect = shuffle(correctImages).slice(0, correctCount);
+      const remaining = 9 - correctCount;
+      const selectedWrong = shuffle(wrongImages).slice(0, remaining);
+
+      const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+
+      captchaInstruction.textContent = prompt.label;
+
+      allImages.forEach(img => {
+        const imgEl = document.createElement("img");
+        imgEl.src = img.src;
+        imgEl.classList.add("captcha-img");
+        imgEl.dataset.correct = img.tag === prompt.correctTag ? "true" : "false";
+        imgEl.addEventListener("click", () => {
+          imgEl.classList.toggle("selected");
+          verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
+          statusEl.textContent = "";
+        });
+        captchaGrid.appendChild(imgEl);
+      });
+    }
+
+    function abrirCaptcha() {
+      generateCaptcha();
+      popupCaptcha.classList.add("active");
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      botaoVotar.disabled = true;
+      statusEl.textContent = "";
+    }
+
+    function fecharCaptcha() {
+      popupCaptcha.classList.remove("active");
+    }
+
+    botaoCaptcha.addEventListener("click", () => {
+      if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
+
+      contadorVotos++;
+      sessionStorage.setItem('contadorVotos', contadorVotos);
+
+      if (contadorVotos % maxVotosAntesCaptcha === 0) {
+        abrirCaptcha();
+      } else {
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoVotar.disabled = false;
+      }
+    });
+
+    verifyBtn.addEventListener("click", () => {
+      let sucesso = true;
+      const imgs = document.querySelectorAll(".captcha-img");
+
+      imgs.forEach(img => {
+        const correto = img.dataset.correct === "true";
+        const selecionado = img.classList.contains("selected");
+        if (correto !== selecionado) {
+          sucesso = false;
+        }
+      });
+
+      if (sucesso) {
+        statusEl.textContent = "✅ Você passou no CAPTCHA!";
+        statusEl.style.color = "#00aaff";
+        botaoCaptcha.setAttribute("aria-pressed", "true");
+        botaoVotar.disabled = false;
+        fecharCaptcha();
+      } else {
+        statusEl.textContent = "❌ Tente novamente.";
+        statusEl.style.color = "#ff5555";
+        setTimeout(() => {
+          generateCaptcha();
+        }, 2000);
+      }
+    });
+
+    refreshBtn.addEventListener("click", generateCaptcha);
+
+    window.enviarVoto = async () => {
+  const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
+  if (!escolhido) {
+    alert("Escolha um participante antes de votar.");
+    return;
+  }
+  if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+    alert("Por favor, confirme que você não é um robô.");
+    return;
+  }
+
+  const selecionadoLabel = document.querySelector(".option.selected");
+  if (!selecionadoLabel) {
+    alert("Erro interno: participante não selecionado visualmente.");
+    return;
+  }
+
+  nomeConfirm.textContent = escolhido;
+  fotoConfirm.src = selecionadoLabel.querySelector("img").src;
+
+  // Aplica fade-out na tela de voto
+  votoTela.classList.add("fade-out");
+
+  setTimeout(() => {
+    votoTela.style.display = "none";
+    votoTela.classList.remove("fade-out");
+
+    confirmTela.style.display = "flex";
+    confirmTela.classList.add("fade-in");
+
+    setTimeout(() => {
+      confirmTela.classList.remove("fade-in");
+    }, 200);
+  }, 200); // Tempo da animação
+  
+
+  const { error } = await supabase
+    .from('roça3')
+    .insert({ participante: escolhido });
+
+  if (error) {
+    alert('❌ Erro ao registrar voto: ' + error.message);
+    console.error(error);
+  }
+};
+
+    function resetarEstado() {
+      votoTela.style.display = "block";
+      confirmTela.style.display = "none";
+      botaoVotar.disabled = true;
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      statusEl.textContent = "";
+      // Remove seleção visual
+      document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+      // Desmarca radios
+      document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
+    }
+
+   window.voltar = () => {
+  location.reload();
+};
+
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+
+    resetarEstado();
+
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
