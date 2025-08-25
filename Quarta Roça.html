@@ -581,9 +581,9 @@ if (!votacaoAtiva) {
     }, 200);
   }, 200); // Tempo da animação
   
-
+//MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('roça3')
+    .from('roça4')
     .insert({ participante: escolhido });
 
   if (error) {
