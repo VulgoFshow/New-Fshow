@@ -589,7 +589,7 @@ if (!votacaoAtiva) {
   
 
   const { error } = await supabase
-    .from('fvotos')
+    .from('roça5')
     .insert({ participante: escolhido });
 
   if (error) {
