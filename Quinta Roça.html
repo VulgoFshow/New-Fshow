@@ -388,6 +388,18 @@ button:hover:not(:disabled),
     </div>
   </div>
 
+  <script>
+  document.querySelectorAll(".option").forEach(option => {
+    option.addEventListener("click", () => {
+      // Remove seleção anterior
+      document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+      // Marca a nova opção
+      option.classList.add("selected");
+      option.querySelector("input").checked = true;
+    });
+  });
+  </script>
+  
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
