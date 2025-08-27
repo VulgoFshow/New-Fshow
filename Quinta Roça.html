@@ -334,6 +334,9 @@ button:hover:not(:disabled),
   </style>
 </head>
 <body>
+
+  <script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
   
   <div class="container" id="votoTela">
     <h1>Quem Você quer que <strong>FIQUE?</strong></h1>
@@ -345,7 +348,7 @@ button:hover:not(:disabled),
     </label>
     <label class="option">
       <input type="radio" name="vote" value="Lucas" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/lucas.jpg?raw=true" alt="Gean" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/lucas.jpg?raw=true" alt="Lucas" />
       <span>Lucas</span>
     </label>
     <label class="option">
@@ -368,6 +371,9 @@ button:hover:not(:disabled),
     <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
   </div>
 
+<script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+  
   <div class="container confirm" id="confirmTela">
     <h2 id="nomeConfirm"></h2>
     <img id="fotoConfirm" src="" alt="Participante escolhido" />
@@ -388,18 +394,6 @@ button:hover:not(:disabled),
     </div>
   </div>
 
-  <script>
-  document.querySelectorAll(".option").forEach(option => {
-    option.addEventListener("click", () => {
-      // Remove seleção anterior
-      document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
-      // Marca a nova opção
-      option.classList.add("selected");
-      option.querySelector("input").checked = true;
-    });
-  });
-  </script>
-  
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
@@ -408,7 +402,7 @@ button:hover:not(:disabled),
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
 
-  const votacaoAtiva = true;
+  const votacaoAtiva = false;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -593,9 +587,9 @@ if (!votacaoAtiva) {
     }, 200);
   }, 200); // Tempo da animação
   
-//MUDAR TABLE DO SUPABASE AQUI ABAIXO 
+
   const { error } = await supabase
-    .from('roça5')
+    .from('fvotos')
     .insert({ participante: escolhido });
 
   if (error) {
@@ -604,16 +598,4 @@ if (!votacaoAtiva) {
   }
 };
 
-    function resetarEstado() {
-      votoTela.style.display = "block";
-      confirmTela.style.display = "none";
-      botaoVotar.disabled = true;
-      botaoCaptcha.setAttribute("aria-pressed", "false");
-      statusEl.textContent = "";
-      // Remove seleção visual
-      document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
-      // Desmarca radios
-      document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
-    }
-
-   window.voltar =
+    function
