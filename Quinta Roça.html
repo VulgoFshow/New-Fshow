@@ -334,27 +334,29 @@ button:hover:not(:disabled),
   </style>
 </head>
 <body>
-
-  <script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
-<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
   
   <div class="container" id="votoTela">
     <h1>Quem Você quer que <strong>FIQUE?</strong></h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Gina" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gina.jpg?raw=true" alt="Gina" />
-      <span>Gina</span>
+      <input type="radio" name="vote" value="Gabriela" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gabriela.jpg?raw=true" alt="Gabriela" />
+      <span>Gabriela</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Lucas" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/lucas.jpg?raw=true" alt="Lucas" />
-      <span>Lucas</span>
+      <input type="radio" name="vote" value="Gean" />
+      <img src="https://i0.wp.com/recordeuropa.com/wp-content/uploads/2024/05/baronesa-e-a-primeira-expulsa-de-a-grande-conquista.jpg?fit=1920%2C1280&quality=100&ssl=1" alt="Gean" />
+      <span>Gean</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Pedro" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/pedro.jpg?raw=true" alt="Pedro" />
-      <span>Pedro</span>
+      <input type="radio" name="vote" value="Renata" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/renata.jpg?raw=true" alt="Renata" />
+      <span>Renata</span>
+      </label>
+      <label class="option">
+      <input type="radio" name="vote" value="Renata" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/renata.jpg?raw=true" alt="Renata" />
+      <span>Renata</span>
       </label>
 
     <!-- Botão do CAPTCHA -->
@@ -371,9 +373,6 @@ button:hover:not(:disabled),
     <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
   </div>
 
-<script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
-<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
-  
   <div class="container confirm" id="confirmTela">
     <h2 id="nomeConfirm"></h2>
     <img id="fotoConfirm" src="" alt="Participante escolhido" />
@@ -589,7 +588,7 @@ if (!votacaoAtiva) {
   
 
   const { error } = await supabase
-    .from('roça5')
+    .from('roça6')
     .insert({ participante: escolhido });
 
   if (error) {
@@ -598,4 +597,36 @@ if (!votacaoAtiva) {
   }
 };
 
-    function
+    function resetarEstado() {
+      votoTela.style.display = "block";
+      confirmTela.style.display = "none";
+      botaoVotar.disabled = true;
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      statusEl.textContent = "";
+      // Remove seleção visual
+      document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+      // Desmarca radios
+      document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
+    }
+
+   window.voltar = () => {
+  location.reload();
+};
+
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+
+    resetarEstado();
+
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
