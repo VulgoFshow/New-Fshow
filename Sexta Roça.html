@@ -339,24 +339,24 @@ button:hover:not(:disabled),
     <h1>Quem Você quer que <strong>FIQUE?</strong></h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Gabriela" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/gabriela.jpg?raw=true" alt="Gabriela" />
-      <span>Gabriela</span>
+      <input type="radio" name="vote" value="Adnilton" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/adnilton.jpg?raw=true" alt="Adnilton" />
+      <span>Adnilton</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Gean" />
-      <img src="https://i0.wp.com/recordeuropa.com/wp-content/uploads/2024/05/baronesa-e-a-primeira-expulsa-de-a-grande-conquista.jpg?fit=1920%2C1280&quality=100&ssl=1" alt="Gean" />
-      <span>Gean</span>
+      <input type="radio" name="vote" value="Lucas" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/lucas.jpg?raw=true" alt="Gean" />
+      <span>Lucas</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Renata" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/renata.jpg?raw=true" alt="Renata" />
-      <span>Renata</span>
+      <input type="radio" name="vote" value="Quim" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/quim.jpg?raw=true" alt="Quim" />
+      <span>Quim</span>
       </label>
       <label class="option">
-      <input type="radio" name="vote" value="Renata" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/renata.jpg?raw=true" alt="Renata" />
-      <span>Renata</span>
+      <input type="radio" name="vote" value="Quim" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/quim.jpg?raw=true" alt="Quim" />
+      <span>Quim</span>
       </label>
 
     <!-- Botão do CAPTCHA -->
@@ -401,7 +401,7 @@ button:hover:not(:disabled),
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
 
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -586,7 +586,7 @@ if (!votacaoAtiva) {
     }, 200);
   }, 200); // Tempo da animação
   
-
+//MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
     .from('roça6')
     .insert({ participante: escolhido });
