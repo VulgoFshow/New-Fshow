@@ -204,11 +204,11 @@
 
     carregarResultados();
 
-    // 🔥 F5 automático quando chegar voto novo
+    // 🔥 Atualização em tempo real
     supabase
       .channel('votos-listener')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'roça6' }, () => {
-        location.reload(); // 🔥 Recarrega a página inteira
+        carregarResultados(); // Atualiza o gráfico sempre que entrar um voto novo
       })
       .subscribe();
 
