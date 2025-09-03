@@ -339,14 +339,14 @@ button:hover:not(:disabled),
     <h1>Quem Você quer que <strong>FIQUE?</strong></h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Koyuh e Renata" />
-      <img src="https://i.postimg.cc/zfPyw4Hj/Grid-Art-20250901-221126723.jpg" alt="Koyuh e Renata" />
-      <span>Koyuh e Renata</span>
+      <input type="radio" name="vote" value="Gih e João" />
+      <img src="https://media.discordapp.net/attachments/1362843321902432437/1412587671905243256/GridArt_20250902_205734852.jpg?ex=68b8d649&is=68b784c9&hm=e3cc092010e9c4c4044322929d3c50e2b31c1ee8581a5439853264ff6cd828c3&=&format=webp&width=1039&height=693" alt="Gih e João" />
+      <span>Gih e João</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Mira e Vitor" />
-      <img src="https://i.ibb.co/h3RG2pJ/Grid-Art-20250901-221209194.jpg" alt="Mira e Vitor" />
-      <span>Mira e Vitor</span>
+      <input type="radio" name="vote" value="Gina e Lucas" />
+      <img src="https://media.discordapp.net/attachments/1362843321902432437/1412587672324669460/GridArt_20250902_205817595.jpg?ex=68b8d649&is=68b784c9&hm=8e77a2827e2059265f8985265ae3e6db8fc9fa9e4763401a0579e81b8ccb28a8&=&format=webp&width=1039&height=693" alt="Gina e Lucas" />
+      <span>Gina e Lucas</span>
     </label>
 
     <!-- Botão do CAPTCHA -->
@@ -391,7 +391,7 @@ button:hover:not(:disabled),
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
 
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -578,7 +578,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('roça9')
+    .from('roça10')
     .insert({ participante: escolhido });
 
   if (error) {
