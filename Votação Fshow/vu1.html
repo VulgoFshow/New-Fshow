@@ -92,6 +92,77 @@
     button:hover:not(:disabled) { background: #e65c00; }
     button:disabled { background: #555; cursor: not-allowed; }
 
+    /* Fundo do popup ocupando toda a tela */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6); /* escurece */
+  backdrop-filter: blur(8px);   /* aplica blur */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Quando ativo */
+.popup-overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Caixa do login */
+.popup-box {
+  background: #1e1e1e;
+  padding: 25px;
+  border-radius: 12px;
+  width: 360px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  text-align: center;
+  color: #fff;
+}
+
+.popup-box h3 {
+  margin-bottom: 15px;
+}
+
+.popup-box input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.popup-box button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #ff6600;
+  color: white;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.popup-box button:hover {
+  background: #e65500;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+    
     /* ANIMAÇÕES */
 @keyframes fadeInUp {
   from {
@@ -334,6 +405,21 @@ button:hover:not(:disabled),
   </style>
 </head>
 <body>
+  <!-- POPUP LOGIN -->
+<div class="popup-overlay active" id="popupLogin">
+  <div class="popup-box">
+    <h3>🔑 Faça login ou crie uma conta Fshow</h3>
+    <input id="loginEmail" type="email" placeholder="Seu email">
+    <input id="loginSenha" type="password" placeholder="Sua senha">
+
+    <div class="popup-actions">
+      <button onclick="login()">Entrar</button>
+      <button onclick="registrar()">Criar Conta</button>
+    </div>
+
+    <div id="loginStatus" style="margin-top:10px;font-size:14px;"></div>
+  </div>
+</div>
   
   <div class="container" id="votoTela">
     <h1>Quem Você quer que <strong>FIQUE?</strong></h1>
@@ -369,11 +455,18 @@ button:hover:not(:disabled),
   </div>
 
   <div class="container confirm" id="confirmTela">
-    <h2 id="nomeConfirm"></h2>
-    <img id="fotoConfirm" src="" alt="Participante escolhido" />
-    <p>✅ Seu voto foi registrado com sucesso!</p>
-    <button onclick="voltar()">Votar novamente</button>
-  </div>
+  <h2 id="nomeConfirm"></h2>
+  <img id="fotoConfirm" src="" alt="Participante escolhido" />
+  <p>✅ Seu voto único foi registrado com sucesso!</p>
+  <button onclick="irParaResultado()">Voto da Torcida</button>
+</div>
+
+<script>
+  function irParaResultado() {
+    window.location.href = "pvt1"; 
+  }
+</script>
+
 
   <div class="popup" id="popupCaptcha" role="dialog" aria-modal="true" aria-labelledby="captcha-instruction">
     <div class="captcha-box">
@@ -388,15 +481,79 @@ button:hover:not(:disabled),
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+ <script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
-    const supabase = createClient(
-      'https://maroopnrcrpoizpjhmss.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
-    );
+  const supabase = createClient(
+    'https://maroopnrcrpoizpjhmss.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
+  )
 
-  const votacaoAtiva = false;
+  const popupLogin = document.getElementById("popupLogin")
+  const loginStatus = document.getElementById("loginStatus")
+
+  // Função: criar conta
+  window.registrar = async () => {
+    const email = document.getElementById("loginEmail").value
+    const senha = document.getElementById("loginSenha").value
+
+    if (!email || !senha) {
+      loginStatus.textContent = "⚠️ Preencha todos os campos"
+      return
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: senha,
+    })
+
+    if (error) {
+      loginStatus.textContent = "❌ " + error.message
+    } else {
+      loginStatus.textContent = "✅ Conta criada! Verifique seu e-mail."
+    }
+  }
+
+  // Função: login
+  window.login = async () => {
+    const email = document.getElementById("loginEmail").value
+    const senha = document.getElementById("loginSenha").value
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: senha,
+    })
+
+    if (error) {
+      loginStatus.textContent = "❌ " + error.message
+    } else {
+      loginStatus.textContent = "✅ Login realizado!"
+      popupLogin.classList.remove("active")
+      localStorage.setItem("fshow-user", JSON.stringify(data.session)) // salvar sessão
+    }
+  }
+
+  // Verificar login persistente ao carregar
+  async function checarSessao() {
+    const { data } = await supabase.auth.getSession()
+    if (data.session) {
+      popupLogin.classList.remove("active") // já está logado
+    } else {
+      popupLogin.classList.add("active") // precisa logar
+    }
+  }
+  checarSessao()
+
+  // Logout
+  window.logout = async () => {
+    await supabase.auth.signOut()
+    localStorage.removeItem("fshow-user")
+    popupLogin.classList.add("active")
+  }
+</script>
+
+<script>
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -583,7 +740,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('roça4')
+    .from('vup1')
     .insert({ participante: escolhido });
 
   if (error) {
