@@ -26,6 +26,183 @@
       font-size: 0.9em;
       color: #777;
     }
+    <!-- BLOCO DE VOTAÇÃO -->
+<div class="vote-frame">
+  <div class="vote-mock">
+
+    <!-- HERO - imagem única -->
+    <div class="vote-hero">
+      <img src="https://i.ibb.co/XfpykF4F/Grid-Art-20250918-214636224.webp" alt="Participantes">
+    </div>
+
+    <!-- Card -->
+    <div class="vote-card">
+      <div class="vote-card-header">
+        <div>
+          <div class="vote-title">Quem você quer eliminar?</div>
+          <div style="font-size:13px;color:#6b7280;margin-top:6px">Primeiro Paredão</div>
+        </div>
+
+        <div style="text-align:right">
+          <div class="vote-status">
+            <span class="vote-dot"></span>
+            <span style="font-weight:600;color:#374151;font-size:13px">VOTAÇÃO EM ANDAMENTO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vote-options">
+  <button class="vote-btn vote-green" id="singleVote" onclick="window.location.href='https://pollforall.com/plqqne64'">
+    <span>Voto único</span>
+    <div class="vote-icon">👁️</div>
+  </button>
+
+  <button class="vote-btn vote-purple" id="teamVote" onclick="window.location.href='vot.html'">
+    <span>Voto da torcida</span>
+    <div class="vote-icon">👥</div>
+  </button>
+</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ====== ESTILOS ISOLADOS DO BLOCO DE VOTAÇÃO ====== */
+  .vote-frame {
+    background: linear-gradient(90deg, #6fffd6, #5c43ff);
+    padding: 12px;
+    border-radius: 22px;
+    max-width: 980px;
+    width: 100%;
+    margin: 20px auto;
+    box-shadow: 0 8px 30px rgba(15,20,40,0.12);
+  }
+
+  .vote-mock {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .vote-hero img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .vote-card {
+    position: relative;
+    margin: -18px 22px 26px 22px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid rgba(10,10,10,0.04);
+    box-shadow: 0 8px 26px rgba(13,20,40,0.06);
+  }
+
+  .vote-card-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom: 18px;
+  }
+
+  .vote-title {
+    font-size:20px;
+    font-weight:700;
+    color:#111827;
+  }
+
+  .vote-status {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color: #58606b;
+    font-size:13px;
+    font-weight:600;
+  }
+
+  .vote-dot {
+    width:10px;height:10px;border-radius:50%;background: #96f3a8;
+    box-shadow:0 0 0 6px rgba(150,243,168,0.07);
+  }
+
+  .vote-options {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .vote-btn {
+    border-radius: 12px;
+    padding: 16px;
+    font-size:16px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    cursor:pointer;
+    border: none;
+    outline: none;
+    transition: transform .12s ease, box-shadow .12s ease;
+    box-shadow: 0 6px 18px rgba(10,10,20,0.04);
+  }
+
+  .vote-btn:active { transform: translateY(1px) }
+
+  .vote-green {
+    background: linear-gradient(90deg,#9cf7c6,#6ef5b0);
+    color: #052018;
+  }
+
+  .vote-purple {
+    background: linear-gradient(90deg,#5b3bff,#2b0db7);
+    color: white;
+  }
+
+  .vote-icon {
+    width:44px;height:44px;border-radius:10px;
+    background:rgba(255,255,255,0.08);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+
+  .vote-btn:hover {
+    position: relative;
+    z-index: 1;
+  }
+
+  .vote-btn:hover::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 15px;
+    background: linear-gradient(90deg, #6fffd6, #5c43ff);
+    z-index: -1;
+  }
+</style>
+
+<script>
+  const btnSingle = document.getElementById('singleVote');
+  const btnTeam = document.getElementById('teamVote');
+
+  btnSingle.addEventListener('click', ()=> {
+    window.location.href = "voto-unico.html";
+  });
+
+  btnTeam.addEventListener('click', ()=> {
+    window.location.href = "voto-torcida.html";
+  });
+</script>
     
   </style>
 </head>
@@ -84,6 +261,79 @@
   <div class="bolinha" style="background-image: url('/Estrela/taliz.webp');"></div>
   <div class="bolinha" style="background-image: url('/Estrela/thaina.webp');"></div>
     </div>
+
+<div class="vote-frame">
+  <div class="vote-mock">
+
+    <!-- HERO - imagem única -->
+    <div class="vote-hero">
+      <img src="https://i.ibb.co/XfpykF4F/Grid-Art-20250918-214636224.webp" alt="Participantes">
+    </div>
+
+    <!-- Card -->
+    <div class="vote-card">
+      <div class="vote-card-header">
+        <div>
+          <div class="vote-title">Quem você quer <strong>ELIMINAR?</strong></div>
+          <div style="font-size:13px;color:#6b7280;margin-top:6px">Primeiro Paredão</div>
+        </div>
+
+        <div style="text-align:right">
+          <div class="vote-status">
+            <span class="vote-dot"></span>
+            <span style="font-weight:600;color:#374151;font-size:13px">VOTAÇÃO EM ANDAMENTO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vote-options">
+  <button class="vote-btn vote-green" id="singleVote" onclick="window.location.href='https://pollforall.com/plqqne64'">
+    <span>Voto único</span>
+    <div class="vote-icon">👁️</div>
+  </button>
+
+  <button class="vote-btn vote-purple" id="teamVote" onclick="window.location.href='vot.html'">
+    <span>Voto da torcida</span>
+    <div class="vote-icon">👥</div>
+  </button>
+</div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Borda gradient estilo BBB */
+.vote-frame {
+  position: relative;
+  border-radius: 22px;
+  padding: 4px; /* espaço para a faixa */
+}
+
+.vote-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px; /* largura da faixa */
+  border-radius: 22px;
+  background: linear-gradient(90deg, #00f, #0f0); /* azul e verde */
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vote-mock {
+  position: relative;
+  border-radius: 18px; /* para não cobrir a faixa */
+  background: #fff;
+  overflow: hidden;
+  z-index: 2;
+}
+</style>
+
 
     <!-- Carrossel de Destaques -->
 <section class="carousel-container" aria-label="destaques">
