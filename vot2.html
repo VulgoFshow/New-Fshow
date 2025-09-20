@@ -1,11 +1,22 @@
 <!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Fshow/Votação</title>
+
+  <link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp">
+  
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  
   <meta charset="UTF-8" />
-  <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon">
-
+  <title>Fshow</title>
   <style>
     body {
       margin: 15px;
@@ -16,6 +27,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      overflow-x: hidden;
     }
     .container {
       background: #1e1e1e;
@@ -25,37 +37,41 @@
       max-width: 700px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, .7);
       color: #eee;
-      text-align: center;
     }
-    h1 { margin-bottom: 25px; font-size: 26px; }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 26px;
+    }
     .option {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       background: #2d2d2d;
       border: 2px solid #444;
       border-radius: 10px;
+      overflow: hidden;
       cursor: pointer;
+      transition: border-color .25s;
+      user-select: none;
     }
+    .option:hover { filter: brightness(1.1); }
+    .option input { display: none; }
     .option img {
-      width: 120px; height: 80px;
+      width: 130px;
+      height: 85px;
       object-fit: cover;
-      border-radius: 8px 0 0 8px;
+      flex-shrink: 0;
+      pointer-events: none;
+      user-select: none;
     }
-    .option span { flex: 1; font-size: 18px; font-weight: bold; }
-    button {
-      margin-top: 20px;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      width: 100%;
+    .option span {
+      flex: 1;
+      padding: 0 20px;
+      font-size: 18px;
+      font-weight: 600;
+      pointer-events: none;
     }
-    #googleBtn { background: #4285F4; color: #fff; }
-    #botaoVotar { background: #ff6600; color: #fff; }
-    #botaoVotar:disabled { background: #555; cursor: not-allowed; }
-    
     .option.selected {
       border-color: #00aaff;
       box-shadow: 0 0 10px #00aaffbb;
@@ -76,77 +92,6 @@
     button:hover:not(:disabled) { background: #e65c00; }
     button:disabled { background: #555; cursor: not-allowed; }
 
-    /* Fundo do popup ocupando toda a tela */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6); /* escurece */
-  backdrop-filter: blur(8px);   /* aplica blur */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-/* Quando ativo */
-.popup-overlay.active {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* Caixa do login */
-.popup-box {
-  background: #1e1e1e;
-  padding: 25px;
-  border-radius: 12px;
-  width: 360px;
-  max-width: 90%;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-  text-align: center;
-  color: #fff;
-}
-
-.popup-box h3 {
-  margin-bottom: 15px;
-}
-
-.popup-box input {
-  width: 100%;
-  margin-bottom: 12px;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-}
-
-.popup-box button {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  background: #ff6600;
-  color: white;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-.popup-box button:hover {
-  background: #e65500;
-}
-
-.popup-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-    
     /* ANIMAÇÕES */
 @keyframes fadeInUp {
   from {
@@ -386,37 +331,31 @@ button:hover:not(:disabled),
   animation: fadeIn 0.4s ease forwards;
 }
 
-</style>
+  </style>
 </head>
 <body>
+  
+  <div class="container" id="votoTela">
+    <h1>Quem Você quer que seja <strong>ELIMINADO?</strong></h1>
 
-<div class="container" id="loginTela">
-  <h1>🔑 Faça login para votar</h1>
-  <button id="googleBtn">Entrar com Google</button>
-</div>
+    <label class="option">
+      <input type="radio" name="vote" value="Manchinha" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmanchinha.jpg?raw=true" alt="Manchinha" />
+      <span>Manchinha</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Mikael" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true" alt="Mikael" />
+      <span>Mikael</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Samuel" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bsamuel.jpg?raw=true" alt="Samuel" />
+      <span>Samuel</span>
+      </label>
 
-<div class="container" id="votoTela" style="display:none;">
-  <h1>Quem você quer que <strong>FIQUE?</strong></h1>
-
-  <label class="option">
-    <input type="radio" name="vote" value="Adnilton">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/adnilton.jpg?raw=true">
-    <span>Adnilton</span>
-  </label>
-
-  <label class="option">
-    <input type="radio" name="vote" value="Lucas">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/lucas.jpg?raw=true">
-    <span>Lucas</span>
-  </label>
-
-  <label class="option">
-    <input type="radio" name="vote" value="Quim">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/quim.jpg?raw=true">
-    <span>Quim</span>
-  </label>
-
-<button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
+    <!-- Botão do CAPTCHA -->
+    <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
         <svg class="checkmark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 12l6 6 10-10" />
@@ -426,24 +365,16 @@ button:hover:not(:disabled),
       <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="Logo personalizada" />
     </button>
 
-  <button id="botaoVotar" disabled>Votar</button>
-</div>
+    <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
+  </div>
 
-<div class="container" id="confirmTela" style="display:none;">
-  <h2 id="nomeConfirm"></h2>
-  <img id="fotoConfirm" src="" alt="" style="width:150px; height:150px; border-radius:10px;">
-  <p>✅ Seu voto único foi registrado com sucesso!</p>
-  <button onclick="window.location.href='resultado.html'">Voto da Torcida</button>
-</div>
+  <div class="container confirm" id="confirmTela">
+    <h2 id="nomeConfirm"></h2>
+    <img id="fotoConfirm" src="" alt="Participante escolhido" />
+    <p>✅ Seu voto foi registrado com sucesso!</p>
+    <button onclick="voltar()">Votar novamente</button>
+  </div>
 
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
-
-  const supabase = createClient(
-    "https://maroopnrcrpoizpjhmss.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  );
-  
   <div class="popup" id="popupCaptcha" role="dialog" aria-modal="true" aria-labelledby="captcha-instruction">
     <div class="captcha-box">
       <button class="captcha-close" aria-label="Fechar CAPTCHA" style="float:right; font-size: 24px; color:#aaa; background:none; border:none; cursor:pointer;" onclick="fecharCaptcha()">&times;</button>
@@ -457,79 +388,14 @@ button:hover:not(:disabled),
     </div>
   </div>
 
- <script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
-  const supabase = createClient(
-    'https://maroopnrcrpoizpjhmss.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
-  )
+    const supabase = createClient(
+      'https://maroopnrcrpoizpjhmss.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
+    );
 
-  const popupLogin = document.getElementById("popupLogin")
-  const loginStatus = document.getElementById("loginStatus")
-
-  // Função: criar conta
-  window.registrar = async () => {
-    const email = document.getElementById("loginEmail").value
-    const senha = document.getElementById("loginSenha").value
-
-    if (!email || !senha) {
-      loginStatus.textContent = "⚠️ Preencha todos os campos"
-      return
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: senha,
-    })
-
-    if (error) {
-      loginStatus.textContent = "❌ " + error.message
-    } else {
-      loginStatus.textContent = "✅ Conta criada! Verifique seu e-mail."
-    }
-  }
-
-  // Função: login
-  window.login = async () => {
-    const email = document.getElementById("loginEmail").value
-    const senha = document.getElementById("loginSenha").value
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: senha,
-    })
-
-    if (error) {
-      loginStatus.textContent = "❌ " + error.message
-    } else {
-      loginStatus.textContent = "✅ Login realizado!"
-      popupLogin.classList.remove("active")
-      localStorage.setItem("fshow-user", JSON.stringify(data.session)) // salvar sessão
-    }
-  }
-
-  // Verificar login persistente ao carregar
-  async function checarSessao() {
-    const { data } = await supabase.auth.getSession()
-    if (data.session) {
-      popupLogin.classList.remove("active") // já está logado
-    } else {
-      popupLogin.classList.add("active") // precisa logar
-    }
-  }
-  checarSessao()
-
-  // Logout
-  window.logout = async () => {
-    await supabase.auth.signOut()
-    localStorage.removeItem("fshow-user")
-    popupLogin.classList.add("active")
-  }
-</script>
-  
-<script>
-  //Fechar votação
   const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
@@ -717,7 +583,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('vup1')
+    .from('paredão2')
     .insert({ participante: escolhido });
 
   if (error) {
@@ -752,75 +618,10 @@ if (!votacaoAtiva) {
 
     resetarEstado();
 
-const loginTela = document.getElementById("loginTela");
-  const votoTela = document.getElementById("votoTela");
-  const confirmTela = document.getElementById("confirmTela");
-  const botaoVotar = document.getElementById("botaoVotar");
-  const googleBtn = document.getElementById("googleBtn");
-  const nomeConfirm = document.getElementById("nomeConfirm");
-  const fotoConfirm = document.getElementById("fotoConfirm");
-
-  let usuario = null;
-
-  // Google Login
-  googleBtn.addEventListener("click", async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google"
-    });
-    if (error) alert("Erro: " + error.message);
-  });
-
-  // Verificar login e voto
-  async function checarLogin() {
-    const { data } = await supabase.auth.getUser();
-    if (data.user) {
-      usuario = data.user;
-      // Checar se já votou
-      const { data: voto } = await supabase
-        .from("votos")
-        .select("*")
-        .eq("user_id", usuario.id)
-        .maybeSingle();
-
-      loginTela.style.display = "none";
-      if (voto) {
-        // Já votou
-        confirmTela.style.display = "block";
-        nomeConfirm.textContent = voto.participante;
-        fotoConfirm.src = voto.foto;
-      } else {
-        votoTela.style.display = "block";
-      }
-    }
-  }
-  checarLogin();
-
-  // Habilitar botão quando escolher
-  document.querySelectorAll("input[name='vote']").forEach(radio => {
-    radio.addEventListener("change", () => {
-      botaoVotar.disabled = false;
-    });
-  });
-
-  // Registrar voto
-  botaoVotar.addEventListener("click", async () => {
-    const escolhido = document.querySelector("input[name='vote']:checked").value;
-    const imgSrc = document.querySelector("input[name='vote']:checked + img").src;
-
-    const { error } = await supabase.from("votos").insert([
-      { user_id: usuario.id, participante: escolhido, foto: imgSrc }
-    ]);
-
-    if (error) {
-      alert("Erro ao votar: " + error.message);
-      return;
-    }
-
-    votoTela.style.display = "none";
-    confirmTela.style.display = "block";
-    nomeConfirm.textContent = escolhido;
-    fotoConfirm.src = imgSrc;
-  });
-</script>
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
 </body>
 </html>
