@@ -20,55 +20,27 @@
   <style>
     :root{--bg:#f9f9f9;--bg-2:#ffffff;--text:#121212;--accent-pink:#FF0055;--accent-yellow:#FFD600;--accent-blue:#005fbb;--muted:#777777;--card-radius:10px;--space:16px;--shadow:0 6px 18px rgba(0,0,0,0.12)}*{box-sizing:border-box}body,html{height:100%}body{margin:0;font-family:Roboto,Arial,sans-serif;background-color:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden;line-height:1.4}a{color:var(--accent-blue);text-decoration:none;cursor:pointer}a:hover{color:var(--accent-pink)}.topo{position:sticky;top:0;z-index:999;background:linear-gradient(90deg,rgba(249,249,249,.95),rgba(255,255,255,.95));display:flex;align-items:center;justify-content:space-between;padding:12px 20px;gap:12px;border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:blur(4px);box-shadow:var(--shadow)}.topo-esquerda{display:flex;align-items:center;gap:16px;position:relative}.logo{display:flex;align-items:center;gap:10px;font-family:Montserrat,sans-serif;font-weight:800;font-size:20px;color:var(--text);user-select:none}.logo .mark{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--accent-pink),var(--accent-yellow));display:inline-flex;align-items:center;justify-content:center;color:#121212;font-weight:700;font-size:18px;box-shadow:var(--shadow);cursor:pointer;position:relative;transition:filter .2s ease}.logo .mark:hover{filter:brightness(1.1)}.dropdown-menu{position:absolute;top:52px;left:0;background:var(--bg-2);border:1px solid rgba(0,0,0,.1);border-radius:var(--card-radius);box-shadow:var(--shadow);width:180px;display:none;flex-direction:column;padding:8px 0;z-index:1000}.dropdown-menu.active{display:flex}.dropdown-menu a{padding:10px 20px;font-weight:600;color:var(--text);white-space:nowrap;transition:background-color .15s ease}.dropdown-menu a:hover{background-color:var(--accent-pink);color:#fff}.topo .mark-container{position:relative}.canal{color:var(--muted);font-size:14px;padding:6px 8px;border-radius:6px;transition:all .15s ease;display:inline-block}.canal:hover{color:var(--text);background:rgba(0,0,0,.03)}.imagem-topo img{height:44px;border-radius:8px}.banner-r7{width:100%;max-width:100vw;height:120px;aspect-ratio:100px;background-color:#004fff;background-size:cover;background-position:center;background-repeat:no-repeat}.banner img{width:100%;height:320px;object-fit:cover;display:block}.container{max-width:1100;margin:28px auto;padding:0 18px}.carousel-container{display:flex;gap:14px;overflow-x:auto;padding:8px 0;scroll-snap-type:x mandatory}.carousel-item{flex:0 0 320px;border-radius:var(--card-radius);overflow:hidden;position:relative;cursor:pointer;scroll-snap-align:start;box-shadow:var(--shadow);background:var(--bg-2);transition:transform .22s ease}.carousel-item:hover{transform:translateY(-6px)}.carousel-item img{width:100%;height:200px;object-fit:cover;display:block}.category-label{position:absolute;top:10px;left:10px;padding:6px 10px;border-radius:6px;font-family:Montserrat,sans-serif;font-weight:700;font-size:12px;color:#fff;user-select:none}.category-label.real{background:var(--accent-pink)}.category-label.purple{background:#c5007f}.title-label{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(0,0,0,.45);padding:8px;border-radius:6px;font-family:Montserrat,sans-serif;font-weight:700;color:#fff;user-select:none}.bolinhas-container{display:flex;gap:12px;overflow-x:auto;padding:12px 4px;margin:18px 0}.bolinha{width:75px;height:75px;border-radius:50%;border:3px solid rgba(0,0,0,.06);background-size:cover;background-position:center;box-shadow:0 6px 18px rgba(0,0,0,.12);flex:0 0 auto;transition:transform .18s;cursor:pointer}.bolinha:hover{transform:scale(1.06)}.card{display:flex;gap:1px;background:var(--bg-2);border-radius:var(--card-radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .18s;cursor:pointer}.card:hover{transform:translateY(-6px)}.card img{width:150px;height:100px;object-fit:cover;user-select:none}.card .conteudo{padding:12px;display:flex;flex-direction:column;justify-content:center}.card .meta{font-size:12px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;user-select:none}.card a.title{font-family:Montserrat,sans-serif;font-weight:700;color:var(--text);font-size:16px}.card a.title:hover{color:var(--accent-pink)}.badge{display:inline-block;padding:6px 8px;border-radius:6px;font-weight:700;font-size:.75rem;color:#121212;margin-right:8px;user-select:none}.badge.pink{background:var(--accent-pink);color:#fff}.badge.yellow{background:var(--accent-yellow);color:#121212}h2.section-title{font-family:Montserrat,sans-serif;color:var(--accent-pink);margin:8px 0 18px;user-select:none}@media (max-width:900px){.container{padding:0 12px}.carousel-item{flex:0 0 280px}.card img{width:120px}}@media (max-width:520px){.topo{padding:10px}.logo{font-size:18px}.carousel-item{flex:0 0 220px}.banner img{height:200px}.card{flex-direction:column}.card img{width:100%;height:160px}}.muted{color:var(--muted)}.spacer{height:18px}a:focus{outline:3px solid rgba(0,194,255,.12);outline-offset:2px}
   
+  .bolinha-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .eliminado {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ff0033;
+    text-transform: uppercase;
+  }
+  
     footer {
       text-align: center;
       margin-top: 50px;
       font-size: 0.9em;
       color: #777;
     }
-    <!-- BLOCO DE VOTAÇÃO -->
-<div class="vote-frame">
-  <div class="vote-mock">
 
-    <!-- HERO - imagem única -->
-    <div class="vote-hero">
-      <img src="https://i.ibb.co/XfpykF4F/Grid-Art-20250918-214636224.webp" alt="Participantes">
-    </div>
-
-    <!-- Card -->
-    <div class="vote-card">
-      <div class="vote-card-header">
-        <div>
-          <div class="vote-title">Quem você quer eliminar?</div>
-          <div style="font-size:13px;color:#6b7280;margin-top:6px">Primeiro Paredão</div>
-        </div>
-
-        <div style="text-align:right">
-          <div class="vote-status">
-            <span class="vote-dot"></span>
-            <span style="font-weight:600;color:#374151;font-size:13px">VOTAÇÃO EM ANDAMENTO</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="vote-options">
-  <button class="vote-btn vote-green" id="singleVote" onclick="window.location.href='https://pollforall.com/plqqne64'">
-    <span>Voto único</span>
-    <div class="vote-icon">👁️</div>
-  </button>
-
-  <button class="vote-btn vote-purple" id="teamVote" onclick="window.location.href='vot.html'">
-    <span>Voto da torcida</span>
-    <div class="vote-icon">👥</div>
-  </button>
-</div>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
   /* ====== ESTILOS ISOLADOS DO BLOCO DE VOTAÇÃO ====== */
   .vote-frame {
     background: linear-gradient(90deg, #6fffd6, #5c43ff);
@@ -191,6 +163,80 @@
   }
 </style>
 
+<style>
+
+    .news-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .news-card {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .news-card:hover {
+      transform: scale(1.02);
+    }
+
+    .news-card img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .news-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .news-category {
+      font-size: 0.8rem;
+      color: #a44;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .news-content h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: #222;
+    }
+    
+    .status-eliminado {
+    font-size: 12px;
+    font-weight: bold;
+    color: red;
+    text-transform: uppercase;
+    font-family: Montserrat, sans-serif;
+  }
+
+    /* Responsivo */
+    @media (max-width: 600px) {
+      .news-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .news-card img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+
 <script>
   const btnSingle = document.getElementById('singleVote');
   const btnTeam = document.getElementById('teamVote');
@@ -246,21 +292,30 @@
 
     <!-- Bolinhas (programas / categorias) -->
      <div class="bolinhas-container">
-  <div class="bolinha" style="background-image: url('/Estrela/bea.webp');"></div> 
-  <div class="bolinha" style="background-image: url('/Estrela/biahh.webp');"></div> 
-  <div class="bolinha" style="background-image: url('/Estrela/brenno.webp');"></div> 
-  <div class="bolinha" style="background-image: url('/Estrela/camille.webp');"></div> 
-  <div class="bolinha" style="background-image: url('/Estrela/daniel.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/gabriel.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/hanii.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/janicio.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/juceir.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/nirah.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/rauma.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/saudario.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/taliz.webp');"></div>
-  <div class="bolinha" style="background-image: url('/Estrela/thaina.webp');"></div>
-    </div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bdavi.jpg?raw=true');"></div> 
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true');"></div> 
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/ehelena.jpg?raw=true');"></div> 
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bines.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bjoao.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bkoyuh.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluca.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/blucas.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluddi.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bludmila.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmanchinha.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/ematheus.png?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmiguel.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/epedro.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/brose.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bsam.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bsamuel.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true');"></div> 
+    <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvictor.jpg?raw=true');"></div> 
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvitor.jpg?raw=true');"></div> 
+</div> <!-- fecha bolinhas-container -->
+<div style="height:1px"></div>
 
 <div class="vote-frame">
   <div class="vote-mock">
@@ -334,14 +389,15 @@
 }
 </style>
 
+<div style="height:18px"></div>
 
     <!-- Carrossel de Destaques -->
 <section class="carousel-container" aria-label="destaques">
   
-  <a class="carousel-item" href="bbb/Banco de Estalecas.html" target="_blank">
-    <img src="https://i.ibb.co/XkNkDmHD/Banco-de-Estalecas-Corrigido-imagen.png" alt="Notícia 1">
-    <div class="category-label real">Realities</div>
-    <div class="title-label">Banco de Estalecas - Confira as contas dos Brotheres</div>
+  <a class="carousel-item" href="enquetefazenda" target="_blank">
+    <img src="https://portalaltadefinicao.com/wp-content/uploads/2025/08/A-Fazenda-17-1.jpg" alt="Notícia 1">
+    <div class="category-label real">A Fazenda 17</div>
+    <div class="title-label">Enquete - Quem é seu Favorito da Fazenda17?</div>
   </a>
   
 <a class="carousel-item" href="roças/fazendadeverão.html" target="_blank">
@@ -365,51 +421,35 @@
 </section>
 
     <div class="spacer"></div>
-
-  <!-- Agenda A Fazenda de Verão -->
-<div style="max-width: 900px; margin: 16px auto; padding: 8px;">
-  <img
-    src=""
-    alt="Continue lendo abaixo"
-    style="display:block; width:100%; height:auto; border:4px solid #1e90ff; border-radius:12px; box-sizing:border-box;"
-    loading="lazy"
-  >
-</div>
+    <div style="height:18px"></div>
 
     <!-- SEÇÃO DE NOTÍCIAS !-->
-    <section>
-      <h2 class="section-title">Projetos</h2>
+   <div class="news-container">
+     <h2 class="section-title">Mais Detalhes</h2>
 
-      <article class="card">
-        <img src="https://i.ibb.co/zVp4grF7/Chat-GPT-Image-18-de-jul-de-2025-22-34-43.png" alt="Not1">
-        <div class="conteudo">
-          <div class="meta">Lívros • <span class="muted">Watpadd</span></div>
-          <a class="title" href="https://www.wattpad.com/story/398276542-comeback-valentine" target="_blank">Terceiro capítulo já está disponível! Clique e leia já!</a>
-        </div>
-      </article>
+    <a href="bbb/Banco de Estalecas.html" class="news-card">
+      <img src="https://i.ibb.co/gZrR3HqH/Banco-de-Estalecas-Corrigido-imagen.png" alt="Banco.estalecas">
+      <div class="news-content">
+        <span class="news-category">REALITIES · BBBF5</span>
+        <h3>Banco de Estalecas - Confira as contas dos Brotheres</h3>
+      </div>
+    </a>
 
-      <div style="height:14px"></div>
+    <a href="https://www.wattpad.com/story/398732648-jogo-da-lula-brasil" class="news-card">
+      <img src="https://i.ibb.co/bgQLtFKn/jogodalula.jpg" alt="Notícia 2">
+      <div class="news-content">
+        <span class="news-category">LIVROS · WATTPAD</span>
+        <h3>Squid Game Brasil - Acompanhe o início</h3>
+      </div>
+    </a>
 
-      <article class="card">
-        <img src="https://i.ibb.co/7N4sN1qR/Jogo-A-reo-de-Dodgeball-convert-io.webp" alt="Not2">
-        <div class="conteudo">
-          <div class="meta">Lívros • <span class="muted">Watpadd</span></div>
-          <a class="title" href="https://www.wattpad.com/story/398732648-jogo-da-lula-brasil" target="_blank">Squid Game Brasil - Acompanhe o início</a>
-        </div>
-      </article>
-
-      <div style="height:14px"></div>
-
-      <article class="card">
-        <img src="https://i.ibb.co/qFBHM8T3/Power-Couple-Brasil-convert-io.webp" alt="Not3">
-        <div class="conteudo">
-          <div class="meta">Canal • <span class="muted">YouTube</span></div>
-          <a class="title" href="https://youtu.be/l1HGeR5NR1s?si=hvV8PduhC1sWRkU_" target="_blank">Power Couple - Veja as porcentagens</a>
-          </a>
-        </div>
-      </article>
-
-    </section>
+    <a href="roças/fazendadeverão.html" class="news-card">
+      <img src="https://i.ibb.co/xS3BbSQY/unnamed-1.jpg" alt="Notícia 3">
+      <div class="news-content">
+        <span class="news-category">REALITIES · A FAZENDA DE VERÃO</span>
+        <h3>A Fazenda de Verão - Saiba quem são os participantes</h3>
+      </div>
+    </a>
   
 </main>
   
