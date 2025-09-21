@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fshow/Votação</title>
+  
   <link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon" />
   <link rel="apple-touch-icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -202,14 +203,47 @@
       color: #777;
     }
     
+      #resultadoModal > div {
+    width: 90%;
+    max-width: 800px;
+    height: 90%;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #resultadoModal iframe {
+    flex: 1;
+    border: none;
+  }
+
+  #votarNovamente {
+    width: 100%;
+    padding: 14px 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 0 0 10px 10px;
+    background: #00aaff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s ease;
+  }
+
+  #votarNovamente:hover {
+    background: #008ecc;
+    transform: scale(1.02);
+  }
+  
   </style>
 </head>
 
 <body>
-
  
   <div class="container" id="votoTela">
-    <h1>Quem é o seu favorito do Estrela da Casa?</h1>
+    <h1>Quem é o seu favorito na Fazenda 17?</h1>
 
     <label class="option">
       <input type="radio" name="vote" value="Creo Kellab" />
@@ -346,11 +380,58 @@
   </div>
   
   <!-- Modal de Resultado -->
-  <div id="resultadoModal">
-    <div>
-      <iframe src="" id="iframeResultado"></iframe>
-    </div>
+<div id="resultadoModal">
+  <div>
+    <iframe src="" id="iframeResultado"></iframe>
+    <button id="votarNovamente">Votar novamente</button>
   </div>
+</div>
+
+<script>
+ 
+  window.enviarVoto = async () => {
+    const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
+
+    if (!escolhido) {
+      alert("Escolha um participante antes de votar.");
+      return;
+    }
+    if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+      alert("Confirme que você não é um robô.");
+      return;
+    }
+
+    const { error } = await supabase
+      .from('fazendae17')
+      .insert({ participante: escolhido });
+
+    if (error) {
+      alert('❌ Erro ao registrar voto: ' + error.message);
+      console.error(error);
+      return;
+    }
+
+
+    setTimeout(() => {
+      document.getElementById("iframeResultado").src = "enqueteresultado.html"; 
+      document.getElementById("resultadoModal").style.display = "flex";
+    }, 500);
+  };
+
+
+document.getElementById("votarNovamente").addEventListener("click", () => {
+
+  document.getElementById("resultadoModal").style.display = "none";
+
+  document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
+
+  const botaoCaptcha = document.getElementById("botaoCaptcha");
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoCaptcha.textContent = "Não sou um robô";
+});
+
+</script>
+
 
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
@@ -405,6 +486,14 @@
         document.getElementById("resultadoModal").style.display = "flex";
       }, 500);
     };
+    
+    document.getElementById("votarNovamente").addEventListener("click", () => {
+  document.getElementById("resultadoModal").style.display = "none";
+  document.getElementById("iframeResultado").src = ""; // limpa resultado
+  // Se quiser recarregar a votação:
+  location.reload();
+});
+
   </script>
 
    <footer>
