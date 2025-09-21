@@ -431,7 +431,6 @@ document.getElementById("votarNovamente").addEventListener("click", () => {
 
 </script>
 
-
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
@@ -479,17 +478,16 @@ document.getElementById("votarNovamente").addEventListener("click", () => {
         return;
       }
 
-      // Mostrar modal com resultados
       setTimeout(() => {
-        document.getElementById("iframeResultado").src = "resultado.html";
+        document.getElementById("iframeResultado").src = "enqueteresultado.html";
         document.getElementById("resultadoModal").style.display = "flex";
       }, 500);
     };
     
     document.getElementById("votarNovamente").addEventListener("click", () => {
   document.getElementById("resultadoModal").style.display = "none";
-  document.getElementById("iframeResultado").src = ""; // limpa resultado
-  // Se quiser recarregar a votação:
+  document.getElementById("iframeResultado").src = ""; 
+
   location.reload();
 });
 
