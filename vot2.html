@@ -339,19 +339,19 @@ button:hover:not(:disabled),
     <h1>Quem Você quer que seja <strong>ELIMINADO?</strong></h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Manchinha" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmanchinha.jpg?raw=true" alt="Manchinha" />
-      <span>Manchinha</span>
+      <input type="radio" name="vote" value="Erick" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/berick.jpg?raw=true" alt="Erick" />
+      <span>Erick</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Mikael" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true" alt="Mikael" />
-      <span>Mikael</span>
+      <input type="radio" name="vote" value="Flávia" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia" />
+      <span>Flávia</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Samuel" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bsamuel.jpg?raw=true" alt="Samuel" />
-      <span>Samuel</span>
+      <input type="radio" name="vote" value="Tety" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true" alt="Tety" />
+      <span>Tety</span>
       </label>
 
     <!-- Botão do CAPTCHA -->
@@ -396,7 +396,7 @@ button:hover:not(:disabled),
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
     );
 
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -583,7 +583,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('paredão2')
+    .from('paredão3')
     .insert({ participante: escolhido });
 
   if (error) {
@@ -619,9 +619,5 @@ if (!votacaoAtiva) {
     resetarEstado();
 
   </script>
-</body>
-</html>
-<!-- partial -->
-  
 </body>
 </html>
