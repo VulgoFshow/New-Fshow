@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resultado da Enquete</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+ <style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+    color: #222;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .container {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 700px;
+    margin: auto;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: fadeIn 0.6s ease;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: clamp(24px, 5vw, 32px);
+    font-weight: 700;
+    color: #0d1b2a;
+  }
+
+  #total-votos {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 25px;
+    font-size: 15px;
+    color: #444;
+    letter-spacing: 0.5px;
+  }
+
+  .resultado {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 1px;
+  border-radius: 14px;
+  background: #fafafa;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+  border: 1px solid transparent;
+  background-image: linear-gradient(#fafafa, #fafafa), 
+                    linear-gradient(135deg, #6a11cb, #2575fc);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
+.resultado:hover {
+  transform: scale(1.02);
+}
+
+  .resultado img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #e3e3e3;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .info {
+    flex: 1;
+  }
+
+  .nome {
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: #222;
+  }
+
+  .barra {
+  position: relative;
+  height: 20px;
+  border-radius: 10px;
+  background: #ebebeb;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#ebebeb, #ebebeb), 
+                    linear-gradient(90deg, #6a11cb, #2575fc);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
+  .preenchido {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    border-radius: 10px;
+    width: 0;
+    transition: width 0.6s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15) inset;
+  }
+
+  .porcentagem {
+    margin-left: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    color: #2575fc;
+    min-width: 55px;
+    text-align: justify;
+  }
+
+  #votar-novamente {
+    display: block;
+    margin: 30px auto 0;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+  }
+
+  #votar-novamente:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 16px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Resultado Parcial</h1>
+    <div id="total-votos">Total de votos: 0</div>
+    <div id="participantes"></div>
+    <button id="votar-novamente">Votar novamente</button>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    // Participantes fixos
+    const participantes = {
+      "Creo Kellab": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-creo.jpg?raw=true",
+      "Duda Wendling": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-duda.jpg?raw=true",
+      "Dudu Camargo": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-dudu.jpg?raw=true",
+      "Fabiano Moraes": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-fabiano.jpg?raw=true",
+      "Fernando Sampaio": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-fernando.jpg?raw=true",
+      "Gabily": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-gabily.jpg?raw=true",
+      "Gaby Spanic": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-gaby.jpg?raw=true",
+      "Guilherme Bouwry": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-guilherme.jpg?raw=true",
+      "Kathy Maravilha": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-kathy.jpg?raw=true",
+      "Maria Caporusso": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-maria.jpg?raw=true",
+      "Martina Sanzi": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-martina.jpg?raw=true",
+      "Luiz Mesquita": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-luiz.jpg?raw=true",
+      "Michelle Barros": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-michelle.jpg?raw=true",
+      "Nizam": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-nizam.jpg?raw=true",
+      "Rayane Figliuzzi": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-rayane.jpg?raw=true",
+      "Renata Muller": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-renata.jpg?raw=true",
+      "Saory Cardoso": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-saory.jpg?raw=true",
+      "Shia Phoenix": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-shia.jpg?raw=true",
+      "Tàmires Assis": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-tamires.jpg?raw=true",
+      "Toninho Tornado": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-toninho.jpg?raw=true",
+      "Walério Araújo": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-walerio.jpg?raw=true",
+      "Wallas Arrais": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-wallas.jpg?raw=true",
+      "Will Guimarães": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-will.jpg?raw=true",
+      "Yoná Sousa": "https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-yona.jpg?raw=true"
+    };
+
+    const container = document.getElementById("participantes");
+    const totalVotosEl = document.getElementById("total-votos");
+
+    const SUPABASE_URL = "https://maroopnrcrpoizpjhmss.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function carregarResultados() {
+      const { data, error } = await supabaseClient
+        .from("fazendae17")   
+        .select("participante");
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+     const contagem = {};
+data.forEach(v => {
+  contagem[v.participante] = (contagem[v.participante] || 0) + 1;
+});
+
+
+      const total = data.length || 1;
+      totalVotosEl.textContent = `Total de votos: ${data.length}`;
+
+      // Ordena participantes pelos mais votados
+      const ordenados = Object.entries(participantes).sort((a, b) => {
+        const votosA = contagem[a[0]] || 0;
+        const votosB = contagem[b[0]] || 0;
+        return votosB - votosA;
+      });
+
+      // Renderiza lista
+      container.innerHTML = "";
+      ordenados.forEach(([nome, foto]) => {
+        const votos = contagem[nome] || 0;
+        const porcentagem = ((votos / total) * 100).toFixed(1);
+
+        container.innerHTML += `
+          <div class="resultado" data-nome="${nome}">
+            <img src="${foto}" alt="${nome}">
+            <div class="info">
+              <div class="nome">${nome}</div>
+              <div class="barra"><div class="preenchido" style="width:${porcentagem}%"></div></div>
+            </div>
+            <div class="porcentagem">${porcentagem}%</div>
+          </div>
+        `;
+      });
+    }
+
+    // Atualiza ao abrir
+    carregarResultados();
+
+    // Atualiza em tempo real
+    supabaseClient.channel("votos-channel")
+      .on("postgres_changes", { event: "*", schema: "public", table: "fazendae17" }, () => {
+        carregarResultados();
+      })
+      .subscribe();
+
+    // Botão de votar novamente
+    document.getElementById("votar-novamente").addEventListener("click", () => {
+      window.location.href = "pagina-votacao.html"; // coloque o link da sua página de votação
+    });
+  </script>
+</body>
+</html>
