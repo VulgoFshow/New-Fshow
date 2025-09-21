@@ -9,11 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Flop</title>
 
-  <!-- Favicon -->
   <link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon">
   <link rel="apple-touch-icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp">
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
@@ -264,7 +262,6 @@
         </div>
       </div>
       
-      <!-- Dropdown menu -->
       <nav class="dropdown-menu" id="pfMenu" role="menu" aria-label="Menu principal">
         <a href="index.html" role="menuitem" tabindex="-1">Home</a>
         <a href="index.html" role="menuitem" tabindex="-1">Reaities</a>
@@ -290,7 +287,7 @@
   .banner-r7{background-color:#004fff;width:100vw;padding:10px 0 20px 0;box-sizing:border-box}.banner-content{display:flex;justify-content:center;align-items:center;gap:20px;max-width:1200px;margin:0 auto}.banner-img{height:140px;object-fit:contain}.banner-logo{height:110px;object-fit:contain}.banner-menu{margin-top:15px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;max-width:1200px;margin-left:auto;margin-right:auto}.banner-menu button{background:0 0;border:1.5px solid #fff;color:#fff;padding:8px 16px;border-radius:30px;font-weight:600;cursor:pointer;transition:background-color .25s,color .25s}.banner-menu button:hover{background-color:#fff;color:#004fff}@media (max-width:600px){.banner-content{flex-direction:column;gap:12px}.banner-img,.banner-logo{height:100px}}
 </style>
 
-    <!-- Bolinhas (programas / categorias) -->
+    <!-- Bolinhas -->
      <div class="bolinhas-container">
   <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bdavi.jpg?raw=true');"></div> 
   <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true');"></div> 
@@ -310,17 +307,17 @@
   <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/epedro.jpg?raw=true');"></div>
   <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/brose.jpg?raw=true');"></div>
   <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bsam.jpg?raw=true');"></div>
-  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bsamuel.jpg?raw=true');"></div>
+  <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/esamuel.jpg?raw=true');"></div>
   <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true');"></div> 
     <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvictor.jpg?raw=true');"></div> 
   <div class="bolinha" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvitor.jpg?raw=true');"></div> 
-</div> <!-- fecha bolinhas-container -->
+</div>
 <div style="height:1px"></div>
 
 <div class="vote-frame">
   <div class="vote-mock">
 
-    <!-- HERO - imagem única -->
+    <!-- HERO -->
     <div class="vote-hero">
       <img src="https://media.discordapp.net/attachments/1418706671630549015/1419127118960267388/GridArt_20250920_220259077.jpg?ex=68d0a09f&is=68cf4f1f&hm=be57ded642fc9e8063db21e213c5172d32f1d89d13ea2487bf373ff3e48392a3&=&format=webp&width=1385&height=693" alt="Paredão">
     </div>
@@ -357,20 +354,20 @@
 </div>
 
 <style>
-/* Borda gradient estilo BBB */
+  
 .vote-frame {
   position: relative;
   border-radius: 22px;
-  padding: 4px; /* espaço para a faixa */
+  padding: 4px;
 }
 
 .vote-frame::before {
   content: '';
   position: absolute;
   inset: 0;
-  padding: 2px; /* largura da faixa */
+  padding: 2px; 
   border-radius: 22px;
-  background: linear-gradient(90deg, #00f, #0f0); /* azul e verde */
+  background: linear-gradient(90deg, #0f0, #00f); 
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
@@ -382,7 +379,7 @@
 
 .vote-mock {
   position: relative;
-  border-radius: 18px; /* para não cobrir a faixa */
+  border-radius: 18px; 
   background: #fff;
   overflow: hidden;
   z-index: 2;
@@ -451,20 +448,17 @@
 <meta name="robots" content="index, follow">
 
  <script>
-  // Toggle menu dropdown
   pfButton.addEventListener('click', (e) => {
-    e.stopPropagation(); // Impede que o clique vá para o document
+    e.stopPropagation();
     const expanded = pfButton.getAttribute('aria-expanded') === 'true' || false;
     pfButton.setAttribute('aria-expanded', !expanded);
     pfMenu.classList.toggle('active');
   });
 
-  // Impede que clique dentro do menu feche ele
   pfMenu.addEventListener('click', (e) => {
     e.stopPropagation();
   });
 
-  // Fechar menu ao clicar fora
   document.addEventListener('click', (e) => {
     if (!pfButton.contains(e.target) && !pfMenu.contains(e.target)) {
       pfMenu.classList.remove('active');
@@ -472,7 +466,6 @@
     }
   });
 
-  // Acessibilidade: fechar menu com ESC
   document.addEventListener('keydown', (e) => {
     if (e.key === "Escape") {
       pfMenu.classList.remove('active');
