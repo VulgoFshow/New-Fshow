@@ -339,14 +339,14 @@ button:hover:not(:disabled),
     <h1>Quem Você quer que seja <strong>ELIMINADO?</strong></h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Erick" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/berick.jpg?raw=true" alt="Erick" />
-      <span>Erick</span>
+      <input type="radio" name="vote" value="Miguel" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmiguelk?raw=true" alt="Miguel" />
+      <span>Miguel</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Flávia" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia" />
-      <span>Flávia</span>
+      <input type="radio" name="vote" value="Rose" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/brose.jpg?raw=true" alt="Rose" />
+      <span>Rose</span>
     </label>
     <label class="option">
       <input type="radio" name="vote" value="Tety" />
@@ -396,7 +396,7 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4"
 );
 
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -566,7 +566,6 @@ if (!votacaoAtiva) {
   nomeConfirm.textContent = escolhido;
   fotoConfirm.src = selecionadoLabel.querySelector("img").src;
 
-  // Aplica fade-out na tela de voto
   votoTela.classList.add("fade-out");
 
   setTimeout(() => {
@@ -583,7 +582,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('paredão3')
+    .from('paredão4')
     .insert({ participante: escolhido });
 
   if (error) {
@@ -598,9 +597,9 @@ if (!votacaoAtiva) {
       botaoVotar.disabled = true;
       botaoCaptcha.setAttribute("aria-pressed", "false");
       statusEl.textContent = "";
-      // Remove seleção visual
+  
       document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
-      // Desmarca radios
+      
       document.querySelectorAll("input[name='vote']").forEach(r => r.checked = false);
     }
 
