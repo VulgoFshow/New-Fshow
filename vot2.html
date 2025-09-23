@@ -339,14 +339,14 @@ button:hover:not(:disabled),
     <h1>Quem Você quer que seja <strong>ELIMINADO?</strong></h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Miguel" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmiguel.jpg?raw=true" alt="Miguel" />
-      <span>Miguel</span>
+      <input type="radio" name="vote" value="Manchinha" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmanchinha.jpg?raw=true" alt="Manchinha" />
+      <span>Manchinha</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Rose" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/brose.jpg?raw=true" alt="Rose" />
-      <span>Rose</span>
+      <input type="radio" name="vote" value="Luddi" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluddi.jpg?raw=true" alt="Luddi" />
+      <span>Luddi</span>
     </label>
     <label class="option">
       <input type="radio" name="vote" value="Tety" />
@@ -396,7 +396,7 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4"
 );
 
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -582,7 +582,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('paredão4')
+    .from('paredão5')
     .insert({ participante: escolhido });
 
   if (error) {
