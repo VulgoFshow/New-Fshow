@@ -10,33 +10,135 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
   <style>
-    /* --- SEU CSS MANTIDO --- */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #222; overflow-x: hidden; padding: 20px; }
-    .container { background: white; padding: 20px; border-radius: 14px; width: 95%; max-width: 600px; box-shadow: 0 4px 10px rgba(0, 0, 0, .1); margin: 0 auto; }
-    h1 { text-align: center; margin-bottom: 20px; font-size: clamp(20px, 5vw, 26px); }
-    .option { display: flex; align-items: center; margin-bottom: 10px; background: #f0f0f0; border: 2px solid #ccc; border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color .25s, box-shadow .25s; }
-    .option:hover { filter: brightness(1.05); }
-    .option input { display: none; }
-    .option img { width: 40%; max-width: 120px; aspect-ratio: 4 / 3; object-fit: cover; flex-shrink: 0; }
-    .option span { flex: 1; padding: 0 10px; font-size: clamp(16px, 4vw, 18px); font-weight: 600; }
-    .option.selected { border-color: #00aaff; box-shadow: 0 0 10px #00aaff99; }
-    button { width: 100%; margin-top: 20px; padding: 14px 0; font-size: 16px; border: none; border-radius: 10px; background: #00aaff; color: #fff; cursor: pointer; transition: background-color 0.3s, transform 0.2s ease; }
-    button:hover:not(:disabled) { background: #008ecc; transform: scale(1.03); }
-    button:disabled { background: #ccc; cursor: not-allowed; }
-    #botaoCaptcha { display: flex; align-items: center; justify-content: flex-start; background: #e6e6e6; border: 1px solid #ccc; border-radius: 6px; padding: 0 10px; cursor: pointer; height: 60px; box-shadow: 0 2px 6px rgb(0 0 0 / 0.1); color: #111; font-size: 14px; font-weight: 400; margin-top: 20px; width: 100%; gap: 10px; box-sizing: border-box; }
-    .recaptcha-checkbox { flex-shrink: 0; width: 26px; height: 26px; background: white; border: 2px solid #ccc; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
-    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox { background-color: #00aaff; border-color: #00aaff; }
-    .checkmark { width: 16px; height: 16px; display: none; stroke: white; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-    #botaoCaptcha[aria-pressed="true"] .checkmark { display: block; }
-    .recaptcha-label { flex-grow: 1; }
-    .recaptcha-icon { width: 30px; height: 30px; object-fit: contain; }
-    #resultadoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; align-items: center; justify-content: center; }
-    #resultadoModal > div { width: 90%; max-width: 800px; height: 90%; background: white; border-radius: 10px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
-    #resultadoModal iframe { flex: 1; border: none; }
-    #votarNovamente { width: 100%; padding: 14px 0; font-size: 16px; border: none; border-radius: 0 0 10px 10px; background: #00aaff; color: #fff; cursor: pointer; transition: background-color 0.3s, transform 0.2s ease; }
-    #votarNovamente:hover { background: #008ecc; transform: scale(1.02); }
-    footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
+   /* --- SEU CSS MANTIDO --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #222; overflow-x: hidden; padding: 20px; }
+.container { background: white; padding: 20px; border-radius: 14px; width: 95%; max-width: 600px; box-shadow: 0 4px 10px rgba(0, 0, 0, .1); margin: 0 auto; }
+h1 { text-align: center; margin-bottom: 20px; font-size: clamp(20px, 5vw, 26px); }
+.option { display: flex; align-items: center; margin-bottom: 10px; background: #f0f0f0; border: 2px solid #ccc; border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color .25s, box-shadow .25s; }
+.option:hover { filter: brightness(1.05); }
+.option input { display: none; }
+.option img { width: 40%; max-width: 120px; aspect-ratio: 4 / 3; object-fit: cover; flex-shrink: 0; }
+.option span { flex: 1; padding: 0 10px; font-size: clamp(16px, 4vw, 18px); font-weight: 600; }
+.option.selected { border-color: #00aaff; box-shadow: 0 0 10px #00aaff99; }
+
+#botaoCaptcha { 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+  background: #e6e6e6; 
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
+  padding: 0 10px; 
+  cursor: pointer; 
+  height: 60px; 
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1); 
+  color: #111; 
+  font-size: 14px; 
+  font-weight: 400; 
+  margin-top: 20px; 
+  width: 100%; 
+  gap: 10px; 
+  box-sizing: border-box; 
+}
+.recaptcha-checkbox { 
+  flex-shrink: 0; 
+  width: 26px; 
+  height: 26px; 
+  background: white; 
+  border: 2px solid #ccc; 
+  border-radius: 4px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox { 
+  background-color: #00aaff; 
+  border-color: #00aaff; 
+}
+.checkmark { 
+  width: 16px; 
+  height: 16px; 
+  display: none; 
+  stroke: white; 
+  stroke-width: 3; 
+  stroke-linecap: round; 
+  stroke-linejoin: round; 
+}
+#botaoCaptcha[aria-pressed="true"] .checkmark { 
+  display: block; 
+}
+.recaptcha-label { flex-grow: 1; }
+.recaptcha-icon { width: 30px; height: 30px; object-fit: contain; }
+
+#resultadoModal { 
+  display: none; 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background: rgba(0, 0, 0, 0.7); 
+  z-index: 9999; 
+  align-items: center; 
+  justify-content: center; 
+}
+#resultadoModal > div { 
+  width: 90%; 
+  max-width: 800px; 
+  height: 90%; 
+  background: white; 
+  border-radius: 10px; 
+  overflow: hidden; 
+  position: relative; 
+  display: flex; 
+  flex-direction: column; 
+}
+#resultadoModal iframe { flex: 1; border: none; }
+#votarNovamente { 
+  width: 100%; 
+  padding: 14px 0; 
+  font-size: 16px; 
+  border: none; 
+  border-radius: 0 0 10px 10px; 
+  background: #00aaff; 
+  color: #fff; 
+  cursor: pointer; 
+  transition: background-color 0.3s, transform 0.2s ease; 
+}
+#votarNovamente:hover { 
+  background: #008ecc; 
+  transform: scale(1.02); 
+}
+
+#botaoVotar {
+  display: block;
+  margin: 30px auto 0;
+  padding: 14px 100px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+#botaoVotar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 16px rgba(0,0,0,0.2);
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
+#botaoVotar:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
+
   </style>
 </head>
 
