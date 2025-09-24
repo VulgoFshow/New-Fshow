@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fshow/Votação</title>
+  
+  <link rel="icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://i.ibb.co/cc5m1B4z/Background-Eraser-20250812-194521006.webp" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* --- SEU CSS MANTIDO --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #222; overflow-x: hidden; padding: 20px; }
+    .container { background: white; padding: 20px; border-radius: 14px; width: 95%; max-width: 600px; box-shadow: 0 4px 10px rgba(0, 0, 0, .1); margin: 0 auto; }
+    h1 { text-align: center; margin-bottom: 20px; font-size: clamp(20px, 5vw, 26px); }
+    .option { display: flex; align-items: center; margin-bottom: 10px; background: #f0f0f0; border: 2px solid #ccc; border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color .25s, box-shadow .25s; }
+    .option:hover { filter: brightness(1.05); }
+    .option input { display: none; }
+    .option img { width: 40%; max-width: 120px; aspect-ratio: 4 / 3; object-fit: cover; flex-shrink: 0; }
+    .option span { flex: 1; padding: 0 10px; font-size: clamp(16px, 4vw, 18px); font-weight: 600; }
+    .option.selected { border-color: #00aaff; box-shadow: 0 0 10px #00aaff99; }
+    button { width: 100%; margin-top: 20px; padding: 14px 0; font-size: 16px; border: none; border-radius: 10px; background: #00aaff; color: #fff; cursor: pointer; transition: background-color 0.3s, transform 0.2s ease; }
+    button:hover:not(:disabled) { background: #008ecc; transform: scale(1.03); }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    #botaoCaptcha { display: flex; align-items: center; justify-content: flex-start; background: #e6e6e6; border: 1px solid #ccc; border-radius: 6px; padding: 0 10px; cursor: pointer; height: 60px; box-shadow: 0 2px 6px rgb(0 0 0 / 0.1); color: #111; font-size: 14px; font-weight: 400; margin-top: 20px; width: 100%; gap: 10px; box-sizing: border-box; }
+    .recaptcha-checkbox { flex-shrink: 0; width: 26px; height: 26px; background: white; border: 2px solid #ccc; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox { background-color: #00aaff; border-color: #00aaff; }
+    .checkmark { width: 16px; height: 16px; display: none; stroke: white; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    #botaoCaptcha[aria-pressed="true"] .checkmark { display: block; }
+    .recaptcha-label { flex-grow: 1; }
+    .recaptcha-icon { width: 30px; height: 30px; object-fit: contain; }
+    #resultadoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; align-items: center; justify-content: center; }
+    #resultadoModal > div { width: 90%; max-width: 800px; height: 90%; background: white; border-radius: 10px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+    #resultadoModal iframe { flex: 1; border: none; }
+    #votarNovamente { width: 100%; padding: 14px 0; font-size: 16px; border: none; border-radius: 0 0 10px 10px; background: #00aaff; color: #fff; cursor: pointer; transition: background-color 0.3s, transform 0.2s ease; }
+    #votarNovamente:hover { background: #008ecc; transform: scale(1.02); }
+    footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="votoTela">
+    <h1>Quem é o seu favorito na Fazenda 17?</h1>
+
+    <label class="option">
+      <input type="radio" name="vote" value="Carol Lekker" />
+      <img src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/O7ALIQ7DFNAKNG3CEVST47N7RE.jpg" alt="Carol Lekker" />
+      <span>Carol Lekker</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Duda Wendling" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-duda.jpg?raw=true" alt="Duda Wendling" />
+      <span>Duda Wendling</span>
+    </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Gabily" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-gabily.jpg?raw=true" alt="Gabily" />
+      <span>Gabily</span>
+    </label>
+
+    <button id="botaoCaptcha" aria-pressed="false" type="button">
+      <span class="recaptcha-checkbox">
+        <svg class="checkmark" viewBox="0 0 24 24"   fill="none" stroke="currentColor">
+          <path d="M4 12l6 6 10-10" />
+        </svg>
+      </span>
+      <span class="recaptcha-label">Não sou um robô</span>
+      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="Captcha logo" />
+    </button>
+
+    <button id="botaoVotar" onclick="enviarVoto()" disabled>Votar</button>
+  </div>
+  
+  <!-- Modal de Resultado -->
+  <div id="resultadoModal">
+    <div>
+      <iframe src="" id="iframeResultado"></iframe>
+      <button id="votarNovamente">Votar novamente</button>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:a363ca5cedfc7af87142a7",
+  measurementId: "G-KM5BQCTT67"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const botaoCaptcha = document.getElementById("botaoCaptcha");
+    const botaoVotar = document.getElementById("botaoVotar");
+
+    botaoCaptcha.addEventListener("click", () => {
+      const marcado = botaoCaptcha.getAttribute("aria-pressed") === "true";
+      botaoCaptcha.setAttribute("aria-pressed", (!marcado).toString());
+      botaoVotar.disabled = marcado;
+    });
+
+    document.querySelectorAll(".option").forEach(label => {
+      label.addEventListener("click", () => {
+        document.querySelectorAll(".option").forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+        label.querySelector("input").checked = true;
+      });
+    });
+
+    window.enviarVoto = async () => {
+      const escolhido = [...document.querySelectorAll("input[name='vote']")].find(r => r.checked)?.value;
+
+      if (!escolhido) {
+        alert("Escolha um participante antes de votar.");
+        return;
+      }
+      if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+        alert("Confirme que você não é um robô.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "fazendae17"), {
+          participante: escolhido,
+          timestamp: new Date()
+        });
+
+// < -- RESULTADO -->
+        setTimeout(() => {
+          document.getElementById("iframeResultado").src = "resultadoroça1.html";
+          document.getElementById("resultadoModal").style.display = "flex";
+        }, 500);
+
+      } catch (e) {
+        alert("❌ Erro ao registrar voto: " + e.message);
+        console.error(e);
+      }
+    };
+
+    document.getElementById("votarNovamente").addEventListener("click", () => {
+      document.getElementById("resultadoModal").style.display = "none";
+      document.getElementById("iframeResultado").src = ""; 
+      location.reload();
+    });
+  </script>
+
+  <footer>
+    © 2025 Portal Flop / Fshow - Todos os direitos reservados.
+  </footer>
+</body>
+</html>
