@@ -337,21 +337,26 @@ button:hover:not(:disabled),
   
   <div class="container" id="votoTela">
     <h1>Quem Você quer que seja <strong>ELIMINADO?</strong></h1>
-
-     <label class="option">
-      <input type="radio" name="vote" value="Lucas" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/blucas.jpg?raw=true" alt="Lucas" />
-      <span>Lucas</span>
-      </label>
-    <label class="option">
-      <input type="radio" name="vote" value="Luddi" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluddi.jpg?raw=true" alt="Luddi" />
-      <span>Luddi</span>
-    </label>
-    <label class="option">
+    
+ <label class="option">
       <input type="radio" name="vote" value="Manchinha" />
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmanchinha.jpg?raw=true" alt="Manchinha" />
       <span>Manchinha</span>
+    </label>
+     <label class="option">
+      <input type="radio" name="vote" value="Mikael" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true" alt="Mikael" />
+      <span>Mikael</span>
+      </label>
+    <label class="option">
+      <input type="radio" name="vote" value="Tety" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true" alt="Tety" />
+      <span>Tety</span>
+    </label>
+   <label class="option">
+      <input type="radio" name="vote" value="Vitor" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvitor.jpg?raw=true" alt="Vitor" />
+      <span>Vitor</span>
     </label>
   
 
@@ -397,7 +402,7 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4"
 );
 
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -583,7 +588,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('paredão5')
+    .from('paredão6')
     .insert({ participante: escolhido });
 
   if (error) {
