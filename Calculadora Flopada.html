@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Porcentagens</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 15px auto;
+      max-width: 500px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #34495e;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 15px;
+    }
+
+    button {
+      background: #3498db;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    .resultado {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculadora de Porcentagens</h1>
+
+  <div class="card">
+    <h2>1. Quanto é X% de Y?</h2>
+    <input type="number" id="p1" placeholder="Porcentagem (%)">
+    <input type="number" id="v1" placeholder="Número base">
+    <button onclick="calcPorcentagem()">Calcular</button>
+    <div class="resultado" id="res1"></div>
+  </div>
+
+  <div class="card">
+    <h2>2. Média Ponderada de duas porcentagens</h2>
+    <input type="number" id="p2a" placeholder="Porcentagem 1">
+    <input type="number" id="w2a" placeholder="Peso 1">
+    <input type="number" id="p2b" placeholder="Porcentagem 2">
+    <input type="number" id="w2b" placeholder="Peso 2">
+    <button onclick="calcMedia()">Calcular</button>
+    <div class="resultado" id="res2"></div>
+  </div>
+
+  <div class="card">
+    <h2>3. Aumentar/Diminuir número em X%</h2>
+    <input type="number" id="v3" placeholder="Número">
+    <input type="number" id="p3" placeholder="Porcentagem (%)">
+    <select id="tipo3">
+      <option value="aumentar">Aumentar</option>
+      <option value="diminuir">Diminuir</option>
+    </select>
+    <button onclick="calcAjuste()">Calcular</button>
+    <div class="resultado" id="res3"></div>
+  </div>
+
+  <div class="card">
+    <h2>4. Qual porcentagem A é de B?</h2>
+    <input type="number" id="a4" placeholder="Número A">
+    <input type="number" id="b4" placeholder="Número B">
+    <button onclick="calcRelacao()">Calcular</button>
+    <div class="resultado" id="res4"></div>
+  </div>
+
+  <script>
+    function calcPorcentagem() {
+      let p = parseFloat(document.getElementById("p1").value);
+      let v = parseFloat(document.getElementById("v1").value);
+      if (isNaN(p) || isNaN(v)) return;
+      let res = (p/100) * v;
+      document.getElementById("res1").innerText = `${p}% de ${v} = ${res.toFixed(2)}`;
+    }
+
+    function calcMedia() {
+      let p1 = parseFloat(document.getElementById("p2a").value);
+      let w1 = parseFloat(document.getElementById("w2a").value);
+      let p2 = parseFloat(document.getElementById("p2b").value);
+      let w2 = parseFloat(document.getElementById("w2b").value);
+      if (isNaN(p1) || isNaN(w1) || isNaN(p2) || isNaN(w2)) return;
+      let res = ((p1*w1) + (p2*w2)) / (w1+w2);
+      document.getElementById("res2").innerText = `Média Ponderada = ${res.toFixed(2)}%`;
+    }
+
+    function calcAjuste() {
+      let v = parseFloat(document.getElementById("v3").value);
+      let p = parseFloat(document.getElementById("p3").value);
+      let tipo = document.getElementById("tipo3").value;
+      if (isNaN(v) || isNaN(p)) return;
+      let res = tipo === "aumentar" ? v * (1 + p/100) : v * (1 - p/100);
+      document.getElementById("res3").innerText = `Resultado = ${res.toFixed(2)}`;
+    }
+
+    function calcRelacao() {
+      let a = parseFloat(document.getElementById("a4").value);
+      let b = parseFloat(document.getElementById("b4").value);
+      if (isNaN(a) || isNaN(b) || b === 0) return;
+      let res = (a/b) * 100;
+      document.getElementById("res4").innerText = `${a} é ${res.toFixed(2)}% de ${b}`;
+    }
+  </script>
+</body>
+</html>
