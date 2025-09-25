@@ -13,19 +13,20 @@
       margin: 0;
       padding: 20px;
     }
+    /* 🔥 container agora ocupa toda largura */
     .container {
-      background: #fff;
-      border-radius: 20px;
-      max-width: 700px;
-      margin: auto;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      background: transparent; /* removi o fundo branco */
+      border-radius: 0;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 10px;
+      box-shadow: none;
       animation: fadeIn 0.6s ease;
     }
     h1 {
       text-align: center;
       margin-bottom: 15px;
-      font-size: clamp(24px, 5vw, 32px);
+      font-size: clamp(26px, 6vw, 38px);
       font-weight: 700;
       color: #0d1b2a;
     }
@@ -33,89 +34,81 @@
       text-align: center;
       font-weight: 600;
       margin-bottom: 25px;
-      font-size: 15px;
+      font-size: 18px;
       color: #444;
-      letter-spacing: 0.5px;
     }
     .resultado {
       display: flex;
       align-items: center;
-      margin-bottom: 20px;
-      padding: 1px;
-      border-radius: 14px;
-      background: #fafafa;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      margin: 15px auto;
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
       transition: transform 0.2s;
-      border: 1px solid transparent;
-      background-image: linear-gradient(#fafafa, #fafafa), 
-                        linear-gradient(135deg, #6a11cb, #2575fc);
-      background-origin: border-box;
-      background-clip: content-box, border-box;
+      border: 1px solid #e3e3e3;
+      width: 95%;
+      max-width: 1000px; /* aumenta a largura máxima */
     }
     .resultado:hover { transform: scale(1.02); }
     .resultado img {
-      width: 70px;
-      height: 70px;
-      border-radius: 12px;
+      width: 100px;
+      height: 100px;
+      border-radius: 14px;
       object-fit: cover;
-      margin-right: 15px;
+      margin-right: 20px;
       border: 2px solid #e3e3e3;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
     .info { flex: 1; }
     .nome {
       font-weight: 600;
-      font-size: 17px;
-      margin-bottom: 8px;
+      font-size: 20px;
+      margin-bottom: 10px;
       color: #222;
     }
     .barra {
       position: relative;
-      height: 20px;
-      border-radius: 10px;
+      height: 22px;
+      border-radius: 12px;
       background: #ebebeb;
       overflow: hidden;
-      border: 2px solid transparent;
-      background-image: linear-gradient(#ebebeb, #ebebeb), 
-                        linear-gradient(90deg, #6a11cb, #2575fc);
-      background-origin: border-box;
-      background-clip: content-box, border-box;
     }
     .preenchido {
       position: absolute;
       top: 0; left: 0;
       height: 100%;
       background: linear-gradient(90deg, #6a11cb, #2575fc);
-      border-radius: 10px;
+      border-radius: 12px;
       width: 0;
       transition: width 0.6s ease;
       box-shadow: 0 2px 4px rgba(0,0,0,0.15) inset;
     }
     .porcentagem {
-      margin-left: 12px;
+      margin-left: 15px;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 17px;
       color: #2575fc;
-      min-width: 55px;
-      text-align: justify;
+      min-width: 60px;
+      text-align: right;
     }
     #votar-novamente {
       display: block;
-      margin: 30px auto 0;
-      padding: 14px 24px;
-      font-size: 16px;
+      margin: 40px auto 0;
+      padding: 16px 28px;
+      font-size: 18px;
       font-weight: 600;
       color: white;
       background: linear-gradient(135deg, #2575fc, #6a11cb);
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 5px 14px rgba(0,0,0,0.15);
     }
     #votar-novamente:hover {
       transform: translateY(-2px);
-      box-shadow: 0 7px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 7px 18px rgba(0,0,0,0.2);
       background: linear-gradient(135deg, #6a11cb, #2575fc);
     }
     @keyframes fadeIn {
@@ -129,9 +122,10 @@
     <h1>Resultado Parcial</h1>
     <div id="total-votos">Total de votos: 0</div>
     <div id="participantes"></div>
+    <button id="votar-novamente">Votar novamente</button>
   </div>
 
-  <!-- Firebase SDK (compat) -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
@@ -180,42 +174,42 @@
     const totalVotosEl = document.getElementById("total-votos");
 
     function renderResultados(snapshot) {
-  const contagem = {};
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    if (data.participante) {
-      contagem[data.participante] = (contagem[data.participante] || 0) + 1;
+      const contagem = {};
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.participante) {
+          contagem[data.participante] = (contagem[data.participante] || 0) + 1;
+        }
+      });
+      const total = snapshot.size;
+      totalVotosEl.textContent = `Total de votos: ${total}`;
+
+      const ordenados = Object.entries(participantes).sort((a, b) => {
+        const votosA = contagem[a[0]] || 0;
+        const votosB = contagem[b[0]] || 0;
+        return votosB - votosA;
+      });
+
+      container.innerHTML = "";
+      ordenados.forEach(([nome, foto]) => {
+        const votos = contagem[nome] || 0;
+        if (votos > 0) {
+          const porcentagem = total === 0 ? 0 : ((votos / total) * 100).toFixed(2);
+          container.insertAdjacentHTML("beforeend", `
+            <div class="resultado" data-nome="${nome}">
+              <img src="${foto}" alt="${nome}">
+              <div class="info">
+                <div class="nome">${nome}</div>
+                <div class="barra"><div class="preenchido" style="width:${porcentagem}%"></div></div>
+              </div>
+              <div class="porcentagem">${porcentagem}%</div>
+            </div>
+          `);
+        }
+      });
     }
-  });
-  const total = snapshot.size;
-  totalVotosEl.textContent = `Total de votos: ${total}`;
 
-  const ordenados = Object.entries(participantes).sort((a, b) => {
-    const votosA = contagem[a[0]] || 0;
-    const votosB = contagem[b[0]] || 0;
-    return votosB - votosA;
-  });
-
-  container.innerHTML = "";
-  ordenados.forEach(([nome, foto]) => {
-    const votos = contagem[nome] || 0;
-    if (votos > 0) { // 👉 só mostra quem recebeu voto
-      const porcentagem = total === 0 ? 0 : ((votos / total) * 100).toFixed(2);
-      container.insertAdjacentHTML("beforeend", `
-        <div class="resultado" data-nome="${nome}">
-          <img src="${foto}" alt="${nome}">
-          <div class="info">
-            <div class="nome">${nome}</div>
-            <div class="barra"><div class="preenchido" style="width:${porcentagem}%"></div></div>
-          </div>
-          <div class="porcentagem">${porcentagem}%</div>
-        </div>
-      `);
-    }
-  });
-}
-
-    // 🔥 Atenção: use o nome EXATO da coleção
+    // Corrigido: estava quebrado "onSnaps hot"
     db.collection("fazendae17").onSnapshot(renderResultados);
 
     document.getElementById("votar-novamente").addEventListener("click", () => {
@@ -224,4 +218,3 @@
   </script>
 </body>
 </html>
-
