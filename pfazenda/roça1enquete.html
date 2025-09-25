@@ -95,20 +95,22 @@ h1 { text-align: center; margin-bottom: 20px; font-size: clamp(20px, 5vw, 26px);
   flex-direction: column; 
 }
 #resultadoModal iframe { flex: 1; border: none; }
-#votarNovamente { 
-  width: 100%; 
-  padding: 14px 0; 
-  font-size: 16px; 
-  border: none; 
-  border-radius: 0 0 10px 10px; 
-  background: #00aaff; 
-  color: #fff; 
-  cursor: pointer; 
-  transition: background-color 0.3s, transform 0.2s ease; 
+
+/* Botão fechar */
+#fecharModal {
+  width: 100%;
+  padding: 14px 0;
+  font-size: 16px;
+  border: none;
+  border-radius: 0 0 10px 10px;
+  background: #ff4d4d;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease;
 }
-#votarNovamente:hover { 
-  background: #008ecc; 
-  transform: scale(1.02); 
+#fecharModal:hover {
+  background: #cc0000;
+  transform: scale(1.02);
 }
 
 #botaoVotar {
@@ -184,6 +186,7 @@ footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
   <div id="resultadoModal">
     <div>
       <iframe src="" id="iframeResultado"></iframe>
+      <button id="fecharModal">Fechar</button>
     </div>
   </div>
 
@@ -194,12 +197,12 @@ footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
 
     const firebaseConfig = {
       apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
-  authDomain: "enquete-fa527.firebaseapp.com",
-  projectId: "enquete-fa527",
-  storageBucket: "enquete-fa527.firebasestorage.app",
-  messagingSenderId: "544422121318",
-  appId: "1:544422121318:web:a363ca5cedfc7af87142a7",
-  measurementId: "G-KM5BQCTT67"
+      authDomain: "enquete-fa527.firebaseapp.com",
+      projectId: "enquete-fa527",
+      storageBucket: "enquete-fa527.firebasestorage.app",
+      messagingSenderId: "544422121318",
+      appId: "1:544422121318:web:a363ca5cedfc7af87142a7",
+      measurementId: "G-KM5BQCTT67"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -240,7 +243,7 @@ footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
           timestamp: new Date()
         });
 
-// < -- RESULTADO -->
+        // Exibir resultado
         setTimeout(() => {
           document.getElementById("iframeResultado").src = "resultadoroça1.html";
           document.getElementById("resultadoModal").style.display = "flex";
@@ -252,10 +255,11 @@ footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
       }
     };
 
-    document.getElementById("votarNovamente").addEventListener("click", () => {
+    // Botão fechar popup
+    document.getElementById("fecharModal").addEventListener("click", () => {
       document.getElementById("resultadoModal").style.display = "none";
       document.getElementById("iframeResultado").src = ""; 
-      location.reload();
+      location.reload(); // Atualiza a página
     });
   </script>
 
