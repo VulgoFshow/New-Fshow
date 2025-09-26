@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+5<!DOCTYPE html>
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
@@ -337,28 +337,22 @@ button:hover:not(:disabled),
   
   <div class="container" id="votoTela">
     <h1>Quem Você quer que seja <strong>ELIMINADO?</strong></h1>
-    
+
+    <label class="option">
+      <input type="radio" name="vote" value="Flávia" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia" />
+      <span>Flávia</span>
+    </label>
  <label class="option">
       <input type="radio" name="vote" value="Manchinha" />
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmanchinha.jpg?raw=true" alt="Manchinha" />
       <span>Manchinha</span>
     </label>
-     <label class="option">
-      <input type="radio" name="vote" value="Mikael" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true" alt="Mikael" />
-      <span>Mikael</span>
-      </label>
     <label class="option">
       <input type="radio" name="vote" value="Tety" />
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true" alt="Tety" />
       <span>Tety</span>
     </label>
-   <label class="option">
-      <input type="radio" name="vote" value="Vitor" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvitor.jpg?raw=true" alt="Vitor" />
-      <span>Vitor</span>
-    </label>
-  
 
     <!-- Botão do CAPTCHA -->
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -407,7 +401,7 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4"
 );
 
-  const votacaoAtiva = false;
+  const votacaoAtiva = true;
 
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html"; 
@@ -593,7 +587,7 @@ if (!votacaoAtiva) {
   
 //MUDAR TABLE DO SUPABASE AQUI ABAIXO 
   const { error } = await supabase
-    .from('paredão6')
+    .from('paredão7')
     .insert({ participante: escolhido });
 
   if (error) {
