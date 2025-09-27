@@ -227,34 +227,38 @@ const statusEl = document.getElementById("captcha-status");
 
 // ===== CAPTCHA =====
 const prompts = [
-  { label: "Clique nas imagens contendo algo comestível", correctTag: "comestivel",
-    images: [
-      { src: "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg", tag: "comestivel" },
-      { src: "https://images.pexels.com/photos/1414234/pexels-photo-1414234.jpeg", tag: "comestivel" },
-      { src: "https://images.pexels.com/photos/1166120/pexels-photo-1166120.jpeg", tag: "comestivel" },
-      { src: "https://images.pexels.com/photos/4109133/pexels-photo-4109133.jpeg", tag: "comestivel" },
-      { src: "https://a-static.mlcdn.com.br/1500x1500/drone-e88-pro-camera-1080p-wi-fi-celular-com-bolsa-ee/oliststore/mglxhhuf4d7dtxji/8a4dba0777742b21e4745fbf5dc01474.jpeg", tag: "ave" },
-      { src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/21/6b/00/ba/br-ceu3-nossa-mais-nova.jpg?w=500&h=500&s=1", tag: "ave" },
-      { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Raptor_F-22_27th.jpg/250px-Raptor_F-22_27th.jpg", tag: "ave" },
-      { src: "https://www.petz.com.br/blog/wp-content/uploads/2020/06/gatos-pretos.jpg", tag: "outro" },
-      { src: "https://portaldeauditoria.com.br/wp-content/uploads/2018/01/1267121114825461.jpg", tag: "outro" }
-    ]
-  },
-  { label: "Clique nas imagens contendo um objeto que pode voar", correctTag: "ave",
-    images: [
-      { src: "https://a-static.mlcdn.com.br/1500x1500/drone-e88-pro-camera-1080p-wi-fi-celular-com-bolsa-ee/oliststore/mglxhhuf4d7dtxji/8a4dba0777742b21e4745fbf5dc01474.jpeg", tag: "ave" },
-      { src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/21/6b/00/ba/br-ceu3-nossa-mais-nova.jpg?w=500&h=500&s=1", tag: "ave" },
-      { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Raptor_F-22_27th.jpg/250px-Raptor_F-22_27th.jpg", tag: "ave" },
-      { src: "https://img.aeroexpo.online/pt/images_ar/photo-g/182095-20185041.webp", tag: "ave" },
-      { src: "https://www.petz.com.br/blog/wp-content/uploads/2020/06/gatos-pretos.jpg", tag: "outro" },
-      { src: "https://portaldeauditoria.com.br/wp-content/uploads/2018/01/1267121114825461.jpg", tag: "outro" },
-      { src: "https://canaldareceita.com.br/wp-content/uploads/2025/08/Design-sem-nome-3.webp", tag: "outro" },
-      { src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKY64Vd40m0QIwOhV3jvrGYDqxmr0rULNGeQ&s", tag: "outro" },
-      { src: "https://addictedtodates.com/wp-content/uploads/2019/01/vegan-milk-chocolate-recipe.jpg", tag: "outro" }
-    ]
-  }
-];
-
+  const prompts = [
+      {
+        label: "Clique nas imagens contendo um mamífero",
+        correctTag: "mamifero",
+        images: [
+          { src: "https://media.istockphoto.com/id/1589824836/pt/foto/cute-brown-dog-that-smiles-isolated-background.jpg?s=612x612&w=0&k=20&c=6XY-uqPQZ3XkDHUJGk5oJJ0wv7Ez3Rt4dxEV0Bao8bI=", tag: "mamifero" }, //Cachorro
+          { src: "https://media.istockphoto.com/id/1164946759/pt/foto/cute-grey-cat.jpg?s=612x612&w=0&k=20&c=shwthP3leH6C3A8tKrrFsjUSUXr7UlynbEqweinNBa8=", tag: "mamifero" }, //Gato
+          { src: "https://media.istockphoto.com/id/177228186/pt/foto/jovem-capivara.jpg?s=612x612&w=0&k=20&c=HIaHC5JhfE3zobczCLIEY6bdy2NdOLq0sskZkuXsM9w=", tag: "mamifero" }, //Capivara
+          { src: "https://media.istockphoto.com/id/514622028/pt/foto/pouco-guaxinim-em-%C3%A1rvore.jpg?s=612x612&w=0&k=20&c=QFycBBdmOcjYxtRh4rP20QmBYyynMk6CuduLHpcidFw=", tag: "mamifero" }, //Guaxinim
+          { src: "https://media.istockphoto.com/id/1588317860/pt/foto/three-domestic-ducks-walk-along-a-green-lawn-next-to-a-pond.jpg?s=612x612&w=0&k=20&c=3QOjjJDeo0gRB52A_Pgtj3SF6WiD5LbLvo8311MKv6Q=", tag: "ave" }, //Pato
+          { src: "https://media.istockphoto.com/id/508496270/pt/foto/flamingo-chileno.jpg?s=612x612&w=0&k=20&c=xEiq9i8dm48y4_Q5BIiW-7sUx2Qxbp7dtbRUn-47a0U=", tag: "ave" }, //Flamingo
+          { src: "https://media.istockphoto.com/id/533995902/pt/foto/pinguim-papu-andar-na-neve-na-ant%C3%A1rctida.jpg?s=612x612&w=0&k=20&c=1-B5YRTVdsbX-B2bQB6ZEpbgxG1vUx2rJOXfq8FimL4=", tag: "ave" }, //Pinguim
+          { src: "https://media.istockphoto.com/id/166006960/pt/foto/lado-do-passageiro-avi%C3%A3o-a-jato-f%C3%A1cil-de-cortar.jpg?s=612x612&w=0&k=20&c=b58Lh4rrG-YkDPrOgg2r4yvfhaFf_vzzncTeGzZirSM=", tag: "outro" }, //Avião
+          { src: "https://media.istockphoto.com/id/485462644/pt/foto/helic%C3%B3ptero-em-v%C3%B4o-isolado-contra-branco.jpg?s=612x612&w=0&k=20&c=tjUUsm7JQ4kZ3RUr2v2HQP2v1J4qkw5y6Jd3NeJxwG8=", tag: "outro" } //Helicóptero 
+        ]
+      },
+      {
+        label: "Clique nas imagens contendo uma ave",
+        correctTag: "ave",
+        images: [
+          { src: "https://media.istockphoto.com/id/464988959/pt/foto/pato-real-com-tra%C3%A7ado-de-recorte.jpg?s=612x612&w=0&k=20&c=SUhSeo67zEVs8bgUm0K-OrMDD4iQ5s75CxaOG4gBI1Y=", tag: "ave" }, //Pato
+          { src: "https://media.istockphoto.com/id/1716227735/pt/foto/beautiful-white-domestic-goose.jpg?s=612x612&w=0&k=20&c=vUNR9WIh00uE5wYRJJpxR0DyVqXi5kC4ZJ-5OeBhdIM=", tag: "ave" }, //Ganso
+          { src: "https://media.istockphoto.com/id/178625595/pt/foto/spheniscus-demersus-pinguim-africano-isolado-no-branco.jpg?s=612x612&w=0&k=20&c=Kv8Vfj3MbeoyiHtCseaPivn6FbxjEAFf4h-TDqrUngo=", tag: "ave" }, //Pinguim
+          { src: "https://media.istockphoto.com/id/1512660779/pt/foto/close-up-giant-panda-in-republic-of-korea.jpg?s=612x612&w=0&k=20&c=cts2W9bJ7Ru7H3ncxhSqqtVYAgvuZsT1gdVgwS5Rbz0=", tag: "mamifero" }, //Panda
+          { src: "https://media.istockphoto.com/id/1551607933/pt/foto/golden-retriever-dog-doing-trick.jpg?s=612x612&w=0&k=20&c=ERFmdd13iFS2hdG7Rof27T1YnSxwENsJM0ZrB57yUdk=", tag: "mamifero" }, //Cachorro
+          { src: "https://media.istockphoto.com/id/1361956153/pt/foto/black-cat-sticking-out-tongue-funny-portrait.jpg?s=612x612&w=0&k=20&c=3dOtmpKZFzQeGbLTYpOWypzxDISUJWZa5-i4K653iKM=", tag: "mamifero" }, //Gato
+          { src: "https://media.istockphoto.com/id/1408679386/pt/foto/capybara.jpg?s=612x612&w=0&k=20&c=rIsVTCUlZCeGF0Npz8guQLwnBquLaobfFC4Q39LcnWo=", tag: "mamifero" }, //Capivara
+          { src: "https://media.istockphoto.com/id/1047163322/pt/foto/racoon-in-the-trash.jpg?s=612x612&w=0&k=20&c=c2TZ9ajlaKFBmvTd_TARVdNakiNkUQ2FEuL-mN4zSSY=", tag: "mamifero" }, //Guaxinim
+          { src: "https://media.istockphoto.com/id/157430678/pt/foto/tr%C3%AAs-batatas.jpg?s=612x612&w=0&k=20&c=BoUCWwC1mWkz2JzT8K0RLaJSYfRPEWWPRSMXL36pI9Q=", tag: "outro" } //Avião
+        ]
+      }
+    ];
 
 function shuffle(array){ 
   for(let i=array.length-1;i>0;i--){
