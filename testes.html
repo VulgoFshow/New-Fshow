@@ -476,12 +476,23 @@ botaoCaptcha.addEventListener("click", () => {
 
 // ===== INIT (sincroniza estado inicial) =====
 (function initState() {
+  const restantes = getVotosRestantes();
+
+  // Sempre começa "desmarcado"
   botaoCaptcha.setAttribute("aria-pressed", "false");
   botaoCaptcha.disabled = false;
+
+  // Botão de votar sempre começa bloqueado
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
-})();
 
+  // Mantém os votos restantes armazenados, mas só libera quando clicar no captcha
+  if (restantes > 0) {
+    setVotosRestantes(restantes); // mantém contador
+  } else {
+    setVotosRestantes(0);
+  }
+})();
 
 </script>
 
