@@ -148,6 +148,12 @@ color:var(--text);margin:0;padding:0}
       filter: brightness(0.7);
       flex-shrink: 0;
     }
+    
+    #botaoCaptcha:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none; 
+}
 
   </style>
 </head>
@@ -217,7 +223,28 @@ color:var(--text);margin:0;padding:0}
 <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
     </div>
   </div>
+  
+<script>
+// ===== CONTROLE DE ENCERRAMENTO =====
 
+// Defina a data e hora (ano, mês, dia, hora, minuto)
+const encerramento = new Date(2025, 8, 27, 19, 0, 0);
+
+
+const votacaoAtiva = true;
+
+function checkEncerramento() {
+  const agora = new Date();
+
+  if (!votacaoAtiva || agora >= encerramento) {
+    window.location.href = "fechada.html";
+  }
+}
+
+checkEncerramento();
+
+setInterval(checkEncerramento, 60 * 1000);
+</script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
@@ -227,11 +254,9 @@ const supabase = createClient(
 );
 
 // ===== CONFIG =====
-const VOTOS_POR_CAPTCHA = 5; // quantos votos o usuário ganha ao passar no captcha
+const VOTOS_POR_CAPTCHA = 5;
 
-// ===== HELPERS DE STORAGE =====
 function getVotosRestantes() {
-  // Por design: default = 0 => pede captcha no primeiro voto
   return parseInt(localStorage.getItem("votosRestantes") ?? "0", 10);
 }
 function setVotosRestantes(n) {
@@ -297,8 +322,8 @@ function shuffle(array) {
   return array;
 }
 
-// ===== CAPTCHA UI / Lógica =====
-let pendingVote = null; // guarda voto pendente quando abrimos captcha a partir do "Votar"
+
+let pendingVote = null;
 
 function generateCaptcha() {
   captchaGrid.innerHTML = "";
@@ -343,14 +368,6 @@ function fecharCaptcha() {
   popupCaptcha.classList.remove("active");
   botaoVotar.disabled = false;
 }
-
-// abrir o popup ao clicar no botão de captcha (manual)
-botaoCaptcha.addEventListener("click", () => {
-  if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
-  abrirCaptcha();
-});
-
-refreshBtn.addEventListener("click", generateCaptcha);
 
 verifyBtn.addEventListener("click", () => {
   let sucesso = true;
@@ -463,19 +480,41 @@ botaoVotar.addEventListener("click", (e) => {
   submitVote(participante);
 });
 
-// ===== INIT (sincroniza estado do botão de captcha / votar ao carregar) =====
+// ===== BOTÃO DE CAPTCHA =====
+botaoCaptcha.addEventListener("click", () => {
+  if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
+
+  if (getVotosRestantes() > 0) {
+    // Ainda tem votos livres -> só de clicar libera
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.disabled = false;
+    botaoVotar.classList.add("active");
+  } else {
+    // Sem votos livres -> precisa resolver captcha
+    abrirCaptcha();
+  }
+});
+
+// ===== INIT (sincroniza estado inicial) =====
 (function initState() {
   const restantes = getVotosRestantes();
+
+  // Sempre começa "desmarcado"
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoCaptcha.disabled = false;
+
+  // Botão de votar sempre começa bloqueado
+  botaoVotar.disabled = true;
+  botaoVotar.classList.remove("active");
+
+  // Mantém os votos restantes armazenados, mas só libera quando clicar no captcha
   if (restantes > 0) {
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.classList.add("active");
-    botaoVotar.disabled = false;
+    setVotosRestantes(restantes); // mantém contador
   } else {
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    // deixar botão de votar habilitado para que o usuário clique e abra o captcha automaticamente
-    botaoVotar.disabled = false;
+    setVotosRestantes(0);
   }
 })();
+
 </script>
 
 </body>
