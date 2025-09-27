@@ -339,7 +339,7 @@ async function enviarVoto(){
     botaoVotar.textContent = "Enviando...";
 
     const { data, error } = await supabase
-      .from("testes")
+      .from("paredão8")
       .insert({ participante });
 
     if (error) {
