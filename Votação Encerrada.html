@@ -21,15 +21,14 @@
     .card {
       display: flex;
       align-items: stretch;
-      background: transparent !important; /* transparente */
+      background: transparent !important; /* fundo removido */
       border-radius: 12px;
       overflow: hidden;
       width: 100%;
       max-width: 720px;
       margin: 20px auto;
-      border: 1px solid rgba(255,255,255,0.3); /* borda leve */
+      border: 1px solid #fff;
       box-shadow: none; /* sombra removida */
-      backdrop-filter: blur(4px); /* leve desfoque atrás, opcional */
     }
 
     .card img {
@@ -37,7 +36,6 @@
       height: 100%;
       object-fit: cover;
       flex-shrink: 0;
-      border-right: 1px solid rgba(255,255,255,0.2);
     }
 
     .card-info {
@@ -53,7 +51,6 @@
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 6px;
-      color: #fff; /* mantém contraste */
     }
 
     .card-info small {
@@ -75,9 +72,8 @@
     }
 
     .card-percent .eliminado-label {
-      background: rgba(255,59,59,0.2); /* transparente */
-      color: #ff3b3b;
-      border: 1px solid rgba(255,59,59,0.4);
+      background: #ff3b3b;
+      color: white;
       padding: 2px 8px;
       font-size: 12px;
       font-weight: 600;
@@ -93,8 +89,6 @@
       .card img {
         width: 100%;
         height: auto;
-        border-right: none;
-        border-bottom: 1px solid rgba(255,255,255,0.2);
       }
 
       .card-percent {
@@ -110,7 +104,7 @@
       text-align: center;
       margin-top: 50px;
       font-size: 0.9em;
-      color: #999;
+      color: #777;
     }
   </style>  
     
@@ -129,7 +123,7 @@
         </p>
 
         <div class="card">
-          <img src="bbb/eluddi.jpg" alt="Participante Eliminado">
+          <img src="https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/bbb/emiguel.jpg" alt="Participante Eliminado">
           <div class="card-info">
             <span>LUDDI</span>
           </div>
