@@ -282,33 +282,34 @@ const statusEl = document.getElementById("captcha-status");
 // === prompts do CAPTCHA ===
 const prompts = [
   {
-    label: "Clique nas imagens contendo um mamífero",
-    correctTag: "mamifero",
+    label: "Clique nas imagens contendo algo que pode se locomover",
+    correctTag: "transporte",
     images: [
-      { src: "https://media.istockphoto.com/id/1589824836/pt/foto/cute-brown-dog-that-smiles-isolated-background.jpg?s=612x612&w=0&k=20&c=6XY-uqPQZ3XkDHUJGk5oJJ0wv7Ez3Rt4dxEV0Bao8bI=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/1164946759/pt/foto/cute-grey-cat.jpg?s=612x612&w=0&k=20&c=shwthP3leH6C3A8tKrrFsjUSUXr7UlynbEqweinNBa8=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/177228186/pt/foto/jovem-capivara.jpg?s=612x612&w=0&k=20&c=HIaHC5JhfE3zobczCLIEY6bdy2NdOLq0sskZkuXsM9w=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/514622028/pt/foto/pouco-guaxinim-em-%C3%A1rvore.jpg?s=612x612&w=0&k=20&c=QFycBBdmOcjYxtRh4rP20QmBYyynMk6CuduLHpcidFw=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/1588317860/pt/foto/three-domestic-ducks-walk-along-a-green-lawn-next-to-a-pond.jpg?s=612x612&w=0&k=20&c=3QOjjJDeo0gRB52A_Pgtj3SF6WiD5LbLvo8311MKv6Q=", tag: "ave" },
-      { src: "https://media.istockphoto.com/id/508496270/pt/foto/flamingo-chileno.jpg?s=612x612&w=0&k=20&c=xEiq9i8dm48y4_Q5BIiW-7sUx2Qxbp7dtbRUn-47a0U=", tag: "ave" },
-      { src: "https://media.istockphoto.com/id/533995902/pt/foto/pinguim-papu-andar-na-neve-na-ant%C3%A1rctida.jpg?s=612x612&w=0&k=20&c=1-B5YRTVdsbX-B2bQB6ZEpbgxG1vUx2rJOXfq8FimL4=", tag: "ave" },
-      { src: "https://media.istockphoto.com/id/166006960/pt/foto/lado-do-passageiro-avi%C3%A3o-a-jato-f%C3%A1cil-de-cortar.jpg?s=612x612&w=0&k=20&c=b58Lh4rrG-YkDPrOgg2r4yvfhaFf_vzzncTeGzZirSM=", tag: "outro" },
-      { src: "https://media.istockphoto.com/id/485462644/pt/foto/helic%C3%B3ptero-em-v%C3%B4o-isolado-contra-branco.jpg?s=612x612&w=0&k=20&c=tjUUsm7JQ4kZ3RUr2v2HQP2v1J4qkw5y6Jd3NeJxwG8=", tag: "outro" }
+      { src: "https://http2.mlstatic.com/D_815735-MLB80705886004_112024-C.jpg", tag: "transporte" },
+      { src: "https://www.revistapro.com.br/uploads/images/2024/01/image_750x_65b99d3786b02.jpg", tag: "transporte" },
+      { src: "https://cdn.motor1.com/images/mgl/g4JY94/419:0:1080:1080/avelloz-az-125-2024---registro-no-brasil.webp", tag: "transporte" },
+      { src: "https://www.fiat.com.br/content/dam/fiat/nova-home/carrossel/argo.webp", tag: "transporte" },
+      { src: "https://www.moneytimes.com.br/uploads/2022/01/fiat-pulse-67.jpg", tag: "transporte" },
+      { src: "https://correiodeuberlandia.com.br/wp-content/uploads/2024/09/20240921-dia-da-arvore.jpg", tag: "outros" },
+      { src: "https://www.housedigest.com/img/gallery/these-are-the-places-in-the-u-s-where-neem-trees-can-thrive/where-to-plant-neem-trees-1711104953.jpg", tag: "outros" },
+      { src: "https://hotelbalneariopc.com.br/gdd/sgc/imagens/foto_texto/26/rad91AB2201810211663_457.jpg", tag: "outroa" },
+      { src: "https://123ecos.com.br/wp-content/uploads/2024/11/Parque-Estadual-da-Pedra-Azul-1-1.jpg", tag: "outro" },
+      { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "outro" }
     ]
   },
   {
-    label: "Clique nas imagens contendo uma ave",
-    correctTag: "ave",
+    label: "Clique nas imagens contendo um quadrúpede",
+    correctTag: "animal",
     images: [
-      { src: "https://media.istockphoto.com/id/464988959/pt/foto/pato-real-com-tra%C3%A7ado-de-recorte.jpg?s=612x612&w=0&k=20&c=SUhSeo67zEVs8bgUm0K-OrMDD4iQ5s75CxaOG4gBI1Y=", tag: "ave" },
-      { src: "https://media.istockphoto.com/id/1716227735/pt/foto/beautiful-white-domestic-goose.jpg?s=612x612&w=0&k=20&c=vUNR9WIh00uE5wYRJJpxR0DyVqXi5kC4ZJ-5OeBhdIM=", tag: "ave" },
-      { src: "https://media.istockphoto.com/id/178625595/pt/foto/spheniscus-demersus-pinguim-africano-isolado-no-branco.jpg?s=612x612&w=0&k=20&c=Kv8Vfj3MbeoyiHtCseaPivn6FbxjEAFf4h-TDqrUngo=", tag: "ave" },
-      { src: "https://media.istockphoto.com/id/1512660779/pt/foto/close-up-giant-panda-in-republic-of-korea.jpg?s=612x612&w=0&k=20&c=cts2W9bJ7Ru7H3ncxhSqqtVYAgvuZsT1gdVgwS5Rbz0=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/1551607933/pt/foto/golden-retriever-dog-doing-trick.jpg?s=612x612&w=0&k=20&c=ERFmdd13iFS2hdG7Rof27T1YnSxwENsJM0ZrB57yUdk=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/1361956153/pt/foto/black-cat-sticking-out-tongue-funny-portrait.jpg?s=612x612&w=0&k=20&c=3dOtmpKZFzQeGbLTYpOWypzxDISUJWZa5-i4K653iKM=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/1408679386/pt/foto/capybara.jpg?s=612x612&w=0&k=20&c=rIsVTCUlZCeGF0Npz8guQLwnBquLaobfFC4Q39LcnWo=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/1047163322/pt/foto/racoon-in-the-trash.jpg?s=612x612&w=0&k=20&c=c2TZ9ajlaKFBmvTd_TARVdNakiNkUQ2FEuL-mN4zSSY=", tag: "mamifero" },
-      { src: "https://media.istockphoto.com/id/157430678/pt/foto/tr%C3%AAs-batatas.jpg?s=612x612&w=0&k=20&c=BoUCWwC1mWkz2JzT8K0RLaJSYfRPEWWPRSMXL36pI9Q=", tag: "outro" }
+      { src: "https://img.cancaonova.com/cnimages/canais/uploads/sites/6/2021/08/formacao_a-expressao-%E2%80%9Cbode-expiatorio%E2%80%9D-possui-origem-na-biblia.jpg", tag: "animal" },
+      { src: "https://picinspire.com/uploads/media/default/0001/27/thumb_26625_default_med.jpg", tag: "animal" },
+      { src: "https://www.shutterstock.com/image-photo/adorable-happy-white-dog-isolated-600nw-2574597113.jpg", tag: "animal" },
+      { src: "https://www.shutterstock.com/image-photo/cute-dog-tongue-out-isolated-600nw-2510143377.jpg", tag: "animal" },
+      { src: "https://i.redd.it/ml0omhvjlrxb1.jpg", tag: "animal" },
+      { src: "https://moinhoglobo.com.br/wp-content/uploads/2020/10/05-sorvete-caseiro.jpg", tag: "outros" },
+      { src: "https://www.tecsoft.ind.br/wp-content/uploads/2023/12/cascao-sorvete-soft-2-sabores-alto-lucro-investimento.webp", tag: "outros" },
+      { src: "https://www.oitedi.com.br/_next/image?url=https%3A%2F%2Ftedi-production.s3.amazonaws.com%2Fcooking_recipes%2Ffood_description%2F18622aa1308c719b20da5b9e2e97f9b0cd7dfe85.png&w=1080&q=70", tag: "outros" },
+      { src: "https://www.oitedi.com.br/_next/image?url=https%3A%2F%2Ftedi-production.s3.amazonaws.com%2Fcooking_recipes%2Ffood_description%2F0ee09a7cdb27ec074ef259c03d40e3a2d7dec07e.png&w=1080&q=70", tag: "outro" }
     ]
   }
 ];
