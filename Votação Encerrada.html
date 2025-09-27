@@ -12,7 +12,7 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: #111;
+      background: transparent !important; /* fundo removido */
       color: #fff;
       padding: 30px;
       text-align: center;
@@ -21,14 +21,15 @@
     .card {
       display: flex;
       align-items: stretch;
-      background: #1c1c1c;
+      background: transparent !important; /* transparente */
       border-radius: 12px;
       overflow: hidden;
       width: 100%;
       max-width: 720px;
       margin: 20px auto;
-      border: 1px solid #333;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.3); /* borda leve */
+      box-shadow: none; /* sombra removida */
+      backdrop-filter: blur(4px); /* leve desfoque atrás, opcional */
     }
 
     .card img {
@@ -36,6 +37,7 @@
       height: 100%;
       object-fit: cover;
       flex-shrink: 0;
+      border-right: 1px solid rgba(255,255,255,0.2);
     }
 
     .card-info {
@@ -51,6 +53,7 @@
       font-size: 18px;
       font-weight: 600;
       margin-bottom: 6px;
+      color: #fff; /* mantém contraste */
     }
 
     .card-info small {
@@ -61,7 +64,7 @@
     .card-percent {
       font-size: 18px;
       font-weight: 700;
-      color: 	#e60000;
+      color: #e60000;
       text-align: right;
       padding: 16px;
       display: flex;
@@ -72,8 +75,9 @@
     }
 
     .card-percent .eliminado-label {
-      background: #ff3b3b;
-      color: white;
+      background: rgba(255,59,59,0.2); /* transparente */
+      color: #ff3b3b;
+      border: 1px solid rgba(255,59,59,0.4);
       padding: 2px 8px;
       font-size: 12px;
       font-weight: 600;
@@ -89,6 +93,8 @@
       .card img {
         width: 100%;
         height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
       }
 
       .card-percent {
@@ -99,13 +105,14 @@
         align-items: center;
       }
     }
-     footer {
+
+    footer {
       text-align: center;
       margin-top: 50px;
       font-size: 0.9em;
-      color: #777;
+      color: #999;
     }
-</style>  
+  </style>  
     
 </head>
 <body>
