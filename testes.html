@@ -215,7 +215,7 @@ color:var(--text);margin:0;padding:0}
       <img id="fotoConfirm" src="" alt="Foto do participante"/>
       <p id="nomeConfirm"></p>
       <div class="success-msg">Voto computado com sucesso!</div>
-      <button class="voltar" onclick="window.location.href='https://fshow.site/testes.html'">
+      <button class="voltar" onclick="window.location.href='https://fshow.site/vot2.html'">
   VOTAR NOVAMENTE
 </button>
       <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
@@ -347,12 +347,6 @@ function fecharCaptcha() {
   popupCaptcha.classList.remove("active");
   botaoVotar.disabled = false;
 }
-
-// abrir o popup ao clicar no botão de captcha (manual)
-botaoCaptcha.addEventListener("click", () => {
-  if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
-  abrirCaptcha();
-});
 
 verifyBtn.addEventListener("click", () => {
   let sucesso = true;
