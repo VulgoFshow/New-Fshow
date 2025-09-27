@@ -166,7 +166,6 @@ color:var(--text);margin:0;padding:0}
       <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="Logo personalizada" style="width:40px;height:40px;border-radius:4px"/>
     </button>
 
-    <!-- removi onclick inline daqui -->
     <button id="botaoVotar" disabled>Votar</button>
 
     <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
@@ -195,7 +194,7 @@ color:var(--text);margin:0;padding:0}
       <button class="voltar" onclick="window.location.href='https://fshow.site/vot2.html'">
   VOTAR NOVAMENTE
 </button>
-      <div class="notice-confirm">São válidos apenas os votos feitos em território nacional.</div>
+      <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
       <script async="async" data-cfasync="false" src="//pl27399086.revenuecpmgate.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
 <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
     </div>
@@ -209,18 +208,16 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'
 );
 
-const votacaoAtiva = true;
-if (!votacaoAtiva) {
-  window.location.href = "Votação Encerrada.html";
-}
+// ===== CONFIG =====
+const VOTOS_POR_CAPTCHA = 5; // quantos votos o usuário ganha ao passar no captcha
 
-// ===== CONTADOR DE VOTOS LOCAL =====
-const VOTOS_POR_CAPTCHA = 5;
+// ===== HELPERS DE STORAGE =====
 function getVotosRestantes() {
-  return parseInt(localStorage.getItem("votosRestantes") || VOTOS_POR_CAPTCHA);
+  // Por design: default = 0 => pede captcha no primeiro voto
+  return parseInt(localStorage.getItem("votosRestantes") ?? "0", 10);
 }
 function setVotosRestantes(n) {
-  localStorage.setItem("votosRestantes", n);
+  localStorage.setItem("votosRestantes", String(n));
 }
 
 // ===== ELEMENTOS =====
@@ -239,70 +236,75 @@ const verifyBtn = document.getElementById("verify-btn");
 const refreshBtn = document.getElementById("refresh-btn");
 const statusEl = document.getElementById("captcha-status");
 
-// ===== CAPTCHA ====
-  const prompts = [
-      {
-        label: "Clique nas imagens contendo um mamífero",
-        correctTag: "mamifero",
-        images: [
-          { src: "https://media.istockphoto.com/id/1589824836/pt/foto/cute-brown-dog-that-smiles-isolated-background.jpg?s=612x612&w=0&k=20&c=6XY-uqPQZ3XkDHUJGk5oJJ0wv7Ez3Rt4dxEV0Bao8bI=", tag: "mamifero" }, //Cachorro
-          { src: "https://media.istockphoto.com/id/1164946759/pt/foto/cute-grey-cat.jpg?s=612x612&w=0&k=20&c=shwthP3leH6C3A8tKrrFsjUSUXr7UlynbEqweinNBa8=", tag: "mamifero" }, //Gato
-          { src: "https://media.istockphoto.com/id/177228186/pt/foto/jovem-capivara.jpg?s=612x612&w=0&k=20&c=HIaHC5JhfE3zobczCLIEY6bdy2NdOLq0sskZkuXsM9w=", tag: "mamifero" }, //Capivara
-          { src: "https://media.istockphoto.com/id/514622028/pt/foto/pouco-guaxinim-em-%C3%A1rvore.jpg?s=612x612&w=0&k=20&c=QFycBBdmOcjYxtRh4rP20QmBYyynMk6CuduLHpcidFw=", tag: "mamifero" }, //Guaxinim
-          { src: "https://media.istockphoto.com/id/1588317860/pt/foto/three-domestic-ducks-walk-along-a-green-lawn-next-to-a-pond.jpg?s=612x612&w=0&k=20&c=3QOjjJDeo0gRB52A_Pgtj3SF6WiD5LbLvo8311MKv6Q=", tag: "ave" }, //Pato
-          { src: "https://media.istockphoto.com/id/508496270/pt/foto/flamingo-chileno.jpg?s=612x612&w=0&k=20&c=xEiq9i8dm48y4_Q5BIiW-7sUx2Qxbp7dtbRUn-47a0U=", tag: "ave" }, //Flamingo
-          { src: "https://media.istockphoto.com/id/533995902/pt/foto/pinguim-papu-andar-na-neve-na-ant%C3%A1rctida.jpg?s=612x612&w=0&k=20&c=1-B5YRTVdsbX-B2bQB6ZEpbgxG1vUx2rJOXfq8FimL4=", tag: "ave" }, //Pinguim
-          { src: "https://media.istockphoto.com/id/166006960/pt/foto/lado-do-passageiro-avi%C3%A3o-a-jato-f%C3%A1cil-de-cortar.jpg?s=612x612&w=0&k=20&c=b58Lh4rrG-YkDPrOgg2r4yvfhaFf_vzzncTeGzZirSM=", tag: "outro" }, //Avião
-          { src: "https://media.istockphoto.com/id/485462644/pt/foto/helic%C3%B3ptero-em-v%C3%B4o-isolado-contra-branco.jpg?s=612x612&w=0&k=20&c=tjUUsm7JQ4kZ3RUr2v2HQP2v1J4qkw5y6Jd3NeJxwG8=", tag: "outro" } //Helicóptero 
-        ]
-      },
-      {
-        label: "Clique nas imagens contendo uma ave",
-        correctTag: "ave",
-        images: [
-          { src: "https://media.istockphoto.com/id/464988959/pt/foto/pato-real-com-tra%C3%A7ado-de-recorte.jpg?s=612x612&w=0&k=20&c=SUhSeo67zEVs8bgUm0K-OrMDD4iQ5s75CxaOG4gBI1Y=", tag: "ave" }, //Pato
-          { src: "https://media.istockphoto.com/id/1716227735/pt/foto/beautiful-white-domestic-goose.jpg?s=612x612&w=0&k=20&c=vUNR9WIh00uE5wYRJJpxR0DyVqXi5kC4ZJ-5OeBhdIM=", tag: "ave" }, //Ganso
-          { src: "https://media.istockphoto.com/id/178625595/pt/foto/spheniscus-demersus-pinguim-africano-isolado-no-branco.jpg?s=612x612&w=0&k=20&c=Kv8Vfj3MbeoyiHtCseaPivn6FbxjEAFf4h-TDqrUngo=", tag: "ave" }, //Pinguim
-          { src: "https://media.istockphoto.com/id/1512660779/pt/foto/close-up-giant-panda-in-republic-of-korea.jpg?s=612x612&w=0&k=20&c=cts2W9bJ7Ru7H3ncxhSqqtVYAgvuZsT1gdVgwS5Rbz0=", tag: "mamifero" }, //Panda
-          { src: "https://media.istockphoto.com/id/1551607933/pt/foto/golden-retriever-dog-doing-trick.jpg?s=612x612&w=0&k=20&c=ERFmdd13iFS2hdG7Rof27T1YnSxwENsJM0ZrB57yUdk=", tag: "mamifero" }, //Cachorro
-          { src: "https://media.istockphoto.com/id/1361956153/pt/foto/black-cat-sticking-out-tongue-funny-portrait.jpg?s=612x612&w=0&k=20&c=3dOtmpKZFzQeGbLTYpOWypzxDISUJWZa5-i4K653iKM=", tag: "mamifero" }, //Gato
-          { src: "https://media.istockphoto.com/id/1408679386/pt/foto/capybara.jpg?s=612x612&w=0&k=20&c=rIsVTCUlZCeGF0Npz8guQLwnBquLaobfFC4Q39LcnWo=", tag: "mamifero" }, //Capivara
-          { src: "https://media.istockphoto.com/id/1047163322/pt/foto/racoon-in-the-trash.jpg?s=612x612&w=0&k=20&c=c2TZ9ajlaKFBmvTd_TARVdNakiNkUQ2FEuL-mN4zSSY=", tag: "mamifero" }, //Guaxinim
-          { src: "https://media.istockphoto.com/id/157430678/pt/foto/tr%C3%AAs-batatas.jpg?s=612x612&w=0&k=20&c=BoUCWwC1mWkz2JzT8K0RLaJSYfRPEWWPRSMXL36pI9Q=", tag: "outro" } //Avião
-        ]
-      }
-    ];
+// === prompts do CAPTCHA ===
+const prompts = [
+  {
+    label: "Clique nas imagens contendo um mamífero",
+    correctTag: "mamifero",
+    images: [
+      { src: "https://media.istockphoto.com/id/1589824836/pt/foto/cute-brown-dog-that-smiles-isolated-background.jpg?s=612x612&w=0&k=20&c=6XY-uqPQZ3XkDHUJGk5oJJ0wv7Ez3Rt4dxEV0Bao8bI=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/1164946759/pt/foto/cute-grey-cat.jpg?s=612x612&w=0&k=20&c=shwthP3leH6C3A8tKrrFsjUSUXr7UlynbEqweinNBa8=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/177228186/pt/foto/jovem-capivara.jpg?s=612x612&w=0&k=20&c=HIaHC5JhfE3zobczCLIEY6bdy2NdOLq0sskZkuXsM9w=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/514622028/pt/foto/pouco-guaxinim-em-%C3%A1rvore.jpg?s=612x612&w=0&k=20&c=QFycBBdmOcjYxtRh4rP20QmBYyynMk6CuduLHpcidFw=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/1588317860/pt/foto/three-domestic-ducks-walk-along-a-green-lawn-next-to-a-pond.jpg?s=612x612&w=0&k=20&c=3QOjjJDeo0gRB52A_Pgtj3SF6WiD5LbLvo8311MKv6Q=", tag: "ave" },
+      { src: "https://media.istockphoto.com/id/508496270/pt/foto/flamingo-chileno.jpg?s=612x612&w=0&k=20&c=xEiq9i8dm48y4_Q5BIiW-7sUx2Qxbp7dtbRUn-47a0U=", tag: "ave" },
+      { src: "https://media.istockphoto.com/id/533995902/pt/foto/pinguim-papu-andar-na-neve-na-ant%C3%A1rctida.jpg?s=612x612&w=0&k=20&c=1-B5YRTVdsbX-B2bQB6ZEpbgxG1vUx2rJOXfq8FimL4=", tag: "ave" },
+      { src: "https://media.istockphoto.com/id/166006960/pt/foto/lado-do-passageiro-avi%C3%A3o-a-jato-f%C3%A1cil-de-cortar.jpg?s=612x612&w=0&k=20&c=b58Lh4rrG-YkDPrOgg2r4yvfhaFf_vzzncTeGzZirSM=", tag: "outro" },
+      { src: "https://media.istockphoto.com/id/485462644/pt/foto/helic%C3%B3ptero-em-v%C3%B4o-isolado-contra-branco.jpg?s=612x612&w=0&k=20&c=tjUUsm7JQ4kZ3RUr2v2HQP2v1J4qkw5y6Jd3NeJxwG8=", tag: "outro" }
+    ]
+  },
+  {
+    label: "Clique nas imagens contendo uma ave",
+    correctTag: "ave",
+    images: [
+      { src: "https://media.istockphoto.com/id/464988959/pt/foto/pato-real-com-tra%C3%A7ado-de-recorte.jpg?s=612x612&w=0&k=20&c=SUhSeo67zEVs8bgUm0K-OrMDD4iQ5s75CxaOG4gBI1Y=", tag: "ave" },
+      { src: "https://media.istockphoto.com/id/1716227735/pt/foto/beautiful-white-domestic-goose.jpg?s=612x612&w=0&k=20&c=vUNR9WIh00uE5wYRJJpxR0DyVqXi5kC4ZJ-5OeBhdIM=", tag: "ave" },
+      { src: "https://media.istockphoto.com/id/178625595/pt/foto/spheniscus-demersus-pinguim-africano-isolado-no-branco.jpg?s=612x612&w=0&k=20&c=Kv8Vfj3MbeoyiHtCseaPivn6FbxjEAFf4h-TDqrUngo=", tag: "ave" },
+      { src: "https://media.istockphoto.com/id/1512660779/pt/foto/close-up-giant-panda-in-republic-of-korea.jpg?s=612x612&w=0&k=20&c=cts2W9bJ7Ru7H3ncxhSqqtVYAgvuZsT1gdVgwS5Rbz0=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/1551607933/pt/foto/golden-retriever-dog-doing-trick.jpg?s=612x612&w=0&k=20&c=ERFmdd13iFS2hdG7Rof27T1YnSxwENsJM0ZrB57yUdk=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/1361956153/pt/foto/black-cat-sticking-out-tongue-funny-portrait.jpg?s=612x612&w=0&k=20&c=3dOtmpKZFzQeGbLTYpOWypzxDISUJWZa5-i4K653iKM=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/1408679386/pt/foto/capybara.jpg?s=612x612&w=0&k=20&c=rIsVTCUlZCeGF0Npz8guQLwnBquLaobfFC4Q39LcnWo=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/1047163322/pt/foto/racoon-in-the-trash.jpg?s=612x612&w=0&k=20&c=c2TZ9ajlaKFBmvTd_TARVdNakiNkUQ2FEuL-mN4zSSY=", tag: "mamifero" },
+      { src: "https://media.istockphoto.com/id/157430678/pt/foto/tr%C3%AAs-batatas.jpg?s=612x612&w=0&k=20&c=BoUCWwC1mWkz2JzT8K0RLaJSYfRPEWWPRSMXL36pI9Q=", tag: "outro" }
+    ]
+  }
+];
 
-function shuffle(array){ 
-  for(let i=array.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [array[i],array[j]]=[array[j],array[i]];
-  } 
+// ===== UTIL =====
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
   return array;
 }
 
-function generateCaptcha(){
+// ===== CAPTCHA UI / Lógica =====
+let pendingVote = null; // guarda voto pendente quando abrimos captcha a partir do "Votar"
+
+function generateCaptcha() {
   captchaGrid.innerHTML = "";
   statusEl.textContent = "";
   verifyBtn.disabled = true;
 
-  const prompt = prompts[Math.floor(Math.random()*prompts.length)];
-  const correctImages = prompt.images.filter(img=>img.tag===prompt.correctTag);
-  const wrongImages = prompt.images.filter(img=>img.tag!==prompt.correctTag);
+  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+  const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
+  const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
 
-  const correctCount = Math.floor(Math.random()*3)+2;
-  const selectedCorrect = shuffle(correctImages).slice(0,correctCount);
-  const selectedWrong = shuffle(wrongImages).slice(0,9-correctCount);
+  const correctCount = Math.floor(Math.random() * 3) + 2; // 2..4 corretas
+  const selectedCorrect = shuffle(correctImages).slice(0, correctCount);
+  const selectedWrong = shuffle(wrongImages).slice(0, 9 - correctCount);
 
-  const allImages = shuffle([...selectedCorrect,...selectedWrong]);
+  const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+
   captchaInstruction.textContent = prompt.label;
 
-  allImages.forEach(img=>{
+  allImages.forEach(img => {
     const imgEl = document.createElement("img");
     imgEl.src = img.src;
     imgEl.className = "captcha-img";
     imgEl.dataset.correct = img.tag === prompt.correctTag ? "true" : "false";
-    imgEl.addEventListener("click", ()=>{
+    imgEl.addEventListener("click", () => {
       imgEl.classList.toggle("selected");
       verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
       statusEl.textContent = "";
@@ -311,25 +313,31 @@ function generateCaptcha(){
   });
 }
 
-function abrirCaptcha(){
+function abrirCaptcha() {
   generateCaptcha();
   popupCaptcha.classList.add("active");
-  botaoCaptcha.setAttribute("aria-pressed","false");
-  botaoVotar.disabled = true;
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoVotar.disabled = true; // evita cliques enquanto resolve
   statusEl.textContent = "";
 }
 
-function fecharCaptcha(){ popupCaptcha.classList.remove("active") }
+function fecharCaptcha() {
+  popupCaptcha.classList.remove("active");
+  botaoVotar.disabled = false;
+}
 
-botaoCaptcha.addEventListener("click", ()=>{
-  if (botaoCaptcha.getAttribute("aria-pressed")==="true") return;
+// abrir o popup ao clicar no botão de captcha (manual)
+botaoCaptcha.addEventListener("click", () => {
+  if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
   abrirCaptcha();
 });
 
-verifyBtn.addEventListener("click", ()=>{
+refreshBtn.addEventListener("click", generateCaptcha);
+
+verifyBtn.addEventListener("click", () => {
   let sucesso = true;
   const imgs = document.querySelectorAll(".captcha-img");
-  imgs.forEach(img=>{
+  imgs.forEach(img => {
     const correto = img.dataset.correct === "true";
     const selecionado = img.classList.contains("selected");
     if (correto !== selecionado) sucesso = false;
@@ -338,43 +346,37 @@ verifyBtn.addEventListener("click", ()=>{
   if (sucesso) {
     statusEl.textContent = "✅ Você passou no CAPTCHA!";
     statusEl.style.color = "#00aaff";
-    botaoCaptcha.setAttribute("aria-pressed","true");
+
+    // libera X votos e marca o botão como "checado"
+    setVotosRestantes(VOTOS_POR_CAPTCHA);
+    botaoCaptcha.setAttribute("aria-pressed", "true");
     botaoVotar.disabled = false;
     botaoVotar.classList.add("active");
-    setTimeout(()=>fecharCaptcha(), 800);
-    setVotosRestantes(VOTOS_POR_CAPTCHA);
+
+    // fecha popup
+    setTimeout(() => {
+      fecharCaptcha();
+
+      // se havia um voto pendente (usuário clicou em Votar e abriu captcha), submete automaticamente
+      if (pendingVote) {
+        const voto = pendingVote;
+        pendingVote = null;
+        // pequena espera para UX (fecha o modal e mostra "Enviando...")
+        setTimeout(() => {
+          submitVote(voto);
+        }, 200);
+      }
+    }, 500);
   } else {
     statusEl.textContent = "❌ Tente novamente.";
     statusEl.style.color = "#ff5555";
-    setTimeout(()=>generateCaptcha(),1500);
+    setTimeout(() => generateCaptcha(), 1500);
   }
 });
 
-refreshBtn.addEventListener("click", generateCaptcha);
-
-// ===== VOTAÇÃO =====
-async function enviarVoto(){
+// ===== FUNÇÃO QUE REALMENTE ENVIA O VOTO (faz insert no supabase) =====
+async function submitVote(participante) {
   try {
-    // ⚠️ VERIFICAÇÃO DO CAPTCHA
-    if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
-      alert("Você precisa passar no CAPTCHA antes de votar!");
-      return;
-    }
-
-    const escolhido = document.querySelector('input[name="vote"]:checked');
-    if (!escolhido) {
-      alert("Selecione um participante antes de votar!");
-      return;
-    }
-
-    const participante = escolhido.value;
-
-    const foto = {
-  "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bkoyuh.jpg?raw=true",
-  "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true",
-  "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true"
-}[participante] || "";
-
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
     botaoVotar.textContent = "Enviando...";
@@ -391,36 +393,72 @@ async function enviarVoto(){
       return;
     }
 
-    console.log("Voto registrado:", data);
-
-    // controle captcha
+    // decrementa votos restantes
     let restantes = getVotosRestantes() - 1;
     if (restantes <= 0) {
-      botaoVotar.disabled = true;
+      setVotosRestantes(0);
+      botaoCaptcha.setAttribute("aria-pressed", "false"); // precisa captcha no próximo
       botaoVotar.classList.remove("active");
-      botaoCaptcha.setAttribute("aria-pressed","false");
-      setVotosRestantes(0); // força pedir captcha
     } else {
       setVotosRestantes(restantes);
     }
 
+    // mostra confirmação
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
-    fotoConfirm.src = foto;
+    fotoConfirm.src = {
+      "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bkoyuh.jpg?raw=true",
+      "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true",
+      "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true"
+    }[participante] || "";
+
+    botaoVotar.textContent = prevText;
+    botaoVotar.disabled = false;
+    console.log("Voto registrado:", data);
   } catch (err) {
-    console.error("Erro enviarVoto:", err);
+    console.error("Erro submitVote:", err);
     alert("Erro inesperado. Veja o console do navegador.");
     botaoVotar.disabled = false;
     botaoVotar.textContent = "Votar";
   }
 }
 
-// ...todo o código que você já tem...
+// ===== LÓGICA DO BOTÃO "VOTAR" (gatilho) =====
+botaoVotar.addEventListener("click", (e) => {
+  e.preventDefault();
+  const escolhidoEl = document.querySelector('input[name="vote"]:checked');
+  if (!escolhidoEl) {
+    alert("Selecione um participante antes de votar!");
+    return;
+  }
+  const participante = escolhidoEl.value;
 
-// Listener do botão votar
+  // Se não há votos livres, abre captcha e guarda voto pendente
+  if (getVotosRestantes() <= 0) {
+    pendingVote = participante;
+    abrirCaptcha();
+    return;
+  }
 
-botaoVotar.addEventListener("click", enviarVoto);
+  // caso contrário, submete imediatamente
+  submitVote(participante);
+});
+
+// ===== INIT (sincroniza estado do botão de captcha / votar ao carregar) =====
+(function initState() {
+  const restantes = getVotosRestantes();
+  if (restantes > 0) {
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.classList.add("active");
+    botaoVotar.disabled = false;
+  } else {
+    botaoCaptcha.setAttribute("aria-pressed", "false");
+    // deixar botão de votar habilitado para que o usuário clique e abra o captcha automaticamente
+    botaoVotar.disabled = false;
+  }
+})();
 </script>
+
 </body>
 </html>
