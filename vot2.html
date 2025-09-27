@@ -182,7 +182,7 @@
     </div>
   </div>
 
- <script type="module">
+<script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
 const supabase = createClient(
@@ -190,7 +190,7 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'
 );
 
-const votacaoAtiva = falsd;
+const votacaoAtiva = true;
 if (!votacaoAtiva) {
   window.location.href = "Votação Encerrada.html";
 }
@@ -250,7 +250,14 @@ const prompts = [
   }
 ];
 
-function shuffle(array){ for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]]} return array }
+
+function shuffle(array){ 
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  } 
+  return array;
+}
 
 function generateCaptcha(){
   captchaGrid.innerHTML = "";
@@ -289,6 +296,7 @@ function abrirCaptcha(){
   botaoVotar.disabled = true;
   statusEl.textContent = "";
 }
+
 function fecharCaptcha(){ popupCaptcha.classList.remove("active") }
 
 botaoCaptcha.addEventListener("click", ()=>{
@@ -312,7 +320,7 @@ verifyBtn.addEventListener("click", ()=>{
     botaoVotar.disabled = false;
     botaoVotar.classList.add("active");
     setTimeout(()=>fecharCaptcha(), 800);
-    setVotosRestantes(VOTOS_POR_CAPTCHA); // reset após passar captcha
+    setVotosRestantes(VOTOS_POR_CAPTCHA);
   } else {
     statusEl.textContent = "❌ Tente novamente.";
     statusEl.style.color = "#ff5555";
@@ -325,6 +333,12 @@ refreshBtn.addEventListener("click", generateCaptcha);
 // ===== VOTAÇÃO =====
 async function enviarVoto(){
   try {
+    // ⚠️ VERIFICAÇÃO DO CAPTCHA
+    if (botaoCaptcha.getAttribute("aria-pressed") !== "true") {
+      alert("Você precisa passar no CAPTCHA antes de votar!");
+      return;
+    }
+
     const escolhido = document.querySelector('input[name="vote"]:checked');
     if (!escolhido) {
       alert("Selecione um participante antes de votar!");
@@ -332,7 +346,12 @@ async function enviarVoto(){
     }
 
     const participante = escolhido.value;
-    const foto = escolhido.closest(".option").querySelector("img").src;
+
+    const foto = {
+  "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bkoyuh.jpg?raw=true",
+  "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true",
+  "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true"
+}[participante] || "";
 
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
@@ -375,36 +394,11 @@ async function enviarVoto(){
   }
 }
 
-// ===== BOTOES =====
+// ...todo o código que você já tem...
+
+// Listener do botão votar
+
 botaoVotar.addEventListener("click", enviarVoto);
-
-window.voltar = function(){
-  confirmTela.style.display = "none";
-  votoTela.style.display = "flex";
-  const checked = document.querySelector('input[name="vote"]:checked');
-  if (checked) checked.checked = false;
-  botaoVotar.classList.remove("active");
-  botaoVotar.disabled = (getVotosRestantes() <= 0);
-};
-
-// ===== AO CARREGAR =====
-window.addEventListener("load", ()=>{
-  if (getVotosRestantes() <= 0) {
-    botaoVotar.disabled = true;
-    botaoVotar.classList.remove("active");
-    botaoCaptcha.setAttribute("aria-pressed","false");
-  } else {
-    botaoVotar.disabled = false;
-  }
-});
-
-// ===== DESTACAR OPÇÃO SELECIONADA =====
-document.querySelectorAll('.option').forEach(label=>{
-  label.addEventListener('click', ()=>{
-    document.querySelectorAll('.option').forEach(l=>l.classList.remove('selected'));
-    label.classList.add('selected');
-  });
-});
 </script>
 </body>
 </html>
