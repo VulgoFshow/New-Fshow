@@ -18,7 +18,7 @@
       --panel-border: rgba(255,255,255,0.06);
       
     }body {
-  background: transparent !important; /* fundo totalmente transparente */
+  background: transparent !important; 
   font-family: Arial, sans-serif;
   color: var(--text);
   margin: 0;
@@ -59,23 +59,23 @@ color:var(--text);margin:0;padding:0}
 #fotoConfirm {
   width: 100%;
   display: block;
-  border-radius: 10px 10px 0 0;  /* só em cima */
+  border-radius: 10px 10px 0 0;  
   border: 1px solid #ddd;
-  border-bottom: none;          /* evita sobreposição com o nome */
+  border-bottom: none;          
 }
 
 #nomeConfirm {
-  background: #1F1F1F;             /* mesmo fundo da caixa */
+  background: #1F1F1F;             
   color: #fff;
   font-size: 20px;
   font-weight: 700;
   text-align: center;
   padding: 14px;
-  border-radius: 0 0 10px 10px; /* só embaixo */
+  border-radius: 0 0 10px 10px; 
   border: 1px solid #ddd;
-  border-top: none;             /* cola na imagem */
+  border-top: none;             
   margin: 0;
-  box-sizing: border-box;       /* garante alinhamento perfeito */
+  box-sizing: border-box;    
 }
 
 
@@ -83,7 +83,7 @@ color:var(--text);margin:0;padding:0}
     .success-msg::before{content:"✔";color:#00ff6a;margin-right:6px}
     .voltar{background:var(--accent);color:#fff}
 
-    /* tela de confirmação transparente */
+    /* tela de confirmação */
 #confirmTela {
   display: none;
   flex-direction: column;
@@ -184,23 +184,23 @@ color:var(--text);margin:0;padding:0}
     <h1>Quem deve ser ELIMINADO? ⚡</h1>
 
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmiguel.jpg?raw=true" alt="Miguel">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bludmila.jpg?raw=true" alt="Ludmila">
       <div class="option-content">
-        <input type="radio" name="vote" value="Miguel"> Miguel
+        <input type="radio" name="vote" value="Ludmila"> Ludmila
       </div>
     </label>
     
 <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true" alt="Mikael">
       <div class="option-content">
-        <input type="radio" name="vote" value="Neto"> Neto
+        <input type="radio" name="vote" value="Mikael"> Mikael
       </div>
     </label>
     
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvictor.jpg?raw=true" alt="Victor">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bsam.jpg?raw=true" alt="Sam">
       <div class="option-content">
-        <input type="radio" name="vote" value="Victor"> Victor
+        <input type="radio" name="vote" value="Sam"> Sam
       </div>
     </label>
   
@@ -248,7 +248,6 @@ color:var(--text);margin:0;padding:0}
 </div>
 
 <script>
-// ===== CONTROLE DE ENCERRAMENTO =====
 
 // (ano, mês, dia, hora, minuto)
 const encerramento = new Date(2025, 8, 28, 14, 50, 0);
@@ -302,7 +301,7 @@ const verifyBtn = document.getElementById("verify-btn");
 const refreshBtn = document.getElementById("refresh-btn");
 const statusEl = document.getElementById("captcha-status");
 
-// === prompts do CAPTCHA ===
+// CAPTCHA ===
 const prompts = [
   {
     label: "Clique nas imagens contendo algo que pode se locomover",
@@ -384,7 +383,7 @@ function abrirCaptcha() {
   generateCaptcha();
   popupCaptcha.classList.add("active");
   botaoCaptcha.setAttribute("aria-pressed", "false");
-  botaoVotar.disabled = true; // evita cliques enquanto resolve
+  botaoVotar.disabled = true;
   statusEl.textContent = "";
 }
 
@@ -406,21 +405,19 @@ verifyBtn.addEventListener("click", () => {
     statusEl.textContent = "✅ Você passou no CAPTCHA!";
     statusEl.style.color = "#00aaff";
 
-    // libera X votos e marca o botão como "checado"
+
     setVotosRestantes(VOTOS_POR_CAPTCHA);
     botaoCaptcha.setAttribute("aria-pressed", "true");
     botaoVotar.disabled = false;
     botaoVotar.classList.add("active");
 
-    // fecha popup
     setTimeout(() => {
       fecharCaptcha();
 
-      // se havia um voto pendente (usuário clicou em Votar e abriu captcha), submete automaticamente
       if (pendingVote) {
         const voto = pendingVote;
         pendingVote = null;
-        // pequena espera para UX (fecha o modal e mostra "Enviando...")
+       
         setTimeout(() => {
           submitVote(voto);
         }, 200);
@@ -433,7 +430,6 @@ verifyBtn.addEventListener("click", () => {
   }
 });
 
-// ===== FUNÇÃO QUE REALMENTE ENVIA O VOTO (faz insert no supabase) =====
 async function submitVote(participante) {
   try {
     botaoVotar.disabled = true;
@@ -442,7 +438,7 @@ async function submitVote(participante) {
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
-      .from("paredão10")
+      .from("paredão11")
       .insert({ participante });
 
     if (error) {
@@ -453,17 +449,15 @@ async function submitVote(participante) {
       return;
     }
 
-    // decrementa votos restantes
     let restantes = getVotosRestantes() - 1;
     if (restantes <= 0) {
       setVotosRestantes(0);
-      botaoCaptcha.setAttribute("aria-pressed", "false"); // precisa captcha no próximo
+      botaoCaptcha.setAttribute("aria-pressed", "false");
       botaoVotar.classList.remove("active");
     } else {
       setVotosRestantes(restantes);
     }
 
-    // mostra confirmação
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
@@ -495,7 +489,6 @@ async function submitVote(participante) {
   }
 }
 
-// ===== LÓGICA DO BOTÃO "VOTAR" (gatilho) =====
 botaoVotar.addEventListener("click", (e) => {
   e.preventDefault();
   const escolhidoEl = document.querySelector('input[name="vote"]:checked');
@@ -505,47 +498,41 @@ botaoVotar.addEventListener("click", (e) => {
   }
   const participante = escolhidoEl.value;
 
-  // Se não há votos livres, abre captcha e guarda voto pendente
   if (getVotosRestantes() <= 0) {
     pendingVote = participante;
     abrirCaptcha();
     return;
   }
 
-  // caso contrário, submete imediatamente
   submitVote(participante);
 });
 
-// ===== BOTÃO DE CAPTCHA =====
 botaoCaptcha.addEventListener("click", () => {
   if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
 
   if (getVotosRestantes() > 0) {
-    // Ainda tem votos livres -> só de clicar libera
+    
     botaoCaptcha.setAttribute("aria-pressed", "true");
     botaoVotar.disabled = false;
     botaoVotar.classList.add("active");
   } else {
-    // Sem votos livres -> precisa resolver captcha
+
     abrirCaptcha();
   }
 });
 
-// ===== INIT (sincroniza estado inicial) =====
+// ===== INIT =====
 (function initState() {
   const restantes = getVotosRestantes();
 
-  // Sempre começa "desmarcado"
   botaoCaptcha.setAttribute("aria-pressed", "false");
   botaoCaptcha.disabled = false;
 
-  // Botão de votar sempre começa bloqueado
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
 
-  // Mantém os votos restantes armazenados, mas só libera quando clicar no captcha
   if (restantes > 0) {
-    setVotosRestantes(restantes); // mantém contador
+    setVotosRestantes(restantes);
   } else {
     setVotosRestantes(0);
   }
