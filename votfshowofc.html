@@ -162,23 +162,23 @@ color:var(--text);margin:0;padding:0}
     <h1>Quem deve ser ELIMINADO? ⚡</h1>
 
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmiguel.jpg?raw=true" alt="Miguel">
       <div class="option-content">
-        <input type="radio" name="vote" value="Flávia"> Flávia
+        <input type="radio" name="vote" value="Miguel"> Miguel
       </div>
     </label>
     
 <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bines.jpg?raw=true" alt="Inês">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
       <div class="option-content">
-        <input type="radio" name="vote" value="Inês"> Inês
+        <input type="radio" name="vote" value="Neto"> Neto
       </div>
     </label>
     
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bvictor.jpg?raw=true" alt="Victor">
       <div class="option-content">
-        <input type="radio" name="vote" value="Neto"> Neto
+        <input type="radio" name="vote" value="Victor"> Victor
       </div>
     </label>
   
@@ -229,10 +229,10 @@ color:var(--text);margin:0;padding:0}
 // ===== CONTROLE DE ENCERRAMENTO =====
 
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 8, 28, 11, 0, 0);
+const encerramento = new Date(2025, 8, 28, 14, 30, 0);
 
 
-const votacaoAtiva = false;
+const votacaoAtiva = true;
 
 function checkEncerramento() {
   const agora = new Date();
@@ -420,7 +420,7 @@ async function submitVote(participante) {
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
-      .from("paredão9")
+      .from("paredão10")
       .insert({ participante });
 
     if (error) {
