@@ -227,8 +227,8 @@ color:var(--text);margin:0;padding:0}
 <script>
 // ===== CONTROLE DE ENCERRAMENTO =====
 
-// Defina a data e hora (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 8, 27, 19, 0, 0);
+// (ano, mês, dia, hora, minuto)
+const encerramento = new Date(2025, 8, 28, 11, 0, 0);
 
 
 const votacaoAtiva = true;
@@ -417,8 +417,9 @@ async function submitVote(participante) {
     const prevText = botaoVotar.textContent;
     botaoVotar.textContent = "Enviando...";
 
+    // MUDAR TABLE AQUI 
     const { data, error } = await supabase
-      .from("paredão8")
+      .from("paredão9")
       .insert({ participante });
 
     if (error) {
