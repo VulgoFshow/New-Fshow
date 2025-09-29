@@ -320,7 +320,7 @@
 
     <!-- HERO -->
     <div class="vote-hero">
-      <img src="https://media.discordapp.net/attachments/1362843321902432437/1421938874036257009/GridArt_20250928_161524410.jpg?ex=68dadb45&is=68d989c5&hm=51f78c598e7d6ff62f053b08462aeb3f46c3c9be3f3953070ba7f4da942a5209&=&format=webp&width=1385&height=693" alt="Paredão">
+      <img src="https://media.discordapp.net/attachments/1325551524272934922/1422018455129034812/GridArt_20250928_213233328.jpg?ex=68db2563&is=68d9d3e3&hm=3cda6f41073063908d045e0bc7fcc7e020841a9ea4f9cfc83760b9d5b9b57018&=&format=webp&width=1385&height=693" alt="Paredão">
     </div>
 
     <!-- Card -->
@@ -328,7 +328,7 @@
       <div class="vote-card-header">
         <div>
           <div class="vote-title">Quem você quer <strong>ELIMINAR?</strong></div>
-          <div style="font-size:13px;color:#6b7280;margin-top:6px">Paredão Turbo</div>
+          <div style="font-size:13px;color:#6b7280;margin-top:6px">Décimo Segundo Paredão</div>
         </div>
 
         <div style="text-align:right">
@@ -342,7 +342,7 @@
 <!-- Botão -->
 
 <div class="vote-options">
-  <button class="vote-btn vote-green" id="singleVote" onclick="window.location.href='https://pollforall.com/pk00mmjz'">
+  <button class="vote-btn vote-green" id="singleVote" onclick="window.location.href='https://pollforall.com/pk58xy58'">
     <span>Voto único</span>
     <div class="vote-icon">👁️</div>
   </button>
@@ -352,7 +352,6 @@
   <div class="vote-icon">👥</div>
 </button>
 
-<!-- Popup que cobre a tela -->
 <div id="voteOverlay" class="overlay">
   <div class="popup">
     <span class="close" id="closePopup">&times;</span>
@@ -361,7 +360,7 @@
 </div>
 
 <style>
-/* Fundo cobrindo a tela */
+
 .overlay {
   display: none;
   position: fixed;
@@ -371,7 +370,6 @@
   z-index: 10000;
 }
 
-/* Caixa do popup ocupando toda a tela */
 .popup {
   position: relative;
   width: 100%;
@@ -381,7 +379,6 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Fechar */
 .close {
   position: absolute;
   top: 15px; right: 20px;
@@ -392,14 +389,12 @@
   z-index: 10;
 }
 
-/* Iframe ocupando todo o espaço */
 .popup iframe {
   width: 100%;
   height: 100%;
   border: none;
 }
 
-/* Animação */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -411,12 +406,10 @@ const teamVoteBtn = document.getElementById("teamVote");
 const overlay = document.getElementById("voteOverlay");
 const closePopup = document.getElementById("closePopup");
 
-// Abrir popup
 teamVoteBtn.addEventListener("click", () => {
   overlay.style.display = "block";
 });
 
-// Fechar popup
 closePopup.addEventListener("click", () => {
   overlay.style.display = "none";
 });
