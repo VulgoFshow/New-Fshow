@@ -190,7 +190,7 @@
 
     async function carregarResultados() {
       const { data, error } = await supabaseClient
-        .from("fazendae17")   
+        .from("enquete2")   
         .select("participante");
 
       if (error) {
