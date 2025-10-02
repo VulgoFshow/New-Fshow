@@ -150,19 +150,19 @@ footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
     <h1>Quem você quer que FIQUE na Fazenda 17?</h1>
 
     <label class="option">
-      <input type="radio" name="vote" value="Carol Lekker" />
-      <img src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/O7ALIQ7DFNAKNG3CEVST47N7RE.jpg" alt="Carol Lekker" />
-      <span>Carol Lekker</span>
+      <input type="radio" name="vote" value="Duda" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-duda.jpg?raw=true" alt="Duda" />
+      <span>Duda</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Fabiano" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-fabiano.jpg?raw=true" alt="Fabiano" />
-      <span>Fabiano</span>
+      <input type="radio" name="vote" value="Renata" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-renata.jpg?raw=true" alt="Renata" />
+      <span>Renata</span>
     </label>
     <label class="option">
-      <input type="radio" name="vote" value="Gabily" />
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-gabily.jpg?raw=true" alt="Gabily" />
-      <span>Gabily</span>
+      <input type="radio" name="vote" value="Walério" />
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-walerio.jpg?raw=true" alt="Walério" />
+      <span>Walério</span>
     </label>
 
     <button id="botaoCaptcha" aria-pressed="false" type="button">
@@ -238,12 +238,11 @@ footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
       }
 
       try {
-        await addDoc(collection(db, "fazendae17"), {
+        await addDoc(collection(db, "enquete2"), {
           participante: escolhido,
           timestamp: new Date()
         });
 
-        // Exibir resultado
         setTimeout(() => {
           document.getElementById("iframeResultado").src = "resultadoroça1.html";
           document.getElementById("resultadoModal").style.display = "flex";
@@ -255,11 +254,10 @@ footer { text-align: center; margin-top: 50px; font-size: 0.9em; color: #777; }
       }
     };
 
-    // Botão fechar popup
     document.getElementById("fecharModal").addEventListener("click", () => {
       document.getElementById("resultadoModal").style.display = "none";
       document.getElementById("iframeResultado").src = ""; 
-      location.reload(); // Atualiza a página
+      location.reload();
     });
   </script>
 
