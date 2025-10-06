@@ -181,7 +181,7 @@ color:var(--text);margin:0;padding:0}
 </head>
 <body>
   <div id="votoTela" class="container">
-    <h1>Quem deve ser FINALISTA?</h1>
+    <h1>Quem deve VENCER?</h1>
 
     <label class="option">
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia">
@@ -201,13 +201,6 @@ color:var(--text);margin:0;padding:0}
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
       <div class="option-content">
         <input type="radio" name="vote" value="Neto"> Neto
-      </div>
-    </label>
-
-    <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmiguel.jpg?raw=true" alt="Miguel">
-      <div class="option-content">
-        <input type="radio" name="vote" value="Miguel"> Miguel
       </div>
     </label>
 
@@ -259,7 +252,7 @@ color:var(--text);margin:0;padding:0}
 <script>
 
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 06, 19, 00, 0);
+const encerramento = new Date(2025, 9, 07, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -447,7 +440,7 @@ async function submitVote(participante) {
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
-      .from("paredão17")
+      .from("finalbbbf5")
       .insert({ participante });
 
     if (error) {
