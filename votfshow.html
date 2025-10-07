@@ -121,7 +121,18 @@
 
   <!-- hCaptcha -->
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-</head>
+  </head>
+
+<!-- Função global para callback -->
+<script>
+  function captchaResolvido(token) {
+    if (token) {
+      const botaoVotar = document.getElementById("botaoVotar");
+      botaoVotar.disabled = false;
+      botaoVotar.classList.add("active");
+    }
+  }
+</script>
 
 <body>
   <div id="votoTela" class="container">
@@ -148,7 +159,7 @@
       </div>
     </label>
 
-    <!-- hCaptcha -->
+    <!-- hCaptcha renderizado -->
     <div class="captcha-container">
       <div class="h-captcha" data-sitekey="ca52a2be-e1e0-4062-a7e0-745018eeeb26" data-callback="captchaResolvido"></div>
     </div>
@@ -169,92 +180,83 @@
   </div>
 
 <script type="module">
-const VOTACAO_ATUAL = a; 
+  const VOTACAO_ATUAL = 'a'; // ⚠️ Coloque entre aspas
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// Config do Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyANHVK6lI_uBsQk1_rz2zI5TrJj40P1kV8",
-  authDomain: "votounico-974d7.firebaseapp.com",
-  databaseURL: "https://votounico-974d7-default-rtdb.firebaseio.com",
-  projectId: "votounico-974d7",
-  storageBucket: "votounico-974d7.appspot.com",
-  messagingSenderId: "286853936059",
-  appId: "1:286853936059:web:fbf96050e246b697ea4a9e"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyANHVK6lI_uBsQk1_rz2zI5TrJj40P1kV8",
+    authDomain: "votounico-974d7.firebaseapp.com",
+    databaseURL: "https://votounico-974d7-default-rtdb.firebaseio.com",
+    projectId: "votounico-974d7",
+    storageBucket: "votounico-974d7.appspot.com",
+    messagingSenderId: "286853936059",
+    appId: "1:286853936059:web:fbf96050e246b697ea4a9e"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-const votoTela = document.getElementById("votoTela");
-const confirmTela = document.getElementById("confirmTela");
-const nomeConfirm = document.getElementById("nomeConfirm");
-const fotoConfirm = document.getElementById("fotoConfirm");
-const botaoVotar = document.getElementById("botaoVotar");
+  const votoTela = document.getElementById("votoTela");
+  const confirmTela = document.getElementById("confirmTela");
+  const nomeConfirm = document.getElementById("nomeConfirm");
+  const fotoConfirm = document.getElementById("fotoConfirm");
+  const botaoVotar = document.getElementById("botaoVotar");
 
-const LOCAL_KEY = `votou_${VOTACAO_ATUAL}`;
-const LOCAL_PART = `${LOCAL_KEY}_part`;
-const LOCAL_IMG = `${LOCAL_KEY}_img`;
+  const LOCAL_KEY = `votou_${VOTACAO_ATUAL}`;
+  const LOCAL_PART = `${LOCAL_KEY}_part`;
+  const LOCAL_IMG = `${LOCAL_KEY}_img`;
 
-window.captchaResolvido = function(token) {
-  if (token) {
-    botaoVotar.disabled = false;
-    botaoVotar.classList.add("active");
-  }
-};
-
-function verificarBloqueio() {
-  if (localStorage.getItem(LOCAL_KEY) === 'true') {
-    votoTela.style.display = "none";
-    confirmTela.style.display = "flex";
-    nomeConfirm.textContent = localStorage.getItem(LOCAL_PART);
-    fotoConfirm.src = localStorage.getItem(LOCAL_IMG);
-  }
-}
-
-botaoVotar.addEventListener("click", async () => {
-  const escolhido = document.querySelector('input[name="vote"]:checked');
-  if (!escolhido) {
-    alert("Selecione um participante antes de votar!");
-    return;
+  function verificarBloqueio() {
+    if (localStorage.getItem(LOCAL_KEY) === 'true') {
+      votoTela.style.display = "none";
+      confirmTela.style.display = "flex";
+      nomeConfirm.textContent = localStorage.getItem(LOCAL_PART);
+      fotoConfirm.src = localStorage.getItem(LOCAL_IMG);
+    }
   }
 
-  if (localStorage.getItem(LOCAL_KEY) === 'true') {
-    verificarBloqueio();
-    return;
-  }
+  botaoVotar.addEventListener("click", async () => {
+    const escolhido = document.querySelector('input[name="vote"]:checked');
+    if (!escolhido) {
+      alert("Selecione um participante antes de votar!");
+      return;
+    }
 
-  const participante = escolhido.value;
-  const img = escolhido.closest(".option").querySelector("img").src;
+    if (localStorage.getItem(LOCAL_KEY) === 'true') {
+      verificarBloqueio();
+      return;
+    }
 
-  botaoVotar.disabled = true;
-  botaoVotar.textContent = "Enviando...";
+    const participante = escolhido.value;
+    const img = escolhido.closest(".option").querySelector("img").src;
 
-  //TABLE FIREBASE
-  try {
-    const votoRef = ref(db, `vu1_${VOTACAO_ATUAL}/${participante}`);
-    await runTransaction(votoRef, (current) => (current || 0) + 1);
+    botaoVotar.disabled = true;
+    botaoVotar.textContent = "Enviando...";
 
-    localStorage.setItem(LOCAL_KEY, 'true');
-    localStorage.setItem(LOCAL_PART, participante);
-    localStorage.setItem(LOCAL_IMG, img);
+    try {
+      const votoRef = ref(db, `vu1_${VOTACAO_ATUAL}/${participante}`);
+      await runTransaction(votoRef, (current) => (current || 0) + 1);
 
-    votoTela.style.display = "none";
-    confirmTela.style.display = "flex";
-    nomeConfirm.textContent = participante;
-    fotoConfirm.src = img;
-  } catch (err) {
-    console.error(err);
-    alert("❌ Erro ao registrar voto. Tente novamente.");
-  } finally {
-    botaoVotar.disabled = false;
-    botaoVotar.textContent = "Votar";
-  }
-});
+      localStorage.setItem(LOCAL_KEY, 'true');
+      localStorage.setItem(LOCAL_PART, participante);
+      localStorage.setItem(LOCAL_IMG, img);
 
-verificarBloqueio();
+      votoTela.style.display = "none";
+      confirmTela.style.display = "flex";
+      nomeConfirm.textContent = participante;
+      fotoConfirm.src = img;
+    } catch (err) {
+      console.error(err);
+      alert("❌ Erro ao registrar voto. Tente novamente.");
+    } finally {
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = "Votar";
+    }
+  });
+
+  verificarBloqueio();
 </script>
 </body>
 </html>
