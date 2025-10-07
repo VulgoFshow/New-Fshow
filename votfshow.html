@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fshow/Votação</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #2b2b2b;
+      --selected-bg: #3c3c3c;
+      --border-radius: 8px;
+      --accent: #00b7b0;
+      --text: #fff;
+      --muted: #bdbdbd;
+      --panel-bg: #2b2b2b;
+      --panel-border: rgba(255,255,255,0.06);
+    }
+
+    body {
+      background: transparent !important; 
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px 15px;
+    }
+
+    h1 {font-size:20px;font-weight:700;margin-bottom:20px;text-align:left}
+    .option {
+      display:flex;align-items:stretch;background:var(--card-bg);
+      border-radius:var(--border-radius);margin-bottom:12px;
+      overflow:hidden;border:1px solid #fff;cursor:pointer;transition:.2s;
+    }
+    .option img {width:150px;height:auto;object-fit:cover;flex-shrink:0}
+    .option-content {display:flex;align-items:center;padding:0 12px;width:100%;font-size:18px;font-weight:500;position:relative}
+    .option-content input[type="radio"] {
+      appearance:none;-webkit-appearance:none;width:20px;height:20px;
+      border:2px solid var(--muted);border-radius:50%;margin-right:8px;cursor:pointer;position:relative;
+    }
+    .option-content input[type="radio"]:checked {border-color:var(--accent)}
+    .option-content input[type="radio"]:checked::before {
+      content:"";position:absolute;width:10px;height:10px;top:3px;left:3px;border-radius:50%;background:var(--accent);
+    }
+
+    button {
+      width:100%;padding:14px;font-size:16px;border:none;border-radius:var(--border-radius);
+      margin-top:15px;cursor:pointer;background:#444;color:var(--muted);
+      font-weight:bold;transition:.3s;
+    }
+    button.active {background:var(--accent);color:#fff}
+    button:disabled {opacity:.6;cursor:not-allowed}
+    .notice {font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+    /* tela de confirmação */
+    #confirmTela {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      background: transparent !important;
+      min-height: 85vh;
+    }
+
+    .confirm-card {
+      background: transparent !important; 
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    #fotoConfirm {
+      width: 100%;
+      display: block;
+      border-radius: 10px 10px 0 0;  
+      border: 1px solid #ddd;
+      border-bottom: none;          
+    }
+
+    #nomeConfirm {
+      background: #1F1F1F;             
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      padding: 14px;
+      border-radius: 0 0 10px 10px; 
+      border: 1px solid #ddd;
+      border-top: none;             
+      margin: 0;
+      box-sizing: border-box;    
+    }
+
+    .success-msg {
+      display:flex;align-items:center;justify-content:center;
+      font-size:14px;color:#fff;background:rgba(0,255,100,.15);
+      border:1px solid rgba(0,255,100,.4);border-radius:6px;
+      padding:10px;margin-bottom:18px;
+    }
+    .success-msg::before{content:"✔";color:#00ff6a;margin-right:6px}
+    .voltar{background:var(--accent);color:#fff}
+    
+    /* hCaptcha */
+    .captcha-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+  </style>
+
+  <!-- hCaptcha -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+</head>
+
+<body>
+  <div id="votoTela" class="container">
+    <h1>Quem deve VENCER?</h1>
+
+    <label class="option">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Flávia"> Flávia
+      </div>
+    </label>
+
+    <label class="option">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluca.jpg?raw=true" alt="Luca">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Luca"> Luca
+      </div>
+    </label>
+
+    <label class="option">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Neto"> Neto
+      </div>
+    </label>
+
+    <!-- hCaptcha -->
+    <div class="captcha-container">
+      <div class="h-captcha" data-sitekey="ca52a2be-e1e0-4062-a7e0-745018eeeb26" data-callback="captchaResolvido"></div>
+    </div>
+
+    <button id="botaoVotar" disabled>Votar</button>
+
+    <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
+  </div>
+
+  <div id="confirmTela">
+    <div class="confirm-card">
+      <img id="fotoConfirm" src="" alt="Foto do participante"/>
+      <p id="nomeConfirm"></p>
+      <button class="voltar" onclick="window.location.href='https://fshow.site'">VOLTAR</button>
+      <div class="success-msg" style="margin-top: 15px;">Você já votou!</div>
+      <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
+    </div>
+  </div>
+
+<script type="module">
+const VOTACAO_ATUAL = a; 
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// Config do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyANHVK6lI_uBsQk1_rz2zI5TrJj40P1kV8",
+  authDomain: "votounico-974d7.firebaseapp.com",
+  databaseURL: "https://votounico-974d7-default-rtdb.firebaseio.com",
+  projectId: "votounico-974d7",
+  storageBucket: "votounico-974d7.appspot.com",
+  messagingSenderId: "286853936059",
+  appId: "1:286853936059:web:fbf96050e246b697ea4a9e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const votoTela = document.getElementById("votoTela");
+const confirmTela = document.getElementById("confirmTela");
+const nomeConfirm = document.getElementById("nomeConfirm");
+const fotoConfirm = document.getElementById("fotoConfirm");
+const botaoVotar = document.getElementById("botaoVotar");
+
+const LOCAL_KEY = `votou_${VOTACAO_ATUAL}`;
+const LOCAL_PART = `${LOCAL_KEY}_part`;
+const LOCAL_IMG = `${LOCAL_KEY}_img`;
+
+window.captchaResolvido = function(token) {
+  if (token) {
+    botaoVotar.disabled = false;
+    botaoVotar.classList.add("active");
+  }
+};
+
+function verificarBloqueio() {
+  if (localStorage.getItem(LOCAL_KEY) === 'true') {
+    votoTela.style.display = "none";
+    confirmTela.style.display = "flex";
+    nomeConfirm.textContent = localStorage.getItem(LOCAL_PART);
+    fotoConfirm.src = localStorage.getItem(LOCAL_IMG);
+  }
+}
+
+botaoVotar.addEventListener("click", async () => {
+  const escolhido = document.querySelector('input[name="vote"]:checked');
+  if (!escolhido) {
+    alert("Selecione um participante antes de votar!");
+    return;
+  }
+
+  if (localStorage.getItem(LOCAL_KEY) === 'true') {
+    verificarBloqueio();
+    return;
+  }
+
+  const participante = escolhido.value;
+  const img = escolhido.closest(".option").querySelector("img").src;
+
+  botaoVotar.disabled = true;
+  botaoVotar.textContent = "Enviando...";
+
+  //TABLE FIREBASE
+  try {
+    const votoRef = ref(db, `vu1_${VOTACAO_ATUAL}/${participante}`);
+    await runTransaction(votoRef, (current) => (current || 0) + 1);
+
+    localStorage.setItem(LOCAL_KEY, 'true');
+    localStorage.setItem(LOCAL_PART, participante);
+    localStorage.setItem(LOCAL_IMG, img);
+
+    votoTela.style.display = "none";
+    confirmTela.style.display = "flex";
+    nomeConfirm.textContent = participante;
+    fotoConfirm.src = img;
+  } catch (err) {
+    console.error(err);
+    alert("❌ Erro ao registrar voto. Tente novamente.");
+  } finally {
+    botaoVotar.disabled = false;
+    botaoVotar.textContent = "Votar";
+  }
+});
+
+verificarBloqueio();
+</script>
+</body>
+</html>
