@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados dos Paredões</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    color: #222;
+    margin: 0;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-family: 'Roboto Slab', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+    color: #1a1a1a;
+    position: relative;
+  }
+
+  h1::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #e50914;
+    margin: 12px auto 0;
+    border-radius: 2px;
+  }
+
+  .paredao {
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin: 20px auto;
+    max-width: 700px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+  }
+
+  .paredao:hover {
+    transform: translateY(-3px);
+  }
+
+  .titulo {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    color: #111;
+  }
+
+  .participante {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+  }
+
+  .participante:last-child {
+    border-bottom: none;
+  }
+
+  .nome {
+    font-weight: 500;
+  }
+
+  .porcentagem {
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .total {
+    text-align: right;
+    font-size: 0.9rem;
+    margin-top: 12px;
+    color: #555;
+  }
+
+  .eliminado {
+    color: #d32f2f;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<h1>Resultados dos Paredões</h1>
+
+<!-- 1 -->
+<div class="paredao">
+  <div class="titulo">1º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Helena</span><span class="porcentagem eliminado">2,91% | 23,2% | 13,06%</span></div>
+  <div class="participante"><span class="nome eliminado">Matheus</span><span class="porcentagem eliminado">11,62% | 38,4% | 25,01%</span></div>
+  <div class="participante"><span class="nome eliminado">Pedro</span><span class="porcentagem eliminado">85,47% | 38,4% | 61,93%</span></div>
+  <div class="total">Total de Votos: 185 votos</div
+  <div class="total">Total: 185 votos</div>
+</div>
+
+<!-- 2 -->
+<div class="paredao">
+  <div class="titulo">2º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Samuel</span><span class="porcentagem eliminado">54,74% | 43,75% | 49,24%</span></div>
+  <div class="participante"><span class="nome">Manchinha</span><span class="porcentagem">24,29% | 37,50% | 30,89%</span></div>
+  <div class="participante"><span class="nome">Mikael</span><span class="porcentagem">20,96% | 18,75% | 19,87%</span></div>
+  <div class="total">Total: 1.576 votos</div>
+</div>
+
+<!-- 3 -->
+<div class="paredao">
+  <div class="titulo">3º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Erick</span><span class="porcentagem eliminado">77,47% | 51,62% | 64,54%</span></div>
+  <div class="participante"><span class="nome">Flávia</span><span class="porcentagem">21,58% | 41,93% | 31,75%</span></div>
+  <div class="participante"><span class="nome">Tety</span><span class="porcentagem">0,99% | 6,45% | 3,71%</span></div>
+  <div class="total">Total: 3.962 votos</div>
+</div>
+
+<!-- 4 -->
+<div class="paredao">
+  <div class="titulo">4º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Rose</span><span class="porcentagem eliminado">74,28% | 37,5% | 55,89%</span></div>
+  <div class="participante"><span class="nome">Tety</span><span class="porcentagem">16,69% | 31,25% | 23,97%</span></div>
+  <div class="participante"><span class="nome">Miguel</span><span class="porcentagem">9,04% | 31,25% | 20,14%</span></div>
+  <div class="total">Total: 4.918 votos</div>
+</div>
+
+<!-- 5 -->
+<div class="paredao">
+  <div class="titulo">5º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Luddi</span><span class="porcentagem eliminado">41,05% | 38,46% | 39,67%</span></div>
+  <div class="participante"><span class="nome">Lucas</span><span class="porcentagem">34,46% | 42,31% | 38,38%</span></div>
+  <div class="participante"><span class="nome">Manchinha</span><span class="porcentagem">24,68% | 19,23% | 21,95%</span></div>
+  <div class="total">Total: 4.892 votos</div>
+</div>
+
+<!-- 6 -->
+<div class="paredao">
+  <div class="titulo">6º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Vitor</span><span class="porcentagem eliminado">33,16% | 32,50% | 32,83%</span></div>
+  <div class="participante"><span class="nome">Tety</span><span class="porcentagem">19,28% | 37,20% | 28,24%</span></div>
+  <div class="participante"><span class="nome">Manchinha</span><span class="porcentagem">36,82% | 12,20% | 24,51%</span></div>
+  <div class="participante"><span class="nome">Mikael</span><span class="porcentagem">10,74% | 18,1% | 14,42%</span></div>
+  <div class="total">Total: 2.474 votos</div>
+</div>
+
+<!-- 7 -->
+<div class="paredao">
+  <div class="titulo">7º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Manchinha</span><span class="porcentagem eliminado">43,62%</span></div>
+  <div class="participante"><span class="nome">Flávia</span><span class="porcentagem">38,04%</span></div>
+  <div class="participante"><span class="nome">Tety</span><span class="porcentagem">18,35%</span></div>
+  <div class="total">Total: 3.870 votos</div>
+</div>
+
+<!-- 8 -->
+<div class="paredao">
+  <div class="titulo">8º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Tety</span><span class="porcentagem eliminado">69,07%</span></div>
+  <div class="participante"><span class="nome">Koyuh</span><span class="porcentagem">24,18%</span></div>
+  <div class="participante"><span class="nome">Mikael</span><span class="porcentagem">6,75%</span></div>
+</div>
+
+<!-- 9 -->
+<div class="paredao">
+  <div class="titulo">9º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Inês</span><span class="porcentagem eliminado">67,92% | 52% | 59,96%</span></div>
+  <div class="participante"><span class="nome">Flávia</span><span class="porcentagem">30,87% | 40% | 35,43%</span></div>
+  <div class="participante"><span class="nome">Neto</span><span class="porcentagem">1,21% | 8% | 4,61%</span></div>
+  <div class="total">Total: 5.745 votos</div>
+</div>
+
+<!-- 10 -->
+<div class="paredao">
+  <div class="titulo">10º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Victor</span><span class="porcentagem eliminado">46,52% | 47,61% | 47,06%</span></div>
+  <div class="participante"><span class="nome">Miguel</span><span class="porcentagem">48,11% | 42,87% | 45,50%</span></div>
+  <div class="participante"><span class="nome">Neto</span><span class="porcentagem">5,37% | 9,52% | 7,44%</span></div>
+  <div class="total">Total: 2.609 votos</div>
+</div>
+
+<!-- 11 -->
+<div class="paredao">
+  <div class="titulo">11º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Mikael</span><span class="porcentagem eliminado">86,73% | 60% | 73,36%</span></div>
+  <div class="participante"><span class="nome">Sam</span><span class="porcentagem">4,47% | 32% | 18,24%</span></div>
+  <div class="participante"><span class="nome">Ludmila</span><span class="porcentagem">8,80% | 8% | 8,40%</span></div>
+  <div class="total">Total: 2.821 votos</div>
+</div>
+
+<!-- 12 -->
+<div class="paredao">
+  <div class="titulo">12º Paredão (Voto pra ficar)</div>
+  <div class="participante"><span class="nome">Miguel</span><span class="porcentagem">49,56% | 14,28% | 31,92%</span></div>
+  <div class="participante"><span class="nome">Koyuh</span><span class="porcentagem">20,56% | 42,85% | 31,70%</span></div>
+  <div class="participante"><span class="nome">Sam</span><span class="porcentagem">25,26% | 28,59% | 26,92%</span></div>
+  <div class="participante"><span class="nome eliminado">Davi</span><span class="porcentagem eliminado">4,62% | 14,28% | 9,46%</span></div>
+  <div class="total">Total: 2.306 votos</div>
+</div>
+
+<!-- 13 -->
+<div class="paredao">
+  <div class="titulo">13º Paredão</div>
+  <div class="participante"><span class="nome eliminado">João</span><span class="porcentagem eliminado">69,77% | 36,35% | 53,06%</span></div>
+  <div class="participante"><span class="nome">Neto</span><span class="porcentagem">28,52% | 50% | 39,26%</span></div>
+  <div class="participante"><span class="nome">Flávia</span><span class="porcentagem">1,71% | 13,65% | 7,68%</span></div>
+  <div class="total">Total: 4.408 votos</div>
+</div>
+
+<!-- 14 -->
+<div class="paredao">
+  <div class="titulo">14º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Lucas</span><span class="porcentagem eliminado">47,57% | 32% | 39,78%</span></div>
+  <div class="participante"><span class="nome">Neto</span><span class="porcentagem">25% | 52% | 38,50%</span></div>
+  <div class="participante"><span class="nome">Flávia</span><span class="porcentagem">27,43% | 16% | 21,72%</span></div>
+  <div class="total">Total: 6.485 votos</div>
+</div>
+
+<!-- 15 -->
+<div class="paredao">
+  <div class="titulo">15º Paredão (Voto pra ficar)</div>
+  <div class="participante"><span class="nome">Neto</span><span class="porcentagem">65,46% | 36,37% | 50,93%</span></div>
+  <div class="participante"><span class="nome">Flávia</span><span class="porcentagem">33,15% | 54,54% | 43,84%</span></div>
+  <div class="participante"><span class="nome">Miguel</span><span class="porcentagem">0,74% | 9,09% | 4,91%</span></div>
+  <div class="participante"><span class="nome eliminado">Ludmila</span><span class="porcentagem eliminado">0,40% | 0% | 0,20%</span></div>
+  <div class="participante"><span class="nome eliminado">Sam</span><span class="porcentagem eliminado">0,25% | 0% | 0,12%</span></div>
+  <div class="total">Total: 2.035 votos</div>
+</div>
+
+<!-- 16 -->
+<div class="paredao">
+  <div class="titulo">16º Paredão</div>
+  <div class="participante"><span class="nome eliminado">Koyuh</span><span class="porcentagem eliminado">40,22% | 48,64% | 44,43%</span></div>
+  <div class="participante"><span class="nome">Neto</span><span class="porcentagem">42,85% | 45,94% | 44,39%</span></div>
+  <div class="participante"><span class="nome">Luca</span><span class="porcentagem">16,95% | 5,42% | 11,18%</span></div>
+  <div class="total">Total: 4.915 votos</div>
+</div>
+
+<!-- 17 -->
+<div class="paredao">
+  <div class="titulo">17º Paredão (Voto pra ficar)</div>
+  <div class="participante"><span class="nome">Luca</span><span class="porcentagem">63,49% | 70% | 66,74%</span></div>
+  <div class="participante"><span class="nome">Neto</span><span class="porcentagem">31,58% | 13,33% | 22,46%</span></div>
+  <div class="participante"><span class="nome">Flávia</span><span class="porcentagem">3,71% | 10% | 6,87%</span></div>
+  <div class="participante"><span class="nome eliminado">Miguel</span><span class="porcentagem eliminado">1,22% | 6,64% | 3,93%</span></div>
+  <div class="total">Total: 5.508 votos</div>
+</div>
+
+</body>
+</html>
