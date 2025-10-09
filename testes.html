@@ -1,324 +1,71 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Votação — 1 voto por IP (simplificado)</title>
+<div class="ad-block ad-leaderboard" role="complementary" aria-label="Anúncio topo">
+  <!-- coloque aqui o código da sua ad network (ex: AdSense) -->
+  <div class="ad-slot" data-ad-type="leaderboard">
+    <script async="async" data-cfasync="false" src="//pl27399086.effectivegatecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+  </div>
+  <noscript><div class="ad-fallback">Anúncio - Habilite o JavaScript</div></noscript>
+</div>
+
 <style>
-  :root{
-    --bg1:#151515; --bg2:#0a0a0a; --accent:#ff0055; --success:#00ff88; --warn:#ffcc00;
-  }
-  body{
-    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:radial-gradient(circle at top, var(--bg1), var(--bg2));
-    color:#fff; font-family:'Poppins',system-ui,Arial,sans-serif; padding:24px;
-  }
-  .card{ width:100%; max-width:920px; background:linear-gradient(180deg,rgba(255,255,255,0.03),transparent);
-    border-radius:14px; padding:28px; box-shadow:0 8px 30px rgba(0,0,0,0.6); text-align:center;
-  }
-  h1{ margin:0 0 18px; font-size:1.6rem; letter-spacing:0.6px; }
-  
-  .options {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 20px;
-  justify-content: center;
-  margin-top: 8px;
-  max-width: 340px; 
-  margin-left: auto;
-  margin-right: auto;
+.ad-block{max-width:1100px;margin:0 auto;padding:10px 12px;box-sizing:border-box}
+.ad-leaderboard .ad-slot{width:100%;height:90px;display:block;border-radius:8px;background:#f5f5f5;display:flex;align-items:center;justify-content:center}
+.ad-fallback{font-size:14px;color:#666;padding:8px;text-align:center}
+@media (max-width:480px){
+  .ad-leaderboard .ad-slot{height:60px}
 }
-
-
-  .option{ cursor:pointer; width:150px; display:flex; flex-direction:column; align-items:center; transition:all .22s; }
-  .option img{ width:150px; height:150px; border-radius:14px; object-fit:cover; border:3px solid transparent;
-    box-shadow:0 6px 20px rgba(0,0,0,0.6); transition:all .22s; }
-  .option:hover img{ transform:scale(1.04); border-color:var(--accent); box-shadow:0 10px 30px rgba(255,0,85,0.12); }
-  .label{ margin-top:10px; font-weight:600; font-size:1rem; }
-  .selected img{ transform:scale(1.04); border-color:var(--accent); box-shadow:0 10px 35px rgba(255,0,85,0.16); }
-  #status{ margin-top:22px; font-size:1rem; opacity:0.95; min-height:1.2em; }
-  #resetBtn{ margin-top:18px; display:none; padding:10px 26px; border-radius:999px; border:0; cursor:pointer; font-weight:700;
-    background:linear-gradient(90deg,var(--accent),#ff3399); color:#fff; }
-  .small{ font-size:.9rem; opacity:.85; margin-top:6px; }
-
-  /* pop-up bloqueio */
-  #bloqueio {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.9);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    text-align: center;
-    gap: 20px;
-    padding: 20px;
-  }
-  #bloqueio img {
-    width: 180px;
-    height: 180px;
-    border-radius: 14px;
-    object-fit: cover;
-    border: 3px solid var(--accent);
-    box-shadow: 0 0 20px rgba(255,0,85,0.3);
-  }
-  #bloqueio h2 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: var(--accent);
-  }
-  #bloqueio p {
-    font-size: 1.1rem;
-    opacity: 0.9;
-  }
-
-  @media (max-width:520px){
-    .option img{ width:120px; height:120px; } .option{ width:120px; }
-  }
-  
-.vote-frame {
-  background: linear-gradient(90deg, #6fffd6, #5c43ff);
-  padding: 12px;
-  border-radius: 22px;
-  max-width: 980px;
-  width: 100%;
-  margin: 20px auto;
-  box-shadow: 0 8px 30px rgba(15,20,40,0.12);
-  font-family: Arial, sans-serif; 
-}
-
-.vote-mock {
-  background: #fff;
-  border-radius: 18px;
-  overflow: hidden;
-  position: relative;
-}
-
-.vote-hero img {
-  width: 100%;         
-  height: auto;
-  display: block;
-  object-fit: cover;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-}
-
-.vote-card {
-  position: relative;
-  margin: -18px 22px 26px 22px;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 18px;
-  border: 1px solid rgba(10,10,10,0.04);
-  box-shadow: 0 8px 26px rgba(13,20,40,0.06);
-}
-
-.vote-card-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom: 18px;
-}
-
-.vote-title {
-  font-size:20px;
-  font-weight:700;
-  color:#111827;
-}
-
-.vote-status {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color: #58606b;
-  font-size:13px;
-  font-weight:600;
-}
-
-.vote-dot {
-  width:10px;height:10px;border-radius:50%;
-  background: #96f3a8;
-  box-shadow:0 0 0 6px rgba(150,243,168,0.07);
-}
-
-.vote-options {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.vote-btn {
-  border-radius: 12px;
-  padding: 16px;
-  font-size:16px;
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  cursor:pointer;
-  border: none;
-  outline: none;
-  transition: transform .12s ease, box-shadow .12s ease;
-  box-shadow: 0 6px 18px rgba(10,10,20,0.04);
-  position: relative;
-  z-index: 0;
-}
-
-.vote-btn:active { transform: translateY(1px) }
-
-.vote-green {
-  background: linear-gradient(90deg,#9cf7c6,#6ef5b0);
-  color: #052018;
-}
-
-.vote-purple {
-  background: linear-gradient(90deg,#5b3bff,#2b0db7);
-  color: white;
-}
-
-.vote-icon {
-  width:44px;height:44px;border-radius:10px;
-  background:rgba(255,255,255,0.08);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-}
-
-.vote-btn:hover {
-  z-index: 1;
-}
-
-.vote-btn:hover::before {
-  content: "";
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border-radius: 15px;
-  background: linear-gradient(90deg, #6fffd6, #5c43ff);
-  z-index: -1;
-}
-
-@media (max-width: 480px) {
-  .options {
-    grid-template-columns: 1fr; 
-    max-width: 180px;
-  }
-}
-
 </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Vote em seu participante favorito 💖</h1>
 
-    <div class="options" id="optionsWrap">
-      <label class="option" data-value="Neto" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
-        <div class="label">Neto</div>
-      </label>
-
-      <label class="option" data-value="Helena" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bhelena.jpg?raw=true">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bhelena.jpg?raw=true" alt="Helena">
-        <div class="label">Helena</div>
-      </label>
-    </div>
-    
-    <label class="option" data-value="Helena" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bhelena.jpg?raw=true">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bhelena.jpg?raw=true" alt="Helena">
-        <div class="label">Helena</div>
-      </label>
-    </div>
-
-    <div id="status" aria-live="polite"></div>
-    <div class="small">Bloqueio: 1 voto por paredão</div>
-  
+<!-- Medium Rectangle -->
+<div class="ad-block ad-medium-rect" role="complementary" aria-label="Anúncio lateral">
+  <div class="ad-slot" data-ad-type="300x250" style="width:300px;height:250px;">
+    <script async="async" data-cfasync="false" src="//pl27399086.effectivegatecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
   </div>
+  <noscript><div class="ad-fallback">Anúncio 300x250</div></noscript>
+</div>
 
-  <!-- Pop-up bloqueio -->
-  <div id="bloqueio" style="display:none;">
-    <h2>🛑 Já votou!</h2>
-    <img id="fotoVoto" src="" alt="Foto do voto">
-    <p id="textoVoto"></p>
-    
+<style>
+.ad-medium-rect{padding:8px}
+.ad-medium-rect .ad-slot{background:#fafafa;border:1px solid #eee;border-radius:6px;display:flex;align-items:center;justify-content:center}
+@media (max-width:600px){
+  .ad-medium-rect .ad-slot{width:100%;height:auto;aspect-ratio:4/3}
+}
+</style>
+
+<!-- Sidebar skyscraper -->
+<aside class="ad-block ad-skyscraper" role="complementary" aria-label="Anúncio lateral vertical">
+  <div class="ad-slot" data-ad-type="skyscraper" style="width:160px;min-height:600px;">
+    <script async="async" data-cfasync="false" src="//pl27399086.effectivegatecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
   </div>
+  <noscript><div class="ad-fallback">Anúncio Vertical</div></noscript>
+</aside>
 
-<script type="module">
-const VOTACAO_ATUAL = 99999; 
+<style>
+.ad-skyscraper{position:sticky;top:20px;padding:8px}
+.ad-skyscraper .ad-slot{background:#fafafa;border:1px solid #eee;border-radius:8px;display:flex;align-items:center;justify-content:center}
+@media (max-width:900px){ .ad-skyscraper{display:none} } /* esconder em mobile */
+</style>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<!-- Sticky footer ad (mobile) -->
+<div class="ad-block ad-sticky" role="complementary" aria-label="Anúncio rodapé">
+  <button class="ad-close" aria-label="Fechar anúncio">×</button>
+  <div class="ad-slot" data-ad-type="sticky" style="height:60px;">
+   <script async="async" data-cfasync="false" src="//pl27399086.effectivegatecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+  </div>
+</div>
 
-// 🔥 Config do seu Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyANHVK6lI_uBsQk1_rz2zI5TrJj40P1kV8",
-  authDomain: "votounico-974d7.firebaseapp.com",
-  databaseURL: "https://votounico-974d7-default-rtdb.firebaseio.com",
-  projectId: "votounico-974d7",
-  storageBucket: "votounico-974d7.appspot.com",
-  messagingSenderId: "286853936059",
-  appId: "1:286853936059:web:fbf96050e246b697ea4a9e"
-};
+<style>
+.ad-sticky{position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;background:#fff;border-radius:10px;padding:6px;box-shadow:0 6px 20px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px}
+.ad-close{background:transparent;border:0;font-size:18px;line-height:1;cursor:pointer;margin-left:auto}
+@media (min-width:900px){ .ad-sticky{display:none} } /* só mobile */
+</style>
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-const options = document.querySelectorAll('.option');
-const statusEl = document.getElementById('status');
-const bloqueio = document.getElementById('bloqueio');
-const fotoVoto = document.getElementById('fotoVoto');
-const textoVoto = document.getElementById('textoVoto');
-
-const LOCAL_KEY = `votou_${VOTACAO_ATUAL}`;
-const LOCAL_PART = `${LOCAL_KEY}_part`;
-const LOCAL_IMG = `${LOCAL_KEY}_img`;
-
-function setStatus(text, color){
-  statusEl.textContent = text;
-  statusEl.style.color = color || 'inherit';
-}
-
-function verificarBloqueio() {
-  if (localStorage.getItem(LOCAL_KEY) === 'true') {
-    bloqueio.style.display = 'flex';
-    fotoVoto.src = localStorage.getItem(LOCAL_IMG);
-    textoVoto.textContent = `Você já votou em ${localStorage.getItem(LOCAL_PART)} nesta votação.`;
-  }
-}
-
-options.forEach(opt => {
-  opt.addEventListener('click', async () => {
-    if (localStorage.getItem(LOCAL_KEY) === 'true') {
-      verificarBloqueio();
-      return;
-    }
-
-    const participante = opt.dataset.value;
-    const img = opt.dataset.img;
-
-    setStatus(`🗳️ Enviando voto para ${participante}...`, null);
-
-    try {
-      const votoRef = ref(db, `vu1_${VOTACAO_ATUAL}/${participante}`);
-      await runTransaction(votoRef, (current) => (current || 0) + 1);
-      localStorage.setItem(LOCAL_KEY, 'true');
-      localStorage.setItem(LOCAL_PART, participante);
-      localStorage.setItem(LOCAL_IMG, img);
-      setStatus(`✅ Voto para ${participante} computado com sucesso!`, 'var(--success)');
-      setTimeout(verificarBloqueio, 800);
-    } catch (err) {
-      console.error(err);
-      setStatus('❌ Erro ao registrar voto.', 'var(--warn)');
-    }
-  });
+<script>
+document.addEventListener('click', e => {
+  if(e.target.matches('.ad-close')) e.target.closest('.ad-sticky').remove();
 });
-
-verificarBloqueio();
 </script>
-</body>
-</html>
+
