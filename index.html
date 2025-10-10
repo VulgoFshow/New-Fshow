@@ -1076,6 +1076,48 @@ body {
   height: 34px;
   cursor: pointer;
 }
+
+.ad-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid #ccc;
+  max-width: 970px;
+  width: 95%;
+  height: 90px;
+  overflow: hidden;
+  margin: 20px auto; /* centraliza horizontalmente */
+  background: #004400;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.ad-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  background: #fff;
+  color: #555;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  padding: 8px 4px;
+  text-align: center;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}
+
+.ad-banner {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ad-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 </style>
 
 <script>
@@ -1195,40 +1237,13 @@ document.addEventListener('click', e=>{
   </div>
   
 <!-- BANNER ADS -->
-<div class="pf-ad leaderboard" data-link="ads/planos.html" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/bannerAd.jpeg?raw=true"></div>
+<div class="ad-container">
+  <div class="ad-label">Publicidade</div>
+  <a href="ads/planos.html" target="_blank" class="ad-banner">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/bannerAd.jpeg?raw=true" alt="Publicidade">
+  </a>
+</div>
 
-<style>
-.pf-ad.leaderboard {
-  width: 628px;
-  height: 65px;
-  max-width: 100%; 
-  margin: 20px auto;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-
-.pf-ad.leaderboard a {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.pf-ad.leaderboard img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  display: block;
-}
-</style>
-
-<script>
-document.querySelectorAll('.pf-ad.leaderboard').forEach(ad=>{
-  const img = ad.dataset.img;
-  const link = ad.dataset.link || "#";
-  ad.innerHTML = `<a href="${link}" target="_blank" rel="noopener"><img src="${img}" alt="Banner Leaderboard"></a>`;
-});
-</script>
   
 <section class="hero">
   <div class="hero-principal">
