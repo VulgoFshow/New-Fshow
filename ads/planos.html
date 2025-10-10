@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabela de Preços - Anúncios</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #0b0b0f;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(90deg, #6a00f4, #9d4edd);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    section {
+      padding: 50px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    section h2 {
+      text-align: center;
+      color: #a78bfa;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #272733;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .pricing-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .plan {
+      background-color: #14141a;
+      border: 2px solid #272733;
+      border-radius: 16px;
+      padding: 30px;
+      width: 300px;
+      text-align: center;
+      transition: 0.3s ease;
+    }
+
+    .plan:hover {
+      border-color: #7c3aed;
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .plan h3 {
+      font-size: 1.5rem;
+      color: #a78bfa;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 2rem;
+      margin: 15px 0;
+      color: #fff;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .features li {
+      margin: 8px 0;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .features li::before {
+      content: "✔️";
+      margin-right: 8px;
+      color: #a78bfa;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      background: linear-gradient(90deg, #7c3aed, #9d4edd);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+      font-size: 0.9rem;
+      border-top: 1px solid #1c1c24;
+    }
+
+    @media (max-width: 700px) {
+      .plan {
+        width: 100%;
+      }
+    }
+    
+    .notice{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+    
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tabela de Preços de Anúncios</h1>
+    <p>Escolha o plano ideal para divulgar sua marca no nosso site</p>
+  </header>
+
+ <!-- PLANOS SEMANAIS -->
+  <section>
+    <h2>Planos Semanais</h2>
+    <div class="notice">Válidos por 7 dias após o pagamento</div>
+    <div class="pricing-container">
+      <div class="plan">
+        <h3>Plano Xepa</h3>
+        <p class="price">R$ 10/semana</p>
+        <ul class="features">
+          <li>Banner na aba "Mais detalhes" (300x250)</li>
+          <li>Banner Sticky</li>
+          <li>1 Story (Bolinha)</li>
+        </ul>
+        <a href="mailto:contatofshow7@gmail.com?subject=Interesse no Plano Xepa" class="btn">Contratar</a>
+      </div>
+
+      <div class="plan">
+        <h3>Plano Vip</h3>
+        <p class="price">R$ 20/semana</p>
+        <ul class="features">
+          <li>Banner topo (728x90)</li>
+          <li>1 Post na aba "Destaques"</li>
+          <li>Logo no header do site</li>
+          <li>Banner na votação (728x90)</li>
+          
+        </ul>
+        <a href="mailto:contatofshow7@gmail.com?subject=Interesse no Plano Vip" class="btn">Contratar</a>
+      </div>
+
+      <div class="plan">
+        <h3>Plano Big Boss</h3>
+        <p class="price">R$ 25/semana</p>
+        <ul class="features">
+          <li>Benefícios do plano  xepa + Vip</li>
+        </ul>
+        <a href="mailto:contatofshow7@gmail.com?subject=Interesse no Plano Big Boss" class="btn">Contratar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANOS DIÁRIOS -->
+  <section>
+    <h2>Planos Diários</h2>
+        <div class="notice">Válidos por 24 horas após o pagamento, ou com reserva</div>
+    <div class="pricing-container">
+      <div class="plan">
+        <h3>Plano Carelli</h3>
+        <p class="price">R$ 3/dia</p>
+        <ul class="features">
+          <li>Anúncio na Aba "Destaques"</li>
+          <li>Exibição por 24 horas</li>
+        </ul>
+        <a href="mailto:contatofshow7.com?subject=Interesse no Plano Carelli" class="btn">Contratar</a>
+      </div>
+
+      <div class="plan">
+        <h3>Plano Love</h3>
+        <p class="price">R$ 5/dia</p>
+        <ul class="features">
+          <li>Hero patrocinado do dia</li>
+          <li>Exibição por 24 horas</li>
+        </ul>
+        <a href="mailto:contatofshow7.com?subject=Interesse no Plano Diário Love" class="btn">Contratar</a>
+      </div>
+
+      <div class="plan">
+        <h3>Plano Love Turbo</h3>
+        <p class="price">R$ 8/dia</p>
+        <ul class="features">
+          <li>1 story (Bolinha)</li>
+          <li>1 post na aba "Mais Detalhes"</li>
+          <li>Exibição por 24 horas</li>
+        </ul>
+        <a href="mailto:contatofshow7.com?subject=Interesse no Plano Diário Love Turbo" class="btn">Contratar</a>
+      </div>
+    </div>
+  </section>
+
+<footer>
+    Valores sujeitos a variações.
+  </footer>
+  <footer>
+    © 2025 Seu Site — Todos os direitos reservados.
+  </footer>
+</body>
+</html>
+
