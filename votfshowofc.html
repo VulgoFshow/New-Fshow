@@ -58,7 +58,7 @@ color:var(--text);margin:0;padding:0}
     
 #fotoConfirm {
   width: 100%;
-  display: block;
+  display: flex;
   border-radius: 10px 10px 0 0;  
   border: 1px solid #ddd;
   border-bottom: none;          
@@ -86,7 +86,7 @@ color:var(--text);margin:0;padding:0}
     /* tela de confirmação */
 #confirmTela {
   display: none;
-  flex-direction: column;
+  flex-direction: flex-direction;
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -181,26 +181,47 @@ color:var(--text);margin:0;padding:0}
 </head>
 <body>
   <div id="votoTela" class="container">
-    <h1>Quem deve VENCER?</h1>
+    <h1>Quem deve ENTRAR na F9?</h1>
 
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia">
+      <img src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/Y6MUVSC4WJEEJNQTYJGP6X6D7E.png" alt="Erick">
       <div class="option-content">
-        <input type="radio" name="vote" value="Flávia"> Flávia
+        <input type="radio" name="vote" value="Erick"> Erick
       </div>
     </label>
     
 <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluca.jpg?raw=true" alt="Luca">
+      <img src="https://www.bnews.com.br/media/_versions/marco_2023/ingrid_ohara_widelg.jpg" alt="Imagine">
       <div class="option-content">
-        <input type="radio" name="vote" value="Luca"> Luca
+        <input type="radio" name="vote" value="Imagine"> Imagine
       </div>
     </label>
     
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
+      <img src="https://record.r7.com/resizer/v2/5HURCXTRONC4TN544EOSN2T5Y4.png?auth=78efed2082fa4e0d39ec615740a095a0e3dc20777f0ab946c12c86bb27dd7470" alt="Isabelle">
       <div class="option-content">
-        <input type="radio" name="vote" value="Neto"> Neto
+        <input type="radio" name="vote" value="Isabelle"> Isabelle
+      </div>
+    </label>
+    
+    <label class="option">
+      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/6TWWON4JDJIL3KB3CYJU4ID5DA.jpg?auth=a3c6a2a95cea474c4857b4af2e51c6c68c56f0ff46a49dcb24771138d4e6d795&width=677&height=369" alt="Manchinha">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Manchinha"> Manchinha
+      </div>
+    </label>
+    
+    <label class="option">
+      <img src="https://f.i.uol.com.br/fotografia/2021/09/22/1632365074614bea1247334_1632365074_3x2_xl.jpg" alt="Regina">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Regina"> Regina
+      </div>
+    </label>
+    
+    <label class="option">
+      <img src="https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/GOCNX2SFZFGJLPUKJ4FUDT4ZJA.png?smart=true&auth=cc83956ff9818a754ce18640146ec2fad8993ce67302a0314ca54385e68b533d&width=677&height=380" alt="Yasmin  ">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Yasmin"> Yasmin
       </div>
     </label>
 
@@ -217,7 +238,7 @@ color:var(--text);margin:0;padding:0}
     <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
   </div>
 
-  <script async="async" data-cfasync="false" src="//pl27399086.revenuecpmgate.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
+  <script async="async" data-cfasync="false" src="/ /pl27399086.revenuecpmgate.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
 <div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
 
   <div id="popupCaptcha" class="popup">
@@ -252,10 +273,10 @@ color:var(--text);margin:0;padding:0}
 <script>
 
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 07, 19, 00, 0);
+const encerramento = new Date(2025, 9, 13, 19, 00, 0);
 
 
-const votacaoAtiva = false;
+const votacaoAtiva = true;
 
 function checkEncerramento() {
   const agora = new Date();
@@ -440,7 +461,7 @@ async function submitVote(participante) {
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
-      .from("finalbbbf5")
+      .from("f9p")
       .insert({ participante });
 
     if (error) {
@@ -464,12 +485,12 @@ async function submitVote(participante) {
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
     fotoConfirm.src = {
-      "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bkoyuh.jpg?raw=true",
-      "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmikael.jpg?raw=true",
-      "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/btety.jpg?raw=true",
-      "Flávia": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true",
-      "Inês": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bines.jpg?raw=true",
-      "Neto": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true",
+      "Erick": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/Y6MUVSC4WJEEJNQTYJGP6X6D7E.png",
+      "Isabelle": "https://record.r7.com/resizer/v2/5HURCXTRONC4TN544EOSN2T5Y4.png?auth=78efed2082fa4e0d39ec615740a095a0e3dc20777f0ab946c12c86bb27dd7470",
+      "Manchinha": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/6TWWON4JDJIL3KB3CYJU4ID5DA.jpg?auth=a3c6a2a95cea474c4857b4af2e51c6c68c56f0ff46a49dcb24771138d4e6d795&width=677&height=369",
+      "Imagine": "https://www.bnews.com.br/media/_versions/marco_2023/ingrid_ohara_widelg.jpg",
+      "Regina": "https://f.i.uol.com.br/fotografia/2021/09/22/1632365074614bea1247334_1632365074_3x2_xl.jpg",
+      "Yasmin": "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/GOCNX2SFZFGJLPUKJ4FUDT4ZJA.png?smart=true&auth=cc83956ff9818a754ce18640146ec2fad8993ce67302a0314ca54385e68b533d&width=677&height=380",
       "Miguel": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bmiguel.jpg?raw=true",
       "Davi": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bdavi.jpg?raw=true",
       "Luca": "https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluca.jpg?raw=true",
