@@ -1,17 +1,1105 @@
-<style>fshow.site/css.html</style>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Flop</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
-<!-- BLOCO DE ADS -->
-<div class="pf-ad" data-type="leaderboard" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/bannerAd.jpeg?raw=true" data-link="https://seulink.com"></div>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6R1CFLW6ZH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-<div class="pf-ad" data-type="rectangle" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/quadradoAd.jpeg?raw=true" data-link="https://seulink.com"></div>
+  gtag('config', 'G-6R1CFLW6ZH');
+</script>
+  
+</head>
 
-<div class="pf-ad" data-type="card" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/quadradoAd.jpeg?raw=true" data-link="https://seulink.com" data-title="Título do Anúncio" data-desc="Descrição curta do anúncio, estilo Portal Flop."></div>
+<style>
+:root {
+  --cor-primaria: #ff3366;
+  --cor-secundaria: #0077ff;
+  --cor-destaque: #ffb703;
+  --fundo: #f9f9f9;
+  --texto: #222;
+  --branco: #fff;
+}
 
-<div class="pf-ad" data-type="skyscraper" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/quadradoAd.jpeg?raw=true" data-link="https://seulink.com"></div>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 
-<div class="pf-ad" data-type="sticky" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/quadradoAd.jpeg?raw=true" data-link="https://seulink.com"></div>
+body {
+  background: var(--fundo);
+  color: var(--texto);
+}
 
-<div class="pf-ad" data-type="modal" data-img="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/quadradoAd.jpeg?raw=true" data-link="https://seulink.com"></div>
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(90deg, var(--cor-primaria), var(--cor-secundaria));
+  color: var(--branco);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 6%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+nav ul {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+nav a {
+  color: var(--branco);
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: 0.2s;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--branco);
+  transition: 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* TOPO */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 6%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+/* Lado esquerdo (logo + info) */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff4b2b, #ff416c, #ff4b2b);
+  background-size: 200% 200%;
+  animation: gradientMove 4s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -1px;
+  box-shadow: 0 3px 10px rgba(255,65,108,0.4);
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.site-info h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+}
+
+.site-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Lado direito */
+.topbar-right {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #222;
+}
+
+.topbar-right span {
+  background: linear-gradient(135deg, #0077ff, #00c6ff);
+  color: white;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+   /* BANNER */
+.banner {
+  position: relative; 
+  top: auto;
+  width: 100%;
+  height: 100px;
+  background: url("https://github.com/VulgoFshow/New-Fshow/blob/main/bannerhallowen.png?raw=true")
+    no-repeat center center;
+  background-size: cover;
+  z-index: 150;
+  margin-top: 0; 
+}
+
+
+.banner img {
+  width: 100%;
+  height: auto;     
+  display: block;
+}
+
+.banner {
+  width: 100%;
+  height: 100px; 
+  background: url("https://github.com/VulgoFshow/New-Fshow/blob/main/bannerhallowen.png?raw=true") no-repeat center center;
+  background-size: cover;
+}
+
+/* ===== HERO ===== */
+.hero {
+  display: flex;
+  justify-content: center;
+  padding: 40px 6%;
+}
+
+.hero-principal {
+  width: 100%;
+  max-width: 980px;
+  background: var(--branco);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+
+.hero-principal:hover {
+  transform: scale(1.02);
+}
+
+.hero-principal img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9; /* mantém proporção widescreen */
+  object-fit: cover;
+  display: block;
+}
+
+.hero-principal .texto {
+  padding: 20px;
+}
+
+.hero-principal h2 {
+  font-size: 26px;
+  color: var(--cor-secundaria);
+  margin-bottom: 10px;
+}
+
+.hero-principal p {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}
+
+
+/* ===== DESTAQUES ===== */
+.destaques {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.card-mini {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--branco);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.card-mini:hover {
+  transform: translateX(5px);
+}
+
+.card-mini img {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+}
+
+.card-mini h4 {
+  font-size: 14px;
+  color: var(--texto);
+  line-height: 1.3;
+}
+
+/* ===== GRID DE NOTÍCIAS ===== */
+.grid {
+  padding: 40px 6%;
+}
+
+.grid h3 {
+  font-size: 22px;
+  color: var(--cor-primaria);
+  margin-bottom: 20px;
+}
+
+.noticias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: var(--branco);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card .conteudo {
+  padding: 18px;
+}
+
+.card h4 {
+  font-size: 17px;
+  color: var(--cor-secundaria);
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ===== RODAPÉ ===== */
+footer {
+  background: var(--cor-secundaria);
+  color: var(--branco);
+  padding: 40px 6%;
+  text-align: center;
+  margin-top: 50px;
+}
+
+footer a {
+  color: var(--cor-destaque);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 950px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-principal img {
+    height: 300px;
+  }
+}
+
+@media (max-width: 700px) {
+  nav ul {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+}
+</style>
+
+<style>
+.carrossel {
+  position: relative;
+  padding: 20px 6%;
+}
+
+.carrossel h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: var(--cor-primaria);
+}
+
+.carrossel-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; 
+}
+
+.carrossel-container::-webkit-scrollbar {
+  display: none; 
+}
+
+.carrossel-card {
+  min-width: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  background: #000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  transition: transform 0.3s;
+}
+
+.carrossel-card:hover {
+  transform: scale(1.03);
+}
+
+.carrossel-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ff007f;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tag.destaque {
+  background: #ff6600;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+}
+
+.overlay h4 {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Botões do carrossel */
+.carrossel-btn {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.carrossel-btn:hover {
+  background: rgba(0,0,0,0.8);
+}
+
+.carrossel-btn.prev {
+  left: 10px;
+}
+
+.carrossel-btn.next {
+  right: 10px;
+}
+
+ /* ÁREA DE STORIES */
+    .stories-container {
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      gap: 12px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #ccc transparent;
+    }
+
+    /* Esconde scrollbar no Chrome */
+    .stories-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .stories-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .stories-container::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
+    }
+
+    .story {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid #ff3cac;
+  overflow: hidden;
+  transition: transform 0.3s;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+    .story:hover {
+      transform: scale(1.1);
+    }
+
+    .story img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .stories-container::-webkit-scrollbar {
+      display: none;
+    }
+    
+    ..topbar-right {
+  font-weight: bold;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-right span {
+  background: black;
+  color: white;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.canal-btn img {
+  width: 28px;   /* tamanho do ícone */
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.canal-btn img:hover {
+  transform: scale(1.1);
+}
+
+/* ====== BASE ====== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #3d1a00;
+}
+
+/* ====== CONTAINER ====== */
+.vote-frame {
+  background: linear-gradient(135deg, #ffd966, #ff914d, #d64545, #5c2c06);
+  padding: 14px;
+  border-radius: 28px;
+  max-width: 640px;
+  width: 92%;
+  margin: 50px auto;
+  box-shadow: 0 10px 40px rgba(40, 20, 0, 0.2);
+  background-size: 300% 300%;
+  animation: gradientMove 5s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ====== BLOCO ====== */
+.vote-mock {
+  background: rgba(255, 248, 239, 0.9);
+  border-radius: 22px;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+}
+
+/* ====== IMAGEM ====== */
+.vote-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
+}
+
+/* ====== CARTÃO ====== */
+.vote-card {
+  margin: -22px 28px 30px 28px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+  border: 1px solid rgba(80,40,0,0.08);
+  box-shadow: 0 8px 30px rgba(80,40,0,0.08);
+  text-align: center;
+}
+
+.vote-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #3d1a00;
+  margin-bottom: 24px;
+  text-shadow: 0 1px 0 #fff;
+}
+
+/* ====== BOTÃO ====== */
+.vote-btn {
+  border-radius: 18px;
+  padding: 20px 24px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff7e9;
+  background: linear-gradient(90deg,#ff9f4d,#ff6a00);
+  box-shadow: 0 6px 18px rgba(60,20,0,0.2);
+  transition: all .18s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.vote-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  transition: all 0.6s ease;
+}
+
+.vote-btn:hover::before {
+  left: 100%;
+}
+
+.vote-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(60,20,0,0.25);
+}
+
+.vote-icon {
+  font-size: 28px;
+}
+
+/* ====== POPUP ====== */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0); 
+  z-index: 10000;
+}
+
+.popup {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba(18,18,18,0.9); 
+  backdrop-filter: blur(5px);      
+  animation: fadeIn 0.3s ease;
+}
+
+.close {
+  position: absolute;
+  top: 15px; right: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.popup iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ====== MOBILE ====== */
+@media (max-width: 480px) {
+  .vote-btn {
+    font-size: 18px;
+    padding: 18px;
+  }
+  .vote-title {
+    font-size: 19px;
+  }
+}
+
+/* ====== CARROSEL ====== */
+
+.carrossel-card, .card-mini, .card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+.carrossel-card:hover, .card-mini:hover, .card:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+}
+
+.news-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .news-card {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .news-card:hover {
+      transform: scale(1.02);
+    }
+
+    .news-card img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .news-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .news-category {
+      font-size: 0.8rem;
+      color: #a44;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .news-content h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: #222;
+    }
+    
+    :root {
+  --bg-2: #fff;
+  --text: #222;
+  --accent-pink: #ff4b2b;
+  --card-radius: 10px;
+  --shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+/* TOPO */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 6%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+}
+
+.logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff4b2b, #ff416c, #ff4b2b);
+  background-size: 200% 200%;
+  animation: gradientMove 4s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -1px;
+  box-shadow: 0 3px 10px rgba(255,65,108,0.4);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: 65px;
+  left: 0;
+  background: var(--bg-2);
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  width: 180px;
+  display: none;
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.dropdown-menu.active {
+  display: flex;
+}
+
+.dropdown-menu a {
+  padding: 10px 20px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color .15s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--accent-pink);
+  color: #fff;
+}
+
+<!-- ADS -->
+.pf-ad {
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px; 
+  border: 3px solid #fff; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  background: #fff;
+  margin: 20px auto;
+  text-align: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.pf-ad:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.pf-ad img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px; 
+  object-fit: cover;
+}
+
+.pf-ad a {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+/* Leaderboard */
+.pf-ad[data-type="leaderboard"] {
+  max-width: 1200px;
+  max-height: 110px;
+  border: 3px solid #fff;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .pf-ad[data-type="leaderboard"] {
+    max-height: 70px;
+  }
+}
+
+/* Rectangle & Skyscraper */
+.pf-ad[data-type="rectangle"] {
+  max-width: 300px;
+}
+
+.pf-ad[data-type="skyscraper"] {
+  max-width: 160px;
+  min-height: 600px;
+}
+
+@media (max-width: 900px) {
+  .pf-ad[data-type="skyscraper"] {
+    display: none;
+  }
+}
+
+/* Card */
+.pf-ad[data-type="card"] {
+  max-width: 520px;
+  display: flex;
+  flex-direction: row;
+  border-radius: 6px;
+}
+
+.pf-ad[data-type="card"] img {
+  width: 40%;
+  min-width: 150px;
+  height: auto;
+  border-radius: 6px 0 0 6px;
+}
+
+.pf-ad[data-type="card"] .pf-ad-body {
+  padding: 12px;
+  text-align: left;
+  flex: 1;
+}
+
+.pf-ad[data-type="card"] h4 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: #222;
+}
+
+.pf-ad[data-type="card"] p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #555;
+}
+
+.pf-ad[data-type="card"] span {
+  font-weight: 600;
+  font-size: 13px;
+  color: #007bff;
+}
+
+@media (max-width: 520px) {
+  .pf-ad[data-type="card"] {
+    flex-direction: column;
+  }
+  .pf-ad[data-type="card"] img {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+  }
+}
+
+/* Sticky */
+.pf-ad[data-type="sticky"] {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 9999;
+  padding: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.12);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-radius: 6px;
+}
+
+.pf-ad[data-type="sticky"] img {
+  height: 60px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.pf-ad[data-type="sticky"] button {
+  background: transparent;
+  border: 0;
+  font-size: 20px;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+@media (min-width: 900px) {
+  .pf-ad[data-type="sticky"] {
+    display: none;
+  }
+}
+
+/* Modal */
+.pf-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.6);
+  z-index: 10000;
+}
+
+.pf-modal[aria-hidden="false"] {
+  display: flex;
+}
+
+.pf-modal-inner {
+  background: #fff;
+  padding: 18px;
+  border-radius: 6px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.3);
+  text-align: center;
+  position: relative;
+}
+
+.pf-modal-inner img {
+  width: 320px;
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.pf-modal-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  background: #fff;
+  border: 0;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+
+.ad-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid #ccc;
+  max-width: 970px;
+  width: 95%;
+  height: 90px;
+  overflow: hidden;
+  margin: 20px auto; /* centraliza horizontalmente */
+  background: #004400;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.ad-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  background: #fff;
+  color: #555;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  padding: 8px 4px;
+  text-align: center;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}
+
+.ad-banner {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ad-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+</style>
 
 <script>
 document.querySelectorAll('.pf-ad').forEach(ad=>{
@@ -53,10 +1141,12 @@ document.querySelectorAll('.pf-ad').forEach(ad=>{
   }
 });
 
+// Fechar sticky
 document.addEventListener('click', e=>{
   if(e.target.classList.contains('pf-close')) e.target.closest('.pf-ad').remove();
 });
 
+// Modal - abrir manualmente
 window.showPFModal = ()=>{document.getElementById('pfAdModal')?.setAttribute('aria-hidden','false');}
 window.hidePFModal = ()=>{document.getElementById('pfAdModal')?.setAttribute('aria-hidden','true');}
 document.addEventListener('click', e=>{
@@ -64,3 +1154,233 @@ document.addEventListener('click', e=>{
   if(e.target.classList.contains('pf-modal')) hidePFModal();
 });
 </script>
+
+</style>
+
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo" id="pfBtn">PF</div>
+
+    <div class="site-info">
+      <h1>Portal Flop</h1>
+      <p>Notícias | Enquetes | Realities</p>
+    </div>
+
+    <!-- MENU DROPDOWN -->
+    <nav class="dropdown-menu" id="pfMenu">
+      <a href="index.html">Home</a>
+      <a href="Calculadora Flopada.html">Calculadora</a>
+      <a href="snake.html">Snake</a>
+      <a href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank">Canal</a>
+      <a href="whatpadd.html">Whatpadd</a>
+    </nav>
+  </div>
+
+  <div class="topbar-right">
+    <a href="https://www.youtube.com/@Vulgo_Flop/featured" target="_blank" class="canal-btn">
+      <img src="https://i.ibb.co/21k1S8yr/Banco-de-Estalacas-20251006-223356-0000.webp" alt="Canal" width="28">
+    </a>
+  </div>
+</div>
+
+  <!-- BANNER -->
+  <header class="banner">
+</header>
+
+ <!-- STORIES -->
+  <div class="stories-container">
+  <div class="story" href="ads/planos.html" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/ads/bannerAd.jpeg?raw=true');"></div> 
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/edavi.jpg?raw=true');"></div> 
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/eerick.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/eflavia.jpg?raw=true');"></div> 
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/ehelena.jpg?raw=true');"></div> 
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/eines.png?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/ejoao.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/ekoyuh.png?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluca.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/elucas.png?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/eluddi.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/eludmila.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/emanchinha.png?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/ematheus.png?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/emiguel.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/emikael.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/eneto.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/epedro.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/erose.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/esam.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/esamuel.jpg?raw=true');"></div>
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/etety.jpg?raw=true');"></div> 
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/evictor.jpg?raw=true');"></div> 
+  <div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/evitor.jpg?raw=true');"></div> 
+  </div>
+  
+<!-- BANNER ADS -->
+<div class="ad-container">
+  <div class="ad-label">Publicidade</div>
+  <a href="ads/planos.html" target="_blank" class="ad-banner">
+    <img src="ads/bannerAd.jpeg" alt="Publicidade">
+  </a>
+</div>
+
+<!-- BLOCO DE VOTAÇÃO -->
+<div class="vote-frame">
+  <div class="vote-mock">
+
+    <div class="vote-hero">
+      <img src="https://tracklist.com.br/wp-content/uploads/media/2025/10/3-roca-a-fazenda-17.png" alt="Roça">
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-title">Quem você quer que <strong>FIQUE?</strong></div>
+
+      <button class="vote-btn" id="teamVote">
+        <span>Vote Agora!</span>
+        <span class="vote-icon">🔥</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div id="voteOverlay" class="overlay">
+  <div class="popup">
+    <span class="close" id="closePopup">&times;</span>
+    <iframe src="https://fshow.site/votfshowofc.html" frameborder="0"></iframe>
+  </div>
+</div>
+
+<script>
+const teamVoteBtn = document.getElementById("teamVote");
+const overlay = document.getElementById("voteOverlay");
+const closePopup = document.getElementById("closePopup");
+
+teamVoteBtn.addEventListener("click", () => {
+  overlay.style.display = "block";
+});
+
+closePopup.addEventListener("click", () => {
+  overlay.style.display = "none";
+});
+</script>
+  
+<section class="hero">
+  <div class="hero-principal">
+    <a href="paredoesbbbf5.html">
+      <img src="https://s2-gshow.glbimg.com/IGT-qoskM7UcWFMJ7jBVRPRfFOA=/0x0:3840x2160/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2025/g/u/PaOYeyREGikVpYQBkxmQ/bbb25-logo-1-.jpg" alt="">
+      <div class="texto">
+        <h2>Relembre os paredões do BBBF5!</h2>
+        <p>Relembre e acompanhe as porcentágens de todos os paredões da Quinta Temporada.</p>
+      </div>
+    </a>
+  </div>
+  </section>
+  
+<section class="carrossel">
+  <h3>Destaques</h3>
+  <div class="carrossel-container" id="carrossel">
+    
+    <!-- Card 1 -->
+<a href="index.html" class="carrossel-card">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluca.jpg?raw=true" alt="">
+  <span class="tag">Campeão! Luca vence o BBBF5.</span>
+  <div class="overlay">
+    <h4>A Fazenda de Verão - Saiba quem são os participantes</h4>
+  </div>
+</a>
+
+<!-- Card 2 -->
+<a href="pfazenda/roça1enquete.html" class="carrossel-card">
+  <img src="https://i.ibb.co/gFj1WF6d/Grid-Art-20251002-000158337.jpg" alt="">
+  <span class="tag">A Fazenda 17 - Vote na enquete!</span>
+  <div class="overlay">
+    <h4>A Fazenda 17 - Vote na enquete!</h4>
+  </div>
+</a>
+
+<!-- Card 3 -->
+<a href="enquete.html" class="carrossel-card">
+  <img src="https://i.ibb.co/ZD2pmt0/Estreladacasa.webp" alt="">
+  <span class="tag destaque">Estrela da Casa</span>
+  <div class="overlay">
+    <h4>Enquete - Vote no seu favorito!</h4>
+  </div>
+</a>
+
+  </div>
+
+  <!-- Botões navegação -->
+  <button class="carrossel-btn prev" onclick="scrollCarrossel(-1)">&#10094;</button>
+  <button class="carrossel-btn next" onclick="scrollCarrossel(1)">&#10095;</button>
+</section>
+
+  <!-- SEÇÃO DE NOTÍCIAS !-->
+   <div class="news-container">
+     <h2 class="section-title">Mais Detalhes</h2>
+
+      <a href="ads/planos.html" class="news-card">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/ads/bannerAd.jpeg?raw=true" alt="Planos">
+      <div class="news-content">
+        <span class="news-category">ADS</span>
+        <h3>Anuncie aqui</h3>
+      </div>
+    </a>
+     
+    <a href="bbb/Banco de Estalecas.html" class="news-card">
+      <img src="https://i.ibb.co/gZrR3HqH/Banco-de-Estalecas-Corrigido-imagen.png" alt="Banco.estalecas">
+      <div class="news-content">
+        <span class="news-category">REALITIES · BBBF5</span>
+        <h3>Banco de Estalecas - Confira as contas dos Brotheres</h3>
+      </div>
+    </a>
+
+    <a href="https://www.wattpad.com/story/398732648-jogo-da-lula-brasil" class="news-card">
+      <img src="https://i.ibb.co/bgQLtFKn/jogodalula.jpg" alt="Notícia 2">
+      <div class="news-content">
+        <span class="news-category">LIVROS · WATTPAD</span>
+        <h3>Squid Game Brasil - Acompanhe o início</h3>
+      </div>
+    </a>
+
+    <a href="roças/fazendadeverão.html" class="news-card">
+      <img src="https://i.ibb.co/xS3BbSQY/unnamed-1.jpg" alt="Notícia 3">
+      <div class="news-content">
+        <span class="news-category">REALITIES · A FAZENDA DE VERÃO</span>
+        <h3>A Fazenda de Verão - Saiba quem são os participantes</h3>
+      </div>
+    </a>
+    </section>
+
+<script>
+function scrollCarrossel(direction) {
+  const carrossel = document.getElementById('carrossel');
+  const scrollAmount = 350; 
+  carrossel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+}
+</script>
+
+<script>
+const pfBtn = document.getElementById("pfBtn");
+const pfMenu = document.getElementById("pfMenu");
+
+pfBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); 
+  pfMenu.classList.toggle("active");
+});
+
+document.addEventListener("click", (e) => {
+  if (!pfMenu.contains(e.target) && !pfBtn.contains(e.target)) {
+    pfMenu.classList.remove("active");
+  }
+});
+</script>
+
+<footer>
+  <p>&copy; 2025 Portal Flop Notícias — Todos os direitos reservados.</p>
+  <p>Feito com ❤️ por <a href="#">Felipe Love</a></p>
+</footer>
+
+</body>
+</html>
