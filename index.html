@@ -544,132 +544,115 @@ footer a {
   transform: scale(1.1);
 }
 
-/* ====== BLOCO DE VOTAÇÃO ====== */
+/* ====== BASE ====== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #3d1a00;
+}
+
+/* ====== CONTAINER ====== */
 .vote-frame {
-  background: linear-gradient(90deg, #6fffd6, #5c43ff);
-  padding: 12px;
-  border-radius: 22px;
-  max-width: 980px;
-  width: 100%;
-  margin: 20px auto;
-  box-shadow: 0 8px 30px rgba(15,20,40,0.12);
-  font-family: Arial, sans-serif; 
+  background: linear-gradient(135deg, #ffd966, #ff914d, #d64545, #5c2c06);
+  padding: 14px;
+  border-radius: 28px;
+  max-width: 640px;
+  width: 92%;
+  margin: 50px auto;
+  box-shadow: 0 10px 40px rgba(40, 20, 0, 0.2);
+  background-size: 300% 300%;
+  animation: gradientMove 5s ease infinite;
 }
 
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ====== BLOCO ====== */
 .vote-mock {
-  background: #fff;
-  border-radius: 18px;
+  background: rgba(255, 248, 239, 0.9);
+  border-radius: 22px;
   overflow: hidden;
-  position: relative;
+  backdrop-filter: blur(6px);
 }
 
+/* ====== IMAGEM ====== */
 .vote-hero img {
-  width: 100%;         
+  width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
 }
 
+/* ====== CARTÃO ====== */
 .vote-card {
-  position: relative;
-  margin: -18px 22px 26px 22px;
+  margin: -22px 28px 30px 28px;
   background: #ffffff;
-  border-radius: 12px;
-  padding: 18px;
-  border: 1px solid rgba(10,10,10,0.04);
-  box-shadow: 0 8px 26px rgba(13,20,40,0.06);
-}
-
-.vote-card-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom: 18px;
+  border-radius: 18px;
+  padding: 28px;
+  border: 1px solid rgba(80,40,0,0.08);
+  box-shadow: 0 8px 30px rgba(80,40,0,0.08);
+  text-align: center;
 }
 
 .vote-title {
-  font-size:20px;
-  font-weight:700;
-  color:#111827;
+  font-size: 24px;
+  font-weight: 700;
+  color: #3d1a00;
+  margin-bottom: 24px;
+  text-shadow: 0 1px 0 #fff;
 }
 
-.vote-status {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color: #58606b;
-  font-size:13px;
-  font-weight:600;
-}
-
-.vote-dot {
-  width:10px;height:10px;border-radius:50%;
-  background: #96f3a8;
-  box-shadow:0 0 0 6px rgba(150,243,168,0.07);
-}
-
-.vote-options {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
+/* ====== BOTÃO ====== */
 .vote-btn {
-  border-radius: 12px;
-  padding: 16px;
-  font-size:16px;
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  cursor:pointer;
+  border-radius: 18px;
+  padding: 20px 24px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
   border: none;
   outline: none;
-  transition: transform .12s ease, box-shadow .12s ease;
-  box-shadow: 0 6px 18px rgba(10,10,20,0.04);
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff7e9;
+  background: linear-gradient(90deg,#ff9f4d,#ff6a00);
+  box-shadow: 0 6px 18px rgba(60,20,0,0.2);
+  transition: all .18s ease;
   position: relative;
-  z-index: 0;
+  overflow: hidden;
 }
 
-.vote-btn:active { transform: translateY(1px) }
-
-.vote-green {
-  background: linear-gradient(90deg,#9cf7c6,#6ef5b0);
-  color: #052018;
-}
-
-.vote-purple {
-  background: linear-gradient(90deg,#5b3bff,#2b0db7);
-  color: white;
-}
-
-.vote-icon {
-  width:44px;height:44px;border-radius:10px;
-  background:rgba(255,255,255,0.08);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-}
-
-.vote-btn:hover {
-  z-index: 1;
+.vote-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  transition: all 0.6s ease;
 }
 
 .vote-btn:hover::before {
-  content: "";
-  position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border-radius: 15px;
-  background: linear-gradient(90deg, #6fffd6, #5c43ff);
-  z-index: -1;
+  left: 100%;
+}
+
+.vote-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(60,20,0,0.25);
+}
+
+.vote-icon {
+  font-size: 28px;
 }
 
 /* ====== POPUP ====== */
@@ -678,54 +661,69 @@ footer a {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.6); 
+  background: rgba(0, 0, 0, 0); 
   z-index: 10000;
-  margin: 0;
-  padding: 0;
 }
+
 
 .popup {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(18, 18, 18, 0.4); 
-  backdrop-filter: blur(5px);
+  position: fixed;            
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 18, 18, 0.92);
+  backdrop-filter: blur(6px);
   animation: fadeIn 0.3s ease;
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-
-.popup iframe {
-  width: 100vw;
-  height: 100vh;
-  border: none;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close {
-  position: fixed;
-  top: 1px;
-  right: 30px;
-  font-size: 40px;
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 36px;
   font-weight: bold;
   color: #fff;
   cursor: pointer;
-  z-index: 10001;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.close:hover {
+  transform: scale(1.2);
+  color: #ff914d;
 }
 
 .popup iframe {
   width: 100%;
   height: 100%;
   border: none;
+  border-radius: 0;
+  display: block;
 }
 
+/* ====== ANIMAÇÃO ====== */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
+/* ====== MOBILE ====== */
+@media (max-width: 480px) {
+  .vote-btn {
+    font-size: 18px;
+    padding: 18px;
+  }
+  .vote-title {
+    font-size: 19px;
+  }
+}
+
+
+/* ====== CARROSEL ====== */
 
 .carrossel-card, .card-mini, .card {
   display: block;
@@ -1244,6 +1242,46 @@ document.addEventListener('click', e=>{
   </a>
 </div>
 
+<!-- BLOCO DE VOTAÇÃO -->
+<div class="vote-frame">
+  <div class="vote-mock">
+
+    <div class="vote-hero">
+      <img src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/43/A_Fazenda_17.jpg/640px-A_Fazenda_17.jpg" alt="Roça">
+    </div>
+
+    <div class="vote-card">
+      <div class="vote-title">Quem você quer que <strong>ENTRE</strong> no jogo?</div>
+
+      <button class="vote-btn" id="teamVote">
+        <span>Vote Agora!</span>
+        <span class="vote-icon">🔥</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div id="voteOverlay" class="overlay">
+  <div class="popup">
+    <span class="close" id="closePopup">&times;</span>
+    <iframe src="https://fshow.site/votfshowofc.html" frameborder="0"></iframe>
+  </div>
+</div>
+
+<script>
+const teamVoteBtn = document.getElementById("teamVote");
+const overlay = document.getElementById("voteOverlay");
+const closePopup = document.getElementById("closePopup");
+
+teamVoteBtn.addEventListener("click", () => {
+  overlay.style.display = "block";
+});
+
+closePopup.addEventListener("click", () => {
+  overlay.style.display = "none";
+});
+</script>
   
 <section class="hero">
   <div class="hero-principal">
