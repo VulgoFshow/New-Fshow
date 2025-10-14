@@ -113,40 +113,7 @@
 
   <article>
     <p>Vote na enquete e defina qual será o poder branco de hoje.</p>
-
-    <p><Strong>Opção A: Imunize um peão da puxada da baia</Strong></p>
-<p><Strong>Opção B: Cancele todos os votos recebidos por um peão na votação da casa</Strong></p>
-
-    <h2>Votação:</h2>
-<h2>Qual deve ser o poder da chama Branca?</h2>
-
-<div class="options">
-  <label class="option">
-    <input type="radio" name="vote" value="Opção A">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQctnLJ1nRzqC2PPxXMI77_XLDvoTZQZeyJCQ&s" alt="Opção A">
-  </label>
-
-  <label class="option">
-    <input type="radio" name="vote" value="Opção B">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWU4P6sYWWZAHxXJuiL0aFK77_kXwb2yABv080rE02k66P4JZvObVSQ-c&s=10" alt="Opção B">
-  </label>
-</div>
-
-<div id="status"></div>
-<button id="resetBtn">Votar novamente</button>
-
-
-    <div class="divider"></div>
-
-    <p>Continue acompanhando todas as novidades do reality aqui no <strong>Portal Flop</strong></p>
-  </article>
-
-  <footer>
-    <p>📢 Leia também: <a href="#">Quem deve ser o próximo eliminado?</a></p>
-    <p>&copy; 2025 Portal Flop - Todos os direitos reservados.</p>
-  </footer>
-</div>
-
+  
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -159,7 +126,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 40px;
+    gap: 25px;
     padding: 30px;
   }
 
@@ -167,24 +134,29 @@
     font-size: 1.8em;
     font-weight: 600;
     color: #000;
+    text-align: center;
+  }
+
+  #contador {
+    font-size: 1.1em;
+    color: #444;
+    font-weight: 500;
   }
 
   .options {
     display: flex;
-    flex-direction: row; /* mantém horizontal */
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 30px;
-    flex-wrap: nowrap; /* impede quebrar linha */
   }
 
   .option {
     position: relative;
     cursor: pointer;
-    transition: 0.3s ease;
     border-radius: 16px;
-    padding: 6px; /* espaço interno da borda */
-    border: 3px solid #ccc; /* borda visível antes de selecionar */
+    padding: 6px;
+    border: 3px solid #ccc;
     transition: 0.3s;
   }
 
@@ -198,7 +170,6 @@
     height: 160px;
     object-fit: cover;
     border-radius: 12px;
-    transition: 0.3s;
   }
 
   .option input {
@@ -218,6 +189,7 @@
   #status {
     font-size: 1.1em;
     color: #000;
+    text-align: center;
   }
 
   #resetBtn {
@@ -241,14 +213,31 @@
 </head>
 <body>
 
+<h2>Qual deve ser o poder da chama Branca?</h2>
+<div id="contador">Total de votos: 0</div>
+
+<div class="options">
+  <label class="option">
+    <input type="radio" name="vote" value="Neto">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQctnLJ1nRzqC2PPxXMI77_XLDvoTZQZeyJCQ&s" alt="Neto">
+  </label>
+
+  <label class="option">
+    <input type="radio" name="vote" value="Helena">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWU4P6sYWWZAHxXJuiL0aFK77_kXwb2yABv080rE02k66P4JZvObVSQ-c&s=10" alt="Helena">
+  </label>
+</div>
+
+<div id="status"></div>
+<button id="resetBtn">Votar novamente</button>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
     authDomain: "fchat-60461.firebaseapp.com",
-    databaseURL: "https://fchat-60461-default-rtdb.firebaseio.com",
     projectId: "fchat-60461",
     storageBucket: "fchat-60461.firebasestorage.app",
     messagingSenderId: "919618815528",
@@ -258,32 +247,39 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const votosRef = collection(db, "votos");
 
   const options = document.querySelectorAll('input[name="vote"]');
   const status = document.getElementById('status');
   const resetBtn = document.getElementById('resetBtn');
+  const contador = document.getElementById('contador');
 
+  // 🔢 Atualiza contador em tempo real
+  onSnapshot(votosRef, (snapshot) => {
+    contador.textContent = `Total de votos: ${snapshot.size}`;
+  });
+
+  // 🗳️ Enviar voto
   options.forEach(option => {
     option.addEventListener('change', async () => {
       const voto = option.value;
       status.textContent = `Enviando voto para ${voto}...`;
-
       document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'none');
 
       try {
-        await addDoc(collection(db, "votos"), { participante: voto, timestamp: Date.now() });
+        await addDoc(votosRef, { participante: voto, timestamp: Date.now() });
         status.textContent = `✅ Voto para ${voto} enviado com sucesso!`;
         document.querySelectorAll('.option').forEach(o => o.classList.add('voted'));
         option.closest('.option').classList.add('selected');
 
         setTimeout(() => {
-          status.textContent = "⏳ Enviando voto...";
+          status.textContent = "⏳ Processando...";
           setTimeout(() => {
             status.textContent = "Você já pode votar novamente.";
             resetBtn.style.display = 'inline-block';
             document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'auto');
           }, 1500);
-        }, 300);
+        }, 400);
       } catch (e) {
         console.error(e);
         status.textContent = '❌ Erro ao enviar voto';
@@ -292,14 +288,28 @@
     });
   });
 
+  // 🔄 Resetar voto
   resetBtn.addEventListener('click', () => {
     options.forEach(option => option.checked = false);
-    document.querySelectorAll('.option')
-      .forEach(o => o.classList.remove('voted', 'selected'));
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('voted', 'selected'));
     status.textContent = '';
     resetBtn.style.display = 'none';
   });
 </script>
+
+</body>
+
+
+    <div class="divider"></div>
+
+    <p>Continue acompanhando todas as novidades do reality aqui no <strong>Portal Flop</strong></p>
+  </article>
+
+  <footer>
+    <p>📢 Leia também: <a href="#">Quem deve ser o próximo eliminado?</a></p>
+    <p>&copy; 2025 Portal Flop - Todos os direitos reservados.</p>
+  </footer>
+</div>
 
 </body>
 </html>
