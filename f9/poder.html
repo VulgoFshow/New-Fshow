@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Título da Notícia - Portal Flop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #111;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .container {
+    max-width: 850px;
+    width: 100%;
+    padding: 20px;
+  }
+  
+  #contador {
+    font-size: 1.1em;
+    color: #444;
+    font-weight: 500;
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  header h1 {
+    font-size: 2em;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  header p.meta {
+    color: #666;
+    font-size: 0.95em;
+    margin-top: 8px;
+  }
+
+  .image-container {
+    width: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 25px 0;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 14px;
+  }
+
+  article {
+    line-height: 1.8;
+    font-size: 1.05em;
+  }
+
+  article p {
+    margin-bottom: 18px;
+  }
+
+  article h2 {
+    font-size: 1.4em;
+    margin-top: 30px;
+    color: #000;
+  }
+
+  .divider {
+    border-bottom: 2px solid #eee;
+    margin: 30px 0;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 30px;
+  }
+
+  footer a {
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🔥 Chama Branca - Vote na enquete para definir o poder!</h1>
+    <p class="meta">Por <strong>Redação Portal Flop</strong> · 14 de outubro de 2025</p>
+  </header>
+
+  <div class="image-container">
+    <img src="https://www.fashionbubbles.com/wp-content/uploads/2022/10/lampiao-a-fazenda.jpg" alt="Lampião">
+  </div>
+
+  <article>
+    <p>Vote na enquete e defina qual será o poder branco de hoje.</p>
+
+    <p><Strong>Opção A: Imunize um peão da puxada da baia</Strong></p>
+<p><Strong>Opção B: Cancele todos os votos recebidos por um peão na votação da casa</Strong></p>
+
+    <h2>Votação:</h2>
+<h2>Qual deve ser o poder da chama Branca?</h2>
+
+<div class="options">
+  <label class="option">
+    <input type="radio" name="vote" value="Opção A">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQctnLJ1nRzqC2PPxXMI77_XLDvoTZQZeyJCQ&s" alt="Opção A">
+  </label>
+
+  <label class="option">
+    <input type="radio" name="vote" value="Opção B">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWU4P6sYWWZAHxXJuiL0aFK77_kXwb2yABv080rE02k66P4JZvObVSQ-c&s=10" alt="Opção B">
+  </label>
+</div>
+
+<div id="status"></div>
+<button id="resetBtn">Votar novamente</button>
+
+
+    <div class="divider"></div>
+
+    <p>Continue acompanhando todas as novidades do reality aqui no <strong>Portal Flop</strong></p>
+  </article>
+
+  <footer>
+    <p>📢 Leia também: <a href="#">Quem deve ser o próximo eliminado?</a></p>
+    <p>&copy; 2025 Portal Flop - Todos os direitos reservados.</p>
+  </footer>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    background: #fff;
+    color: #000;
+    font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 30px;
+  }
+
+  h2 {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #000;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: row; /* mantém horizontal */
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: nowrap; /* impede quebrar linha */
+  }
+
+  .option {
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s ease;
+    border-radius: 16px;
+    padding: 6px; /* espaço interno da borda */
+    border: 3px solid #ccc; /* borda visível antes de selecionar */
+    transition: 0.3s;
+  }
+
+  .option:hover {
+    border-color: #000;
+    transform: scale(1.03);
+  }
+
+  .option img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: 0.3s;
+  }
+
+  .option input {
+    display: none;
+  }
+
+  .option.selected {
+    border-color: #000;
+    transform: scale(1.05);
+  }
+
+  .voted {
+    opacity: 0.4;
+    filter: grayscale(60%);
+  }
+
+  #status {
+    font-size: 1.1em;
+    color: #000;
+  }
+
+  #resetBtn {
+    display: none;
+    padding: 12px 32px;
+    font-size: 1.1em;
+    font-weight: 600;
+    background: #000;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+  }
+
+  #resetBtn:hover {
+    background: #333;
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
+    authDomain: "fchat-60461.firebaseapp.com",
+    databaseURL: "https://fchat-60461-default-rtdb.firebaseio.com",
+    projectId: "fchat-60461",
+    storageBucket: "fchat-60461.firebasestorage.app",
+    messagingSenderId: "919618815528",
+    appId: "1:919618815528:web:bcbbccb703e17cf5f4971d",
+    measurementId: "G-15HYVM1QXV"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const options = document.querySelectorAll('input[name="vote"]');
+  const status = document.getElementById('status');
+  const resetBtn = document.getElementById('resetBtn');
+
+  options.forEach(option => {
+    option.addEventListener('change', async () => {
+      const voto = option.value;
+      status.textContent = `Enviando voto para ${voto}...`;
+
+      document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'none');
+
+      try {
+        await addDoc(collection(db, "votos"), { participante: voto, timestamp: Date.now() });
+        status.textContent = `✅ Voto para ${voto} enviado com sucesso!`;
+        document.querySelectorAll('.option').forEach(o => o.classList.add('voted'));
+        option.closest('.option').classList.add('selected');
+
+        setTimeout(() => {
+          status.textContent = "⏳ Enviando voto...";
+          setTimeout(() => {
+            status.textContent = "Você já pode votar novamente.";
+            resetBtn.style.display = 'inline-block';
+            document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'auto');
+          }, 1500);
+        }, 300);
+      } catch (e) {
+        console.error(e);
+        status.textContent = '❌ Erro ao enviar voto';
+        document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'auto');
+      }
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    options.forEach(option => option.checked = false);
+    document.querySelectorAll('.option')
+      .forEach(o => o.classList.remove('voted', 'selected'));
+    status.textContent = '';
+    resetBtn.style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
+
