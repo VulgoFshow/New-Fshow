@@ -184,23 +184,23 @@ color:var(--text);margin:0;padding:0}
     <h1>Quem você quer que FIQUE?</h1>
 
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Erick.webp?raw=true" alt="Erick">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Cícero.webp?raw=true" alt="Cícero">
       <div class="option-content">
-        <input type="radio" name="vote" value="Erick"> Erick
+        <input type="radio" name="vote" value="Cícero"> Cícero
       </div>
     </label>
     
 <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Gean.webp?raw=true" alt="Gean">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Davi.webp?raw=true" alt="Davi">
       <div class="option-content">
-        <input type="radio" name="vote" value="Gean"> Gean
+        <input type="radio" name="vote" value="Davi"> Davi
       </div>
     </label>
     
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Neto.webp?raw=true" alt="Neto">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Kaio.webp?raw=true" alt="Kaio">
       <div class="option-content">
-        <input type="radio" name="vote" value="Neto"> Neto
+        <input type="radio" name="vote" value="Kaio"> Kaio
       </div>
     </label>
 
@@ -248,7 +248,7 @@ color:var(--text);margin:0;padding:0}
 <script>
 
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 14, 19, 00, 0);
+const encerramento = new Date(2025, 9, 15, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -436,7 +436,7 @@ async function submitVote(participante) {
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
-      .from("f9r1")
+      .from("f9r2")
       .insert({ participante });
 
     if (error) {
