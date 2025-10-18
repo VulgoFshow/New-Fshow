@@ -457,13 +457,11 @@ button {
 
   let votosTotais = [];
   
-  // 🔢 Atualiza contador e resultados em tempo real
   onSnapshot(votosRef, (snapshot) => {
     votosTotais = snapshot.docs.map(doc => doc.data());
     contador.textContent = `Total de votos: ${votosTotais.length}`;
   });
 
-  // 🗳️ Enviar voto
   options.forEach(option => {
     option.addEventListener('change', async () => {
       const voto = option.value;
@@ -490,7 +488,6 @@ button {
     });
   });
 
-  // 🔄 Resetar voto
   resetBtn.addEventListener('click', () => {
     options.forEach(option => option.checked = false);
     document.querySelectorAll('.option').forEach(o => o.classList.remove('voted', 'selected'));
@@ -498,35 +495,36 @@ button {
     resetBtn.style.display = 'none';
   });
 
-  // 📊 Mostrar popup com resultados (com fotos)
-  resultBtn.addEventListener('click', () => {
-    const contagem = {};
-    votosTotais.forEach(v => contagem[v.participante] = (contagem[v.participante] || 0) + 1);
+resultBtn.addEventListener('click', () => {
+  const contagem = {};
+  votosTotais.forEach(v => contagem[v.participante] = (contagem[v.participante] || 0) + 1);
 
-    resultadosDiv.innerHTML = '';
-    const total = votosTotais.length;
+  resultadosDiv.innerHTML = '';
+  const total = votosTotais.length;
 
-    Object.entries(contagem).forEach(([nome, qtd]) => {
-      const perc = ((qtd / total) * 100).toFixed(1);
-      const img = document.querySelector(`label.option input[value="${nome}"]`)?.closest('.option')?.dataset.img || '';
+  const ordenado = Object.entries(contagem).sort((a, b) => b[1] - a[1]);
 
-      const card = document.createElement('div');
-      card.className = 'result-card';
-      card.innerHTML = `
-        <div class="result-left">
-          <img src="${img}" alt="${nome}">
-          <div class="result-name">${nome}</div>
-        </div>
-        <div class="result-right">
-          <div class="result-percent">${perc}%</div>
-          <div class="result-votes">${qtd} votos</div>
-        </div>
-      `;
-      resultadosDiv.appendChild(card);
-    });
+  ordenado.forEach(([nome, qtd]) => {
+    const perc = ((qtd / total) * 100).toFixed(1);
+    const img = document.querySelector(`label.option input[value="${nome}"]`)?.closest('.option')?.dataset.img || '';
 
-    overlay.style.display = 'flex';
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.innerHTML = `
+      <div class="result-left">
+        <img src="${img}" alt="${nome}">
+        <div class="result-name">${nome}</div>
+      </div>
+      <div class="result-right">
+        <div class="result-percent">${perc}%</div>
+        <div class="result-votes">${qtd} votos</div>
+      </div>
+    `;
+    resultadosDiv.appendChild(card);
   });
+
+  overlay.style.display = 'flex';
+});
 
   closePopup.addEventListener('click', () => {
     overlay.style.display = 'none';
