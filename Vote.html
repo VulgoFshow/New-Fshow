@@ -49,12 +49,14 @@ h2 {
 }
 
 .options {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
   gap: 25px;
+  justify-items: center;
+  align-items: start;
   margin-top: 20px;
+  max-width: 400px; 
+  width: 100%;
 }
 
 .option {
@@ -64,11 +66,11 @@ h2 {
   overflow: hidden;
   transition: 0.3s ease;
   background: var(--card-bg);
-  width: 180px;
+  width: 100%; 
+  max-width: 180px; 
   border: 2px solid rgba(51, 51, 50);
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
-
 .option:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 14px rgba(0,0,0,0.10);
