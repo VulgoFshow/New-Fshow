@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil do Participante</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    background-color: #fff;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    width: 320px;
+    border: 3px solid #e63946;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+
+  .tag {
+    background: #6c27d9;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .profile {
+    text-align: center;
+  }
+
+  .profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: filter 0.3s ease;
+  }
+
+  .profile img.eliminada {
+    filter: grayscale(100%);
+  }
+
+  .name {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .tab {
+    font-size: 13px;
+    color: #666;
+    padding-bottom: 4px;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    color: #6c27d9;
+    font-weight: 600;
+    border-bottom: 2px solid #6c27d9;
+  }
+
+  .section {
+    margin-top: 15px;
+  }
+
+  .section h3 {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .status {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  .status span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f3f3f3;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: 0.3s ease;
+  }
+
+  .status .eliminado {
+    background: #e63946;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .status .ativo {
+    background: #2ecc71;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .estalecas {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .historico {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+    row-gap: 10px;
+  }
+
+  .historico div {
+    padding: 6px 0;
+  }
+
+  .historico span {
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    color: #e63946;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 10px;
+    color: #888;
+    margin-top: 15px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="profile">
+      <img id="foto" src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Mikael.webp?raw=true" 
+      alt="Mikael">
+      <div class="name">Mikael</div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active">Resumo do jogo</div>
+    </div>
+
+    <div class="section">
+      <h3>Status</h3>
+      <div class="status">
+        <span id="statusTexto">Participante</span>
+      </div>
+    </div>
+
+    <div class="section estalecas">
+      <h3>Rançômetro</h3>
+     0.8%
+    </div>
+
+    <div class="section">
+      <h3>Histórico</h3>
+      <div class="historico">
+        <div>👒<span>0</span><br>Fazendeiro</div>
+        <div>🏮<span>0</span><br>Lampião</div>
+        <div>🛏️<span>0</span></span></span><br>Baia</div>
+        <div>🔥<span>0</span><br>Roça</div>
+      </div>
+    </div>
+
+<script>
+let eliminado = false;
+
+const img = document.getElementById('foto');
+const statusTexto = document.getElementById('statusTexto');
+
+if (eliminado) {
+  img.classList.add('eliminada');
+  statusTexto.classList.add('eliminado');
+  statusTexto.textContent = 'Eliminado';
+} else {
+  img.classList.remove('eliminada');
+  statusTexto.classList.add('ativo');
+  statusTexto.textContent = 'Participante'
+}
+</script>
+
+</body>
+</html>
