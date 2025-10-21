@@ -488,23 +488,39 @@ footer a {
       border-radius: 10px;
     }
 
-    .story {
-  flex-shrink: 0;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 3px solid #ff3cac;
-  overflow: hidden;
-  transition: transform 0.3s;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
+    .stories-container {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 12px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+  }
 
+  .stories-container::-webkit-scrollbar {
+    display: none;
+  }
 
-    .story:hover {
-      transform: scale(1.1);
-    }
+  .story {
+    position: relative;
+    flex-shrink: 0;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #ff3cac;
+    overflow: visible; 
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: transform 0.3s;
+  }
+
+  .story:hover {
+    transform: scale(1.1);
+  }
 
     .story img {
       width: 100%;
@@ -515,6 +531,42 @@ footer a {
     .stories-container::-webkit-scrollbar {
       display: none;
     }
+    
+    /* Chapéu de fazendeiro */
+  .story.chapeu::after {
+    content: "";
+    position: absolute;
+    top: -47px;
+    right: -34px;
+    width: 110px;
+    height: 100px;
+    background: url('https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png') no-repeat center/contain;
+    transform: rotate(2deg);
+    pointer-events: none;
+  }
+  
+  /* roça */
+  .story.roça::after {
+    content: "🔥";
+    position: absolute;
+    top: -16px;
+    right: -11px;
+    font-size: 31px;
+    transform: rotate(-5deg);
+    pointer-events: none;
+  }
+  
+  /* roça */
+  .story.poder::after {
+    content: "🏮";
+    position: absolute;
+    top: -16px;
+    right: -11px;
+    font-size: 31px;
+    transform: rotate(-5deg);
+    pointer-events: none;
+  }
+  
     
     ..topbar-right {
   font-weight: bold;
@@ -1216,7 +1268,7 @@ document.addEventListener('click', e=>{
   <a href="f9/Flávia.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Flávia.webp?raw=true');"></div></a>
   <a href="f9/Gean.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Gean.png?raw=true');"></div></a>
   <a href="f9/Inês.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Inês.webp?raw=true');"></div></a>
-  <a href="f9/João.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/João.webp?raw=true');"></div></a>
+  <a href="f9/João.html"><div class="story chapeu" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/João.webp?raw=true');"></div></a>
   <a href="f9/Jp.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Jp.png?raw=true');"></div></a>
   <a href="f9/Kaio.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Kaio.png?raw=true');"></div></a>
   <a href="f9/Lua.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Lua.png?raw=true');"></div></a>
@@ -1229,10 +1281,10 @@ document.addEventListener('click', e=>{
   <a href="f9/Rauilly.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Rauilly.webp?raw=true');"></div></a>
   <a href="f9/Regina.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Regina.webp?raw=true');"></div></a>
   <a href="f9/Rose.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Rose.webp?raw=true');"></div></a>
-  <a href="f9/Tety.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Tety.webp?raw=true');"></div></a>
+  <a href="f9/Tety.html"><div class="story poder" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Tety.webp?raw=true');"></div></a>
   <a href="f9/Urach.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Urach.webp?raw=true');"></div></a>
   <a href="f9/Vitor.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Vitor.webp?raw=true');"></div></a>
-  <a href="f9/Yasmin.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Yasmin.webp?raw=true');"></div></a>
+  <a href="f9/Yasmin.html"><div class="story" style="background-image: url('https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Yasmin.png?raw=true');"></div></a>
   </div>
   
 <!-- BANNER ADS -->
