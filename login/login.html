@@ -1,62 +1,82 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Fshow</title>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";const firebaseConfig = {
-  apiKey: "AIzaSyDAR1XPOyU_rJpy9B84LxV9zsDzpUdv9E0",
-  authDomain: "login-fshow.firebaseapp.com",
-  projectId: "login-fshow",
-  storageBucket: "login-fshow.firebasestorage.app",
-  messagingSenderId: "943567663687",
-  appId: "1:943567663687:web:43120815a64212349e3762",
-  measurementId: "G-CSTCTSBV7L"
-};
+    import { 
+      getAuth, 
+      GoogleAuthProvider, 
+      signInWithPopup, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword 
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAR1XPOyU_rJpy9B84LxV9zsDzpUdv9E0",
+      authDomain: "login-fshow.firebaseapp.com",
+      projectId: "login-fshow",
+      storageBucket: "login-fshow.firebasestorage.app",
+      messagingSenderId: "943567663687",
+      appId: "1:943567663687:web:43120815a64212349e3762",
+      measurementId: "G-CSTCTSBV7L"
+    };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const googleBtn = document.getElementById('googleLogin');
-  const emailForm = document.getElementById('emailForm');
-  const criarConta = document.getElementById('criarConta');
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-  googleBtn.addEventListener('click', async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      alert('Login com Google realizado com sucesso!');
-    } catch (error) {
-      alert('Erro: ' + error.message);
+    // 🔁 Função para redirecionar o usuário de volta à página anterior
+    function redirecionarDeVolta() {
+      const redirectUrl = localStorage.getItem("redirectAfterLogin");
+      if (redirectUrl) {
+        localStorage.removeItem("redirectAfterLogin");
+        window.location.href = redirectUrl;
+      } else {
+        window.location.href = "/"; // Página padrão caso não haja anterior
+      }
     }
-  });
 
-  emailForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('senha').value;
-    try {
-      await signInWithEmailAndPassword(auth, email, senha);
-      alert('Login realizado com sucesso!');
-    } catch (error) {
-      alert('Erro: ' + error.message);
-    }
-  });
+    document.addEventListener('DOMContentLoaded', () => {
+      const googleBtn = document.getElementById('googleLogin');
+      const emailForm = document.getElementById('emailForm');
+      const criarConta = document.getElementById('criarConta');
 
-  criarConta.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('senha').value;
-    try {
-      await createUserWithEmailAndPassword(auth, email, senha);
-      alert('Conta criada com sucesso!');
-    } catch (error) {
-      alert('Erro: ' + error.message);
-    }
-  });
-});
+      googleBtn.addEventListener('click', async () => {
+        try {
+          await signInWithPopup(auth, provider);
+          redirecionarDeVolta();
+        } catch (error) {
+          alert('Erro: ' + error.message);
+        }
+      });
+
+      emailForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+        try {
+          await signInWithEmailAndPassword(auth, email, senha);
+          redirecionarDeVolta();
+        } catch (error) {
+          alert('Erro: ' + error.message);
+        }
+      });
+
+      criarConta.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+        try {
+          await createUserWithEmailAndPassword(auth, email, senha);
+          redirecionarDeVolta();
+        } catch (error) {
+          alert('Erro: ' + error.message);
+        }
+      });
+    });
 
   </script>
   <style>
@@ -70,120 +90,75 @@ document.addEventListener('DOMContentLoaded', () => {
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-    }.container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-  text-align: center;
-}
-
-.logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.logo img {
-  height: 30px;
-}
-
-h2 {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-button.primary {
-  width: 100%;
-  padding: 10px;
-  background-color: #0057e7;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-button.primary:hover {
-  background-color: #0043b3;
-}
-
-.divider {
-  margin: 20px 0;
-  color: #666;
-}
-
-.social-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-.social-buttons button {
-  width: 50px;
-  height: 50px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: 0.2s;
-}
-
-.social-buttons button:hover {
-  border-color: #0057e7;
-}
-
-.social-buttons img {
-  width: 24px;
-  height: 24px;
-}
-
-.register {
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.register a {
-  color: #0057e7;
-  text-decoration: none;
-}
-
-.register a:hover {
-  text-decoration: underline;
-}
-
-.info-box {
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 15px;
-  margin-top: 20px;
-  text-align: left;
-  font-size: 14px;
-}
-
-.info-box ul {
-  padding-left: 20px;
-  margin: 0;
-}
-
-.info-box li {
-  margin-bottom: 10px;
-}
-
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      text-align: center;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .logo img { height: 30px; }
+    h2 { font-size: 18px; margin-bottom: 20px; }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+    button.primary {
+      width: 100%;
+      padding: 10px;
+      background-color: #0057e7;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    button.primary:hover { background-color: #0043b3; }
+    .divider { margin: 20px 0; color: #666; }
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    .social-buttons button {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.2s;
+    }
+    .social-buttons button:hover { border-color: #0057e7; }
+    .social-buttons img { width: 24px; height: 24px; }
+    .register { font-size: 14px; margin-top: 10px; }
+    .register a { color: #0057e7; text-decoration: none; }
+    .register a:hover { text-decoration: underline; }
+    .info-box {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      text-align: left;
+      font-size: 14px;
+    }
+    .info-box ul { padding-left: 20px; margin: 0; }
+    .info-box li { margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -191,33 +166,38 @@ button.primary:hover {
     <div class="logo">
       <img src="https://i.ibb.co/21k1S8yr/Banco-de-Estalacas-20251006-223356-0000.webp" alt="Fshow Logo" />
       <span style="font-weight:600;color:#0057e7">Fshow</span>
-    </div><h2>Crie sua conta Fshow</h2>
+    </div>
 
-<form id="emailForm">
-  <input type="email" id="email" placeholder="Informe o seu e-mail" required />
-  <input type="password" id="senha" placeholder="Digite sua senha" required />
-  <button class="primary" type="submit">Continuar</button>
-</form>
+    <h2>Crie sua conta Fshow</h2>
 
-<div class="divider">Ou escolha uma opção:</div>
+    <form id="emailForm">
+      <input type="email" id="email" placeholder="Informe o seu e-mail" required />
+      <input type="password" id="senha" placeholder="Digite sua senha" required />
+      <button class="primary" type="submit">Continuar</button>
+    </form>
 
-<div class="social-buttons">
-  <button id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" /></button>
-  <button disabled><img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" alt="Facebook" /></button>
-</div>
+    <div class="divider">Ou escolha uma opção:</div>
 
-<div class="register">
-  Não tem conta? <a href="#" id="criarConta">Criar Conta Fshow grátis</a>
-</div>
+    <div class="social-buttons">
+      <button id="googleLogin">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+      </button>
+      <button disabled>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" alt="Facebook" />
+      </button>
+    </div>
 
-<div class="info-box">
-  <b>Por que ter uma Conta Fshow?</b>
-  <ul>
-    <li>A Conta Fshow é gratuita, basta se cadastrar e acessar!</li>
-    <li>Use o mesmo login e senha para todos os produtos Fshow.</li>
-  </ul>
-</div>
+    <div class="register">
+      Não tem conta? <a href="#" id="criarConta">Criar Conta Fshow grátis</a>
+    </div>
 
+    <div class="info-box">
+      <b>Por que ter uma Conta Fshow?</b>
+      <ul>
+        <li>A Conta Fshow é gratuita, basta se cadastrar e acessar!</li>
+        <li>Use o mesmo login e senha para todos os produtos Fshow.</li>
+      </ul>
+    </div>
   </div>
 </body>
 </html>
