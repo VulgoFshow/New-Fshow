@@ -77,10 +77,6 @@ h1 {
   transition: transform 0.4s ease;
 }
 
-.option:hover img {
-  transform: scale(1.05);
-}
-
 .option-content {
   display: flex;
   align-items: center;
@@ -204,7 +200,7 @@ button:disabled {
   display: grid;
   grid-template-columns: repeat(3,1fr);
   gap: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .captcha-img {
@@ -212,18 +208,18 @@ button:disabled {
   aspect-ratio: 1/1;
   object-fit: cover;
   border: 2px solid transparent;
+  border-radius: 10px;
   cursor: pointer;
-  border-radius: 6px;
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: var(--transition);
 }
 
 .captcha-img:hover {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .captcha-img.selected {
-  border-color: #00aaff;
-  box-shadow: 0 0 8px #00aaffcc;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(0,255,204,0.5);
 }
 
 .captcha-footer {
@@ -233,26 +229,24 @@ button:disabled {
 }
 
 .captcha-btn {
-  background: #00aaff;
-  color: #111;
+  background: linear-gradient(135deg, #00ffcc, #00b7ff);
+  color: #000;
   border: none;
-  padding: 9px 18px;
+  padding: 10px 20px;
   font-size: 15px;
-  font-weight: 600;
-  border-radius: 6px;
+  font-weight: 700;
+  border-radius: 8px;
   cursor: pointer;
   flex: 1;
-  max-width: 140px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: var(--transition);
 }
 
 .captcha-btn:hover {
-  background: #00c0ff;
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
 .captcha-btn:disabled {
-  background: #004466;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
@@ -279,23 +273,20 @@ button:disabled {
 }
 
 .success-msg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: #fff;
-  background: rgba(0,255,100,.15);
-  border: 1px solid rgba(0,255,100,.4);
-  border-radius: 6px;
-  padding: 10px;
+  background: rgba(0,255,150,0.1);
+  border: 1px solid rgba(0,255,150,0.4);
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: center;
+  color: #00ff99;
+  font-weight: 600;
   margin-bottom: 18px;
   animation: fadeIn 0.6s ease;
 }
 
 .success-msg::before {
-  content: "✔";
-  color: #00ff6a;
-  margin-right: 6px;
+  content: "✔ ";
+  color: #00ff99;
 }
 
 .voltar {
