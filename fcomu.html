@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Comunidades — Fshow</title>
+  <style>
+    body{font-family:Inter,system-ui;background:#0f0f11;color:#eee;margin:0}
+    header{display:flex;align-items:center;justify-content:space-between;padding:15px 20px;background:#141416;border-bottom:1px solid #222}
+    .logo{font-weight:700;color:#ff3366}
+    .user-info{display:flex;align-items:center;gap:10px}
+    .user-info img{width:36px;height:36px;border-radius:50%}
+    .btn-logout{background:transparent;color:#ff3366;border:1px solid #ff3366;border-radius:8px;padding:6px 10px;cursor:pointer}
+
+    .container{max-width:800px;margin:25px auto;padding:0 15px}
+    .composer{background:#141416;border-radius:10px;padding:12px;margin-bottom:25px}
+    textarea{width:100%;border:none;resize:none;background:transparent;color:#fff;font-size:15px;padding:8px}
+    .composer-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+    .file-label{cursor:pointer;color:#aaa}
+    .btn{background:#ff3366;border:none;color:#fff;border-radius:8px;padding:8px 12px;cursor:pointer}
+    .feed{display:grid;gap:15px}
+    .post{background:#141416;border-radius:10px;padding:12px;display:flex;gap:10px}
+    .avatar img{width:50px;height:50px;border-radius:50%}
+    .post-body{flex:1}
+    .meta{font-size:13px;color:#aaa}
+    .post-image img{width:100%;border-radius:8px;margin-top:8px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Fshow • Comunidades</div>
+    <div class="user-info" id="userInfo" style="display:none">
+      <img id="userPhoto" alt="foto" />
+      <span id="userName"></span>
+      <button class="btn-logout" id="logoutBtn">Sair</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="composer" id="composer" style="display:none">
+      <form id="postForm">
+        <textarea id="postText" placeholder="Compartilhe algo com a comunidade..." required></textarea>
+        <div class="composer-bottom">
+          <label class="file-label">📎 <input id="postImage" type="file" accept="image/*" style="display:none"></label>
+          <button class="btn" id="postBtn">Postar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="feed" id="feed"></section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+    import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+    import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
+
+    const firebaseConfig = {
+      apiKey: 'AIzaSyDlcU9zvOI7-_vmgX6XZzPR82MASIohxv0',
+      authDomain: 'com-fshow.firebaseapp.com',
+      projectId: 'com-fshow',
+      storageBucket: 'com-fshow.firebasestorage.app',
+      messagingSenderId: '564837266499',
+      appId: '1:564837266499:web:abee77e4bf223ac8c610f6',
+      measurementId: 'G-9RZNS0QE2P'
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    const auth = getAuth(app);
+
+    const composer = document.getElementById('composer');
+    const feed = document.getElementById('feed');
+    const userInfo = document.getElementById('userInfo');
+    const userName = document.getElementById('userName');
+    const userPhoto = document.getElementById('userPhoto');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        composer.style.display = 'block';
+        userInfo.style.display = 'flex';
+        userName.textContent = user.displayName || user.email;
+        userPhoto.src = user.photoURL || 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/anonymous.png';
+      } else {
+        composer.style.display = 'none';
+        userInfo.style.display = 'none';
+        alert('Você precisa estar logado para acessar as comunidades.');
+        window.location.href = 'login.html';
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+    });
+
+    const postForm = document.getElementById('postForm');
+    const postText = document.getElementById('postText');
+    const postImage = document.getElementById('postImage');
+
+    postForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) return alert('Faça login para postar.');
+
+      const text = postText.value.trim();
+      if (!text && !postImage.files[0]) return alert('Adicione texto ou imagem.');
+
+      const post = {
+        uid: user.uid,
+        name: user.displayName || user.email,
+        photo: user.photoURL || 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/anonymous.png',
+        text: text,
+        createdAt: serverTimestamp(),
+        imageURL: null
+      };
+
+      const docRef = await addDoc(collection(db, 'posts'), post);
+
+      if (postImage.files[0]) {
+        const file = postImage.files[0];
+        const storageRef = ref(storage, `posts/${docRef.id}/${file.name}`);
+        await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(storageRef);
+        await addDoc(collection(db, 'postsUpdate'), { id: docRef.id, imageURL: url });
+      }
+
+      postText.value = '';
+      postImage.value = '';
+    });
+
+    const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
+    onSnapshot(q, (snapshot) => {
+      feed.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const p = doc.data();
+        const card = document.createElement('div');
+        card.className = 'post';
+        card.innerHTML = `
+          <div class='avatar'><img src='${p.photo}'></div>
+          <div class='post-body'>
+            <div class='meta'><b>${p.name}</b></div>
+            <div>${p.text || ''}</div>
+            ${p.imageURL ? `<div class='post-image'><img src='${p.imageURL}'></div>` : ''}
+          </div>`;
+        feed.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>
