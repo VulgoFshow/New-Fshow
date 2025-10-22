@@ -5,179 +5,411 @@
   <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
+:root {
+  --bg: #121212;
+  --card-bg: #2b2b2b;
+  --selected-bg: #3c3c3c;
+  --border-radius: 8px;
+  --accent: #00b7b0;
+  --text: #fff;
+  --muted: #bdbdbd;
+  --panel-bg: #2b2b2b;
+  --panel-border: rgba(255,255,255,0.06);
+}
 
-    :root {
-      --bg: #121212;
-      --card-bg: #2b2b2b;
-      --selected-bg: #3c3c3c;
-      --border-radius: 8px;
-      --accent: #00b7b0;
-      --text: #fff;
-      --muted: #bdbdbd;
-      --panel-bg: #2b2b2b;
-      --panel-border: rgba(255,255,255,0.06);
-      
-    }body {
-  background: transparent !important; 
-  font-family: Arial, sans-serif;
+body {
+  background: transparent !important;
+  font-family: "Inter", Arial, sans-serif;
   color: var(--text);
   margin: 0;
   padding: 0;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .container {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px 15px;
+  animation: slideUp 0.6s ease;
 }
 
-color:var(--text);margin:0;padding:0}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    h1{font-size:20px;font-weight:700;margin-bottom:20px;text-align:left}
-    .option{display:flex;align-items:stretch;background:var(--card-bg);border-radius:var(--border-radius);margin-bottom:12px;overflow:hidden;border:1px solid #fff;cursor:pointer;transition:.2s}
-    .option img{width:150px;height:auto;object-fit:cover;flex-shrink:0}
-    .option-content{display:flex;align-items:center;padding:0 12px;width:100%;font-size:18px;font-weight:500;position:relative}
-    .option-content input[type="radio"]{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:2px solid var(--muted);border-radius:50%;margin-right:8px;cursor:pointer;position:relative}
-    .option-content input[type="radio"]:checked{border-color:var(--accent)}
-    .option-content input[type="radio"]:checked::before{content:"";position:absolute;width:10px;height:10px;top:3px;left:3px;border-radius:50%;background:var(--accent)}
-    button{width:100%;padding:14px;font-size:16px;border:none;border-radius:var(--border-radius);margin-top:15px;cursor:pointer;background:#444;color:var(--muted);font-weight:bold;transition:.3s}
-    button.active{background:var(--accent);color:#fff}
-    button:disabled{opacity:.6;cursor:not-allowed}
-    .notice{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: left;
+  transition: color 0.3s ease;
+}
 
-    /* popup & confirmação (mantidos) */
-    .popup{display:none;position:fixed;z-index:1500;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:20px;overflow-y:auto}
-    .popup.active{display:flex}
-    .captcha-box{background:#222;padding:20px 30px;border-radius:10px;width:340px;max-width:100%;text-align:center;color:#eee}
-    .captcha-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px}
-    .captcha-img{width:100%;aspect-ratio:1/1;object-fit:cover;border:2px solid transparent;cursor:pointer;border-radius:6px}
-    .captcha-img.selected{border-color:#00aaff;box-shadow:0 0 8px #00aaffcc}
-    .captcha-footer{display:flex;gap:10px;justify-content:center}
-    .captcha-btn{background:#00aaff;color:#111;border:none;padding:9px 18px;font-size:15px;font-weight:600;border-radius:6px;cursor:pointer;flex:1;max-width:140px}
-    .captcha-btn:disabled{background:#004466;cursor:not-allowed}
-    
+.option {
+  display: flex;
+  align-items: stretch;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid #fff;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
+}
+
+.option:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  border-color: var(--accent);
+}
+
+.option img {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+
+.option:hover img {
+  transform: scale(1.05);
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.option-content input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.option-content input[type="radio"]:hover {
+  transform: scale(1.1);
+}
+
+.option-content input[type="radio"]:checked {
+  border-color: var(--accent);
+}
+
+.option-content input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 3px;
+  left: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: var(--border-radius);
+  margin-top: 15px;
+  cursor: pointer;
+  background: #444;
+  color: var(--muted);
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
+}
+
+button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* POPUP */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1500;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,.85);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.popup.active {
+  display: flex;
+  opacity: 1;
+  animation: fadeIn 0.5s ease;
+}
+
+.captcha-box {
+  background: #222;
+  padding: 20px 30px;
+  border-radius: 10px;
+  width: 340px;
+  max-width: 100%;
+  text-align: center;
+  color: #eee;
+  animation: popIn 0.5s ease;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.captcha-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.captcha-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border: 2px solid transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.captcha-img:hover {
+  transform: scale(1.04);
+}
+
+.captcha-img.selected {
+  border-color: #00aaff;
+  box-shadow: 0 0 8px #00aaffcc;
+}
+
+.captcha-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.captcha-btn {
+  background: #00aaff;
+  color: #111;
+  border: none;
+  padding: 9px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  flex: 1;
+  max-width: 140px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.captcha-btn:hover {
+  background: #00c0ff;
+  transform: scale(1.03);
+}
+
+.captcha-btn:disabled {
+  background: #004466;
+  cursor: not-allowed;
+}
+
 #fotoConfirm {
   width: 100%;
   display: flex;
-  border-radius: 10px 10px 0 0;  
+  border-radius: 10px 10px 0 0;
   border: 1px solid #ddd;
-  border-bottom: none;          
+  border-bottom: none;
 }
 
 #nomeConfirm {
-  background: #1F1F1F;             
+  background: #1F1F1F;
   color: #fff;
   font-size: 20px;
   font-weight: 700;
   text-align: center;
   padding: 14px;
-  border-radius: 0 0 10px 10px; 
+  border-radius: 0 0 10px 10px;
   border: 1px solid #ddd;
-  border-top: none;             
+  border-top: none;
   margin: 0;
-  box-sizing: border-box;    
+  box-sizing: border-box;
 }
 
+.success-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(0,255,100,.15);
+  border: 1px solid rgba(0,255,100,.4);
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 18px;
+  animation: fadeIn 0.6s ease;
+}
 
-    .success-msg{display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;background:rgba(0,255,100,.15);border:1px solid rgba(0,255,100,.4);border-radius:6px;padding:10px;margin-bottom:18px}
-    .success-msg::before{content:"✔";color:#00ff6a;margin-right:6px}
-    .voltar{background:var(--accent);color:#fff}
+.success-msg::before {
+  content: "✔";
+  color: #00ff6a;
+  margin-right: 6px;
+}
 
-    /* tela de confirmação */
+.voltar {
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.voltar:hover {
+  background: #00c9b8;
+}
+
+/* tela de confirmação */
 #confirmTela {
   display: none;
-  flex-direction: flex-direction;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px;
   text-align: center;
   background: transparent !important;
   min-height: 85vh;
+  animation: fadeIn 0.6s ease;
 }
 
 .confirm-card {
-  background: transparent !important; 
+  background: transparent !important;
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 20px;
   max-width: 380px;
   width: 100%;
 }
-    #botaoCaptcha {
-      display: flex;               
-      align-items: center;         
-      justify-content: flex-start; 
-      background: #222;
-      border: 1px solid #444;
-      border-radius: 6px;
-      padding: 0 15px;
-      cursor: pointer;
-      user-select: none;
-      height: 70px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
-      transition: border-color 0.3s, box-shadow 0.3s;
-      color: #ccc;
-      font-size: 14px;
-      font-weight: 400;
-      margin: 20px auto 0;       
-      max-width: 320px;          
-      width: 320px;              
-      gap: 12px;
-    }
 
-    .recaptcha-checkbox {
-      flex-shrink: 0;
-      width: 30px;
-      height: 30px;
-      background: #111;
-      border: 2px solid #444;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
-      background-color: #00aaff;
-      border-color: #00aaff;
-    }
-
-    .checkmark {
-      width: 18px;
-      height: 18px;
-      display: none;
-      stroke: white;
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    #botaoCaptcha[aria-pressed="true"] .checkmark {
-      display: block;
-    }
-
-    .recaptcha-label {
-      user-select: none;
-      line-height: 1;
-      flex-grow: 1;              
-    }
-
-    .recaptcha-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 4px;
-      object-fit: contain;
-      filter: brightness(0.7);
-      flex-shrink: 0;
-    }
-    
-    #botaoCaptcha:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none; 
+#botaoCaptcha {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 0 15px;
+  cursor: pointer;
+  user-select: none;
+  height: 70px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
+  transition: all 0.3s ease;
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 20px auto 0;
+  max-width: 320px;
+  width: 320px;
+  gap: 12px;
 }
 
-  </style>
+#botaoCaptcha:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0,183,176,0.3);
+}
+
+.recaptcha-checkbox {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: #111;
+  border: 2px solid #444;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+  background-color: #00aaff;
+  border-color: #00aaff;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  display: none;
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#botaoCaptcha[aria-pressed="true"] .checkmark {
+  display: block;
+}
+
+.recaptcha-label {
+  user-select: none;
+  line-height: 1;
+  flex-grow: 1;
+}
+
+.recaptcha-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: contain;
+  filter: brightness(0.7);
+  flex-shrink: 0;
+}
+
+#botaoCaptcha:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+</style>
 </head>
 <body>
   <div id="votoTela" class="container">
