@@ -656,6 +656,8 @@ async function submitVote(participante) {
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
     botaoVotar.textContent = "Enviando...";
+    
+    await new Promise(resolve => setTimeout(resolve, 1200));
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
