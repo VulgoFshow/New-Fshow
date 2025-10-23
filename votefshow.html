@@ -407,23 +407,23 @@ button:disabled {
     <h1>Quem você quer que FIQUE?</h1>
 
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Ludmila.webp?raw=true" alt="Ludmila">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Inês.webp?raw=true" alt="Inês">
       <div class="option-content">
-        <input type="radio" name="vote" value="Ludmila"> Ludmila
+        <input type="radio" name="vote" value="Inês"> Inês
       </div>
     </label>
     
 <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Mikael.webp?raw=true" alt="Mikael">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Luddy.webp?raw=true" alt="Luddi">
       <div class="option-content">
-        <input type="radio" name="vote" value="Mikael"> Mikael
+        <input type="radio" name="vote" value="Luddi"> Luddi
       </div>
     </label>
     
     <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Vitor.webp?raw=true" alt="Vitor">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Rose.webp?raw=true" alt="Rose">
       <div class="option-content">
-        <input type="radio" name="vote" value="Vitor"> Vitor
+        <input type="radio" name="vote" value="Rose"> Rose
       </div>
     </label>
 
@@ -661,7 +661,7 @@ async function submitVote(participante) {
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
-      .from("f9r8")
+      .from("f9r9")
       .insert({ participante });
 
     if (error) {
