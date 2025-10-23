@@ -647,7 +647,7 @@ verifyBtn.addEventListener("click", () => {
   } else {
     statusEl.textContent = "❌ Tente novamente.";
     statusEl.style.color = "#ff5555";
-    setTimeout(() => generateCaptcha(), 500);
+    setTimeout(() => generateCaptcha(), 1500);
   }
 });
 
@@ -657,7 +657,7 @@ async function submitVote(participante) {
     const prevText = botaoVotar.textContent;
     botaoVotar.textContent = "Enviando...";
     
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     // MUDAR TABLE AQUI 
     const { data, error } = await supabase
