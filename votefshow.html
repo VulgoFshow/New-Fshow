@@ -459,7 +459,7 @@ button:disabled {
   <div class="confirm-card">
     <img id="fotoConfirm" src="" alt="Voto"/>
     <p id="nomeConfirm"></p>
-    <button class="voltar" onclick="window.location.href='https://fshow.site/votefshow.html'">
+    <button class="voltar" onclick="window.location.href='votefshow.html'">
       VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
@@ -578,7 +578,7 @@ function generateCaptcha() {
   const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
   const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
 
-  const correctCount = Math.floor(Math.random() * 3) + 2; // 2..4 corretas
+  const correctCount = Math.floor(Math.random() * 3) + 2;
   const selectedCorrect = shuffle(correctImages).slice(0, correctCount);
   const selectedWrong = shuffle(wrongImages).slice(0, 9 - correctCount);
 
@@ -655,7 +655,7 @@ async function submitVote(participante) {
   try {
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
-    botaoVotar.textContent = "Enviando...";
+    botaoVotar.textContent = "Enviando voto...";
     
     await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -717,7 +717,7 @@ async function submitVote(participante) {
     console.log("Voto registrado:", data);
   } catch (err) {
     console.error("Erro submitVote:", err);
-    alert("Erro inesperado. Veja o console do navegador.");
+    alert("Erro inesperado. Tente novamente.");
     botaoVotar.disabled = false;
     botaoVotar.textContent = "Votar";
   }
