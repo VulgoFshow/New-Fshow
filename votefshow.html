@@ -900,19 +900,33 @@ async function submitVote(participante) {
     
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // MUDAR TABLE AQUI 
+    let votosParaEnviar = [];
+
+    if (participante === "Luana") {
+      // Envia 2 votos para Luana
+      votosParaEnviar = [
+        { participante: "Luana" },
+        { participante: "Luana" }
+      ];
+    } else {
+      // Envia 1 voto para os outros
+      votosParaEnviar = [{ participante }];
+    }
+
+    // Insere todos os votos de uma vez
     const { data, error } = await supabase
       .from("f9r11")
-      .insert({ participante });
+      .insert(votosParaEnviar);
 
     if (error) {
       console.error("Supabase error:", error);
-      alert("❌ Erro ao registrar voto: " + error.message);
+      alert("Erro ao registrar voto: " + error.message);
       botaoVotar.disabled = false;
       botaoVotar.textContent = prevText;
       return;
     }
 
+    // Atualiza votos restantes (só conta 1 uso do CAPTCHA, mesmo se Luana ganhar 2)
     let restantes = getVotosRestantes() - 1;
     if (restantes <= 0) {
       setVotosRestantes(0);
@@ -955,7 +969,7 @@ async function submitVote(participante) {
 
     botaoVotar.textContent = prevText;
     botaoVotar.disabled = false;
-    console.log("Voto registrado:", data);
+    console.log("Votos registrados:", data);
   } catch (err) {
     console.error("Erro submitVote:", err);
     alert("Erro inesperado. Tente novamente.");
