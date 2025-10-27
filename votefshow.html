@@ -18,7 +18,7 @@
 }
 
 body {
-  background: transparent !important;
+  background: #0d0d0d !important;
   font-family: "Inter", Arial, sans-serif;
   color: var(--text);
   margin: 0;
@@ -250,6 +250,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* ====================== CONFIRMAÇÃO ====================== */
 #fotoConfirm {
   width: 100%;
   display: flex;
@@ -416,7 +417,7 @@ button:disabled {
 
 .pf-ad:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 25px rgba(13, 13, 13);
 }
 
 .pf-ad img {
@@ -437,7 +438,7 @@ button:disabled {
 .pf-ad[data-type="leaderboard"] {
   max-width: 1200px;
   max-height: 110px;
-  border: 3px solid #fff;
+  border: 3px solid #0d0d0d;
   border-radius: 6px;
   box-sizing: border-box;
 }
@@ -947,6 +948,7 @@ async function submitVote(participante) {
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
     fotoConfirm.src = {
+      "Bryan": "https://i.ibb.co/39W3Ld2t/Bryan.jpg",
       "Erick": "https://i.ibb.co/F4NLs8TT/Erick.jpg",
       "Davi": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Davi.webp?raw=true",
       "Daniel": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Daniel.webp?raw=true",
