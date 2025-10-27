@@ -514,42 +514,6 @@ button:disabled {
   }
 }
 
-/* Sticky */
-.pf-ad[data-type="sticky"] {
-  position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  z-index: 9999;
-  padding: 6px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.12);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  border-radius: 6px;
-}
-
-.pf-ad[data-type="sticky"] img {
-  height: 60px;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.pf-ad[data-type="sticky"] button {
-  background: transparent;
-  border: 0;
-  font-size: 20px;
-  margin-left: auto;
-  cursor: pointer;
-}
-
-@media (min-width: 900px) {
-  .pf-ad[data-type="sticky"] {
-    display: none;
-  }
-}
 
 /* Modal */
 .pf-modal {
@@ -638,14 +602,15 @@ button:disabled {
 </head>
 <body>
   
-  <div class="ad-container">
+  <div id="votoTela" class="container">
+
+      <div class="ad-container">
   <div class="ad-label">Publicidade</div>
   <a href="votefshow.html" target="_blank" class="ad-banner">
     <img src="https://i.ibb.co/yFwJXRh7/P-xeels-20251027-091542-0000.png" alt="Publicidade">
   </a>
 </div>
-  
-  <div id="votoTela" class="container">
+    
     <h1>Quem você quer que FIQUE?</h1>
 
     <label class="option">
