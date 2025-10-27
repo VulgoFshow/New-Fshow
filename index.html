@@ -1013,92 +1013,6 @@ body {
   }
 }
 
-/* Card */
-.pf-ad[data-type="card"] {
-  max-width: 520px;
-  display: flex;
-  flex-direction: row;
-  border-radius: 6px;
-}
-
-.pf-ad[data-type="card"] img {
-  width: 40%;
-  min-width: 150px;
-  height: auto;
-  border-radius: 6px 0 0 6px;
-}
-
-.pf-ad[data-type="card"] .pf-ad-body {
-  padding: 12px;
-  text-align: left;
-  flex: 1;
-}
-
-.pf-ad[data-type="card"] h4 {
-  margin: 0 0 6px;
-  font-size: 16px;
-  color: #222;
-}
-
-.pf-ad[data-type="card"] p {
-  margin: 0 0 10px;
-  font-size: 13px;
-  color: #555;
-}
-
-.pf-ad[data-type="card"] span {
-  font-weight: 600;
-  font-size: 13px;
-  color: #007bff;
-}
-
-@media (max-width: 520px) {
-  .pf-ad[data-type="card"] {
-    flex-direction: column;
-  }
-  .pf-ad[data-type="card"] img {
-    width: 100%;
-    border-radius: 6px 6px 0 0;
-  }
-}
-
-/* Sticky */
-.pf-ad[data-type="sticky"] {
-  position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  z-index: 9999;
-  padding: 6px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.12);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  border-radius: 6px;
-}
-
-.pf-ad[data-type="sticky"] img {
-  height: 60px;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.pf-ad[data-type="sticky"] button {
-  background: transparent;
-  border: 0;
-  font-size: 20px;
-  margin-left: auto;
-  cursor: pointer;
-}
-
-@media (min-width: 900px) {
-  .pf-ad[data-type="sticky"] {
-    display: none;
-  }
-}
-
 /* Modal */
 .pf-modal {
   position: fixed;
@@ -1184,62 +1098,6 @@ body {
 
 </style>
 
-<script>
-document.querySelectorAll('.pf-ad').forEach(ad=>{
-  const type = ad.dataset.type;
-  const img = ad.dataset.img;
-  const link = ad.dataset.link || "#";
-  const title = ad.dataset.title || "";
-  const desc = ad.dataset.desc || "";
-
-  if(type==="card"){
-    ad.innerHTML = `
-      <a href="${link}" target="_blank" rel="noopener">
-        <img src="${img}" alt="Anúncio">
-        <div class="pf-ad-body">
-          <h4>${title}</h4>
-          <p>${desc}</p>
-          <span>Saiba mais ›</span>
-        </div>
-      </a>`;
-  }
-  else if(type==="sticky"){
-    ad.innerHTML = `
-      <button class="pf-close">×</button>
-      <a href="${link}" target="_blank" rel="noopener">
-        <img src="${img}" alt="Anúncio">
-      </a>`;
-  }
-  else if(type==="modal"){
-    ad.outerHTML = `
-      <div class="pf-modal" id="pfAdModal" aria-hidden="true">
-        <div class="pf-modal-inner">
-          <button class="pf-modal-close">×</button>
-          <a href="${link}" target="_blank" rel="noopener"><img src="${img}" alt="Anúncio Modal"></a>
-        </div>
-      </div>`;
-  }
-  else {
-    ad.innerHTML = `<a href="${link}" target="_blank" rel="noopener"><img src="${img}" alt="Anúncio"></a>`;
-  }
-});
-
-// Fechar sticky
-document.addEventListener('click', e=>{
-  if(e.target.classList.contains('pf-close')) e.target.closest('.pf-ad').remove();
-});
-
-// Modal - abrir manualmente
-window.showPFModal = ()=>{document.getElementById('pfAdModal')?.setAttribute('aria-hidden','false');}
-window.hidePFModal = ()=>{document.getElementById('pfAdModal')?.setAttribute('aria-hidden','true');}
-document.addEventListener('click', e=>{
-  if(e.target.classList.contains('pf-modal-close')) hidePFModal();
-  if(e.target.classList.contains('pf-modal')) hidePFModal();
-});
-</script>
-
-</style>
-
 <body>
 
 <div class="topbar">
@@ -1320,7 +1178,7 @@ document.addEventListener('click', e=>{
     <div class="vote-card">
       <div class="vote-title">Quem você quer que <strong>FIQUE?</strong></div>
 
-      <a href="https://fshow.site/votefshow.html" target="_blank" class="vote-btn" id="teamVote">
+      <a href="votefshowofc.html" target="_blank" class="vote-btn" id="teamVote">
   <span>Vote Agora!</span>
   <span class="vote-icon">🔥</span>
 </a>
