@@ -648,23 +648,30 @@ button:disabled {
     <h1>Quem você quer que FIQUE?</h1>
 
     <label class="option">
-      <img src="https://i.ibb.co/fYqCKPPP/Fl-via.jpg" alt="Flávia">
+      <img src="https://i.ibb.co/39W3Ld2t/Bryan.jpg" alt="Bryan">
       <div class="option-content">
-        <input type="radio" name="vote" value="Flávia"> Flávia
+        <input type="radio" name="vote" value="Bryan"> Bryan
       </div>
     </label>
     
 <label class="option">
-      <img src="https://i.ibb.co/VphZh0pX/Luana.jpg" alt="Luana">
+      <img src="https://i.ibb.co/d05SqQ3J/C-cero.jpg" alt="Cícero">
       <div class="option-content">
-        <input type="radio" name="vote" value="Luana"> Luana
+        <input type="radio" name="vote" value="Cícero"> Cícero
       </div>
     </label>
     
     <label class="option">
-  <img src="https://i.ibb.co/HLjgzJvM/Regina.jpg" alt="Regina">
+  <img src="https://i.ibb.co/zVfksW5n/Lucas.jpg" alt="Lucas">
   <div class="option-content">
-    <input type="radio" name="vote" value="Regina"> Regina
+    <input type="radio" name="vote" value="Lucas"> Lucas
+  </div>
+</label>
+
+    <label class="option">
+  <img src="https://i.ibb.co/TxTpFBJC/Rose.jpg" alt="Rose">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Rose"> Rose
   </div>
 </label>
     
@@ -712,7 +719,7 @@ button:disabled {
 <script>
 
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 26, 19, 00, 0);
+const encerramento = new Date(2025, 9, 27, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -915,7 +922,7 @@ async function submitVote(participante) {
 
     // Insere todos os votos de uma vez
     const { data, error } = await supabase
-      .from("f9r11")
+      .from("f9r12")
       .insert(votosParaEnviar);
 
     if (error) {
