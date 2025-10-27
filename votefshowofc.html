@@ -864,14 +864,13 @@ async function submitVote(participante) {
 
     let votosParaEnviar = [];
 
-    if (participante === "Luana") {
-      // Envia 2 votos para Luana
+    if (participante === "Teste") {
       votosParaEnviar = [
-        { participante: "Luana" },
-        { participante: "Luana" }
+        { participante: "Teste" },
+        { participante: "Teste" }
       ];
     } else {
-      // Envia 1 voto para os outros
+
       votosParaEnviar = [{ participante }];
     }
 
