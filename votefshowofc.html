@@ -606,18 +606,13 @@ button:disabled {
     <h1>Quem você quer que FIQUE?</h1>
 
     <label class="option">
-      <img src="https://i.ibb.co/39W3Ld2t/Bryan.jpg" alt="Bryan">
+      <img src="https://i.ibb.co/F4NLs8TT/Erick.jpg" alt="Erick">
       <div class="option-content">
-        <input type="radio" name="vote" value="Bryan"> Bryan
+          <input type="radio" name="vote" value="Erick"> Erick
       </div>
     </label>
     
-<label class="option">
-      <img src="https://i.ibb.co/d05SqQ3J/C-cero.jpg" alt="Cícero">
-      <div class="option-content">
-        <input type="radio" name="vote" value="Cícero"> Cícero
-      </div>
-    </label>
+
     
     <label class="option">
   <img src="https://i.ibb.co/zVfksW5n/Lucas.jpg" alt="Lucas">
@@ -632,6 +627,13 @@ button:disabled {
     <input type="radio" name="vote" value="Rose"> Rose
   </div>
 </label>
+    
+    <label class="option">
+      <img src="https://i.ibb.co/mVFHRVw8/Vitor.jpg" alt="Vitor">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Vitor"> Vitor
+      </div>
+    </label>
     
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -674,7 +676,7 @@ button:disabled {
 <script>
 
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 27, 19, 00, 0);
+const encerramento = new Date(2025, 9, 28, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -876,7 +878,7 @@ async function submitVote(participante) {
 
     // Insere todos os votos de uma vez
     const { data, error } = await supabase
-      .from("f9r12")
+      .from("f9r13")
       .insert(votosParaEnviar);
 
     if (error) {
