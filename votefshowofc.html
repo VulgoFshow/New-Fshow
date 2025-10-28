@@ -686,6 +686,26 @@ button:disabled {
   </div>
 </div>
 
+  <script>
+// (ano, mês, dia, hora, minuto)
+const encerramento = new Date(2025, 9, 27, 19, 00, 0);
+
+
+const votacaoAtiva = true;
+
+function checkEncerramento() {
+  const agora = new Date();
+
+  if (!votacaoAtiva || agora >= encerramento) {
+    window.location.href = "fechada.html";
+  }
+}
+
+checkEncerramento();
+
+setInterval(checkEncerramento, 60 * 1000);
+</script>
+  
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 const supabase = createClient(
