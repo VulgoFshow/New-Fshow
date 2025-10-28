@@ -4,25 +4,37 @@
   <meta charset="UTF-8" />
   <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
+<style>
+/* ===== VARIÁVEIS GLOBAIS ===== */
 :root {
   --bg: #121212;
   --card-bg: #2b2b2b;
   --selected-bg: #3c3c3c;
-  --border-radius: 8px;
+  --panel-bg: #2b2b2b;
+  --panel-border: rgba(255, 255, 255, 0.06);
   --accent: #00b7b0;
   --text: #fff;
   --muted: #bdbdbd;
-  --panel-bg: #2b2b2b;
-  --panel-border: rgba(255,255,255,0.06);
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
+}
+
+/* ===== BASE ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-  background: transparent !important;
-  font-family: "Inter", Arial, sans-serif;
-  color: var(--text);
   margin: 0;
   padding: 0;
+  background: transparent;
+  font-family: "Inter", Arial, sans-serif;
+  color: var(--text);
   animation: fadeIn 0.6s ease;
 }
 
@@ -31,6 +43,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ===== LAYOUT ===== */
 .container {
   max-width: 400px;
   margin: 0 auto;
@@ -51,21 +64,21 @@ h1 {
   transition: color 0.3s ease;
 }
 
+/* ===== OPÇÕES (RADIO CARDS) ===== */
 .option {
   display: flex;
-  align-items: stretch;
   background: var(--card-bg);
+  border: 1px solid #fff;
   border-radius: var(--border-radius);
   margin-bottom: 12px;
   overflow: hidden;
-  border: 1px solid #fff;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
 }
 
 .option:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-md);
   border-color: var(--accent);
 }
 
@@ -84,13 +97,11 @@ h1 {
   width: 100%;
   font-size: 18px;
   font-weight: 500;
-  position: relative;
   transition: background 0.3s ease;
 }
 
 .option-content input[type="radio"] {
   appearance: none;
-  -webkit-appearance: none;
   width: 20px;
   height: 20px;
   border: 2px solid var(--muted);
@@ -112,26 +123,24 @@ h1 {
 .option-content input[type="radio"]:checked::before {
   content: "";
   position: absolute;
-  width: 10px;
-  height: 10px;
-  top: 3px;
-  left: 3px;
+  inset: 3px;
   border-radius: 50%;
   background: var(--accent);
 }
 
+/* ===== BOTÃO PRINCIPAL ===== */
 button {
   width: 100%;
   padding: 14px;
   font-size: 16px;
+  font-weight: bold;
   border: none;
   border-radius: var(--border-radius);
   margin-top: 15px;
   cursor: pointer;
   background: #444;
   color: var(--muted);
-  font-weight: bold;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 button:hover:not(:disabled) {
@@ -250,13 +259,13 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* ====================== CONFIRMAÇÃO ====================== */
+/* ===== CONFIRMAÇÃO ===== */
 #fotoConfirm {
   width: 100%;
-  display: flex;
   border-radius: 10px 10px 0 0;
   border: 1px solid #ddd;
   border-bottom: none;
+  display: block;
 }
 
 #nomeConfirm {
@@ -270,12 +279,11 @@ button:disabled {
   border: 1px solid #ddd;
   border-top: none;
   margin: 0;
-  box-sizing: border-box;
 }
 
 .success-msg {
-  background: rgba(0,255,150,0.1);
-  border: 1px solid rgba(0,255,150,0.4);
+  background: rgba(0, 255, 150, 0.1);
+  border: 1px solid rgba(0, 255, 150, 0.4);
   border-radius: 8px;
   padding: 10px 15px;
   text-align: center;
@@ -300,7 +308,6 @@ button:disabled {
   background: #00c9b8;
 }
 
-/* tela de confirmação */
 #confirmTela {
   display: none;
   flex-direction: column;
@@ -308,26 +315,24 @@ button:disabled {
   justify-content: center;
   padding: 20px;
   text-align: center;
-  background: transparent !important;
+  background: transparent;
   min-height: 85vh;
   animation: fadeIn 0.6s ease;
 }
 
 .confirm-card {
-  background: transparent !important;
+  background: transparent;
   border: 2px solid var(--panel-border);
   border-radius: 12px;
   padding: 20px;
   max-width: 450px;
   width: 100%;
   margin: 0 auto;
-  overflow: hidden; 
-  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .confirm-card .img-container {
-  width: 100%;
-  height: 200px; 
+  height: 200px;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 16px;
@@ -337,36 +342,36 @@ button:disabled {
 .confirm-card .img-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover;     
+  object-fit: cover;
   object-position: center;
-  display: block;
 }
 
+/* ===== BOTÃO CAPTCHA CUSTOM ===== */
 #botaoCaptcha {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  gap: 12px;
   background: #222;
   border: 1px solid #444;
   border-radius: 6px;
   padding: 0 15px;
+  height: 70px;
+  max-width: 320px;
+  width: 320px;
+  margin: 20px auto 0;
   cursor: pointer;
   user-select: none;
-  height: 70px;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.6);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
   color: #ccc;
   font-size: 14px;
   font-weight: 400;
-  margin: 20px auto 0;
-  max-width: 320px;
-  width: 320px;
-  gap: 12px;
+  transition: var(--transition);
 }
 
 #botaoCaptcha:hover {
   border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(0,183,176,0.3);
+  box-shadow: 0 0 12px rgba(0, 183, 176, 0.3);
 }
 
 .recaptcha-checkbox {
@@ -379,22 +384,22 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  transition: var(--transition);
 }
 
 #botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
-  background-color: #00aaff;
+  background: #00aaff;
   border-color: #00aaff;
 }
 
 .checkmark {
   width: 18px;
   height: 18px;
-  display: none;
   stroke: white;
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
+  display: none;
 }
 
 #botaoCaptcha[aria-pressed="true"] .checkmark {
@@ -418,34 +423,35 @@ button:disabled {
 
 #botaoCaptcha:disabled {
   opacity: 0.6;
-  cursor: not-allowed;
+  cursor: ->not-allowed;
   pointer-events: none;
 }
-<!-- ADS -->
+
+/* ===== ANÚNCIOS (ADS) ===== */
 .pf-ad {
   font-family: "Poppins", sans-serif;
   position: relative;
   overflow: hidden;
-  border-radius: 6px; 
-  border: 3px solid #fff; 
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border-radius: 6px;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   background: #fff;
   margin: 20px auto;
   text-align: center;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pf-ad:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(13, 13, 13);
+  box-shadow: var(--shadow-lg);
 }
 
 .pf-ad img {
   width: 100%;
   height: auto;
-  display: block;
-  border-radius: 4px; 
+  border-radius: 4px;
   object-fit: cover;
+  display: block;
 }
 
 .pf-ad a {
@@ -459,7 +465,6 @@ button:disabled {
   max-width: 1200px;
   max-height: 110px;
   border: 3px solid #0d0d0d;
-  border-radius: 6px;
   box-sizing: border-box;
 }
 
@@ -470,19 +475,11 @@ button:disabled {
 }
 
 /* Rectangle & Skyscraper */
-.pf-ad[data-type="rectangle"] {
-  max-width: 300px;
-}
-
-.pf-ad[data-type="skyscraper"] {
-  max-width: 160px;
-  min-height: 600px;
-}
+.pf-ad[data-type="rectangle"] { max-width: 300px; }
+.pf-ad[data-type="skyscraper"] { max-width: 160px; min-height: 600px; }
 
 @media (max-width: 900px) {
-  .pf-ad[data-type="skyscraper"] {
-    display: none;
-  }
+  .pf-ad[data-type="skyscraper"] { display: none; }
 }
 
 /* Card */
@@ -490,7 +487,6 @@ button:disabled {
   max-width: 520px;
   display: flex;
   flex-direction: row;
-  border-radius: 6px;
 }
 
 .pf-ad[data-type="card"] img {
@@ -534,7 +530,6 @@ button:disabled {
   }
 }
 
-
 /* Modal */
 .pf-modal {
   position: fixed;
@@ -542,7 +537,7 @@ button:disabled {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,.6);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 10000;
 }
 
@@ -554,7 +549,7 @@ button:disabled {
   background: #fff;
   padding: 18px;
   border-radius: 6px;
-  box-shadow: 0 8px 40px rgba(0,0,0,.3);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
   text-align: center;
   position: relative;
 }
@@ -577,6 +572,7 @@ button:disabled {
   cursor: pointer;
 }
 
+/* Ad Container */
 .ad-container {
   display: flex;
   align-items: center;
@@ -585,11 +581,10 @@ button:disabled {
   max-width: 970px;
   width: 95%;
   height: 90px;
-  overflow: hidden;
   margin: 20px auto;
   background: #004400;
-  box-sizing: border-box;
   border-radius: 4px;
+  overflow: hidden;
 }
 
 .ad-label {
@@ -606,7 +601,6 @@ button:disabled {
 }
 
 .ad-banner {
-  display: block;
   width: 100%;
   height: 100%;
 }
@@ -617,7 +611,6 @@ button:disabled {
   object-fit: cover;
   display: block;
 }
-
 </style>
 </head>
 <body>
