@@ -619,18 +619,18 @@ button:disabled {
     <h1>Quem você quer que FIQUE?</h1>
 
     <label class="option">
-      <img src="https://i.ibb.co/F4NLs8TT/Erick.jpg" alt="Erick">
+      <img src="https://i.ibb.co/svNCVQZK/In-s.jpg" alt="Inês">
       <div class="option-content">
-          <input type="radio" name="vote" value="Erick"> Erick
+          <input type="radio" name="vote" value="Inês"> Inês
       </div>
     </label>
     
 
     
     <label class="option">
-  <img src="https://i.ibb.co/zVfksW5n/Lucas.jpg" alt="Lucas">
+  <img src="https://i.ibb.co/N2f1FqqZ/Neto.jpg" alt="Neto">
   <div class="option-content">
-    <input type="radio" name="vote" value="Lucas"> Lucas
+    <input type="radio" name="vote" value="Neto"> Neto
   </div>
 </label>
 
@@ -642,9 +642,9 @@ button:disabled {
 </label>
     
     <label class="option">
-      <img src="https://i.ibb.co/mVFHRVw8/Vitor.jpg" alt="Vitor">
+      <img src="https://i.ibb.co/1YgznKMF/Urach.jpg" alt="Urach">
       <div class="option-content">
-        <input type="radio" name="vote" value="Vitor"> Vitor
+        <input type="radio" name="vote" value="Urach"> Urach
       </div>
     </label>
     
@@ -688,7 +688,7 @@ button:disabled {
 
   <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 27, 19, 00, 0);
+const encerramento = new Date(2025, 9, 29, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -882,8 +882,9 @@ async function submitVote(participante) {
       { participante }
     ];
 
+    //TABLE
     const { data, error } = await supabase
-      .from("f9r13")
+      .from("f9r14")
       .insert(votosParaEnviar);
 
     if (error) {
