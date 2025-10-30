@@ -1179,35 +1179,20 @@ body {
       <div class="vote-title">Quem você quer que <strong>FIQUE?</strong></div>
 
       <button class="vote-btn" id="teamVote">
-  <span>Vote Agora!</span>
-  <span class="vote-icon">🔥</span>
-</button>
+        <span>Vote Agora!</span>
+        <span class="vote-icon">🔥</span>
+      </button>
       
     </div>
   </div>
 </div>
 
-<!-- POPUP -->
-<div id="voteOverlay" class="overlay">
-  <div class="popup">
-    <span class="close" id="closePopup">&times;</span>
-    <iframe src="votefshowofc.html" frameborder="0"></iframe>
-  </div>
-</div>
-
 <script>
-const teamVoteBtn = document.getElementById("teamVote");
-const overlay = document.getElementById("voteOverlay");
-const closePopup = document.getElementById("closePopup");
-
-teamVoteBtn.addEventListener("click", () => {
-  overlay.style.display = "block";
-});
-
-closePopup.addEventListener("click", () => {
-  overlay.style.display = "none";
+document.getElementById("teamVote").addEventListener("click", () => {
+  window.location.href = "votefshow.html";
 });
 </script>
+
   
 <section class="hero">
   <div class="hero-principal">
