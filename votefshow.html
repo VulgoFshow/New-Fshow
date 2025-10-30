@@ -688,18 +688,25 @@ button:disabled {
   </div>
 </div>
 
-  <script>
+ Adicione nesse script, verificação invisível por recaptcha, mas não remova o captcha visual que já existe.
+
+ <script>
 // (ano, mês, dia, hora, minuto)
 const encerramento = new Date(2025, 9, 31, 19, 00, 0);
+
+
 const votacaoAtiva = true;
 
 function checkEncerramento() {
   const agora = new Date();
+
   if (!votacaoAtiva || agora >= encerramento) {
     window.location.href = "fechada.html";
   }
 }
+
 checkEncerramento();
+
 setInterval(checkEncerramento, 60 * 1000);
 </script>
   
@@ -733,21 +740,7 @@ const verifyBtn = document.getElementById("verify-btn");
 const refreshBtn = document.getElementById("refresh-btn");
 const statusEl = document.getElementById("captcha-status");
 
-// ======= FUNÇÃO RECAPTCHA INVISÍVEL =======
-async function verificarRecaptcha() {
-  try {
-    const token = await grecaptcha.execute('6Le9m_wrAAAAAKOEWXeP-xPqJZPiV3Bd5jEVwq8a', { action: 'submit' });
-    if (!token) throw new Error("Token inválido");
-    console.log("reCAPTCHA token:", token);
-    return true;
-  } catch (e) {
-    console.error("Falha no reCAPTCHA:", e);
-    alert("Falha na verificação de segurança. Tente novamente.");
-    return false;
-  }
-}
-
-// ===== CAPTCHA VISUAL =====
+// CAPTCHA ===
 const prompts = [
   {
     label: "Clique nas imagens contendo algo que pode se locomover",
@@ -774,7 +767,7 @@ const prompts = [
       { src: "https://www.shutterstock.com/image-photo/adorable-happy-white-dog-isolated-600nw-2574597113.jpg", tag: "animal" },
       { src: "https://www.shutterstock.com/image-photo/cute-dog-tongue-out-isolated-600nw-2510143377.jpg", tag: "animal" },
       { src: "https://i.redd.it/ml0omhvjlrxb1.jpg", tag: "animal" },
-      { src: "https://www.moinhoglobo.com.br/wp-content/uploads/2020/10/05-sorvete-caseiro.jpg", tag: "outros" },
+      { src: "https://moinhoglobo.com.br/wp-content/uploads/2020/10/05-sorvete-caseiro.jpg", tag: "outros" },
       { src: "https://www.tecsoft.ind.br/wp-content/uploads/2023/12/cascao-sorvete-soft-2-sabores-alto-lucro-investimento.webp", tag: "outros" },
       { src: "https://www.oitedi.com.br/_next/image?url=https%3A%2F%2Ftedi-production.s3.amazonaws.com%2Fcooking_recipes%2Ffood_description%2F18622aa1308c719b20da5b9e2e97f9b0cd7dfe85.png&w=1080&q=70", tag: "outros" },
       { src: "https://www.oitedi.com.br/_next/image?url=https%3A%2F%2Ftedi-production.s3.amazonaws.com%2Fcooking_recipes%2Ffood_description%2F0ee09a7cdb27ec074ef259c03d40e3a2d7dec07e.png&w=1080&q=70", tag: "outro" }
@@ -801,7 +794,7 @@ function generateCaptcha() {
   const prompt = prompts[Math.floor(Math.random() * prompts.length)];
   const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
   const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
-  const correctCount = Math.floor(Math.random() * 3) + 2;
+  const correctCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 corretas
   const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
   const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
   const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
@@ -838,12 +831,16 @@ function fecharCaptcha() {
 // BOTÃO ATUALIZAR
 refreshBtn.addEventListener("click", () => {
   statusEl.textContent = "";
-  document.querySelectorAll(".captcha-img").forEach(img => img.classList.remove("selected"));
+  statusEl.style.color = "";
+  document.querySelectorAll(".captcha-img").forEach(img => {
+    img.classList.remove("selected");
+  });
   verifyBtn.disabled = true;
   generateCaptcha();
+  refreshBtn.style.opacity = "0.7";
+  setTimeout(() => refreshBtn.style.opacity = "1", 200);
 });
 
-// ===== VERIFICAR CAPTCHA VISUAL =====
 verifyBtn.addEventListener("click", () => {
   let sucesso = true;
   const imgs = document.querySelectorAll(".captcha-img");
@@ -876,12 +873,8 @@ verifyBtn.addEventListener("click", () => {
   }
 });
 
-// ===== ENVIO DE VOTO =====
 async function submitVote(participante) {
   try {
-    const recaptchaOk = await verificarRecaptcha();
-    if (!recaptchaOk) return;
-
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
     botaoVotar.textContent = "Enviando voto...";
@@ -893,23 +886,33 @@ async function submitVote(participante) {
       { participante }
     ];
 
-    //MUDAR TABLE AQUI
-    const { data, error } = await supabase.from("f9r16").insert(votosParaEnviar);
-    if (error) throw error;
+    //TABLE
+    const { data, error } = await supabase
+      .from("f9r16")
+      .insert(votosParaEnviar);
+
+    if (error) {
+      console.error("Supabase error:", error);
+      alert("Erro ao registrar votos: " + error.message);
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = prevText;
+      return;
+    }
 
     let restantes = getVotosRestantes() - 1;
     if (restantes <= 0) {
       setVotosRestantes(0);
       botaoCaptcha.setAttribute("aria-pressed", "false");
       botaoVotar.classList.remove("active");
-    } else setVotosRestantes(restantes);
+    } else {
+      setVotosRestantes(restantes);
+    }
 
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
-
-    const fotos = {
-"Bryan": "https://i.ibb.co/39W3Ld2t/Bryan.jpg",
+    fotoConfirm.src = {
+      "Bryan": "https://i.ibb.co/39W3Ld2t/Bryan.jpg",
       "Erick": "https://i.ibb.co/F4NLs8TT/Erick.jpg",
       "Davi": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Davi.webp?raw=true",
       "Daniel": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Daniel.webp?raw=true",
@@ -935,12 +938,11 @@ async function submitVote(participante) {
       "Koyuh": "https://i.ibb.co/1YgznKMF/Urach.jpg",
       "Victor": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Victor.webp?raw=true",
       "Vitor": "https://i.ibb.co/mVFHRVw8/Vitor.jpg"
-    };
-    fotoConfirm.src = fotos[participante] || "";
+    }[participante] || "";
 
     botaoVotar.textContent = prevText;
     botaoVotar.disabled = false;
-    console.log("voto enviado para:", participante);
+    console.log("2 votos enviados para:", participante);
 
   } catch (err) {
     console.error("Erro submitVote:", err);
@@ -950,11 +952,13 @@ async function submitVote(participante) {
   }
 }
 
-// ===== EVENTOS =====
-botaoVotar.addEventListener("click", e => {
+botaoVotar.addEventListener("click", (e) => {
   e.preventDefault();
   const escolhidoEl = document.querySelector('input[name="vote"]:checked');
-  if (!escolhidoEl) return alert("Selecione um participante antes de votar!");
+  if (!escolhidoEl) {
+    alert("Selecione um participante antes de votar!");
+    return;
+  }
   const participante = escolhidoEl.value;
 
   if (getVotosRestantes() <= 0) {
@@ -962,28 +966,41 @@ botaoVotar.addEventListener("click", e => {
     abrirCaptcha();
     return;
   }
+
   submitVote(participante);
 });
 
 botaoCaptcha.addEventListener("click", () => {
   if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
+
   if (getVotosRestantes() > 0) {
+    
     botaoCaptcha.setAttribute("aria-pressed", "true");
     botaoVotar.disabled = false;
     botaoVotar.classList.add("active");
-  } else abrirCaptcha();
+  } else {
+
+    abrirCaptcha();
+  }
 });
 
 // ===== INIT =====
 (function initState() {
   const restantes = getVotosRestantes();
+
   botaoCaptcha.setAttribute("aria-pressed", "false");
   botaoCaptcha.disabled = false;
+
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
-  setVotosRestantes(restantes > 0 ? restantes : 0);
-})();
-</script>
 
+  if (restantes > 0) {
+    setVotosRestantes(restantes);
+  } else {
+    setVotosRestantes(0);
+  }
+})();
+
+</script>
 </body>
 </html>
