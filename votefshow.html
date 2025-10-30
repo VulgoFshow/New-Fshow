@@ -32,10 +32,11 @@
 body {
   margin: 0;
   padding: 0;
-  background: rgb(38, 38, 38);
   font-family: "Inter", Arial, sans-serif;
   color: var(--text);
-  animation: fadeIn 0.6s ease;
+  background: url("https://media.discordapp.net/attachments/1325551524272934922/1433266190415036516/Screenshot_20251029-222556.Chrome.png?ex=690410a8&is=6902bf28&hm=a8713fb8773b06637292539b691dea2b5767fc45576fb9b5c5de2c5bf7881cf5&=&format=webp&quality=lossless&width=231&height=481") no-repeat center center fixed;
+  background-size: cover;
+  animation: fadeIn 0.7s ease;
 }
 
 @keyframes fadeIn {
@@ -675,7 +676,7 @@ button:disabled {
   <div class="confirm-card">
     <img id="fotoConfirm" src="" alt="Voto"/>
     <p id="nomeConfirm"></p>
-    <button class="voltar" onclick="window.location.href='votefshow.html'">
+    <button class="voltar" onclick="window.location.href='votefshowofc.html'">
       VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
@@ -936,7 +937,7 @@ async function submitVote(participante) {
 
     botaoVotar.textContent = prevText;
     botaoVotar.disabled = false;
-    console.log("Você votou em:", participante);
+    console.log("2 votos enviados para:", participante);
 
   } catch (err) {
     console.error("Erro submitVote:", err);
