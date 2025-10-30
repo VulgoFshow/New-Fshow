@@ -619,30 +619,30 @@ button:disabled {
     <h1>Quem você quer que FIQUE?</h1>
     
 <label class="option">
-      <img src="https://i.ibb.co/fYqCKPPP/Fl-via.jpg" alt="Flávia">
+      <img src="https://i.ibb.co/r2R4xk3t/Ella.jpg" alt="Ella">
       <div class="option-content">
-        <input type="radio" name="vote" value="Flávia"> Flávia
+        <input type="radio" name="vote" value="Ella"> Ella
       </div>
     </label>
     
     <label class="option">
-      <img src="https://i.ibb.co/svNCVQZK/In-s.jpg" alt="Inês">
+      <img src="https://i.ibb.co/1YgznKMF/Urach.jpg" alt="Koyuh">
       <div class="option-content">
-          <input type="radio" name="vote" value="Inês"> Inês
+          <input type="radio" name="vote" value="Koyuh"> Koyuh
       </div>
     </label>
     
     <label class="option">
-  <img src="https://i.ibb.co/N2f1FqqZ/Neto.jpg" alt="Neto">
+  <img src="https://i.ibb.co/211Vq4YM/Rauilly.jpg" alt="Rauilly">
   <div class="option-content">
-    <input type="radio" name="vote" value="Neto"> Neto
+    <input type="radio" name="vote" value="Rauilly"> Rauilly
   </div>
 </label>
 
     <label class="option">
-  <img src="https://i.ibb.co/TxTpFBJC/Rose.jpg" alt="Rose">
+  <img src="https://i.ibb.co/mVFHRVw8/Vitor.jpg" alt="Vitor">
   <div class="option-content">
-    <input type="radio" name="vote" value="Rose"> Rose
+    <input type="radio" name="vote" value="Vitor"> Vitor
   </div>
 </label>
     
@@ -686,7 +686,7 @@ button:disabled {
 
   <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 29, 19, 00, 0);
+const encerramento = new Date(2025, 9, 30, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -882,7 +882,7 @@ async function submitVote(participante) {
 
     //TABLE
     const { data, error } = await supabase
-      .from("f9r14")
+      .from("f9r15")
       .insert(votosParaEnviar);
 
     if (error) {
@@ -929,7 +929,7 @@ async function submitVote(participante) {
       "Rauilly": "https://i.ibb.co/211Vq4YM/Rauilly.jpg",
       "Rose": "https://i.ibb.co/TxTpFBJC/Rose.jpg",
       "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Tety.webp?raw=true",
-      "Urach": "https://i.ibb.co/1YgznKMF/Urach.jpg",
+      "Koyuh": "https://i.ibb.co/1YgznKMF/Urach.jpg",
       "Victor": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Victor.webp?raw=true",
       "Vitor": "https://i.ibb.co/mVFHRVw8/Vitor.jpg"
     }[participante] || "";
