@@ -736,9 +736,8 @@ const statusEl = document.getElementById("captcha-status");
 // ======= FUNÇÃO RECAPTCHA INVISÍVEL =======
 async function verificarRecaptcha() {
   try {
-    const token = await grecaptcha.execute('SEU_SITE_KEY', { action: 'submit' });
+    const token = await grecaptcha.execute('6Le9m_wrAAAAAKOEWXeP-xPqJZPiV3Bd5jEVwq8a', { action: 'submit' });
     if (!token) throw new Error("Token inválido");
-    // Opcional: você pode enviar o token para o backend verificar
     console.log("reCAPTCHA token:", token);
     return true;
   } catch (e) {
@@ -941,7 +940,7 @@ async function submitVote(participante) {
 
     botaoVotar.textContent = prevText;
     botaoVotar.disabled = false;
-    console.log("2 votos enviados para:", participante);
+    console.log("voto enviado para:", participante);
 
   } catch (err) {
     console.error("Erro submitVote:", err);
