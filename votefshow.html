@@ -637,16 +637,16 @@ button:disabled {
     </label>
     
     <label class="option">
-      <img src="https://i.ibb.co/ccsDkBCG/Jo-o.jpg" alt="João">
+      <img src="https://i.ibb.co/1YgznKMF/Urach.jpg" alt="Koyuh">
       <div class="option-content">
-          <input type="radio" name="vote" value="João"> João
+          <input type="radio" name="vote" value="Koyuh"> Koyuh
       </div>
     </label>
     
     <label class="option">
-  <img src="https://i.ibb.co/VphZh0pX/Luana.jpg" alt="Luana">
+  <img src="https://i.ibb.co/211Vq4YM/Rauilly.jpg" alt="Rauilly">
   <div class="option-content">
-    <input type="radio" name="vote" value="Luana"> Luana
+    <input type="radio" name="vote" value="Rauilly"> Rauilly
   </div>
 </label>
     
@@ -690,7 +690,7 @@ button:disabled {
 
  <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 9, 31, 19, 00, 0);
+const encerramento = new Date(2025, 10, 01, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -886,7 +886,7 @@ async function submitVote(participante) {
 
     //TABLE
     const { data, error } = await supabase
-      .from("f9r16")
+      .from("f9final")
       .insert(votosParaEnviar);
 
     if (error) {
