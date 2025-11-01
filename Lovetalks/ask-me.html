@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ask Me - Pergunte Anonimamente</title>
+  <!-- Firebase SDK v10 CDN -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js';
+    import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+    import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+    import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js';
+    window.firebaseModules = { initializeApp, getAuth, signInAnonymously, getFirestore, collection, addDoc, serverTimestamp, getStorage, ref, uploadBytes, getDownloadURL };
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      background: #5a67d8;
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .form-container {
+      padding: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-group input {
+      width: auto;
+    }
+
+    .file-upload {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background: #f7fafc;
+      border: 2px dashed #cbd5e0;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+      width: 100%;
+    }
+
+    .file-upload:hover {
+      border-color: #667eea;
+      background: #edf2f7;
+    }
+
+    .file-upload input {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-upload p {
+      margin: 0;
+      color: #718096;
+      font-size: 0.95rem;
+    }
+
+    .preview {
+      margin-top: 10px;
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      width: 100%;
+    }
+
+    button:hover:not(:disabled) {
+      background: #5a67d8;
+    }
+
+    button:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+    }
+
+    .status {
+      text-align: center;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .status.success {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .status.error {
+      background: #fed7d7;
+      color: #742a2a;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #667eea;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.8rem; }
+      .form-container { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Cabeçalho -->
+    <div class="header">
+      <h1>Ask Me</h1>
+      <p>Pergunte qualquer coisa</p>
+    </div>
+
+    <!-- Status -->
+    <div id="status" class="status"></div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading">Carregando...</div>
+
+    <!-- Formulário -->
+    <div class="form-container">
+      <form id="askForm">
+        <div class="form-group">
+          <label for="question">Sua pergunta:</label>
+          <textarea id="question" placeholder="Digite sua pergunta aqui..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Seu nome (opcional):</label>
+          <input type="text" id="name" placeholder="Deixe em branco para anonimato" />
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="anonymous" checked />
+          <label for="anonymous">Enviar como anônimo</label>
+        </div>
+
+        <div class="form-group">
+          <label>Imagem (opcional):</label>
+          <label class="file-upload">
+            <input type="file" id="image" accept="image/*" />
+            <p>Clique ou arraste uma imagem aqui (máx. 5MB)</p>
+          </label>
+          <img id="preview" class="preview" />
+        </div>
+
+        <button type="submit" id="submitBtn">Enviar Pergunta</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+   const firebaseConfig = {
+  apiKey: "AIzaSyADC7VI_1VAcr3D-i-KlJS_lv7VLoY7PBo",
+  authDomain: "askflop-1c938.firebaseapp.com",
+  projectId: "askflop-1c938",
+  storageBucket: "askflop-1c938.firebasestorage.app",
+  messagingSenderId: "79238001911",
+  appId: "1:79238001911:web:df6ee1a33fbe91816f4ff2",
+  measurementId: "G-Q5093F86VQ"
+};
+
+
+    // Inicializar Firebase
+    const { initializeApp, getAuth, signInAnonymously, getFirestore, collection, addDoc, serverTimestamp, getStorage, ref, uploadBytes, getDownloadURL } = window.firebaseModules;
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    // Autenticação anônima ao carregar
+    let userId = null;
+    signInAnonymously(auth).then((userCredential) => {
+      userId = userCredential.user.uid;
+      document.getElementById('loading').style.display = 'none';
+    }).catch((error) => {
+      console.error('Erro na autenticação:', error);
+      showStatus('Erro ao conectar. Tente recarregar a página.', 'error');
+    });
+
+    // Funções auxiliares
+    function showStatus(message, type) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status ${type}`;
+      status.style.display = 'block';
+      setTimeout(() => { status.style.display = 'none'; }, 5000);
+    }
+
+    // Pré-visualização da imagem
+    document.getElementById('image').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById('preview');
+      
+      if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+          alert('A imagem deve ter no máximo 5MB.');
+          e.target.value = '';
+          preview.style.display = 'none';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+
+    // Envio do formulário
+    document.getElementById('askForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!userId) {
+        showStatus('Conectando... Aguarde.', 'error');
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      const loading = document.getElementById('loading');
+      const question = document.getElementById('question').value.trim();
+      const nameInput = document.getElementById('name').value.trim();
+      const isAnonymous = document.getElementById('anonymous').checked;
+      const imageFile = document.getElementById('image').files[0];
+
+      if (!question) return;
+
+      // Desabilitar botão e mostrar loading
+      submitBtn.disabled = true;
+      loading.style.display = 'block';
+      loading.textContent = 'Enviando...';
+
+      try {
+        let imageUrl = null;
+        if (imageFile) {
+          // Upload da imagem para Storage
+          const storageRef = ref(storage, `images/${userId}_${Date.now()}_${imageFile.name}`);
+          await uploadBytes(storageRef, imageFile);
+          imageUrl = await getDownloadURL(storageRef);
+        }
+
+        // Salvar no Firestore
+        const author = isAnonymous ? 'Anônimo' : (nameInput || 'Anônimo');
+        await addDoc(collection(db, 'ask'), {
+          question: question,
+          author: author,
+          imageUrl: imageUrl,
+          timestamp: serverTimestamp(),
+          userId: userId
+        });
+
+        // Sucesso
+        showStatus('Pergunta enviada com sucesso!', 'success');
+        this.reset();
+        document.getElementById('preview').style.display = 'none';
+
+      } catch (error) {
+        console.error('Erro ao enviar:', error);
+        showStatus('Erro ao enviar. Verifique sua conexão e tente novamente.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        loading.style.display = 'none';
+        loading.textContent = 'Carregando...';
+      }
+    });
+  </script>
+
+</body>
+</html>
