@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Fshow Fcaptcha</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ask Me - Admin</title>
+
+  <!-- Firebase v9 Compat -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; color: #333; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .header {
+      background: #5a67d8;
+      color: white;
+      padding: 30px;
+      border-radius: 16px 16px 0 0;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h1 { font-size: 2.2rem; margin-bottom: 8px; }
+
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .controls input, .controls button {
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .controls input { flex: 1; min-width: 200px; }
+    .controls button {
+      background: #48bb78;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .controls button:hover { background: #38a169; }
+    .controls button.danger { background: #f56565; }
+    .controls button.danger:hover { background: #e53e3e; }
+
+    .stats {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .questions-list {
+      display: grid;
+      gap: 20px;
+    }
+    .question {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 4px solid #667eea;
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    .question-author {
+      font-weight: 600;
+      color: #5a67d8;
+      font-size: 1.1rem;
+    }
+    .question-date {
+      font-size: 0.9rem;
+      color: #718096;
+      background: #f7fafc;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .question-text {
+      line-height: 1.6;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    .question-image {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .question-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .delete-btn {
+      background: #f56565;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .delete-btn:hover { background: #e53e3e; }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #718096;
+      background: #f7fafc;
+      border-radius: 12px;
+    }
+    @media (max-width: 768px) {
+      .controls { flex-direction: column; align-items: stretch; }
+      .controls input { min-width: auto; }
+      .question-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="admin-panel" id="adminPanel">
+      <div class="header">
+        <h1>📨 Perguntas Recebidas</h1>
+      </div>
+      <div class="stats" id="stats">
+        Carregando...
+      </div>
+      <div class="controls">
+        <input type="text" id="searchInput" placeholder="🔍 Buscar por texto...">
+        <input type="text" id="authorFilter" placeholder="Filtrar por autor...">
+        <button onclick="loadQuestions()">🔄 Atualizar</button>
+        <button onclick="clearFilters()" class="danger">Limpar Filtros</button>
+      </div>
+      <div id="questionsList" class="questions-list"></div>
+    </div>
+  </div>
+
+  <script>
+    // === CONFIGURAÇÃO DO SEU PROJETO ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyADC7VI_1VAcr3D-i-KlJS_lv7VLoY7PBo",
+      authDomain: "askflop-1c938.firebaseapp.com",
+      projectId: "askflop-1c938",
+      storageBucket: "askflop-1c938.firebasestorage.app",
+      messagingSenderId: "79238001911",
+      appId: "1:79238001911:web:df6ee1a33fbe91816f4ff2"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    let questions = [];
+
+    // === CARREGAR PERGUNTAS ===
+    async function loadQuestions() {
+      try {
+        const snapshot = await db.collection('ask')
+          .orderBy('timestamp', 'desc')
+          .get();
+        questions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderQuestions();
+        updateStats();
+      } catch (error) {
+        console.error('Erro ao carregar perguntas:', error);
+      }
+    }
+
+    function updateStats() {
+      const total = questions.length;
+      document.getElementById('stats').innerHTML = `📊 Total de perguntas: <strong>${total}</strong>`;
+    }
+
+    // === RENDERIZAR ===
+    function renderQuestions() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const authorFilter = document.getElementById('authorFilter').value.toLowerCase();
+      const filtered = questions.filter(q =>
+        (q.question || '').toLowerCase().includes(search) &&
+        (q.author || '').toLowerCase().includes(authorFilter)
+      );
+      const container = document.getElementById('questionsList');
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state">📭 Nenhuma pergunta encontrada</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(q => `
+        <div class="question">
+          <div class="question-header">
+            <div class="question-author">${q.author || 'Anônimo'}</div>
+            <div class="question-date">${formatDate(q.timestamp?.toDate())}</div>
+          </div>
+          <div class="question-text">${q.question}</div>
+          ${q.imageUrl ? `<img src="${q.imageUrl}" class="question-image" alt="Imagem">` : ''}
+          <div class="question-actions">
+            <button class="delete-btn" onclick="deleteQuestion('${q.id}')">🗑️ Deletar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function clearFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('authorFilter').value = '';
+      renderQuestions();
+    }
+
+    async function deleteQuestion(id) {
+      if (!confirm('Tem certeza que quer deletar esta pergunta?')) return;
+      try {
+        await db.collection('ask').doc(id).delete();
+        loadQuestions();
+      } catch (error) {
+        console.error('Erro ao deletar:', error);
+      }
+    }
+
+    function formatDate(date) {
+      if (!date) return 'Data inválida';
+      return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Atualiza filtros em tempo real
+    document.getElementById('searchInput').addEventListener('input', renderQuestions);
+    document.getElementById('authorFilter').addEventListener('input', renderQuestions);
+
+    // Carrega automaticamente ao abrir a página
+    loadQuestions();
+  </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
