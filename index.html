@@ -620,15 +620,15 @@ body {
 
 /* ====== CONTAINER ====== */
 .vote-frame {
-  background: linear-gradient(135deg, #ffd966, #ff914d, #d64545, #5c2c06);
+  background: linear-gradient(135deg, #8b0000, #b22222, #a00000, #5c0a0a);
   padding: 14px;
   border-radius: 28px;
   max-width: 640px;
   width: 92%;
   margin: 50px auto;
-  box-shadow: 0 10px 40px rgba(40, 20, 0, 0.2);
+  box-shadow: 0 10px 40px rgba(60, 0, 0, 0.3);
   background-size: 300% 300%;
-  animation: gradientMove 5s ease infinite;
+  animation: gradientMove 6s ease infinite;
 }
 
 @keyframes gradientMove {
@@ -639,10 +639,11 @@ body {
 
 /* ====== BLOCO ====== */
 .vote-mock {
-  background: rgba(255, 248, 239, 0.9);
+  background: rgba(255, 240, 240, 0.9);
   border-radius: 22px;
   overflow: hidden;
   backdrop-filter: blur(6px);
+  border: 1px solid rgba(150, 0, 0, 0.2);
 }
 
 /* ====== IMAGEM ====== */
@@ -653,24 +654,24 @@ body {
   object-fit: cover;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
-  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
+  box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.25);
 }
 
 /* ====== CARTÃO ====== */
 .vote-card {
   margin: -22px 28px 30px 28px;
-  background: #ffffff;
+  background: #fff5f5;
   border-radius: 18px;
   padding: 28px;
-  border: 1px solid rgba(80,40,0,0.08);
-  box-shadow: 0 8px 30px rgba(80,40,0,0.08);
+  border: 1px solid rgba(120, 0, 0, 0.1);
+  box-shadow: 0 8px 30px rgba(90, 0, 0, 0.1);
   text-align: center;
 }
 
 .vote-title {
   font-size: 24px;
   font-weight: 700;
-  color: #3d1a00;
+  color: #7a0000;
   margin-bottom: 24px;
   text-shadow: 0 1px 0 #fff;
 }
@@ -691,9 +692,9 @@ body {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: #fff7e9;
-  background: linear-gradient(90deg,#ff9f4d,#ff6a00);
-  box-shadow: 0 6px 18px rgba(60,20,0,0.2);
+  color: #fff0f0;
+  background: linear-gradient(90deg, #b22222, #ff0000);
+  box-shadow: 0 6px 18px rgba(80, 0, 0, 0.25);
   transition: all .18s ease;
   position: relative;
   overflow: hidden;
@@ -714,7 +715,7 @@ body {
 
 .vote-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(60,20,0,0.25);
+  box-shadow: 0 8px 22px rgba(80, 0, 0, 0.3);
 }
 
 .vote-icon {
@@ -1172,11 +1173,11 @@ body {
   <div class="vote-mock">
 
     <div class="vote-hero">
-      <img src="https://media.discordapp.net/attachments/1325551524272934922/1433963517538472077/GridArt_20251031_203834712.jpg?ex=69069a18&is=69054898&hm=804b80d0959f2d34276c08747aceaa4c2dfc281dce4ad06257c83171807aef57&=&format=webp&width=1339&height=670" alt="Roça">
+      <img src="https://media.discordapp.net/attachments/1325551524272934922/1437609149780197416/GridArt_20251110_220455221.jpg?ex=6913dd5a&is=69128bda&hm=1609f678a121226d88b20a6dfd89b287b6883f7f88dda12bf0e113963d3bc5b7&=&format=webp&width=1172&height=781" alt="Roça">
     </div>
 
     <div class="vote-card">
-      <div class="vote-title">Quem você quer que <strong>VENÇA?</strong></div>
+      <div class="vote-title">Quem você quer que <strong>FIQUE na vila?</strong></div>
 
       <button class="vote-btn" id="teamVote">
         <span>Vote Agora!</span>
