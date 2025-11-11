@@ -620,33 +620,75 @@ button:disabled {
 <body>
   
   <div id="votoTela" class="container">
-    <h1>Quem você quer que VENÇA?</h1>
+    <h1>Quem você quer que FIQUE na vila?</h1>
 
         <label class="option">
-  <img src="https://i.ibb.co/fYqCKPPP/Fl-via.jpg" alt="Flávia">
+  <img src="https://i.ibb.co/N2f1FqqZ/Neto.jpg" alt="Sirleide">
   <div class="option-content">
-    <input type="radio" name="vote" value="Flávia"> Flávia
+    <input type="radio" name="vote" value="Sirleide"> Sirleide
   </div>
 </label>
     
 <label class="option">
-      <img src="https://i.ibb.co/svNCVQZK/In-s.jpg" alt="Inês">
+      <img src="https://i.ibb.co/39W3Ld2t/Bryan.jpg" alt="Victória">
       <div class="option-content">
-        <input type="radio" name="vote" value="Inês"> Inês
+        <input type="radio" name="vote" value="Victória"> Victória
       </div>
     </label>
     
     <label class="option">
-      <img src="https://i.ibb.co/1YgznKMF/Urach.jpg" alt="Koyuh">
+      <img src="https://i.ibb.co/sJDgpVDK/Gean.jpg" alt="Vitor">
+      <div class="option-content">
+          <input type="radio" name="vote" value="Vitor"> Vitor
+      </div>
+    </label>
+    
+    <label class="option">
+  <img src="https://i.ibb.co/TxTpFBJC/Rose.jpg" alt="Luddi">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Luddi"> Luddi
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://www.opovo.com.br/_midias/jpg/2024/04/24/750x500/1_catia_paganote_a_grande_conquista-26596299.jpg" alt="Gean">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Gean"> Gean
+  </div>
+</label>
+    
+<label class="option">
+      <img src="https://i.ibb.co/6xLnxRL/Tety.jpg" alt="Cícero">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Cícero"> Cícero
+      </div>
+    </label>
+    
+    <label class="option">
+      <img src="https://medias.itatiaia.com.br/dims4/default/926f5a9/2147483647/strip/false/crop/2000x1500+0+30/resize/1000x750!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F62%2F0d%2Fed3d2bd34e10b56ef2c8bc1224a9%2Fflor-050-chahestian.JPG" alt="Mira">
+      <div class="option-content">
+          <input type="radio" name="vote" value="Mira"> Mira
+      </div>
+    </label>
+    
+    <label class="option">
+  <img src="https://f.i.uol.com.br/fotografia/2025/03/30/174338574867e9f4941dfd2_1743385748_3x2_xl.jpg" alt="Neto">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Neto"> Neto
+  </div>
+</label>
+
+    <label class="option">
+      <img src="https://i.ibb.co/dwk3psBx/Ludmila.jpg" alt="Koyuh">
       <div class="option-content">
           <input type="radio" name="vote" value="Koyuh"> Koyuh
       </div>
     </label>
     
     <label class="option">
-  <img src="https://i.ibb.co/211Vq4YM/Rauilly.jpg" alt="Rauilly">
+  <img src="https://www.fashionbubbles.com/wp-content/uploads/2022/10/petala-barreiros-perfil.jpg" alt="Mariana">
   <div class="option-content">
-    <input type="radio" name="vote" value="Rauilly"> Rauilly
+    <input type="radio" name="vote" value="Mariana"> Mariana
   </div>
 </label>
     
@@ -690,7 +732,7 @@ button:disabled {
 
  <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 10, 01, 19, 00, 0);
+const encerramento = new Date(2025, 10, 11, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -886,7 +928,7 @@ async function submitVote(participante) {
 
     //TABLE
     const { data, error } = await supabase
-      .from("f9final")
+      .from("agcvila1")
       .insert(votosParaEnviar);
 
     if (error) {
@@ -940,7 +982,7 @@ async function submitVote(participante) {
 
     botaoVotar.textContent = prevText;
     botaoVotar.disabled = false;
-    console.log("2 votos enviados para:", participante);
+    console.log("Seu voto foi enviado para:", participante);
 
   } catch (err) {
     console.error("Erro submitVote:", err);
