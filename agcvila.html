@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Divisão das Casas 🔥🚨</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      color: #fff;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+      color: #ff6b6b;
+      font-weight: 700;
+    }
+
+    .houses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    .house {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 25px;
+      width: 300px;
+      backdrop-filter: blur(10px);
+      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .house:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .house.verde { border-color: #00ff88; }
+    .house.azul { border-color: #00ccff; }
+    .house.laranja { border-color: #ff8c00; }
+
+    .house h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    .house.verde h2 { color: #00ff88; }
+    .house.azul h2 { color: #00ccff; }
+    .house.laranja h2 { color: #ff8c00; }
+
+    .dono {
+      font-weight: 700;
+      color: #ffd700;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      text-decoration: underline;
+    }
+
+    .membros {
+      list-style: none;
+      text-align: left;
+      font-size: 1rem;
+    }
+
+    .membros li {
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.2);
+    }
+
+    .membros li:last-child {
+      border-bottom: none;
+    }
+
+    .fire {
+      font-size: 2rem;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      .houses { flex-direction: column; align-items: center; }
+      .house { width: 90%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔥🚨 CASAS 🚨🔥</h1>
+    <p class="subtitle">As casas estão montadas! Aqui está a divisão oficial:</p>
+
+    <div class="houses">
+      <!-- CASA VERDE -->
+      <div class="house verde">
+        <h2>🏠 Casa Verde</h2>
+        <p class="dono">👑 DONA - Renata</p>
+        <ul class="membros">
+          <li>Gabi</li>
+          <li>Koyuh</li>
+          <li>Sirleide</li>
+          <li>Kristhyan</li>
+          <li>Eliana</li>
+          <li>Victoria</li>
+          <li>Rose</li>
+          <li>Ludmila</li>
+        </ul>
+      </div>
+
+      <!-- CASA AZUL -->
+      <div class="house azul">
+        <h2>🏠 Casa Azul</h2>
+        <p class="dono">👑 DONO - João</p>
+        <ul class="membros">
+          <li>Alysson</li>
+          <li>Mariana</li>
+          <li>Vicente</li>
+          <li>Caio</li>
+          <li>Silas</li>
+          <li>Samuel</li>
+          <li>Perlla</li>
+          <li>Vilmar</li>
+          <li>Eueu</li>
+          <li>Tekitos</li>
+          <li>Thomaz</li>
+          <li>Emanuel</li>
+        </ul>
+      </div>
+
+      <!-- CASA LARANJA -->
+      <div class="house laranja">
+        <h2>🏠 Casa Laranja</h2>
+        <p class="dono">👑 DONO - Davi José</p>
+        <ul class="membros">
+          <li>Vitor</li>
+          <li>Raquel</li>
+          <li>Cícero</li>
+          <li>Luddi</li>
+          <li>Lucas</li>
+          <li>Tety</li>
+          <li>Flávia</li>
+          <li>Gean</li>
+          <li>Davi</li>
+          <li>Neto</li>
+          <li>Tatah</li>
+          <li>Rodrigo</li>
+          <li>Mikael</li>
+          <li>Pedro</li>
+          <li>Gu</li>
+          <li>Mira</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      Divisão oficial decidida com sucesso! <br>
+      Qual casa vai dominar? 🔥
+    </footer>
+  </div>
+</body>
+</html>
