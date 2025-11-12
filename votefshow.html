@@ -718,7 +718,7 @@ button:disabled {
 
  <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 10, 11, 19, 00, 0);
+const encerramento = new Date(2025, 10, 12, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -914,7 +914,7 @@ async function submitVote(participante) {
 
     //TABLE
     const { data, error } = await supabase
-      .from("agcvila1")
+      .from("agcvila2")
       .insert(votosParaEnviar);
 
     if (error) {
