@@ -622,73 +622,59 @@ button:disabled {
   <div id="votoTela" class="container">
     <h1>Quem você quer que FIQUE na vila?</h1>
 
+    <label class="option">
+      <img src="https://i.ibb.co/99WRnh0z/Caio-2.jpg" alt="Caio">
+      <div class="option-content">
+        <input type="radio" name="vote" value="Caio"> Caio
+      </div>
+    </label>
+    
         <label class="option">
-  <img src="https://i.ibb.co/N2f1FqqZ/Neto.jpg" alt="Sirleide">
+  <img src="https://i.ibb.co/ymdRKRkB/Eliana-2.jpg" alt="Eliana">
   <div class="option-content">
-    <input type="radio" name="vote" value="Sirleide"> Sirleide
+    <input type="radio" name="vote" value="Eliana"> Eliana
   </div>
 </label>
-    
-<label class="option">
-      <img src="https://i.ibb.co/39W3Ld2t/Bryan.jpg" alt="Victória">
+        
+    <label class="option">
+      <img src="https://i.ibb.co/9mfJ2RVD/Gu-2.jpg" alt="Gu">
       <div class="option-content">
-        <input type="radio" name="vote" value="Victória"> Victória
+          <input type="radio" name="vote" value="Gu"> Gu
       </div>
     </label>
     
     <label class="option">
-      <img src="https://i.ibb.co/sJDgpVDK/Gean.jpg" alt="Vitor">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Vitor"> Vitor
-      </div>
-    </label>
-    
-    <label class="option">
-  <img src="https://i.ibb.co/TxTpFBJC/Rose.jpg" alt="Luddi">
+  <img src="https://i.ibb.co/21yY0q9y/Kristhyan-2.jpg" alt="Kristhyan">
   <div class="option-content">
-    <input type="radio" name="vote" value="Luddi"> Luddi
+    <input type="radio" name="vote" value="Kristhyan"> Kristhyan
   </div>
 </label>
 
 <label class="option">
-  <img src="https://www.opovo.com.br/_midias/jpg/2024/04/24/750x500/1_catia_paganote_a_grande_conquista-26596299.jpg" alt="Gean">
+  <img src="https://i.ibb.co/8nNkKgFW/Mikael-2.jpg" alt="Mikael">
   <div class="option-content">
-    <input type="radio" name="vote" value="Gean"> Gean
+    <input type="radio" name="vote" value="Mikael"> Mikael
   </div>
 </label>
     
 <label class="option">
-      <img src="https://i.ibb.co/6xLnxRL/Tety.jpg" alt="Cícero">
+      <img src="https://i.ibb.co/F4NLs8TT/Tekitos.jpg" alt="Tekitos">
       <div class="option-content">
-        <input type="radio" name="vote" value="Cícero"> Cícero
+        <input type="radio" name="vote" value="Tekitos"> Tekitos
       </div>
     </label>
     
     <label class="option">
-      <img src="https://medias.itatiaia.com.br/dims4/default/926f5a9/2147483647/strip/false/crop/2000x1500+0+30/resize/1000x750!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F62%2F0d%2Fed3d2bd34e10b56ef2c8bc1224a9%2Fflor-050-chahestian.JPG" alt="Mira">
+      <img src="https://media.discordapp.net/attachments/1325551524272934922/1437968065374588949/Thomaz2.avif?ex=69152b9e&is=6913da1e&hm=a361aa2df71593384710ac040dd4122a3fdcbb4afe32c49e20adeceaa016364c&=&format=webp&quality=lossless&width=675&height=507" alt="Thomas">
       <div class="option-content">
-          <input type="radio" name="vote" value="Mira"> Mira
+          <input type="radio" name="vote" value="Thomas"> Thomas
       </div>
     </label>
     
     <label class="option">
-  <img src="https://f.i.uol.com.br/fotografia/2025/03/30/174338574867e9f4941dfd2_1743385748_3x2_xl.jpg" alt="Neto">
+  <img src="https://i.ibb.co/svzZjKvP/Vicente-2.jpg" alt="Vicente">
   <div class="option-content">
-    <input type="radio" name="vote" value="Neto"> Neto
-  </div>
-</label>
-
-    <label class="option">
-      <img src="https://i.ibb.co/dwk3psBx/Ludmila.jpg" alt="Koyuh">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Koyuh"> Koyuh
-      </div>
-    </label>
-    
-    <label class="option">
-  <img src="https://www.fashionbubbles.com/wp-content/uploads/2022/10/petala-barreiros-perfil.jpg" alt="Mariana">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Mariana"> Mariana
+    <input type="radio" name="vote" value="Vicente"> Vicente
   </div>
 </label>
     
@@ -953,18 +939,18 @@ async function submitVote(participante) {
     nomeConfirm.textContent = participante;
     fotoConfirm.src = {
       "Victória": "https://i.ibb.co/39W3Ld2t/Bryan.jpg",
-      "Erick": "https://i.ibb.co/F4NLs8TT/Erick.jpg",
+      "Eliana": "https://i.ibb.co/ymdRKRkB/Eliana-2.jpg",
       "Mira": "https://medias.itatiaia.com.br/dims4/default/926f5a9/2147483647/strip/false/crop/2000x1500+0+30/resize/1000x750!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F62%2F0d%2Fed3d2bd34e10b56ef2c8bc1224a9%2Fflor-050-chahestian.JPG",
       "Daniel": "https://medias.itatiaia.com.br/dims4/default/926f5a9/2147483647/strip/false/crop/2000x1500+0+30/resize/1000x750!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F62%2F0d%2Fed3d2bd34e10b56ef2c8bc1224a9%2Fflor-050-chahestian.JPG",
       "Cícero": "https://i.ibb.co/d05SqQ3J/Tety.jpg",
-      "Regina": "https://i.ibb.co/HLjgzJvM/Regina.jpg",
+      "Thomas": "https://media.discordapp.net/attachments/1325551524272934922/1437968065374588949/Thomaz2.avif?ex=69152b9e&is=6913da1e&hm=a361aa2df71593384710ac040dd4122a3fdcbb4afe32c49e20adeceaa016364c&=&format=webp&quality=lossless&width=675&height=507",
       "Flávia": "https://i.ibb.co/fYqCKPPP/Fl-via.jpg",
-      "Ella": "https://i.ibb.co/r2R4xk3t/Ella.jpg",
+      "Gu": "https://i.ibb.co/9mfJ2RVD/Gu-2.jpg",
       "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Gean.webp?raw=true",
-      "Inês": "https://i.ibb.co/svNCVQZK/In-s.jpg",
+      "Mikael": "https://i.ibb.co/8nNkKgFW/Mikael-2.jpg",
       "João": "https://i.ibb.co/ccsDkBCG/Jo-o.jpg",
-      "Jp": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Jp.webp?raw=true",
-      "Kaio": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Kaio.webp?raw=true",
+      "Kristhyan": "https://i.ibb.co/21yY0q9y/Kristhyan-2.jpg",
+      "Tekitos": "https://i.ibb.co/F4NLs8TT/Tekitos.jpg",
       "Gean": "https://www.opovo.com.br/_midias/jpg/2024/04/24/750x500/1_catia_paganote_a_grande_conquista-26596299.jpg",
       "Luana": "https://i.ibb.co/VphZh0pX/Luana.jpg",
       "Lucas": "https://i.ibb.co/zVfksW5n/Lucas.jpg",
@@ -974,9 +960,9 @@ async function submitVote(participante) {
       "Sirleide": "https://i.ibb.co/N2f1FqqZ/Neto.jpg",
       "Neto": "https://f.i.uol.com.br/fotografia/2025/03/30/174338574867e9f4941dfd2_1743385748_3x2_xl.jpg",
       "Rose": "https://i.ibb.co/TxTpFBJC/Rose.jpg",
-      "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Tety.webp?raw=true",
+      "Vicente": "https://i.ibb.co/svzZjKvP/Vicente-2.jpg",
       "Koyuh": "https://i.ibb.co/dwk3psBx/Ludmila.jpg",
-      "Victor": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Victor.webp?raw=true",
+      "Caio": "https://i.ibb.co/99WRnh0z/Caio-2.jpg",
       "Vitor": "https://i.ibb.co/mVFHRVw8/Vitor.jpg"
     }[participante] || "";
 
