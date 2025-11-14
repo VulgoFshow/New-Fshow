@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Resu</title>
+    <title>Resultado</title>
     
 
   </head>
@@ -533,7 +533,7 @@
             label: function(context) {
               const value = context.parsed;
               const total = context.dataset.data.reduce((a, b) => a + b, 0);
-              const percentage = ((value / total) * 100).toFixed(2); // 2 casas
+              const percentage = ((value / total) * 100).toFixed(2); 
               return `${context.label}: ${value} votos (${percentage}%)`;
             }
           }
@@ -557,7 +557,7 @@
 
     while (continuar) {
       const { data, error } = await supabase
-        .from('agcvila3')
+        .from('agcvila4')
         .select('participante')
         .range(pagina * limitePorPagina, (pagina + 1) * limitePorPagina - 1);
 
@@ -630,7 +630,7 @@
       const votos = item[1];
       const perc = ((votos / total) * 100).toFixed(2); // 2 casas
       const pos = i === 0 ? '1º' : i === 1 ? '2º' : i === 2 ? '3º' : `${i + 1}º`;
-      return `${pos} ${nome} - ${votos} votos (${perc}%)`;
+      return `${nome} - (${perc}%)`;
     });
   }
 
