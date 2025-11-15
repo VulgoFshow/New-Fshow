@@ -623,116 +623,25 @@ button:disabled {
     <h1>Quem você quer que SUBA pra Mansão?</h1>
     
         <label class="option">
-  <img src="https://i.ibb.co/6xLnxRL/C-cero.jpg" alt="Cícero">
+  <img src="https://i.ibb.co/MxXH10sw/Alysson-2.jpg" alt="Alysson">
   <div class="option-content">
-    <input type="radio" name="vote" value="Cícero"> Cícero
+    <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
 
         <label class="option">
-      <img src="https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg" alt="Davi José">
+      <img src="https://i.ibb.co/B5rJNWvH/Gabi-2.jpg" alt="Gaby">
       <div class="option-content">
-          <input type="radio" name="vote" value="Davi José"> Davi José
+          <input type="radio" name="vote" value="Gaby"> Gaby
       </div>
     </label>
 
         <label class="option">
-      <img src="https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg" alt="Emanuel">
+      <img src="https://i.ibb.co/fYqCKPPP/Fl-via.jpg" alt="Rose">
       <div class="option-content">
-          <input type="radio" name="vote" value="Emanuel"> Emanuel
+          <input type="radio" name="vote" value="Rose"> Rose
       </div>
     </label>
-
-        <label class="option">
-      <img src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Eueu"> Eueu
-      </div>
-    </label>
-    
-     <label class="option">
-      <img src="https://i.ibb.co/39W3Ld2t/Fl-via.jpg" alt="Flávia">
-      <div class="option-content">
-        <input type="radio" name="vote" value="Flávia"> Flávia
-      </div>
-    </label>
-
-  <label class="option">
-      <img src="https://i.ibb.co/d0Znn920/Gean.jpg" alt="Gean">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Gean"> Gean
-      </div>
-    </label>
-
-    <label class="option">
-  <img src="https://i.ibb.co/9Ht8Frbw/Joao.jpg" alt="João">
-  <div class="option-content">
-    <input type="radio" name="vote" value="João"> João
-  </div>
-    </label>  
-
-    <label class="option">
-  <img src="https://i.ibb.co/CKpr83kd/Lucas-2.jpg" alt="Lucas">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Lucas"> Lucas
-  </div>
-  </label>
-      
-    <label class="option">
-      <img src="https://i.ibb.co/TxTpFBJC/Luddi.jpg" alt="Luddi">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Luddi"> Luddi
-      </div>
-    </label>
-
-      <label class="option">
-  <img src="https://i.ibb.co/609rcJCY/Pedro-2.jpg" alt="Pedro">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Pedro"> Pedro
-  </div>
-</label>
-
-<label class="option">
-      <img src="https://i.ibb.co/d4Cnz8cy/Raquel-2.jpg" alt="Raquel">
-      <div class="option-content">
-        <input type="radio" name="vote" value="Raquel"> Raquel
-      </div>
-    </label>
-
-    <label class="option">
-      <img src="https://i.ibb.co/bMZsynmb/Samuel-2.jpg" alt="Samuel">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Samuel"> Samuel
-      </div>
-    </label>
-      
-        <label class="option">
-  <img src="https://i.ibb.co/G4jyXVxx/Silas-2.jpg" alt="Silas">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Silas"> Silas
-  </div>
-</label>
-      
-    <label class="option">
-  <img src="https://i.ibb.co/Y7yBJfQg/Tatah-2.jpg" alt="Tatah">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Tatah"> Tatah
-  </div>
-</label>
-
-        <label class="option">
-      <img src="https://i.ibb.co/JwNWw60L/Tety-1-2.jpg" alt="Tety">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Tety"> Tety
-      </div>
-    </label>
-    
-    <label class="option">
-  <img src="https://i.ibb.co/svzZjKvP/Vicente-2.jpg" alt="Vicente">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Vicente"> Vicente
-  </div>
-</label>
     
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -774,7 +683,7 @@ button:disabled {
 
  <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 10, 14, 19, 00, 0);
+const encerramento = new Date(2025, 10, 15, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -970,7 +879,7 @@ async function submitVote(participante) {
 
     //TABLE
     const { data, error } = await supabase
-      .from("agcvila4")
+      .from("agc1")
       .insert(votosParaEnviar);
 
     if (error) {
@@ -996,7 +905,7 @@ async function submitVote(participante) {
     fotoConfirm.src = {
       "Victória": "https://i.ibb.co/39W3Ld2t/Bryan.jpg",
       "Eliana": "https://i.ibb.co/ymdRKRkB/Eliana-2.jpg",
-      "Mira": "https://medias.itatiaia.com.br/dims4/default/926f5a9/2147483647/strip/false/crop/2000x1500+0+30/resize/1000x750!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F62%2F0d%2Fed3d2bd34e10b56ef2c8bc1224a9%2Fflor-050-chahestian.JPG",
+      "Alysson": "https://i.ibb.co/MxXH10sw/Alysson-2.jpg",
       "Renata": "https://i.ibb.co/1YgznKMF/Yon.jpg",
       "Cícero": "https://i.ibb.co/6xLnxRL/C-cero.jpg",
       "Davi José": "https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg",
@@ -1019,7 +928,7 @@ async function submitVote(participante) {
       "Vicente": "https://i.ibb.co/svzZjKvP/Vicente-2.jpg",
       "Koyuh": "https://i.ibb.co/dwk3psBx/Ludmila.jpg",
       "Caio": "https://i.ibb.co/99WRnh0z/Caio-2.jpg",
-      "Vitor": "https://i.ibb.co/mVFHRVw8/Vitor.jpg",
+      "Gaby": "https://i.ibb.co/B5rJNWvH/Gabi-2.jpg",
       "Tety": "https://i.ibb.co/JwNWw60L/Tety-1-2.jpg",
       "João": "https://i.ibb.co/9Ht8Frbw/Joao.jpg",
       "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
