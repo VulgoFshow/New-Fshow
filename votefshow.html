@@ -623,21 +623,21 @@ button:disabled {
     <h1>Quem você quer que FIQUE na Mansão?</h1>
     
         <label class="option">
-  <img src="https://i.ibb.co/MyshVLrG/Alysson.jpg" alt="Alysson">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Davi-Jose.webp?raw=true" alt="Alysson">
   <div class="option-content">
     <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
 
         <label class="option">
-      <img src="https://i.ibb.co/B5rJNWvH/Gabi-2.jpg" alt="Gaby">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Lucas.webp?raw=true" alt="Gaby">
       <div class="option-content">
           <input type="radio" name="vote" value="Gaby"> Gaby
       </div>
     </label>
 
         <label class="option">
-      <img src="https://i.ibb.co/fYqCKPPP/Fl-via.jpg" alt="Rose">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true" alt="Rose">
       <div class="option-content">
           <input type="radio" name="vote" value="Rose"> Rose
       </div>
@@ -683,7 +683,7 @@ button:disabled {
 
  <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 10, 15, 19, 00, 0);
+const encerramento = new Date(2025, 10, 16, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -879,7 +879,7 @@ async function submitVote(participante) {
 
     //TABLE
     const { data, error } = await supabase
-      .from("agc1")
+      .from("agc2")
       .insert(votosParaEnviar);
 
     if (error) {
@@ -903,36 +903,30 @@ async function submitVote(participante) {
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
     fotoConfirm.src = {
-      "Victória": "https://i.ibb.co/39W3Ld2t/Bryan.jpg",
-      "Eliana": "https://i.ibb.co/ymdRKRkB/Eliana-2.jpg",
-      "Alysson": "https://i.ibb.co/MyshVLrG/Alysson.jpg",
-      "Renata": "https://i.ibb.co/1YgznKMF/Yon.jpg",
-      "Cícero": "https://i.ibb.co/6xLnxRL/C-cero.jpg",
-      "Davi José": "https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg",
-      "Flávia": "https://i.ibb.co/39W3Ld2t/Fl-via.jpg",
-      "Emanuel": "https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg",
-      "Raquel": "https://i.ibb.co/d4Cnz8cy/Raquel-2.jpg",
-      "Mikael": "https://i.ibb.co/8nNkKgFW/Mikael-2.jpg",
-      "João": "https://i.ibb.co/ccsDkBCG/Jo-o.jpg",
-      "Kristhyan": "https://i.ibb.co/21yY0q9y/Kristhyan-2.jpg",
-      "Tekitos": "https://i.ibb.co/F4NLs8TT/Tekitos.jpg",
-      "Gean": "https://i.ibb.co/d0Znn920/Gean.jpg",
-      "Samuel": "https://i.ibb.co/bMZsynmb/Samuel-2.jpg",
-      "Lucas": "https://i.ibb.co/CKpr83kd/Lucas-2.jpg",
-      "Luddi": "https://i.ibb.co/TxTpFBJC/Luddi.jpg",
-      "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/f9/Ludmila.webp?raw=true",
-      "Mariana": "https://www.fashionbubbles.com/wp-content/uploads/2022/10/petala-barreiros-perfil.jpg",
-      "Pedro": "https://i.ibb.co/609rcJCY/Pedro-2.jpg",
-      "Silas": "https://i.ibb.co/G4jyXVxx/Silas-2.jpg",
-      "Rose": "https://i.ibb.co/fYqCKPPP/Fl-via.jpg",
-      "Vicente": "https://i.ibb.co/svzZjKvP/Vicente-2.jpg",
-      "Koyuh": "https://i.ibb.co/dwk3psBx/Ludmila.jpg",
-      "Caio": "https://i.ibb.co/99WRnh0z/Caio-2.jpg",
-      "Gaby": "https://i.ibb.co/B5rJNWvH/Gabi-2.jpg",
-      "Tety": "https://i.ibb.co/JwNWw60L/Tety-1-2.jpg",
-      "João": "https://i.ibb.co/9Ht8Frbw/Joao.jpg",
-      "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
-      "Tatah": "https://i.ibb.co/Y7yBJfQg/Tatah-2.jpg"
+      "Victória": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
+      "Eliana": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
+      "Alysson": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
+      "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
+      "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
+      "Alysson": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Alysson.webp?raw=true",
+      "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Cicero.webp?raw=true",
+      "Davi": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Davi.webp?raw=true",
+      "Davi Josè": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Davi-Jose.webp?raw=true",
+      "Emanuel": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Emanuel.webp?raw=true",
+      "Flávia": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Flavia.webp?raw=true",
+      "Gabi": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Gabi.webp?raw=true",
+      "Gean": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Gean.webp?raw=true",
+      "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Joao.webp?raw=true",
+      "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Koyuh.webp?raw=true",
+      "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Lucas.webp?raw=true",
+      "Luddi": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Luddi.webp?raw=true",
+      "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Ludmila.webp?raw=true",
+      "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Mariana.webp?raw=true",
+      "Rodrigo": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rodrigo.webp?raw=true",
+      "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tatah.webp?raw=true",
+      "Tatah": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
+      "Tekitos": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tekitos.webp?raw=true",
+      "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tety.webp?raw=true"
     }[participante] || "";
 
     botaoVotar.textContent = prevText;
