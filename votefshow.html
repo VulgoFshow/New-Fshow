@@ -630,9 +630,9 @@ button:disabled {
 </label>
 
 <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Joao.webp?raw=true" alt="João">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Mikael.webp?raw=true" alt="Mikael">
       <div class="option-content">
-          <input type="radio" name="vote" value="João"> João
+          <input type="radio" name="vote" value="Mikael"> Mikael
       </div>
 </label>
     
@@ -640,13 +640,6 @@ button:disabled {
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tatah.webp?raw=true" alt="Tatah">
       <div class="option-content">
           <input type="radio" name="vote" value="Tatah"> Tatah
-      </div>
-    </label>
-    
-<label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tekitos.webp?raw=true" alt="Tekitos">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Tekitos"> Tekitos
       </div>
     </label>
     
@@ -690,7 +683,7 @@ button:disabled {
 
  <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 10, 18, 19, 00, 0);
+const encerramento = new Date(2025, 10, 19, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -886,7 +879,7 @@ async function submitVote(participante) {
 
     //TABLE
     const { data, error } = await supabase
-      .from("agc3")
+      .from("agc4")
       .insert(votosParaEnviar);
 
     if (error) {
