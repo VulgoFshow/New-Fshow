@@ -313,7 +313,7 @@
       let continuar = true;
       while (continuar) {
         const { data, error } = await supabase
-          .from('agc2')
+          .from('agc3')
           .select('participante')
           .range(pagina * limitePorPagina, (pagina + 1) * limitePorPagina - 1);
         if (error) { console.error("Erro ao buscar votos:", error); break; }
@@ -328,7 +328,7 @@
     }
 
     let ultimoRanking = [];
-    const NUM_ELIMINADOS = 6; // <<<< NÚMERO DE ELIMINADOS
+    const NUM_ELIMINADOS = 1; // <<<< NÚMERO DE ELIMINADOS
 
     async function carregarVotos() {
       const data = await carregarTodosVotos();
@@ -403,7 +403,7 @@
         return;
       }
       const texto = [
-        "RESULTADO PARCIAL DA VOTAÇÃO",
+        "RESULTADO",
         `Total de votos: ${document.getElementById("totalVotos").textContent}`,
         `Participantes: ${document.getElementById("participantes").textContent}`,
         "",
