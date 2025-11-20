@@ -622,23 +622,23 @@ button:disabled {
     <h1>Quem você quer que FIQUE na Mansão?</h1>
     
         <label class="option">
-  <img src="agc/Eueu.webp" alt="Eueu">
+  <img src="agc/Rodrigo.webp" alt="Rodrigo">
   <div class="option-content">
-    <input type="radio" name="vote" value="Eueu"> Eueu
+    <input type="radio" name="vote" value="Rodrigo"> Rodrigo
   </div>
 </label>
 
 <label class="option">
-      <img src="https://i.ibb.co/8nNkKgFW/Mikael-2.jpg" alt="Mikael">
+      <img src="agc/Tekitos.webp" alt="Tekitos">
       <div class="option-content">
-          <input type="radio" name="vote" value="Mikael"> Mikael
+          <input type="radio" name="vote" value="Tekitos"> Tekitos
       </div>
 </label>
     
         <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tatah.webp?raw=true" alt="Tatah">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tety.webp?raw=true" alt="Tety">
       <div class="option-content">
-          <input type="radio" name="vote" value="Tatah"> Tatah
+          <input type="radio" name="vote" value="Tety"> Tety
       </div>
     </label>
     
@@ -682,7 +682,7 @@ button:disabled {
 
  <script>
 // (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 10, 19, 19, 00, 0);
+const encerramento = new Date(2025, 10, 20, 19, 00, 0);
 
 
 const votacaoAtiva = true;
@@ -872,13 +872,12 @@ async function submitVote(participante) {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const votosParaEnviar = [
-      { participante },
       { participante }
     ];
 
     //TABLE
     const { data, error } = await supabase
-      .from("agc4")
+      .from("agc5")
       .insert(votosParaEnviar);
 
     if (error) {
