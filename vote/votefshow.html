@@ -621,7 +621,7 @@ const supabase = createClient(
 );
 
 // ===== CONFIG =====
-const VOTOS_POR_CAPTCHA = 1;
+const VOTOS_POR_CAPTCHA = 10;
 function getVotosRestantes() {
   const raw = localStorage.getItem("votosRestantes");
   const token = localStorage.getItem("token");
