@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erro ao enviar voto</title>
+
+  <!-- Importar fonte Inter para combinar com a votação -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #2b2b2b;
+      --selected-bg: #3c3c3c;
+      --panel-bg: #2b2b2b;
+      --panel-border: rgba(255, 255, 255, 0.06);
+      --accent: #00b7b0;
+      --text: #fff;
+      --muted: #bdbdbd;
+      --border-radius: 10px;
+      --transition: all 0.3s ease;
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
+      --back: #0d0d0d;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background: var(--back);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARD DE ERRO */
+    .error-card {
+      background: var(--card-bg);
+      padding: 35px 28px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      max-width: 390px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid var(--panel-border);
+      animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .error-icon {
+      font-size: 58px;
+      color: #ff5555;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 8px 0 12px;
+      color: #ff6b6b;
+    }
+
+    p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      transition: var(--transition);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .txt {
+     width: 100%
+    }
+    
+  </style>
+
+</head>
+<body>
+
+  <div class="error-card">
+    <div class="error-icon">⚠️</div>
+    <h1>Erro ao enviar voto</h1>
+    <p>Ocorreu um problema ao registrar seu voto.</p> <p>Por favor, tente novamente.</p>
+ 
+    <button class="btn" onclick="window.location.href='votefshow.html'">
+      TENTAR NOVAMENTE
+    </button>
+  </div>
+
+</body>
+</html>
