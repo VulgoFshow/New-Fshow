@@ -168,7 +168,7 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* POPUP */
+/* ===== POPUP ===== */
 .popup {
   display: none;
   position: fixed;
@@ -177,90 +177,171 @@ button:disabled {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,.85);
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(4px);
   align-items: center;
   justify-content: center;
   padding: 20px;
-  overflow-y: auto;
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity .25s ease;
 }
 
 .popup.active {
   display: flex;
   opacity: 1;
-  animation: fadeIn 0.5s ease;
 }
 
+/* ===== CONTAINER ===== */
 .captcha-box {
-  background: #222;
-  padding: 20px 30px;
-  border-radius: 10px;
-  width: 340px;
-  max-width: 100%;
-  text-align: center;
+  background: #1b1b1b;
+  width: 360px;
+  max-width: 95%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.45);
+  animation: fadeIn .3s ease;
   color: #eee;
-  animation: popIn 0.5s ease;
 }
 
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+/* ===== CABEÇALHO ===== */
+.captcha-header {
+  background: #0f7b82;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
+.captcha-header span {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  flex: 1;
+  color: #fff;
+}
+
+.captcha-header img {
+  width: 62px;
+  height: 62px;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-left: 12px;
+}
+
+/* ===== GRID ===== */
 .captcha-grid {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 8px;
-  margin-bottom: 18px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 10px;
+  background: #00000022;
 }
 
 .captcha-img {
   width: 100%;
   aspect-ratio: 1/1;
   object-fit: cover;
-  border: 2px solid transparent;
-  border-radius: 10px;
+  border-radius: 6px;
+  background: #111;
   cursor: pointer;
-  transition: var(--transition);
+  border: 2px solid transparent;
+  transition: .15s;
 }
 
 .captcha-img:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .captcha-img.selected {
-  border-color: var(--accent);
-  box-shadow: 0 0 10px rgba(0,255,204,0.5);
+  border-color: #fff;
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
 }
 
+/* ===== FOOTER ===== */
 .captcha-footer {
+  padding: 12px;
   display: flex;
-  gap: 10px;
-  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
 }
 
+/* ===== BOTÃO AVANÇAR ===== */
 .captcha-btn {
-  background: linear-gradient(135deg, #00ffcc, #00b7ff);
-  color: #000;
-  border: none;
-  padding: 10px 20px;
-  font-size: 15px;
-  font-weight: 700;
-  border-radius: 8px;
+  background: #e6e6e6;
+  color: #222;
+  padding: 10px 22px;
+  border-radius: 6px;
   cursor: pointer;
-  flex: 1;
-  transition: var(--transition);
-}
-
-.captcha-btn:hover {
-  transform: scale(1.04);
+  border: none;
+  font-weight: 600;
+  transition: .15s;
 }
 
 .captcha-btn:disabled {
-  opacity: 0.6;
+  opacity: .5;
   cursor: not-allowed;
 }
+
+.captcha-btn:hover:not(:disabled) {
+  background: #fff;
+}
+
+/* ===== BOTÃO ICONE ===== */
+.captcha-icon-btn {
+  background: #2b2b2b;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .15s;
+}
+
+.captcha-icon-btn img {
+  width: 20px;
+  opacity: 0.8;
+}
+
+.captcha-icon-btn:hover {
+  background: #333;
+}
+
+/* ===== MÃOZINHA ===== */
+.captcha-hand img {
+  width: 36px;
+  opacity: 0.85;
+}
+
+/* ===== PAGINAÇÃO ===== */
+.captcha-dots {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #555;
+  transition: .15s;
+}
+
+.dot.active {
+  background: #fff;
+}
+
+/* ===== ANIMAÇÃO ===== */
+@keyframes fadeIn {
+  from {opacity:0; transform: scale(.95);}
+  to {opacity:1; transform: scale(1);}
+}
+
+
 
 /* ===== CONFIRMAÇÃO ===== */
 #fotoConfirm {
@@ -430,190 +511,10 @@ button:disabled {
   pointer-events: none;
 }
 
-/* ===== ANÚNCIOS (ADS) ===== */
-.pf-ad {
-  font-family: "Poppins", sans-serif;
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-  border: 3px solid #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  background: #fff;
-  margin: 20px auto;
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.bot-bait {
+  pointer-events: none;
 }
 
-.pf-ad:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
-
-.pf-ad img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-  object-fit: cover;
-  display: block;
-}
-
-.pf-ad a {
-  text-decoration: none;
-  display: block;
-  color: inherit;
-}
-
-/* Leaderboard */
-.pf-ad[data-type="leaderboard"] {
-  max-width: 1200px;
-  max-height: 110px;
-  border: 3px solid #0d0d0d;
-  box-sizing: border-box;
-}
-
-@media (max-width: 600px) {
-  .pf-ad[data-type="leaderboard"] {
-    max-height: 70px;
-  }
-}
-
-/* Rectangle & Skyscraper */
-.pf-ad[data-type="rectangle"] { max-width: 300px; }
-.pf-ad[data-type="skyscraper"] { max-width: 160px; min-height: 600px; }
-
-@media (max-width: 900px) {
-  .pf-ad[data-type="skyscraper"] { display: none; }
-}
-
-/* Card */
-.pf-ad[data-type="card"] {
-  max-width: 520px;
-  display: flex;
-  flex-direction: row;
-}
-
-.pf-ad[data-type="card"] img {
-  width: 40%;
-  min-width: 150px;
-  height: auto;
-  border-radius: 6px 0 0 6px;
-}
-
-.pf-ad[data-type="card"] .pf-ad-body {
-  padding: 12px;
-  text-align: left;
-  flex: 1;
-}
-
-.pf-ad[data-type="card"] h4 {
-  margin: 0 0 6px;
-  font-size: 16px;
-  color: #222;
-}
-
-.pf-ad[data-type="card"] p {
-  margin: 0 0 10px;
-  font-size: 13px;
-  color: #555;
-}
-
-.pf-ad[data-type="card"] span {
-  font-weight: 600;
-  font-size: 13px;
-  color: #007bff;
-}
-
-@media (max-width: 520px) {
-  .pf-ad[data-type="card"] {
-    flex-direction: column;
-  }
-  .pf-ad[data-type="card"] img {
-    width: 100%;
-    border-radius: 6px 6px 0 0;
-  }
-}
-
-/* Modal */
-.pf-modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 10000;
-}
-
-.pf-modal[aria-hidden="false"] {
-  display: flex;
-}
-
-.pf-modal-inner {
-  background: #fff;
-  padding: 18px;
-  border-radius: 6px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
-  text-align: center;
-  position: relative;
-}
-
-.pf-modal-inner img {
-  width: 320px;
-  max-width: 100%;
-  border-radius: 6px;
-}
-
-.pf-modal-close {
-  position: absolute;
-  right: 14px;
-  top: 14px;
-  background: #fff;
-  border: 0;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  cursor: pointer;
-}
-
-/* Ad Container */
-.ad-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border: 1px solid #ccc;
-  max-width: 970px;
-  width: 95%;
-  height: 90px;
-  margin: 20px auto;
-  background: #004400;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.ad-label {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  background: #fff;
-  color: #555;
-  font-size: 14px;
-  font-family: Arial, sans-serif;
-  padding: 8px 4px;
-  text-align: center;
-  height: 100%;
-  border-right: 1px solid #ccc;
-}
-
-.ad-banner {
-  width: 100%;
-  height: 100%;
-}
-
-.ad-banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
 </style>
 </head>
 <body>
@@ -622,14 +523,14 @@ button:disabled {
     <h1>Quem você quer que FIQUE na Mansão?</h1>
     
         <label class="option">
-  <img src="agc/Rodrigo.webp" alt="Rodrigo">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rodrigo.webp?raw=true" alt="Rodrigo">
   <div class="option-content">
     <input type="radio" name="vote" value="Rodrigo"> Rodrigo
   </div>
 </label>
 
 <label class="option">
-      <img src="agc/Tekitos.webp" alt="Tekitos">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tekitos.webp?raw=true" alt="Tekitos">
       <div class="option-content">
           <input type="radio" name="vote" value="Tekitos"> Tekitos
       </div>
@@ -655,17 +556,29 @@ button:disabled {
     <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
   </div>
 
-  <div id="popupCaptcha" class="popup">
-    <div class="captcha-box">
-      <h3 id="captcha-instruction">Carregando desafio...</h3>
-      <div id="captcha-grid" class="captcha-grid"></div>
-      <div class="captcha-footer">
-        <button id="refresh-btn" class="captcha-btn">↻ Atualizar</button>
-        <button id="verify-btn" class="captcha-btn" disabled>Verificar</button>
+<!-- POPUP CAPTCHA -->
+<div id="popupCaptcha" class="popup">
+  <div class="captcha-box">
+    <div class="captcha-header">
+      <span id="captcha-instrucao">Toque em itens comumente usados com o item mostrado</span>
+      <img id="captcha-ref-img" src="" alt="Referência">
+    </div>
+    <div id="captchaGrid" class="captcha-grid"></div>
+    <div class="captcha-footer">
+      <button id="captchaRefresh" class="captcha-icon-btn" title="Recarregar">
+        <img src="https://i.imgur.com/orZDpuE.png" alt="reload">
+      </button>
+      <div class="captcha-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
       </div>
-      <div id="captcha-status" class="captcha-status"></div>
+      <button id="captchaConfirm" class="captcha-btn" disabled>Avançar</button>
+<div id="captchaStatus" style="color:#fff; font-size:14px; padding:4px 0;"></div>
+
     </div>
   </div>
+</div>
 
   <div id="confirmTela">
   <div class="confirm-card">
@@ -708,12 +621,20 @@ const supabase = createClient(
 );
 
 // ===== CONFIG =====
-const VOTOS_POR_CAPTCHA = 9;
+const VOTOS_POR_CAPTCHA = 1;
 function getVotosRestantes() {
-  return parseInt(localStorage.getItem("votosRestantes") ?? "0", 10);
+  const raw = localStorage.getItem("votosRestantes");
+  const token = localStorage.getItem("token");
+  
+  if (!raw || !token) return 0;
+
+  const valid = hashTag(raw) == token;
+  return valid ? parseInt(raw) : 0;
 }
+
 function setVotosRestantes(n) {
   localStorage.setItem("votosRestantes", String(n));
+  localStorage.setItem("token", String(hashTag(String(n))));
 }
 
 // ===== ELEMENTOS =====
@@ -724,43 +645,44 @@ const fotoConfirm = document.getElementById("fotoConfirm");
 const botaoCaptcha = document.getElementById("botaoCaptcha");
 const botaoVotar = document.getElementById("botaoVotar");
 const popupCaptcha = document.getElementById("popupCaptcha");
-const captchaGrid = document.getElementById("captcha-grid");
-const captchaInstruction = document.getElementById("captcha-instruction");
-const verifyBtn = document.getElementById("verify-btn");
-const refreshBtn = document.getElementById("refresh-btn");
-const statusEl = document.getElementById("captcha-status");
+const captchaGrid = document.getElementById("captchaGrid");
+const captchaInstruction = document.getElementById("captcha-instrucao");
+const verifyBtn = document.getElementById("captchaConfirm");
+const refreshBtn = document.getElementById("captchaRefresh");
+const statusEl = document.getElementById("captchaStatus");
+
 
 // CAPTCHA ===
 const prompts = [
   {
     label: "Clique nas imagens contendo algo que pode se locomover",
-    correctTag: "transporte",
+    correctTag: "202",
     images: [
-      { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "transporte" },
-      { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "transporte" },
-      { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "transporte" },
-      { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "transporte" },
-      { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "transporte" },
-      { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "outros" },
-      { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "outros" },
-      { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "outroa" },
-      { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "outro" },
-      { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "outro" }
+      { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },
+      { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },
+      { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
+      { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
+      { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
+      { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },
+      { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },
+      { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },
+      { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },
+      { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }
     ]
   },
   {
     label: "Clique nas imagens contendo um animal",
-    correctTag: "animal",
+    correctTag: "706",
     images: [
-      { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "animal" },
-      { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "animal" },
-      { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "animal" },
-      { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "animal" },
-      { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "animal" },
-      { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "outros" },
-      { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "outros" },
-      { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "outros" },
-      { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "outro" }
+      { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },
+      { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },
+      { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },
+      { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },
+      { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },
+      { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },
+      { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },
+      { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },
+      { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }
     ]
   }
 ];
@@ -781,21 +703,27 @@ function generateCaptcha() {
   statusEl.textContent = "";
   verifyBtn.disabled = true;
 
+  // Primeiro sorteia o prompt
   const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+  captchaCurrentPrompt = prompt;
+
+  // Só agora pode usar captchaCurrentPrompt
+  captchaInstruction.textContent = prompt.label;
+  document.getElementById("captcha-ref-img").src = prompt.images[0].src;
+
   const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
   const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
-  const correctCount = Math.floor(Math.random() * 3) + 2; // 2 a 4 corretas
+
+  const correctCount = Math.floor(Math.random() * 3) + 2;
   const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
   const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
   const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
-
-  captchaInstruction.textContent = prompt.label;
 
   allImages.forEach(img => {
     const imgEl = document.createElement("img");
     imgEl.src = img.src;
     imgEl.className = "captcha-img";
-    imgEl.dataset.correct = img.tag === prompt.correctTag ? "true" : "false";
+    imgEl.dataset.hash = hashTag(img.tag);
     imgEl.addEventListener("click", () => {
       imgEl.classList.toggle("selected");
       verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
@@ -805,6 +733,21 @@ function generateCaptcha() {
   });
 }
 
+function hashTag(tag) {
+  const secret = "CPTX_2025_FSHOW_🔥";
+  let h = 0;
+  const str = tag + secret;
+
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+
+  return h;
+}
+
+let captchaCurrentPrompt = null;
+
 function abrirCaptcha() {
   generateCaptcha();
   popupCaptcha.classList.add("active");
@@ -813,12 +756,12 @@ function abrirCaptcha() {
   statusEl.textContent = "";
 }
 
+
 function fecharCaptcha() {
   popupCaptcha.classList.remove("active");
   botaoVotar.disabled = false;
 }
 
-// BOTÃO ATUALIZAR
 refreshBtn.addEventListener("click", () => {
   statusEl.textContent = "";
   statusEl.style.color = "";
@@ -834,10 +777,14 @@ refreshBtn.addEventListener("click", () => {
 verifyBtn.addEventListener("click", () => {
   let sucesso = true;
   const imgs = document.querySelectorAll(".captcha-img");
+
+  const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
+
   imgs.forEach(img => {
-    const correto = img.dataset.correct === "true";
+    const isCorrect = img.dataset.hash == corretoHash;
     const selecionado = img.classList.contains("selected");
-    if (correto !== selecionado) sucesso = false;
+
+    if (isCorrect !== selecionado) sucesso = false;
   });
 
   if (sucesso) {
@@ -869,7 +816,7 @@ async function submitVote(participante) {
     const prevText = botaoVotar.textContent;
     botaoVotar.textContent = "Enviando voto...";
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 600));
 
     const votosParaEnviar = [
       { participante }
@@ -881,12 +828,10 @@ async function submitVote(participante) {
       .insert(votosParaEnviar);
 
     if (error) {
-      console.error("Supabase error:", error);
-      alert("Erro ao registrar votos: " + error.message);
-      botaoVotar.disabled = false;
-      botaoVotar.textContent = prevText;
-      return;
-    }
+  console.error("Supabase error:", error);
+  window.location.href = "erro.html";
+  return;
+}
 
     let restantes = getVotosRestantes() - 1;
     if (restantes <= 0) {
