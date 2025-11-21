@@ -946,10 +946,11 @@ async function submitVote(participante) {
       setVotosRestantes(restantes);  
     }  
   
-    votoTela.style.display = "none";  
-    confirmTela.style.display = "flex";  
-    nomeConfirm.textContent = participante;  
-  const fotos = {
+votoTela.style.display = "none";
+confirmTela.style.display = "flex";
+nomeConfirm.textContent = participante;
+
+const fotos = {
   "Alysson": "https://i.ibb.co/MyshVLrG/Alysson.jpg",
   "Cícero": "https://i.ibb.co/6xLnxRL/C-cero.jpg",
   "Davi": "https://i.ibb.co/BHstzy4t/Davi.jpg",
@@ -968,12 +969,12 @@ async function submitVote(participante) {
   "Tekitos": "https://i.ibb.co/F4NLs8TT/Tekitos.jpg"
 };
 
+fotoConfirm.src = fotos[participante] || "";
 
-    }[participante] || "";  
+botaoVotar.textContent = prevText;
+botaoVotar.disabled = false;
+console.log("Seu voto foi enviado para:", participante);
   
-    botaoVotar.textContent = prevText;  
-    botaoVotar.disabled = false;  
-    console.log("Seu voto foi enviado para:", participante);  
   
   } catch (err) {  
     console.error("Erro submitVote:", err);  
@@ -1032,5 +1033,6 @@ botaoCaptcha.addEventListener("click", () => {
   }  
 })();  
   
-</script>  </body>  
+</script> 
+</body>  
 </html>
