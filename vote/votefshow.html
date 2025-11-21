@@ -535,26 +535,117 @@ button:disabled {
   <div id="votoTela" class="container">
     <h1>Quem você quer que FIQUE na Mansão?</h1>
     
-        <label class="option">
-  <img src="https://i.ibb.co/VphZh0pX/Rodrigo.jpg" alt="Rodrigo">
+<label class="option">
+  <img src="https://i.ibb.co/MyshVLrG/Alysson.jpg" alt="Alysson">
   <div class="option-content">
-    <input type="radio" name="vote" value="Rodrigo"> Rodrigo
+      <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
 
 <label class="option">
-      <img src="https://i.ibb.co/F4NLs8TT/Tekitos.jpg" alt="Tekitos">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Tekitos"> Tekitos
-      </div>
+  <img src="https://i.ibb.co/6xLnxRL/C-cero.jpg" alt="Cícero">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Cícero"> Cícero
+  </div>
 </label>
-    
-        <label class="option">
-      <img src="https://i.ibb.co/JwNWw60L/Tety-1-2.jpg" alt="Tety">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Tety"> Tety
-      </div>
-    </label>
+
+<label class="option">
+  <img src="https://i.ibb.co/BHstzy4t/Davi.jpg" alt="Davi">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Davi"> Davi
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg" alt="Davi José">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Davi José"> Davi José
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg" alt="Emanuel">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Emanuel"> Emanuel
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Eueu"> Eueu
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/39W3Ld2t/Fl-via.jpg" alt="Flávia">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Flávia"> Flávia
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/mr6sTbPM/Gean.jpg" alt="Gean">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Gean"> Gean
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/dwk3psBx/Koyuh.jpg" alt="Koyuh">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Koyuh"> Koyuh
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/TxTpFBJC/Luddi.jpg" alt="Luddi">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Luddi"> Luddi
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/wrWB49Nd/Ludmila.jpg" alt="Ludmila">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Ludmila"> Ludmila
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/YFsn03Jc/Mariana.jpg" alt="Mariana">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Mariana"> Mariana
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg" alt="Mikael">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Mikael"> Mikael
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/VphZh0pX/Rodrigo.jpg" alt="Rodrigo">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Rodrigo"> Rodrigo
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/GvFbbHkf/Rose-1-2.jpg" alt="Rose">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Rose"> Rose
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/F4NLs8TT/Tekitos.jpg" alt="Tekitos">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Tekitos"> Tekitos
+  </div>
+</label>
     
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -837,7 +928,7 @@ async function submitVote(participante) {
   
     //TABLE  
     const { data, error } = await supabase  
-      .from("agc5")  
+      .from("superzona")  
       .insert(votosParaEnviar);  
   
     if (error) {  
@@ -874,7 +965,7 @@ async function submitVote(participante) {
       "Gean": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Gean.webp?raw=true",  
       "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Joao.webp?raw=true",  
       "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Koyuh.webp?raw=true",  
-      "Mikael": "https://i.ibb.co/8nNkKgFW/Mikael-2.jpg",  
+      "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",  
       "Luddi": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Luddi.webp?raw=true",  
       "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Ludmila.webp?raw=true",  
       "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Mariana.webp?raw=true",  
