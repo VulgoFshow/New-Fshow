@@ -599,10 +599,11 @@ button:disabled {
 </div>
   
 <script>
-if (!sessionStorage.getItem("logadoSessao")) {
-    sessionStorage.setItem("voltandoDoLogin", "true");
-    window.location.href = "login.html";
-}
+document.addEventListener("DOMContentLoaded", () => {
+    if (!sessionStorage.getItem("logadoSessao")) {
+        window.location.href = "login.html";
+    }
+});
 </script>
   
  <script>  
