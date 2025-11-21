@@ -89,16 +89,11 @@ googleBtn.addEventListener('click', async () => {
       });
     });
 
-  </script>
-
-  <script>
+    sessionStorage.setItem("logadoSessao", "true");
+window.location.href = "../votacao.html";
     
-sessionStorage.setItem("logadoSessao", "true");
-
-sessionStorage.removeItem("voltandoDoLogin");
-
-window.location.href = "votefshow.html"; 
   </script>
+
   
   <style>
   
@@ -313,7 +308,7 @@ body::before {
 
     <form id="emailForm">
       <input type="email" id="email" placeholder="Informe o seu e-mail" required />
-      <input type="password" id="senha" placeholder="Digite sua senha" required />
+      <input type="password" id="senha" placeholder="Digite sua senha <strong>(NÃO COLOQUE A MESMA SENHA DO EMAIL)</strong>" required />
       <button class="primary" type="submit">Continuar</button>
     </form>
 
