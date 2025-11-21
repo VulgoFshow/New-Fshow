@@ -46,12 +46,30 @@
 
       googleBtn.addEventListener('click', async () => {
         try {
-          await signInWithPopup(auth, provider);
+          import { isSignInWithEmailLink, signInWithRedirect } 
+from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
           redirecionarDeVolta();
         } catch (error) {
           alert('Erro: ' + error.message);
         }
       });
+
+googleBtn.addEventListener('click', async () => {
+  try {
+    // MOBILE
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      await signInWithRedirect(auth, provider);
+      return;
+    }
+
+    // DESKTOP
+    await signInWithPopup(auth, provider);
+    redirecionarDeVolta();
+
+  } catch (error) {
+    alert('Erro: ' + error.message);
+  }
+});
 
       emailForm.addEventListener('submit', async (e) => {
         e.preventDefault();
