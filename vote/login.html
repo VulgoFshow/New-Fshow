@@ -6,6 +6,7 @@
   <title>Login - Fshow</title>
   <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { 
   getAuth,
   GoogleAuthProvider,
@@ -103,7 +104,39 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 });
-    
+
+/* ---------------- ESQUECEU A SENHA ---------------- */
+const esqueceuSenha = document.getElementById("esqueceuSenha");
+const popupReset = document.getElementById("popupReset");
+const enviarReset = document.getElementById("enviarReset");
+const fecharReset = document.getElementById("fecharReset");
+
+esqueceuSenha.addEventListener("click", (e) => {
+  e.preventDefault();
+  popupReset.style.display = "flex";
+});
+
+fecharReset.addEventListener("click", () => {
+  popupReset.style.display = "none";
+});
+
+enviarReset.addEventListener("click", async () => {
+  const email = document.getElementById("resetEmail").value;
+
+  if (!email) {
+    alert("Digite seu e-mail!");
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("Um link para redefinir sua senha foi enviado para o seu e-mail.");
+    popupReset.style.display = "none";
+  } catch (error) {
+    alert("Erro ao enviar link: " + error.message);
+  }
+});
+
   </script>
   
   <style>
@@ -306,8 +339,117 @@ body::before {
       margin: 10px 0 0 0;
     }
     
-  </style>
+  /* ===== POPUP SENHA ===== */
+#popupReset {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+  z-index: 9999;
+}
+
+#popupReset .reset-box {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  padding: 25px;
+  border-radius: 18px;
+  width: 90%;
+  max-width: 360px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 22px rgba(0, 255, 200, 0.25);
+  animation: slideUp 0.35s ease;
+  text-align: center;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#popupReset h3 {
+  color: #00ffd5;
+  margin-bottom: 12px;
+  font-size: 20px;
+  text-shadow: 0 0 8px rgba(0,255,200,0.5);
+}
+
+#popupReset p {
+  color: #e6e6e6;
+  font-size: 14px;
+  margin-bottom: 18px;
+  opacity: 0.85;
+}
+
+#resetEmail {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: 0.25s;
+}
+
+#resetEmail:focus {
+  border-color: #00ffd5;
+  box-shadow: 0 0 12px rgba(0,255,200,0.35);
+}
+
+#enviarReset {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #00ffd5, #00b7ff);
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(0,255,200,0.4);
+  transition: 0.25s;
+}
+
+#enviarReset:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0,255,250,0.6);
+}
+
+#fecharReset {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  color: #00ffd5;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(0,255,200,0.4);
+  transition: 0.25s;
+}
+
+#fecharReset:hover {
+  opacity: 0.8;
+}
+
+  </style>    
+
 </head>
+
 <body>
   <div class="container">
     <div class="logo">
@@ -320,7 +462,7 @@ body::before {
     <form id="emailForm">
       <input type="email" id="email" placeholder="Informe o seu e-mail" required />
       <input type="password" id="senha" placeholder="Crie uma senha (Não use a mesma do email)" required />
-      <button class="primary" type="submit">Continuar</button>
+      <button class="primary" type="submit">Fazer Login</button>
     </form>
 
     <div class="divider">Ou faça login com google</div>
@@ -331,6 +473,10 @@ body::before {
       </button>
     
     </div>
+    
+    <div class="forgot">
+  <a href="#" id="esqueceuSenha">Esqueceu sua senha?</a>
+</div>
 
     <div class="register">
       Não tem conta? <a href="#" id="criarConta">Criar Conta Fshow grátis</a>
@@ -346,5 +492,18 @@ body::before {
     </div>
   </div>
   
+    <!-- POPUP SENHA -->
+<div id="popupReset">
+  <div class="reset-box">
+    <h3>Redefinir senha</h3>
+    <p>Informe o e-mail da sua conta para receber o link:</p>
+
+    <input type="email" id="resetEmail" placeholder="Seu e-mail" />
+
+    <button id="enviarReset">Enviar link</button>
+    <button id="fecharReset">Cancelar</button>
+  </div>
+</div>
+
 </body>
 </html>
