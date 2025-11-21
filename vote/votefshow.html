@@ -807,11 +807,9 @@ function generateCaptcha() {
   statusEl.textContent = "";  
   verifyBtn.disabled = true;  
   
-  // Primeiro sorteia o prompt  
   const prompt = prompts[Math.floor(Math.random() * prompts.length)];  
   captchaCurrentPrompt = prompt;  
-  
-  // Só agora pode usar captchaCurrentPrompt  
+    
   captchaInstruction.textContent = prompt.label;  
   document.getElementById("captcha-ref-img").src = prompt.images[0].src;  
   
@@ -923,7 +921,8 @@ async function submitVote(participante) {
     await new Promise(resolve => setTimeout(resolve, 600));  
   
     const votosParaEnviar = [  
-      { participante }  
+      { participante },
+      { participante }
     ];  
   
     //TABLE  
