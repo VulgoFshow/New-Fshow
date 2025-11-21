@@ -949,7 +949,7 @@ async function submitVote(participante) {
     votoTela.style.display = "none";  
     confirmTela.style.display = "flex";  
     nomeConfirm.textContent = participante;  
-    fotoConfirm.src = {
+  const fotos = {
   "Alysson": "https://i.ibb.co/MyshVLrG/Alysson.jpg",
   "Cícero": "https://i.ibb.co/6xLnxRL/C-cero.jpg",
   "Davi": "https://i.ibb.co/BHstzy4t/Davi.jpg",
@@ -966,7 +966,8 @@ async function submitVote(participante) {
   "Rodrigo": "https://i.ibb.co/VphZh0pX/Rodrigo.jpg",
   "Rose": "https://i.ibb.co/GvFbbHkf/Rose-1-2.jpg",
   "Tekitos": "https://i.ibb.co/F4NLs8TT/Tekitos.jpg"
-}
+};
+
 
     }[participante] || "";  
   
