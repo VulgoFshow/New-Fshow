@@ -7,13 +7,14 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { 
-      getAuth, 
-      GoogleAuthProvider, 
-      signInWithPopup, 
-      signInWithEmailAndPassword, 
-      createUserWithEmailAndPassword 
-    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    
     const firebaseConfig = {
       apiKey: "AIzaSyDAR1XPOyU_rJpy9B84LxV9zsDzpUdv9E0",
       authDomain: "login-fshow.firebaseapp.com",
@@ -230,7 +231,7 @@ body::before {
     }
 
     .social-buttons button {
-      width: 1000px;
+      width: 100%;
       height: 55px;
       background: rgba(255, 255, 255, 0.09);
       border: 1px solid rgba(255,255,255,0.15);
