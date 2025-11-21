@@ -5,128 +5,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Fshow</title>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { 
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  getRedirectResult
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyDAR1XPOyU_rJpy9B84LxV9zsDzpUdv9E0",
-      authDomain: "login-fshow.firebaseapp.com",
-      projectId: "login-fshow",
-      storageBucket: "login-fshow.firebasestorage.app",
-      messagingSenderId: "943567663687",
-      appId: "1:943567663687:web:43120815a64212349e3762",
-      measurementId: "G-CSTCTSBV7L"
-    };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+const firebaseConfig = {
+  apiKey: "AIzaSyDAR1XPOyU_rJpy9B84LxV9zsDzpUdv9E0",
+  authDomain: "login-fshow.firebaseapp.com",
+  projectId: "login-fshow",
+  storageBucket: "login-fshow.firebasestorage.app",
+  messagingSenderId: "943567663687",
+  appId: "1:943567663687:web:43120815a64212349e3762",
+  measurementId: "G-CSTCTSBV7L"
+};
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-    function redirecionarDeVolta() {
-      const redirectUrl = localStorage.getItem("redirectAfterLogin");
-      if (redirectUrl) {
-        localStorage.removeItem("redirectAfterLogin");
-        window.location.href = redirectUrl;
-      } else {
-        window.location.href = "votefshow.html";
-      }
-    }
+function irParaVotacao() {
+  window.location.href = "votefshow.html";
+}
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const googleBtn = document.getElementById('googleLogin');
-      const emailForm = document.getElementById('emailForm');
-      const criarConta = document.getElementById('criarConta');
+document.addEventListener("DOMContentLoaded", async () => {
 
-googleBtn.addEventListener('click', async () => {
+  /* ---------------- LOGIN POR REDIRECT (MOBILE) ---------------- */
   try {
-
-    // MOBILE → signInWithRedirect
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      await signInWithRedirect(auth, provider);
-      return;
-    }
-
-    // DESKTOP → signInWithPopup
-    const result = await signInWithPopup(auth, provider);
-
-    redirecionarDeVolta();
-
-  } catch (error) {
-    alert('Erro no login com Google: ' + error.message);
-  }
-});
-      
-      emailForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
-        try {
-          await signInWithEmailAndPassword(auth, email, senha);
-          redirecionarDeVolta();
-        } catch (error) {
-          alert('Erro: ' + error.message);
-        }
-      });
-
-      criarConta.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
-        try {
-          await createUserWithEmailAndPassword(auth, email, senha);
-          redirecionarDeVolta();
-        } catch (error) {
-          alert('Erro: ' + error.message);
-        }
-      });
-    });
-
-
-    // MOBILE
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      localStorage.setItem("redirectAfterLogin", "votefshow.html");
-      await signInWithRedirect(auth, provider);
-      return;
-    }
-
-    const result = await signInWithPopup(auth, provider);
-    sessionStorage.setItem("logadoSessao", "true");
-
-    redirecionarDeVolta();
-
-  } catch (error) {
-    alert('Erro no login com Google: ' + error.message);
-  }
-});
-
-    import { getRedirectResult } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-
-document.addEventListener('DOMContentLoaded', async () => {
-
-  try {
-    const result = await getRedirectResult(auth);
-
-    if (result) {
+    const redirectResult = await getRedirectResult(auth);
+    if (redirectResult) {
       sessionStorage.setItem("logadoSessao", "true");
-      redirecionarDeVolta();
+      irParaVotacao();
       return;
     }
-
   } catch (error) {
-    console.error("Erro ao processar login por redirect:", error.message);
+    console.error("Erro redirect:", error);
   }
 
-});
-  </script>
+  /* ---------------- ELEMENTOS ---------------- */
+  const googleBtn = document.getElementById("googleLogin");
+  const emailForm = document.getElementById("emailForm");
+  const criarConta = document.getElementById("criarConta");
 
+  /* ---------------- LOGIN GOOGLE ---------------- */
+  googleBtn.addEventListener("click", async () => {
+    try {
+      // MOBILE
+      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        await signInWithRedirect(auth, provider);
+        return;
+      }
+
+      // DESKTOP POPUP
+      await signInWithPopup(auth, provider);
+      sessionStorage.setItem("logadoSessao", "true");
+      irParaVotacao();
+
+    } catch (error) {
+      alert("Erro no login com Google: " + error.message);
+    }
+  });
+
+  /* ---------------- LOGIN EMAIL ---------------- */
+  emailForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, senha);
+      sessionStorage.setItem("logadoSessao", "true");
+      irParaVotacao();
+    } catch (error) {
+      alert("Erro: " + error.message);
+    }
+  });
+
+  /* ---------------- CRIAR CONTA ---------------- */
+  criarConta.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, senha);
+      sessionStorage.setItem("logadoSessao", "true");
+      irParaVotacao();
+    } catch (error) {
+      alert("Erro: " + error.message);
+    }
+  });
+
+});
+    
+  </script>
   
   <style>
   
@@ -367,5 +345,6 @@ body::before {
       </ul>
     </div>
   </div>
+  
 </body>
 </html>
