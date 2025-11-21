@@ -119,6 +119,25 @@ redirecionarDeVolta();
     alert('Erro no login com Google: ' + error.message);
   }
 });
+
+    import { getRedirectResult } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+  try {
+    const result = await getRedirectResult(auth);
+
+    if (result) {
+      sessionStorage.setItem("logadoSessao", "true");
+      redirecionarDeVolta();
+      return;
+    }
+
+  } catch (error) {
+    console.error("Erro ao processar login por redirect:", error.message);
+  }
+
+});
   </script>
 
   
