@@ -597,12 +597,14 @@ button:disabled {
     
   </div>
 </div>
-
+  
 <script>
-
-window.location.href = "login.html";
+if (!sessionStorage.getItem("logadoSessao")) {
+    sessionStorage.setItem("voltandoDoLogin", "true");
+    window.location.href = "login.html";
+}
 </script>
-
+  
  <script>  
 // (ano, mês, dia, hora, minuto)  
 const encerramento = new Date(2025, 10, 21, 02, 00, 0);  
@@ -620,8 +622,10 @@ function checkEncerramento() {
   
 checkEncerramento();  
   
-setInterval(checkEncerramento, 60 * 1000);  
-</script>  <script type="module">  
+setInterval(checkEncerramento, 60 * 1000);
+   </script> 
+  
+  <script type="module">  
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';  
 const supabase = createClient(  
   'https://vchvvvvzulrkovjmiokg.supabase.co',  
