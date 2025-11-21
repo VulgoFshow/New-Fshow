@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (!sessionStorage.getItem("logadoSessao")) {
+        window.location.href = "login.html";
+    }
+});
+</script>
   
 <style>
 /* ===== VARIÁVEIS GLOBAIS ===== */
@@ -597,15 +605,7 @@ button:disabled {
     
   </div>
 </div>
-  
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    if (!sessionStorage.getItem("logadoSessao")) {
-        window.location.href = "login.html";
-    }
-});
-</script>
-  
+    
  <script>  
 // (ano, mês, dia, hora, minuto)  
 const encerramento = new Date(2025, 10, 21, 19, 00, 0);  
