@@ -707,12 +707,10 @@ function generateCaptcha() {
   captchaGrid.innerHTML = "";
   statusEl.textContent = "";
   verifyBtn.disabled = true;
-
-  // Primeiro sorteia o prompt
+  
   const prompt = prompts[Math.floor(Math.random() * prompts.length)];
   captchaCurrentPrompt = prompt;
 
-  // Só agora pode usar captchaCurrentPrompt
   captchaInstruction.textContent = prompt.label;
   document.getElementById("captcha-ref-img").src = prompt.images[0].src;
 
@@ -937,6 +935,10 @@ botaoCaptcha.addEventListener("click", () => {
     setVotosRestantes(0);
   }
 })();
+  
+if (localStorage.getItem("usuarioLogado") !== "true") {
+    window.location.href = "login/login.html";
+}
 
 </script>
 </body>
