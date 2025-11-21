@@ -89,19 +89,6 @@ googleBtn.addEventListener('click', async () => {
       });
     });
 
-    sessionStorage.setItem("logadoSessao", "true");
-window.location.href = "votefshow.html";
-
-await signInWithEmailAndPassword(auth, email, senha);
-sessionStorage.setItem("logadoSessao", "true");
-redirecionarDeVolta();
-
- await createUserWithEmailAndPassword(auth, email, senha);
-sessionStorage.setItem("logadoSessao", "true");
-redirecionarDeVolta();
-
-  googleBtn.addEventListener('click', async () => {
-  try {
 
     // MOBILE
     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
@@ -354,7 +341,7 @@ body::before {
 
     <form id="emailForm">
       <input type="email" id="email" placeholder="Informe o seu e-mail" required />
-      <input type="password" id="senha" placeholder="Digite sua senha <strong>(NÃO COLOQUE A MESMA SENHA DO EMAIL)</strong>" required />
+      <input type="password" id="senha" placeholder="Crie uma senha (Não use a mesma do email)" required />
       <button class="primary" type="submit">Continuar</button>
     </form>
 
