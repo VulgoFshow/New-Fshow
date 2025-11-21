@@ -91,7 +91,34 @@ googleBtn.addEventListener('click', async () => {
 
     sessionStorage.setItem("logadoSessao", "true");
 window.location.href = "votefshow.html";
-    
+
+await signInWithEmailAndPassword(auth, email, senha);
+sessionStorage.setItem("logadoSessao", "true");
+redirecionarDeVolta();
+
+ await createUserWithEmailAndPassword(auth, email, senha);
+sessionStorage.setItem("logadoSessao", "true");
+redirecionarDeVolta();
+
+  googleBtn.addEventListener('click', async () => {
+  try {
+
+    // MOBILE
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      localStorage.setItem("redirectAfterLogin", "votefshow.html");
+      await signInWithRedirect(auth, provider);
+      return;
+    }
+
+    const result = await signInWithPopup(auth, provider);
+    sessionStorage.setItem("logadoSessao", "true");
+
+    redirecionarDeVolta();
+
+  } catch (error) {
+    alert('Erro no login com Google: ' + error.message);
+  }
+});
   </script>
 
   
