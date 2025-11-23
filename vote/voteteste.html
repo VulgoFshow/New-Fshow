@@ -631,7 +631,9 @@ const supabase = createClient(
   'https://vchvvvvzulrkovjmiokg.supabase.co',  
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'  
 );  
-  
+
+let captchaLocked = false;
+
 // ===== CONFIG =====  
 const VOTOS_POR_CAPTCHA = 10;  
 function getVotosRestantes() {  
@@ -763,8 +765,10 @@ function hashTag(tag) {
 let captchaCurrentPrompt = null;  
   
 function abrirCaptcha() {
-  captchaLocked = true; 
-let captchaLocked = false;
+  if (captchaAberto) return; 
+
+  captchaAberto = true;
+  captchaLocked = true;
 
   generateCaptcha(); 
   popupCaptcha.classList.add("active");
@@ -772,15 +776,16 @@ let captchaLocked = false;
   botaoCaptcha.setAttribute("aria-pressed", "false");
   botaoVotar.disabled = true;
   statusEl.textContent = "";
+
   setTimeout(() => captchaLocked = false, 200);
 }
+  
+function fecharCaptcha() {
+  popupCaptcha.classList.remove("active");
+  botaoVotar.disabled = false;
+  captchaAberto = false; 
+}
 
-  
-  
-function fecharCaptcha() {  
-  popupCaptcha.classList.remove("active");  
-  botaoVotar.disabled = false;  
-}  
   
 refreshBtn.addEventListener("click", () => {  
   statusEl.textContent = "";  
@@ -794,7 +799,7 @@ refreshBtn.addEventListener("click", () => {
   setTimeout(() => refreshBtn.style.opacity = "1", 200);  
 });  
   
-let etapaCaptcha = 1; // agora existem 2 etapas
+let etapaCaptcha = 1; 
 
 verifyBtn.addEventListener("click", () => {
   let sucesso = true;
@@ -812,22 +817,20 @@ verifyBtn.addEventListener("click", () => {
     statusEl.textContent = "Errou! Tente novamente...";
     statusEl.style.color = "red";
 
-    // Reseta etapa 1 ou 2
     etapaCaptcha = 1;
 
     setTimeout(() => generateCaptcha(), 1200);
     return;
   }
 
-  // ========== SE ACERTOU UMA ETAPA ==========
   if (sucesso && etapaCaptcha === 1) {
-    etapaCaptcha = 2; // vai para a segunda fase
+    etapaCaptcha = 2;
     statusEl.textContent = "Primeira etapa concluída!";
     statusEl.style.color = "green";
 
     setTimeout(() => {
       statusEl.textContent = "";
-      generateCaptcha(); // novo desafio
+      generateCaptcha();
     }, 900);
 
     return;
@@ -835,25 +838,17 @@ verifyBtn.addEventListener("click", () => {
 
   // ========== SE ACERTOU A ETAPA 2 ==========
   if (sucesso && etapaCaptcha === 2) {
-    etapaCaptcha = 1; // reseta para próxima vez
+    etapaCaptcha = 1; 
 
     statusEl.textContent = "Você passou nos dois desafios!";
     statusEl.style.color = "green";
-
-    // Agora sim libera 10 votos
     setVotosRestantes(VOTOS_POR_CAPTCHA);
-
-    // Marca como liberado
     botaoCaptcha.setAttribute("aria-pressed", "true");
     botaoVotar.disabled = false;
     botaoVotar.classList.add("active");
-
-    // CHAVE: zerar suspeita aqui!
     suspeita = 0;
     tentativasVoto = 0;
     scrollsRecentes = 0;
-
-    // fecha captcha
     setTimeout(() => {
       fecharCaptcha();
 
@@ -982,8 +977,8 @@ let ultimaTrocaAba = Date.now();
 let scrollsRecentes = 0;
 let tentativasVoto = 0;
 
-// --- Força CAPTCHA quando suspeito ---
 function exigirCaptchaPorSuspeita() {
+  if (captchaAberto) return; 
   console.warn("⚠ Atividade suspeita detectada — novo CAPTCHA exigido!");
 
   setVotosRestantes(0); // força o fluxo normal
