@@ -317,29 +317,36 @@ button:disabled {
   background: #333;
 }
 
-/* ===== MÃOZINHA ===== */
+/* ===== sticky ===== */
 .captcha-hand img {
   width: 36px;
   opacity: 0.85;
 }
 
 /* ===== PAGINAÇÃO ===== */
-.captcha-dots {
+#captchaSteps {
   display: flex;
-  gap: 4px;
-  margin-left: auto;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
 }
 
-.dot {
-  width: 7px;
-  height: 7px;
+.step-bolinha {
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: #555;
-  transition: .15s;
+  background: #222;  
+  transition: background 0.3s, transform 0.2s;
 }
 
-.dot.active {
-  background: #fff;
+.step-active {
+  background: #fff !important;
+  transform: scale(1.1);
+}
+
+.step-done {
+  background: #2ecc71 !important;
+  transform: scale(1.1);
 }
 
 /* ===== CONFIRMAÇÃO ===== */
@@ -581,10 +588,12 @@ button:disabled {
         <img src="https://i.imgur.com/orZDpuE.png" alt="reload">
       </button>
       <div class="captcha-dots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+        
+<div id="captchaSteps">
+  <span class="step-bolinha" id="step1"></span>
+  <span class="step-bolinha" id="step2"></span>
+</div>
+
       <button id="captchaConfirm" class="captcha-btn" disabled>Avançar</button>
 <div id="captchaStatus" style="color:#fff; font-size:14px; padding:4px 0;"></div>
 
@@ -633,6 +642,7 @@ const supabase = createClient(
 );  
 
 let captchaLocked = false;
+let captchaAberto = false;
 
 // ===== CONFIG =====  
 const VOTOS_POR_CAPTCHA = 10;  
@@ -664,7 +674,8 @@ const captchaInstruction = document.getElementById("captcha-instrucao");
 const verifyBtn = document.getElementById("captchaConfirm");  
 const refreshBtn = document.getElementById("captchaRefresh");  
 const statusEl = document.getElementById("captchaStatus");  
-  
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
   
 // CAPTCHA ===  
 const prompts = [  
@@ -765,27 +776,62 @@ function hashTag(tag) {
 let captchaCurrentPrompt = null;  
   
 function abrirCaptcha() {
-  if (captchaAberto) return; 
+  if (captchaLocked || captchaAberto) return; 
 
-  captchaAberto = true;
   captchaLocked = true;
+  captchaAberto = true;
 
-  generateCaptcha(); 
+  generateCaptcha();
   popupCaptcha.classList.add("active");
 
   botaoCaptcha.setAttribute("aria-pressed", "false");
   botaoVotar.disabled = true;
   statusEl.textContent = "";
 
-  setTimeout(() => captchaLocked = false, 200);
+  setTimeout(() => {
+    captchaLocked = false;
+  }, 300); 
 }
   
-function fecharCaptcha() {
-  popupCaptcha.classList.remove("active");
-  botaoVotar.disabled = false;
-  captchaAberto = false; 
-}
+function generateCaptcha() {
+  step1.classList.add("step-active");
+  step1.classList.remove("step-done");
 
+  step2.classList.remove("step-active", "step-done");
+
+  captchaGrid.innerHTML = "";
+  statusEl.textContent = "";
+  verifyBtn.disabled = true;
+
+  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+  captchaCurrentPrompt = prompt;
+  captchaInstruction.textContent = prompt.label;
+
+  const imagensCorretas = prompt.images.filter(img => img.tag === prompt.correctTag);
+  const referencia = shuffle([...imagensCorretas])[0];
+  document.getElementById("captcha-ref-img").src = referencia.src;
+
+  const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
+  const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
+  const correctCount = Math.floor(Math.random() * 3) + 2;
+  const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
+  const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
+  const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+
+  allImages.forEach(img => {
+    const imgEl = document.createElement("img");
+    imgEl.src = img.src;
+    imgEl.className = "captcha-img";
+    imgEl.dataset.hash = hashTag(img.tag);
+
+    imgEl.addEventListener("click", () => {
+      imgEl.classList.toggle("selected");
+      verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
+    });
+
+    captchaGrid.appendChild(imgEl);
+  });
+}
   
 refreshBtn.addEventListener("click", () => {  
   statusEl.textContent = "";  
@@ -823,42 +869,50 @@ verifyBtn.addEventListener("click", () => {
     return;
   }
 
-  if (sucesso && etapaCaptcha === 1) {
-    etapaCaptcha = 2;
-    statusEl.textContent = "Primeira etapa concluída!";
-    statusEl.style.color = "green";
+if (sucesso && etapaCaptcha === 1) {
+  etapaCaptcha = 2;
 
-    setTimeout(() => {
-      statusEl.textContent = "";
-      generateCaptcha();
-    }, 900);
+  step1.classList.remove("step-active");
+  step1.classList.add("step-done");
 
-    return;
-  }
+  step2.classList.add("step-active");
 
-  // ========== SE ACERTOU A ETAPA 2 ==========
-  if (sucesso && etapaCaptcha === 2) {
-    etapaCaptcha = 1; 
+  setTimeout(() => {
+    generateCaptcha(); 
+  }, 500);
 
-    statusEl.textContent = "Você passou nos dois desafios!";
-    statusEl.style.color = "green";
-    setVotosRestantes(VOTOS_POR_CAPTCHA);
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.disabled = false;
-    botaoVotar.classList.add("active");
-    suspeita = 0;
-    tentativasVoto = 0;
-    scrollsRecentes = 0;
-    setTimeout(() => {
-      fecharCaptcha();
+  return;
+}
 
-      if (pendingVote) {
-        const voto = pendingVote;
-        pendingVote = null;
-        setTimeout(() => submitVote(voto), 200);
-      }
-    }, 900);
-  }
+  // ========== ETAPA 2 ==========
+if (sucesso && etapaCaptcha === 2) {
+  etapaCaptcha = 1;
+
+  step2.classList.remove("step-active");
+  step2.classList.add("step-done");
+  setVotosRestantes(VOTOS_POR_CAPTCHA);
+
+  botaoCaptcha.setAttribute("aria-pressed", "true");
+  botaoVotar.disabled = false;
+  botaoVotar.classList.add("active");
+
+  suspeita = 0;
+  tentativasVoto = 0;
+  scrollsRecentes = 0;
+
+  setTimeout(() => {
+    fecharCaptcha();
+
+    if (pendingVote) {
+      const voto = pendingVote;
+      pendingVote = null;
+      setTimeout(() => submitVote(voto), 200);
+    }
+  }, 800);
+
+  return;
+}
+
 });
 
   
