@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+4<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -536,16 +536,23 @@ button:disabled {
     <h1>Quem você quer que FIQUE na Mansão?</h1>
     
 <label class="option">
-  <img src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg" alt="Mikael">
+  <img src="https://i.ibb.co/MyshVLrG/Alysson.jpg" alt="Alysson">
   <div class="option-content">
-      <input type="radio" name="vote" value="Mikael"> Mikael
+      <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/VphZh0pX/Rodrigo.jpg" alt="Rodrigo">
+  <img src="https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg" alt="Emanuel">
   <div class="option-content">
-      <input type="radio" name="vote" value="Rodrigo"> Rodrigo
+      <input type="radio" name="vote" value="Emanuel"> Emanuel
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/39W3Ld2t/Fl-via.jpg" alt="Flávia">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Flávia"> Flávia
   </div>
 </label>
 
@@ -608,7 +615,7 @@ button:disabled {
     
  <script>  
 // (ano, mês, dia, hora, minuto)  
-const encerramento = new Date(2025, 10, 22, 19, 00, 0);  
+const encerramento = new Date(2025, 10, 23, 19, 00, 0);  
   
   
 const votacaoAtiva = true;  
@@ -836,7 +843,7 @@ async function submitVote(participante) {
   
     //TABLE  
     const { data, error } = await supabase  
-      .from("agc6")  
+      .from("agc7")  
       .insert(votosParaEnviar);  
   
     if (error) {  
