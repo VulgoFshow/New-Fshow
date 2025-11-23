@@ -647,25 +647,47 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'  
 );  
 
-async function getServerUTC() {
-  const resp = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
-  const data = await resp.json();
-  return new Date(data.utc_datetime);
-}
+<script>
+const encerramentoBR = new Date("2025-11-22T20:40:00"); 
 
-const encerramentoUTC = new Date("2025-11-23T20:00:00Z"); 
+async function getBrasilTime() {
+  try {
+    const resp = await fetch(
+      "https://timeapi.io/api/time/current/zone?timeZone=America/Sao_Paulo"
+    );
 
-async function checkEncerramento() {
-  const agoraUTC = await getServerUTC();
+    if (!resp.ok) {
+      window.location.replace("fechada.html");
+      return null;
+    }
 
-  if (agoraUTC >= encerramentoUTC) {
-    window.location.href = "fechada.html";
+    const data = await resp.json();
+    return new Date(
+      data.year,
+      data.month - 1,
+      data.day,
+      data.hour,
+      data.minute,
+      data.seconds
+    );
+
+  } catch (e) {
+    window.location.replace("fechada.html");
+    return null;
   }
 }
 
-checkEncerramento();
-setInterval(checkEncerramento, 30000);
-    
+async function verificarHorario() {
+  const agoraBR = await getBrasilTime();
+  if (!agoraBR) return;
+
+  if (agoraBR >= encerramentoBR) {
+    window.location.replace("fechada.html");
+  }
+}
+
+verificarHorario();
+   
 let captchaLocked = false;
 let captchaAberto = false;
 
