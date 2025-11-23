@@ -647,39 +647,26 @@ const supabase = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'  
 );  
 
-<script>
-const encerramentoBR = new Date("2025-11-22T20:40:00"); 
+// Horário de Encerramento
+const encerramentoBR = new Date("2025-11-23T20:40:00");
 
-async function getBrasilTime() {
-  try {
-    const resp = await fetch(
-      "https://timeapi.io/api/time/current/zone?timeZone=America/Sao_Paulo"
-    );
+async function getServerTime() {
+  const { data, error } = await supabase.rpc("get_server_time");
 
-    if (!resp.ok) {
-      window.location.replace("fechada.html");
-      return null;
-    }
-
-    const data = await resp.json();
-    return new Date(
-      data.year,
-      data.month - 1,
-      data.day,
-      data.hour,
-      data.minute,
-      data.seconds
-    );
-
-  } catch (e) {
+  if (error || !data) {
     window.location.replace("fechada.html");
     return null;
   }
+
+  return new Date(data);
 }
 
 async function verificarHorario() {
-  const agoraBR = await getBrasilTime();
-  if (!agoraBR) return;
+  const agoraServer = await getServerTime();
+  if (!agoraServer) return;
+  const agoraBR = new Date(
+    agoraServer.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+  );
 
   if (agoraBR >= encerramentoBR) {
     window.location.replace("fechada.html");
