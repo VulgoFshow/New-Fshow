@@ -647,29 +647,25 @@ const supabaseUrl = "https://maroopnrcrpoizpjhmss.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Data e hora real de encerramento (em UTC)
-const encerramentoUTC = new Date("2025-11-23T22:19:00Z"); 
-
-async function getServerTime() {
-  const { data, error } = await supabase.rpc("now"); 
-
-  if (error) {
-    console.error("Erro ao pegar horário do servidor", error);
-    return null;
-  }
-
-  return new Date(data);
+async function getServerUTC() {
+  const resp = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
+  const data = await resp.json();
+  return new Date(data.utc_datetime);
 }
 
+const encerramentoUTC = new Date("2025-11-23T22:20:00Z"); 
+
 async function checkEncerramento() {
-  const serverTime = await getServerTime();
+  const agoraUTC = await getServerUTC();
 
-  if (!serverTime) return;
-
-  if (serverTime >= encerramentoUTC) {
+  if (agoraUTC >= encerramentoUTC) {
     window.location.href = "fechada.html";
   }
 }
+
+checkEncerramento();
+setInterval(checkEncerramento, 30000);
+
 
 checkEncerramento();
 setInterval(checkEncerramento, 30000);
