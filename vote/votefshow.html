@@ -6,23 +6,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   
 <script>
-console.log("Início da página voteteste.html");
-
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOMContentLoaded carregou");
 
-    const hoje = new Date().toISOString().split("T")[0];
-    const ultimoLogin = localStorage.getItem("ultimoLoginFshow");
+    const ultimoLogin = Number(localStorage.getItem("ultimoLoginFshow"));
+    const agora = Date.now();
+    const UM_DIA = 86400000;
 
-    console.log("hoje =", hoje);
-    console.log("ultimoLoginFshow =", ultimoLogin);
-
-    if (ultimoLogin !== hoje) {
-        console.warn("Redirecionando para login.html");
+    if (!ultimoLogin || (agora - ultimoLogin) > UM_DIA) {
+        console.warn("Login expirado → redirecionando...");
         window.location.href = "login.html";
-    } else {
-        console.log("Autorizado! login ok");
+        return;
     }
+
+    console.log("Autorizado! Login dentro do prazo.");
 });
 
 document.addEventListener("DOMContentLoaded", () => {
