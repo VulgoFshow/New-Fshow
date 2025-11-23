@@ -36,13 +36,20 @@ body {
   padding: 0;
   font-family: "Inter", Arial, sans-serif;
   color: var(--text);
-  background: var(--back);
+
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
+    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
+
+  background-attachment: fixed;
   background-size: cover;
   animation: fadeIn 0.7s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -335,14 +342,6 @@ button:disabled {
   background: #fff;
 }
 
-/* ===== ANIMAÇÃO ===== */
-@keyframes fadeIn {
-  from {opacity:0; transform: scale(.95);}
-  to {opacity:1; transform: scale(1);}
-}
-
-
-
 /* ===== CONFIRMAÇÃO ===== */
 #fotoConfirm {
   width: 100%;
@@ -401,8 +400,11 @@ button:disabled {
   text-align: center;
   background: transparent;
   min-height: 85vh;
-  animation: fadeIn 0.6s ease;
+  animation: slideUp 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
 }
+
 
 .confirm-card {
   background: transparent;
@@ -430,7 +432,6 @@ button:disabled {
   object-position: center;
 }
 
-/* ===== BOTÃO CAPTCHA CUSTOM ===== */
 #botaoCaptcha {
   display: flex;
   align-items: center;
@@ -515,6 +516,10 @@ button:disabled {
   pointer-events: none;
 }
 
+.fade-in-element {
+  opacity: 0.6; 
+}
+  
 </style>
 </head>
 <body>
@@ -522,26 +527,33 @@ button:disabled {
   <div id="votoTela" class="container">
     <h1>Quem você quer que FIQUE na Mansão?</h1>
     
-        <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rodrigo.webp?raw=true" alt="Rodrigo">
+<label class="option">
+  <img src="https://i.ibb.co/MyshVLrG/Alysson.jpg" alt="Alysson">
   <div class="option-content">
-    <input type="radio" name="vote" value="Rodrigo"> Rodrigo
+      <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
 
 <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tekitos.webp?raw=true" alt="Tekitos">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Tekitos"> Tekitos
-      </div>
+  <img src="https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg" alt="Emanuel">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Emanuel"> Emanuel
+  </div>
 </label>
-    
-        <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tety.webp?raw=true" alt="Tety">
-      <div class="option-content">
-          <input type="radio" name="vote" value="Tety"> Tety
-      </div>
-    </label>
+
+<label class="option">
+  <img src="https://i.ibb.co/39W3Ld2t/Fl-via.jpg" alt="Flávia">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Flávia"> Flávia
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/F4NLs8TT/Tekitos.jpg" alt="Tekitos">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Tekitos"> Tekitos
+  </div>
+</label>
     
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -592,128 +604,127 @@ button:disabled {
     
   </div>
 </div>
-
- <script>
-// (ano, mês, dia, hora, minuto)
-const encerramento = new Date(2025, 10, 20, 19, 00, 0);
-
-
-const votacaoAtiva = true;
-
-function checkEncerramento() {
-  const agora = new Date();
-
-  if (!votacaoAtiva || agora >= encerramento) {
-    window.location.href = "fechada.html";
-  }
-}
-
-checkEncerramento();
-
+    
+ <script>  
+// (ano, mês, dia, hora, minuto)  
+const encerramento = new Date(2025, 10, 23, 19, 00, 0);  
+  
+  
+const votacaoAtiva = true;  
+  
+function checkEncerramento() {  
+  const agora = new Date();  
+  
+  if (!votacaoAtiva || agora >= encerramento) {  
+    window.location.href = "fechada.html";  
+  }  
+}  
+  
+checkEncerramento();  
+  
 setInterval(checkEncerramento, 60 * 1000);
-</script>
+   </script> 
   
-<script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-const supabase = createClient(
-  'https://vchvvvvzulrkovjmiokg.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'
-);
-
-// ===== CONFIG =====
-const VOTOS_POR_CAPTCHA = 1;
-function getVotosRestantes() {
-  const raw = localStorage.getItem("votosRestantes");
-  const token = localStorage.getItem("token");
+  <script type="module">  
+import { createClient } from 'https://esm.sh/@supabase/supabase-js';  
+const supabase = createClient(  
+  'https://vchvvvvzulrkovjmiokg.supabase.co',  
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'  
+);  
   
-  if (!raw || !token) return 0;
-
-  const valid = hashTag(raw) == token;
-  return valid ? parseInt(raw) : 0;
-}
-
-function setVotosRestantes(n) {
-  localStorage.setItem("votosRestantes", String(n));
-  localStorage.setItem("token", String(hashTag(String(n))));
-}
-
-// ===== ELEMENTOS =====
-const votoTela = document.getElementById("votoTela");
-const confirmTela = document.getElementById("confirmTela");
-const nomeConfirm = document.getElementById("nomeConfirm");
-const fotoConfirm = document.getElementById("fotoConfirm");
-const botaoCaptcha = document.getElementById("botaoCaptcha");
-const botaoVotar = document.getElementById("botaoVotar");
-const popupCaptcha = document.getElementById("popupCaptcha");
-const captchaGrid = document.getElementById("captchaGrid");
-const captchaInstruction = document.getElementById("captcha-instrucao");
-const verifyBtn = document.getElementById("captchaConfirm");
-const refreshBtn = document.getElementById("captchaRefresh");
-const statusEl = document.getElementById("captchaStatus");
-
-
-// CAPTCHA ===
-const prompts = [
-  {
-    label: "Clique nas imagens contendo algo que pode se locomover",
-    correctTag: "202",
-    images: [
-      { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },
-      { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },
-      { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
-      { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
-      { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
-      { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },
-      { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },
-      { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },
-      { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },
-      { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }
-    ]
-  },
-  {
-    label: "Clique nas imagens contendo um animal",
-    correctTag: "706",
-    images: [
-      { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },
-      { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },
-      { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },
-      { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },
-      { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },
-      { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },
-      { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },
-      { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },
-      { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }
-    ]
-  }
-];
-
-// ===== UTIL =====
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-let pendingVote = null;
-
+// ===== CONFIG =====  
+const VOTOS_POR_CAPTCHA = 10;  
+function getVotosRestantes() {  
+  const raw = localStorage.getItem("votosRestantes");  
+  const token = localStorage.getItem("token");  
+    
+  if (!raw || !token) return 0;  
+  
+  const valid = hashTag(raw) == token;  
+  return valid ? parseInt(raw) : 0;  
+}  
+  
+function setVotosRestantes(n) {  
+  localStorage.setItem("votosRestantes", String(n));  
+  localStorage.setItem("token", String(hashTag(String(n))));  
+}  
+  
+// ===== ELEMENTOS =====  
+const votoTela = document.getElementById("votoTela");  
+const confirmTela = document.getElementById("confirmTela");  
+const nomeConfirm = document.getElementById("nomeConfirm");  
+const fotoConfirm = document.getElementById("fotoConfirm");  
+const botaoCaptcha = document.getElementById("botaoCaptcha");  
+const botaoVotar = document.getElementById("botaoVotar");  
+const popupCaptcha = document.getElementById("popupCaptcha");  
+const captchaGrid = document.getElementById("captchaGrid");  
+const captchaInstruction = document.getElementById("captcha-instrucao");  
+const verifyBtn = document.getElementById("captchaConfirm");  
+const refreshBtn = document.getElementById("captchaRefresh");  
+const statusEl = document.getElementById("captchaStatus");  
+  
+  
+// CAPTCHA ===  
+const prompts = [  
+  {  
+    label: "Clique nas imagens contendo algo que pode se locomover",  
+    correctTag: "202",  
+    images: [  
+      { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },  
+      { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },  
+      { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },  
+      { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },  
+      { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },  
+      { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },  
+      { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },  
+      { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },  
+      { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },  
+      { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }  
+    ]  
+  },  
+  {  
+    label: "Clique nas imagens contendo um animal",  
+    correctTag: "706",  
+    images: [  
+      { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },  
+      { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },  
+      { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },  
+      { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },  
+      { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },  
+      { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },  
+      { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },  
+      { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },  
+      { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }  
+    ]  
+  }  
+];  
+  
+// ===== UTIL =====  
+function shuffle(array) {  
+  for (let i = array.length - 1; i > 0; i--) {  
+    const j = Math.floor(Math.random() * (i + 1));  
+    [array[i], array[j]] = [array[j], array[i]];  
+  }  
+  return array;  
+}  
+  
+let pendingVote = null;  
+  
 function generateCaptcha() {
   captchaGrid.innerHTML = "";
   statusEl.textContent = "";
   verifyBtn.disabled = true;
 
-  // Primeiro sorteia o prompt
   const prompt = prompts[Math.floor(Math.random() * prompts.length)];
   captchaCurrentPrompt = prompt;
-
-  // Só agora pode usar captchaCurrentPrompt
   captchaInstruction.textContent = prompt.label;
-  document.getElementById("captcha-ref-img").src = prompt.images[0].src;
+
+  const imagensCorretas = prompt.images.filter(img => img.tag === prompt.correctTag);
+  const referencia = shuffle([...imagensCorretas])[0];
+  document.getElementById("captcha-ref-img").src = referencia.src;
 
   const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
   const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
-
   const correctCount = Math.floor(Math.random() * 3) + 2;
   const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
   const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
@@ -724,215 +735,366 @@ function generateCaptcha() {
     imgEl.src = img.src;
     imgEl.className = "captcha-img";
     imgEl.dataset.hash = hashTag(img.tag);
+
     imgEl.addEventListener("click", () => {
       imgEl.classList.toggle("selected");
       verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
       statusEl.textContent = "";
     });
+
     captchaGrid.appendChild(imgEl);
   });
 }
 
-function hashTag(tag) {
-  const secret = "CPTX_2025_FSHOW_🔥";
-  let h = 0;
-  const str = tag + secret;
-
-  for (let i = 0; i < str.length; i++) {
-    h = (h << 5) - h + str.charCodeAt(i);
-    h |= 0;
-  }
-
-  return h;
-}
-
-let captchaCurrentPrompt = null;
-
+  
+function hashTag(tag) {  
+  const secret = "CPTX_2025_FSHOW_🔥";  
+  let h = 0;  
+  const str = tag + secret;  
+  
+  for (let i = 0; i < str.length; i++) {  
+    h = (h << 5) - h + str.charCodeAt(i);  
+    h |= 0;  
+  }  
+  
+  return h;  
+}  
+  
+let captchaCurrentPrompt = null;  
+  
 function abrirCaptcha() {
-  generateCaptcha();
+  captchaLocked = true; 
+let captchaLocked = false;
+
+  generateCaptcha(); 
   popupCaptcha.classList.add("active");
+
   botaoCaptcha.setAttribute("aria-pressed", "false");
   botaoVotar.disabled = true;
   statusEl.textContent = "";
+  setTimeout(() => captchaLocked = false, 200);
 }
 
-
-function fecharCaptcha() {
-  popupCaptcha.classList.remove("active");
-  botaoVotar.disabled = false;
-}
-
-refreshBtn.addEventListener("click", () => {
-  statusEl.textContent = "";
-  statusEl.style.color = "";
-  document.querySelectorAll(".captcha-img").forEach(img => {
-    img.classList.remove("selected");
-  });
-  verifyBtn.disabled = true;
-  generateCaptcha();
-  refreshBtn.style.opacity = "0.7";
-  setTimeout(() => refreshBtn.style.opacity = "1", 200);
-});
+  
+  
+function fecharCaptcha() {  
+  popupCaptcha.classList.remove("active");  
+  botaoVotar.disabled = false;  
+}  
+  
+refreshBtn.addEventListener("click", () => {  
+  statusEl.textContent = "";  
+  statusEl.style.color = "";  
+  document.querySelectorAll(".captcha-img").forEach(img => {  
+    img.classList.remove("selected");  
+  });  
+  verifyBtn.disabled = true;  
+  generateCaptcha();  
+  refreshBtn.style.opacity = "0.7";  
+  setTimeout(() => refreshBtn.style.opacity = "1", 200);  
+});  
+  
+let etapaCaptcha = 1; // agora existem 2 etapas
 
 verifyBtn.addEventListener("click", () => {
   let sucesso = true;
   const imgs = document.querySelectorAll(".captcha-img");
-
   const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
 
   imgs.forEach(img => {
     const isCorrect = img.dataset.hash == corretoHash;
     const selecionado = img.classList.contains("selected");
-
     if (isCorrect !== selecionado) sucesso = false;
   });
 
-  if (sucesso) {
-    statusEl.textContent = "Você passou no CAPTCHA!";
-    statusEl.style.color = "#00aaff";
+  // ========== SE ERROU ==========
+  if (!sucesso) {
+    statusEl.textContent = "Errou! Tente novamente...";
+    statusEl.style.color = "red";
+
+    // Reseta etapa 1 ou 2
+    etapaCaptcha = 1;
+
+    setTimeout(() => generateCaptcha(), 1200);
+    return;
+  }
+
+  // ========== SE ACERTOU UMA ETAPA ==========
+  if (sucesso && etapaCaptcha === 1) {
+    etapaCaptcha = 2; // vai para a segunda fase
+    statusEl.textContent = "Primeira etapa concluída!";
+    statusEl.style.color = "green";
+
+    setTimeout(() => {
+      statusEl.textContent = "";
+      generateCaptcha(); // novo desafio
+    }, 900);
+
+    return;
+  }
+
+  // ========== SE ACERTOU A ETAPA 2 ==========
+  if (sucesso && etapaCaptcha === 2) {
+    etapaCaptcha = 1; // reseta para próxima vez
+
+    statusEl.textContent = "Você passou nos dois desafios!";
+    statusEl.style.color = "green";
+
+    // Agora sim libera 10 votos
     setVotosRestantes(VOTOS_POR_CAPTCHA);
+
+    // Marca como liberado
     botaoCaptcha.setAttribute("aria-pressed", "true");
     botaoVotar.disabled = false;
     botaoVotar.classList.add("active");
 
+    // CHAVE: zerar suspeita aqui!
+    suspeita = 0;
+    tentativasVoto = 0;
+    scrollsRecentes = 0;
+
+    // fecha captcha
     setTimeout(() => {
       fecharCaptcha();
+
       if (pendingVote) {
         const voto = pendingVote;
         pendingVote = null;
         setTimeout(() => submitVote(voto), 200);
       }
-    }, 500);
-  } else {
-    statusEl.textContent = "Tente novamente.";
-    statusEl.style.color = "#ff5555";
-    setTimeout(() => generateCaptcha(), 1500);
+    }, 900);
   }
 });
 
-async function submitVote(participante) {
-  try {
-    botaoVotar.disabled = true;
-    const prevText = botaoVotar.textContent;
-    botaoVotar.textContent = "Enviando voto...";
-
-    await new Promise(resolve => setTimeout(resolve, 600));
-
-    const votosParaEnviar = [
+  
+async function submitVote(participante) {  
+  try {  
+    botaoVotar.disabled = true;  
+    const prevText = botaoVotar.textContent;  
+    botaoVotar.textContent = "Enviando voto...";  
+  
+    await new Promise(resolve => setTimeout(resolve, 600));  
+  
+    const votosParaEnviar = [  
+      { participante },
       { participante }
-    ];
+    ];  
+  
+    //TABLE  
+    const { data, error } = await supabase  
+      .from("agc7")  
+      .insert(votosParaEnviar);  
+  
+    if (error) {  
+  console.error("Supabase error:", error);  
+  window.location.href = "erro.html";  
+  return;  
+}  
+  
+    let restantes = getVotosRestantes() - 1;  
+    if (restantes <= 0) {  
+      setVotosRestantes(0);  
+      botaoCaptcha.setAttribute("aria-pressed", "false");  
+      botaoVotar.classList.remove("active");  
+    } else {  
+      setVotosRestantes(restantes);  
+    }  
+  
+votoTela.style.display = "none";
+confirmTela.style.display = "flex";
+nomeConfirm.textContent = participante;
 
-    //TABLE
-    const { data, error } = await supabase
-      .from("agc5")
-      .insert(votosParaEnviar);
+const fotos = {
+  "Alysson": "https://i.ibb.co/MyshVLrG/Alysson.jpg",
+  "Cícero": "https://i.ibb.co/6xLnxRL/C-cero.jpg",
+  "Davi": "https://i.ibb.co/BHstzy4t/Davi.jpg",
+  "Davi José": "https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg",
+  "Emanuel": "https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg",
+  "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
+  "Flávia": "https://i.ibb.co/39W3Ld2t/Fl-via.jpg",
+  "Gean": "https://i.ibb.co/mr6sTbPM/Gean.jpg",
+  "Koyuh": "https://i.ibb.co/dwk3psBx/Koyuh.jpg",
+  "Luddi": "https://i.ibb.co/TxTpFBJC/Luddi.jpg",
+  "Ludmila": "https://i.ibb.co/wrWB49Nd/Ludmila.jpg",
+  "Mariana": "https://i.ibb.co/YFsn03Jc/Mariana.jpg",
+  "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",
+  "Rodrigo": "https://i.ibb.co/VphZh0pX/Rodrigo.jpg",
+  "Rose": "https://i.ibb.co/GvFbbHkf/Rose-1-2.jpg",
+  "Tekitos": "https://i.ibb.co/F4NLs8TT/Tekitos.jpg"
+};
 
-    if (error) {
-  console.error("Supabase error:", error);
-  window.location.href = "erro.html";
-  return;
-}
+fotoConfirm.src = fotos[participante] || "";
 
-    let restantes = getVotosRestantes() - 1;
-    if (restantes <= 0) {
-      setVotosRestantes(0);
-      botaoCaptcha.setAttribute("aria-pressed", "false");
-      botaoVotar.classList.remove("active");
-    } else {
-      setVotosRestantes(restantes);
-    }
+botaoVotar.textContent = prevText;
+botaoVotar.disabled = false;
+console.log("Seu voto foi enviado para:", participante);
+  
+  
+  } catch (err) {  
+    console.error("Erro submitVote:", err);  
+    alert("Erro inesperado. Tente novamente.");  
+    botaoVotar.disabled = false;  
+    botaoVotar.textContent = "Votar";  
+  }  
+}  
+  
+botaoVotar.addEventListener("click", (e) => {  
+  e.preventDefault();  
+  const escolhidoEl = document.querySelector('input[name="vote"]:checked');  
+  if (!escolhidoEl) {  
+    alert("Selecione um participante antes de votar!");  
+    return;  
+  }  
+  const participante = escolhidoEl.value;  
+  
+  if (getVotosRestantes() <= 0) {  
+    pendingVote = participante;  
+    abrirCaptcha();  
+    return;  
+  }  
+  
+  submitVote(participante);  
+});  
+  
+botaoCaptcha.addEventListener("click", () => {  
+  if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;  
+  
+  if (getVotosRestantes() > 0) {  
+      
+    botaoCaptcha.setAttribute("aria-pressed", "true");  
+    botaoVotar.disabled = false;  
+    botaoVotar.classList.add("active");  
+  } else {  
+  
+    abrirCaptcha();  
+  }  
+});  
 
-    votoTela.style.display = "none";
-    confirmTela.style.display = "flex";
-    nomeConfirm.textContent = participante;
-    fotoConfirm.src = {
-      "Victória": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
-      "Eliana": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
-      "Alysson": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
-      "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
-      "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
-      "Alysson": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Alysson.webp?raw=true",
-      "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Cicero.webp?raw=true",
-      "Davi": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Davi.webp?raw=true",
-      "Davi José": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Davi-Jose.webp?raw=true",
-      "Emanuel": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Emanuel.webp?raw=true",
-      "Flávia": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Flavia.webp?raw=true",
-      "Eueu": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Eueu.webp?raw=true",
-      "Gean": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Gean.webp?raw=true",
-      "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Joao.webp?raw=true",
-      "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Koyuh.webp?raw=true",
-      "Mikael": "https://i.ibb.co/8nNkKgFW/Mikael-2.jpg",
-      "Luddi": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Luddi.webp?raw=true",
-      "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Ludmila.webp?raw=true",
-      "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Mariana.webp?raw=true",
-      "Rodrigo": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rodrigo.webp?raw=true",
-      "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Rose.webp?raw=true",
-      "Tatah": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tatah.webp?raw=true",
-      "Tekitos": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tekitos.webp?raw=true",
-      "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/agc/Tety.webp?raw=true"
-    }[participante] || "";
+// ============================
+// SISTEMA ANTI-BOT / ANTI-SUSPEITA
+// ============================
 
-    botaoVotar.textContent = prevText;
-    botaoVotar.disabled = false;
-    console.log("Seu voto foi enviado para:", participante);
+let suspeita = 0;
+const LIMITE_SUSPEITA = 3;
+let ultimoClique = 0;
+let ultimoMouseX = 0, ultimoMouseY = 0;
+let ultimaTrocaAba = Date.now();
+let scrollsRecentes = 0;
+let tentativasVoto = 0;
 
-  } catch (err) {
-    console.error("Erro submitVote:", err);
-    alert("Erro inesperado. Tente novamente.");
-    botaoVotar.disabled = false;
-    botaoVotar.textContent = "Votar";
-  }
-}
+// --- Força CAPTCHA quando suspeito ---
+function exigirCaptchaPorSuspeita() {
+  console.warn("⚠ Atividade suspeita detectada — novo CAPTCHA exigido!");
 
-botaoVotar.addEventListener("click", (e) => {
-  e.preventDefault();
-  const escolhidoEl = document.querySelector('input[name="vote"]:checked');
-  if (!escolhidoEl) {
-    alert("Selecione um participante antes de votar!");
-    return;
-  }
-  const participante = escolhidoEl.value;
-
-  if (getVotosRestantes() <= 0) {
-    pendingVote = participante;
-    abrirCaptcha();
-    return;
-  }
-
-  submitVote(participante);
-});
-
-botaoCaptcha.addEventListener("click", () => {
-  if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
-
-  if (getVotosRestantes() > 0) {
-    
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.disabled = false;
-    botaoVotar.classList.add("active");
-  } else {
-
-    abrirCaptcha();
-  }
-});
-
-// ===== INIT =====
-(function initState() {
-  const restantes = getVotosRestantes();
-
+  setVotosRestantes(0); // força o fluxo normal
   botaoCaptcha.setAttribute("aria-pressed", "false");
-  botaoCaptcha.disabled = false;
-
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
 
-  if (restantes > 0) {
-    setVotosRestantes(restantes);
-  } else {
-    setVotosRestantes(0);
-  }
-})();
+  abrirCaptcha();
+}
 
-</script>
-</body>
+// ============================
+// 1) DETECTA CLIQUES MUITO RÁPIDOS
+// ============================
+document.addEventListener("click", () => {
+  const agora = Date.now();
+  if (agora - ultimoClique < 160) {
+    suspeita++;
+  }
+  ultimoClique = agora;
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 2) DETECTA MOVIMENTAÇÃO ANORMAL DO MOUSE (CORRIGIDO)
+// ============================
+document.addEventListener("mousemove", (e) => {
+  const dx = Math.abs(e.clientX - ultimoMouseX);
+  const dy = Math.abs(e.clientY - ultimoMouseY);
+
+  // Novo limite: muito mais adequado ao uso real
+  if (dx > 350 || dy > 350) {
+    suspeita++;
+  }
+
+  // Atualiza posição
+  ultimoMouseX = e.clientX;
+  ultimoMouseY = e.clientY;
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 3) DETECTA SCROLL FRENÉTICO (SCRIPT OU BOT)
+// ============================
+document.addEventListener("wheel", () => {
+  scrollsRecentes++;
+  if (scrollsRecentes > 14) {
+    suspeita++;
+    scrollsRecentes = 0;
+  }
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 4) DETECTA TROCA DE ABA MUITO RÁPIDA
+// ============================
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    const agora = Date.now();
+    if (agora - ultimaTrocaAba < 450) {
+      suspeita++;
+    }
+    ultimaTrocaAba = agora;
+  }
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 5) DETECTA SPAM DO BOTÃO "VOTAR"
+// ============================
+botaoVotar.addEventListener("click", () => {
+  tentativasVoto++;
+  if (tentativasVoto > 3) {
+    suspeita++;
+    tentativasVoto = 0;
+  }
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 6) SE CAPTCHA FOI ACERTADO → ZERA SUSPEITA
+// ============================
+verifyBtn.addEventListener("click", () => {
+  if (statusEl.textContent.includes("passou")) {
+    suspeita = 0;
+    tentativasVoto = 0;
+    scrollsRecentes = 0;
+  }
+});
+
+// ===== INIT =====  
+(function initState() {  
+  const restantes = getVotosRestantes();  
+  
+  botaoCaptcha.setAttribute("aria-pressed", "false");  
+  botaoCaptcha.disabled = false;  
+  
+  botaoVotar.disabled = true;  
+  botaoVotar.classList.remove("active");  
+  
+  if (restantes > 0) {  
+    setVotosRestantes(restantes);  
+  } else {  
+    setVotosRestantes(0);  
+  }  
+})();  
+  
+</script> 
+</body>  
 </html>
