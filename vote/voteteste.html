@@ -317,36 +317,29 @@ button:disabled {
   background: #333;
 }
 
-/* ===== sticky ===== */
+/* ===== MÃOZINHA ===== */
 .captcha-hand img {
   width: 36px;
   opacity: 0.85;
 }
 
 /* ===== PAGINAÇÃO ===== */
-#captchaSteps {
+.captcha-dots {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 10px 0;
+  gap: 4px;
+  margin-left: auto;
 }
 
-.step-bolinha {
-  width: 14px;
-  height: 14px;
+.dot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #222;  
-  transition: background 0.3s, transform 0.2s;
+  background: #555;
+  transition: .15s;
 }
 
-.step-active {
-  background: #fff !important;
-  transform: scale(1.1);
-}
-
-.step-done {
-  background: #2ecc71 !important;
-  transform: scale(1.1);
+.dot.active {
+  background: #fff;
 }
 
 /* ===== CONFIRMAÇÃO ===== */
@@ -588,12 +581,10 @@ button:disabled {
         <img src="https://i.imgur.com/orZDpuE.png" alt="reload">
       </button>
       <div class="captcha-dots">
-        
-<div id="captchaSteps">
-  <span class="step-bolinha" id="step1"></span>
-  <span class="step-bolinha" id="step2"></span>
-</div>
-
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
       <button id="captchaConfirm" class="captcha-btn" disabled>Avançar</button>
 <div id="captchaStatus" style="color:#fff; font-size:14px; padding:4px 0;"></div>
 
@@ -674,8 +665,7 @@ const captchaInstruction = document.getElementById("captcha-instrucao");
 const verifyBtn = document.getElementById("captchaConfirm");  
 const refreshBtn = document.getElementById("captchaRefresh");  
 const statusEl = document.getElementById("captchaStatus");  
-const step1 = document.getElementById("step1");
-const step2 = document.getElementById("step2");
+  
   
 // CAPTCHA ===  
 const prompts = [  
@@ -790,47 +780,17 @@ function abrirCaptcha() {
 
   setTimeout(() => {
     captchaLocked = false;
-  }, 300); 
+  }, 300);
+  
+  etapaCaptcha = 1;
+atualizarDots();
+
 }
   
-function generateCaptcha() {
-  step1.classList.add("step-active");
-  step1.classList.remove("step-done");
-
-  step2.classList.remove("step-active", "step-done");
-
-  captchaGrid.innerHTML = "";
-  statusEl.textContent = "";
-  verifyBtn.disabled = true;
-
-  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
-  captchaCurrentPrompt = prompt;
-  captchaInstruction.textContent = prompt.label;
-
-  const imagensCorretas = prompt.images.filter(img => img.tag === prompt.correctTag);
-  const referencia = shuffle([...imagensCorretas])[0];
-  document.getElementById("captcha-ref-img").src = referencia.src;
-
-  const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
-  const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
-  const correctCount = Math.floor(Math.random() * 3) + 2;
-  const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
-  const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
-  const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
-
-  allImages.forEach(img => {
-    const imgEl = document.createElement("img");
-    imgEl.src = img.src;
-    imgEl.className = "captcha-img";
-    imgEl.dataset.hash = hashTag(img.tag);
-
-    imgEl.addEventListener("click", () => {
-      imgEl.classList.toggle("selected");
-      verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
-    });
-
-    captchaGrid.appendChild(imgEl);
-  });
+function fecharCaptcha() {
+  popupCaptcha.classList.remove("active");
+  botaoVotar.disabled = false;
+  captchaAberto = false; 
 }
   
 refreshBtn.addEventListener("click", () => {  
@@ -846,6 +806,18 @@ refreshBtn.addEventListener("click", () => {
 });  
   
 let etapaCaptcha = 1; 
+const dot1 = document.getElementById("dot1");
+const dot2 = document.getElementById("dot2");
+
+function atualizarDots() {
+  if (etapaCaptcha === 1) {
+    dot1.classList.add("active");
+    dot2.classList.remove("active");
+  } else if (etapaCaptcha === 2) {
+    dot1.classList.add("active");
+    dot2.classList.add("active");
+  }
+}
 
 verifyBtn.addEventListener("click", () => {
   let sucesso = true;
@@ -858,7 +830,6 @@ verifyBtn.addEventListener("click", () => {
     if (isCorrect !== selecionado) sucesso = false;
   });
 
-  // ========== SE ERROU ==========
   if (!sucesso) {
     statusEl.textContent = "Errou! Tente novamente...";
     statusEl.style.color = "red";
@@ -869,50 +840,41 @@ verifyBtn.addEventListener("click", () => {
     return;
   }
 
-if (sucesso && etapaCaptcha === 1) {
-  etapaCaptcha = 2;
+  if (sucesso && etapaCaptcha === 1) {
+    etapaCaptcha = 2;
+    atualizarDots();
+    setTimeout(() => {
+      statusEl.textContent = "";
+      generateCaptcha();
+    }, 900);
 
-  step1.classList.remove("step-active");
-  step1.classList.add("step-done");
+    return;
+  }
 
-  step2.classList.add("step-active");
+  if (sucesso && etapaCaptcha === 2) {
+    etapaCaptcha = 1; 
+    atualizarDots();
 
-  setTimeout(() => {
-    generateCaptcha(); 
-  }, 500);
 
-  return;
-}
+    statusEl.textContent = "Você passou nos dois desafios!";
+    statusEl.style.color = "green";
+    setVotosRestantes(VOTOS_POR_CAPTCHA);
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.disabled = false;
+    botaoVotar.classList.add("active");
+    suspeita = 0;
+    tentativasVoto = 0;
+    scrollsRecentes = 0;
+    setTimeout(() => {
+      fecharCaptcha();
 
-  // ========== ETAPA 2 ==========
-if (sucesso && etapaCaptcha === 2) {
-  etapaCaptcha = 1;
-
-  step2.classList.remove("step-active");
-  step2.classList.add("step-done");
-  setVotosRestantes(VOTOS_POR_CAPTCHA);
-
-  botaoCaptcha.setAttribute("aria-pressed", "true");
-  botaoVotar.disabled = false;
-  botaoVotar.classList.add("active");
-
-  suspeita = 0;
-  tentativasVoto = 0;
-  scrollsRecentes = 0;
-
-  setTimeout(() => {
-    fecharCaptcha();
-
-    if (pendingVote) {
-      const voto = pendingVote;
-      pendingVote = null;
-      setTimeout(() => submitVote(voto), 200);
-    }
-  }, 800);
-
-  return;
-}
-
+      if (pendingVote) {
+        const voto = pendingVote;
+        pendingVote = null;
+        setTimeout(() => submitVote(voto), 200);
+      }
+    }, 900);
+  }
 });
 
   
@@ -998,7 +960,7 @@ botaoVotar.addEventListener("click", (e) => {
   
   if (getVotosRestantes() <= 0) {  
     pendingVote = participante;  
-    abrirCaptcha();  
+    abrirCaptcha();
     return;  
   }  
   
@@ -1020,7 +982,7 @@ botaoCaptcha.addEventListener("click", () => {
 });  
 
 // ============================
-// SISTEMA ANTI-BOT / ANTI-SUSPEITA
+// Captcha Security
 // ============================
 
 let suspeita = 0;
@@ -1035,7 +997,7 @@ function exigirCaptchaPorSuspeita() {
   if (captchaAberto) return; 
   console.warn("⚠ Atividade suspeita detectada — novo CAPTCHA exigido!");
 
-  setVotosRestantes(0); // força o fluxo normal
+  setVotosRestantes(0); 
   botaoCaptcha.setAttribute("aria-pressed", "false");
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
@@ -1057,18 +1019,15 @@ document.addEventListener("click", () => {
 });
 
 // ============================
-// 2) DETECTA MOVIMENTAÇÃO ANORMAL DO MOUSE (CORRIGIDO)
+// 2) DETECTA MOVIMENTAÇÃO DO MOUSE 
 // ============================
 document.addEventListener("mousemove", (e) => {
   const dx = Math.abs(e.clientX - ultimoMouseX);
   const dy = Math.abs(e.clientY - ultimoMouseY);
-
-  // Novo limite: muito mais adequado ao uso real
   if (dx > 350 || dy > 350) {
     suspeita++;
   }
 
-  // Atualiza posição
   ultimoMouseX = e.clientX;
   ultimoMouseY = e.clientY;
 
@@ -1089,7 +1048,7 @@ document.addEventListener("wheel", () => {
 });
 
 // ============================
-// 4) DETECTA TROCA DE ABA MUITO RÁPIDA
+// 4) DETECTA TROCA DE ABA 
 // ============================
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
@@ -1104,7 +1063,7 @@ document.addEventListener("visibilitychange", () => {
 });
 
 // ============================
-// 5) DETECTA SPAM DO BOTÃO "VOTAR"
+// 5) SPAM 
 // ============================
 botaoVotar.addEventListener("click", () => {
   tentativasVoto++;
@@ -1117,7 +1076,7 @@ botaoVotar.addEventListener("click", () => {
 });
 
 // ============================
-// 6) SE CAPTCHA FOI ACERTADO → ZERA SUSPEITA
+// 6) ZERA SUSPEITA
 // ============================
 verifyBtn.addEventListener("click", () => {
   if (statusEl.textContent.includes("passou")) {
