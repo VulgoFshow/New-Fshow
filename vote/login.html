@@ -127,9 +127,6 @@ enviarReset.addEventListener("click", async () => {
     alert("Digite seu e-mail!");
     return;
   }
-
-const hoje = new Date().toISOString().split("T")[0];
-localStorage.setItem("ultimoLoginFshow", hoje);
   
   try {
     await sendPasswordResetEmail(auth, email);
@@ -139,6 +136,27 @@ localStorage.setItem("ultimoLoginFshow", hoje);
     alert("Erro ao enviar link: " + error.message);
   }
 });
+
+async function fazerLogin() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: senha
+    });
+
+    if (error) {
+        alert("Credenciais inválidas");
+        return;
+    }
+    const hoje = new Date().toISOString().split("T")[0];
+    localStorage.setItem("ultimoLoginFshow", hoje);
+    setTimeout(() => {
+        window.location.href = "votefshow.html";
+    }, 50);
+}
+
 
   </script>
   
