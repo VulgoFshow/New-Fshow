@@ -128,6 +128,9 @@ enviarReset.addEventListener("click", async () => {
     return;
   }
 
+const hoje = new Date().toISOString().split("T")[0];
+localStorage.setItem("ultimoLoginFshow", hoje);
+  
   try {
     await sendPasswordResetEmail(auth, email);
     alert("Um link para redefinir sua senha foi enviado para o seu e-mail.");
