@@ -653,7 +653,7 @@ async function getServerUTC() {
   return new Date(data.utc_datetime);
 }
 
-const encerramentoUTC = new Date("2025-11-23T22:20:00Z"); 
+const encerramentoUTC = new Date("2025-11-23T20:00:00Z"); 
 
 async function checkEncerramento() {
   const agoraUTC = await getServerUTC();
@@ -662,10 +662,6 @@ async function checkEncerramento() {
     window.location.href = "fechada.html";
   }
 }
-
-checkEncerramento();
-setInterval(checkEncerramento, 30000);
-
 
 checkEncerramento();
 setInterval(checkEncerramento, 30000);
