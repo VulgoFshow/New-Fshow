@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-
+  
   <script>
 document.addEventListener("DOMContentLoaded", () => {
     if (!sessionStorage.getItem("logadoSessao")) {
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 </script>
-  
+
 <style>
 /* ===== VARIÁVEIS GLOBAIS ===== */
 :root {
@@ -332,6 +332,7 @@ button:disabled {
 }
 
 /* ===== PAGINAÇÃO ===== */
+
 .captcha-dots {
   display: flex;
   gap: 4px;
@@ -342,12 +343,20 @@ button:disabled {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #555;
-  transition: .15s;
+  background: #222;
+  transition: background .15s;
+}
+
+.dot.white {
+  background: #ffffff !important;
+}
+
+.dot.green {
+  background: #4CAF50 !important;
 }
 
 .dot.active {
-  background: #fff;
+  background: none !important;
 }
 
 /* ===== CONFIRMAÇÃO ===== */
@@ -586,13 +595,12 @@ button:disabled {
     <div id="captchaGrid" class="captcha-grid"></div>
     <div class="captcha-footer">
       <button id="captchaRefresh" class="captcha-icon-btn" title="Recarregar">
-        <img src="https://i.imgur.com/orZDpuE.png" alt="reload">
+        <img src="https://i.ibb.co/MyvQhHP4/Seta.png" alt="reload">
       </button>
-      <div class="captcha-dots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+<div class="captcha-dots">
+  <div class="dot" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+</div>
       <button id="captchaConfirm" class="captcha-btn" disabled>Avançar</button>
 <div id="captchaStatus" style="color:#fff; font-size:14px; padding:4px 0;"></div>
 
@@ -639,7 +647,10 @@ const supabase = createClient(
   'https://vchvvvvzulrkovjmiokg.supabase.co',  
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'  
 );  
-  
+
+let captchaLocked = false;
+let captchaAberto = false;
+
 // ===== CONFIG =====  
 const VOTOS_POR_CAPTCHA = 10;  
 function getVotosRestantes() {  
@@ -718,38 +729,42 @@ function shuffle(array) {
   
 let pendingVote = null;  
   
-function generateCaptcha() {  
-  captchaGrid.innerHTML = "";  
-  statusEl.textContent = "";  
-  verifyBtn.disabled = true;  
-  
-  const prompt = prompts[Math.floor(Math.random() * prompts.length)];  
-  captchaCurrentPrompt = prompt;  
-    
-  captchaInstruction.textContent = prompt.label;  
-  document.getElementById("captcha-ref-img").src = prompt.images[0].src;  
-  
-  const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);  
-  const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);  
-  
-  const correctCount = Math.floor(Math.random() * 3) + 2;  
-  const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);  
-  const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);  
-  const allImages = shuffle([...selectedCorrect, ...selectedWrong]);  
-  
-  allImages.forEach(img => {  
-    const imgEl = document.createElement("img");  
-    imgEl.src = img.src;  
-    imgEl.className = "captcha-img";  
-    imgEl.dataset.hash = hashTag(img.tag);  
-    imgEl.addEventListener("click", () => {  
-      imgEl.classList.toggle("selected");  
-      verifyBtn.disabled = !document.querySelector(".captcha-img.selected");  
-      statusEl.textContent = "";  
-    });  
-    captchaGrid.appendChild(imgEl);  
-  });  
-}  
+function generateCaptcha() {
+  captchaGrid.innerHTML = "";
+  statusEl.textContent = "";
+  verifyBtn.disabled = true;
+
+  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+  captchaCurrentPrompt = prompt;
+  captchaInstruction.textContent = prompt.label;
+
+  const imagensCorretas = prompt.images.filter(img => img.tag === prompt.correctTag);
+  const referencia = shuffle([...imagensCorretas])[0];
+  document.getElementById("captcha-ref-img").src = referencia.src;
+
+  const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
+  const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
+  const correctCount = Math.floor(Math.random() * 3) + 2;
+  const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
+  const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
+  const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+
+  allImages.forEach(img => {
+    const imgEl = document.createElement("img");
+    imgEl.src = img.src;
+    imgEl.className = "captcha-img";
+    imgEl.dataset.hash = hashTag(img.tag);
+
+    imgEl.addEventListener("click", () => {
+      imgEl.classList.toggle("selected");
+      verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
+      statusEl.textContent = "";
+    });
+
+    captchaGrid.appendChild(imgEl);
+  });
+}
+
   
 function hashTag(tag) {  
   const secret = "CPTX_2025_FSHOW_🔥";  
@@ -766,19 +781,49 @@ function hashTag(tag) {
   
 let captchaCurrentPrompt = null;  
   
-function abrirCaptcha() {  
-  generateCaptcha();  
-  popupCaptcha.classList.add("active");  
-  botaoCaptcha.setAttribute("aria-pressed", "false");  
-  botaoVotar.disabled = true;  
-  statusEl.textContent = "";  
-}  
+function abrirCaptcha() {
+  if (captchaLocked || captchaAberto) return; 
+
+  captchaLocked = true;
+  captchaAberto = true;
+
+etapaCaptcha = 1;  
+  atualizarDots(); 
   
+  generateCaptcha();
+  popupCaptcha.classList.add("active");
+
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoVotar.disabled = true;
+  statusEl.textContent = "";
+
+  setTimeout(() => {
+    captchaLocked = false;
+  }, 300);
   
-function fecharCaptcha() {  
-  popupCaptcha.classList.remove("active");  
-  botaoVotar.disabled = false;  
-}  
+  etapaCaptcha = 1;
+
+function atualizarDots() {
+  dot1.className = "dot";
+  dot2.className = "dot";
+
+  if (etapaCaptcha === 1) {
+    dot1.classList.add("white");
+  }
+
+  else if (etapaCaptcha === 2) {
+    dot1.classList.add("green");
+    dot2.classList.add("white");
+  }
+}
+
+}
+  
+function fecharCaptcha() {
+  popupCaptcha.classList.remove("active");
+  botaoVotar.disabled = false;
+  captchaAberto = false; 
+}
   
 refreshBtn.addEventListener("click", () => {  
   statusEl.textContent = "";  
@@ -792,37 +837,78 @@ refreshBtn.addEventListener("click", () => {
   setTimeout(() => refreshBtn.style.opacity = "1", 200);  
 });  
   
-verifyBtn.addEventListener("click", () => {  
-  let sucesso = true;  
-  const imgs = document.querySelectorAll(".captcha-img");  
-  
-  const corretoHash = hashTag(captchaCurrentPrompt.correctTag);  
-  
-  imgs.forEach(img => {  
-    const isCorrect = img.dataset.hash == corretoHash;  
-    const selecionado = img.classList.contains("selected");  
-  
-    if (isCorrect !== selecionado) sucesso = false;  
-  });  
-  
-  if (sucesso) {  
-    setVotosRestantes(VOTOS_POR_CAPTCHA);  
-    botaoCaptcha.setAttribute("aria-pressed", "true");  
-    botaoVotar.disabled = false;  
-    botaoVotar.classList.add("active");  
-  
-    setTimeout(() => {  
-      fecharCaptcha();  
-      if (pendingVote) {  
-        const voto = pendingVote;  
-        pendingVote = null;  
-        setTimeout(() => submitVote(voto), 200);  
-      }  
-    }, 500);  
-  } else {  
-    setTimeout(() => generateCaptcha(), 1500);  
-  }  
-});  
+let etapaCaptcha = 1; 
+
+const dot1 = document.getElementById("dot1");
+const dot2 = document.getElementById("dot2");
+
+function atualizarDots() {
+  if (!dot1 || !dot2) return;
+
+  dot1.classList.remove("white", "green", "active");
+  dot2.classList.remove("white", "green", "active");
+
+  if (etapaCaptcha === 1) {
+    dot1.classList.add("green");
+  } else if (etapaCaptcha === 2) {
+    dot1.classList.add("green");
+    dot2.classList.add("white");
+  } else {
+  }
+}
+
+
+verifyBtn.addEventListener("click", () => {
+  let sucesso = true;
+  const imgs = document.querySelectorAll(".captcha-img");
+  const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
+
+  imgs.forEach(img => {
+    const isCorrect = img.dataset.hash == corretoHash;
+    const selecionado = img.classList.contains("selected");
+    if (isCorrect !== selecionado) sucesso = false;
+  });
+
+  if (!sucesso) {
+    etapaCaptcha = 1;
+    setTimeout(() => generateCaptcha(), 1200);
+    return;
+  }
+
+ if (sucesso && etapaCaptcha === 1) {
+  etapaCaptcha = 2;
+  atualizarDots();   
+    setTimeout(() => {
+      statusEl.textContent = "";
+      generateCaptcha();
+    }, 900);
+
+    return;
+  }
+
+if (sucesso && etapaCaptcha === 2) {
+  etapaCaptcha = 1;
+  atualizarDots();  
+
+    setVotosRestantes(VOTOS_POR_CAPTCHA);
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.disabled = false;
+    botaoVotar.classList.add("active");
+    suspeita = 0;
+    tentativasVoto = 0;
+    scrollsRecentes = 0;
+    setTimeout(() => {
+      fecharCaptcha();
+
+      if (pendingVote) {
+        const voto = pendingVote;
+        pendingVote = null;
+        setTimeout(() => submitVote(voto), 200);
+      }
+    }, 900);
+  }
+});
+
   
 async function submitVote(participante) {  
   try {  
@@ -906,7 +992,7 @@ botaoVotar.addEventListener("click", (e) => {
   
   if (getVotosRestantes() <= 0) {  
     pendingVote = participante;  
-    abrirCaptcha();  
+    abrirCaptcha();
     return;  
   }  
   
@@ -926,7 +1012,112 @@ botaoCaptcha.addEventListener("click", () => {
     abrirCaptcha();  
   }  
 });  
-  
+
+// ============================
+// Captcha Security
+// ============================
+
+let suspeita = 0;
+const LIMITE_SUSPEITA = 3;
+let ultimoClique = 0;
+let ultimoMouseX = 0, ultimoMouseY = 0;
+let ultimaTrocaAba = Date.now();
+let scrollsRecentes = 0;
+let tentativasVoto = 0;
+
+function exigirCaptchaPorSuspeita() {
+  if (captchaAberto) return; 
+  console.warn("⚠ Atividade suspeita detectada — novo CAPTCHA exigido!");
+
+  setVotosRestantes(0); 
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoVotar.disabled = true;
+  botaoVotar.classList.remove("active");
+
+  abrirCaptcha();
+}
+
+// ============================
+// 1) DETECTA CLIQUES MUITO RÁPIDOS
+// ============================
+document.addEventListener("click", () => {
+  const agora = Date.now();
+  if (agora - ultimoClique < 160) {
+    suspeita++;
+  }
+  ultimoClique = agora;
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 2) DETECTA MOVIMENTAÇÃO DO MOUSE 
+// ============================
+document.addEventListener("mousemove", (e) => {
+  const dx = Math.abs(e.clientX - ultimoMouseX);
+  const dy = Math.abs(e.clientY - ultimoMouseY);
+  if (dx > 350 || dy > 350) {
+    suspeita++;
+  }
+
+  ultimoMouseX = e.clientX;
+  ultimoMouseY = e.clientY;
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 3) DETECTA SCROLL FRENÉTICO (SCRIPT OU BOT)
+// ============================
+document.addEventListener("wheel", () => {
+  scrollsRecentes++;
+  if (scrollsRecentes > 14) {
+    suspeita++;
+    scrollsRecentes = 0;
+  }
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 4) DETECTA TROCA DE ABA 
+// ============================
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    const agora = Date.now();
+    if (agora - ultimaTrocaAba < 450) {
+      suspeita++;
+    }
+    ultimaTrocaAba = agora;
+  }
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 5) SPAM 
+// ============================
+botaoVotar.addEventListener("click", () => {
+  tentativasVoto++;
+  if (tentativasVoto > 3) {
+    suspeita++;
+    tentativasVoto = 0;
+  }
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
+
+// ============================
+// 6) ZERA SUSPEITA
+// ============================
+verifyBtn.addEventListener("click", () => {
+  if (statusEl.textContent.includes("passou")) {
+    suspeita = 0;
+    tentativasVoto = 0;
+    scrollsRecentes = 0;
+  }
+});
+
 // ===== INIT =====  
 (function initState() {  
   const restantes = getVotosRestantes();  
