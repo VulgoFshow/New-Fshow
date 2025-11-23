@@ -5,13 +5,23 @@
   <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   
-  <script>
+<script>
+console.log("Início da página voteteste.html");
+
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOMContentLoaded carregou");
+
     const hoje = new Date().toISOString().split("T")[0];
     const ultimoLogin = localStorage.getItem("ultimoLoginFshow");
 
+    console.log("hoje =", hoje);
+    console.log("ultimoLoginFshow =", ultimoLogin);
+
     if (ultimoLogin !== hoje) {
+        console.warn("Redirecionando para login.html");
         window.location.href = "login.html";
+    } else {
+        console.log("Autorizado! login ok");
     }
 });
 </script>
