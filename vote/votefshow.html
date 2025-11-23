@@ -639,33 +639,40 @@ button:disabled {
     
   </div>
 </div>
-    
- <script>  
-// (ano, mês, dia, hora, minuto)  
-const encerramento = new Date(2025, 10, 23, 19, 00, 0);  
-  
-  
-const votacaoAtiva = true;  
-  
-function checkEncerramento() {  
-  const agora = new Date();  
-  
-  if (!votacaoAtiva || agora >= encerramento) {  
-    window.location.href = "fechada.html";  
-  }  
-}  
-  
-checkEncerramento();  
-  
-setInterval(checkEncerramento, 60 * 1000);
-   </script> 
-  
-  <script type="module">  
+
+<script type="module">  
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';  
 const supabase = createClient(  
   'https://vchvvvvzulrkovjmiokg.supabase.co',  
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'  
-);  
+);
+const supabase = createClient(supabaseUrl, supabaseKey);
+  
+const encerramentoUTC = new Date("2025-11-23T19:00:00Z"); 
+
+async function getServerTime() {
+  const { data, error } = await supabase.rpc("now"); /
+  if (error) {
+    console.error("Erro ao pegar horário do servidor", error);
+    return null;
+  }
+
+  return new Date(data);
+}
+
+async function checkEncerramento() {
+  const serverTime = await getServerTime();
+
+  if (!serverTime) return;
+
+  if (serverTime >= encerramentoUTC) {
+    window.location.href = "fechada.html";
+  }
+}
+
+checkEncerramento();
+setInterval(checkEncerramento, 30000);
+    
 
 let captchaLocked = false;
 let captchaAberto = false;
