@@ -648,7 +648,7 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Data e hora real de encerramento (em UTC)
-const encerramentoUTC = new Date("2025-11-23T22:00:00Z"); 
+const encerramentoUTC = new Date("2025-11-23T22:19:00Z"); 
 
 async function getServerTime() {
   const { data, error } = await supabase.rpc("now"); 
