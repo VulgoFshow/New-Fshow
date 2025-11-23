@@ -137,10 +137,13 @@ enviarReset.addEventListener("click", async () => {
   }
 });
 
+/* ---------------- DATA ---------------- */
+    
+sessionStorage.setItem("logadoSessao", "true");
+localStorage.setItem("ultimoLoginFshow", Date.now());
   </script>
   
   <style>
-  
    body {
   margin: 0;
   padding: 0;
