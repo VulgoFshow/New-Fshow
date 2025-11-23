@@ -1,4 +1,4 @@
-4<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -806,8 +806,6 @@ verifyBtn.addEventListener("click", () => {
   });  
   
   if (sucesso) {  
-    statusEl.textContent = "Você passou no CAPTCHA!";  
-    statusEl.style.color = "#00aaff";  
     setVotosRestantes(VOTOS_POR_CAPTCHA);  
     botaoCaptcha.setAttribute("aria-pressed", "true");  
     botaoVotar.disabled = false;  
@@ -822,8 +820,6 @@ verifyBtn.addEventListener("click", () => {
       }  
     }, 500);  
   } else {  
-    statusEl.textContent = "Tente novamente.";  
-    statusEl.style.color = "#ff5555";  
     setTimeout(() => generateCaptcha(), 1500);  
   }  
 });  
