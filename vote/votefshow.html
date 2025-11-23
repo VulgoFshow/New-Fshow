@@ -24,6 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Autorizado! login ok");
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const ultimoLogin = Number(localStorage.getItem("ultimoLoginFshow"));
+    const agora = Date.now();
+    const UM_DIA = 86400000;
+    if (!ultimoLogin || (agora - ultimoLogin) > UM_DIA) {
+        window.location.href = "login.html";
+    }
+});
+
 </script>
 
 <style>
