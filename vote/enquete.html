@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enquete - A Fazenda 17</title>  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: bold;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .opcao {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 0;
+      border-radius: 14px;
+      margin: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.2s;
+      height: 95px;
+    }
+
+    .textoOpcao {
+      font-size: 20px;
+      padding-left: 20px;
+    }
+
+    .imagemOpcao {
+      width: 110px;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .opcao.selecionada {
+      background: #0ca1a6;
+      color: #fff;
+    }
+
+    .captchaBox {
+      margin: 25px;
+      font-size: 17px;
+      display: none;
+    }
+
+    .botao {
+      display: block;
+      margin: 25px 0;
+      background: #0ca1a6;
+      padding: 18px;
+      color: #fff;
+      text-align: center;
+      border-radius: 12px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .processando {
+      text-align: center;
+      padding: 50px;
+      font-size: 18px;
+      display: none;
+    }
+
+    .loadingCircle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 6px solid #ccc;
+      border-top: 6px solid #0ca1a6;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style></head><body>  <h1>Enquete da roça surpresa: Quem você quer que fique em 'A fazenda 17'?</h1>  <!-- OPÇÕES -->  <div class="opcao" onclick="selecionar('Fabiano Moraes')">
+    <div class="textoOpcao">Fabiano Moraes</div>
+    <img class="imagemOpcao" src="IMG_FABIANO_AQUI">
+  </div>  <div class="opcao" onclick="selecionar('Kathy Maravilha')">
+    <div class="textoOpcao">Kathy Maravilha</div>
+    <img class="imagemOpcao" src="IMG_KATHY_AQUI">
+  </div>  <div class="opcao" onclick="selecionar('Maria Caporusso')">
+    <div class="textoOpcao">Maria Caporusso</div>
+    <img class="imagemOpcao" src="IMG_MARIA_AQUI">
+  </div>  <!-- CAPTCHA -->  <div class="captchaBox" id="captchaBox">
+    <p>Você selecionou a opção <b id="opcaoEscolhida"></b>. Confirme que você é humano através do captcha para validar seu voto.</p><div id="hcaptcha-container"></div>
+
+<div class="botao" onclick="enviarVoto()">Validar voto</div>
+
+  </div>  <!-- PROCESSANDO -->  <div id="processando" class="processando">
+    <div class="loadingCircle"></div>
+    Processando seu voto...
+  </div><script src="https://js.hcaptcha.com/1/api.js" async defer></script><script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "FIREBASE_API_KEY_AQUI",
+    authDomain: "FIREBASE_AUTH_DOMAIN_AQUI",
+    databaseURL: "FIREBASE_DB_URL_AQUI",
+    projectId: "FIREBASE_PROJECT_ID_AQUI",
+    storageBucket: "FIREBASE_STORAGE_AQUI",
+    messagingSenderId: "FIREBASE_SENDER_ID_AQUI",
+    appId: "FIREBASE_APP_ID_AQUI"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  let escolha = null;
+  let captchaToken = null;
+
+  function selecionar(nome) {
+    escolha = nome;
+
+    document.querySelectorAll(".opcao").forEach(op => op.classList.remove("selecionada"));
+    event.currentTarget.classList.add("selecionada");
+
+    document.getElementById("captchaBox").style.display = "block";
+    document.getElementById("opcaoEscolhida").innerText = nome;
+
+    hcaptcha.render("hcaptcha-container", {
+      sitekey: "HCAPTCHA_SITE_KEY_AQUI",
+      callback: function(token) {
+        captchaToken = token;
+      }
+    });
+  }
+  window.selecionar = selecionar;
+
+  async function enviarVoto() {
+    if (!captchaToken) {
+      alert("Confirme o captcha para continuar.");
+      return;
+    }
+
+    document.getElementById("captchaBox").style.display = "none";
+    document.getElementById("processando").style.display = "block";
+
+    await push(ref(db, "votos"), {
+      participante: escolha,
+      horario: Date.now()
+    });
+
+    setTimeout(() => {
+      window.location.href = "resultado.html";
+    }, 1500);
+  }
+  window.enviarVoto = enviarVoto;
+</script></body>
+</html><!-- Integração completa com Firebase + hCaptcha adicionada abaixo --><script type="module">
+  /* ========================= FIREBASE ========================= */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  databaseURL: "https://enquete-fa527-default-rtdb.firebaseio.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  /* ========================= HCAPTCHA ========================= */
+  async function validarHcaptcha() {
+    const token = document.querySelector("[name='h-captcha-response']")?.value;
+    if (!token) return null;
+
+    const resp = await fetch("https://hcaptcha.com/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: "7f923220-ad3a-4dce-ac7e-cecca72a233a",
+        response: token
+      })
+    });
+
+    const data = await resp.json();
+    return data.success;
+  }
+
+  /* ========================= FUNÇÃO DE VOTO ========================= */
+  document.querySelectorAll('.opcao').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const participante = btn.dataset.id;
+
+      // valida CAPTCHA antes de registrar
+      const captchaOK = await validarHcaptcha();
+      if (!captchaOK) {
+        alert("Confirme que você não é um robô.");
+        return;
+      }
+
+      const votoRef = push(ref(db, "votos"));
+      await set(votoRef, {
+        participante,
+        horario: new Date().toISOString()
+      });
+
+      window.location.href = "resultado.html";
+    });
+  });
+</script>
