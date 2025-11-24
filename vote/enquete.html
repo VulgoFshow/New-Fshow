@@ -254,6 +254,108 @@ body {
   transition: text-shadow .25s ease;
 }
 
+/* ===== MOBILE (TELAS PEQUENAS) ===== */
+@media (max-width: 720px) {
+
+  body {
+    padding: 18px 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .header h1 {
+    font-size: 20px;
+  }
+
+  .header img {
+    width: 76px;
+    height: 76px;
+  }
+
+  .wrapper {
+    width: 100%;
+  }
+
+  /* ===== OPÇÕES ===== */
+
+  .opcao-wrapper {
+    margin: 18px 0;
+  }
+
+  .opcao {
+    height: auto;
+    min-height: 88px;
+    padding: 16px 16px 16px 94px;
+  }
+
+  .imagemOpcao {
+    width: 82px;
+    height: 82px;
+    left: -6px;
+    border-radius: 10px;
+  }
+
+  .textoOpcao {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* Impede quebra feia no texto */
+  .info {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* ===== CAPTCHA ===== */
+
+  .captchaBox {
+    padding: 14px;
+  }
+
+  .captcha-row {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .captcha-widget {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .botao {
+    width: 100%;
+    margin-top: 6px;
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  .instrucao {
+    font-size: 13px;
+    text-align: center;
+  }
+
+  /* ===== HOVER: desativado no celular ===== */
+  .opcao-wrapper:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .opcao-wrapper:hover .imagemOpcao {
+    transform: translateY(-50%) scale(1);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+  }
+  .opcao:hover .textoOpcao {
+    text-shadow: none;
+  }
+}
+
 </style>
 
 <div class="wrapper">
