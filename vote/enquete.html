@@ -254,107 +254,97 @@ body {
   transition: text-shadow .25s ease;
 }
 
-/* ===== MOBILE (TELAS PEQUENAS) ===== */
+/* ===== MOBILE ===== */
 @media (max-width: 720px) {
 
   body {
-    padding: 18px 10px;
+    padding: 26px 14px;
   }
-
+  
   .header {
     flex-direction: column;
     text-align: center;
-    gap: 12px;
-    padding: 16px;
+    gap: 14px;
+    padding: 22px;
   }
 
   .header h1 {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .header img {
-    width: 76px;
-    height: 76px;
+    width: 100px;
+    height: 100px;
   }
 
   .wrapper {
     width: 100%;
   }
 
-  /* ===== OPÇÕES ===== */
 
   .opcao-wrapper {
-    margin: 18px 0;
+    margin: 26px 0;
+    border-radius: 20px;
   }
 
   .opcao {
-    height: auto;
-    min-height: 88px;
-    padding: 16px 16px 16px 94px;
+    height: 120px;             
+    padding-left: 150px;       
+    padding-right: 22px;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 
   .imagemOpcao {
-    width: 82px;
-    height: 82px;
-    left: -6px;
-    border-radius: 10px;
+    width: 130px;             
+    height: 130px;             
+    left: -12px;
+    border-radius: 16px;          
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .textoOpcao {
-    font-size: 17px;
+    font-size: 22px;               
     font-weight: 700;
-    line-height: 1.3;
   }
 
-  /* Impede quebra feia no texto */
   .info {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 6px;
+    flex-direction: row;            
+    align-items: center;
+    gap: 16px;
   }
-
-  /* ===== CAPTCHA ===== */
 
   .captchaBox {
-    padding: 14px;
-  }
-
-  .captcha-row {
-    flex-direction: column;
-    gap: 14px;
+    padding: 20px;
   }
 
   .captcha-widget {
-    width: 100%;
-    justify-content: center;
+    transform: scale(1.12);         
+    transform-origin: left;
   }
 
   .botao {
     width: 100%;
-    margin-top: 6px;
-    font-size: 18px;
-    padding: 14px;
+    font-size: 21px;                
+    padding: 16px 26px;
+    border-radius: 14px;
+    margin-top: 18px;
   }
 
   .instrucao {
-    font-size: 13px;
-    text-align: center;
+    font-size: 15px;
   }
 
-  /* ===== HOVER: desativado no celular ===== */
-  .opcao-wrapper:hover {
+  .opcao-wrapper:hover,
+  .opcao:hover,
+  .opcao-wrapper:hover .imagemOpcao {
     transform: none;
     box-shadow: none;
-  }
-  .opcao-wrapper:hover .imagemOpcao {
-    transform: translateY(-50%) scale(1);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
-  }
-  .opcao:hover .textoOpcao {
     text-shadow: none;
   }
 }
+
 
 </style>
 
