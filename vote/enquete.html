@@ -80,17 +80,17 @@
 <!-- OPÇÕES -->
 <div class="opcao" onclick="selecionar(this, 'Fabiano')">
   <div class="textoOpcao">Fabiano</div>
-  <img class="imagemOpcao" src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-fabiano.jpg?raw=true">
+  <img class="imagemOpcao" src="https://medias.itatiaia.com.br/dims4/default/9787942/2147483647/strip/true/crop/2144x1207+8+0/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fba%2F59%2F3f95397f4920a32d67d87e7d8a63%2Ffabiano-moraes-4-1.jpg">
 </div>
 
 <div class="opcao" onclick="selecionar(this, 'Kathy')">
   <div class="textoOpcao">Kathy</div>
-  <img class="imagemOpcao" src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-kathy.jpg?raw=true">
+  <img class="imagemOpcao" src="https://record.r7.com/resizer/v2/C6SLRSQAVRG23N5MCBVJ2NH2WQ.png?auth=75dd93607b797cc8354eb96b45464ed0789baa9f596572bb447e2fa05ed77267">
 </div>
 
 <div class="opcao" onclick="selecionar(this, 'Maria')">
   <div class="textoOpcao">Maria</div>
-  <img class="imagemOpcao" src="https://github.com/VulgoFshow/New-Fshow/blob/main/pfazenda/a-fazenda-17-maria.jpg?raw=true">
+  <img class="imagemOpcao" src="https://medias.itatiaia.com.br/dims4/default/a6d779e/2147483647/strip/true/crop/701x395+0+21/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F68%2F9f%2Febe23b3c40f797f6d829ba15f30a%2Fmaria-caporusso-onedrive-09-23-2025-06-06-pm.jpg">
 </div>
 
 <!-- CAPTCHA -->
@@ -115,19 +115,18 @@
 <!-- FIREBASE + LÓGICA -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   const app = initializeApp({
     apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
     authDomain: "enquete-fa527.firebaseapp.com",
-    databaseURL: "https://enquete-fa527-default-rtdb.firebaseio.com",
     projectId: "enquete-fa527",
     storageBucket: "enquete-fa527.firebasestorage.app",
     messagingSenderId: "544422121318",
     appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
   });
 
-  const db = getDatabase(app);
+  const db = getFirestore(app);
 
   let escolha = null;
   let captchaToken = null;
@@ -166,14 +165,20 @@
     document.getElementById("captchaBox").style.display = "none";
     document.getElementById("processando").style.display = "block";
 
-    await push(ref(db, "votos"), {
-      participante: escolha,
-      horario: Date.now()
-    });
+    try {
+      await addDoc(collection(db, "votos"), {
+        participante: escolha,
+        horario: serverTimestamp()
+      });
 
-    setTimeout(() => {
-      window.location.href = "resultado.html";
-    }, 1500);
+      setTimeout(() => {
+        window.location.href = "resultado.html";
+      }, 1500);
+
+    } catch (error) {
+      alert("Erro ao enviar voto.");
+      console.error(error);
+    }
   };
 </script>
 
