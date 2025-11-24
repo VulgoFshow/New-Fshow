@@ -1,171 +1,494 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enquete - A Fazenda 17</title>
-
-  <style>
-    body { font-family: Arial; background: #ffffff; margin:0; padding:0; }
-
-    h1 { font-size: 26px; padding: 20px; margin: 0; }
-
-    .opcao {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      margin: 15px;
-      overflow: hidden;
-      cursor: pointer;
-      height: 95px;
-      transition: .2s;
-    }
-
-    .opcao.selecionada { background: #0ca1a6; color: #fff; }
-
-    .textoOpcao { font-size: 20px; padding-left: 20px; }
-
-    .imagemOpcao { width: 110px; height: 100%; object-fit: cover; }
-
-  .captchaBox {
-  margin: 25px;
-  display: none;
-  text-align: center;         
-}
-
-#hcaptcha-container {
-  display: flex;
-  justify-content: center;    
-  margin-top: 15px;
-}
-
-    .botao {
-      margin-top: 20px;
-      background: #0ca1a6;
-      padding: 18px;
-      color: #fff;
-      text-align: center;
-      border-radius: 12px;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .processando {
-      display: none;
-      text-align: center;
-      padding: 50px;
-      font-size: 18px;
-    }
-
-    .loadingCircle {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 6px solid #ccc;
-      border-top: 6px solid #0ca1a6;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
-</head>
-<body>
-
-<h1>Quem você quer que fique na 'A Fazenda 17?</h1>
-
-<!-- OPÇÕES -->
-<div class="opcao" onclick="selecionar(this, 'Fabiano')">
-  <div class="textoOpcao">Fabiano</div>
-  <img class="imagemOpcao" src="https://medias.itatiaia.com.br/dims4/default/9787942/2147483647/strip/true/crop/2144x1207+8+0/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fba%2F59%2F3f95397f4920a32d67d87e7d8a63%2Ffabiano-moraes-4-1.jpg">
-</div>
-
-<div class="opcao" onclick="selecionar(this, 'Kathy')">
-  <div class="textoOpcao">Kathy</div>
-  <img class="imagemOpcao" src="https://record.r7.com/resizer/v2/C6SLRSQAVRG23N5MCBVJ2NH2WQ.png?auth=75dd93607b797cc8354eb96b45464ed0789baa9f596572bb447e2fa05ed77267">
-</div>
-
-<div class="opcao" onclick="selecionar(this, 'Maria')">
-  <div class="textoOpcao">Maria</div>
-  <img class="imagemOpcao" src="https://medias.itatiaia.com.br/dims4/default/a6d779e/2147483647/strip/true/crop/701x395+0+21/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2F68%2F9f%2Febe23b3c40f797f6d829ba15f30a%2Fmaria-caporusso-onedrive-09-23-2025-06-06-pm.jpg">
-</div>
-
-<!-- CAPTCHA -->
-<div class="captchaBox" id="captchaBox">
-  <p>Você selecionou <b id="opcaoEscolhida"></b>. Confirme que você é humano.</p>
-  <div id="hcaptcha-container"></div>
-  <div class="botao" onclick="enviarVoto()">votar</div>
-</div>
-</div>
-
-<!-- PROCESSANDO -->
-<div id="processando" class="processando">
-  <div class="loadingCircle"></div>
-  Processando seu voto...
-</div>
-
-
-<!-- HCAPTCHA -->
 <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
+<style>
+/* ===== ANIMAÇÕES ===== */
 
-<!-- FIREBASE + LÓGICA -->
+@keyframes fadeSlide {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes openBox {
+  0% { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===== GLOBAL ===== */
+
+body {
+  font-family: "Inter", Arial, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 32px 16px;
+  animation: fade 0.6s ease;
+  color: #222;
+}
+
+/* header demo */
+.header {
+  max-width: 920px;
+  margin: 0 auto 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+.header h1 { margin:0; font-size:22px; }
+.header img { width:86px; height:86px; object-fit:cover; border-radius:12px; }
+
+/* ===== LAYOUT ===== */
+
+.wrapper {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.opcao-wrapper {
+  margin: 22px 0;
+  position: relative;
+  transition: transform .22s ease;
+  border: 1px solid #d0d0d0;
+  border-radius: 18px;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 18px;
+  height: 92px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  padding-left: 140px; 
+  position: relative;
+}
+
+
+.opcao-wrapper.active {
+  border-color: #0bb4b9;
+}
+
+.opcao-wrapper.active .opcao {
+  background: linear-gradient(135deg, #0bb4b9, #0a8d91);
+  color: #fff;
+}
+
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.imagemOpcao {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+  position: absolute;
+  top: 50%;
+  left: -10px;   
+  transform: translateY(-50%);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  z-index: 5;
+}
+
+.textoOpcao {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.opcao input[type="radio"] { display:none; }
+
+.captchaBox {
+  display: none; 
+  background: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  padding: 18px;
+  animation: openBox .22s ease;
+  overflow: hidden;
+}
+
+.opcao-wrapper.active .captchaBox {
+  display: block;
+}
+
+.opcao-wrapper.active .captchaBox { 
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.captcha-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.captcha-left {
+  flex:1 1 320px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.captcha-widget {
+  border: 1px dashed #ccc;
+  padding: 12px 18px;
+  border-radius: 10px;
+  min-width: 220px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.botao {
+  margin-top: 16px;
+  background: linear-gradient(135deg, #00b6c4, #0ca1a6);
+  padding: 14px 26px;
+  color: #fff;
+  text-align: center;
+  border-radius: 12px;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 6px 16px rgba(0,147,150,0.28);
+  transition: 0.18s ease;
+  min-width: 210px;
+  align-self:flex-end;
+}
+
+.botao[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.instrucao {
+  color: #666;
+  font-size: 14px;
+}
+
+.processando {
+  display: none;
+  text-align: center;
+  padding: 14px;
+  font-size: 15px;
+  color: #444;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width:720px) {
+  .captcha-row { flex-direction: column; align-items:stretch; }
+  .botao { width:100%; min-width:0; }
+  .captcha-left { width:100%; }
+}
+
+.botao.desativado {
+  background: #b5b5b5 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+.botao:not(.desativado) {
+  background: #0ca1a6 !important;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.espacador {
+  width: 100%;
+  margin: 26px 0;
+}
+
+.opcao-wrapper {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.opcao-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.opcao-wrapper:hover .imagemOpcao {
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 6px 20px rgba(10, 160, 165);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.opcao:hover {
+  background: #ffffff;
+}
+
+.opcao-wrapper.active:hover .opcao {
+  background: linear-gradient(135deg, #0bb4b9, #0a8d91);
+}
+
+.opcao:hover .textoOpcao {
+  text-shadow: 0 0 6px rgba(0,0,0,0.08);
+  transition: text-shadow .25s ease;
+}
+
+</style>
+
+<div class="wrapper">
+
+  <!-- TÍTULO NO TOPO -->
+    <h2 style="
+    max-width:980px;
+    margin:0 auto 16px;
+    font-size:26px;
+    font-weight:800;
+    text-align:center;">
+    ENQUETE
+  </h2>
+  <h2 style="
+    max-width:890;
+    margin:0 auto 16px;
+    font-size:26px;
+    font-weight:800;
+    text-align:center;">
+    Quem você quer que fique em A Fazenda 17?
+  </h2>
+
+<!-- OPÇÃO 1 -->
+<div class="opcao-wrapper" 
+     data-nome="Fabiano"
+     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg">
+
+  <label class="opcao">
+    <div class="info">
+      <img class="imagemOpcao"
+           src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg"
+           alt="Fabiano" />
+      <div style="padding:12px">
+        <div class="textoOpcao">Fabiano</div>
+        <div class="instrucao">Clique para selecionar</div>
+      </div>
+    </div>
+    <input type="radio" name="voto" value="Fabiano" />
+  </label>
+
+  <div class="captchaBox">
+    <div class="captcha-row">
+      <div class="captcha-left">
+        <div class="h-captcha captcha-widget"
+             data-sitekey="7f923220-ad3a-4dce-ac7e-cecca72a233a"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="botao votarReal desativado" disabled>votar</button>
+        <div class="processando">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:18px;height:18px;border-radius:50%;
+                 border:3px solid #eee;border-top-color:#0ca1a6;
+                 animation:spin 1s linear infinite"></div>
+            Enviando voto...
+          </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="espacador"></div>
+
+
+<!-- OPÇÃO 2 -->
+<div class="opcao-wrapper" 
+     data-nome="Kathy"
+     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg">
+
+  <label class="opcao">
+    <div class="info">
+      <img class="imagemOpcao"
+           src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg"
+           alt="Kathy" />
+      <div style="padding:12px">
+        <div class="textoOpcao">Kathy</div>
+        <div class="instrucao">Clique para selecionar</div>
+      </div>
+    </div>
+    <input type="radio" name="voto" value="Kathy" />
+  </label>
+
+  <div class="captchaBox">
+    <div class="captcha-row">
+      <div class="captcha-left">
+        <div class="h-captcha captcha-widget"
+             data-sitekey="7f923220-ad3a-4dce-ac7e-cecca72a233a"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="botao votarReal desativado" disabled>votar</button>
+        <div class="processando">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:18px;height:18px;border-radius:50%;
+                 border:3px solid #eee;border-top-color:#0ca1a6;
+                 animation:spin 1s linear infinite"></div>
+            Enviando voto...
+          </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="espacador"></div>
+
+
+<!-- OPÇÃO 3 -->
+<div class="opcao-wrapper" 
+     data-nome="Maria"
+     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg">
+
+  <label class="opcao">
+    <div class="info">
+      <img class="imagemOpcao"
+           src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg"
+           alt="MariaMaria" />
+      <div style="padding:12px">
+        <div class="textoOpcao">Maria</div>
+        <div class="instrucao">Clique para selecionar</div>
+      </div>
+    </div>
+    <input type="radio" name="voto" value="Maria" />
+  </label>
+
+  <div class="captchaBox">
+    <div class="captcha-row">
+      <div class="captcha-left">
+        <div class="h-captcha captcha-widget"
+             data-sitekey="7f923220-ad3a-4dce-ac7e-cecca72a233a"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="botao votarReal desativado" disabled>votar</button>
+        <div class="processando">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:18px;height:18px;border-radius:50%;
+                 border:3px solid #eee;border-top-color:#0ca1a6;
+                 animation:spin 1s linear infinite"></div>
+            Enviando voto...
+          </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="header" style="margin-top:25px">
+  <h1>Você selecionou <strong id="selecionadoNome">—</strong></h1>
+</div>
+
+  
+</div>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  const app = initializeApp({
-    apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
-    authDomain: "enquete-fa527.firebaseapp.com",
-    projectId: "enquete-fa527",
-    storageBucket: "enquete-fa527.firebasestorage.app",
-    messagingSenderId: "544422121318",
-    appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+const app = initializeApp({
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbVQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+});
+
+const db = getFirestore(app);
+
+let escolha = null;
+let captchaToken = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const wrappers = document.querySelectorAll(".opcao-wrapper");
+  const headerNome = document.getElementById("selecionadoNome");
+  const headerImg = document.getElementById("selecionadoImg");
+
+wrappers.forEach(wrapper => {
+  wrapper.querySelector(".opcao").addEventListener("click", () => {
+
+    headerNome.textContent = wrapper.dataset.nome;
+    headerImg.src = wrapper.dataset.img;
   });
+});
 
-  const db = getFirestore(app);
 
-  let escolha = null;
-  let captchaToken = null;
-  let captchaRenderizado = false;
+  wrappers.forEach(wrapper => {
+    const radio = wrapper.querySelector("input[type=radio]");
+    const votarBtn = wrapper.querySelector(".botao");
+    const processando = wrapper.querySelector(".processando");
+    const captchaContainer = wrapper.querySelector(".captcha-widget");
 
-  window.selecionar = function (el, nome) {
-    escolha = nome;
+    votarBtn.disabled = true;
+    votarBtn.classList.add("desativado");
 
-    document.querySelectorAll(".opcao").forEach(op => op.classList.remove("selecionada"));
-    el.classList.add("selecionada");
+    wrapper.querySelector(".opcao").addEventListener("click", () => {
+      wrappers.forEach(w => {
+        w.classList.remove("active");
+        const btn = w.querySelector(".botao");
+        btn.disabled = true;
+        btn.classList.add("desativado");
+      });
 
-    document.getElementById("captchaBox").style.display = "block";
-    document.getElementById("opcaoEscolhida").innerText = nome;
+      wrapper.classList.add("active");
+      radio.checked = true;
+      escolha = wrapper.dataset.nome;
+      headerNome.innerText = escolha;
 
-    // evita renderizar o hCaptcha duas vezes
-    if (!captchaRenderizado) {
-      const intervalo = setInterval(() => {
-        if (window.hcaptcha) {
-          hcaptcha.render("hcaptcha-container", {
-            sitekey: "7f923220-ad3a-4dce-ac7e-cecca72a233a",
-            callback: token => { captchaToken = token; }
-          });
-          captchaRenderizado = true;
-          clearInterval(intervalo);
+      captchaToken = null;
+
+      votarBtn.disabled = true;
+      votarBtn.classList.add("desativado");
+
+      captchaContainer.innerHTML = "";
+      hcaptcha.render(captchaContainer, {
+        sitekey: "7f923220-ad3a-4dce-ac7e-cecca72a233a",
+        callback: token => {
+          captchaToken = token;
+          votarBtn.disabled = false;
+          votarBtn.classList.remove("desativado");
         }
-      }, 200);
-    }
-  };
+      });
+    });
 
-  window.enviarVoto = async function () {
-    if (!captchaToken) {
-      alert("Resolva o captcha para continuar.");
-      return;
-    }
+    votarBtn.addEventListener("click", async () => {
+      if (!captchaToken) return;
 
-    document.getElementById("captchaBox").style.display = "none";
-    document.getElementById("processando").style.display = "block";
+      votarBtn.disabled = true;
+      votarBtn.classList.add("desativado");
+      processando.style.display = "block";
 
-    try {
       await addDoc(collection(db, "votos"), {
         participante: escolha,
         horario: serverTimestamp()
@@ -173,14 +496,8 @@
 
       setTimeout(() => {
         window.location.href = "resultado.html";
-      }, 1500);
-
-    } catch (error) {
-      alert("Erro ao enviar voto.");
-      console.error(error);
-    }
-  };
+      }, 900);
+    });
+  });
+});
 </script>
-
-</body>
-</html>
