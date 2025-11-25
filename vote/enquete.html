@@ -127,7 +127,7 @@ body {
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  padding: 18px;
+  padding: 10px 12px !important; /* MOBILE COMO PADRÃO */
   animation: openBox .22s ease;
   overflow: hidden;
 }
@@ -141,16 +141,22 @@ body {
   border-top-right-radius: 0;
 }
 
+/* ===== MOBILE COMO PADRÃO ===== */
+
 .captcha-row {
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
+  flex-direction: column !important;
+  gap: 10px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 0 auto !important;
 }
 
 .captcha-left {
-  flex:1 1 320px;
+  width: auto !important;
+  flex: none !important;
+  justify-content: center !important;
   display:flex;
   align-items:center;
   gap:12px;
@@ -164,23 +170,26 @@ body {
   display:flex;
   align-items:center;
   gap:10px;
+  margin: 0 auto !important;
 }
 
 .botao {
   margin-top: 16px;
   background: linear-gradient(135deg, #00b6c4, #0ca1a6);
-  padding: 14px 26px;
+  padding: 14px 26px !important;
   color: #fff;
   text-align: center;
   border-radius: 12px;
-  font-size: 20px;
+  font-size: 20px !important;
   cursor: pointer;
   font-weight: 700;
   border: none;
   box-shadow: 0 6px 16px rgba(0,147,150,0.28);
   transition: 0.18s ease;
-  min-width: 210px;
-  align-self:flex-end;
+  width: auto !important;
+  min-width: 210px !important;
+  margin: 12px auto 0 auto !important;
+  align-self: center !important;
 }
 
 .botao[disabled] {
@@ -252,44 +261,6 @@ body {
   transition: text-shadow .25s ease;
 }
 
-/* =========================================================
-   =============== MOBILE  ===============
-   ========================================================= */
-
-@media (max-width: 720px) {
-
-  .captchaBox {
-    padding: 10px 12px !important;
-  }
-
-  .captcha-row {
-    flex-direction: column;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .captcha-left {
-    width: auto;
-    flex: none;
-    justify-content: center;
-  }
-
-  .captcha-widget {
-    margin: 0 auto;
-  }
-
-  .botao {
-    width: auto;
-    min-width: 210px;
-    padding: 14px 26px;
-    font-size: 20px;
-    margin: 12px auto 0 auto;
-    align-self: center;
-  }
-}
 </style>
   </head>
   <body>
