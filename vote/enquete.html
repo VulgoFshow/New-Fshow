@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Título da página</title>
+    <meta charset="utf-8">
+
 <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
 <style>
@@ -76,7 +82,6 @@ body {
   position: relative;
 }
 
-
 .opcao-wrapper.active {
   border-color: #0bb4b9;
 }
@@ -85,7 +90,6 @@ body {
   background: linear-gradient(135deg, #0bb4b9, #0a8d91);
   color: #fff;
 }
-
 
 .info {
   display: flex;
@@ -204,12 +208,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-@media (max-width:720px) {
-  .captcha-row { flex-direction: column; align-items:stretch; }
-  .botao { width:100%; min-width:0; }
-  .captcha-left { width:100%; }
-}
-
 .botao.desativado {
   background: #b5b5b5 !important;
   cursor: not-allowed !important;
@@ -254,7 +252,10 @@ body {
   transition: text-shadow .25s ease;
 }
 
-/* ===== MOBILE ===== */
+/* =========================================================
+   =============== MOBILE  ===============
+   ========================================================= */
+
 @media (max-width: 720px) {
 
   .captchaBox {
@@ -262,34 +263,36 @@ body {
   }
 
   .captcha-row {
-    flex-direction: column !important;
-    gap: 10px !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin: 0 auto !important;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .captcha-left {
-    width: auto !important;
-    flex: none !important;
-    justify-content: center !important;
+    width: auto;
+    flex: none;
+    justify-content: center;
   }
 
   .captcha-widget {
-    margin: 0 auto !important;
+    margin: 0 auto;
   }
 
   .botao {
-    width: auto !important;        
-    min-width: 210px !important;  
-    padding: 14px 26px !important; 
-    font-size: 20px !important;    
-    margin: 12px auto 0 auto !important;
-    align-self: center !important;
+    width: auto;
+    min-width: 210px;
+    padding: 14px 26px;
+    font-size: 20px;
+    margin: 12px auto 0 auto;
+    align-self: center;
   }
 }
 </style>
+  </head>
+  <body>
 
 <div class="wrapper">
 
@@ -323,7 +326,7 @@ body {
            alt="Fabiano" />
       <div style="padding:12px">
         <div class="textoOpcao">Fabiano</div>
-        <div class="instrucao">Clique para selecionar</div>
+        <div class="instrucao">Clique para votar</div>
       </div>
     </div>
     <input type="radio" name="voto" value="Fabiano" />
@@ -366,7 +369,7 @@ body {
            alt="Kathy" />
       <div style="padding:12px">
         <div class="textoOpcao">Kathy</div>
-        <div class="instrucao">Clique para selecionar</div>
+        <div class="instrucao">Clique para votar</div>
       </div>
     </div>
     <input type="radio" name="voto" value="Kathy" />
@@ -409,7 +412,7 @@ body {
            alt="MariaMaria" />
       <div style="padding:12px">
         <div class="textoOpcao">Maria</div>
-        <div class="instrucao">Clique para selecionar</div>
+        <div class="instrucao">Clique para votar</div>
       </div>
     </div>
     <input type="radio" name="voto" value="Maria" />
@@ -440,7 +443,7 @@ body {
 
 
 <div class="header" style="margin-top:25px">
-  <h1>Você selecionou <strong id="selecionadoNome">—</strong></h1>
+  <h1>Você vai votar em <strong id="selecionadoNome">—</strong></h1>
 </div>
 
   
@@ -536,3 +539,5 @@ wrappers.forEach(wrapper => {
   });
 });
 </script>
+</body>
+</html>
