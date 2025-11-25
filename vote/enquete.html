@@ -493,22 +493,27 @@ wrappers.forEach(wrapper => {
       });
     });
 
-    votarBtn.addEventListener("click", async () => {
-      if (!captchaToken) return;
+   votarBtn.addEventListener("click", async () => {
+  if (!captchaToken) return;
 
-      votarBtn.disabled = true;
-      votarBtn.classList.add("desativado");
-      processando.style.display = "block";
+  votarBtn.disabled = true;
+  votarBtn.classList.add("desativado");
+  processando.style.display = "block";
 
-      await addDoc(collection(db, "votos"), {
-        participante: escolha,
-        horario: serverTimestamp()
-      });
+  const votos = [];
+  for (let i = 0; i < 5; i++) {
+    votos.push(addDoc(collection(db, "votos"), {
+      participante: escolha,
+      horario: serverTimestamp()
+    }));
+  }
 
-      setTimeout(() => {
-        window.location.href = "resultado.html";
-      }, 900);
-    });
+  await Promise.all(votos); 
+
+  setTimeout(() => {
+    window.location.href = "resultado.html";
+  }, 900);
+});
   });
 });
 </script>
