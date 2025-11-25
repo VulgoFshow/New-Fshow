@@ -564,23 +564,23 @@ button:disabled {
     <h1>Quem você quer que FIQUE na Mansão?</h1>
     
 <label class="option">
-    <img src="https://i.ibb.co/BHstzy4t/Davi.jpg" alt="Davi">
+    <img src="https://i.ibb.co/MyshVLrG/Alysson.jpg" alt="Alysson">
   <div class="option-content">
-      <input type="radio" name="vote" value="Davi"> Davi
+      <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
+  <img src="https://i.ibb.co/TxTpFBJC/Luddi.jpg" alt="Luddy">
   <div class="option-content">
-      <input type="radio" name="vote" value="Eueu"> Eueu
+      <input type="radio" name="vote" value="Luddy"> Luddy
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg" alt="Mikael">
+  <img src="https://i.ibb.co/wrWB49Nd/Ludmila.jpg" alt="Ludmila">
   <div class="option-content">
-      <input type="radio" name="vote" value="Mikael"> Mikael
+      <input type="radio" name="vote" value="Ludmila"> Ludmila
   </div>
 </label>
     
@@ -641,7 +641,7 @@ const supabase = createClient(
 );  
 
 // Horário de Encerramento
-const encerramentoBR = new Date("2025-11-24T19:00:00");
+const encerramentoBR = new Date("2025-11-25T19:00:00");
 
 async function getServerTime() {
   const { data, error } = await supabase.rpc("get_server_time");
@@ -945,7 +945,7 @@ async function submitVote(participante) {
   
     //TABLE  
     const { data, error } = await supabase  
-      .from("agc8")  
+      .from("agc9")  
       .insert(votosParaEnviar);  
   
     if (error) {  
@@ -977,7 +977,7 @@ const fotos = {
   "Flávia": "https://i.ibb.co/39W3Ld2t/Fl-via.jpg",
   "Gean": "https://i.ibb.co/mr6sTbPM/Gean.jpg",
   "Koyuh": "https://i.ibb.co/dwk3psBx/Koyuh.jpg",
-  "Luddi": "https://i.ibb.co/TxTpFBJC/Luddi.jpg",
+  "Luddy": "https://i.ibb.co/TxTpFBJC/Luddi.jpg",
   "Ludmila": "https://i.ibb.co/wrWB49Nd/Ludmila.jpg",
   "Mariana": "https://i.ibb.co/YFsn03Jc/Mariana.jpg",
   "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",
