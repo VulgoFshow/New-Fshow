@@ -3,193 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resultado da Enquete</title>
-
-<!-- ===== CSS ===== -->
-<style>
-  body {
-    background: #f4f4f4;
-    font-family: "Inter", sans-serif;
-    padding: 20px;
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #222;
-  }
-
-  .resultado-wrapper {
-    max-width: 860px;
-    margin: 0 auto;
-  }
-
-  .card-resultado {
-    background: #fff;
-    border-radius: 16px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 18px;
-    border: 1px solid #e2e2e2;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-  }
-
-  .imgBox {
-    width: 115px;
-    height: 115px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2px solid #ddd;
-  }
-
-  .imgBox img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .infoBox {
-    width: 100%;
-  }
-
-  .nome {
-    font-size: 20px;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 8px;
-  }
-
-  .porcentagem {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #0a8d91;
-  }
-
-  .barra {
-    width: 100%;
-    height: 12px;
-    background: #e6e6e6;
-    border-radius: 20px;
-    overflow: hidden;
-  }
-
-  .barra-fill {
-    height: 100%;
-    background: linear-gradient(135deg, #0bb4b9, #0a8d91);
-    width: 0%;
-    transition: width 1s ease;
-  }
-
-  #totalVotos {
-    text-align: center;
-    margin-top: 22px;
-    font-size: 18px;
-    color: #444;
-    font-weight: 600;
-  }
-
-  #btnVoltar {
-    display: block;
-    margin: 25px auto;
-    padding: 14px 28px;
-    border: none;
-    border-radius: 12px;
-    background: #0bb4b9;
-    color: white;
-    cursor: pointer;
-    font-size: 18px;
-    transition: .2s;
-  }
-
-  #btnVoltar:hover {
-    background: #0a8d91;
-  }
-
-</style>
+<title>Resultado da Votação</title>
+<link rel="stylesheet" href="resultado.css"> <!-- ou coloque o CSS direto -->
 </head>
+
 <body>
 
-<h1>Resultado da Enquete</h1>
+<div class="wrapper">
 
-<div class="resultado-wrapper" id="resultadoWrapper"></div>
+  <h1>Resultado da Votação</h1>
+  <p class="subtitulo">Confira abaixo como ficou o resultado final</p>
 
-<div id="totalVotos">Carregando...</div>
+  <!-- ===== RESULTADO 1 ===== -->
+  <div class="result-card">
+    <div class="result-header">
+      <img src="img/participante1.jpg" alt="Participante 1">
+      <h2>Participante 1</h2>
+    </div>
 
-<button id="btnVoltar" onclick="window.location.href='enquete.html'">
-  Votar novamente
-</button>
+    <div class="barra">
+      <div class="preenchimento" style="width: 62%;"></div>
+    </div>
 
-<!-- ===== Firebase ===== -->
-<script type="module">
-import { initializeApp } 
-  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, getDocs }
-  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    <div class="percentual">62%</div>
+  </div>
 
-const app = initializeApp({
-  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
-  authDomain: "enquete-fa527.firebaseapp.com",
-  projectId: "enquete-fa527",
-  storageBucket: "enquete-fa527.firebasestorage.app",
-  messagingSenderId: "544422121318",
-  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
-});
+  <!-- Linha divisória -->
+  <div class="linha"></div>
 
-const db = getFirestore(app);
+  <!-- ===== RESULTADO 2 ===== -->
+  <div class="result-card">
+    <div class="result-header">
+      <img src="img/participante2.jpg" alt="Participante 2">
+      <h2>Participante 2</h2>
+    </div>
 
-// PARTICIPANTES + IMAGENS
-const participantes = {
-  "Fabiano": "https://medias.itatiaia.com.br/dims4/default/9787942/2147483647/strip/true/crop/2144x1207+8+0/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fba%2F59%2F3f95397f4920a32d67d87e7d8a63%2Ffabiano-moraes-4-1.jpg",
-  "Kathy": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg",
-  "Maria": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg"
-};
+    <div class="barra">
+      <div class="preenchimento" style="width: 28%;"></div>
+    </div>
 
-async function carregarResultados() {
-  const snap = await getDocs(collection(db, "votos"));
-  const votos = {};
-  let total = 0;
+    <div class="percentual">28%</div>
+  </div>
 
-  snap.forEach(doc => {
-    const nome = doc.data().participante;
-    votos[nome] = (votos[nome] || 0) + 1;
-    total++;
-  });
+  <!-- Linha divisória -->
+  <div class="linha"></div>
 
-  document.getElementById("totalVotos").innerText =
-    `Total de votos: ${total}`;
+  <!-- ===== RESULTADO 3 ===== -->
+  <div class="result-card">
+    <div class="result-header">
+      <img src="img/participante3.jpg" alt="Participante 3">
+      <h2>Participante 3</h2>
+    </div>
 
-  const wrapper = document.getElementById("resultadoWrapper");
-  wrapper.innerHTML = "";
+    <div class="barra">
+      <div class="preenchimento" style="width: 10%;"></div>
+    </div>
 
-  Object.keys(participantes).forEach(nome => {
-    const qtd = votos[nome] || 0;
-    const percentual = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
+    <div class="percentual">10%</div>
+  </div>
 
-    const card = document.createElement("div");
-    card.className = "card-resultado";
-    card.innerHTML = `
-      <div class="imgBox">
-        <img src="${participantes[nome]}" />
-      </div>
-
-      <div class="infoBox">
-        <div class="nome">${nome}</div>
-        <div class="porcentagem">${percentual}% • ${qtd} votos</div>
-        <div class="barra">
-          <div class="barra-fill" style="width:${percentual}%"></div>
-        </div>
-      </div>
-    `;
-
-    wrapper.appendChild(card);
-  });
-}
-
-carregarResultados();
-</script>
+</div>
 
 </body>
 </html>
