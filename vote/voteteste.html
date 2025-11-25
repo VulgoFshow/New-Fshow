@@ -358,6 +358,16 @@ Quem você quer que <strong>SAIA</strong> de "A Fazenda 17"?
 
 </div>
 
+<script>
+window.recaptchaCarregado = false;
+
+function onloadCallback() {
+  window.recaptchaCarregado = true;
+}
+</script>
+
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+
 <!-- ====================== SCRIPT ============================ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -395,9 +405,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       wrappers.forEach(w => {
         w.classList.remove("active");
-        const btn = w.querySelector(".botao");
-        btn.disabled = true;
-        btn.classList.add("desativado");
+        w.querySelector(".botao").disabled = true;
+        w.querySelector(".botao").classList.add("desativado");
+        w.querySelector(".captcha-widget").innerHTML = "";
       });
 
       wrapper.classList.add("active");
@@ -406,20 +416,27 @@ document.addEventListener("DOMContentLoaded", () => {
       headerNome.innerText = escolha;
 
       captchaToken = null;
-
       votarBtn.disabled = true;
       votarBtn.classList.add("desativado");
 
-      captchaContainer.innerHTML = "";
+      captchaContainer.innerHTML = `
+        <div id="recaptcha-${escolha}"></div>
+      `;
 
-      const recaptchaId = grecaptcha.render(captchaContainer, {
-        sitekey: "SEU_SITE_KEY_AQUI",
-        callback: token => {
-          captchaToken = token;
-          votarBtn.disabled = false;
-          votarBtn.classList.remove("desativado");
+      const esperar = setInterval(() => {
+        if (window.grecaptcha && window.recaptchaCarregado) {
+          clearInterval(esperar);
+
+          grecaptcha.render(`recaptcha-${escolha}`, {
+            sitekey: "6LcnYBgsAAAAAMQWwo_YE_WHJqllsKf7gqlJQUl9",
+            callback: token => {
+              captchaToken = token;
+              votarBtn.disabled = false;
+              votarBtn.classList.remove("desativado");
+            }
+          });
         }
-      });
+      }, 200);
     });
 
     votarBtn.addEventListener("click", async () => {
