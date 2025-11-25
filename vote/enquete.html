@@ -29,78 +29,60 @@
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 /* ===== GLOBAL ===== */
 
 body {
   font-family: "Inter", Arial, sans-serif;
   background: #f5f7fa;
   margin: 0;
-  padding: 48px 18px;
+  padding: 24px 0;
   animation: fade 0.6s ease;
   color: #222;
-  font-size: 20px;
+  display: flex;
+  justify-content: center;
 }
-
-/* HEADER */
-
-.header {
-  max-width: 1080px;
-  margin: 0 auto 28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#fff;
-  padding:28px;
-  border-radius:20px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-}
-.header h1 { margin:0; font-size:30px; }
-.header img { width:110px; height:110px; object-fit:cover; border-radius:14px; }
-
-/* ===== LAYOUT ===== */
 
 .wrapper {
-  max-width: 1080px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 420px; /* 🔥 Igual ao layout da segunda imagem */
+  padding: 0 14px;
 }
 
 /* ===== OPÇÕES ===== */
 
 .opcao-wrapper {
-  margin: 32px 0;
-  position: relative;
-  transition: transform .25s ease, box-shadow .25s ease;
-  border: 1px solid #c8c8c8;
-  border-radius: 22px;
-  padding: 6px;
-}
-
-.opcao-wrapper:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
-}
-
-.opcao-wrapper:hover .imagemOpcao {
-  transform: translateY(-50%) scale(1.06);
-  box-shadow: 0 6px 20px rgba(10, 160, 165, 0.4);
-  transition: transform .25s ease, box-shadow .25s ease;
+  margin: 26px 0;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  overflow: visible;
+  transition: 0.2s ease;
 }
 
 .opcao {
   display: flex;
   align-items: center;
-  background: #ffffff;
+  background: #fff;
   border-radius: 20px;
-  height: 140px;
+  height: 160px; /* 🔥 Aumentei para ficar igual à segunda imagem */
   cursor: pointer;
-  transition: 0.25s ease;
-  padding-left: 180px;
+  padding-left: 155px; /* 🔥 posição do texto */
   position: relative;
+  transition: 0.25s;
+}
+
+.imagemOpcao {
+  width: 150px;  /* 🔥 Grande e proporcional */
+  height: 160px; /* 🔥 Mesmo tamanho do card */
+  border-radius: 12px;
+  object-fit: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.textoOpcao {
+  font-size: 22px;  /* 🔥 Texto maior */
+  font-weight: 700;
 }
 
 .opcao-wrapper.active {
@@ -112,144 +94,63 @@ body {
   color: #fff;
 }
 
-.opcao:hover {
-  background: #ffffff;
-}
-
-.opcao-wrapper.active:hover .opcao {
-  background: linear-gradient(135deg, #0bb4b9, #0a8d91);
-}
-
-.opcao:hover .textoOpcao {
-  text-shadow: 0 0 6px rgba(0,0,0,0.08);
-  transition: text-shadow .25s ease;
-}
-
-.imagemOpcao {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 16px;
-  position: absolute;
-  top: 50%;
-  left: -14px;   
-  transform: translateY(-50%);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-  background: #fff;
-  border: 1px solid #d0d0d0;
-  z-index: 5;
-}
-
-.textoOpcao {
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.opcao input[type="radio"] { display:none; }
-
 /* ===== CAPTCHA ===== */
 
 .captchaBox {
-  display: none; 
+  display: none;
   background: #fff;
   border: 1px solid #ddd;
   border-top: none;
-  border-bottom-left-radius: 22px;
-  border-bottom-right-radius: 22px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  padding: 22px !important;
+  border-radius: 0 0 22px 22px;
+  padding: 20px;
   animation: openBox .22s ease;
-  overflow: hidden;
 }
 
 .opcao-wrapper.active .captchaBox {
   display: block;
 }
 
-.opcao-wrapper.active .captchaBox { 
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 .captcha-row {
-  display:flex;
-  flex-direction: column !important;
-  gap: 16px !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
 }
 
 .captcha-widget {
-  border: 1px dashed #ccc;
-  padding: 22px 26px;
-  border-radius: 12px;
-  min-width: 300px;
-  font-size: 20px;
-}
-
-.instrucao {
-  color: #666;
-  font-size: 20px;
+  border: 1px dashed #999;
+  padding: 16px;
+  border-radius: 10px;
+  width: 260px;
+  text-align: center;
 }
 
 /* ===== BOTÃO ===== */
 
 .botao {
-  margin-top: 20px;
+  margin-top: 16px;
   background: linear-gradient(135deg, #00b6c4, #0ca1a6);
-  padding: 22px 34px !important;
+  padding: 18px 26px;
   color: #fff;
   text-align: center;
-  border-radius: 16px;
-  font-size: 26px !important;
-  cursor: pointer;
+  border-radius: 14px;
+  font-size: 22px;
   font-weight: 700;
-  border: none;
-  box-shadow: 0 6px 16px rgba(0,147,150,0.28);
-  transition: 0.18s ease;
-  min-width: 280px;
-  margin: 18px auto 0 auto !important;
-  display:block;
-}
-
-.botao:hover {
-  transform: scale(1.04);
-  box-shadow: 0 8px 22px rgba(0,147,150,0.32);
-}
-
-.botao[disabled] {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.botao.desativado {
-  background: #b5b5b5 !important;
-  cursor: not-allowed !important;
-  opacity: 0.7;
-}
-
-.botao:not(.desativado) {
-  background: #0ca1a6 !important;
-  cursor: pointer;
-  opacity: 1;
-}
-
-/* ===== OUTROS ===== */
-
-.processando {
-  display: none;
-  text-align: center;
-  padding: 14px;
-  font-size: 18px;
-  color: #444;
-}
-
-.espacador {
   width: 100%;
-  margin: 26px 0;
+  border: none;
+}
+
+.botao:active {
+  transform: scale(0.97);
+}
+
+/* ===== TEXTO ABAIXO ===== */
+
+.instrucao {
+  text-align: center;
+  font-size: 16px;
+  color: #666;
+  margin-top: 10px;
 }
 
 </style>
