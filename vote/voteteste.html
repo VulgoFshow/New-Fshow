@@ -4,6 +4,9 @@
     <title>Título da página</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- ===== RECAPTCHA V2 GOOGLE ===== -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <style>
 /* ===== ANIMAÇÕES ===== */
 
@@ -127,19 +130,12 @@ body {
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  padding: 10px 12px !important; /* MOBILE COMO PADRÃO */
+  padding: 10px 12px !important;
   animation: openBox .22s ease;
   overflow: hidden;
 }
 
-.opcao-wrapper.active .captchaBox {
-  display: block;
-}
-
-.opcao-wrapper.active .captchaBox { 
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
+.opcao-wrapper.active .captchaBox { display: block; }
 
 /* ===== MOBILE COMO PADRÃO ===== */
 
@@ -163,13 +159,8 @@ body {
 }
 
 .captcha-widget {
-  border: 1px dashed #ccc;
-  padding: 12px 18px;
-  border-radius: 10px;
-  min-width: 220px;
   display:flex;
   align-items:center;
-  gap:10px;
   margin: 0 auto !important;
 }
 
@@ -199,11 +190,6 @@ body {
   box-shadow: none;
 }
 
-.instrucao {
-  color: #666;
-  font-size: 14px;
-}
-
 .processando {
   display: none;
   text-align: center;
@@ -222,21 +208,10 @@ body {
   cursor: not-allowed !important;
   opacity: 0.7;
 }
-.botao:not(.desativado) {
-  background: #0ca1a6 !important;
-  cursor: pointer;
-  opacity: 1;
-}
 
-.espacador {
-  width: 100%;
-  margin: 26px 0;
-}
+.espacador { width: 100%; margin: 26px 0; }
 
-.opcao-wrapper {
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
+.opcao-wrapper { transition: transform .25s ease, box-shadow .25s ease; }
 .opcao-wrapper:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 22px rgba(0,0,0,0.08);
@@ -247,456 +222,143 @@ body {
   box-shadow: 0 6px 20px rgba(10, 160, 165);
   transition: transform .25s ease, box-shadow .25s ease;
 }
-
-.opcao:hover {
-  background: #ffffff;
-}
-
-.opcao-wrapper.active:hover .opcao {
-  background: linear-gradient(135deg, #0bb4b9, #0a8d91);
-}
-
-.opcao:hover .textoOpcao {
-  text-shadow: 0 0 6px rgba(0,0,0,0.08);
-  transition: text-shadow .25s ease;
-}
-
-/* ===== POPUP ===== */
-.popup {
-  display: none;
-  position: fixed;
-  z-index: 1500;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(4px);
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  transition: opacity .25s ease;
-}
-
-.popup.active {
-  display: flex;
-  opacity: 1;
-}
-
-/* ===== CONTAINER ===== */
-.captcha-box {
-  background: #1b1b1b;
-  width: 360px;
-  max-width: 95%;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,.45);
-  animation: fadeIn .3s ease;
-  color: #eee;
-}
-
-/* ===== CABEÇALHO ===== */
-.captcha-header {
-  background: #0f7b82;
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.captcha-header span {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.3;
-  flex: 1;
-  color: #fff;
-}
-
-.captcha-header img {
-  width: 62px;
-  height: 62px;
-  border-radius: 6px;
-  object-fit: cover;
-  margin-left: 12px;
-}
-
-/* ===== GRID ===== */
-.captcha-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  padding: 10px;
-  background: #00000022;
-}
-
-.captcha-img {
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 6px;
-  background: #111;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: .15s;
-}
-
-.captcha-img:hover {
-  transform: scale(1.03);
-}
-
-.captcha-img.selected {
-  border-color: #fff;
-  box-shadow: 0 0 6px rgba(255,255,255,0.5);
-}
-
-/* ===== FOOTER ===== */
-.captcha-footer {
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: flex-end;
-}
-
-/* ===== BOTÃO AVANÇAR ===== */
-.captcha-btn {
-  background: #e6e6e6;
-  color: #222;
-  padding: 10px 22px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-  font-weight: 600;
-  transition: .15s;
-}
-
-.captcha-btn:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-.captcha-btn:hover:not(:disabled) {
-  background: #fff;
-}
-
-/* ===== BOTÃO ICONE ===== */
-.captcha-icon-btn {
-  background: #2b2b2b;
-  border: none;
-  padding: 8px;
-  border-radius: 6px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: .15s;
-}
-
-.captcha-icon-btn img {
-  width: 20px;
-  opacity: 0.8;
-}
-
-.captcha-icon-btn:hover {
-  background: #333;
-}
-
-/* ===== MÃOZINHA ===== */
-.captcha-hand img {
-  width: 36px;
-  opacity: 0.85;
-}
-
-/* ===== PAGINAÇÃO ===== */
-
-.captcha-dots {
-  display: flex;
-  gap: 4px;
-  margin-left: auto;
-}
-
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #222;
-  transition: background .15s;
-}
-
-.dot.white {
-  background: #ffffff !important;
-}
-
-.dot.green {
-  background: #4CAF50 !important;
-}
-
-.dot.active {
-  background: none !important;
-}
-
-#botaoCaptcha {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  background: #222;
-  border: 1px solid #444;
-  border-radius: 6px;
-  padding: 0 15px;
-  height: 70px;
-  max-width: 320px;
-  width: 320px;
-  margin: 20px auto 0;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: var(--shadow-sm);
-  color: #ccc;
-  font-size: 14px;
-  font-weight: 400;
-  transition: var(--transition);
-}
-
-#botaoCaptcha:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(0, 183, 176, 0.3);
-}
-
-.recaptcha-checkbox {
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  background: #111;
-  border: 2px solid #444;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-}
-
-#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
-  background: #00aaff;
-  border-color: #00aaff;
-}
-
-.checkmark {
-  width: 18px;
-  height: 18px;
-  stroke: white;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  display: none;
-}
-
-#botaoCaptcha[aria-pressed="true"] .checkmark {
-  display: block;
-}
-
-.recaptcha-label {
-  user-select: none;
-  line-height: 1;
-  flex-grow: 1;
-}
-
-.recaptcha-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  object-fit: contain;
-  filter: brightness(0.7);
-  flex-shrink: 0;
-}
-
-#botaoCaptcha:disabled {
-  opacity: 0.6;
-  cursor: ->not-allowed;
-  pointer-events: none;
-}
-
-.bot-bait {
-  pointer-events: none;
-}
-
-.fade-in-element {
-  opacity: 0.6; 
-}
-
 </style>
-  </head>
-  <body>
+</head>
 
-<!-- =========================
-     HTML DAS OPÇÕES (seu conteúdo)
-     ========================= -->
+<body>
+
 <div class="wrapper">
 
-  <!-- TÍTULO NO TOPO -->
-  <h2 style="max-width:980px;margin:0 auto 16px;font-size:26px;font-weight:800;text-align:center;">
-    ENQUETE
-  </h2>
-  <h2 style="max-width:890;margin:0 auto 16px;font-size:26px;font-weight:800;text-align:center;">
-    Quem você quer que <strong>SAIA</strong> de "A Fazenda 17"?
-  </h2>
+<h2 style="max-width:980px;margin:0 auto 16px;font-size:26px;font-weight:800;text-align:center;">
+ENQUETE
+</h2>
 
-  <!-- OPÇÃO 1 -->
-  <div class="opcao-wrapper" 
-       data-nome="Fabiano"
-       data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg">
+<h2 style="max-width:890;margin:0 auto 16px;font-size:26px;font-weight:800;text-align:center;">
+Quem você quer que <strong>SAIA</strong> de "A Fazenda 17"?
+</h2>
 
-    <label class="opcao">
-      <div class="info">
-        <img class="imagemOpcao"
-             src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg"
-             alt="Fabiano" />
-        <div style="padding:12px">
-          <div class="textoOpcao">Fabiano</div>
-          <div class="instrucao">Clique para votar</div>
-        </div>
+<!-- ===================== OPÇÃO 1 ====================== -->
+<div class="opcao-wrapper" data-nome="Fabiano"
+     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg">
+
+  <label class="opcao">
+    <div class="info">
+      <img class="imagemOpcao" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg">
+      <div style="padding:12px">
+        <div class="textoOpcao">Fabiano</div>
+        <div class="instrucao">Clique para votar</div>
       </div>
-      <input type="radio" name="voto" value="Fabiano" />
-    </label>
+    </div>
+    <input type="radio" name="voto" value="Fabiano">
+  </label>
 
-    <div class="captchaBox">
-      <div class="captcha-row">
-        <div class="captcha-left">
-          <button class="botaoCaptchaLocal">Verificar captcha</button>
-        </div>
+  <div class="captchaBox">
+    <div class="captcha-row">
+      <div class="captcha-left">
+        <div class="g-recaptcha captcha-widget"
+             data-sitekey="6LcnYBgsAAAAAMQWwo_YE_WHJqllsKf7gqlJQUl9"></div>
+      </div>
 
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-          <button class="botao votarReal desativado" disabled>votar</button>
-          <div class="processando" style="display:none">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
-              Enviando voto...
-            </div>  
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="botao votarReal desativado" disabled>votar</button>
+
+        <div class="processando">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+            Enviando voto...
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="espacador"></div>
-
-  <!-- OPÇÃO 2 -->
-  <div class="opcao-wrapper" 
-       data-nome="Kathy"
-       data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg">
-
-    <label class="opcao">
-      <div class="info">
-        <img class="imagemOpcao"
-             src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg"
-             alt="Kathy" />
-        <div style="padding:12px">
-          <div class="textoOpcao">Kathy</div>
-          <div class="instrucao">Clique para votar</div>
-        </div>
-      </div>
-      <input type="radio" name="voto" value="Kathy" />
-    </label>
-
-    <div class="captchaBox">
-      <div class="captcha-row">
-        <div class="captcha-left">
-          <button class="botaoCaptchaLocal">Verificar captcha</button>
-        </div>
-
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-          <button class="botao votarReal desativado" disabled>votar</button>
-          <div class="processando" style="display:none">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
-              Enviando voto...
-            </div>  
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="espacador"></div>
-
-  <!-- OPÇÃO 3 -->
-  <div class="opcao-wrapper" 
-       data-nome="Maria"
-       data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg">
-
-    <label class="opcao">
-      <div class="info">
-        <img class="imagemOpcao"
-             src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg"
-             alt="Maria" />
-        <div style="padding:12px">
-          <div class="textoOpcao">Maria</div>
-          <div class="instrucao">Clique para votar</div>
-        </div>
-      </div>
-      <input type="radio" name="voto" value="Maria" />
-    </label>
-
-    <div class="captchaBox">
-      <div class="captcha-row">
-        <div class="captcha-left">
-          <button class="botaoCaptchaLocal">Verificar captcha</button>
-        </div>
-
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-          <button class="botao votarReal desativado" disabled>votar</button>
-          <div class="processando" style="display:none">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
-              Enviando voto...
-            </div>  
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="header" style="margin-top:25px">
-    <h1>Você vai votar em: <strong id="selecionadoNome">—</strong></h1>
-  </div>
-
-</div>
-
-<!-- =========================
-     POPUP DO CAPTCHA
-     ========================= -->
-<div id="popupCaptcha" class="captcha-popup" style="display:none;">
-  <div class="captcha-modal">
-    <button id="captchaClose" class="captcha-close">×</button>
-
-    <div class="captcha-top" style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-      <div id="dot1" class="dot"></div>
-      <div id="dot2" class="dot"></div>
-      <div style="flex:1"></div>
-      <button id="captchaRefresh" class="small">Recarregar</button>
-    </div>
-
-    <div id="captcha-instrucao" style="margin-bottom:8px;font-weight:700"></div>
-
-    <div style="display:flex;gap:12px;align-items:flex-start">
-      <div style="width:120px;height:80px;border-radius:8px;overflow:hidden">
-        <img id="captcha-ref-img" src="" style="width:100%;height:100%;object-fit:cover" alt="referência"/>
-      </div>
-
-      <div id="captchaGrid" class="captcha-grid" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px"></div>
-    </div>
-
-    <div style="margin-top:12px;display:flex;align-items:center;gap:12px">
-      <div id="captchaStatus" style="flex:1"></div>
-      <button id="captchaConfirm" class="small" disabled>Confirmar</button>
     </div>
   </div>
 </div>
 
-<!-- =========================
-     FIREBASE + VOTAÇÃO (module)
-     ========================= -->
+<div class="espacador"></div>
+
+<!-- ===================== OPÇÃO 2 ====================== -->
+<div class="opcao-wrapper" data-nome="Kathy"
+     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg">
+
+  <label class="opcao">
+    <div class="info">
+      <img class="imagemOpcao" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg">
+      <div style="padding:12px">
+        <div class="textoOpcao">Kathy</div>
+        <div class="instrucao">Clique para votar</div>
+      </div>
+    </div>
+    <input type="radio" name="voto" value="Kathy">
+  </label>
+
+  <div class="captchaBox">
+    <div class="captcha-row">
+      <div class="captcha-left">
+        <div class="g-recaptcha captcha-widget"
+             data-sitekey="6LcnYBgsAAAAAMQWwo_YE_WHJqllsKf7gqlJQUl9"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="botao votarReal desativado" disabled>votar</button>
+
+        <div class="processando">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+            Enviando voto...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="espacador"></div>
+
+<!-- ===================== OPÇÃO 3 ====================== -->
+<div class="opcao-wrapper" data-nome="Maria"
+     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg">
+
+  <label class="opcao">
+    <div class="info">
+      <img class="imagemOpcao"
+           src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg">
+      <div style="padding:12px">
+        <div class="textoOpcao">Maria</div>
+        <div class="instrucao">Clique para votar</div>
+      </div>
+    </div>
+    <input type="radio" name="voto" value="Maria">
+  </label>
+
+  <div class="captchaBox">
+    <div class="captcha-row">
+      <div class="captcha-left">
+        <div class="g-recaptcha captcha-widget"
+             data-sitekey="6LcnYBgsAAAAAMQWwo_YE_WHJqllsKf7gqlJQUl9"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="botao votarReal desativado" disabled>votar</button>
+
+        <div class="processando">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+            Enviando voto...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="header" style="margin-top:25px">
+  <h1>
+    Você vai votar em: <strong id="selecionadoNome">—</strong>
+  </h1>
+</div>
+
+</div>
+
+<!-- ====================== SCRIPT ============================ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp }
@@ -714,368 +376,74 @@ const app = initializeApp({
 const db = getFirestore(app);
 
 let escolha = null;
+let captchaToken = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const wrappers = document.querySelectorAll(".opcao-wrapper");
   const headerNome = document.getElementById("selecionadoNome");
 
   wrappers.forEach(wrapper => {
-    wrapper.querySelector(".opcao").addEventListener("click", () => {
-      headerNome.textContent = wrapper.dataset.nome;
-      const radio = wrapper.querySelector("input[type=radio]");
-      radio.checked = true;
-      escolha = wrapper.dataset.nome;
-    });
-  });
-
-  wrappers.forEach(wrapper => {
+    const radio = wrapper.querySelector("input[type=radio]");
     const votarBtn = wrapper.querySelector(".botao");
     const processando = wrapper.querySelector(".processando");
-    const botaoCaptchaLocal = wrapper.querySelector(".botaoCaptchaLocal");
+    const captchaContainer = wrapper.querySelector(".captcha-widget");
 
     votarBtn.disabled = true;
     votarBtn.classList.add("desativado");
 
-    botaoCaptchaLocal.addEventListener("click", (e) => {
+    wrapper.querySelector(".opcao").addEventListener("click", () => {
+
+      wrappers.forEach(w => {
+        w.classList.remove("active");
+        const btn = w.querySelector(".botao");
+        btn.disabled = true;
+        btn.classList.add("desativado");
+      });
+
+      wrapper.classList.add("active");
+      radio.checked = true;
       escolha = wrapper.dataset.nome;
-      document.getElementById("selecionadoNome").innerText = escolha;
+      headerNome.innerText = escolha;
 
-      abrirCaptcha(() => {
-        votarBtn.disabled = false;
-        votarBtn.classList.remove("desativado");
+      captchaToken = null;
 
-        try { if (typeof setVotosRestantes === "function") setVotosRestantes(10); } catch (err) {}
+      votarBtn.disabled = true;
+      votarBtn.classList.add("desativado");
+
+      captchaContainer.innerHTML = "";
+
+      const recaptchaId = grecaptcha.render(captchaContainer, {
+        sitekey: "SEU_SITE_KEY_AQUI",
+        callback: token => {
+          captchaToken = token;
+          votarBtn.disabled = false;
+          votarBtn.classList.remove("desativado");
+        }
       });
     });
 
     votarBtn.addEventListener("click", async () => {
-      if (!escolha) {
-        alert("Selecione um participante antes de votar!");
-        return;
-      }
+      if (!captchaToken) return;
 
       votarBtn.disabled = true;
       votarBtn.classList.add("desativado");
       processando.style.display = "block";
 
-      try {
-        const votos = [];
-        for (let i = 0; i < 5; i++) {
-          votos.push(addDoc(collection(db, "votos"), {
-            participante: escolha,
-            horario: serverTimestamp()
-          }));
-        }
-
-        await Promise.all(votos);
-
-        setTimeout(() => {
-          window.location.href = "resultado.html";
-        }, 900);
-
-      } catch (err) {
-        console.error("Erro ao enviar votos:", err);
-        alert("Erro ao enviar votos. Tente novamente.");
-        votarBtn.disabled = false;
-        votarBtn.classList.remove("desativado");
-        processando.style.display = "none";
+      const votos = [];
+      for (let i = 0; i < 5; i++) {
+        votos.push(addDoc(collection(db, "votos"), {
+          participante: escolha,
+          horario: serverTimestamp()
+        }));
       }
+
+      await Promise.all(votos);
+
+      setTimeout(() => {
+        window.location.href = "resultado.html";
+      }, 900);
     });
   });
-});
-</script>
-
-
-<script>
-/* ============================
-   CAPTCHA — CONFIG & ELEMENTOS
-   ============================ */
-const VOTOS_POR_CAPTCHA = 10;
-
-function getVotosRestantes() {
-  const raw = localStorage.getItem("votosRestantes");
-  const token = localStorage.getItem("token");
-  if (!raw || !token) return 0;
-  const valid = hashTag(raw) == token;
-  return valid ? parseInt(raw) : 0;
-}
-
-function setVotosRestantes(n) {
-  localStorage.setItem("votosRestantes", String(n));
-  localStorage.setItem("token", String(hashTag(String(n))));
-}
-
-const popupCaptcha = document.getElementById("popupCaptcha");
-const captchaGrid = document.getElementById("captchaGrid");
-const captchaInstruction = document.getElementById("captcha-instrucao");
-const verifyBtn = document.getElementById("captchaConfirm");
-const refreshBtn = document.getElementById("captchaRefresh");
-const statusEl = document.getElementById("captchaStatus");
-const captchaRefImg = document.getElementById("captcha-ref-img");
-const captchaClose = document.getElementById("captchaClose");
-
-const dot1 = document.getElementById("dot1");
-const dot2 = document.getElementById("dot2");
-
-let currentOnSuccess = null; 
-
-const prompts = [
-  {
-    label: "Clique nas imagens contendo algo que pode se locomover",
-    correctTag: "202",
-    images: [
-      { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },
-      { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },
-      { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
-      { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
-      { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
-      { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },
-      { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },
-      { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },
-      { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },
-      { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }
-    ]
-  },
-  {
-    label: "Clique nas imagens contendo um animal",
-    correctTag: "706",
-    images: [
-      { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },
-      { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },
-      { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },
-      { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },
-      { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },
-      { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },
-      { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },
-      { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },
-      { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }
-    ]
-  }
-];
-
-/* ============================
-   UTILIL
-   ============================ */
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-function hashTag(tag) {
-  const secret = "CPTX_2025_FSHOW_🔥";
-  let h = 0;
-  const str = tag + secret;
-  for (let i = 0; i < str.length; i++) {
-    h = (h << 5) - h + str.charCodeAt(i);
-    h |= 0;
-  }
-  return h;
-}
-
-/* ============================
-   ESTADO DO CAPTCHA
-   ============================ */
-let captchaCurrentPrompt = null;
-let captchaLocked = false;
-let captchaAberto = false;
-let etapaCaptcha = 1;
-
-/* ============================
-   GERADOR DO CAPTCHA
-   ============================ */
-function generateCaptcha() {
-  if (!captchaGrid) return;
-  captchaGrid.innerHTML = "";
-  statusEl.textContent = "";
-  verifyBtn.disabled = true;
-
-  const prompt = prompts[Math.floor(Math.random() * prompts.length)];
-  captchaCurrentPrompt = prompt;
-  captchaInstruction.textContent = prompt.label;
-
-  const imagensCorretas = prompt.images.filter(img => img.tag === prompt.correctTag);
-  const referencia = shuffle([...imagensCorretas])[0];
-  captchaRefImg.src = referencia.src;
-
-  const correctImages = prompt.images.filter(img => img.tag === prompt.correctTag);
-  const wrongImages = prompt.images.filter(img => img.tag !== prompt.correctTag);
-  const correctCount = Math.floor(Math.random() * 3) + 2;
-  const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
-  const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
-  const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
-
-  allImages.forEach(img => {
-    const imgEl = document.createElement("img");
-    imgEl.src = img.src;
-    imgEl.className = "captcha-img";
-    imgEl.style.cursor = "pointer";
-    imgEl.style.width = "100%";
-    imgEl.style.height = "80px";
-    imgEl.style.objectFit = "cover";
-    imgEl.dataset.hash = hashTag(img.tag);
-
-    imgEl.addEventListener("click", () => {
-      imgEl.classList.toggle("selected");
-      imgEl.style.outline = imgEl.classList.contains("selected") ? "3px solid #0ca1a6" : "none";
-      verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
-      statusEl.textContent = "";
-    });
-
-    const container = document.createElement("div");
-    container.appendChild(imgEl);
-    captchaGrid.appendChild(container);
-  });
-}
-
-function abrirCaptcha(onSuccess) {
-  if (captchaLocked || captchaAberto) return;
-  captchaLocked = true;
-  captchaAberto = true;
-  currentOnSuccess = typeof onSuccess === "function" ? onSuccess : null;
-
-  etapaCaptcha = 1;
-  atualizarDots();
-
-  generateCaptcha();
-  popupCaptcha.style.display = "flex"; 
-  popupCaptcha.classList.add("active");
-
-  statusEl.textContent = "";
-  setTimeout(() => (captchaLocked = false), 300);
-}
-
-function fecharCaptcha() {
-  popupCaptcha.style.display = "none";
-  popupCaptcha.classList.remove("active");
-  captchaAberto = false;
-  currentOnSuccess = null;
-}
-
-/* ============================
-   DOTS 
-   ============================ */
-function atualizarDots() {
-  if (!dot1 || !dot2) return;
-  dot1.className = "dot";
-  dot2.className = "dot";
-  if (etapaCaptcha === 1) {
-    dot1.classList.add("green");
-  } else if (etapaCaptcha === 2) {
-    dot1.classList.add("green");
-    dot2.classList.add("white");
-  }
-}
-
-/* ============================
-   EVENTOS DO POPUP
-   ============================ */
-captchaClose.addEventListener("click", () => {
-  fecharCaptcha();
-});
-
-refreshBtn.addEventListener("click", () => {
-  statusEl.textContent = "";
-  verifyBtn.disabled = true;
-  document.querySelectorAll(".captcha-img").forEach(img => {
-    img.classList.remove("selected");
-    img.style.outline = "none";
-  });
-  generateCaptcha();
-});
-
-/* ============================
-   VERIFICAR CAPTCHA
-   ============================ */
-verifyBtn.addEventListener("click", () => {
-  let sucesso = true;
-  const imgs = document.querySelectorAll(".captcha-img");
-  const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
-
-  imgs.forEach(img => {
-    const isCorrect = img.dataset.hash == corretoHash;
-    const selecionado = img.classList.contains("selected");
-    if (isCorrect !== selecionado) sucesso = false;
-  });
-
-  if (!sucesso) {
-    etapaCaptcha = 1;
-    atualizarDots();
-    statusEl.textContent = "Não foi dessa vez — tente novamente.";
-    setTimeout(() => generateCaptcha(), 900);
-    return;
-  }
-
-  // primeira etapa
-  if (sucesso && etapaCaptcha === 1) {
-    etapaCaptcha = 2;
-    atualizarDots();
-    setTimeout(() => generateCaptcha(), 900);
-    return;
-  }
-
-  // segunda etapa
-  if (sucesso && etapaCaptcha === 2) {
-    etapaCaptcha = 1;
-    atualizarDots();
-    setVotosRestantes(VOTOS_POR_CAPTCHA);
-    if (currentOnSuccess) {
-      try { currentOnSuccess(); } catch (err) { console.error(err); }
-    }
-    setTimeout(() => {
-      statusEl.textContent = "";
-      fecharCaptcha();
-    }, 800);
-  }
-});
-
-
-(function initCaptchaState() {
-})();
-
-document.querySelectorAll(".opcao-wrapper").forEach(wrapper => {
-  wrapper.addEventListener("click", function () {
-
-    document.querySelectorAll(".opcao-wrapper").forEach(w => {
-      if (w !== wrapper) {
-        w.classList.remove("active");
-        const box = w.querySelector(".captchaBox");
-        if (box) box.style.display = "none";
-      }
-    });
-
-    const estaAtiva = wrapper.classList.toggle("active");
-
-    const radio = wrapper.querySelector("input[type='radio']");
-    radio.checked = true;
-
-    document.getElementById("selecionadoNome").textContent =
-      wrapper.dataset.nome;
-
-    const caixa = wrapper.querySelector(".captchaBox");
-    caixa.style.display = estaAtiva ? "block" : "none";
-  });
-});
-
-
-// ===== ABRIR POPUP =====
-document.querySelectorAll(".botaoCaptchaLocal").forEach(btn => {
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    abrirCaptcha(() => {
-      const wrapper = btn.closest(".opcao-wrapper");
-      const votarBtn = wrapper.querySelector(".votarReal");
-      votarBtn.disabled = false;
-      votarBtn.classList.remove("desativado");
-    });
-  });
-});
-
-// ===== FECHAR POPUP =====
-document.getElementById("captchaClose").addEventListener("click", () => {
-  fecharCaptcha();
 });
 </script>
 
