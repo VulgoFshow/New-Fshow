@@ -1,11 +1,8 @@
- <script type="module">  
-import { createClient } from 'https://esm.sh/@supabase/supabase-js';  
-const supabase = createClient(  
-  'https://vchvvvvzulrkovjmiokg.supabase.co',  
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'  
-);  
-
-
+import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+const supabase = createClient(
+  'https://vchvvvvzulrkovjmiokg.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4'
+);
    
 let captchaLocked = false;
 let captchaAberto = false;
