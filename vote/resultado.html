@@ -4,109 +4,116 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resultado da Enquete</title>
-
+  
 <style>
-  body {
-    background: #f4f4f4;
-    font-family: "Inter", sans-serif;
-    padding: 20px;
-  }
+body {
+  background: #f4f4f4;
+  font-family: "Inter", sans-serif;
+  padding: 20px;
+}
 
-  h1 {
-    text-align: center;
-    margin-bottom: 25px;
-    color: #222;
-  }
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #222;
+}
 
-  .resultado-wrapper {
-    max-width: 860px;
-    margin: 0 auto;
-  }
+.resultado-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-  .card-resultado {
-    background: #fff;
-    border-radius: 16px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 18px;
-    border: 1px solid #e2e2e2;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-  }
+/* === BLOCO DO RESULTADO (ESTILO IDÊNTICO AO DA IMAGEM) === */
+.card-resultado {
+  width: 100%;
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 22px;
 
-  .imgBox {
-    width: 115px;
-    height: 115px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2px solid #ddd;
-  }
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
 
-  .imgBox img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+/* === IMAGEM À ESQUERDA === */
+.imgBox {
+  width: 110px;
+  height: 110px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
 
-  .infoBox {
-    width: 100%;
-  }
+.imgBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-  .nome {
-    font-size: 20px;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 8px;
-  }
+/* === TEXTO === */
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-  .porcentagem {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #0a8d91;
-  }
+.nome {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 6px;
+}
 
-  .barra {
-    width: 100%;
-    height: 12px;
-    background: #e6e6e6;
-    border-radius: 20px;
-    overflow: hidden;
-  }
+.porcentagem {
+  font-size: 17px;
+  font-weight: 600;
+  color: #0a8d91;
+  margin-bottom: 8px;
+}
 
-  .barra-fill {
-    height: 100%;
-    background: linear-gradient(135deg, #0bb4b9, #0a8d91);
-    width: 0%;
-    transition: width 1s ease;
-  }
+/* === BARRA DE PORCENTAGEM === */
+.barra {
+  width: 100%;
+  height: 14px;
+  background: #e6e6e6;
+  border-radius: 12px;
+  overflow: hidden;
+}
 
-  #totalVotos {
-    text-align: center;
-    margin-top: 22px;
-    font-size: 18px;
-    color: #444;
-    font-weight: 600;
-  }
+.barra-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #0bb4b9, #0a8d91);
+  width: 0%;
+  transition: width 1s ease;
+}
 
-  #btnVoltar {
-    display: block;
-    margin: 25px auto;
-    padding: 14px 28px;
-    border: none;
-    border-radius: 12px;
-    background: #0bb4b9;
-    color: white;
-    cursor: pointer;
-    font-size: 18px;
-    transition: .2s;
-  }
+#totalVotos {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 18px;
+  color: #444;
+  font-weight: 600;
+}
 
-  #btnVoltar:hover {
-    background: #0a8d91;
-  }
+#btnVoltar {
+  display: block;
+  margin: 25px auto;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  background: #0bb4b9;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  transition: .2s;
+}
 
+#btnVoltar:hover {
+  background: #0a8d91;
+}
 </style>
 </head>
 <body>
@@ -141,9 +148,21 @@ const db = getFirestore(app);
 
 // PARTICIPANTES + IMAGENS
 const participantes = {
-  "Fabiano": "https://medias.itatiaia.com.br/dims4/default/9787942/2147483647/strip/true/crop/2144x1207+8+0/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fba%2F59%2F3f95397f4920a32d67d87e7d8a63%2Ffabiano-moraes-4-1.jpg",
+  "Fabiano": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg",
   "Kathy": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg",
-  "Maria": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg"
+  "Maria": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg",
+  "Carol": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/NEETNBTZK5D25DEXTHW4JXCLOU.jpg",
+  "Creo": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/VEPF54DHRBEN3OK23MBEYZPOZQ.jpg",
+  "Duda": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6LGMYPULFVATZDAMF5AZFRY73M.jpg",
+  "Dudu": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/DEU2UYHHC5CQVEKDMN53TZNZOY.jpg",
+  "Kathy": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg",
+  "Mesquita": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg",
+  "Maria": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg",
+  "Ray": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg",
+  "Saory": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/DELGVBA35FEMBLUR57ECPPWUO4.jpg",
+  "Tàmires": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/CLWGAFNXL5A3BLXK3COSM4ONC4.jpg",
+  "Toninho": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg",
+  "Walério": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/ARME7HV73FCVPJEO4A4WDVHKYY.jpg"
 };
 
 async function carregarResultados() {
