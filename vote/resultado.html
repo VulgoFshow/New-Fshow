@@ -181,9 +181,8 @@ async function carregarResultados() {
 
   const wrapper = document.getElementById("resultadoWrapper");
   wrapper.innerHTML = "";
-
-  Object.keys(participantes).forEach(nome => {
-    const qtd = votos[nome] || 0;
+  Object.keys(votos).forEach(nome => {
+    const qtd = votos[nome];
     const percentual = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
 
     const card = document.createElement("div");
@@ -204,9 +203,11 @@ async function carregarResultados() {
 
     wrapper.appendChild(card);
   });
-}
 
-carregarResultados();
+} 
+
+carregarResultados(); 
+
 </script>
 
 </body>
