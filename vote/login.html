@@ -138,10 +138,16 @@ enviarReset.addEventListener("click", async () => {
 });
 
 /* ---------------- DATA ---------------- */
-    
-sessionStorage.setItem("logadoSessao", "true");
-localStorage.setItem("ultimoLoginFshow", Date.now());
-  </script>
+localStorage.setItem("ultimoLogin", Date.now());
+
+const voltarPara = localStorage.getItem("paginaAnterior");
+
+if (voltarPara) {
+  window.location.href = voltarPara;
+} else {
+  window.location.href = "index.html";
+}
+</script>
   
   <style>
    body {
