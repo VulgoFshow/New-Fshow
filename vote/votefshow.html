@@ -5,7 +5,26 @@
   <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   
+<script>
+function verificarLogin24h() {
+  const ultimoLogin = localStorage.getItem("ultimoLogin");
+  if (!ultimoLogin) {
+    window.location.replace("login.html");
+    return;
+  }
 
+  const ultimo = parseInt(ultimoLogin);
+  const agora = Date.now();
+
+  const limite = 24 * 60 * 60 * 1000;
+
+  if ((agora - ultimo) > limite) {
+    window.location.replace("login.html");
+  }
+}
+
+verificarLogin24h();
+</script>
 
 <style>
 /* ===== VARIÁVEIS GLOBAIS ===== */
