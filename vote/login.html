@@ -32,7 +32,13 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 function irParaVotacao() {
-  window.location.href = "votefshow.html";
+  const voltar = localStorage.getItem("voltarDepoisLogin");
+  if (voltar) {
+    localStorage.removeItem("voltarDepoisLogin");
+    window.location.href = voltar;
+  } else {
+    window.location.href = "votefshow.html";
+  }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
