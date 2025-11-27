@@ -4,9 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Fshow</title>
-  <script type="module">
+<script type="module">
+
+/* ==============================
+   IMPORTS
+============================== */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { 
   getAuth,
   GoogleAuthProvider,
@@ -14,9 +17,14 @@ import {
   signInWithRedirect,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  getRedirectResult
+  getRedirectResult,
+  onAuthStateChanged,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
+/* ==============================
+   CONFIG
+============================== */
 const firebaseConfig = {
   apiKey: "AIzaSyDAR1XPOyU_rJpy9B84LxV9zsDzpUdv9E0",
   authDomain: "login-fshow.firebaseapp.com",
@@ -31,6 +39,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+/* ==============================
+   FUNÇÃO DE REDIRECIONAMENTO
+============================== */
 function irParaVotacao() {
   const voltar = localStorage.getItem("voltarDepoisLogin");
   if (voltar) {
@@ -41,13 +52,26 @@ function irParaVotacao() {
   }
 }
 
+/* ==============================
+   ON AUTH STATE CHANGED (AGORA CORRETO)
+============================== */
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    irParaVotacao();
+  }
+});
+
+/* ==============================
+   LOGIN / CADASTRO
+============================== */
 document.addEventListener("DOMContentLoaded", async () => {
 
-  /* ---------------- LOGIN POR REDIRECT (MOBILE) ---------------- */
+  /* ----- LOGIN VIA REDIRECT (MOBILE) ----- */
   try {
     const redirectResult = await getRedirectResult(auth);
     if (redirectResult) {
       sessionStorage.setItem("logadoSessao", "true");
+      localStorage.setItem("ultimoLogin", Date.now());
       irParaVotacao();
       return;
     }
@@ -55,23 +79,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Erro redirect:", error);
   }
 
-  /* ---------------- ELEMENTOS ---------------- */
+  /* ----- ELEMENTOS ----- */
   const googleBtn = document.getElementById("googleLogin");
   const emailForm = document.getElementById("emailForm");
   const criarConta = document.getElementById("criarConta");
 
-  /* ---------------- LOGIN GOOGLE ---------------- */
+  /* ----- LOGIN GOOGLE ----- */
   googleBtn.addEventListener("click", async () => {
     try {
-      // MOBILE
+      // MOBILE = REDIRECT
       if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         await signInWithRedirect(auth, provider);
         return;
       }
 
-      // DESKTOP POPUP
+      // DESKTOP = POPUP
       await signInWithPopup(auth, provider);
       sessionStorage.setItem("logadoSessao", "true");
+      localStorage.setItem("ultimoLogin", Date.now());
       irParaVotacao();
 
     } catch (error) {
@@ -79,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  /* ---------------- LOGIN EMAIL ---------------- */
+  /* ----- LOGIN EMAIL/SENHA ----- */
   emailForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
@@ -88,13 +113,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await signInWithEmailAndPassword(auth, email, senha);
       sessionStorage.setItem("logadoSessao", "true");
+      localStorage.setItem("ultimoLogin", Date.now());
       irParaVotacao();
     } catch (error) {
       alert("Erro: " + error.message);
     }
   });
 
-  /* ---------------- CRIAR CONTA ---------------- */
+  /* ----- CRIAR CONTA ----- */
   criarConta.addEventListener("click", async (e) => {
     e.preventDefault();
     const email = document.getElementById("email").value;
@@ -103,6 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, senha);
       sessionStorage.setItem("logadoSessao", "true");
+      localStorage.setItem("ultimoLogin", Date.now());
       irParaVotacao();
     } catch (error) {
       alert("Erro: " + error.message);
@@ -111,7 +138,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 
-/* ---------------- ESQUECEU A SENHA ---------------- */
+/* ==============================
+   ESQUECEU A SENHA
+============================== */
 const esqueceuSenha = document.getElementById("esqueceuSenha");
 const popupReset = document.getElementById("popupReset");
 const enviarReset = document.getElementById("enviarReset");
@@ -143,11 +172,8 @@ enviarReset.addEventListener("click", async () => {
   }
 });
 
-/* ---------------- DATA ---------------- */
-localStorage.setItem("ultimoLogin", Date.now());
-
 </script>
-  
+
   <style>
    body {
   margin: 0;
