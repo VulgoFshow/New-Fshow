@@ -139,11 +139,11 @@ const app = initializeApp({
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
   authDomain: "enquete-fa527.firebaseapp.com",
   projectId: "enquete-fa527",
-  storageBucket: "enquete-fa527.firebasestorage.app",
+  storageBucket: "enquete-fa527.appspot.com",
   messagingSenderId: "544422121318",
   appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
 });
-
+  
 const db = getFirestore(app);
 
 // PARTICIPANTES + IMAGENS
@@ -181,7 +181,7 @@ async function carregarResultados() {
 
   const wrapper = document.getElementById("resultadoWrapper");
   wrapper.innerHTML = "";
-  Object.keys(votos).forEach(nome => {
+  Object.keys(fshowro).forEach(nome => {
     const qtd = votos[nome];
     const percentual = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
 
