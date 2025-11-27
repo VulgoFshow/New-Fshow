@@ -358,11 +358,26 @@ window.recaptchaCarregado = false;
 function onloadCallback() {
   window.recaptchaCarregado = true;
 }
-</script>
+
+localStorage.setItem("voltarDepoisLogin", window.location.href);
+
+import { getAuth, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+const auth = getAuth();
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  }
+});
+
+ </script>
 
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
 <!-- ====================== SCRIPT ============================ -->
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { 
