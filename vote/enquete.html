@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
-    <title>Título da página</title>
+    <title>Enquete Fshow - A Fazenda 17</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -252,8 +252,7 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
   <div class="captchaBox">
     <div class="captcha-row">
       <div class="captcha-left">
-        <div class="g-recaptcha captcha-widget"
-             data-sitekey="6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg"></div>
+        <div class="captcha-widget"></div>
       </div>
 
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
@@ -290,8 +289,7 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
   <div class="captchaBox">
     <div class="captcha-row">
       <div class="captcha-left">
-        <div class="g-recaptcha captcha-widget"
-             data-sitekey="6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg"></div>
+        <div class="captcha-widget"></div>
       </div>
 
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
@@ -329,8 +327,7 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
   <div class="captchaBox">
     <div class="captcha-row">
       <div class="captcha-left">
-        <div class="g-recaptcha captcha-widget"
-             data-sitekey="6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg"></div>
+       <div class="captcha-widget"></div>
       </div>
 
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
@@ -444,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
   processando.style.display = "block";
 
   for (let i = 0; i < 5; i++) {
-    await addDoc(collection(db, "roçaton"), {
+    await addDoc(collection(db, "fshowro"), {
       participante: escolha,
       horario: serverTimestamp()
     });
