@@ -166,13 +166,13 @@ const participantes = {
 };
 
 async function carregarResultados() {
-  const snap = await getDocs(collection(db, "votos"));
-  const votos = {};
+  const snap = await getDocs(collection(db, "fshowro"));
+  const fshowro = {};  
   let total = 0;
 
   snap.forEach(doc => {
     const nome = doc.data().participante;
-    votos[nome] = (votos[nome] || 0) + 1;
+    fshowro[nome] = (fshowro[nome] || 0) + 1;
     total++;
   });
 
@@ -181,8 +181,9 @@ async function carregarResultados() {
 
   const wrapper = document.getElementById("resultadoWrapper");
   wrapper.innerHTML = "";
+
   Object.keys(fshowro).forEach(nome => {
-    const qtd = votos[nome];
+    const qtd = fshowro[nome];
     const percentual = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
 
     const card = document.createElement("div");
@@ -203,8 +204,8 @@ async function carregarResultados() {
 
     wrapper.appendChild(card);
   });
+}
 
-} 
 
 carregarResultados(); 
 
