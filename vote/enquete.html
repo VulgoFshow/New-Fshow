@@ -4,9 +4,6 @@
     <title>Título da página</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ===== RECAPTCHA V2 GOOGLE ===== -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 <style>
 /* ===== ANIMAÇÕES ===== */
 
@@ -439,27 +436,24 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 200);
     });
 
-    votarBtn.addEventListener("click", async () => {
-      if (!captchaToken) return;
+   votarBtn.addEventListener("click", async () => {
+  if (!captchaToken) return;
 
-      votarBtn.disabled = true;
-      votarBtn.classList.add("desativado");
-      processando.style.display = "block";
+  votarBtn.disabled = true;
+  votarBtn.classList.add("desativado");
+  processando.style.display = "block";
 
-      const votos = [];
-      for (let i = 0; i < 5; i++) {
-        votos.push(addDoc(collection(db, "roçaton"), {
-          participante: escolha,
-          horario: serverTimestamp()
-        }));
-      }
-
-      await Promise.all(votos);
-
-      setTimeout(() => {
-        window.location.href = "resultado.html";
-      }, 900);
+  for (let i = 0; i < 5; i++) {
+    await addDoc(collection(db, "roçaton"), {
+      participante: escolha,
+      horario: serverTimestamp()
     });
+  }
+
+  setTimeout(() => {
+    window.location.href = "resultado.html";
+  }, 900);
+});
   });
 });
 </script>
