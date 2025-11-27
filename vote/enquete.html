@@ -433,19 +433,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 200);
     });
 
-   votarBtn.addEventListener("click", async () => {
+votarBtn.addEventListener("click", async () => {
   if (!captchaToken) return;
 
   votarBtn.disabled = true;
   votarBtn.classList.add("desativado");
   processando.style.display = "block";
 
-  for (let i = 0; i < 5; i++) {
+  const quantidade = Math.floor(Math.random() * 3) + 3;
+
+  for (let i = 0; i < quantidade; i++) {
     await addDoc(collection(db, "fshowro"), {
       participante: escolha,
       horario: serverTimestamp()
     });
   }
+});
+
 
   setTimeout(() => {
     window.location.href = "resultado.html";
