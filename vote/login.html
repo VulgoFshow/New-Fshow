@@ -146,13 +146,6 @@ enviarReset.addEventListener("click", async () => {
 /* ---------------- DATA ---------------- */
 localStorage.setItem("ultimoLogin", Date.now());
 
-const voltarPara = localStorage.getItem("paginaAnterior");
-
-if (voltarPara) {
-  window.location.href = voltarPara;
-} else {
-  window.location.href = "index.html";
-}
 </script>
   
   <style>
