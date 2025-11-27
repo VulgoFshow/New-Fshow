@@ -576,9 +576,9 @@ button:disabled {
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg" alt="Emanuel">
+  <img src="https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg" alt="Davi José">
   <div class="option-content">
-      <input type="radio" name="vote" value="Emanuel"> Emanuel
+      <input type="radio" name="vote" value="Davi José"> Davi José
   </div>
 </label>
 
@@ -588,7 +588,14 @@ button:disabled {
       <input type="radio" name="vote" value="Eueu"> Eueu
   </div>
 </label>
-    
+
+<label class="option">
+  <img src="https://i.ibb.co/mr6sTbPM/Gean.jpg" alt="Gean">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Gean"> Gean
+  </div>
+</label>
+
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
         <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l6 6 10-10"/></svg>
@@ -599,7 +606,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>Votar</button>
 
-    <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
+    <div class="notice">A votação segue aberta até às 19:00 horas.</div>
   </div>
 
 <!-- POPUP CAPTCHA -->
@@ -649,8 +656,8 @@ button:disabled {
   console.log("SUPABASE OK:", supabase);
 
   // =================== CONFIGURAÇÃO ===================
-const aberturaBR = new Date("2025-11-25T22:30:00");
-const encerramentoBR = new Date("2025-11-26T11:00:00");
+const aberturaBR = new Date("2025-11-25T21:00:00");
+const encerramentoBR = new Date("2025-11-27T19:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -982,7 +989,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("agc10")  
+      .from("agc12")  
       .insert(votosParaEnviar);  
   
     if (error) {  
