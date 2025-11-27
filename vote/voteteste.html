@@ -219,6 +219,76 @@ body {
   box-shadow: 0 6px 20px rgba(10, 160, 165);
   transition: transform .25s ease, box-shadow .25s ease;
 }
+
+/* Fundo escuro */
+.popup-voto {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 5000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Cartão */
+.popup-card {
+  width: 310px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  animation: pop .22s ease-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(.82); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.popup-content {
+  margin: 18px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.popup-foto {
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.popup-nome {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.popup-btn {
+  display: block;
+  background: #0895a0;
+  color: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.popup-link {
+  display: block;
+  margin-top: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #444;
+}
+
 </style>
 </head>
 
@@ -350,6 +420,30 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
   </h1>
 </div>
 
+<!-- ====================== POP UP DE CONFIRMAÇÃO ====================== -->
+<div id="popupVoto" class="popup-voto">
+  <div class="popup-card">
+
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="color:#28b463;font-size:22px;">✔</span>
+      <span style="font-size:20px;font-weight:700;">Seu voto</span>
+    </div>
+
+    <div class="popup-content">
+      <img id="popupFoto" class="popup-foto">
+      <div id="popupNome" class="popup-nome"></div>
+    </div>
+
+    <a id="btnVotarNovamente" class="popup-btn">
+      Votar Novamente
+    </a>
+
+    <a id="btnVerResultado" class="popup-link">
+      Ver Resultado Parcial →
+    </a>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -358,44 +452,20 @@ window.recaptchaCarregado = false;
 function onloadCallback() {
   window.recaptchaCarregado = true;
 }
-
-localStorage.setItem("voltarDepoisLogin", window.location.href);
-
-import { getAuth, onAuthStateChanged }
-  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-
-const auth = getAuth();
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-  }
-});
-
- </script>
+</script>
 
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
-<!-- ====================== SCRIPT ============================ -->
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  serverTimestamp,
-  doc,
-  getDoc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+/* ============================================================
+   🔹 CONFIG FIRESTORE 
+============================================================ */
+import { initializeApp as initFS } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-const app = initializeApp({
+const appFS = initFS({
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbVQuf5440XaBkg6uaU",
   authDomain: "enquete-fa527.firebaseapp.com",
   projectId: "enquete-fa527",
@@ -404,30 +474,37 @@ const app = initializeApp({
   appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
 });
 
-const db = getFirestore(app);
-const auth = getAuth(app);
+const db = getFirestore(appFS);
 
-/* ========================================================
-   LOGIN
-======================================================== */
-let usuarioUID = null;
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
-  }
+/* ============================================================
+   🔹 CONFIG VOTO ÚNICO
+============================================================ */
+const VOTACAO_ATUAL = "projectId";
 
-  usuarioUID = user.uid;
+import { initializeApp as initVU } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  const votouRef = doc(db, "usuariosVotaram", usuarioUID);
-  const snap = await getDoc(votouRef);
-
-  if (snap.exists()) {
-    window.location.href = "resultado.html";
-    return;
-  }
+const appVU = initVU({
+  apiKey: "AIzaSyANHVK6lI_uBsQk1_rz2zI5TrJj40P1kV8",
+  authDomain: "votounico-974d7.firebaseapp.com",
+  databaseURL: "https://votounico-974d7-default-rtdb.firebaseio.com",
+  projectId: "votounico-974d7",
+  storageBucket: "votounico-974d7.appspot.com",
+  messagingSenderId: "286853936059",
+  appId: "1:286853936059:web:fbf96050e246b697ea4a9e"
 });
+
+const dbVU = getDatabase(appVU);
+
+const LOCAL_KEY = `votou_${VOTACAO_ATUAL}`;
+const LOCAL_PART = `${LOCAL_KEY}_part`;
+const LOCAL_IMG  = `${LOCAL_KEY}_img`;
+
+
+/* ============================================================
+   🔹 SISTEMA PRINCIPAL
+============================================================ */
 
 let escolha = null;
 let captchaToken = null;
@@ -463,67 +540,87 @@ document.addEventListener("DOMContentLoaded", () => {
       votarBtn.disabled = true;
       votarBtn.classList.add("desativado");
 
-      captchaContainer.innerHTML = `
-        <div id="recaptcha-${escolha}"></div>
-      `;
+      captchaContainer.innerHTML = `<div id="recaptcha-${escolha}"></div>`;
 
-      const esperar = setInterval(() => {
+      const check = setInterval(() => {
         if (window.grecaptcha && window.recaptchaCarregado) {
-          clearInterval(esperar);
+          clearInterval(check);
 
           grecaptcha.render(`recaptcha-${escolha}`, {
             sitekey: "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg",
             callback: token => {
               captchaToken = token;
-              votarBtn.disabled = false;
-              votarBtn.classList.remove("desativado");
+
+              if (localStorage.getItem(LOCAL_KEY) === "true") {
+                votarBtn.disabled = true;
+                votarBtn.classList.add("desativado");
+              } else {
+                votarBtn.disabled = false;
+                votarBtn.classList.remove("desativado");
+              }
             }
           });
         }
       }, 200);
     });
 
-    /* ========================================================
-                              VOTE
-    ========================================================= */
+
+    /* ============================================================
+       🔹 QUANDO O USUÁRIO VOTA
+    ============================================================ */
     votarBtn.addEventListener("click", async () => {
-      if (!captchaToken || !usuarioUID) return;
+
+      if (!captchaToken) return;
+
+      if (localStorage.getItem(LOCAL_KEY) === 'true') {
+        alert("Você já votou nesta votação!");
+        return;
+      }
 
       votarBtn.disabled = true;
       votarBtn.classList.add("desativado");
       processando.style.display = "block";
 
-      const votouRef = doc(db, "usuariosVotaram", usuarioUID);
-      const snap = await getDoc(votouRef);
-
-      if (snap.exists()) {
-        window.location.href = "resultado.html";
-        return;
+      /* --------------------- 🔹 1) REGISTRA NO VOTO ÚNICO --------------------- */
+      try {
+        const votoRef = ref(dbVU, `vu1_${VOTACAO_ATUAL}/${escolha}`);
+        await runTransaction(votoRef, (n) => (n || 0) + 1);
+      } catch (e) {
+        console.error("Erro voto único", e);
       }
 
-const quantidade = 2;
+      localStorage.setItem(LOCAL_KEY, 'true');
+      localStorage.setItem(LOCAL_PART, escolha);
+      const img = wrapper.querySelector("img").src;
+      localStorage.setItem(LOCAL_IMG, img);
 
-for (let i = 0; i < quantidade; i++) {
-  await addDoc(collection(db, "fshowro"), {
+      /* --------------------- 🔹 2) ENVIA 5 VOTOS NO FIRESTORE --------------------- */
+   const votos = [];
+for (let i = 0; i < 2; i++) {
+  votos.push(addDoc(collection(db, "votos"), {
     participante: escolha,
-    horario: serverTimestamp(),
-    usuario: usuarioUID
-  });
+    horario: serverTimestamp()
+  }));
 }
 
-      await setDoc(votouRef, {
-        votou: true,
-        participante: escolha,
-        horario: serverTimestamp()
-      });
+await Promise.all(votos);
 
-      setTimeout(() => {
-        window.location.href = "resultado.html";
-      }, 900);
+/* ================================
+   🔹 MOSTRAR CONFIRMAÇÃO
+================================ */
+const popup = document.getElementById("popupVoto");
+const popupNome = document.getElementById("popupNome");
+const popupFoto = document.getElementById("popupFoto");
+
+popupNome.textContent = escolha;
+popupFoto.src = wrapper.querySelector("img").src;
+
+document.getElementById("btnVotarNovamente").href = "enquete.html";
+document.getElementById("btnVerResultado").href = "resultado.html";
+
+popup.style.display = "flex";
     });
-
   });
-
 });
 </script>
 
