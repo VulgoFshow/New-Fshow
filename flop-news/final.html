@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia — Portal Flop</title>
 
-        TEST 3
+        TESTE 4
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -487,19 +487,20 @@ footer a {
    POPUP DE CONFIRMAÇÃO DE VOTO
 ===============================*/
 .popup-full {
-  position: absolute;
+  position: fixed;             
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: linear-gradient(150deg, #e9ffff, #ffffff, #d9f7f8);
   display: none;
   justify-content: center;
   align-items: center;
   padding: 24px;
-  z-index: 9999;
+  z-index: 2;        
   animation: fadeIn 0.3s ease forwards;
 }
+
 
 /* Ativo */
 .popup-full.ativo {
