@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Você já votou!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Inter', sans-serif;
+      background: #f2f8f9;
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 430px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      animation: pop 0.4s ease-out;
+    }
+    @keyframes pop {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .titulo {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0895a0;
+      margin-bottom: 16px;
+    }
+    .foto-voto {
+      width: 140px;
+      height: 140px;
+      border-radius: 20px;
+      object-fit: cover;
+      margin: 20px auto;
+      display: block;
+      border: 6px solid #e6f9fa;
+      box-shadow: 0 4px 15px rgba(8,149,160,0.15);
+    }
+    .nome {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 12px 0 30px;
+      color: #222;
+    }
+    .botao {
+      display: block;
+      width: 100%;
+      background: #0895a0;
+      color: white;
+      padding: 18px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      margin: 20px 0;
+      transition: background 0.2s;
+    }
+    .botao:hover { background: #067f89; }
+    .link-secundario {
+      display: block;
+      margin-top: 16px;
+      color: #0895a0;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .link-secundario:hover { text-decoration: underline; }
+    .emoji { font-size: 42px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="emoji">Checkmark</div>
+    <div class="titulo">Voto registrado com sucesso!</div>
+
+    <img id="fotoVotado" class="foto-voto" src="" alt="Participante votado">
+    <div id="nomeVotado" class="nome">Carregando...</div>
+
+    <a href="voto-sem-limites.html" class="botao">
+      Voto sem Limites
+    </a>
+
+    <a href="resultado.html" class="link-secundario">
+      Ver Resultado Parcial →
+    </a>
+
+    <a href="#" id="votarNovamente" class="link-secundario" style="margin-top:24px; display:block;">
+      ← Votar em outro participante
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const nomeSalvo = localStorage.getItem("ultimoVotoNome");
+      const fotoSalva = localStorage.getItem("ultimoVotoImg");
+
+      const nomeEl = document.getElementById("nomeVotado");
+      const fotoEl = document.getElementById("fotoVotado");
+
+      // Se NÃO tiver voto salvo → manda de volta pra enquete
+      if (!nomeSalvo || !fotoSalva) {
+        window.location.href = "enquete.html";
+        return;
+      }
+
+      nomeEl.textContent = nomeSalvo;
+      fotoEl.src = fotoSalva;
+      fotoEl.alt = "Foto de " + nomeSalvo;
+
+      document.getElementById("votarNovamente").addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("ultimoVotoNome");
+        localStorage.removeItem("ultimoVotoImg");
+        window.location.href = "enquete.html";
+      });
+    });
+  </script>
+
+</body>
+</html>
