@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <title>Enquete Fshow - A Fazenda 17</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enquete - A Fazenda 17</title>
 
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-
-TESTE 7
-
+  TESTE 8 
 <style>
 /* ===== ANIMAÇÕES ===== */
 
@@ -430,49 +428,31 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
   </h1>
 </div>
 
-<!-- ====================== POP UP DE CONFIRMAÇÃO ====================== -->
-<div id="popupVoto" class="popup-voto">
-
-  <div class="popup-card">
-
-    <div class="popup-top">
-      <i>✔</i> Você votou em:
-    </div>
-
-    <div class="popup-content">
-      <img id="popupFoto" class="popup-foto" src="">
+  <!-- POPUP DE CONFIRMAÇÃO -->
+  <div id="popupVoto" class="popup-voto">
+    <div class="popup-card">
+      <div class="popup-top">Você votou em:</div>
+      <img id="popupFoto" class="popup-foto" src="" alt="">
       <div id="popupNome" class="popup-nome"></div>
+      <a href="enquete.html" class="popup-btn">Votar Novamente</a>
+      <a href="resultado.html" class="popup-link">Ver Resultado Parcial →</a>
+      <a href="obrigado.html" class="popup-link" style="display:block;margin-top:12px;color:#0895a0;">
+        Continuar →
+      </a>
     </div>
-
-    <a id="popupBtn" class="popup-btn" href="#">
-      Votar Novamente
-    </a>
-
-    <a class="popup-link" href="resultado.html">
-      Ver Resultado Parcial → 
-    </a>
-
   </div>
-
 </div>
-
-</div>
-
-<script>
-window.recaptchaCarregado = false;
-function onloadCallback() {
-  window.recaptchaCarregado = true;
-}
-</script>
 
 <!-- reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-<script type="module">
+<script>
+  window.recaptchaCarregado = false;
+  function onloadCallback() { window.recaptchaCarregado = true; }
+</script>
 
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { 
-  getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbVQuf5440XaBkg6uaU",
@@ -482,22 +462,14 @@ const app = initializeApp({
   messagingSenderId: "544422121318",
   appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
 });
-
 const db = getFirestore(app);
 
-/* ============================ 
-   Config 
-============================ */
 const COLECAO_VOTOS = "fshow";
 const SITEKEY = "6LeZ8xosAAAAAP7ZBc5Tw_Tv74nddhF_yBeCDoca";
 let escolha = null;
 let captchaToken = null;
-
 const widgetIdMap = new Map();
 
-/* ============================ 
-   Helpers ReCAPTCHA 
-============================ */
 function ensureRecaptchaDiv(container, divId) {
   let node = container.querySelector(`#${divId}`);
   if (!node) {
@@ -514,37 +486,29 @@ function renderOrResetRecaptcha(containerId, callback) {
     try { grecaptcha.reset(existing); } catch(e){}
     return existing;
   }
-  const wid = grecaptcha.render(containerId, {
-    sitekey: SITEKEY,
-    callback: token => callback(token)
-  });
+  const wid = grecaptcha.render(containerId, { sitekey: SITEKEY, callback });
   widgetIdMap.set(containerId, wid);
   return wid;
 }
 
-/* ============================ 
-   Sistema de Voto (SEM LOGIN)
-============================ */
 document.addEventListener("DOMContentLoaded", () => {
   const wrappers = document.querySelectorAll(".opcao-wrapper");
   const headerNome = document.getElementById("selecionadoNome");
 
-  wrappers.forEach((wrapper) => {
+  wrappers.forEach(wrapper => {
     const votarBtn = wrapper.querySelector(".botao");
     const processando = wrapper.querySelector(".processando");
     const captchaContainer = wrapper.querySelector(".captcha-widget");
-
-    votarBtn.disabled = true;
 
     wrapper.querySelector(".opcao").addEventListener("click", () => {
       wrappers.forEach(w => {
         w.classList.remove("active");
         w.querySelector(".botao").disabled = true;
+        w.querySelector(".botao").classList.add("desativado");
       });
-
       wrapper.classList.add("active");
       escolha = wrapper.dataset.nome;
-      headerNome.innerHTML = escolha;
+      headerNome.textContent = escolha;
 
       const recId = `recaptcha-${escolha}`;
       ensureRecaptchaDiv(captchaContainer, recId);
@@ -562,7 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     votarBtn.addEventListener("click", async () => {
-      if (!captchaToken) return;
+      if (!captchaToken || !escolha) return;
 
       votarBtn.disabled = true;
       processando.style.display = "block";
@@ -573,26 +537,22 @@ document.addEventListener("DOMContentLoaded", () => {
           horario: serverTimestamp()
         });
 
+        // SALVA NO localStorage para a página "Você já votou" mostrar
+        localStorage.setItem("ultimoVotoNome", escolha);
+        localStorage.setItem("ultimoVotoImg", wrapper.dataset.img);
+
+        // Mostra popup de sucesso
         const popup = document.getElementById("popupVoto");
+        document.getElementById("popupFoto").src = wrapper.dataset.img;
+        document.getElementById("popupNome").textContent = escolha;
         popup.style.display = "flex";
 
-        document.getElementById("popupFoto").src = wrapper.dataset.img;
-        document.getElementById("popupNome").innerHTML = escolha;
-
       } catch (err) {
-        alert("Erro ao votar: " + err.message);
+        alert("Erro ao enviar voto: " + err.message);
       }
 
       processando.style.display = "none";
     });
-  });
-
-  document.getElementById("btnVotarNovamente").addEventListener("click", () => {
-    window.location.reload();
-  });
-
-  document.getElementById("btnVerResultado").addEventListener("click", () => {
-    window.location.href = "resultado.html";
   });
 });
 </script>
