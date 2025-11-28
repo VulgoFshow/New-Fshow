@@ -4,6 +4,9 @@
     <title>Enquete Fshow - A Fazenda 17</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+
 <style>
 /* ===== ANIMAÇÕES ===== */
 
@@ -448,20 +451,23 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
 
 <script>
 window.recaptchaCarregado = false;
-
 function onloadCallback() {
   window.recaptchaCarregado = true;
 }
 </script>
 
+<!-- reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+
+<!-- FingerprintJS (precisa ser antes do módulo!) -->
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 
 <script type="module">
 /* ============================
-   CONFIGURAÇÃO FIRESTORE
+   CONFIG FIREBASE
    ============================ */
 import { initializeApp as initFS } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 const appFS = initFS({
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbVQuf5440XaBkg6uaU",
@@ -471,24 +477,46 @@ const appFS = initFS({
   messagingSenderId: "544422121318",
   appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
 });
+
 const db = getFirestore(appFS);
 
 /* ============================
-   CONFIGURAÇÕES GERAIS
+   IDENTIFICAÇÃO ÚNICA CORRIGIDA
    ============================ */
-const MULTIPLOS_VOTOS = 2;
-const LOCAL_KEY_PREFIX = "votou_";
-const SITEKEY = "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg";
+let fingerprintId = null;
+const COLECAO_VOTO_UNICO = "votantes_unicos";
+
+// Inicializar FingerprintJS corretamente
+async function initFingerprint() {
+  try {
+    if (!window.FingerprintJS) {
+      console.error("FingerprintJS não carregou!");
+      return null;
+    }
+    const fp = await window.FingerprintJS.load();
+    const result = await fp.get();
+    fingerprintId = result.visitorId;
+    console.log("Fingerprint:", fingerprintId);
+  } catch (e) {
+    console.error("Erro Fingerprint:", e);
+  }
+}
+initFingerprint();
 
 /* ============================
-   ESTADO
+   CONFIGURAÇÕES DO SISTEMA
    ============================ */
+const MULTIPLOS_VOTOS = 2;
+const SITEKEY = "6LeZ8xosAAAAAP7ZBc5Tw_Tv74nddhF_yBeCDoca";
+const LOCAL_KEY_PREFIX = "votou_fshow4";
+
 let escolha = null;
 let captchaToken = null;
+
 const widgetIdMap = new Map();
 
 /* ============================
-   HELPERS reCAPTCHA
+   HELPER reCAPTCHA
    ============================ */
 function ensureRecaptchaDiv(container, divId) {
   let node = container.querySelector(`#${divId}`);
@@ -501,23 +529,17 @@ function ensureRecaptchaDiv(container, divId) {
 }
 
 function renderOrResetRecaptcha(containerId, callback) {
-  if (!window.grecaptcha) return null;
   const existing = widgetIdMap.get(containerId);
   if (existing !== undefined && existing !== null) {
-    try {
-      grecaptcha.reset(existing);
-    } catch (e) {
-      console.warn("grecaptcha.reset falhou:", e);
-    }
+    try { grecaptcha.reset(existing); } catch(e){}
     return existing;
-  } else {
-    const wid = grecaptcha.render(containerId, {
-      sitekey: SITEKEY,
-      callback: (token) => callback(token)
-    });
-    widgetIdMap.set(containerId, wid);
-    return wid;
   }
+  const wid = grecaptcha.render(containerId, {
+    sitekey: SITEKEY,
+    callback: (token)=> callback(token)
+  });
+  widgetIdMap.set(containerId, wid);
+  return wid;
 }
 
 /* ============================
@@ -526,11 +548,31 @@ function renderOrResetRecaptcha(containerId, callback) {
 const popup = document.getElementById("popupVoto");
 const popupNome = document.getElementById("popupNome");
 const popupFoto = document.getElementById("popupFoto");
-const btnVotarNovamente = document.getElementById("btnVotarNovamente");
-const btnVerResultado = document.getElementById("btnVerResultado");
+const btnNovamente = document.getElementById("btnVotarNovamente");
+const btnResultado = document.getElementById("btnVerResultado");
 
-btnVotarNovamente.href = "."; 
-btnVerResultado.href = "resultado.html";
+btnNovamente.href = ".";
+btnResultado.href = "resultado.html";
+
+/* ============================
+   CHECAR VOTO ÚNICO (CORRIGIDO)
+   ============================ */
+async function jaVotou() {
+  if (!fingerprintId) {
+    console.warn("Fingerprint ainda não carregado! Permitindo temporariamente.");
+    return false;
+  }
+
+  const q = query(
+    collection(db, COLECAO_VOTO_UNICO),
+    where("fingerprint", "==", fingerprintId),
+    where("votacao", "==", LOCAL_KEY_PREFIX)
+  );
+
+  const snap = await getDocs(q);
+
+  return !snap.empty;
+}
 
 /* ============================
    MAIN
@@ -540,107 +582,93 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerNome = document.getElementById("selecionadoNome");
 
   wrappers.forEach(wrapper => {
-    const radio = wrapper.querySelector('input[type="radio"]');
     const votarBtn = wrapper.querySelector(".botao");
     const processando = wrapper.querySelector(".processando");
     const captchaContainer = wrapper.querySelector(".captcha-widget");
-    const nome = wrapper.dataset.nome;
-    const localKey = `${LOCAL_KEY_PREFIX}${nome}`;
 
     votarBtn.disabled = true;
-    votarBtn.classList.add("desativado");
 
     wrapper.querySelector(".opcao").addEventListener("click", () => {
       wrappers.forEach(w => {
         w.classList.remove("active");
-        const b = w.querySelector(".botao");
-        if (b) {
-          b.disabled = true;
-          b.classList.add("desativado");
-        }
+        w.querySelector(".botao").disabled = true;
       });
 
       wrapper.classList.add("active");
-      radio.checked = true;
       escolha = wrapper.dataset.nome;
-      headerNome.innerText = escolha;
+      headerNome.innerHTML = escolha;
 
-      captchaToken = null;
-      votarBtn.disabled = true;
-      votarBtn.classList.add("desativado");
-
-      const containerDivId = `recaptcha-${escolha}`;
-      ensureRecaptchaDiv(captchaContainer, containerDivId);
+      const recId = `recaptcha-${escolha}`;
+      ensureRecaptchaDiv(captchaContainer, recId);
 
       const wait = setInterval(() => {
         if (window.grecaptcha && window.recaptchaCarregado) {
           clearInterval(wait);
-
-          renderOrResetRecaptcha(containerDivId, (token) => {
+          renderOrResetRecaptcha(recId, token => {
             captchaToken = token;
-
-            const GLOBAL_VOTOU = localStorage.getItem(`${LOCAL_KEY_PREFIX}projectId`) === "true";
-            if (GLOBAL_VOTOU) {
-              votarBtn.disabled = true;
-              votarBtn.classList.add("desativado");
-            } else {
-              votarBtn.disabled = false;
-              votarBtn.classList.remove("desativado");
-            }
+            votarBtn.disabled = false;
           });
         }
       }, 150);
     });
 
-
-    /* ============ EVENTO DO BOTÃO VOTAR ============ */
     votarBtn.addEventListener("click", async () => {
       if (!captchaToken) return;
 
-      const GLOBAL_KEY = `${LOCAL_KEY_PREFIX}projectId`;
-      if (localStorage.getItem(GLOBAL_KEY) === "true") {
-        alert("Você já votou nesta votação!");
-        return;
-      }
-
       votarBtn.disabled = true;
-      votarBtn.classList.add("desativado");
       processando.style.display = "block";
 
       try {
-        localStorage.setItem(GLOBAL_KEY, "true");
-        localStorage.setItem(`${GLOBAL_KEY}_part`, escolha);
-        const img = wrapper.querySelector("img") ? wrapper.querySelector("img").src : "";
-        localStorage.setItem(`${GLOBAL_KEY}_img`, img);
+        /* ============================
+           1 - VERIFICA VOTO ÚNICO
+           ============================ */
+        const votou = await jaVotou();
+        if (votou) {
+          alert("❌ Você já votou nesta votação.");
+          processando.style.display = "none";
+          return;
+        }
 
-        const votos = [];
+        /* ============================
+           2 - REGISTRA FINGERPRINT
+           ============================ */
+        await addDoc(collection(db, COLECAO_VOTO_UNICO), {
+          fingerprint: fingerprintId,
+          votacao: LOCAL_KEY_PREFIX,
+          horario: serverTimestamp()
+        });
+
+        /* ============================
+           3 - REGISTRA OS VOTOS
+           ============================ */
         for (let i = 0; i < MULTIPLOS_VOTOS; i++) {
-          votos.push(addDoc(collection(db, "votos"), {
+          await addDoc(collection(db, "fshow"), {
             participante: escolha,
             horario: serverTimestamp()
-          }));
+          });
         }
-        await Promise.all(votos);
 
+        /* ============================
+           4 - MOSTRA POPUP
+           ============================ */
+        const img = wrapper.querySelector("img").src;
         popupNome.textContent = escolha;
-        popupFoto.src = img || "";
+        popupFoto.src = img;
         popup.style.display = "flex";
 
-      } catch (err) {
-        console.error("Erro ao enviar votos:", err);
-        localStorage.removeItem(GLOBAL_KEY);
-        localStorage.removeItem(`${GLOBAL_KEY}_part`);
-        localStorage.removeItem(`${GLOBAL_KEY}_img`);
-
-        alert("❌ Erro ao registrar voto. Verifique as permissões do Firestore ou tente novamente.");
-      } finally {
-        processando.style.display = "none";
+      } catch(e) {
+        console.error(e);
+        alert("Erro ao votar, tente novamente.");
       }
+
+      processando.style.display = "none";
     });
 
   });
 });
 </script>
+
+
 
 </body>
 </html>
