@@ -322,28 +322,38 @@ footer a {
 </div>
 
 <script>
-  function carregarNaCaixa(url) {
-    fetch(url)
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("conteudo-enquete").innerHTML = html;
-      })
-      .catch(() => {
-        document.getElementById("conteudo-enquete").innerHTML =
-          "<p>Erro ao carregar a enquete.</p>";
+function carregarNaCaixa(url) {
+  fetch(url)
+    .then(res => res.text())
+    .then(html => {
+      const caixa = document.getElementById("conteudo-enquete");
+      caixa.innerHTML = html;
+
+      // --- Executar scripts internos ---
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = html;
+
+      const scripts = tempDiv.querySelectorAll("script");
+
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement("script");
+
+        if (oldScript.src) {
+          newScript.src = oldScript.src;
+        } else {
+          newScript.textContent = oldScript.textContent;
+        }
+
+        document.body.appendChild(newScript);
       });
-  }
-
-  document.getElementById("abrirEnquete").addEventListener("click", () => {
-
-    let caixa = document.getElementById("conteudo-enquete");
-    caixa.classList.add("ativo");
-
-    document.getElementById("abrirEnquete").style.display = "none";
-    
-    carregarNaCaixa("enquetefinalagc.html");  
-  });
+    })
+    .catch(() => {
+      document.getElementById("conteudo-enquete").innerHTML =
+        "<p>Erro ao carregar a enquete.</p>";
+    });
+}
 </script>
+
 
 <script>
 document.getElementById("abrirEnquete").addEventListener("click", () => {
@@ -384,4 +394,3 @@ document.getElementById("abrirEnquete").addEventListener("click", () => {
 
 </body>
 </html>
-
