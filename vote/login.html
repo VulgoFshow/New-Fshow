@@ -44,17 +44,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+await auth.signOut();
 
 /* ==============================
    FUNÇÃO DE REDIRECIONAMENTO
 ============================== */
 function irParaVotacao() {
   const voltar = localStorage.getItem("voltarDepoisLogin");
+
   if (voltar) {
     localStorage.removeItem("voltarDepoisLogin");
-    window.location.href = voltar;
+    window.location.replace(voltar); 
   } else {
-    window.location.href = "votefshow.html";
+    window.location.replace("votefshow.html");
   }
 }
 
