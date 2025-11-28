@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fim de Jogo! Flávia está eliminada da Grande Conquista 4.</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/png" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
+<link rel="apple-touch-icon" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
+<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/3yCzdJ59/logo-fshow.png">
+
+<style>
+
+/* =================================
+        PALETA E VARIÁVEIS
+================================= */
+:root {
+  --roxo: #7b2cff;
+  --laranja: #ff7b00;
+  --gradiente: linear-gradient(90deg, #7b2cff, #ff7b00);
+  --texto: #222;
+  --cinza: #666;
+  --bg: #fafafa;
+  --branco: #fff;
+}
+
+/* =================================
+        BASE
+================================= */
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  margin: 0;
+  padding: 0;
+  color: var(--texto);
+  line-height: 1.6;
+}
+
+/* =================================
+        TOPBAR (AGORA COMPLETA)
+================================= */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 8%;
+  background: var(--branco);
+  border-bottom: 1px solid #e7e7e7;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  background: var(--gradiente);
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 22px;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: -1px;
+}
+
+.site-info h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  font-family: "Poppins", sans-serif;
+}
+
+.site-info p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--cinza);
+}
+
+/* NAVBAR DENTRO DA TOPBAR */
+.topbar nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.topbar nav a {
+  color: var(--texto);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 15px;
+  position: relative;
+}
+
+.topbar nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: var(--roxo);
+  transition: .3s;
+}
+
+.topbar nav a:hover::after {
+  width: 100%;
+}
+
+/* =================================
+          CONTEÚDO
+================================= */
+.container {
+  max-width: 850px;
+  margin: 40px auto;
+  padding: 0 8%;
+}
+
+.titulo {
+  font-size: 40px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.subtitulo {
+  font-size: 19px;
+  color: var(--cinza);
+  margin-bottom: 25px;
+  font-weight: 400;
+}
+
+.img-noticia {
+  width: 100%;
+  border-radius: 16px;
+  margin: 25px 0;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.container p {
+  font-size: 18px;
+  margin-bottom: 18px;
+  color: #333;
+}
+
+/* =================================
+        RECOMENDADOS
+================================= */
+.recomendados {
+  margin-top: 50px;
+}
+
+.recomendados h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.12);
+  transition: .25s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.card p {
+  padding: 12px 14px;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* =================================
+            FOOTER
+================================= */
+footer {
+  background: var(--laranja);
+  color: white;
+  padding: 40px 8%;
+  text-align: center;
+  margin-top: 70px;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+}
+
+footer a {
+  color: #ffe9b8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+
+  <div class="topbar-left">
+    <div class="logo">FS</div>
+
+    <div class="site-info">
+      <h1>Portal Flop</h1>
+      <p>Flop Notícias</p>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="#">Reality</a>
+    <a href="https://www.youtube.com/@VulgoFlopp">Youtube</a>
+  </nav>
+
+</div>
+
+<!-- CONTEÚDO -->
+<div class="container">
+
+  <h1 class="titulo">Fim de Jogo!</h1>
+  <p class="subtitulo"> Flávia está eliminada da Grande Conquista 4, Mikael segue para a Final.</p>
+
+  <img class="img-noticia" src="https://i.ibb.co/BHPQ3W0X/Flav.jpg"'>
+
+  <p>Flávia está eliminada da Grande Conquista 4. Ela deixa o jogo na penúltima zona de risco com 22,95% dos votos.</p>
+
+  <p>Mikael se junta a Eueu e Gean na grande final.</p>
+
+  <!-- RECOMENDADOS -->
+  <div class="recomendados">
+    <h2>Leia também</h2>
+
+<div class="grid">
+
+  <a href="https://fshow.site/vote/enquete.html" class="card">
+    <img src="https://i.ibb.co/k26XrgPy/Ro-a.jpg">
+    <p>Enquete Revela resultado da 12° Roça de A Fazenda 17</p>
+  </a>
+
+  <a href="https://fshow.site/flop-news/finalistas2.html" class="card">
+    <img src="https://i.ibb.co/F4r5x4Ld/Finalistas2.jpg">
+    <p>É Finalista! Eueu e Gean garantem as primeiras vagas na final.</p>
+  </a>
+
+  <a href="https://fshow.site/vote/votefshow.html" class="card">
+    <img src="https://i.ibb.co/zWBgsj2s/Luddirose.jpg">
+    <p>Vale vaga na final! Luddy e Rose estão na última Zona de risco da temporada</p>
+  </a>
+
+</div>
+
+
+<footer>
+  © 2025 Portal Flop — <a href="#">Pìxeels Productions LTDA</a>
+</footer>
+
+<!-- ================= SEO TAGS PARA GOOGLE ================ -->
+
+</body>
+</html>
