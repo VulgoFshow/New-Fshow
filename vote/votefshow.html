@@ -569,30 +569,16 @@ button:disabled {
     <h1>Quem você quer que seja FINALISTA?</h1>
     
 <label class="option">
-    <img src="https://i.ibb.co/MyshVLrG/Alysson.jpg" alt="Alysson">
+    <img src="https://i.ibb.co/39W3Ld2t/Fl-via.jpg" alt="Flávia">
   <div class="option-content">
-      <input type="radio" name="vote" value="Alysson"> Alysson
+      <input type="radio" name="vote" value="Flávia"> Flávia
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg" alt="Davi José">
+  <img src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg" alt="Mikael">
   <div class="option-content">
-      <input type="radio" name="vote" value="Davi José"> Davi José
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
-  <div class="option-content">
-      <input type="radio" name="vote" value="Eueu"> Eueu
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://i.ibb.co/mr6sTbPM/Gean.jpg" alt="Gean">
-  <div class="option-content">
-      <input type="radio" name="vote" value="Gean"> Gean
+      <input type="radio" name="vote" value="Mikael"> Mikael
   </div>
 </label>
 
@@ -657,7 +643,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-11-27T19:00:00");
+const encerramentoBR = new Date("2025-11-28T11:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -989,7 +975,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("agc12")  
+      .from("agc13")  
       .insert(votosParaEnviar);  
   
     if (error) {  
