@@ -275,6 +275,13 @@ footer a {
   transform: translateY(-2px);
 }
 
+#frameEnquete {
+  width: 100%;
+  border: none;
+  height: 0;
+  transition: height .4s ease;
+}
+
 </style>
 
 </head>
@@ -314,45 +321,28 @@ footer a {
 <div class="caixa-enquete">
 
   <button class="btn-vote" id="abrirEnquete">VOTE AQUI</button>
-
-  <div class="conteudo-enquete" id="conteudo-enquete">
+  
+<div class="conteudo-enquete" id="conteudo-enquete">
+  <iframe id="frameEnquete" src="" frameborder="0"></iframe>
+</div>
 
   </div>
 
 </div>
 
 <script>
-function carregarNaCaixa(url) {
-  fetch(url)
-    .then(res => res.text())
-    .then(html => {
-      const caixa = document.getElementById("conteudo-enquete");
-      caixa.innerHTML = html;
+document.getElementById("abrirEnquete").addEventListener("click", () => {
+  const caixa = document.getElementById("conteudo-enquete");
+  const frame = document.getElementById("frameEnquete");
 
-      // --- Executar scripts internos ---
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = html;
+  caixa.classList.add("ativo");          
+  document.getElementById("abrirEnquete").style.display = "none";
 
-      const scripts = tempDiv.querySelectorAll("script");
-
-      scripts.forEach(oldScript => {
-        const newScript = document.createElement("script");
-
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
-        } else {
-          newScript.textContent = oldScript.textContent;
-        }
-
-        document.body.appendChild(newScript);
-      });
-    })
-    .catch(() => {
-      document.getElementById("conteudo-enquete").innerHTML =
-        "<p>Erro ao carregar a enquete.</p>";
-    });
-}
+  frame.src = "https://fshow.site/flop-news/enquetefinalagc.html";
+  frame.style.height = "760px";   // ajuste
+});
 </script>
+
 
 
 <script>
