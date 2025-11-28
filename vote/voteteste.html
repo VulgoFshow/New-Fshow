@@ -15,6 +15,10 @@ function verificarLoginSempre() {
 }
 
 verificarLoginSempre();
+
+    localStorage.setItem("voltarDepoisLogin", window.location.href);
+window.location.href = "login.html";
+  
 </script>
 
 <style>
