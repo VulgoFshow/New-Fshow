@@ -547,9 +547,23 @@ button:disabled {
     <div class="espacador"></div>
     
 <label class="option">
-    <img src="https://i.ibb.co/39W3Ld2t/Fl-via.jpg" alt="Flávia">
+    <img src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
   <div class="option-content">
-      <input type="radio" name="vote" value="Flávia"> Flávia
+      <input type="radio" name="vote" value="Eueu"> Eueu
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.ibb.co/d0Znn920/Gean.jpg" alt="Gean">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Gean"> Gean
+  </div>
+</label>
+
+<label class="option">
+    <img src="https://i.ibb.co/TxTpFBJC/Luddi.jpg" alt="Luddy">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Luddy"> Luddy
   </div>
 </label>
 
@@ -570,7 +584,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>Votar</button>
 
-    <div class="notice">A votação segue aberta até às 11:00 horas.</div>
+    <div class="notice">A votação segue aberta até às 19:00 horas.</div>
   </div>
 
 <!-- POPUP CAPTCHA -->
@@ -604,7 +618,7 @@ button:disabled {
       VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Votação segue aberta até às 11:00</div>
+    <div class="notice">Votação segue aberta até às 19:00</div>
     
   </div>
 </div>
@@ -621,7 +635,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-11-28T11:00:00");
+const encerramentoBR = new Date("2025-11-30T19:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -953,7 +967,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("agc13")  
+      .from("agc15")  
       .insert(votosParaEnviar);  
   
     if (error) {  
