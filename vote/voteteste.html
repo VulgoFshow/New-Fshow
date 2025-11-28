@@ -6,7 +6,7 @@
 
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-TESTE 6
+TESTE 7
 
 <style>
 /* ===== ANIMAÇÕES ===== */
@@ -224,102 +224,99 @@ body {
   transition: transform .25s ease, box-shadow .25s ease;
 }
 
+/* Fundo — página inteira */
 .popup-voto {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #f4f6f8; 
-  z-index: 5000;
-  display: none;
+  inset: 0; /* substitui top/left/width/height */
+  background: #f4f6f8;
+  z-index: 9999;
+  display: none; /* será ativado com display: block */
   overflow-y: auto;
-  padding: 30px 20px;
   animation: fadeIn .25s ease-out;
+  padding: 0; /* remove margens */
 }
 
+/* Animação */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
+/* O CARD agora vira um CONTAINER CENTRAL */
 .popup-card {
-  max-width: 480px;
+  width: 100%;
+  max-width: 520px;
+  margin: 40px auto; /* centraliza sem limitar a tela */
   background: #fff;
-  border-radius: 16px;
-  padding: 25px;
-  margin: 0 auto;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
   animation: pop .22s ease-out;
 }
 
 @keyframes pop {
-  0% { transform: scale(.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 
+/* parte superior */
 .popup-top {
   display: flex;
   align-items: center;
   gap: 10px;
   color: #2c7a3f;
   font-weight: 600;
-  font-size: 17px;
+  font-size: 18px;
 }
 
-.popup-top i {
-  font-size: 20px;
-  color: #2ecc71;
-}
-
+/* conteúdo */
 .popup-content {
-  margin-top: 20px;
+  margin-top: 24px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 
 .popup-foto {
-  width: 85px;
-  height: 85px;
-  border-radius: 12px;
+  width: 95px;
+  height: 95px;
+  border-radius: 14px;
   object-fit: cover;
 }
 
 .popup-nome {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   color: #111;
 }
 
+/* Botão */
 .popup-btn {
   display: block;
   width: 100%;
   background: #0895a0;
   color: #fff;
   padding: 16px;
-  border-radius: 10px;
-  margin-top: 30px;
+  border-radius: 12px;
+  margin-top: 32px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 18px;
 }
 
+/* Link */
 .popup-link {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 6px;
-  margin-top: 22px;
+  margin-top: 24px;
   font-weight: 600;
   color: #0077b6;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 17px;
 }
 
-.popup-link i {
-  font-size: 18px;
-}
 
 </style>
 </head>
@@ -454,25 +451,30 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
 
 <!-- ====================== POP UP DE CONFIRMAÇÃO ====================== -->
 <div id="popupVoto" class="popup-voto">
+
   <div class="popup-card">
+
     <div class="popup-top">
       <i>✔</i> Você votou em:
     </div>
+
     <div class="popup-content">
-      <img id="popupFoto" class="popup-foto" src="" alt="">
+      <img id="popupFoto" class="popup-foto" src="">
       <div id="popupNome" class="popup-nome"></div>
     </div>
-    
-    <a href="javotou.html" id="btnVotarNovamente" class="popup-btn">
+
+    <a id="popupBtn" class="popup-btn" href="#">
       Votar Novamente
     </a>
 
-    <a href="resultado.html" id="btnVerResultado" class="popup-link">
-      Ver Resultado Parcial <i>➜</i>
+    <a class="popup-link" href="resultado.html">
+      Ver Resultado Parcial → 
     </a>
 
   </div>
+
 </div>
+
 </div>
 
 <script>
