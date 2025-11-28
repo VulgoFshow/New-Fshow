@@ -10,37 +10,6 @@
 <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
 <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/3yCzdJ59/logo-fshow.png">
   
-<script>
-function verificarLogin24h() {
-  const ultimoLogin = localStorage.getItem("ultimoLogin");
-
-  if (!ultimoLogin) {
-    localStorage.setItem("paginaAnterior", window.location.href);
-    window.location.replace("login.html");
-    return;
-  }
-
-  const ultimo = Number(ultimoLogin);
-
-  if (isNaN(ultimo)) {
-    localStorage.setItem("paginaAnterior", window.location.href);
-    window.location.replace("login.html");
-    return;
-  }
-
-  const agora = Date.now();
-  const limite = 24 * 60 * 60 * 1000; // 24h
-
-  if ((agora - ultimo) > limite) {
-    localStorage.setItem("paginaAnterior", window.location.href);
-    window.location.replace("login.html");
-  }
-}
-
-verificarLogin24h();
-
-</script>
-
 <style>
 /* ===== VARIÁVEIS GLOBAIS ===== */
 :root {
