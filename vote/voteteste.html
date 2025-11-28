@@ -6,20 +6,7 @@
 
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-TESTE 5
-
-<script>
-function verificarLoginSempre() {
-  localStorage.setItem("paginaAnterior", window.location.href);
-  window.location.replace("login.html");
-}
-
-verificarLoginSempre();
-
-    localStorage.setItem("voltarDepoisLogin", window.location.href);
-window.location.href = "login.html";
-  
-</script>
+TESTE 6
 
 <style>
 /* ===== ANIMAÇÕES ===== */
@@ -472,17 +459,15 @@ function onloadCallback() {
 
 <!-- reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-<script type="module">
 /* ============================
    CONFIG FIREBASE
 ============================ */
+<script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { 
   getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-import { 
-  getAuth, onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbVQuf5440XaBkg6uaU",
@@ -494,24 +479,19 @@ const app = initializeApp({
 });
 
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-/* ============================
-   CONFIG DO VOTO
+/* ============================ 
+   Config 
 ============================ */
-const COLECAO_VOTO_UNICO = "votos_unicos"; 
-const COLECAO_VOTOS = "fshow";            
-const MULTIPLOS_VOTOS = 1;                 
+const COLECAO_VOTOS = "fshow";
 const SITEKEY = "6LeZ8xosAAAAAP7ZBc5Tw_Tv74nddhF_yBeCDoca";
-
 let escolha = null;
 let captchaToken = null;
-let usuarioLogado = null;
 
 const widgetIdMap = new Map();
 
-/* ============================
-   reCAPTCHA HELPERS
+/* ============================ 
+   Helpers ReCAPTCHA 
 ============================ */
 function ensureRecaptchaDiv(container, divId) {
   let node = container.querySelector(`#${divId}`);
@@ -537,114 +517,80 @@ function renderOrResetRecaptcha(containerId, callback) {
   return wid;
 }
 
-/* ============================
-   VOTO ÚNICO POR CONTA (UID)
+/* ============================ 
+   Sistema de Voto (SEM LOGIN)
 ============================ */
-async function jaVotou(uid) {
-  const q = query(
-    collection(db, COLECAO_VOTO_UNICO),
-    where("uid", "==", uid)
-  );
+document.addEventListener("DOMContentLoaded", () => {
+  const wrappers = document.querySelectorAll(".opcao-wrapper");
+  const headerNome = document.getElementById("selecionadoNome");
 
-  const snap = await getDocs(q);
-  return !snap.empty;
-}
+  wrappers.forEach((wrapper) => {
+    const votarBtn = wrapper.querySelector(".botao");
+    const processando = wrapper.querySelector(".processando");
+    const captchaContainer = wrapper.querySelector(".captcha-widget");
 
-/* ============================
-   MAIN — USUÁRIO LOGADO
-============================ */
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return;  
-  usuarioLogado = user;
+    votarBtn.disabled = true;
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const wrappers = document.querySelectorAll(".opcao-wrapper");
-    const headerNome = document.getElementById("selecionadoNome");
+    wrapper.querySelector(".opcao").addEventListener("click", () => {
+      wrappers.forEach(w => {
+        w.classList.remove("active");
+        w.querySelector(".botao").disabled = true;
+      });
 
-    wrappers.forEach(wrapper => {
-      const votarBtn = wrapper.querySelector(".botao");
-      const processando = wrapper.querySelector(".processando");
-      const captchaContainer = wrapper.querySelector(".captcha-widget");
+      wrapper.classList.add("active");
+      escolha = wrapper.dataset.nome;
+      headerNome.innerHTML = escolha;
+
+      const recId = `recaptcha-${escolha}`;
+      ensureRecaptchaDiv(captchaContainer, recId);
+
+      const wait = setInterval(() => {
+        if (window.grecaptcha && window.recaptchaCarregado) {
+          clearInterval(wait);
+          renderOrResetRecaptcha(recId, token => {
+            captchaToken = token;
+            votarBtn.disabled = false;
+            votarBtn.classList.remove("desativado");
+          });
+        }
+      }, 150);
+    });
+
+    votarBtn.addEventListener("click", async () => {
+      if (!captchaToken) return;
 
       votarBtn.disabled = true;
+      processando.style.display = "block";
 
-      wrapper.querySelector(".opcao").addEventListener("click", () => {
-        wrappers.forEach(w => {
-          w.classList.remove("active");
-          w.querySelector(".botao").disabled = true;
+      try {
+        await addDoc(collection(db, COLECAO_VOTOS), {
+          participante: escolha,
+          horario: serverTimestamp()
         });
 
-        wrapper.classList.add("active");
-        escolha = wrapper.dataset.nome;
-        headerNome.innerHTML = escolha;
+        const popup = document.getElementById("popupVoto");
+        popup.style.display = "flex";
 
-        const recId = `recaptcha-${escolha}`;
-        ensureRecaptchaDiv(captchaContainer, recId);
+        document.getElementById("popupFoto").src = wrapper.dataset.img;
+        document.getElementById("popupNome").innerHTML = escolha;
 
-        const wait = setInterval(() => {
-          if (window.grecaptcha && window.recaptchaCarregado) {
-            clearInterval(wait);
-            renderOrResetRecaptcha(recId, token => {
-              captchaToken = token;
-              votarBtn.disabled = false;
-            });
-          }
-        }, 150);
-      });
+      } catch (err) {
+        alert("Erro ao votar: " + err.message);
+      }
 
-      votarBtn.addEventListener("click", async () => {
-        if (!captchaToken) return;
-
-        votarBtn.disabled = true;
-        processando.style.display = "block";
-
-        try {
-          // 🔒 Verificar voto único por UID
-          const votou = await jaVotou(usuarioLogado.uid);
-          if (votou) {
-            alert("❌ Você já votou nesta votação.");
-            processando.style.display = "none";
-            return;
-          }
-
-          // Registrar que essa conta já votou
-          await addDoc(collection(db, COLECAO_VOTO_UNICO), {
-            uid: usuarioLogado.uid,
-            participante: escolha,
-            horario: serverTimestamp()
-          });
-
-          // Registrar o voto normal
-          for (let i = 0; i < MULTIPLOS_VOTOS; i++) {
-            await addDoc(collection(db, COLECAO_VOTOS), {
-              participante: escolha,
-              horario: serverTimestamp()
-            });
-          }
-
-          // POPUP
-          const popup = document.getElementById("popupVoto");
-          const popupNome = document.getElementById("popupNome");
-          const popupFoto = document.getElementById("popupFoto");
-
-          popupNome.textContent = escolha;
-          popupFoto.src = wrapper.querySelector("img").src;
-          popup.style.display = "flex";
-
-        } catch(e) {
-          console.error(e);
-          alert("Erro ao votar, tente novamente.");
-        }
-
-        processando.style.display = "none";
-      });
-
+      processando.style.display = "none";
     });
+  });
+
+  document.getElementById("btnVotarNovamente").addEventListener("click", () => {
+    window.location.reload();
+  });
+
+  document.getElementById("btnVerResultado").addEventListener("click", () => {
+    window.location.href = "resultado.html";
   });
 });
 </script>
-
-
 
 </body>
 </html>
