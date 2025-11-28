@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia — Portal Flop</title>
 
+        TESTE 
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -32,12 +33,13 @@
         BASE
 ================================= */
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", Arial, sans-serif;
   background: var(--bg);
   margin: 0;
   padding: 0;
   color: var(--texto);
   line-height: 1.6;
+  animation: fade 0.6s ease;
 }
 
 /* =================================
@@ -223,60 +225,60 @@ footer a {
 </style>
 
 <style>
-  .caixa-enquete {
-    max-width: 650px;
-    margin: 20px auto;
-    background: #fff;
-    border-radius: 6px;
-    border: 1px solid #dcdcdc;
-    position: relative;
-    overflow: hidden;
-    transition: 0.3s ease;
-  }
+.caixa-enquete {
+  width: 95%;             
+  max-width: 1100px;       
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
 
-  /* Linha vermelha  */
-  .caixa-enquete::before {
-    content: "";
-    width: 100%;
-    height: 5px;
-    background: #d00;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+/* Linha vermelha  */
+.caixa-enquete::before {
+  content: "";
+  width: 100%;
+  height: 5px;
+  background: #d00;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
-  .conteudo-enquete {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.45s ease;
-    padding: 0 20px;
-  }
+.conteudo-enquete {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s ease;
+  padding: 0 20px;
+}
 
-  .conteudo-enquete.ativo {
-    max-height: 1400px; 
-    padding-bottom: 20px;
-  }
+.conteudo-enquete.ativo {
+  max-height: 1400px; 
+  padding-bottom: 20px;
+}
 
-  /* Botão */
-  .btn-vote {
-    background: #d00;
-    color: #fff;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    font-weight: 700;
-    margin: 30px auto;
-    display: block;
-    transition: 0.2s;
-  }
+/* Botão */
+.btn-vote {
+  background: #d00;
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
+  margin: 30px auto;
+  display: block;
+  transition: 0.2s;
+}
 
-  .btn-vote:hover {
-    filter: brightness(0.9);
-  }
-  
-  <style>
+.btn-vote:hover {
+  filter: brightness(0.9);
+}
+
 /* ===== ANIMAÇÕES ===== */
 
 @keyframes fadeSlide {
@@ -297,17 +299,6 @@ footer a {
 @keyframes openBox {
   0% { opacity: 0; transform: translateY(-8px) scale(0.97); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* ===== GLOBAL ===== */
-
-body {
-  font-family: "Inter", Arial, sans-serif;
-  background: #f5f7fa;
-  margin: 0;
-  padding: 32px 16px;
-  animation: fade 0.6s ease;
-  color: #222;
 }
 
 /* header demo */
@@ -495,13 +486,13 @@ body {
    POPUP DE CONFIRMAÇÃO DE VOTO
 ===============================*/
 .popup-full {
-  position: fixed;
+  position: absolute;   
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;           
+  height: 100%;
   background: #ffffff;
-  z-index: 99999;
+  z-index: 9999;
   display: none;
   justify-content: center;
   align-items: center;
