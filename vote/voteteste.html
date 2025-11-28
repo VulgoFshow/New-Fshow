@@ -224,99 +224,80 @@ body {
   transition: transform .25s ease, box-shadow .25s ease;
 }
 
-/* Fundo — página inteira */
+  /* Fundo escuro */
 .popup-voto {
   position: fixed;
-  inset: 0; /* substitui top/left/width/height */
-  background: #f4f6f8;
-  z-index: 9999;
-  display: none; /* será ativado com display: block */
-  overflow-y: auto;
-  animation: fadeIn .25s ease-out;
-  padding: 0; /* remove margens */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 5000;
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Animação */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* O CARD agora vira um CONTAINER CENTRAL */
+/* Cartão */
 .popup-card {
-  width: 100%;
-  max-width: 520px;
-  margin: 40px auto; /* centraliza sem limitar a tela */
+  width: 310px;
   background: #fff;
-  border-radius: 18px;
-  padding: 32px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
   animation: pop .22s ease-out;
 }
 
 @keyframes pop {
-  0% { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: scale(.82);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-/* parte superior */
-.popup-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #2c7a3f;
-  font-weight: 600;
-  font-size: 18px;
-}
-
-/* conteúdo */
 .popup-content {
-  margin-top: 24px;
+  margin: 18px 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 8px;
 }
 
 .popup-foto {
-  width: 95px;
-  height: 95px;
-  border-radius: 14px;
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
   object-fit: cover;
 }
 
 .popup-nome {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 700;
-  color: #111;
 }
 
-/* Botão */
 .popup-btn {
   display: block;
-  width: 100%;
   background: #0895a0;
   color: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  margin-top: 32px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 18px;
-}
-
-/* Link */
-.popup-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  margin-top: 24px;
-  font-weight: 600;
-  color: #0077b6;
+  padding: 14px;
+  border-radius: 8px;
+  margin-top: 10px;
   text-decoration: none;
-  font-size: 17px;
+  font-weight: 600;
 }
 
+.popup-link {
+  display: block;
+  margin-top: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #444;
+}
 
 </style>
 </head>
