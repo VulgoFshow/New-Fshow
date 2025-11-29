@@ -5,16 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia — Portal Flop</title>
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <link rel="icon" type="image/png" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
 <link rel="apple-touch-icon" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
 <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
 <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/3yCzdJ59/logo-fshow.png">
 
   <head>
+
+<!-- ======== GOOGLE FONTS ======== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
+/* FONTE GLOBAL */
+* {
+  font-family: "Inter", sans-serif;
+}
+
+h1, h2, h3, h4, .btn-vote, .botao, .btn-novamente, .titulo-confirmado, #popupNome {
+  font-family: "Poppins", sans-serif !important;
+}
+
+/* ==================== ESTILOS EXISTENTES ==================== */
+
 .caixa-enquete {
   width: 95%;             
   max-width: 1100px;       
@@ -796,7 +811,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // ============================
-      // MOSTRAR POPUP DE CONFIRMAÇÃO
+      // MOSTRAR POPUP
       // ============================
       popupNome.innerText = escolha;
       popupImg.src = escolhaImg;
