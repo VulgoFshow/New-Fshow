@@ -100,13 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Limpa TODAS as opções antes
       wrappers.forEach(w => {
-        w.classList.remove("active");
+        w.classList.remove("ativo"); 
         w.querySelector(".botao").disabled = true;
         w.querySelector(".botao").classList.add("desativado");
         w.querySelector(".captcha-widget").innerHTML = "";
       });
 
-      wrapper.classList.add("active");
+      wrapper.classList.add("ativo"); 
       radio.checked = true;
 
       escolha = wrapper.dataset.nome;
