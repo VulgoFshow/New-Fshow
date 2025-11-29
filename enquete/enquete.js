@@ -1,15 +1,12 @@
-<script>
+// =================== reCAPTCHA ======================
 window.recaptchaCarregado = false;
 window.recaptchaWidgets = {};
-function onloadCallback() {
+
+window.onloadCallback = function () {
   window.recaptchaCarregado = true;
-}
-</script>
+};
 
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-
-<!-- ====================== SCRIPT ============================ -->
-<script type="module">
+// =================== FIREBASE ========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
@@ -25,62 +22,51 @@ const app = initializeApp({
 
 const db = getFirestore(app);
 
-// =========================
-// VARIÁVEIS
-// =========================
+// =================== VARIÁVEIS ========================
 let escolha = null;
 let escolhaImg = null;
 let captchaToken = null;
 
-// =========================
-// ELEMENTOS DO POPUP
-// =========================
+// =================== POPUP ============================
 const popup = document.getElementById("popupVoto");
 const popupNome = document.getElementById("popupNome");
 const popupImg = document.getElementById("popupImg");
 
-// =========================
-// FUNÇÕES EXTRAS
-// =========================
-
-// Recarrega só a caixa-enquete
+// =================== FUNÇÕES EXTRAS ====================
 window.recarregarEnquete = function () {
-    const caixa = document.querySelector(".caixa-enquete");
+  const caixa = document.querySelector(".caixa-enquete");
 
-    popup.classList.remove("ativo");
-    caixa.style.opacity = "0";
+  popup.classList.remove("ativo");
+  caixa.style.opacity = "0";
 
-    fetch(window.location.href)
-        .then(res => res.text())
-        .then(html => {
-            const temp = document.createElement("div");
-            temp.innerHTML = html;
+  fetch(window.location.href)
+    .then(res => res.text())
+    .then(html => {
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
 
-            const novaCaixa = temp.querySelector(".caixa-enquete");
-            if (novaCaixa) caixa.innerHTML = novaCaixa.innerHTML;
+      const nova = temp.querySelector(".caixa-enquete");
+      if (nova) caixa.innerHTML = nova.innerHTML;
 
-            caixa.style.opacity = "1";
-        });
+      caixa.style.opacity = "1";
+    });
 };
 
-// Carrega HTML dentro da caixa
 window.abrirResultadoNaCaixa = function (url) {
-    const caixa = document.querySelector(".caixa-enquete");
+  const caixa = document.querySelector(".caixa-enquete");
 
-    fetch(url)
-        .then(res => res.text())
-        .then(html => {
-            caixa.innerHTML = html;
-        });
+  fetch(url)
+    .then(res => res.text())
+    .then(html => {
+      caixa.innerHTML = html;
+    });
 
-    popup.classList.remove("ativo");
+  popup.classList.remove("ativo");
 };
 
-
-// =========================
-// SISTEMA DA ENQUETE
-// =========================
+// =================== SISTEMA ===========================
 document.addEventListener("DOMContentLoaded", () => {
+
   const wrappers = document.querySelectorAll(".opcao-wrapper");
   const headerNome = document.getElementById("selecionadoNome");
 
@@ -93,42 +79,41 @@ document.addEventListener("DOMContentLoaded", () => {
     votarBtn.disabled = true;
     votarBtn.classList.add("desativado");
 
-    // =====================================
-    // QUANDO CLICA NA OPÇÃO
-    // =====================================
+    // ================= CLICK NA OPÇÃO ====================
     wrapper.querySelector(".opcao").addEventListener("click", () => {
 
-      // Limpa TODAS as opções antes
+      // limpar todas as opções
       wrappers.forEach(w => {
-        w.classList.remove("ativo"); 
+        w.classList.remove("ativo");
         w.querySelector(".botao").disabled = true;
         w.querySelector(".botao").classList.add("desativado");
         w.querySelector(".captcha-widget").innerHTML = "";
       });
 
-      wrapper.classList.add("ativo"); 
+      wrapper.classList.add("ativo");
       radio.checked = true;
 
       escolha = wrapper.dataset.nome;
       escolhaImg = wrapper.dataset.img;
+
       headerNome.innerText = escolha;
 
       captchaToken = null;
       votarBtn.disabled = true;
       votarBtn.classList.add("desativado");
 
+      // cria o container do captcha
       captchaContainer.innerHTML = `<div id="recaptcha-${escolha}"></div>`;
 
-      // Aguarda o grecaptcha carregar
+      // aguarda o reCAPTCHA carregar
       const esperar = setInterval(() => {
         if (window.grecaptcha && window.recaptchaCarregado) {
           clearInterval(esperar);
 
-          // Se já existe → reset
+          // se já existe → resetar
           if (window.recaptchaWidgets[escolha] !== undefined) {
             grecaptcha.reset(window.recaptchaWidgets[escolha]);
           } else {
-            // Cria novo reCAPTCHA
             window.recaptchaWidgets[escolha] = grecaptcha.render(`recaptcha-${escolha}`, {
               sitekey: "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg",
               callback: token => {
@@ -140,13 +125,11 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
         }
-      }, 200);
+      }, 150);
 
     });
 
-    // =====================================
-    // BOTÃO "VOTAR"
-    // =====================================
+    // ================= BOTÃO VOTAR =======================
     votarBtn.addEventListener("click", async () => {
       if (!captchaToken) return;
 
@@ -163,14 +146,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
-      // MOSTRAR POPUP
       popupNome.innerText = escolha;
       popupImg.src = escolhaImg;
-
       popup.classList.add("ativo");
     });
 
   });
 
 });
-</script>
