@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícia — Portal Flop</title>
 
-  TESTE 
-  
+  TESTÃO
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -247,10 +246,7 @@ footer a {
 }
 
 .conteudo-enquete {
-  max-height: 0;
-  overflow: hidden;
-  padding: 0 20px;
-  transition: max-height 0.5s ease, padding 0.35s ease;
+  padding: 20px;
 }
 
 .conteudo-enquete.ativo {
@@ -318,20 +314,16 @@ transform: translateY(-2px);
 
   <p></p>
 
+<!-- ====================== ENQUETE ====================== -->
+
+<!-- CSS da enquete -->
+<link rel="stylesheet" href="enquete/enquete.css">
+
 <div class="caixa-enquete">
 
   <button class="btn-vote" id="abrirEnquete">VOTE AQUI</button>
-  
-<div class="conteudo-enquete" id="conteudo-enquete">
-  <iframe id="frameEnquete" src="" frameborder="0"></iframe>
-</div>
 
-<!-- ================= INÍCIO DO BLOCO ================= -->
-
-  <link rel="stylesheet" href="enquete.css">
-
-  <script src="enquete.js"></script>
-
+  <div class="conteudo-enquete" id="conteudo-enquete">
 <body>
 <div class="wrapper">
 
@@ -498,6 +490,7 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
 </div>
 </div>
 
+    <div id="enqueteContainer">
 <!-- ================= POP-UP DE CONFIRMAÇÃO DE VOTO ================= -->
 <div id="popupVoto" class="popup-full">
 
@@ -525,15 +518,35 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
   Ver Resultado Parcial →
 </a>
 
+  </div>
+</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS da enquete -->
+<script src="enquete/enquete.js" defer></script>
+
+<!-- Abrir enquete ao clicar no botão -->
+<script>
+document.getElementById("abrirEnquete").addEventListener("click", () => {
+  document.getElementById("conteudo-enquete").classList.add("ativo");
+  document.getElementById("abrirEnquete").style.display = "none";
+
+  // Chama a função do seu enquete.js, caso exista
+  if (typeof iniciarEnquete === "function") {
+    iniciarEnquete();
+  }
+});
+</script>
+
+<!-- ==================== FIM ENQUETE ==================== -->
 
   </div>
 
 </div>
 
-<!-- ================= FIM DO BLOCO ================= -->
-  </div>
-
-</div>
 
 
 <script>
