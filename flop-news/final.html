@@ -720,6 +720,145 @@ h1, h2, h3, h4, .btn-vote, .botao, .btn-novamente, .titulo-confirmado, #popupNom
   text-decoration: underline;
 }
 
+        <style>
+body {
+  background: #eef1f5;
+  font-family: "Inter", sans-serif;
+  padding: 25px;
+  margin: 0;
+}
+
+/* Impede rolagem lateral */
+html, body {
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* TÍTULO */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1d1d1d;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+/* WRAPPER CENTRALIZADO */
+.resultado-wrapper {
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+/* CARD DO PARTICIPANTE */
+.card-resultado {
+  position: relative;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px 20px 18px 85px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin: 20px 0 10px;
+  min-height: 90px;
+
+  border: 1px solid #e1e4e8;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+
+.card-resultado:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+}
+
+/* IMAGEM PARA FORA DO CARD */
+.imgBox {
+  position: absolute;
+  left: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 3px solid #fff; /* borda que dá destaque */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.imgBox img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+/* NOME */
+.nome {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+/* SUBTEXTO OU PORCENTAGEM */
+.porcentagem {
+  font-size: 16px;
+  font-weight: 500;
+  color: #0086a8;
+  margin-bottom: 8px;
+}
+
+/* BARRA DE PROGRESSO */
+.barra {
+  width: 100%;
+  height: 12px;
+  background: #dfe3e6;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.barra-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00c7d9, #0094a6);
+  width: 0%;
+  transition: width 0.9s ease;
+}
+
+/* TOTAL DE VOTOS */
+#totalVotos {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 19px;
+  color: #333;
+  font-weight: 700;
+  padding-bottom: 10px;
+}
+
+/* BOTÃO VOLTAR */
+#btnVoltar {
+  display: block;
+  margin: 30px auto;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 14px;
+  background: #0092a3;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: background .2s, transform .15s;
+}
+
+#btnVoltar:hover {
+  background: #007e8d;
+  transform: translateY(-2px);
+}
 </style>
 </head>
 <body>
@@ -1091,6 +1230,102 @@ document.getElementById("btnMostrarResultado").addEventListener("click", () => {
 });
 </script>
 
+</head>
+<body>
+
+<h1>Resultado da Enquete</h1>
+
+<div class="resultado-wrapper" id="resultadoWrapper"></div>
+
+<div id="totalVotos">Carregando...</div>
+
+<button id="btnVoltar" onclick="window.location.href='enquetefinalagc.html'">
+  Votar novamente
+</button>
+
+<!-- ===== Firebase ===== -->
+<script type="module">
+import { initializeApp } 
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, getDocs }
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.appspot.com",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+});
+  
+const db = getFirestore(app);
+
+// PARTICIPANTES + IMAGENS
+const participantes = {
+  "Fabiano": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg",
+  "Kathy": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg",
+  "Maria": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg",
+  "Carol": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/NEETNBTZK5D25DEXTHW4JXCLOU.jpg",
+  "Creo": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/VEPF54DHRBEN3OK23MBEYZPOZQ.jpg",
+  "Duda": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6LGMYPULFVATZDAMF5AZFRY73M.jpg",
+  "Dudu": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/DEU2UYHHC5CQVEKDMN53TZNZOY.jpg",
+  "Ray": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg",
+  "Saory": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/DELGVBA35FEMBLUR57ECPPWUO4.jpg",
+  "Tàmires": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/CLWGAFNXL5A3BLXK3COSM4ONC4.jpg",
+  "Toninho": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg",
+  "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
+  "Gean": "https://i.ibb.co/d0Znn920/Gean.jpg",
+  "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",
+  "Luddy": "https://i.ibb.co/TxTpFBJC/Luddi.jpg",
+  "Walério": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/ARME7HV73FCVPJEO4A4WDVHKYY.jpg"
+};
+
+async function carregarResultados() {
+  const snap = await getDocs(collection(db, "finalagc4"));
+
+  const votos = {};  
+  let total = 0;
+
+  snap.forEach(doc => {
+    const nome = doc.data().participante;
+    votos[nome] = (votos[nome] || 0) + 1;
+    total++;
+  });
+
+  document.getElementById("totalVotos").innerText =
+    `Total de votos: ${total}`;
+
+  const wrapper = document.getElementById("resultadoWrapper");
+  wrapper.innerHTML = "";
+
+  const ordenados = Object.keys(votos).sort((a, b) => votos[b] - votos[a]);
+
+  ordenados.forEach(nome => {
+    const qtd = votos[nome];
+    const percentual = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
+
+    const card = document.createElement("div");
+    card.className = "card-resultado";
+    card.innerHTML = `
+      <div class="imgBox">
+        <img src="${participantes[nome]}" />
+      </div>
+      <div class="infoBox">
+        <div class="nome">${nome}</div>
+        <div class="porcentagem">${percentual}% • ${qtd} votos</div>
+        <div class="barra">
+          <div class="barra-fill" style="width:${percentual}%"></div>
+        </div>
+      </div>
+    `;
+
+    wrapper.appendChild(card);
+  });
+}
+
+carregarResultados();
+</script>
   </div>
 </div>
 
