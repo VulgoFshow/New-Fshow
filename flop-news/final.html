@@ -720,7 +720,6 @@ h1, h2, h3, h4, .btn-vote, .botao, .btn-novamente, .titulo-confirmado, #popupNom
   text-decoration: underline;
 }
 
-        <style>
 body {
   background: #eef1f5;
   font-family: "Inter", sans-serif;
@@ -882,6 +881,10 @@ h1 {
   background: #fff;
   border-radius: 18px;
   padding: 20px;
+}
+
+#popupResultado.ativo {
+  display: flex !important;
 }
 
 </style>
@@ -1217,8 +1220,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // POPUP DE RESULTADO PARCIAL
 // ================================
 document.getElementById("btnMostrarResultado").addEventListener("click", async () => {
-    popup.classList.remove("ativo"); 
-    popupResultado.classList.add("ativo");
+popup.classList.remove("ativo");
+popupResultado.style.display = "flex";
 
     await carregarResultados();
 });
