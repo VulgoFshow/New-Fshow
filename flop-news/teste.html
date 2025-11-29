@@ -513,6 +513,15 @@ transform: translateY(-2px);
 </div>
 
 <!-- ==================== ABRIR ENQUETE (SEM DUPLICAÇÃO) ==================== -->
+<script>
+    window.recaptchaCarregado = false;
+    window.recaptchaWidgets = {};
+
+    window.onloadCallback = function () {
+        window.recaptchaCarregado = true;
+    };
+</script>
+
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
 <script type="module" src="/enquete/enquete.js"></script>
