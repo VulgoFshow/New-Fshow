@@ -276,12 +276,14 @@ transition: 0.2s ease;
 transform: translateY(-2px);
 }
         
-#frameEnquete {
+#iframeResultado {
   width: 100%;
+  height: 420px;
   border: none;
-  height: 0;
-  transition: height .4s ease;
+  border-radius: 10px;
+  margin-top: 10px;
 }
+        
 </style>
 
 </head>
@@ -564,34 +566,39 @@ h1, h2, h3, h4, .btn-vote, .botao, .btn-novamente, .titulo-confirmado, #popupNom
    POPUP DE CONFIRMAÇÃO DE VOTO
 ===============================*/
 .popup-full {
-  position: absolute; 
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%; 
-  background: rgba(255, 255, 255, 0.90);
-  backdrop-filter: blur(8px);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
   display: none;
   justify-content: center;
-  align-items: center; 
-  padding: 24px;
-  z-index: 999999; 
-  animation: fadeIn 0.3s ease forwards;
-  overflow: hidden;
+  align-items: center;
+  z-index: 9999;
 }
 
-/* Ativo */
 .popup-full.ativo {
-  display: flex;
+  display: flex !important;
 }
 
-
-/* Animação geral */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.popup-card {
+  width: 92%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+  animation: popup .25s ease;
 }
 
+@keyframes popup {
+  from { transform: scale(.8); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+        
 /* Card principal */
 .popup-card {
   width: 100%;
@@ -1029,43 +1036,30 @@ h1 {
 
         </div>
     </div>
-
-    <div id="popupVoto" class="popup-full">
-        <div class="popup-card">
-            
-            <div class="icone-confirmacao">✔</div>
-            
-            <h2 class="titulo-confirmado">Voto Confirmado!</h2>
-            <div style="color:#666; font-size:14px;">Você votou em:</div>
-
-            <h2 id="popupNome">Nome Participante</h2>
-
-            <img id="popupImg" class="foto" src="" alt="Foto">
-
-            <div class="social">
-                <a href="#" class="face" title="Facebook">f</a>
-                <a href="#" class="tw" title="Twitter">t</a>
-            </div>
-
-            <button class="btn-novamente" onclick="location.reload()">
-                Votar Novamente
-            </button>
-
-      <a id="btnMostrarResultado" class="link-resultado">
-    Ver Resultado Parcial →
-</a>
-
-                <!-- POPUP DE RESULTADO -->
-<div id="popupResultado" class="popup-full">
-    <div class="popup-card">
-        <iframe id="iframeResultado" style="width:100%; height:420px; border:0;"></iframe>
-
-        <button class="btn-novamente" onclick="location.reload()">
-            Fechar
-        </button>
-    </div>
+<!-- POPUP de confirmação -->
+<div id="popupVoto" class="popup-full">
+  <div class="popup-card">
+      <h2>Voto computado!</h2>
+      <p>Você votou em <b id="popupNome"></b></p>
+      <img id="popupImg" src="" style="width:130px; border-radius:12px; margin:12px auto;">
+      
+      <button id="btnMostrarResultado" class="btn-vote" style="margin-top:15px;">Ver resultado parcial</button>
+  </div>
 </div>
 
+<!-- POPUP dos resultados -->
+<div id="popupResultado" class="popup-full">
+  <div class="popup-card">
+      <h2>Resultado Parcial</h2>
+
+      <!-- AQUI O RESULTADO.HTML É CARREGADO -->
+      <iframe id="iframeResultado"></iframe>
+
+      <button onclick="popupResultado.style.display='none'" class="btn-vote" style="margin-top:18px; background:#555">
+        Fechar
+      </button>
+  </div>
+</div>
 
         </div>
     </div>
