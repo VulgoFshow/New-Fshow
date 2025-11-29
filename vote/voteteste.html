@@ -1,307 +1,338 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Enquete - A Fazenda 17</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notícia — Portal Flop</title>
 
-  TESTE 8 
+  TESTE 
+  
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/png" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
+<link rel="apple-touch-icon" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/3yCzdJ59/logo-fshow.pnghttps://i.ibb.co/3yCzdJ59/logo-fshow.pn">
+<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/3yCzdJ59/logo-fshow.png">
+
 <style>
-/* ===== ANIMAÇÕES ===== */
 
-@keyframes fadeSlide {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+/* =================================
+        PALETA E VARIÁVEIS
+================================= */
+:root {
+  --roxo: #7b2cff;
+  --laranja: #ff7b00;
+  --gradiente: linear-gradient(90deg, #7b2cff, #ff7b00);
+  --texto: #222;
+  --cinza: #666;
+  --bg: #fafafa;
+  --branco: #fff;
 }
 
-@keyframes fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-  0% { transform: scale(0.95); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes openBox {
-  0% { opacity: 0; transform: translateY(-8px) scale(0.97); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* ===== GLOBAL ===== */
-
+/* =================================
+        BASE
+================================= */
 body {
   font-family: "Inter", Arial, sans-serif;
-  background: #f5f7fa;
+  background: var(--bg);
   margin: 0;
-  padding: 32px 16px;
+  padding: 0;
+  color: var(--texto);
+  line-height: 1.6;
   animation: fade 0.6s ease;
-  color: #222;
 }
 
-/* header demo */
-.header {
-  max-width: 920px;
-  margin: 0 auto 20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#fff;
-  padding:20px;
-  border-radius:16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-}
-.header h1 { margin:0; font-size:22px; }
-.header img { width:86px; height:86px; object-fit:cover; border-radius:12px; }
-
-/* ===== LAYOUT ===== */
-
-.wrapper {
-  width: 100%;
-  max-width: 920px;
-  margin: 0 auto;
-  padding: 0 6px;
-}
-
-.opcao-wrapper {
-  margin: 22px 0;
-  position: relative;
-  transition: transform .22s ease;
-  border: 1px solid #d0d0d0;
-  border-radius: 18px;
-}
-
-.opcao {
+/* =================================
+        TOPBAR (AGORA COMPLETA)
+================================= */
+.topbar {
   display: flex;
   align-items: center;
-  background: #ffffff;
-  border-radius: 18px;
-  height: 92px;
-  cursor: pointer;
-  transition: 0.25s ease;
-  padding-left: 140px; 
-  position: relative;
+  justify-content: space-between;
+  padding: 18px 8%;
+  background: var(--branco);
+  border-bottom: 1px solid #e7e7e7;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
 }
 
-.opcao-wrapper.active {
-  border-color: #0bb4b9;
-}
-
-.opcao-wrapper.active .opcao {
-  background: linear-gradient(135deg, #0bb4b9, #0a8d91);
-  color: #fff;
-}
-
-.info {
+.topbar-left {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-.imagemOpcao {
-  width: 110px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 12px;
-  position: absolute;
-  top: 50%;
-  left: -10px;   
-  transform: translateY(-50%);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-  background: #fff;
-  border: 1px solid #d0d0d0;
-  z-index: 5;
-}
-
-.textoOpcao {
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.opcao input[type="radio"] { display:none; }
-
-.captchaBox {
-  display: none; 
-  background: #fff;
-  border: 1px solid #ddd;
-  border-top: none;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  padding: 10px 12px !important;
-  animation: openBox .22s ease;
-  overflow: hidden;
-}
-
-.opcao-wrapper.active .captchaBox { display: block; }
-
-/* ===== MOBILE COMO PADRÃO ===== */
-
-.captcha-row {
-  display:flex;
-  flex-direction: column !important;
-  gap: 10px !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-.captcha-left {
-  width: auto !important;
-  flex: none !important;
-  justify-content: center !important;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.captcha-widget {
-  display:flex;
-  align-items:center;
-  margin: 0 auto !important;
-}
-
-.botao {
-  margin-top: 16px;
-  background: linear-gradient(135deg, #00b6c4, #0ca1a6);
-  padding: 14px 26px !important;
-  color: #fff;
-  text-align: center;
-  border-radius: 12px;
-  font-size: 20px !important;
-  cursor: pointer;
-  font-weight: 700;
-  border: none;
-  box-shadow: 0 6px 16px rgba(0,147,150,0.28);
-  transition: 0.18s ease;
-  width: auto !important;
-  min-width: 210px !important;
-  margin: 12px auto 0 auto !important;
-  align-self: center !important;
-}
-
-.botao[disabled] {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.processando {
-  display: none;
-  text-align: center;
-  padding: 14px;
-  font-size: 15px;
-  color: #444;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.botao.desativado {
-  background: #b5b5b5 !important;
-  cursor: not-allowed !important;
-  opacity: 0.7;
-}
-
-.espacador { width: 100%; margin: 26px 0; }
-
-.opcao-wrapper { transition: transform .25s ease, box-shadow .25s ease; }
-.opcao-wrapper:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
-}
-
-.opcao-wrapper:hover .imagemOpcao {
-  transform: translateY(-50%) scale(1.06);
-  box-shadow: 0 6px 20px rgba(10, 160, 165);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-  /* Fundo escuro */
-.popup-voto {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(4px);
-  z-index: 5000;
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Cartão */
-.popup-card {
-  width: 310px;
-  background: #fff;
+.logo {
+  background: var(--gradiente);
+  width: 54px;
+  height: 54px;
   border-radius: 14px;
-  padding: 22px;
-  text-align: center;
-  animation: pop .22s ease-out;
-}
-
-@keyframes pop {
-  0% {
-    transform: scale(.82);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.popup-content {
-  margin: 18px 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 22px;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: -1px;
 }
 
-.popup-foto {
-  width: 90px;
-  height: 90px;
-  border-radius: 10px;
+.site-info h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  font-family: "Poppins", sans-serif;
+}
+
+.site-info p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--cinza);
+}
+
+/* NAVBAR DENTRO DA TOPBAR */
+.topbar nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.topbar nav a {
+  color: var(--texto);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 15px;
+  position: relative;
+}
+
+.topbar nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: var(--roxo);
+  transition: .3s;
+}
+
+.topbar nav a:hover::after {
+  width: 100%;
+}
+
+/* =================================
+          CONTEÚDO
+================================= */
+.container {
+  max-width: 850px;
+  margin: 40px auto;
+  padding: 0 8%;
+}
+
+.titulo {
+  font-size: 40px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.subtitulo {
+  font-size: 19px;
+  color: var(--cinza);
+  margin-bottom: 25px;
+  font-weight: 400;
+}
+
+.img-noticia {
+  width: 100%;
+  border-radius: 16px;
+  margin: 25px 0;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.container p {
+  font-size: 18px;
+  margin-bottom: 18px;
+  color: #333;
+}
+
+/* =================================
+        RECOMENDADOS
+================================= */
+.recomendados {
+  margin-top: 50px;
+}
+
+.recomendados h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.12);
+  transition: .25s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
   object-fit: cover;
 }
 
-.popup-nome {
-  font-size: 20px;
-  font-weight: 700;
+.card p {
+  padding: 12px 14px;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #222;
 }
 
-.popup-btn {
-  display: block;
-  background: #0895a0;
-  color: #fff;
-  padding: 14px;
-  border-radius: 8px;
-  margin-top: 10px;
-  text-decoration: none;
-  font-weight: 600;
+/* =================================
+            FOOTER
+================================= */
+footer {
+  background: var(--laranja);
+  color: white;
+  padding: 40px 8%;
+  text-align: center;
+  margin-top: 70px;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
 }
 
-.popup-link {
-  display: block;
-  margin-top: 14px;
+footer a {
+  color: #ffe9b8;
   font-weight: 600;
   text-decoration: none;
-  color: #444;
 }
 
 </style>
-</head>
 
+<style>
+.caixa-enquete {
+  width: 99%;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  position: relative;
+  overflow: hidden;
+}
+
+.caixa-enquete::before {
+  content: "";
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(135deg, #0057ff, #7b2fff, #ff4d00);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.conteudo-enquete {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  transition: max-height 0.5s ease, padding 0.35s ease;
+}
+
+.conteudo-enquete.ativo {
+  max-height: 100%;  
+  padding-bottom: 20px;
+}
+
+.btn-vote {
+background: linear-gradient(135deg, #0057ff, #7b2fff, #ff4d00);
+color: #fff;
+padding: 12px 24px;
+font-size: 16px;
+border-radius: 6px;
+cursor: pointer;
+border: none;
+font-weight: 700;
+margin: 30px auto;
+display: block;
+transition: 0.2s ease;
+}
+
+.btn-vote:hover {
+transform: translateY(-2px);
+}
+        
+#frameEnquete {
+  width: 100%;
+  border: none;
+  height: 0;
+  transition: height .4s ease;
+}
+</style>
+
+</head>
 <body>
 
+<div class="topbar">
+
+  <div class="topbar-left">
+    <div class="logo">FS</div>
+
+    <div class="site-info">
+      <h1>Portal Flop</h1>
+      <p>Flop Notícias</p>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="#">Reality</a>
+    <a href="https://www.youtube.com/@VulgoFlopp">Youtube</a>
+  </nav>
+
+</div>
+
+<!-- CONTEÚDO -->
+<div class="container">
+
+  <h1 class="titulo">Final Formada!</h1>
+  <p class="subtitulo">Eueu, Gean, Luddy e Mikael são os finalistas do reality, e vão disputar pela vitória.</p>
+
+  <img class="img-noticia" src="https://i.ibb.co/HL932NpK/Final.jpg">
+
+  <p>Quem vence A Grande Conquista 4? Vote na enquete!</p>
+
+  <p></p>
+
+<div class="caixa-enquete">
+
+  <button class="btn-vote" id="abrirEnquete">VOTE AQUI</button>
+  
+<div class="conteudo-enquete" id="conteudo-enquete">
+  <iframe id="frameEnquete" src="" frameborder="0"></iframe>
+</div>
+
+<!-- ================= INÍCIO DO BLOCO ================= -->
+
+  <link rel="stylesheet" href="enquete.css">
+
+  <script src="enquete.js"></script>
+
+<body>
 <div class="wrapper">
 
 <h2 style="max-width:980px;margin:0 auto 16px;font-size:26px;font-weight:800;text-align:center;">
@@ -313,18 +344,18 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
 </h2>
 
 <!-- ===================== OPÇÃO 1 ====================== -->
-<div class="opcao-wrapper" data-nome="Mesquita"
-     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg">
+<div class="opcao-wrapper" data-nome="Eueu"
+     data-img="https://i.ibb.co/svNCVQZK/Eueu.jpg">
 
   <label class="opcao">
     <div class="info">
-      <img class="imagemOpcao" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg">
+      <img class="imagemOpcao" src="https://i.ibb.co/svNCVQZK/Eueu.jpg">
       <div style="padding:12px">
-        <div class="textoOpcao">Mesquita</div>
+        <div class="textoOpcao">Eueu</div>
         <div class="instrucao">Clique para votar</div>
       </div>
     </div>
-    <input type="radio" name="voto" value="Mesquita">
+    <input type="radio" name="voto" value="Eueu">
   </label>
 
   <div class="captchaBox">
@@ -350,18 +381,18 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
 <div class="espacador"></div>
 
 <!-- ===================== OPÇÃO 2 ====================== -->
-<div class="opcao-wrapper" data-nome="Ray"
-     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg">
+<div class="opcao-wrapper" data-nome="Gean"
+     data-img="https://i.ibb.co/d0Znn920/Gean.jpg">
 
   <label class="opcao">
     <div class="info">
-      <img class="imagemOpcao" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg">
+      <img class="imagemOpcao" src="https://i.ibb.co/d0Znn920/Gean.jpg">
       <div style="padding:12px">
-        <div class="textoOpcao">Ray</div>
+        <div class="textoOpcao">Gean</div>
         <div class="instrucao">Clique para votar</div>
       </div>
     </div>
-    <input type="radio" name="voto" value="Ray">
+    <input type="radio" name="voto" value="Gean">
   </label>
 
   <div class="captchaBox">
@@ -387,19 +418,57 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
 <div class="espacador"></div>
 
 <!-- ===================== OPÇÃO 3 ====================== -->
-<div class="opcao-wrapper" data-nome="Toninho"
-     data-img="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg">
+<div class="opcao-wrapper" data-nome="Luddy"
+     data-img="https://i.ibb.co/TxTpFBJC/Luddi.jpg">
 
   <label class="opcao">
     <div class="info">
       <img class="imagemOpcao"
-           src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg">
+           src="https://i.ibb.co/TxTpFBJC/Luddi.jpg">
       <div style="padding:12px">
-        <div class="textoOpcao">Toninho</div>
+        <div class="textoOpcao">Luddy</div>
         <div class="instrucao">Clique para votar</div>
       </div>
     </div>
-    <input type="radio" name="voto" value="Toninho">
+    <input type="radio" name="voto" value="Luddy">
+  </label>
+
+  <div class="captchaBox">
+    <div class="captcha-row">
+      <div class="captcha-left">
+       <div class="captcha-widget"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="botao votarReal desativado" disabled>votar</button>
+
+        <div class="processando">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+            Enviando voto...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="espacador"></div>
+
+<!-- ===================== OPÇÃO 4 ====================== -->
+<div class="opcao-wrapper" data-nome="Mikael"
+     data-img="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg">
+
+  <label class="opcao">
+    <div class="info">
+      <img class="imagemOpcao"
+           src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg">
+      <div style="padding:12px">
+        <div class="textoOpcao">Mikael</div>
+        <div class="instrucao">Clique para votar</div>
+      </div>
+    </div>
+    <input type="radio" name="voto" value="Mikael">
   </label>
 
   <div class="captchaBox">
@@ -427,134 +496,82 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
     Você vai votar em: <strong id="selecionadoNome">—</strong>
   </h1>
 </div>
-
-  <!-- POPUP DE CONFIRMAÇÃO -->
-  <div id="popupVoto" class="popup-voto">
-    <div class="popup-card">
-      <div class="popup-top">Você votou em:</div>
-      <img id="popupFoto" class="popup-foto" src="" alt="">
-      <div id="popupNome" class="popup-nome"></div>
-      <a href="javotou.html" class="popup-btn">Votar Novamente</a>
-      <a href="https://fshow.site" class="popup-link" style="display:block;margin-top:12px;color:#0895a0;">
-        Voltar pro início →
-      </a>
-    </div>
-  </div>
 </div>
 
-<!-- reCAPTCHA -->
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+<!-- ================= POP-UP DE CONFIRMAÇÃO DE VOTO ================= -->
+<div id="popupVoto" class="popup-full">
+
+  <div class="popup-card">
+
+      <div class="linha-ok">
+        <span class="icone-ok">✔</span>
+        <span>Seu voto</span>
+      </div>
+
+      <h2 id="popupNome">Nome do Participante</h2>
+
+      <img id="popupImg" class="foto" src="" alt="Foto">
+
+      <div class="social">
+        <a href="#" class="face">f</a>
+        <a href="#" class="tw">t</a>
+      </div>
+
+<button class="btn-novamente" onclick="location.reload()">
+  Votar Novamente
+</button>
+
+<a href="resultado.html" class="link-resultado">
+  Ver Resultado Parcial →
+</a>
+
+
+  </div>
+
+</div>
+
+<!-- ================= FIM DO BLOCO ================= -->
+  </div>
+
+</div>
+
+
 <script>
-  window.recaptchaCarregado = false;
-  function onloadCallback() { window.recaptchaCarregado = true; }
-</script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-const app = initializeApp({
-  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbVQuf5440XaBkg6uaU",
-  authDomain: "enquete-fa527.firebaseapp.com",
-  projectId: "enquete-fa527",
-  storageBucket: "enquete-fa527.firebasestorage.app",
-  messagingSenderId: "544422121318",
-  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
-});
-const db = getFirestore(app);
-
-const COLECAO_VOTOS = "fshow";
-const SITEKEY = "6LeZ8xosAAAAAP7ZBc5Tw_Tv74nddhF_yBeCDoca";
-let escolha = null;
-let captchaToken = null;
-const widgetIdMap = new Map();
-
-function ensureRecaptchaDiv(container, divId) {
-  let node = container.querySelector(`#${divId}`);
-  if (!node) {
-    node = document.createElement("div");
-    node.id = divId;
-    container.appendChild(node);
-  }
-  return node;
-}
-
-function renderOrResetRecaptcha(containerId, callback) {
-  const existing = widgetIdMap.get(containerId);
-  if (existing !== undefined && existing !== null) {
-    try { grecaptcha.reset(existing); } catch(e){}
-    return existing;
-  }
-  const wid = grecaptcha.render(containerId, { sitekey: SITEKEY, callback });
-  widgetIdMap.set(containerId, wid);
-  return wid;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const wrappers = document.querySelectorAll(".opcao-wrapper");
-  const headerNome = document.getElementById("selecionadoNome");
-
-  wrappers.forEach(wrapper => {
-    const votarBtn = wrapper.querySelector(".botao");
-    const processando = wrapper.querySelector(".processando");
-    const captchaContainer = wrapper.querySelector(".captcha-widget");
-
-    wrapper.querySelector(".opcao").addEventListener("click", () => {
-      wrappers.forEach(w => {
-        w.classList.remove("active");
-        w.querySelector(".botao").disabled = true;
-        w.querySelector(".botao").classList.add("desativado");
-      });
-      wrapper.classList.add("active");
-      escolha = wrapper.dataset.nome;
-      headerNome.textContent = escolha;
-
-      const recId = `recaptcha-${escolha}`;
-      ensureRecaptchaDiv(captchaContainer, recId);
-
-      const wait = setInterval(() => {
-        if (window.grecaptcha && window.recaptchaCarregado) {
-          clearInterval(wait);
-          renderOrResetRecaptcha(recId, token => {
-            captchaToken = token;
-            votarBtn.disabled = false;
-            votarBtn.classList.remove("desativado");
-          });
-        }
-      }, 150);
-    });
-
-    votarBtn.addEventListener("click", async () => {
-      if (!captchaToken || !escolha) return;
-
-      votarBtn.disabled = true;
-      processando.style.display = "block";
-
-      try {
-        await addDoc(collection(db, COLECAO_VOTOS), {
-          participante: escolha,
-          horario: serverTimestamp()
-        });
-
-        // SALVA NO localStorage para a página "Você já votou" mostrar
-        localStorage.setItem("ultimoVotoNome", escolha);
-        localStorage.setItem("ultimoVotoImg", wrapper.dataset.img);
-
-        // Mostra popup de sucesso
-        const popup = document.getElementById("popupVoto");
-        document.getElementById("popupFoto").src = wrapper.dataset.img;
-        document.getElementById("popupNome").textContent = escolha;
-        popup.style.display = "flex";
-
-      } catch (err) {
-        alert("Erro ao enviar voto: " + err.message);
-      }
-
-      processando.style.display = "none";
-    });
-  });
+document.getElementById("abrirEnquete").addEventListener("click", () => {
+  document.getElementById("conteudo-enquete").classList.add("ativo");
+  document.getElementById("abrirEnquete").style.display = "none";
 });
 </script>
+
+
+  <!-- RECOMENDADOS -->
+  <div class="recomendados">
+    <h2>Leia também</h2>
+
+<div class="grid">
+
+  <a href="https://fshow.site/vote/enquete.html" class="card">
+    <img src="https://i.ibb.co/k26XrgPy/Ro-a.jpg">
+    <p>Enquete Revela resultado da 12° Roça de A Fazenda 17</p>
+  </a>
+
+  <a href="https://fshow.site/vote/votefshow.html" class="card">
+    <img src="https://i.ibb.co/HL932NpK/Final.jpg">
+    <p>Final Formada! Vote e decida o campeão.</p>
+  </a>
+
+  <a href="https://fshow.site" class="card">
+    <img src="https://i.ibb.co/MynZ550K/Comu-Awards.jpg">
+    <p>Comu Awards - Começaram os preparativos para a premiação mais esperada do ano!</p>
+  </a>
+
+</div>
+
+
+<footer>
+  © 2025 Portal Flop — <a href="#">Pìxeels Productions LTDA</a>
+</footer>
+
 
 </body>
 </html>
