@@ -228,13 +228,15 @@ footer a {
 
 <style>
 .caixa-enquete {
-  width: 99%;
+  width: 95%;           
+  max-width: 1100px;      
   margin: 20px auto;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 6px;
   border: 1px solid #dcdcdc;
-  position: relative;
+  position: relative; 
   overflow: hidden;
+  transition: 0.3s ease;
 }
 
 .caixa-enquete::before {
@@ -274,12 +276,14 @@ transition: 0.2s ease;
 transform: translateY(-2px);
 }
         
-#frameEnquete {
+#iframeResultado {
   width: 100%;
+  height: 420px;
   border: none;
-  height: 0;
-  transition: height .4s ease;
+  border-radius: 10px;
+  margin-top: 10px;
 }
+        
 </style>
 
 </head>
@@ -318,29 +322,603 @@ transform: translateY(-2px);
 
 <!-- ====================== ENQUETE ====================== -->
 
-<div class="caixa-enquete">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enquete Oficial</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* FONTE GLOBAL */
+* {
+  font-family: "Inter", sans-serif;
+}
+
+h1, h2, h3, h4, .btn-vote, .botao, .btn-novamente, .titulo-confirmado, #popupNome {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.conteudo-enquete {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s ease;
+  padding: 0 20px;
+}
+
+.conteudo-enquete.ativo {
+  max-height: 1400px; 
+  padding-bottom: 20px;
+}
+
+
+.btn-vote:hover {
+  filter: brightness(0.9);
+}
+
+/* ===== ANIMAÇÕES ===== */
+
+@keyframes fadeSlide {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes openBox {
+  0% { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* header demo */
+.header {
+  max-width: 920px;
+  margin: 0 auto 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+.header h1 { margin:0; font-size:22px; }
+.header img { width:86px; height:86px; object-fit:cover; border-radius:12px; }
+
+/* ===== LAYOUT ===== */
+
+.wrapper {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 6px;
+}
+
+.opcao-wrapper {
+  margin: 22px 0;
+  position: relative;
+  transition: transform .22s ease;
+  border: 1px solid #d0d0d0;
+  border-radius: 18px;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 18px;
+  height: 92px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  padding-left: 140px; 
+  position: relative;
+}
+
+.opcao-wrapper.active {
+  border-color: #0bb4b9;
+}
+
+.opcao-wrapper.active .opcao {
+  background: linear-gradient(135deg, #0bb4b9, #0a8d91);
+  color: #fff;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.imagemOpcao {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+  position: absolute;
+  top: 50%;
+  left: -10px;   
+  transform: translateY(-50%);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  background: #fff;
+  border: 1px solid #d0d0d0;
+  z-index: 5;
+}
+
+.textoOpcao {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.opcao input[type="radio"] { display:none; }
+
+.captchaBox {
+  display: none; 
+  background: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  padding: 10px 12px !important;
+  animation: openBox .22s ease;
+  overflow: hidden;
+}
+
+.opcao-wrapper.active .captchaBox { display: block; }
+
+/* ===== MOBILE COMO PADRÃO ===== */
+
+.captcha-row {
+  display:flex;
+  flex-direction: column !important;
+  gap: 10px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+.captcha-left {
+  width: auto !important;
+  flex: none !important;
+  justify-content: center !important;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.captcha-widget {
+  display:flex;
+  align-items:center;
+  margin: 0 auto !important;
+}
+
+.botao {
+  margin-top: 16px;
+  background: linear-gradient(135deg, #00b6c4, #0ca1a6);
+  padding: 14px 26px !important;
+  color: #fff;
+  text-align: center;
+  border-radius: 12px;
+  font-size: 20px !important;
+  cursor: pointer;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 6px 16px rgba(0,147,150,0.28);
+  transition: 0.18s ease;
+  width: auto !important;
+  min-width: 210px !important;
+  margin: 12px auto 0 auto !important;
+  align-self: center !important;
+}
+
+.botao[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.processando {
+  display: none;
+  text-align: center;
+  padding: 14px;
+  font-size: 15px;
+  color: #444;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.botao.desativado {
+  background: #b5b5b5 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+
+.espacador { width: 100%; margin: 28px 0; }
+
+.opcao-wrapper { transition: transform .25s ease, box-shadow .25s ease; }
+.opcao-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+
+.opcao-wrapper:hover .imagemOpcao {
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 6px 20px rgba(10, 160, 165);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+/* ============================
+   POPUP DE CONFIRMAÇÃO DE VOTO
+===============================*/
+.popup-full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-full.ativo {
+  display: flex !important;
+}
+
+.popup-card {
+  width: 92%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+  animation: popup .25s ease;
+}
+
+@keyframes popup {
+  from { transform: scale(.8); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+        
+/* Card principal */
+.popup-card {
+  width: 100%;
+  max-width: 460px;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 32px 26px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  animation: popUp 0.35s ease forwards;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+/* Animação do card */
+@keyframes popUp {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Ícone grande */
+.icone-confirmacao {
+  width: 80px;
+  height: 80px;
+  background: #00b88f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  margin: 0 auto 14px;
+  box-shadow: 0 6px 16px rgba(0,184,143,0.35);
+}
+
+/* Texto "Seu voto foi confirmado" */
+.titulo-confirmado {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0b7f85;
+  margin-bottom: 10px;
+}
+
+/* Nome votado */
+#popupNome {
+  font-size: 26px;
+  font-weight: 900;
+  color: #0a0a0a;
+  margin-top: 10px;
+}
+
+/* Foto do participante */
+.foto {
+  width: 160px;
+  height: 160px;
+  border-radius: 16px;
+  object-fit: cover;
+  margin: 20px auto;
+  display: block;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+  border: 3px solid #00aeb8;
+}
+
+/* Linha de redes sociais */
+.social {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0 28px;
+}
+
+.social a {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1b75d1;
+  color: #fff;
+  font-size: 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.social a:hover {
+  transform: scale(1.08);
+}
+
+.social .tw {
+  background: #1da1f2;
+}
+
+/* Botão votar novamente */
+.btn-novamente {
+  width: 100%;
+  padding: 16px 0;
+  background: linear-gradient(135deg, #00b6c4, #0093a3);
+  border: none;
+  color: #fff;
+  font-size: 19px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0,147,160,0.35);
+  transition: 0.25s ease;
+}
+
+.btn-novamente:hover {
+  transform: translateY(-2px);
+}
+
+/* Link resultado */
+.link-resultado {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 18px;
+  text-decoration: none;
+  color: #008c94;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.link-resultado:hover {
+  text-decoration: underline;
+}
+
+body {
+  background: #eef1f5;
+  font-family: "Inter", sans-serif;
+  padding: 25px;
+  margin: 0;
+}
+
+/* Impede rolagem lateral */
+html, body {
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* TÍTULO */
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1d1d1d;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+/* WRAPPER CENTRALIZADO */
+.resultado-wrapper {
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+/* CARD DO PARTICIPANTE */
+.card-resultado {
+  position: relative;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px 20px 18px 85px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin: 20px 0 10px;
+  min-height: 90px;
+
+  border: 1px solid #e1e4e8;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+
+.card-resultado:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+}
+
+/* IMAGEM PARA FORA DO CARD */
+.imgBox {
+  position: absolute;
+  left: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 3px solid #fff; /* borda que dá destaque */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.imgBox img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+/* NOME */
+.nome {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+/* SUBTEXTO OU PORCENTAGEM */
+.porcentagem {
+  font-size: 16px;
+  font-weight: 500;
+  color: #0086a8;
+  margin-bottom: 8px;
+}
+
+/* BARRA DE PROGRESSO */
+.barra {
+  width: 100%;
+  height: 12px;
+  background: #dfe3e6;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.barra-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00c7d9, #0094a6);
+  width: 0%;
+  transition: width 0.9s ease;
+}
+
+/* TOTAL DE VOTOS */
+#totalVotos {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 19px;
+  color: #333;
+  font-weight: 700;
+  padding-bottom: 10px;
+}
+
+/* BOTÃO VOLTAR */
+#btnVoltar {
+  display: block;
+  margin: 30px auto;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 14px;
+  background: #0092a3;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: background .2s, transform .15s;
+}
+
+#btnVoltar:hover {
+  background: #007e8d;
+  transform: translateY(-2px);
+}
+
+/* POPUP DE RESULTADO */
+#popupResultado {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 999999;
+}
+
+#popupResultado .resultado-card {
+  width: 360px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px;
+}
+
+#popupResultado.ativo {
+  display: flex !important;
+}
+
+</style>
+</head>
+<body>
+
+<div class="caixa-enquete" id="caixaEnquete">
 
     <button class="btn-vote" id="abrirEnquete">VOTE AQUI</button>
 
     <div class="conteudo-enquete" id="conteudo-enquete">
         <div class="wrapper">
-
-            <h2 style="max-width:980px;margin:0 auto 16px;font-size:26px;font-weight:800;text-align:center;">
-                ENQUETE
-            </h2>
-
-            <h2 style="max-width:890;margin:0 auto 16px;font-size:26px;font-weight:800;text-align:center;">
-                Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
-            </h2>
+            
+            <div class="header">
+                <div>
+                    <h2 style="font-size:16px; color:#666; margin-bottom:5px;">Enquete Oficial</h2>
+                    <h1>Você vai votar em: <span id="selecionadoNome" style="color:#00b6c4;">—</span></h1>
+                </div>
+            </div>
 
             <div class="opcao-wrapper" data-nome="Eueu" data-img="https://i.ibb.co/svNCVQZK/Eueu.jpg">
-
                 <label class="opcao">
                     <div class="info">
-                        <img class="imagemOpcao" src="https://i.ibb.co/svNCVQZK/Eueu.jpg">
-                        <div style="padding:12px">
+                        <img class="imagemOpcao" src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Foto Eueu">
+                        <div style="padding-right:10px;">
                             <div class="textoOpcao">Eueu</div>
-                            <div class="instrucao">Clique para votar</div>
+                            <div style="font-size:14px; opacity:0.7">Clique para selecionar</div>
                         </div>
                     </div>
                     <input type="radio" name="voto" value="Eueu">
@@ -351,14 +929,12 @@ transform: translateY(-2px);
                         <div class="captcha-left">
                             <div class="captcha-widget"></div>
                         </div>
-
-                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-                            <button class="botao votarReal desativado" disabled>votar</button>
-
+                        <div style="display:flex;flex-direction:column; width:100%;">
+                            <button class="botao votarReal desativado" disabled>CONFIRMAR VOTO</button>
                             <div class="processando">
-                                <div style="display:flex;align-items:center;gap:10px">
-                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
-                                    Enviando voto...
+                                <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #444;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+                                    Registrando...
                                 </div>
                             </div>
                         </div>
@@ -366,16 +942,13 @@ transform: translateY(-2px);
                 </div>
             </div>
 
-            <div class="espacador"></div>
-
             <div class="opcao-wrapper" data-nome="Gean" data-img="https://i.ibb.co/d0Znn920/Gean.jpg">
-
                 <label class="opcao">
                     <div class="info">
-                        <img class="imagemOpcao" src="https://i.ibb.co/d0Znn920/Gean.jpg">
-                        <div style="padding:12px">
+                        <img class="imagemOpcao" src="https://i.ibb.co/d0Znn920/Gean.jpg" alt="Foto Gean">
+                        <div style="padding-right:10px;">
                             <div class="textoOpcao">Gean</div>
-                            <div class="instrucao">Clique para votar</div>
+                            <div style="font-size:14px; opacity:0.7">Clique para selecionar</div>
                         </div>
                     </div>
                     <input type="radio" name="voto" value="Gean">
@@ -386,14 +959,12 @@ transform: translateY(-2px);
                         <div class="captcha-left">
                             <div class="captcha-widget"></div>
                         </div>
-
-                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-                            <button class="botao votarReal desativado" disabled>votar</button>
-
+                        <div style="display:flex;flex-direction:column; width:100%;">
+                            <button class="botao votarReal desativado" disabled>CONFIRMAR VOTO</button>
                             <div class="processando">
-                                <div style="display:flex;align-items:center;gap:10px">
-                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
-                                    Enviando voto...
+                                <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #444;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+                                    Registrando...
                                 </div>
                             </div>
                         </div>
@@ -401,16 +972,13 @@ transform: translateY(-2px);
                 </div>
             </div>
 
-            <div class="espacador"></div>
-
             <div class="opcao-wrapper" data-nome="Luddy" data-img="https://i.ibb.co/TxTpFBJC/Luddi.jpg">
-
                 <label class="opcao">
                     <div class="info">
-                        <img class="imagemOpcao" src="https://i.ibb.co/TxTpFBJC/Luddi.jpg">
-                        <div style="padding:12px">
+                        <img class="imagemOpcao" src="https://i.ibb.co/TxTpFBJC/Luddi.jpg" alt="Foto Luddy">
+                        <div style="padding-right:10px;">
                             <div class="textoOpcao">Luddy</div>
-                            <div class="instrucao">Clique para votar</div>
+                            <div style="font-size:14px; opacity:0.7">Clique para selecionar</div>
                         </div>
                     </div>
                     <input type="radio" name="voto" value="Luddy">
@@ -421,14 +989,12 @@ transform: translateY(-2px);
                         <div class="captcha-left">
                             <div class="captcha-widget"></div>
                         </div>
-
-                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-                            <button class="botao votarReal desativado" disabled>votar</button>
-
+                        <div style="display:flex;flex-direction:column; width:100%;">
+                            <button class="botao votarReal desativado" disabled>CONFIRMAR VOTO</button>
                             <div class="processando">
-                                <div style="display:flex;align-items:center;gap:10px">
-                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
-                                    Enviando voto...
+                                <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #444;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+                                    Registrando...
                                 </div>
                             </div>
                         </div>
@@ -436,16 +1002,13 @@ transform: translateY(-2px);
                 </div>
             </div>
 
-            <div class="espacador"></div>
-
             <div class="opcao-wrapper" data-nome="Mikael" data-img="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg">
-
                 <label class="opcao">
                     <div class="info">
-                        <img class="imagemOpcao" src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg">
-                        <div style="padding:12px">
+                        <img class="imagemOpcao" src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg" alt="Foto Mikael">
+                        <div style="padding-right:10px;">
                             <div class="textoOpcao">Mikael</div>
-                            <div class="instrucao">Clique para votar</div>
+                            <div style="font-size:14px; opacity:0.7">Clique para selecionar</div>
                         </div>
                     </div>
                     <input type="radio" name="voto" value="Mikael">
@@ -456,14 +1019,12 @@ transform: translateY(-2px);
                         <div class="captcha-left">
                             <div class="captcha-widget"></div>
                         </div>
-
-                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-                            <button class="botao votarReal desativado" disabled>votar</button>
-
+                        <div style="display:flex;flex-direction:column; width:100%;">
+                            <button class="botao votarReal desativado" disabled>CONFIRMAR VOTO</button>
                             <div class="processando">
-                                <div style="display:flex;align-items:center;gap:10px">
-                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #eee;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
-                                    Enviando voto...
+                                <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+                                    <div style="width:18px;height:18px;border-radius:50%;border:3px solid #444;border-top-color:#0ca1a6;animation:spin 1s linear infinite"></div>
+                                    Registrando...
                                 </div>
                             </div>
                         </div>
@@ -471,48 +1032,43 @@ transform: translateY(-2px);
                 </div>
             </div>
 
-            <div class="header" style="margin-top:25px">
-                <h1>
-                    Você vai votar em: <strong id="selecionadoNome">—</strong>
-                </h1>
-            </div>
+            <div class="espacador"></div>
+
         </div>
-
-        <div id="enqueteContainer">
-            <div id="popupVoto" class="popup-full">
-
-                <div class="popup-card">
-
-                    <div class="linha-ok">
-                        <span class="icone-ok">✔</span>
-                        <span>Seu voto</span>
-                    </div>
-
-                    <h2 id="popupNome">Nome do Participante</h2>
-
-                    <img id="popupImg" class="foto" src="" alt="Foto">
-
-                    <div class="social">
-                        <a href="#" class="face">f</a>
-                        <a href="#" class="tw">t</a>
-                    </div>
-
-                    <button class="btn-novamente" onclick="location.reload()">
-                        Votar Novamente
-                    </button>
-
-                    <a href="resultado.html" class="link-resultado">
-                        Ver Resultado Parcial →
-                    </a>
-
-                </div>
-            </div>
-        </div>
-
     </div>
+<!-- POPUP de confirmação -->
+<div id="popupVoto" class="popup-full">
+  <div class="popup-card">
+      <h2>Voto computado!</h2>
+      <p>Você votou em <b id="popupNome"></b></p>
+      <img id="popupImg" src="" style="width:130px; border-radius:12px; margin:12px auto;">
+      
+      <button id="btnMostrarResultado" class="btn-vote" style="margin-top:15px;">Ver resultado parcial</button>
+  </div>
 </div>
 
-<!-- ==================== ABRIR ENQUETE (SEM DUPLICAÇÃO) ==================== -->
+<!-- POPUP dos resultados -->
+<div id="popupResultado" class="popup-full">
+  <div class="popup-card">
+      <h2>Resultado Parcial</h2>
+
+      <!-- AQUI O RESULTADO.HTML É CARREGADO -->
+      <iframe id="iframeResultado"></iframe>
+
+      <button onclick="popupResultado.style.display='none'" class="btn-vote" style="margin-top:18px; background:#555">
+        Fechar
+      </button>
+  </div>
+</div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+<!-- ========== reCAPTCHA ========== -->
 <script>
     window.recaptchaCarregado = false;
     window.recaptchaWidgets = {};
@@ -524,14 +1080,222 @@ transform: translateY(-2px);
 
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
-<script type="module" src="/enquete/enquete.js"></script>
+<!-- ========== ENQUETE + VOTAR ========== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs }
+    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-<script>
+const app = initializeApp({
+    apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
+    authDomain: "enquete-fa527.firebaseapp.com",
+    projectId: "enquete-fa527",
+    storageBucket: "enquete-fa527.firebasestorage.app",
+    messagingSenderId: "544422121318",
+    appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+});
+
+const db = getFirestore(app);
+
+// ================================
+// VARIÁVEIS
+// ================================
+let escolha = null;
+let escolhaImg = null;
+let captchaToken = null;
+
+const popup = document.getElementById("popupVoto");
+const popupNome = document.getElementById("popupNome");
+const popupImg = document.getElementById("popupImg");
+const headerNome = document.getElementById("selecionadoNome");
+const popupResultado = document.getElementById("popupResultado");
+
+// ================================
+// ABRIR ENQUETE
+// ================================
 document.getElementById("abrirEnquete").addEventListener("click", () => {
     document.getElementById("conteudo-enquete").classList.add("ativo");
     document.getElementById("abrirEnquete").style.display = "none";
 });
+
+// ================================
+// SELEÇÃO DE OPÇÕES + CAPTCHA
+// ================================
+document.addEventListener("DOMContentLoaded", () => {
+
+    const wrappers = document.querySelectorAll(".opcao-wrapper");
+
+    wrappers.forEach(wrapper => {
+        const radio = wrapper.querySelector("input[type=radio]");
+        const votarBtn = wrapper.querySelector(".botao");
+        const processando = wrapper.querySelector(".processando");
+        const captchaContainer = wrapper.querySelector(".captcha-widget");
+
+        votarBtn.disabled = true;
+        votarBtn.classList.add("desativado");
+
+        radio.addEventListener("change", () => {
+
+            wrappers.forEach(w => {
+                w.classList.remove("active");
+                w.querySelector(".botao").disabled = true;
+                w.querySelector(".botao").classList.add("desativado");
+                w.querySelector(".captcha-widget").innerHTML = "";
+                w.querySelector(".botao").style.display = "block";
+                w.querySelector(".processando").style.display = "none";
+            });
+
+            wrapper.classList.add("active");
+            
+            escolha = wrapper.dataset.nome;
+            escolhaImg = wrapper.dataset.img;
+            headerNome.innerText = escolha;
+
+            captchaToken = null;
+
+            captchaContainer.innerHTML = `<div id="recaptcha-${escolha}"></div>`;
+
+            const esperar = setInterval(() => {
+                if (window.grecaptcha && window.recaptchaCarregado) {
+                    clearInterval(esperar);
+
+                    try {
+                        window.recaptchaWidgets[escolha] =
+                            grecaptcha.render(`recaptcha-${escolha}`, {
+                                sitekey: "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg",
+                                callback: token => {
+                                    captchaToken = token;
+                                    votarBtn.disabled = false;
+                                    votarBtn.classList.remove("desativado");
+                                }
+                            });
+                    } catch (e) {
+                        console.log("Erro no render captcha:", e);
+                    }
+                }
+            }, 200);
+        });
+
+        // ==========================
+        // CONFIRMAR VOTO
+        // ==========================
+        votarBtn.addEventListener("click", async () => {
+            if (!captchaToken) return;
+
+            votarBtn.style.display = "none";
+            processando.style.display = "block";
+
+            const quantidade = Math.floor(Math.random() * 3) + 3;
+
+            try {
+                for (let i = 0; i < quantidade; i++) {
+                    await addDoc(collection(db, "finalagc4"), {
+                        participante: escolha,
+                        horario: serverTimestamp()
+                    });
+                }
+
+                popupNome.innerText = escolha;
+                popupImg.src = escolhaImg;
+                popup.classList.add("ativo");
+
+            } catch (err) {
+                alert("Erro ao registrar o voto. Tente novamente.");
+                votarBtn.style.display = "block";
+                processando.style.display = "none";
+            }
+        });
+    });
+});
+
+// ================================
+// POPUP DE RESULTADO PARCIAL
+// ================================
+document.getElementById("btnMostrarResultado").addEventListener("click", () => {
+    popup.classList.remove("ativo");
+    popupResultado.style.display = "flex";
+    document.getElementById("iframeResultado").src = "resultado.html";
+});
+        
+// ================================
+// RESULTADO PARCIAL
+// ================================
+const participantes = {
+    "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
+    "Gean": "https://i.ibb.co/d0Znn920/Gean.jpg",
+    "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",
+    "Luddy": "https://i.ibb.co/TxTpFBJC/Luddi.jpg"
+};
+
+async function carregarResultados() {
+
+    const snap = await getDocs(collection(db, "finalagc4"));
+    const votos = {};
+    let total = 0;
+
+    snap.forEach(doc => {
+        const nome = doc.data().participante;
+        votos[nome] = (votos[nome] || 0) + 1;
+        total++;
+    });
+
+    const wrapper = document.getElementById("resultadoWrapper");
+    wrapper.innerHTML = "";
+
+    const ordenados = Object.keys(votos).sort((a, b) => votos[b] - votos[a]);
+
+    ordenados.forEach(nome => {
+        const qtd = votos[nome];
+        const perc = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
+
+        wrapper.innerHTML += `
+            <div class="card-resultado">
+                <div class="imgBox"><img src="${participantes[nome]}"></div>
+                <div class="infoBox">
+                    <div class="nome">${nome}</div>
+                    <div class="porcentagem">${perc}% • ${qtd} votos</div>
+                    <div class="barra"><div class="barra-fill" style="width:${perc}%"></div></div>
+                </div>
+            </div>
+        `;
+    });
+}
 </script>
+
+  </div>
+</div>
+
+  <!-- RECOMENDADOS -->
+  <div class="recomendados">
+    <h2>Leia também</h2>
+
+<div class="grid">
+
+  <a href="https://fshow.site/vote/enquete.html" class="card">
+    <img src="https://i.ibb.co/k26XrgPy/Ro-a.jpg">
+    <p>Enquete Revela resultado da 12° Roça de A Fazenda 17</p>
+  </a>
+
+  <a href="https://fshow.site/vote/votefshow.html" class="card">
+    <img src="https://i.ibb.co/HL932NpK/Final.jpg">
+    <p>Final Formada! Vote e decida o campeão.</p>
+  </a>
+
+  <a href="https://fshow.site" class="card">
+    <img src="https://i.ibb.co/MynZ550K/Comu-Awards.jpg">
+    <p>Comu Awards - Começaram os preparativos para a premiação mais esperada do ano!</p>
+  </a>
+
+</div>
+
+
+<footer>
+  © 2025 Portal Flop — <a href="#">Pìxeels Productions LTDA</a>
+</footer>
+
+
+</body>
+</html>
 
 <!-- ==================== FIM ENQUETE ==================== -->
 
