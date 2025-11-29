@@ -884,9 +884,10 @@ h1, h2, h3, h4, .btn-vote, .botao, .btn-novamente, .titulo-confirmado, #popupNom
                 Votar Novamente
             </button>
 
-            <a href="resultado.html" class="link-resultado">
-                Ver Resultado Parcial →
-            </a>
+      <a id="btnMostrarResultado" class="link-resultado">
+    Ver Resultado Parcial →
+</a>
+
 
         </div>
     </div>
@@ -1082,6 +1083,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+
+        <script>
+document.getElementById("btnMostrarResultado").addEventListener("click", () => {
+    const alvo = document.getElementById("resultadoWrapper");
+    alvo.scrollIntoView({ behavior: "smooth" });
+});
+</script>
+
   </div>
 </div>
 
