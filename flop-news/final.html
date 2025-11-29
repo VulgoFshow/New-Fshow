@@ -859,6 +859,31 @@ h1 {
   background: #007e8d;
   transform: translateY(-2px);
 }
+
+/* POPUP DE RESULTADO */
+#popupResultado {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  z-index: 999999;
+}
+
+#popupResultado .resultado-card {
+  width: 360px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px;
+}
+
 </style>
 </head>
 <body>
@@ -1027,6 +1052,19 @@ h1 {
     Ver Resultado Parcial →
 </a>
 
+                <!-- POPUP DE RESULTADO -->
+<div id="popupResultado" class="popup-full">
+    <div class="popup-card">
+        <h2 class="titulo-confirmado">Resultado Parcial</h2>
+
+        <div id="resultadoWrapper"></div>
+
+        <button class="btn-novamente" onclick="location.reload()">
+            Fechar
+        </button>
+    </div>
+</div>
+
 
         </div>
     </div>
@@ -1035,6 +1073,7 @@ h1 {
 
 </body>
 
+<!-- ========== reCAPTCHA ========== -->
 <script>
     window.recaptchaCarregado = false;
     window.recaptchaWidgets = {};
@@ -1046,9 +1085,10 @@ h1 {
 
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
+<!-- ========== ENQUETE + VOTAR ========== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp }
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs }
     from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 const app = initializeApp({
@@ -1062,6 +1102,9 @@ const app = initializeApp({
 
 const db = getFirestore(app);
 
+// ================================
+// VARIÁVEIS
+// ================================
 let escolha = null;
 let escolhaImg = null;
 let captchaToken = null;
@@ -1070,67 +1113,22 @@ const popup = document.getElementById("popupVoto");
 const popupNome = document.getElementById("popupNome");
 const popupImg = document.getElementById("popupImg");
 const headerNome = document.getElementById("selecionadoNome");
-const caixaEnquete = document.getElementById("caixaEnquete");
-const btnVotarNovamente = document.getElementById("btnVotarNovamente"); 
-const linkResultado = document.getElementById("linkResultado");
+const popupResultado = document.getElementById("popupResultado");
 
-async function carregarConteudoNoContainer(url) {
-    if (!caixaEnquete) {
-        console.error("ID 'caixaEnquete' não encontrado. Não é possível carregar conteúdo.");
-        return;
-    }
-    
-    caixaEnquete.innerHTML = `<div style="text-align:center; padding: 40px;">Carregando...</div>`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Erro ao carregar o conteúdo: ${response.statusText}`);
-        }
-        
-        const html = await response.text();
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-        
-        const novoConteudo = tempDiv.querySelector('#caixaEnquete');
-
-        if (novoConteudo) {
-            caixaEnquete.innerHTML = novoConteudo.innerHTML;
-        } else {
-            caixaEnquete.innerHTML = html; 
-        }
-
-        if (popup) {
-            popup.classList.remove("ativo"); 
-        }
-
-    } catch (e) {
-        console.error("Erro no carregamento AJAX:", e);
-        caixaEnquete.innerHTML = `<div style="text-align:center; padding: 40px; color: red;">Erro ao carregar o conteúdo.</div>`;
-    }
-}
-
+// ================================
+// ABRIR ENQUETE
+// ================================
 document.getElementById("abrirEnquete").addEventListener("click", () => {
     document.getElementById("conteudo-enquete").classList.add("ativo");
     document.getElementById("abrirEnquete").style.display = "none";
 });
 
-
+// ================================
+// SELEÇÃO DE OPÇÕES + CAPTCHA
+// ================================
 document.addEventListener("DOMContentLoaded", () => {
+
     const wrappers = document.querySelectorAll(".opcao-wrapper");
-
-    if (btnVotarNovamente) {
-        btnVotarNovamente.addEventListener("click", () => {
-            carregarConteudoNoContainer(window.location.href); 
-        });
-    }
-
-    if (linkResultado) {
-        linkResultado.addEventListener("click", (e) => {
-            e.preventDefault();
-            carregarConteudoNoContainer("resultado.html");
-        });
-    }
 
     wrappers.forEach(wrapper => {
         const radio = wrapper.querySelector("input[type=radio]");
@@ -1148,9 +1146,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 w.querySelector(".botao").disabled = true;
                 w.querySelector(".botao").classList.add("desativado");
                 w.querySelector(".captcha-widget").innerHTML = "";
-                
-                w.querySelector(".processando").style.display = "none";
                 w.querySelector(".botao").style.display = "block";
+                w.querySelector(".processando").style.display = "none";
             });
 
             wrapper.classList.add("active");
@@ -1160,8 +1157,6 @@ document.addEventListener("DOMContentLoaded", () => {
             headerNome.innerText = escolha;
 
             captchaToken = null;
-            votarBtn.disabled = true;
-            votarBtn.classList.add("desativado");
 
             captchaContainer.innerHTML = `<div id="recaptcha-${escolha}"></div>`;
 
@@ -1170,10 +1165,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     clearInterval(esperar);
 
                     try {
-                        if (window.recaptchaWidgets[escolha] !== undefined) {
-                            grecaptcha.reset(window.recaptchaWidgets[escolha]);
-                        } else {
-                            window.recaptchaWidgets[escolha] = grecaptcha.render(`recaptcha-${escolha}`, {
+                        window.recaptchaWidgets[escolha] =
+                            grecaptcha.render(`recaptcha-${escolha}`, {
                                 sitekey: "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg",
                                 callback: token => {
                                     captchaToken = token;
@@ -1181,15 +1174,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                     votarBtn.classList.remove("desativado");
                                 }
                             });
-                        }
                     } catch (e) {
                         console.log("Erro no render captcha:", e);
                     }
                 }
             }, 200);
-
         });
 
+        // ==========================
+        // CONFIRMAR VOTO
+        // ==========================
         votarBtn.addEventListener("click", async () => {
             if (!captchaToken) return;
 
@@ -1208,124 +1202,72 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 popupNome.innerText = escolha;
                 popupImg.src = escolhaImg;
-
                 popup.classList.add("ativo");
 
             } catch (err) {
-                console.error("Erro ao votar:", err);
-                alert("Houve um erro ao registrar o voto. Tente novamente.");
+                alert("Erro ao registrar o voto. Tente novamente.");
                 votarBtn.style.display = "block";
                 processando.style.display = "none";
             }
         });
-
     });
 });
-</script>
 
-        <script>
-document.getElementById("btnMostrarResultado").addEventListener("click", () => {
-    const alvo = document.getElementById("resultadoWrapper");
-    alvo.scrollIntoView({ behavior: "smooth" });
+// ================================
+// POPUP DE RESULTADO PARCIAL
+// ================================
+document.getElementById("btnMostrarResultado").addEventListener("click", async () => {
+    popup.classList.remove("ativo"); 
+    popupResultado.classList.add("ativo");
+
+    await carregarResultados();
 });
-</script>
 
-</head>
-<body>
-
-<h1>Resultado da Enquete</h1>
-
-<div class="resultado-wrapper" id="resultadoWrapper"></div>
-
-<div id="totalVotos">Carregando...</div>
-
-<button id="btnVoltar" onclick="window.location.href='enquetefinalagc.html'">
-  Votar novamente
-</button>
-
-<!-- ===== Firebase ===== -->
-<script type="module">
-import { initializeApp } 
-  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, getDocs }
-  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-const app = initializeApp({
-  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
-  authDomain: "enquete-fa527.firebaseapp.com",
-  projectId: "enquete-fa527",
-  storageBucket: "enquete-fa527.appspot.com",
-  messagingSenderId: "544422121318",
-  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
-});
-  
-const db = getFirestore(app);
-
-// PARTICIPANTES + IMAGENS
+// ================================
+// RESULTADO PARCIAL
+// ================================
 const participantes = {
-  "Fabiano": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/IEQ23WK6HJFVJPA5YMLJE5MQ24.jpg",
-  "Kathy": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/BLHVFVNVGZCQPP3GNBAFNAKY4A.jpg",
-  "Maria": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/I7QMOYFUCZC65JNHUX3NUIWY6E.jpg",
-  "Carol": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/NEETNBTZK5D25DEXTHW4JXCLOU.jpg",
-  "Creo": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/VEPF54DHRBEN3OK23MBEYZPOZQ.jpg",
-  "Duda": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6LGMYPULFVATZDAMF5AZFRY73M.jpg",
-  "Dudu": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/DEU2UYHHC5CQVEKDMN53TZNZOY.jpg",
-  "Ray": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg",
-  "Saory": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/DELGVBA35FEMBLUR57ECPPWUO4.jpg",
-  "Tàmires": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/CLWGAFNXL5A3BLXK3COSM4ONC4.jpg",
-  "Toninho": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg",
-  "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
-  "Gean": "https://i.ibb.co/d0Znn920/Gean.jpg",
-  "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",
-  "Luddy": "https://i.ibb.co/TxTpFBJC/Luddi.jpg",
-  "Walério": "https://cloudfront-us-east-1.images.arcpublishing.com/newr7/ARME7HV73FCVPJEO4A4WDVHKYY.jpg"
+    "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
+    "Gean": "https://i.ibb.co/d0Znn920/Gean.jpg",
+    "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",
+    "Luddy": "https://i.ibb.co/TxTpFBJC/Luddi.jpg"
 };
 
 async function carregarResultados() {
-  const snap = await getDocs(collection(db, "finalagc4"));
 
-  const votos = {};  
-  let total = 0;
+    const snap = await getDocs(collection(db, "finalagc4"));
+    const votos = {};
+    let total = 0;
 
-  snap.forEach(doc => {
-    const nome = doc.data().participante;
-    votos[nome] = (votos[nome] || 0) + 1;
-    total++;
-  });
+    snap.forEach(doc => {
+        const nome = doc.data().participante;
+        votos[nome] = (votos[nome] || 0) + 1;
+        total++;
+    });
 
-  document.getElementById("totalVotos").innerText =
-    `Total de votos: ${total}`;
+    const wrapper = document.getElementById("resultadoWrapper");
+    wrapper.innerHTML = "";
 
-  const wrapper = document.getElementById("resultadoWrapper");
-  wrapper.innerHTML = "";
+    const ordenados = Object.keys(votos).sort((a, b) => votos[b] - votos[a]);
 
-  const ordenados = Object.keys(votos).sort((a, b) => votos[b] - votos[a]);
+    ordenados.forEach(nome => {
+        const qtd = votos[nome];
+        const perc = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
 
-  ordenados.forEach(nome => {
-    const qtd = votos[nome];
-    const percentual = total > 0 ? (qtd / total * 100).toFixed(2) : "0.00";
-
-    const card = document.createElement("div");
-    card.className = "card-resultado";
-    card.innerHTML = `
-      <div class="imgBox">
-        <img src="${participantes[nome]}" />
-      </div>
-      <div class="infoBox">
-        <div class="nome">${nome}</div>
-        <div class="porcentagem">${percentual}% • ${qtd} votos</div>
-        <div class="barra">
-          <div class="barra-fill" style="width:${percentual}%"></div>
-        </div>
-      </div>
-    `;
-
-    wrapper.appendChild(card);
-  });
+        wrapper.innerHTML += `
+            <div class="card-resultado">
+                <div class="imgBox"><img src="${participantes[nome]}"></div>
+                <div class="infoBox">
+                    <div class="nome">${nome}</div>
+                    <div class="porcentagem">${perc}% • ${qtd} votos</div>
+                    <div class="barra"><div class="barra-fill" style="width:${perc}%"></div></div>
+                </div>
+            </div>
+        `;
+    });
 }
-
-carregarResultados();
 </script>
+
   </div>
 </div>
 
