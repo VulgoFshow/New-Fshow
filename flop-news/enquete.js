@@ -1,7 +1,6 @@
 <script>
 window.recaptchaCarregado = false;
-window.recaptchaWidgets = {}; // guarda widgets renderizados
-
+window.recaptchaWidgets = {};
 function onloadCallback() {
   window.recaptchaCarregado = true;
 }
@@ -125,11 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (window.grecaptcha && window.recaptchaCarregado) {
           clearInterval(esperar);
 
-          // SE o captcha já existe → reset
+          // Se já existe → reset
           if (window.recaptchaWidgets[escolha] !== undefined) {
             grecaptcha.reset(window.recaptchaWidgets[escolha]);
           } else {
-            // Cria um novo
+            // Cria novo reCAPTCHA
             window.recaptchaWidgets[escolha] = grecaptcha.render(`recaptcha-${escolha}`, {
               sitekey: "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg",
               callback: token => {
