@@ -526,7 +526,18 @@ Quem você quer que <strong>FIQUE</strong> em "A Fazenda 17"?
 </div>
 
 <!-- JS da enquete -->
-<script src="https://fshow.site/enquete/enquete.js" defer></script>
+<script>
+window.recaptchaCarregado = false;
+window.recaptchaWidgets = {};
+function onloadCallback() {
+  window.recaptchaCarregado = true;
+}
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+
+<!-- Carrega seu script como MÓDULO -->
+<script type="module" src="https://fshow.site/enquete/enquete.js"></script>
+
 
 <!-- Abrir enquete ao clicar no botão -->
 <script>
