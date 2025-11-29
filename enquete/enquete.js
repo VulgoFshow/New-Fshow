@@ -1,15 +1,3 @@
-<script>
-window.recaptchaCarregado = false;
-window.recaptchaWidgets = {}; // guarda widgets renderizados
-
-function onloadCallback() {
-  window.recaptchaCarregado = true;
-}
-</script>
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-
-<!-- ====================== SCRIPT ============================ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp }
@@ -44,36 +32,28 @@ const popupImg = document.getElementById("popupImg");
 // FUNÇÕES EXTRAS
 // =========================
 
-// Recarrega só a caixa-enquete
 window.recarregarEnquete = function () {
     const caixa = document.querySelector(".caixa-enquete");
-
     popup.classList.remove("ativo");
     caixa.style.opacity = "0";
-
     fetch(window.location.href)
         .then(res => res.text())
         .then(html => {
             const temp = document.createElement("div");
             temp.innerHTML = html;
-
             const novaCaixa = temp.querySelector(".caixa-enquete");
             if (novaCaixa) caixa.innerHTML = novaCaixa.innerHTML;
-
             caixa.style.opacity = "1";
         });
 };
 
-// Carrega HTML dentro da caixa
 window.abrirResultadoNaCaixa = function (url) {
     const caixa = document.querySelector(".caixa-enquete");
-
     fetch(url)
         .then(res => res.text())
         .then(html => {
             caixa.innerHTML = html;
         });
-
     popup.classList.remove("ativo");
 };
 
@@ -86,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerNome = document.getElementById("selecionadoNome");
 
   wrappers.forEach(wrapper => {
+    // Pegamos o input radio dentro do wrapper
     const radio = wrapper.querySelector("input[type=radio]");
     const votarBtn = wrapper.querySelector(".botao");
     const processando = wrapper.querySelector(".processando");
@@ -95,20 +76,21 @@ document.addEventListener("DOMContentLoaded", () => {
     votarBtn.classList.add("desativado");
 
     // =====================================
-    // QUANDO CLICA NA OPÇÃO
+    // CORREÇÃO: EVENTO CHANGE NO RÁDIO
     // =====================================
-    wrapper.querySelector(".opcao").addEventListener("click", () => {
+    radio.addEventListener("change", () => {
 
       // Limpa TODAS as opções antes
       wrappers.forEach(w => {
-        w.classList.remove("active");
+        w.classList.remove("ativo"); // CORREÇÃO: "ativo" em vez de "active"
         w.querySelector(".botao").disabled = true;
         w.querySelector(".botao").classList.add("desativado");
         w.querySelector(".captcha-widget").innerHTML = "";
       });
 
-      wrapper.classList.add("active");
-      radio.checked = true;
+      wrapper.classList.add("ativo"); // CORREÇÃO: "ativo"
+      
+      // Não precisa de radio.checked = true, pois o evento change já fez isso
 
       escolha = wrapper.dataset.nome;
       escolhaImg = wrapper.dataset.img;
@@ -139,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
               }
             });
           }
-
         }
       }, 200);
 
