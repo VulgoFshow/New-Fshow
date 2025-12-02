@@ -605,70 +605,88 @@
 
 
 </div>
-
-
 </body>
 
-<script>
+<script type="module">
+  // Firebase 10+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, doc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  window.firebaseConfig = {
+    apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
+    authDomain: "enquete-fa527.firebaseapp.com",
+    projectId: "enquete-fa527",
+    storageBucket: "enquete-fa527.firebasestorage.app",
+    messagingSenderId: "544422121318",
+    appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+});
+
+  const app = initializeApp(window.firebaseConfig);
+  window.db = getFirestore(app);
+</script>
+
+<script type="module">
+import { doc, updateDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
 let participanteSelecionado = null;
 window.recaptchaWidgets = {};
 window.recaptchaCarregado = false;
+
 const participantes = document.querySelectorAll(".participante");
 const popupConfirmacao = document.getElementById("popupConfirmacao");
 
 const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
 const SITE_KEY = "6LerWh4sAAAAAHpIbJkhbH558D1nXfz-gqdTNYqs"; 
-  
+
+/* =============================
+   RECAPTCHA
+============================= */
+
 window.onloadCallback = function () {
     window.recaptchaCarregado = true;
-    
-    IDs_PARTICIPANTES.forEach(nome => {
-        criarCaptcha(nome);
-    });
+    IDs_PARTICIPANTES.forEach(nome => criarCaptcha(nome));
 };
 
 function criarCaptcha(nome) {
     const nomeMinusculo = nome.toLowerCase();
-    
     const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
-    
+
     const captchaID = `captcha-widget-${nomeMinusculo}`;
     placeholder.id = captchaID;
 
-    placeholder.innerHTML = '';
-    
+    placeholder.innerHTML = "";
+
     const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
 
     const widget = grecaptcha.render(captchaID, {
         sitekey: SITE_KEY,
         callback: function () {
-            btnVotar.classList.add("habilitado");
             btnVotar.disabled = false;
+            btnVotar.classList.add("habilitado");
         },
-        'expired-callback': function() {
-            btnVotar.classList.remove("habilitado");
+        "expired-callback": function () {
             btnVotar.disabled = true;
+            btnVotar.classList.remove("habilitado");
         }
     });
 
     window.recaptchaWidgets[nome] = widget;
 }
 
-participantes.forEach(participante => {
-    const info = participante.querySelector(".info");
+/* =============================
+   ABRIR E FECHAR PARTICIPANTES
+============================= */
 
-    info.addEventListener("click", () => {
+participantes.forEach(participante => {
+    participante.querySelector(".info").addEventListener("click", () => {
         const nome = participante.getAttribute("data-nome");
-        
+
         if (participante === participanteSelecionado) {
             deselecionarParticipante(participante);
             participanteSelecionado = null;
         } else {
-          
-            if (participanteSelecionado) {
-                deselecionarParticipante(participanteSelecionado);
-            }
- 
+            if (participanteSelecionado) deselecionarParticipante(participanteSelecionado);
+
             selecionarParticipante(participante, nome);
             participanteSelecionado = participante;
         }
@@ -677,72 +695,81 @@ participantes.forEach(participante => {
 
 function selecionarParticipante(participante, nome) {
     participante.classList.add("selecionado");
-    
-    const captchaWrapper = participante.querySelector(".captcha-wrapper");
-    captchaWrapper.classList.add("aberto");
-    
-    const widgetId = window.recaptchaWidgets[nome];
-    if (widgetId !== undefined) {
-        grecaptcha.reset(widgetId);
-    }
+
+    const wrapper = participante.querySelector(".captcha-wrapper");
+    wrapper.classList.add("aberto");
+
+    const widget = window.recaptchaWidgets[nome];
+    if (widget !== undefined) grecaptcha.reset(widget);
 }
 
 function deselecionarParticipante(participante) {
-  
     participante.classList.remove("selecionado");
-  
-    const captchaWrapper = participante.querySelector(".captcha-wrapper");
-    captchaWrapper.classList.remove("aberto");
 
-    const btnVotar = participante.querySelector(".btn-votar");
-    btnVotar.classList.remove("habilitado");
-    btnVotar.disabled = true;
+    const wrapper = participante.querySelector(".captcha-wrapper");
+    wrapper.classList.remove("aberto");
+
+    const btn = participante.querySelector(".btn-votar");
+    btn.disabled = true;
+    btn.classList.remove("habilitado");
 }
+
+/* =============================
+   BOTÃO VOTAR + FIREBASE
+============================= */
 
 participantes.forEach(participante => {
     const btnVotar = participante.querySelector(".btn-votar");
 
     btnVotar.addEventListener("click", async (event) => {
-        event.preventDefault(); 
-        
+        event.preventDefault();
+
         if (!btnVotar.classList.contains("habilitado")) {
-            alert("Por favor, complete o reCAPTCHA primeiro.");
+            alert("Por favor, complete o CAPTCHA.");
             return;
         }
 
         const nome = participante.getAttribute("data-nome");
-        const fotoSrc = participante.querySelector(".foto").src;
+        const foto = participante.querySelector(".foto").src;
 
-        console.log(`Voto para ${nome} simulado com sucesso!`);
+        /* 🔥 Enviar voto para Firestore */
+        try {
+            const ref = doc(db, "votos", nome);
 
-        exibirPopupConfirmacao(nome, fotoSrc);
+            await setDoc(ref, { total: increment(1) }, { merge: true });
+            console.log("Voto registrado:", nome);
 
-        participantes.forEach(p => {
-            p.querySelector(".info").style.pointerEvents = 'none';
-        });
+        } catch (error) {
+            console.error("Erro ao votar: ", error);
+            alert("Erro ao registrar voto. Tente novamente.");
+            return;
+        }
+
+        /* Desativar tudo após votar */
+        participantes.forEach(p => p.querySelector(".info").style.pointerEvents = "none");
+
+        /* Exibir popup */
+        exibirPopupConfirmacao(nome, foto);
+
+        /* Reset do botão */
+        btnVotar.disabled = true;
+        btnVotar.classList.remove("habilitado");
     });
 });
 
+/* =============================
+   POPUP
+============================= */
+
 function exibirPopupConfirmacao(nome, fotoSrc) {
-    const popupNome = document.getElementById("popupNome");
-    const popupFoto = document.getElementById("popupFoto");
+    document.getElementById("popupNome").textContent = `Voto em ${nome} confirmado!`;
+    document.getElementById("popupFoto").src = fotoSrc;
 
-    popupNome.textContent = `Voto em ${nome} CONFIRMADO!`;
-    popupFoto.src = fotoSrc;
-    
-    popupConfirmacao.classList.add("mostrar");
+    popupConfirmacao.style.display = "block";
 }
 
-function mostrarConfirmacao(nome, foto) {
-  document.getElementById('popupNome').textContent = nome;
-  document.getElementById('popupFoto').src = foto;
-
-  document.getElementById('popupConfirmacao').style.display = 'block';
-}
-
-function abrirResultados() {
-  window.location.href = "resultados.html";
-}
+window.abrirResultados = () => {
+    window.location.href = "resultados.html";
+};
 </script>
-
 </html>
