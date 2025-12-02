@@ -505,74 +505,87 @@
     <p>Quem você quer que FIQUE em "A Fazenda 17"?</p>
   </div>
 
-  <!-- PARTICIPANTE 1 -->
-  <div class="participante" data-nome="Mesquita">
-    <div class="info">
-      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg" alt="">
-      <div class="texto">
-        <div class="nome">Mesquita</div>
-        <div class="clique">Clique para votar</div>
-      </div>
-    </div>
+<!-- Cloudflare Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-    <!-- CAIXA CAPTCHA -->
-    <div class="captcha-wrapper">
-      <div class="captcha-box">
-        <!-- SUA DIV DO CAPTCHA AQUI -->
-        <div class="captcha-placeholder">
-          <p>CAPTCHA</p>
-        </div>
 
-        <button class="btn-votar">votar</button>
-      </div>
+<!-- PARTICIPANTE 1 -->
+<div class="participante" data-nome="Mesquita">
+  <div class="info">
+    <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg" alt="">
+    <div class="texto">
+      <div class="nome">Mesquita</div>
+      <div class="clique">Clique para votar</div>
     </div>
   </div>
 
-  <!-- PARTICIPANTE 2 -->
-  <div class="participante" data-nome="Ray">
-    <div class="info">
-      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg" alt="">
-      <div class="texto">
-        <div class="nome">Ray</div>
-        <div class="clique">Clique para votar</div>
-      </div>
-    </div>
+  <!-- CAIXA CAPTCHA -->
+  <div class="captcha-wrapper">
+    <div class="captcha-box">
 
-    <!-- CAIXA CAPTCHA -->
-    <div class="captcha-wrapper">
-      <div class="captcha-box">
-        <div class="captcha-placeholder">
-          <p>CAPTCHA</p>
+      <!-- TURNSTILE -->
+      <div class="captcha-placeholder">
+        <div class="cf-turnstile"
+             data-sitekey="SUA_SITE_KEY_AQUI"
+             data-callback="turnstileCallback_Mesquita">
         </div>
-
-        <button class="btn-votar">votar</button>
       </div>
+
+      <button class="btn-votar" disabled>votar</button>
     </div>
   </div>
-
-  <!-- PARTICIPANTE 3 -->
-  <div class="participante" data-nome="Toninho">
-    <div class="info">
-      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg" alt="">
-      <div class="texto">
-        <div class="nome">Toninho</div>
-        <div class="clique">Clique para votar</div>
-      </div>
-    </div>
-
-    <!-- CAIXA CAPTCHA -->
-    <div class="captcha-wrapper">
-      <div class="captcha-box">
-        <div class="captcha-placeholder">
-          <p>CAPTCHA</p>
-        </div>
-
-        <button class="btn-votar">votar</button>
-      </div>
-    </div>
-  </div>
-
 </div>
+
+
+<!-- PARTICIPANTE 2 -->
+<div class="participante" data-nome="Ray">
+  <div class="info">
+    <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg" alt="">
+    <div class="texto">
+      <div class="nome">Ray</div>
+      <div class="clique">Clique para votar</div>
+    </div>
+  </div>
+
+  <div class="captcha-wrapper">
+    <div class="captcha-box">
+      <div class="captcha-placeholder">
+        <div class="cf-turnstile"
+             data-sitekey="SUA_SITE_KEY_AQUI"
+             data-callback="turnstileCallback_Ray">
+        </div>
+      </div>
+
+      <button class="btn-votar" disabled>votar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- PARTICIPANTE 3 -->
+<div class="participante" data-nome="Toninho">
+  <div class="info">
+    <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg" alt="">
+    <div class="texto">
+      <div class="nome">Toninho</div>
+      <div class="clique">Clique para votar</div>
+    </div>
+  </div>
+
+  <div class="captcha-wrapper">
+    <div class="captcha-box">
+      <div class="captcha-placeholder">
+        <div class="cf-turnstile"
+             data-sitekey="SUA_SITE_KEY_AQUI"
+             data-callback="turnstileCallback_Toninho">
+        </div>
+      </div>
+
+      <button class="btn-votar" disabled>votar</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- CONFIRMAÇÃO -->
 <div class="overlay-bloco" id="popupConfirmacao">
@@ -607,6 +620,9 @@
 </div>
 </body>
 
+<!-- Turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, doc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -624,39 +640,55 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let participanteSelecionado = null;
-window.recaptchaWidgets = {};
 const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
-const SITE_KEY = "6LerWh4sAAAAAHpIbJkhbH558D1nXfz-gqdTNYqs";
+
+const TURNSTILE_KEY = "0x4AAAAAACEGre7O4wmrWp4M";
+
+window.turnstileWidgets = {};
+
 const participantes = document.querySelectorAll(".participante");
 const popupConfirmacao = document.getElementById("popupConfirmacao");
 
-window.onloadCallback = function () {
+window.onload = () => {
     IDs_PARTICIPANTES.forEach(nome => criarCaptcha(nome));
 };
 
+// -----------------------------
+// CRIAR CAPTCHA TURNSTILE
+// -----------------------------
 function criarCaptcha(nome) {
     const nomeMinusculo = nome.toLowerCase();
     const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
-    const captchaID = `captcha-widget-${nomeMinusculo}`;
+    const captchaID = `captcha-${nomeMinusculo}`;
     placeholder.id = captchaID;
     placeholder.innerHTML = "";
-    const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
 
-    const widget = grecaptcha.render(captchaID, {
-        sitekey: SITE_KEY,
-        callback: function () {
+    const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
+    btnVotar.disabled = true;
+
+    const widget = turnstile.render(captchaID, {
+        sitekey: TURNSTILE_KEY,
+        theme: "light",
+        callback: function (token) {
             btnVotar.disabled = false;
             btnVotar.classList.add("habilitado");
         },
-        "expired-callback": function () {
+        "error-callback": () => {
+            btnVotar.disabled = true;
+            btnVotar.classList.remove("habilitado");
+        },
+        "expired-callback": () => {
             btnVotar.disabled = true;
             btnVotar.classList.remove("habilitado");
         }
     });
 
-    window.recaptchaWidgets[nome] = widget;
+    window.turnstileWidgets[nome] = widget;
 }
 
+// -----------------------------
+// SELEÇÃO DO PARTICIPANTE
+// -----------------------------
 participantes.forEach(participante => {
     participante.querySelector(".info").addEventListener("click", () => {
         const nome = participante.getAttribute("data-nome");
@@ -678,8 +710,10 @@ function selecionarParticipante(participante, nome) {
     const wrapper = participante.querySelector(".captcha-wrapper");
     wrapper.classList.add("aberto");
 
-    const widget = window.recaptchaWidgets[nome];
-    if (widget !== undefined) grecaptcha.reset(widget);
+    // Resetar Turnstile
+    try {
+        turnstile.reset(window.turnstileWidgets[nome]);
+    } catch (e) {}
 }
 
 function deselecionarParticipante(participante) {
@@ -692,13 +726,16 @@ function deselecionarParticipante(participante) {
     btn.classList.remove("habilitado");
 }
 
+// -----------------------------
+// BOTÃO VOTAR
+// -----------------------------
 participantes.forEach(participante => {
     const btnVotar = participante.querySelector(".btn-votar");
 
     btnVotar.addEventListener("click", async (event) => {
         event.preventDefault();
 
-        if (!btnVotar.classList.contains("habilitado")) {
+        if (btnVotar.disabled) {
             alert("Por favor, complete o CAPTCHA.");
             return;
         }
@@ -709,6 +746,7 @@ participantes.forEach(participante => {
         try {
             const ref = doc(db, "votos", nome);
             await setDoc(ref, { total: increment(1) }, { merge: true });
+
         } catch (error) {
             console.error("Erro ao votar: ", error);
             alert("Erro ao registrar voto. Tente novamente.");
@@ -723,6 +761,9 @@ participantes.forEach(participante => {
     });
 });
 
+// -----------------------------
+// POPUP CONFIRMAÇÃO
+// -----------------------------
 function exibirPopupConfirmacao(nome, fotoSrc) {
     document.getElementById("popupNome").textContent = `Voto em ${nome} confirmado!`;
     document.getElementById("popupFoto").src = fotoSrc;
@@ -732,5 +773,26 @@ function exibirPopupConfirmacao(nome, fotoSrc) {
 window.abrirResultados = () => {
     window.location.href = "resultados.html";
 };
+
+
+// -----------------------------
+// CALLBACKS
+// -----------------------------
+window.turnstileCallback_Mesquita = function(token) {
+  document.querySelector('.participante[data-nome="Mesquita"] .btn-votar')
+    .disabled = false;
+};
+
+window.turnstileCallback_Ray = function(token) {
+  document.querySelector('.participante[data-nome="Ray"] .btn-votar')
+    .disabled = false;
+};
+
+window.turnstileCallback_Toninho = function(token) {
+  document.querySelector('.participante[data-nome="Toninho"] .btn-votar')
+    .disabled = false;
+};
+
 </script>
+
 </html>
