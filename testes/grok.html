@@ -337,7 +337,7 @@ body {
 }
 
 #popupConfirmacao {
-  display: none !important;
+  display: none;
 }
 
 
@@ -413,32 +413,30 @@ body {
 
 
 <!-- CONFIRMAÇÃO -->
-<div class="overlay-bloco" id="popupConfirmacao">
-  <div class="popup-bloco">
+<div class="overlay" id="popupConfirmacao">   <div class="popup">     
+    <div class="popup-top">
+      <i>✔</i>
+      Você votou em:
+    </div>
 
-    <div class="popup-top">
-      <i>✔</i>
-      Seu voto
-    </div>
+    <div class="popup-conteudo">
+      <div class="popup-esq">
+        <h2 id="popupNome"></h2>
+      </div>
 
-    <div class="popup-conteudo">
-      <div class="popup-esq">
-        <h2 id="popupNome"></h2>
-      </div>
+      <img id="popupFoto" class="popup-foto" src="" alt="">
+    </div>
 
-      <img id="popupFoto" class="popup-foto" src="" alt="">
-    </div>
+    <button class="btn-novamente" onclick="location.reload()">
+      Votar Novamente
+    </button>
+    
+    <div class="btn-resultado" onclick="abrirResultados()">
+      Ver Resultado Parcial
+      <i>›</i>
+    </div>
 
-    <button class="btn-novamente" onclick="location.reload()">
-      Votar Novamente
-    </button>
-    
-    <div class="btn-resultado" onclick="abrirResultados()">
-      Ver Resultado Parcial
-      <i>›</i>
-    </div>
-
-  </div>
+  </div>
 </div>
 
 
@@ -623,14 +621,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ==========================================================
-    // POPUP CONFIRMAÇÃO
-    // ==========================================================
-    function exibirPopupConfirmacao(nome, fotoSrc) {
-        document.getElementById("popupNome").textContent = `Voto em ${nome} confirmado!`;
-        document.getElementById("popupFoto").src = fotoSrc;
-        popupConfirmacao.style.display = "block";
-    }
+// ==========================================================
+    // POPUP CONFIRMAÇÃO
+    // ==========================================================
+    function exibirPopupConfirmacao(nome, fotoSrc) {
+        document.getElementById("popupNome").textContent = `Voto em ${nome} confirmado!`;
+        document.getElementById("popupFoto").src = fotoSrc;
+        popupConfirmacao.classList.add("mostrar"); 
+    }
 
     window.abrirResultados = () => {
         window.location.href = "resultados.html";
