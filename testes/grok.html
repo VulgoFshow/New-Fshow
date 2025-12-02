@@ -2,15 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Enquete</title>
-1
-<!-- Fonte Inter -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Enquete - A Fazenda 17</title>
 
 <!-- reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-
-</head>
 
 <style>
 /* ============================================
@@ -28,7 +23,6 @@
   --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: all 0.25s ease;
 }
-
 /* BASE */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -37,7 +31,6 @@ body {
   padding: 20px;
   min-height: 100vh;
 }
-
 .enquete {
   max-width: 420px;
   margin: 0 auto;
@@ -47,18 +40,15 @@ body {
   box-shadow: var(--shadow-soft);
   animation: entraEnquete 0.7s ease-out;
 }
-
 @keyframes entraEnquete {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 /* TÍTULO */
 .header {
   padding: 34px 25px 20px;
   text-align: center;
 }
-
 .header h1 {
   margin: 0;
   font-size: 30px;
@@ -69,12 +59,10 @@ body {
   -webkit-text-fill-color: transparent;
   animation: tituloGlow 3s infinite alternate;
 }
-
 @keyframes tituloGlow {
   from { filter: brightness(1); }
   to   { filter: brightness(1.15); }
 }
-
 .header p {
   margin: 12px 0 0;
   font-size: 23px;
@@ -83,7 +71,6 @@ body {
   color: #333;
   animation: fadeInUp 0.8s 0.2s both;
 }
-
 /* PARTICIPANTE */
 .participante {
   position: relative;
@@ -91,12 +78,10 @@ body {
   animation: fadeInUp 0.6s both;
   animation-delay: calc(0.1s * var(--i, 0));
 }
-
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 .info {
   display: flex;
   align-items: center;
@@ -108,7 +93,6 @@ body {
   overflow: hidden;
   position: relative;
 }
-
 .info::before {
   content: '';
   position: absolute;
@@ -120,23 +104,19 @@ body {
   pointer-events: none;
   transition: transform 0.5s, opacity 0.5s;
 }
-
 .info.ripple::before {
   animation: rippleEffect 0.6s ease-out;
 }
-
 @keyframes rippleEffect {
   to {
     transform: scale(4);
     opacity: 0;
   }
 }
-
 .info:hover {
   background: var(--cor-hover);
   transform: translateY(-2px);
 }
-
 .foto {
   width: 80px;
   height: 80px;
@@ -145,11 +125,9 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
   transition: var(--transition);
 }
-
 .texto { flex: 1; }
 .nome { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 .clique { font-size: 15px; color: #777; }
-
 /* SELECIONADO */
 .participante.selecionado .info {
   background: var(--cor-primaria);
@@ -160,20 +138,16 @@ body {
   box-shadow: 0 10px 30px rgba(10,170,192,0.35);
   animation: selecionadoPulse 0.4s ease;
 }
-
 @keyframes selecionadoPulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.04); }
   100% { transform: scale(1.02); }
 }
-
 .participante.selecionado .clique { color: #eaffff; }
-
 .participante.selecionado .foto {
   transform: scale(1.08);
   box-shadow: 0 8px 25px rgba(0,0,0,0.35);
 }
-
 /* CAPTCHA */
 .captcha-wrapper {
   background: #fafdff;
@@ -185,13 +159,11 @@ body {
   padding: 0 22px;
   transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .captcha-wrapper.aberto {
   max-height: 400px;
   padding: 26px 22px;
   box-shadow: inset 0 8px 20px rgba(10,170,192,0.12);
 }
-
 /* BOTÃO VOTAR */
 .btn-votar {
   width: calc(100% - 20px);
@@ -206,28 +178,23 @@ body {
   cursor: not-allowed;
   transition: var(--transition-fast);
 }
-
 .btn-votar.habilitado {
   cursor: pointer;
   background: var(--cor-primaria);
   animation: pulseButton 2s infinite;
 }
-
 .btn-votar.habilitado:hover {
   background: var(--cor-primaria-escura);
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(10,170,192,0.4);
 }
-
 @keyframes pulseButton {
   0%,100% { box-shadow: 0 0 0 0 rgba(10,170,192,0.4); }
   50% { box-shadow: 0 0 0 12px rgba(10,170,192,0); }
 }
-
 /* ===========================================================
-   POPUP NOVO (o moderno que você pediu)
+   POPUP NOVO (moderno)
 =========================================================== */
-
 .overlay {
   position: fixed;
   inset: 0;
@@ -238,11 +205,9 @@ body {
   z-index: 99999;
   backdrop-filter: blur(5px);
 }
-
 .overlay.mostrar {
   display: flex;
 }
-
 .popup {
   background: #fff;
   width: 92%;
@@ -251,14 +216,12 @@ body {
   padding: 26px;
   overflow: hidden;
   animation: popupEntrar 0.35s ease-out;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+  box-shadow: var(--shadow-popup);
 }
-
 @keyframes popupEntrar {
   from { opacity: 0; transform: scale(.85); }
   to   { opacity: 1; transform: scale(1); }
 }
-
 .popup-top {
   display: flex;
   align-items: center;
@@ -268,32 +231,24 @@ body {
   font-weight: 600;
   margin-bottom: 18px;
 }
-
-.popup-top i {
-  font-size: 18px;
-}
-
+.popup-top i { font-size: 18px; }
 .popup-conteudo {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .popup-esq h2 {
   font-size: 25px;
   margin: 0 0 10px;
   font-weight: 800;
   color: #222;
 }
-
 .popup-foto {
   width: 88px;
   height: 88px;
   border-radius: 12px;
   object-fit: cover;
 }
-
-/* BOTÕES DO POPUP */
 .btn-novamente {
   margin-top: 28px;
   background: #0aaac0;
@@ -307,13 +262,11 @@ body {
   cursor: pointer;
   transition: .25s;
 }
-
 .btn-novamente:hover {
   background: #08889a;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(10,170,192,0.4);
 }
-
 .btn-resultado {
   margin-top: 16px;
   text-align: center;
@@ -326,314 +279,191 @@ body {
   justify-content: center;
   gap: 6px;
 }
-
 .btn-resultado i {
   font-size: 18px;
   transition: .3s;
 }
-
-.btn-resultado:hover i {
-  transform: translateX(4px);
-}
-
-#popupConfirmacao {
-  display: none;
-}
-
-
+.btn-resultado:hover i { transform: translateX(4px); }
 </style>
+</head>
 <body>
 
 <div class="enquete">
-
   <!-- TÍTULO -->
   <div class="header">
     <h1>ENQUETE</h1>
     <p>Quem você quer que FIQUE em "A Fazenda 17"?</p>
   </div>
 
-
-<!-- Cloudflare Turnstile -->
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
-<!-- PARTICIPANTE 1 -->
-<div class="participante" data-nome="Mesquita">
-  <div class="info">
-    <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg" alt="">
-    <div class="texto">
-      <div class="nome">Mesquita</div>
-      <div class="clique">Clique para votar</div>
+  <!-- PARTICIPANTE 1 -->
+  <div class="participante" data-nome="Mesquita" style="--i:0">
+    <div class="info">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg" alt="Mesquita">
+      <div class="texto">
+        <div class="nome">Mesquita</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+    <div class="captcha-wrapper">
+      <div class="captcha-placeholder"></div>
+      <button class="btn-votar">Votar</button>
     </div>
   </div>
 
-  <div class="captcha-wrapper">
-    <div class="captcha-box">
+  <!-- PARTICIPANTE 2 -->
+  <div class="participante" data-nome="Ray" style="--i:1">
+    <div class="info">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg" alt="Ray">
+      <div class="texto">
+        <div class="nome">Ray</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+    <div class="captcha-wrapper">
       <div class="captcha-placeholder"></div>
-      <button class="btn-votar" disabled>votar</button>
+      <button class="btn-votar">Votar</button>
+    </div>
+  </div>
+
+  <!-- PARTICIPANTE 3 -->
+  <div class="participante" data-nome="Toninho" style="--i:2">
+    <div class="info">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg" alt="Toninho">
+      <div class="texto">
+        <div class="nome">Toninho</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+    <div class="captcha-wrapper">
+      <div class="captcha-placeholder"></div>
+      <button class="btn-votar">Votar</button>
     </div>
   </div>
 </div>
 
-<!-- PARTICIPANTE 2 -->
-<div class="participante" data-nome="Ray">
-  <div class="info">
-    <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg" alt="">
-    <div class="texto">
-      <div class="nome">Ray</div>
-      <div class="clique">Clique para votar</div>
-    </div>
-  </div>
-
-  <div class="captcha-wrapper">
-    <div class="captcha-box">
-      <div class="captcha-placeholder"></div>
-      <button class="btn-votar" disabled>votar</button>
-    </div>
-  </div>
-</div>
-
-<!-- PARTICIPANTE 3 -->
-<div class="participante" data-nome="Toninho">
-  <div class="info">
-    <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg" alt="">
-    <div class="texto">
-      <div class="nome">Toninho</div>
-      <div class="clique">Clique para votar</div>
-    </div>
-  </div>
-
-  <div class="captcha-wrapper">
-    <div class="captcha-box">
-      <div class="captcha-placeholder"></div>
-      <button class="btn-votar" disabled>votar</button>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- CONFIRMAÇÃO -->
-<div class="overlay" id="popupConfirmacao">    <div class="popup">      
+<!-- POPUP CONFIRMAÇÃO -->
+<div class="overlay" id="popupConfirmacao">
+  <div class="popup">
     <div class="popup-top">
-      <i>✔</i>
-      Você votou em:
+      <span>✓ Voto registrado com sucesso!</span>
     </div>
-
     <div class="popup-conteudo">
       <div class="popup-esq">
-        <h2 id="confirmacaoNome"></h2> 
+        <h2 id="popupNome"></h2>
+        <div class="btn-resultado" onclick="location.reload()">
+          <span>Votar novamente</span>
+          <i>→</i>
+        </div>
       </div>
-
-      <img id="confirmacaoFoto" class="popup-foto" src="" alt=""> 
+      <img id="popupFoto" class="popup-foto" src="" alt="">
     </div>
-
-    <button class="btn-novamente" onclick="location.reload()">
-      Votar Novamente
-    </button>
-    
-    <div class="btn-resultado" onclick="abrirResultados()">
-      Ver Resultado Parcial
-      <i>›</i>
-    </div>
-
   </div>
 </div>
 
+<script>
+let participanteSelecionado = null;
+window.recaptchaWidgets = {};
+window.recaptchaCarregado = false;
 
-</div>
-</body>
+const participantes = document.querySelectorAll(".participante");
+const popupConfirmacao = document.getElementById("popupConfirmacao");
+const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
+const SITE_KEY = "6LerWh4sAAAAAHpIbJkhbH558D1nXfz-gqdTNYqs";
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+window.onloadCallback = function () {
+    window.recaptchaCarregado = true;
+    IDs_PARTICIPANTES.forEach(nome => criarCaptcha(nome));
+};
 
-document.addEventListener("DOMContentLoaded", () => {
+function criarCaptcha(nome) {
+    const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
+    const captchaID = `captcha-${nome.toLowerCase()}`;
+    placeholder.id = captchaID;
+    placeholder.innerHTML = '';
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
-        authDomain: "enquete-fa527.firebaseapp.com",
-        projectId: "enquete-fa527",
-        storageBucket: "enquete-fa527.firebasestorage.app",
-        messagingSenderId: "544422121318",
-        appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let participanteSelecionado = null;
-    const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
-    const TURNSTILE_KEY = "0x4AAAAAACEGre7O4wmrWp4M";
-
-    window.turnstileWidgets = {};
-
-    const participantes = document.querySelectorAll(".participante");
-    const popupConfirmacao = document.getElementById("popupConfirmacao");
-
-    // ==========================================================
-    // ESPERAR DOM + TURNSTILE ANTES DE CRIAR CAPTCHA
-    // ==========================================================
-    const esperarTurnstile = setInterval(() => {
-
-        if (window.turnstile && window.turnstile.render) {
-            clearInterval(esperarTurnstile);
-            console.log("Turnstile pronto + DOM pronto");
-
-            // criar captchas
-            IDs_PARTICIPANTES.forEach(nome => criarCaptcha(nome));
-
-            // ativar seleção
-            inicializarSelecao();
-
-            // ativar botão votar
-            inicializarBotaoVotar();
+    const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
+    const widget = grecaptcha.render(captchaID, {
+        sitekey: SITE_KEY,
+        callback: () => {
+            btnVotar.classList.add("habilitado");
+            btnVotar.disabled = false;
+        },
+        'expired-callback': () => {
+            btnVotar.classList.remove("habilitado");
+            btnVotar.disabled = true;
         }
+    });
+    window.recaptchaWidgets[nome] = widget;
+}
 
-    }, 100);
+// Efeito ripple no clique
+function criarRipple(event) {
+    const info = event.currentTarget;
+    info.classList.add("ripple");
+    setTimeout(() => info.classList.remove("ripple"), 600);
+}
 
+participantes.forEach(participante => {
+    const info = participante.querySelector(".info");
+    info.addEventListener("click", criarRipple);
 
-    // ==========================================================
-    // CRIAR CAPTCHA
-    // ==========================================================
-    function criarCaptcha(nome) {
-        const nomeMinusculo = nome.toLowerCase();
-        const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
+    info.addEventListener("click", () => {
+        const nome = participante.getAttribute("data-nome");
 
-        if (!placeholder) {
-            console.error("ERRO: placeholder não encontrado para:", nome);
+        if (participante === participanteSelecionado) {
+            deselecionarParticipante(participante);
+            participanteSelecionado = null;
+        } else {
+            if (participanteSelecionado) deselecionarParticipante(participanteSelecionado);
+            selecionarParticipante(participante, nome);
+            participanteSelecionado = participante;
+        }
+    });
+});
+
+function selecionarParticipante(participante, nome) {
+    participante.classList.add("selecionado");
+    const captchaWrapper = participante.querySelector(".captcha-wrapper");
+    captchaWrapper.classList.add("aberto");
+
+    const widgetId = window.recaptchaWidgets[nome];
+    if (widgetId !== undefined) grecaptcha.reset(widgetId);
+}
+
+function deselecionarParticipante(participante) {
+    participante.classList.remove("selecionado");
+    const captchaWrapper = participante.querySelector(".captcha-wrapper");
+    captchaWrapper.classList.remove("aberto");
+    const btnVotar = participante.querySelector(".btn-votar");
+    btnVotar.classList.remove("habilitado");
+    btnVotar.disabled = true;
+}
+
+participantes.forEach(participante => {
+    const btnVotar = participante.querySelector(".btn-votar");
+    btnVotar.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (!btnVotar.classList.contains("habilitado")) {
+            alert("Complete o reCAPTCHA primeiro!");
             return;
         }
 
-        const captchaID = `captcha-${nomeMinusculo}`;
-        placeholder.id = captchaID;
-        placeholder.innerHTML = "";
+        const nome = participante.getAttribute("data-nome");
+        const fotoSrc = participante.querySelector(".foto").src;
 
-        const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
-        btnVotar.disabled = true;
+        console.log(`Voto para ${nome} registrado com sucesso!`);
+        exibirPopupConfirmacao(nome, fotoSrc);
 
-        try {
-            const widget = turnstile.render(`#${captchaID}`, {
-                sitekey: TURNSTILE_KEY,
-                theme: "light",
-                callback: () => {
-                    btnVotar.disabled = false;
-                    btnVotar.classList.add("habilitado");
-                },
-                "error-callback": () => {
-                    btnVotar.disabled = true;
-                    btnVotar.classList.remove("habilitado");
-                },
-                "expired-callback": () => {
-                    btnVotar.disabled = true;
-                    btnVotar.classList.remove("habilitado");
-                }
-            });
-
-            window.turnstileWidgets[nome] = widget;
-
-        } catch (erro) {
-            console.error("Erro ao renderizar Turnstile de " + nome, erro);
-        }
-    }
-
-
-
-    // ==========================================================
-    // SELECIONAR PARTICIPANTE
-    // ==========================================================
-    function inicializarSelecao() {
-        participantes.forEach(participante => {
-            participante.querySelector(".info").addEventListener("click", () => {
-                const nome = participante.getAttribute("data-nome");
-
-                if (participante === participanteSelecionado) {
-                    deselecionarParticipante(participante);
-                    participanteSelecionado = null;
-                } else {
-                    if (participanteSelecionado) deselecionarParticipante(participanteSelecionado);
-
-                    selecionarParticipante(participante, nome);
-                    participanteSelecionado = participante;
-                }
-            });
-        });
-    }
-
-    function selecionarParticipante(participante, nome) {
-        participante.classList.add("selecionado");
-        const wrapper = participante.querySelector(".captcha-wrapper");
-        wrapper.classList.add("aberto");
-
-        try {
-            turnstile.reset(window.turnstileWidgets[nome]);
-        } catch (e) {}
-    }
-
-    function deselecionarParticipante(participante) {
-        participante.classList.remove("selecionado");
-        const wrapper = participante.querySelector(".captcha-wrapper");
-        wrapper.classList.remove("aberto");
-
-        const btn = participante.querySelector(".btn-votar");
-        btn.disabled = true;
-        btn.classList.remove("habilitado");
-    }
-
-
-
-    // ==========================================================
-    // BOTÃO VOTAR
-    // ==========================================================
-    function inicializarBotaoVotar() {
-        participantes.forEach(participante => {
-            const btnVotar = participante.querySelector(".btn-votar");
-
-            btnVotar.addEventListener("click", async (event) => {
-                event.preventDefault();
-
-                if (btnVotar.disabled) {
-                    alert("Por favor, complete o CAPTCHA.");
-                    return;
-                }
-
-                const nome = participante.getAttribute("data-nome");
-                const foto = participante.querySelector(".foto").src;
-
-              // CHANGE TABLE
-                try {
-                    const ref = doc(db, "votos", nome);
-                    await setDoc(ref, { total: increment(1) }, { merge: true });
-
-                } catch (error) {
-                    console.error("Erro ao votar: ", error);
-                    alert("Erro ao registrar voto. Tente novamente.");
-                    return;
-                }
-
-                participantes.forEach(p => p.querySelector(".info").style.pointerEvents = "none");
-                exibirPopupConfirmacao(nome, foto);
-
-                btnVotar.disabled = true;
-                btnVotar.classList.remove("habilitado");
-            });
-        });
-    }
-
-
-
-// ==========================================================
-// POPUP CONFIRMAÇÃO
-// ==========================================================
-    function exibirPopupConfirmacao(nome, fotoSrc) {
-document.getElementById("confirmacaoNome").textContent = `Voto em ${nome} confirmado!`;
-document.getElementById("confirmacaoFoto").src = fotoSrc;
-
-        popupConfirmacao.classList.add("mostrar");
-    }
-    window.abrirResultados = () => {
-        window.location.href = "resultados.html";
-    };
-
+        // Desabilita outros cards
+        participantes.forEach(p => p.querySelector(".info").style.pointerEvents = 'none');
+    });
 });
+
+function exibirPopupConfirmacao(nome, fotoSrc) {
+    document.getElementById("popupNome").textContent = nome;
+    document.getElementById("popupFoto").src = fotoSrc;
+    popupConfirmacao.classList.add("mostrar");
+}
 </script>
+</body>
 </html>
