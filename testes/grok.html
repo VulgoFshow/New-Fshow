@@ -740,40 +740,57 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================================
     // BOTÃO VOTAR
     // ==========================================================
-    function inicializarBotaoVotar() {
-        participantes.forEach(participante => {
-            const btnVotar = participante.querySelector(".btn-votar");
+function inicializarBotaoVotar() {
+  participantes.forEach(participante => {
+    const btnVotar = participante.querySelector(".btn-votar");
 
-            btnVotar.addEventListener("click", async (event) => {
-                event.preventDefault();
+    btnVotar.addEventListener("click", async (event) => {
+      event.preventDefault();
 
-                if (btnVotar.disabled) {
-                    alert("Por favor, complete o CAPTCHA.");
-                    return;
-                }
+      if (btnVotar.disabled) {
+        alert("Por favor, complete o CAPTCHA.");
+        return;
+      }
 
-                const nome = participante.getAttribute("data-nome");
-                const foto = participante.querySelector(".foto").src;
+      const nome = participante.getAttribute("data-nome");
+      const foto = participante.querySelector(".foto")?.src || "";
 
-                try {
-                    const ref = doc(db, "votos", nome);
-                    await setDoc(ref, { total: increment(1) }, { merge: true });
+      try {
+        // referência ao documento "votos/{nome}"
+        const ref = doc(db, "testes", nome);
 
-                } catch (error) {
-                    console.error("Erro ao votar: ", error);
-                    alert("Erro ao registrar voto. Tente novamente.");
-                    return;
-                }
+        // tentativa preferida: atualizar com increment
+        try {
+          await updateDoc(ref, { total: increment(1) });
+          console.info("Voto registrado via updateDoc para", nome);
+        } catch (updateErr) {
+          // se não existir o doc, criamos com total = 1
+          console.warn("updateDoc falhou, tentando setDoc:", updateErr && updateErr.code, updateErr && updateErr.message);
 
-                participantes.forEach(p => p.querySelector(".info").style.pointerEvents = "none");
-                exibirPopupConfirmacao(nome, foto);
+          if (updateErr && updateErr.code === "not-found") {
+            // documento não existe -> criar com total = 1
+            await setDoc(ref, { total: 1 }, { merge: true });
+            console.info("Voto registrado via setDoc (criação) para", nome);
+          } else {
+            // se for outro erro, relança para ser tratado pelo catch externo
+            throw updateErr;
+          }
+        }
 
-                btnVotar.disabled = true;
-                btnVotar.classList.remove("habilitado");
-            });
-        });
-    }
+        // bloquear interações e mostrar popup
+        participantes.forEach(p => p.querySelector(".info").style.pointerEvents = "none");
+        exibirPopupConfirmacao(nome, foto);
 
+        btnVotar.disabled = true;
+        btnVotar.classList.remove("habilitado");
+      } catch (error) {
+        // log detalhado para debugar
+        console.error("Erro ao registrar voto — código:", error && error.code, "mensagem:", error && error.message, error);
+        alert("Erro ao registrar voto. Tente novamente.");
+      }
+    });
+  });
+}
 
 
     // ==========================================================
