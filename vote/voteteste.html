@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Enquete</title>
 
-  1
+  2
 <link rel="stylesheet" href="enquete.css">
 
 <!-- Fonte Inter -->
@@ -319,7 +319,7 @@ const participantes = document.querySelectorAll(".participante");
 const popupConfirmacao = document.getElementById("popupConfirmacao");
 
 const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
-const SITE_KEY = "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg"; 
+const SITE_KEY = "6Ld1MB4sAAAAABiqmy674nn3LrjmTEq9_Heidc8G"; 
   
 window.onloadCallback = function () {
     window.recaptchaCarregado = true;
@@ -342,7 +342,7 @@ function criarCaptcha(nome) {
     const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
 
     const widget = grecaptcha.render(captchaID, {
-        sitekey: "SITE_KEY",
+        sitekey: SITE_KEY,
         callback: function () {
             btnVotar.classList.add("habilitado");
             btnVotar.disabled = false;
