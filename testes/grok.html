@@ -754,6 +754,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const nome = participante.getAttribute("data-nome");
                 const foto = participante.querySelector(".foto").src;
 
+              // CHANGE TABLE
                 try {
                     const ref = doc(db, "votos", nome);
                     await setDoc(ref, { total: increment(1) }, { merge: true });
