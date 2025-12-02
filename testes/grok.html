@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Enquete</title>
-3
+
+  4
 <!-- Fonte Inter -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -603,223 +604,191 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, doc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Config Firebase ---
-  const firebaseConfig = {
-      apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
-      authDomain: "enquete-fa527.firebaseapp.com",
-      projectId: "enquete-fa527",
-      storageBucket: "enquete-fa527.firebasestorage.app",
-      messagingSenderId: "544422121318",
-      appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
-  };
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
 
-  // --- Dados ---
-  let participanteSelecionado = null;
-  const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
-  const TURNSTILE_KEY = "0x4AAAAAACEGre7O4wmrWp4M";
-  window.turnstileWidgets = {};
+    const firebaseConfig = {
+        apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
+        authDomain: "enquete-fa527.firebaseapp.com",
+        projectId: "enquete-fa527",
+        storageBucket: "enquete-fa527.firebasestorage.app",
+        messagingSenderId: "544422121318",
+        appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+    };
 
-  const container = document.querySelector(".enquete");
-  if (!container) {
-    console.error("Container .enquete não encontrado. Verifique o HTML.");
-    return;
-  }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // polling para checar se a API do Turnstile foi carregada (timeout 10s)
-  function waitForTurnstile(timeoutMs = 10000) {
-    return new Promise((resolve, reject) => {
-      const start = Date.now();
-      (function check() {
-        if (window.turnstile && typeof window.turnstile.render === "function") {
-          return resolve(window.turnstile);
+    let participanteSelecionado = null;
+    const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
+    const TURNSTILE_KEY = "0x4AAAAAACEGre7O4wmrWp4M";
+
+    window.turnstileWidgets = {};
+
+    const participantes = document.querySelectorAll(".participante");
+    const popupConfirmacao = document.getElementById("popupConfirmacao");
+
+    // ==========================================================
+    // ESPERAR DOM + TURNSTILE ANTES DE CRIAR CAPTCHA
+    // ==========================================================
+    const esperarTurnstile = setInterval(() => {
+
+        if (window.turnstile && window.turnstile.render) {
+            clearInterval(esperarTurnstile);
+            console.log("Turnstile pronto + DOM pronto");
+
+            // criar captchas
+            IDs_PARTICIPANTES.forEach(nome => criarCaptcha(nome));
+
+            // ativar seleção
+            inicializarSelecao();
+
+            // ativar botão votar
+            inicializarBotaoVotar();
         }
-        if (Date.now() - start > timeoutMs) {
-          return reject(new Error("Turnstile não disponível (timeout). Verifique adblock / carregamento do script)."));
-        }
-        setTimeout(check, 200);
-      })();
-    });
-  }
 
-  // inicializa tudo: aguarda Turnstile, cria captchas, liga handlers
-  (async function init() {
-    try {
-      await waitForTurnstile(10000);
-      console.info("Turnstile carregado ✅");
-    } catch (err) {
-      console.error(err);
-      showErrorBanner("Captcha não carregou. Verifique console (adblock / sitekey / rede).");
-      return;
+    }, 100);
+
+
+    // ==========================================================
+    // CRIAR CAPTCHA
+    // ==========================================================
+    function criarCaptcha(nome) {
+        const nomeMinusculo = nome.toLowerCase();
+        const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
+
+        if (!placeholder) {
+            console.error("ERRO: placeholder não encontrado para:", nome);
+            return;
+        }
+
+        const captchaID = `captcha-${nomeMinusculo}`;
+        placeholder.id = captchaID;
+        placeholder.innerHTML = "";
+
+        const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
+        btnVotar.disabled = true;
+
+        try {
+            const widget = turnstile.render(`#${captchaID}`, {
+                sitekey: TURNSTILE_KEY,
+                theme: "light",
+                callback: () => {
+                    btnVotar.disabled = false;
+                    btnVotar.classList.add("habilitado");
+                },
+                "error-callback": () => {
+                    btnVotar.disabled = true;
+                    btnVotar.classList.remove("habilitado");
+                },
+                "expired-callback": () => {
+                    btnVotar.disabled = true;
+                    btnVotar.classList.remove("habilitado");
+                }
+            });
+
+            window.turnstileWidgets[nome] = widget;
+
+        } catch (erro) {
+            console.error("Erro ao renderizar Turnstile de " + nome, erro);
+        }
     }
 
-    // busca participantes (AGORA o DOM já existe)
-    const participantes = Array.from(document.querySelectorAll(".participante"));
-    if (!participantes.length) {
-      console.error("Nenhum elemento .participante encontrado. Verifique o HTML.");
-      showErrorBanner("Nenhum participante encontrado no HTML.");
-      return;
+
+
+    // ==========================================================
+    // SELECIONAR PARTICIPANTE
+    // ==========================================================
+    function inicializarSelecao() {
+        participantes.forEach(participante => {
+            participante.querySelector(".info").addEventListener("click", () => {
+                const nome = participante.getAttribute("data-nome");
+
+                if (participante === participanteSelecionado) {
+                    deselecionarParticipante(participante);
+                    participanteSelecionado = null;
+                } else {
+                    if (participanteSelecionado) deselecionarParticipante(participanteSelecionado);
+
+                    selecionarParticipante(participante, nome);
+                    participanteSelecionado = participante;
+                }
+            });
+        });
     }
 
-    // cria placeholders / captchas só para os IDs presentes em página
-    IDs_PARTICIPANTES.forEach(nome => {
-      const el = participantes.find(p => p.getAttribute("data-nome") === nome);
-      if (el) criarCaptcha(nome);
-      else console.warn(`Participante "${nome}" não encontrado no DOM.`);
-    });
+    function selecionarParticipante(participante, nome) {
+        participante.classList.add("selecionado");
+        const wrapper = participante.querySelector(".captcha-wrapper");
+        wrapper.classList.add("aberto");
 
-    // event delegation: clique em .info abre o captcha/seleciona participante
-    container.addEventListener("click", (e) => {
-      const info = e.target.closest(".info");
-      if (!info) return;
-      const participante = info.closest(".participante");
-      if (!participante) return;
+        try {
+            turnstile.reset(window.turnstileWidgets[nome]);
+        } catch (e) {}
+    }
 
-      // se já houve seleção
-      if (participante === participanteSelecionado) {
-        deselecionarParticipante(participante);
-        participanteSelecionado = null;
-      } else {
-        if (participanteSelecionado) deselecionarParticipante(participanteSelecionado);
-        const nome = participante.getAttribute("data-nome");
-        selecionarParticipante(participante, nome);
-        participanteSelecionado = participante;
-      }
-    });
+    function deselecionarParticipante(participante) {
+        participante.classList.remove("selecionado");
+        const wrapper = participante.querySelector(".captcha-wrapper");
+        wrapper.classList.remove("aberto");
 
-    // delegação para botões de votar (garante funcionamento mesmo que btns sejam criados dinamicamente)
-    container.addEventListener("click", async (e) => {
-      const btn = e.target.closest(".btn-votar");
-      if (!btn) return;
-      e.preventDefault();
-
-      if (btn.disabled) {
-        alert("Por favor, complete o CAPTCHA.");
-        return;
-      }
-
-      const participanteEl = btn.closest(".participante");
-      if (!participanteEl) {
-        console.error("Botão votar não está dentro de .participante");
-        return;
-      }
-
-      const nome = participanteEl.getAttribute("data-nome");
-      const foto = participanteEl.querySelector(".foto")?.src || "";
-
-      try {
-        const ref = doc(db, "votos", nome);
-        // increment precisa de FieldValue.increment; estamos importando increment()
-        await setDoc(ref, { total: increment(1) }, { merge: true });
-        // bloquear interações visuais
-        Array.from(document.querySelectorAll(".participante .info")).forEach(el => el.style.pointerEvents = "none");
-        exibirPopupConfirmacao(nome, foto);
+        const btn = participante.querySelector(".btn-votar");
         btn.disabled = true;
         btn.classList.remove("habilitado");
-      } catch (error) {
-        console.error("Erro ao votar:", error);
-        alert("Erro ao registrar voto. Veja o console para detalhes.");
-      }
-    });
-
-  })();
-
-  // --------- helpers ---------
-  function showErrorBanner(msg) {
-    console.warn(msg);
-    // cria um banner simples no topo da enquete
-    let banner = document.querySelector(".captcha-error-banner");
-    if (!banner) {
-      banner = document.createElement("div");
-      banner.className = "captcha-error-banner";
-      banner.style.cssText = "background:#ffefef;color:#900;padding:10px;border-radius:6px;margin-bottom:12px;font-weight:600;";
-      container.prepend(banner);
     }
-    banner.textContent = msg;
-  }
 
-  function criarCaptcha(nome) {
-    try {
-      const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
-      if (!placeholder) {
-        console.warn(`Placeholder não encontrado para ${nome}`);
-        return;
-      }
-      const captchaID = `captcha-${nome.toLowerCase()}`;
-      placeholder.id = captchaID;
-      placeholder.innerHTML = "";
 
-      const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
-      if (!btnVotar) {
-        console.warn("btn-votar não encontrado para", nome);
-        return;
-      }
-      btnVotar.disabled = true;
 
-      const widget = turnstile.render(captchaID, {
-        sitekey: TURNSTILE_KEY,
-        theme: "light",
-        callback: () => {
-          btnVotar.disabled = false;
-          btnVotar.classList.add("habilitado");
-        },
-        "error-callback": () => {
-          btnVotar.disabled = true;
-          btnVotar.classList.remove("habilitado");
-        },
-        "expired-callback": () => {
-          btnVotar.disabled = true;
-          btnVotar.classList.remove("habilitado");
-        }
-      });
+    // ==========================================================
+    // BOTÃO VOTAR
+    // ==========================================================
+    function inicializarBotaoVotar() {
+        participantes.forEach(participante => {
+            const btnVotar = participante.querySelector(".btn-votar");
 
-      window.turnstileWidgets[nome] = widget;
-      console.debug("Captcha criado para", nome);
-    } catch (err) {
-      console.error("Erro ao criar captcha para", nome, err);
-      showErrorBanner("Erro ao criar captcha. Veja o console.");
+            btnVotar.addEventListener("click", async (event) => {
+                event.preventDefault();
+
+                if (btnVotar.disabled) {
+                    alert("Por favor, complete o CAPTCHA.");
+                    return;
+                }
+
+                const nome = participante.getAttribute("data-nome");
+                const foto = participante.querySelector(".foto").src;
+
+                try {
+                    const ref = doc(db, "votos", nome);
+                    await setDoc(ref, { total: increment(1) }, { merge: true });
+
+                } catch (error) {
+                    console.error("Erro ao votar: ", error);
+                    alert("Erro ao registrar voto. Tente novamente.");
+                    return;
+                }
+
+                participantes.forEach(p => p.querySelector(".info").style.pointerEvents = "none");
+                exibirPopupConfirmacao(nome, foto);
+
+                btnVotar.disabled = true;
+                btnVotar.classList.remove("habilitado");
+            });
+        });
     }
-  }
 
-  function selecionarParticipante(participante, nome) {
-    participante.classList.add("selecionado");
-    const wrapper = participante.querySelector(".captcha-wrapper");
-    if (wrapper) wrapper.classList.add("aberto");
 
-    try {
-      if (window.turnstile && window.turnstile.reset && window.turnstileWidgets[nome]) {
-        turnstile.reset(window.turnstileWidgets[nome]);
-      }
-    } catch (e) {
-      console.warn("Falha ao resetar widget Turnstile (pode não estar inicializado ainda).", e);
+
+    // ==========================================================
+    // POPUP CONFIRMAÇÃO
+    // ==========================================================
+    function exibirPopupConfirmacao(nome, fotoSrc) {
+        document.getElementById("popupNome").textContent = `Voto em ${nome} confirmado!`;
+        document.getElementById("popupFoto").src = fotoSrc;
+        popupConfirmacao.style.display = "block";
     }
-  }
 
-  function deselecionarParticipante(participante) {
-    participante.classList.remove("selecionado");
-    const wrapper = participante.querySelector(".captcha-wrapper");
-    if (wrapper) wrapper.classList.remove("aberto");
-
-    const btn = participante.querySelector(".btn-votar");
-    if (btn) {
-      btn.disabled = true;
-      btn.classList.remove("habilitado");
-    }
-  }
-
-  function exibirPopupConfirmacao(nome, fotoSrc) {
-    const popup = document.getElementById("popupConfirmacao");
-    if (!popup) return;
-    const popupNome = document.getElementById("popupNome");
-    const popupFoto = document.getElementById("popupFoto");
-    if (popupNome) popupNome.textContent = `Voto em ${nome} confirmado!`;
-    if (popupFoto) popupFoto.src = fotoSrc;
-    popup.style.display = "block";
-  }
+    window.abrirResultados = () => {
+        window.location.href = "resultados.html";
+    };
 
 });
 </script>
-
-
 </html>
