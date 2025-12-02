@@ -608,54 +608,38 @@
 </body>
 
 <script type="module">
-  // Firebase 10+
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, doc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  window.firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
     authDomain: "enquete-fa527.firebaseapp.com",
     projectId: "enquete-fa527",
     storageBucket: "enquete-fa527.firebasestorage.app",
     messagingSenderId: "544422121318",
     appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
-});
+};
 
-  const app = initializeApp(window.firebaseConfig);
-  window.db = getFirestore(app);
-</script>
-
-<script type="module">
-import { doc, updateDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 let participanteSelecionado = null;
 window.recaptchaWidgets = {};
-window.recaptchaCarregado = false;
-
+const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
+const SITE_KEY = "6LerWh4sAAAAAHpIbJkhbH558D1nXfz-gqdTNYqs";
 const participantes = document.querySelectorAll(".participante");
 const popupConfirmacao = document.getElementById("popupConfirmacao");
 
-const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
-const SITE_KEY = "6LerWh4sAAAAAHpIbJkhbH558D1nXfz-gqdTNYqs"; 
-
-/* =============================
-   RECAPTCHA
-============================= */
-
 window.onloadCallback = function () {
-    window.recaptchaCarregado = true;
     IDs_PARTICIPANTES.forEach(nome => criarCaptcha(nome));
 };
 
 function criarCaptcha(nome) {
     const nomeMinusculo = nome.toLowerCase();
     const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
-
     const captchaID = `captcha-widget-${nomeMinusculo}`;
     placeholder.id = captchaID;
-
     placeholder.innerHTML = "";
-
     const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
 
     const widget = grecaptcha.render(captchaID, {
@@ -672,10 +656,6 @@ function criarCaptcha(nome) {
 
     window.recaptchaWidgets[nome] = widget;
 }
-
-/* =============================
-   ABRIR E FECHAR PARTICIPANTES
-============================= */
 
 participantes.forEach(participante => {
     participante.querySelector(".info").addEventListener("click", () => {
@@ -695,7 +675,6 @@ participantes.forEach(participante => {
 
 function selecionarParticipante(participante, nome) {
     participante.classList.add("selecionado");
-
     const wrapper = participante.querySelector(".captcha-wrapper");
     wrapper.classList.add("aberto");
 
@@ -705,7 +684,6 @@ function selecionarParticipante(participante, nome) {
 
 function deselecionarParticipante(participante) {
     participante.classList.remove("selecionado");
-
     const wrapper = participante.querySelector(".captcha-wrapper");
     wrapper.classList.remove("aberto");
 
@@ -713,10 +691,6 @@ function deselecionarParticipante(participante) {
     btn.disabled = true;
     btn.classList.remove("habilitado");
 }
-
-/* =============================
-   BOTÃO VOTAR + FIREBASE
-============================= */
 
 participantes.forEach(participante => {
     const btnVotar = participante.querySelector(".btn-votar");
@@ -732,39 +706,26 @@ participantes.forEach(participante => {
         const nome = participante.getAttribute("data-nome");
         const foto = participante.querySelector(".foto").src;
 
-        /* 🔥 Enviar voto para Firestore */
         try {
             const ref = doc(db, "votos", nome);
-
             await setDoc(ref, { total: increment(1) }, { merge: true });
-            console.log("Voto registrado:", nome);
-
         } catch (error) {
             console.error("Erro ao votar: ", error);
             alert("Erro ao registrar voto. Tente novamente.");
             return;
         }
 
-        /* Desativar tudo após votar */
         participantes.forEach(p => p.querySelector(".info").style.pointerEvents = "none");
-
-        /* Exibir popup */
         exibirPopupConfirmacao(nome, foto);
 
-        /* Reset do botão */
         btnVotar.disabled = true;
         btnVotar.classList.remove("habilitado");
     });
 });
 
-/* =============================
-   POPUP
-============================= */
-
 function exibirPopupConfirmacao(nome, fotoSrc) {
     document.getElementById("popupNome").textContent = `Voto em ${nome} confirmado!`;
     document.getElementById("popupFoto").src = fotoSrc;
-
     popupConfirmacao.style.display = "block";
 }
 
