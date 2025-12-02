@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <title>Enquete</title>
 
-  2
-<link rel="stylesheet" href="enquete.css">
-
 <!-- Fonte Inter -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -245,92 +242,258 @@
     50%      { box-shadow:0 0 0 12px rgba(10,170,192,0); }
   }
 
-  /* POPUP */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    backdrop-filter: blur(6px);
-  }
+  /* POPUP — estilo igual ao da imagem */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  backdrop-filter: blur(5px);
+}
 
-  .overlay.mostrar {
-    display: flex;
-    animation: fadeIn 0.4s;
-  }
+.overlay.mostrar {
+  display: flex;
+}
 
-  .popup {
-    background: white;
-    width: 90%;
-    max-width: 360px;
-    border-radius: var(--radius-grande);
-    overflow: hidden;
-    text-align: center;
-    box-shadow: var(--shadow-popup);
-    transform: scale(0.8);
-    animation: popupEntrar 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
-  }
+.popup {
+  background: #fff;
+  width: 92%;
+  max-width: 380px;
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 26px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+  animation: popupEntrar 0.35s ease-out;
+}
 
-  @keyframes popupEntrar {
-    to {
-      transform: scale(1);
-    }
-  }
+@keyframes popupEntrar {
+  from { opacity: 0; transform: scale(.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
 
-  .popup-cabecalho {
-    background: linear-gradient(135deg, var(--cor-primaria), #00e0e0);
-    color: white;
-    padding: 22px;
-    font-size: 21px;
-    font-weight: 700;
-  }
+/* Linha superior com ícone */
+.popup-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #00a882;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
 
-  .popup-conteudo {
-    padding: 30px 24px;
-  }
+.popup-top i {
+  font-size: 18px;
+}
 
-  .popup-conteudo img {
-    width: 100px;
-    height: 100px;
-    border-radius: 18px;
-    object-fit: cover;
-    margin-bottom: 18px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-    animation: fotoPopup 0.8s 0.3s both;
-  }
+/* Layout principal */
+.popup-conteudo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  @keyframes fotoPopup {
-    from { opacity: 0; transform: scale(0.8) rotate(-10deg); }
-    to   { opacity: 1; transform: scale(1) rotate(0); }
-  }
+.popup-esq {
+  flex: 1;
+}
 
-  .popup-conteudo h2 {
-    margin: 0 0 22px;
-    font-size: 24px;
-    font-weight: 700;
-  }
+.popup-esq h2 {
+  margin: 0 0 10px;
+  font-size: 25px;
+  font-weight: 800;
+  color: #222;
+}
 
-  .btn-novamente {
-    background: var(--cor-primaria);
-    color: white;
-    border: none;
-    padding: 16px;
-    width: 100%;
-    border-radius: var(--radius-pequeno);
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-fast);
-  }
+/* Foto do participante */
+.popup-foto {
+  width: 88px;
+  height: 88px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
 
-  .btn-novamente:hover {
-    background: var(--cor-primaria-escura);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(10,170,192,0.4);
-  }
+/* Botão VOTAR NOVAMENTE */
+.btn-novamente {
+  margin-top: 28px;
+  background: #0aaac0;
+  color: white;
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.btn-novamente:hover {
+  background: #08889a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(10,170,192,0.4);
+}
+
+/* Botão RESULTADO PARCIAL */
+.btn-resultado {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0aaac0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-resultado i {
+  font-size: 18px;
+  margin-left: 3px;
+  transition: .3s;
+}
+
+.btn-resultado:hover i {
+  transform: translateX(4px);
+}
+
+.captcha-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      
+  justify-content: center;
+  gap: 18px;              
+  width: 100%;
+}
+
+.captcha-box > * {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.captcha-placeholder {
+  background: #ffffff;
+  border: 1px solid #d5d5d5;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ===== POPUP QUE COBRE SOMENTE O BLOCO ===== */
+.overlay-bloco {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(3px);
+  border-radius: 18px;
+  z-index: 999;
+}
+
+/* CAIXA DO POPUP */
+.popup-bloco {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px 22px;
+  animation: fadePopup 0.4s ease;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+/* ANIMAÇÃO */
+@keyframes fadePopup {
+  from { opacity: 0; transform: translate(-50%, -45%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* TOPO */
+.popup-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2ecc71;
+  margin-bottom: 22px;
+}
+
+.popup-top i {
+  background: #2ecc71;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* CONTEÚDO */
+.popup-conteudo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.popup-esq h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.popup-foto {
+  width: 95px;
+  height: 95px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* BOTÕES */
+.btn-novamente {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: none;
+  background: #eee;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.btn-resultado {
+  width: 100%;
+  background: #2ecc71;
+  color: #fff;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn-resultado i {
+  font-style: normal;
+}
+
 </style>
 <body>
 
@@ -357,7 +520,7 @@
       <div class="captcha-box">
         <!-- SUA DIV DO CAPTCHA AQUI -->
         <div class="captcha-placeholder">
-          <p>Aqui entra o CAPTCHA dessa opção</p>
+          <p>CAPTCHA</p>
         </div>
 
         <button class="btn-votar">votar</button>
@@ -379,7 +542,7 @@
     <div class="captcha-wrapper">
       <div class="captcha-box">
         <div class="captcha-placeholder">
-          <p>Aqui entra o CAPTCHA dessa opção</p>
+          <p>CAPTCHA</p>
         </div>
 
         <button class="btn-votar">votar</button>
@@ -401,7 +564,7 @@
     <div class="captcha-wrapper">
       <div class="captcha-box">
         <div class="captcha-placeholder">
-          <p>Aqui entra o CAPTCHA dessa opção</p>
+          <p>CAPTCHA</p>
         </div>
 
         <button class="btn-votar">votar</button>
@@ -411,20 +574,36 @@
 
 </div>
 
-<!-- POPUP DE VOTO CONFIRMADO -->
-<div class="overlay" id="popupConfirmacao">
-  <div class="popup">
-    <div class="popup-cabecalho">Seu voto</div>
+<!-- CONFIRMAÇÃO -->
+<div class="overlay-bloco" id="popupConfirmacao">
+  <div class="popup-bloco">
+
+    <div class="popup-top">
+      <i>✔</i>
+      Seu voto
+    </div>
 
     <div class="popup-conteudo">
-      <img id="popupFoto" src="" alt="">
-      <h2 id="popupNome"></h2>
+      <div class="popup-esq">
+        <h2 id="popupNome"></h2>
+      </div>
 
-      <button class="btn-novamente" onclick="location.reload()">
-        Votar Novamente
-      </button>
+      <img id="popupFoto" class="popup-foto" src="" alt="">
     </div>
+
+    <button class="btn-novamente" onclick="location.reload()">
+      Votar Novamente
+    </button>
+    
+    <div class="btn-resultado" onclick="abrirResultados()">
+      Ver Resultado Parcial
+      <i>›</i>
+    </div>
+
   </div>
+</div>
+
+
 </div>
 
 
@@ -554,5 +733,16 @@ function exibirPopupConfirmacao(nome, fotoSrc) {
     popupConfirmacao.classList.add("mostrar");
 }
 
+function mostrarConfirmacao(nome, foto) {
+  document.getElementById('popupNome').textContent = nome;
+  document.getElementById('popupFoto').src = foto;
+
+  document.getElementById('popupConfirmacao').style.display = 'block';
+}
+
+function abrirResultados() {
+  window.location.href = "resultados.html";
+}
 </script>
+
 </html>
