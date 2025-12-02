@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Enquete</title>
+
+  2
+<link rel="stylesheet" href="enquete.css">
+
+<!-- Fonte Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+
+</head>
+
+<style>
+/* ==========================================
+                 BASE
+========================================== */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #eef3f8;
+  margin: 0;
+  padding: 20px;
+}
+
+/* container */
+.enquete {
+  max-width: 420px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.10);
+  animation: aparecer 0.45s ease forwards;
+}
+
+/* Fade + slide */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================
+                TÍTULO
+========================================== */
+.header {
+  padding: 32px 25px 18px;
+  text-align: center;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.header p {
+  margin: 12px 0 0;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ==========================================
+            PARTICIPANTE CARD
+========================================== */
+.participante {
+  border-bottom: 1px solid #ebebeb;
+  position: relative;
+  opacity: 0;
+  animation: slideUp 0.45s ease forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* conteudo */
+.info {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  gap: 15px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.25s;
+}
+
+.info:hover {
+  background: #f4f9ff;
+  transform: translateX(3px);
+}
+
+/* foto */
+.foto {
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: 0.25s ease;
+}
+
+/* texto */
+.texto { flex: 1; }
+
+.nome {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.clique {
+  font-size: 15px;
+  color: #777;
+}
+
+/* ==========================================
+          ESTADO SELECIONADO
+========================================== */
+.participante.selecionado .info {
+  background: linear-gradient(135deg, #0bc7d8, #0aaac0);
+  color: white;
+  border-radius: 20px;
+  margin: 8px;
+  margin-bottom: 0;
+  box-shadow: 0 6px 20px rgba(0,150,170,0.35);
+  animation: cardSelect 0.25s ease forwards;
+}
+
+@keyframes cardSelect {
+  from { transform: scale(0.97); opacity: 0.5; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.participante.selecionado .info .clique {
+  color: #e5ffff;
+}
+
+.participante.selecionado .foto {
+  transform: scale(1.08);
+  box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+}
+
+/* ==========================================
+          CAPTCHAS / ABERTURA
+========================================== */
+.captcha-wrapper {
+  background: #ffffff;
+  border: 1px solid #cce4f0;
+  border-top: none;
+  margin: 0 8px;
+  border-radius: 0 0 18px 18px;
+
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: all 0.35s ease, max-height 0.35s ease;
+}
+
+.captcha-wrapper.aberto {
+  padding: 22px;
+  max-height: 330px;
+}
+
+/* ==========================================
+                 BOTÃO VOTAR
+========================================== */
+.btn-votar {
+  background: #b9b9b9;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  width: 100%;
+  font-size: 19px;
+  font-weight: 650;
+  cursor: not-allowed;
+  transition: 0.25s ease;
+}
+
+.btn-votar.habilitado {
+  background: #0aaac0;
+  cursor: pointer;
+  transform: scale(1);
+}
+
+.btn-votar.habilitado:hover {
+  background: #09b8d3;
+  transform: scale(1.03);
+}
+
+/* ==========================================
+                   POPUP
+========================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: fadeInPopup 0.3s forwards;
+}
+
+.overlay.mostrar {
+  display: flex;
+}
+
+@keyframes fadeInPopup {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.popup {
+  background: white;
+  width: 90%;
+  max-width: 340px;
+  border-radius: 22px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+  animation: popupScale 0.35s ease forwards;
+}
+
+@keyframes popupScale {
+  from { transform: scale(0.75); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.popup-cabecalho {
+  background: #0aaac0;
+  color: white;
+  padding: 18px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.popup-conteudo {
+  padding: 28px 22px;
+}
+
+.popup-conteudo img {
+  width: 95px;
+  height: 95px;
+  border-radius: 16px;
+  object-fit: cover;
+  margin-bottom: 15px;
+  animation: fadeIn 0.5s ease;
+}
+
+.popup-conteudo h2 {
+  margin: 0 0 20px;
+  font-size: 23px;
+}
+
+.btn-novamente {
+  background: #0aaac0;
+  color: white;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  border-radius: 14px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-novamente:hover {
+  background: #09b8d3;
+  transform: scale(1.03);
+}
+
+</style>
+<body>
+
+<div class="enquete">
+
+  <!-- TÍTULO -->
+  <div class="header">
+    <h1>ENQUETE</h1>
+    <p>Quem você quer que FIQUE em "A Fazenda 17"?</p>
+  </div>
+
+  <!-- PARTICIPANTE 1 -->
+  <div class="participante" data-nome="Mesquita">
+    <div class="info">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg" alt="">
+      <div class="texto">
+        <div class="nome">Mesquita</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+
+    <!-- CAIXA CAPTCHA -->
+    <div class="captcha-wrapper">
+      <div class="captcha-box">
+        <!-- SUA DIV DO CAPTCHA AQUI -->
+        <div class="captcha-placeholder">
+          <p>Aqui entra o CAPTCHA dessa opção</p>
+        </div>
+
+        <button class="btn-votar">votar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTICIPANTE 2 -->
+  <div class="participante" data-nome="Ray">
+    <div class="info">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg" alt="">
+      <div class="texto">
+        <div class="nome">Ray</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+
+    <!-- CAIXA CAPTCHA -->
+    <div class="captcha-wrapper">
+      <div class="captcha-box">
+        <div class="captcha-placeholder">
+          <p>Aqui entra o CAPTCHA dessa opção</p>
+        </div>
+
+        <button class="btn-votar">votar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTICIPANTE 3 -->
+  <div class="participante" data-nome="Toninho">
+    <div class="info">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg" alt="">
+      <div class="texto">
+        <div class="nome">Toninho</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+
+    <!-- CAIXA CAPTCHA -->
+    <div class="captcha-wrapper">
+      <div class="captcha-box">
+        <div class="captcha-placeholder">
+          <p>Aqui entra o CAPTCHA dessa opção</p>
+        </div>
+
+        <button class="btn-votar">votar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- POPUP DE VOTO CONFIRMADO -->
+<div class="overlay" id="popupConfirmacao">
+  <div class="popup">
+    <div class="popup-cabecalho">Seu voto</div>
+
+    <div class="popup-conteudo">
+      <img id="popupFoto" src="" alt="">
+      <h2 id="popupNome"></h2>
+
+      <button class="btn-novamente" onclick="location.reload()">
+        Votar Novamente
+      </button>
+    </div>
+  </div>
+</div>
+
+
+</body>
+
+<script>
+let participanteSelecionado = null;
+window.recaptchaWidgets = {};
+window.recaptchaCarregado = false;
+const participantes = document.querySelectorAll(".participante");
+const popupConfirmacao = document.getElementById("popupConfirmacao");
+
+const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
+const SITE_KEY = "6LerWh4sAAAAAHpIbJkhbH558D1nXfz-gqdTNYqs"; 
+  
+window.onloadCallback = function () {
+    window.recaptchaCarregado = true;
+    
+    IDs_PARTICIPANTES.forEach(nome => {
+        criarCaptcha(nome);
+    });
+};
+
+function criarCaptcha(nome) {
+    const nomeMinusculo = nome.toLowerCase();
+    
+    const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
+    
+    const captchaID = `captcha-widget-${nomeMinusculo}`;
+    placeholder.id = captchaID;
+
+    placeholder.innerHTML = '';
+    
+    const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
+
+    const widget = grecaptcha.render(captchaID, {
+        sitekey: SITE_KEY,
+        callback: function () {
+            btnVotar.classList.add("habilitado");
+            btnVotar.disabled = false;
+        },
+        'expired-callback': function() {
+            btnVotar.classList.remove("habilitado");
+            btnVotar.disabled = true;
+        }
+    });
+
+    window.recaptchaWidgets[nome] = widget;
+}
+
+participantes.forEach(participante => {
+    const info = participante.querySelector(".info");
+
+    info.addEventListener("click", () => {
+        const nome = participante.getAttribute("data-nome");
+        
+        if (participante === participanteSelecionado) {
+            deselecionarParticipante(participante);
+            participanteSelecionado = null;
+        } else {
+          
+            if (participanteSelecionado) {
+                deselecionarParticipante(participanteSelecionado);
+            }
+ 
+            selecionarParticipante(participante, nome);
+            participanteSelecionado = participante;
+        }
+    });
+});
+
+function selecionarParticipante(participante, nome) {
+    participante.classList.add("selecionado");
+    
+    const captchaWrapper = participante.querySelector(".captcha-wrapper");
+    captchaWrapper.classList.add("aberto");
+    
+    const widgetId = window.recaptchaWidgets[nome];
+    if (widgetId !== undefined) {
+        grecaptcha.reset(widgetId);
+    }
+}
+
+function deselecionarParticipante(participante) {
+  
+    participante.classList.remove("selecionado");
+  
+    const captchaWrapper = participante.querySelector(".captcha-wrapper");
+    captchaWrapper.classList.remove("aberto");
+
+    const btnVotar = participante.querySelector(".btn-votar");
+    btnVotar.classList.remove("habilitado");
+    btnVotar.disabled = true;
+}
+
+participantes.forEach(participante => {
+    const btnVotar = participante.querySelector(".btn-votar");
+
+    btnVotar.addEventListener("click", async (event) => {
+        event.preventDefault(); 
+        
+        if (!btnVotar.classList.contains("habilitado")) {
+            alert("Por favor, complete o reCAPTCHA primeiro.");
+            return;
+        }
+
+        const nome = participante.getAttribute("data-nome");
+        const fotoSrc = participante.querySelector(".foto").src;
+
+        console.log(`Voto para ${nome} simulado com sucesso!`);
+
+        exibirPopupConfirmacao(nome, fotoSrc);
+
+        participantes.forEach(p => {
+            p.querySelector(".info").style.pointerEvents = 'none';
+        });
+    });
+});
+
+function exibirPopupConfirmacao(nome, fotoSrc) {
+    const popupNome = document.getElementById("popupNome");
+    const popupFoto = document.getElementById("popupFoto");
+
+    popupNome.textContent = `Voto em ${nome} CONFIRMADO!`;
+    popupFoto.src = fotoSrc;
+    
+    popupConfirmacao.classList.add("mostrar");
+}
+
+</script>
+</html>
