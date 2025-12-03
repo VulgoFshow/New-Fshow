@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <title>Enquete - A Fazenda 17</title>
 
-<!-- reCAPTCHA -->
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-
 <style>
 /* ============================================
    VARIÁVEIS
@@ -286,184 +283,327 @@ body {
 .btn-resultado:hover i { transform: translateX(4px); }
 </style>
 </head>
+
 <body>
 
 <div class="enquete">
-  <!-- TÍTULO -->
   <div class="header">
     <h1>ENQUETE</h1>
     <p>Quem você quer que FIQUE em "A Fazenda 17"?</p>
   </div>
 
   <!-- PARTICIPANTE 1 -->
-  <div class="participante" data-nome="Mesquita" style="--i:0">
+  <div class="participante" data-nome="Mesquita" data-votos="37" style="--i:0">
     <div class="info">
-      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg" alt="Mesquita">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/SMTPBVYQKJA6NALLFXPR7X2OEU.jpg">
       <div class="texto">
         <div class="nome">Mesquita</div>
         <div class="clique">Clique para votar</div>
       </div>
     </div>
     <div class="captcha-wrapper">
-      <div class="captcha-placeholder"></div>
       <button class="btn-votar">Votar</button>
     </div>
   </div>
 
   <!-- PARTICIPANTE 2 -->
-  <div class="participante" data-nome="Ray" style="--i:1">
+  <div class="participante" data-nome="Ray" data-votos="52" style="--i:1">
     <div class="info">
-      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg" alt="Ray">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/6NDU3EL2QVBURKE2WHCUDDCOQ4.jpg">
       <div class="texto">
         <div class="nome">Ray</div>
         <div class="clique">Clique para votar</div>
       </div>
     </div>
     <div class="captcha-wrapper">
-      <div class="captcha-placeholder"></div>
       <button class="btn-votar">Votar</button>
     </div>
   </div>
 
   <!-- PARTICIPANTE 3 -->
-  <div class="participante" data-nome="Toninho" style="--i:2">
+  <div class="participante" data-nome="Toninho" data-votos="11" style="--i:2">
     <div class="info">
-      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg" alt="Toninho">
+      <img class="foto" src="https://cloudfront-us-east-1.images.arcpublishing.com/newr7/GWAIB53P3JB2RAIEEVZB2QA4TU.jpg">
       <div class="texto">
         <div class="nome">Toninho</div>
         <div class="clique">Clique para votar</div>
       </div>
     </div>
     <div class="captcha-wrapper">
-      <div class="captcha-placeholder"></div>
       <button class="btn-votar">Votar</button>
     </div>
   </div>
 </div>
 
-<!-- POPUP CONFIRMAÇÃO -->
+
+<!-- POPUP DE CONFIRMAÇÃO -->
 <div class="overlay" id="popupConfirmacao">
   <div class="popup">
     <div class="popup-top">
-      <span>✓ Voto registrado com sucesso!</span>
+      <i>✓</i>
+      <span>Voto registrado!</span>
     </div>
+
     <div class="popup-conteudo">
       <div class="popup-esq">
         <h2 id="popupNome"></h2>
-        <div class="btn-resultado" onclick="location.reload()">
-          <span>Votar novamente</span>
-          <i>→</i>
+
+        <!-- NOVO BOTÃO "VER RESULTADOS" -->
+        <div class="btn-resultado" onclick="abrirResultados()">
+          Ver resultados <i>→</i>
         </div>
+
+        <!-- BOTÃO NOVO "VOTAR NOVAMENTE" -->
+        <button class="btn-novamente" onclick="location.reload()">
+          Votar novamente
+        </button>
       </div>
-      <img id="popupFoto" class="popup-foto" src="" alt="">
+
+      <img id="popupFoto" class="popup-foto" src="">
     </div>
   </div>
 </div>
 
-<script>
-let participanteSelecionado = null;
-window.recaptchaWidgets = {};
-window.recaptchaCarregado = false;
 
-const participantes = document.querySelectorAll(".participante");
+<!-- POPUP DE RESULTADOS (NOVO) -->
+<div class="overlay" id="popupResultados">
+  <div class="popup" style="max-width:420px; padding:30px">
+
+    <h2 style="margin:0 0 20px; font-size:26px; text-align:center;">
+      Resultados da votação
+    </h2>
+
+    <div id="resultadoLista"></div>
+
+    <button class="btn-novamente" style="margin-top:25px"
+      onclick="fecharResultados()">
+      Fechar resultados
+    </button>
+
+  </div>
+</div>
+
+
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+/* ========== FIREBASE CONFIG ========== */
+const firebaseConfig = {
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ========== ELEMENTOS ========== */
+const participantes = Array.from(document.querySelectorAll(".participante"));
 const popupConfirmacao = document.getElementById("popupConfirmacao");
-const IDs_PARTICIPANTES = ["Mesquita", "Ray", "Toninho"];
-const SITE_KEY = "6LerWh4sAAAAAHpIbJkhbH558D1nXfz-gqdTNYqs";
+const popupResultados = document.getElementById("popupResultados");
+const resultadoLista = document.getElementById("resultadoLista");
 
-window.onloadCallback = function () {
-    window.recaptchaCarregado = true;
-    IDs_PARTICIPANTES.forEach(nome => criarCaptcha(nome));
+/* Inicializa data-votos se não tiver */
+participantes.forEach(p => {
+  if (!p.dataset.votos) p.dataset.votos = 0;
+});
+
+/* ========== UI: ripple + abrir/fechar ========== */
+let participanteSelecionado = null;
+function criarRipple(event) {
+  const info = event.currentTarget;
+  info.classList.add("ripple");
+  setTimeout(() => info.classList.remove("ripple"), 600);
+}
+
+function abrir(p) {
+  p.classList.add("selecionado");
+  p.querySelector(".captcha-wrapper").classList.add("aberto");
+  const btn = p.querySelector(".btn-votar");
+  btn.classList.add("habilitado");
+  btn.disabled = false;
+}
+
+function fechar(p) {
+  p.classList.remove("selecionado");
+  p.querySelector(".captcha-wrapper").classList.remove("aberto");
+  const btn = p.querySelector(".btn-votar");
+  btn.classList.remove("habilitado");
+  btn.disabled = true;
+}
+
+participantes.forEach(participante => {
+  const info = participante.querySelector(".info");
+  info.addEventListener("click", criarRipple);
+  info.addEventListener("click", () => {
+    if (participante === participanteSelecionado) {
+      fechar(participante);
+      participanteSelecionado = null;
+    } else {
+      if (participanteSelecionado) fechar(participanteSelecionado);
+      abrir(participante);
+      participanteSelecionado = participante;
+    }
+  });
+});
+
+participantes.forEach(p => {
+  const btn = p.querySelector(".btn-votar");
+  btn.disabled = true;
+});
+
+/* ========== FIRESTORE: coleção única ========== */
+const COLECAO_VOTOS = "fazendeiroenquete";
+
+function conectarSnapshotVotos() {
+  const ref = collection(db, COLECAO_VOTOS);
+  onSnapshot(ref, snapshot => {
+
+    // zera todos os votos antes de recalcular
+    participantes.forEach(p => p.dataset.votos = 0);
+
+    // soma os votos existentes no Firestore
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const nome = data && data.nome;
+      if (!nome) return;
+
+      const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+      if (p) {
+        p.dataset.votos = Number(p.dataset.votos) + 1;
+      }
+    });
+
+    console.log("[onSnapshot] votos atualizados:", participantes.map(p => `${p.dataset.nome}: ${p.dataset.votos}`));
+  }, err => {
+    console.error("Erro onSnapshot votos:", err);
+  });
+}
+
+
+conectarSnapshotVotos();
+
+/* ========== Registrar voto (addDoc na mesma coleção) ========== */
+async function registrarVoto(nome) {
+  try {
+    const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+    const btn = p.querySelector(".btn-votar");
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+
+    await addDoc(collection(db, COLECAO_VOTOS), {
+      nome: nome,
+      timestamp: new Date()
+    });
+
+    console.log("Voto registrado no Firestore para:", nome);
+
+    setTimeout(() => {
+      if (btn) {
+        btn.textContent = "Votar";
+      }
+    }, 700);
+
+    return true;
+  } catch (e) {
+    console.error("Erro ao registrar voto:", e);
+    alert("Erro ao registrar voto. Verifique regras do Firestore e console.");
+    const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+    if (p) {
+      const btn = p.querySelector(".btn-votar");
+      btn.disabled = false;
+      btn.textContent = "Votar";
+    }
+    return false;
+  }
+}
+
+
+/* ========== integrar botão de votar ========== */
+participantes.forEach(p => {
+  const btn = p.querySelector(".btn-votar");
+
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    if (btn.disabled) return;
+
+    const nome = p.dataset.nome;
+    const foto = p.querySelector(".foto").src;
+
+    const ok = await registrarVoto(nome);
+    if (!ok) return;
+
+    // mostra popup confirmação
+    document.getElementById("popupNome").textContent = nome;
+    document.getElementById("popupFoto").src = foto;
+    popupConfirmacao.classList.add("mostrar");
+
+    participantes.forEach(pp => pp.querySelector(".info").style.pointerEvents = "none");
+  });
+});
+
+/* ========== POPUP RESULTADOS ========== */
+function abrirResultados() {
+  resultadoLista.innerHTML = "";
+
+  let total = 0;
+  participantes.forEach(p => total += Number(p.dataset.votos || 0));
+
+  if (total === 0) {
+    resultadoLista.innerHTML = `<div style="text-align:center; color:#666; padding:20px;">Ainda não há votos.</div>`;
+    popupResultados.classList.add("mostrar");
+    return;
+  }
+
+  const arr = participantes.map(p => ({
+    nome: p.dataset.nome,
+    votos: Number(p.dataset.votos || 0),
+    foto: p.querySelector(".foto").src
+  }));
+  arr.sort((a,b) => b.votos - a.votos);
+
+  arr.forEach(item => {
+    const pct = ((item.votos / total) * 100).toFixed(2);
+    resultadoLista.innerHTML += `
+      <div style="display:flex; align-items:center; margin-bottom:16px; gap:14px;">
+        <img src="${item.foto}" style="width:62px; height:62px; border-radius:10px; object-fit:cover;">
+        <div style="flex:1;">
+          <div style="font-size:19px; font-weight:700;">${item.nome}</div>
+          <div style="font-size:15px; color:#666;">
+            ${item.votos} votos • ${pct}%
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  popupResultados.classList.add("mostrar");
+}
+function fecharResultados() { popupResultados.classList.remove("mostrar"); }
+
+window.abrirResultados = abrirResultados;
+window.fecharResultados = fecharResultados;
+
+/* ========== DEBUG helpers ========== */
+window._ENQUETE_debug = {
+  colecao: COLECAO_VOTOS,
+  logParticipants: () => participantes.map(p => ({nome: p.dataset.nome, votos: p.dataset.votos}))
 };
 
-function criarCaptcha(nome) {
-    const placeholder = document.querySelector(`.participante[data-nome="${nome}"] .captcha-placeholder`);
-    const captchaID = `captcha-${nome.toLowerCase()}`;
-    placeholder.id = captchaID;
-    placeholder.innerHTML = '';
-
-    const btnVotar = document.querySelector(`.participante[data-nome="${nome}"] .btn-votar`);
-    const widget = grecaptcha.render(captchaID, {
-        sitekey: SITE_KEY,
-        callback: () => {
-            btnVotar.classList.add("habilitado");
-            btnVotar.disabled = false;
-        },
-        'expired-callback': () => {
-            btnVotar.classList.remove("habilitado");
-            btnVotar.disabled = true;
-        }
-    });
-    window.recaptchaWidgets[nome] = widget;
-}
-
-// Efeito ripple no clique
-function criarRipple(event) {
-    const info = event.currentTarget;
-    info.classList.add("ripple");
-    setTimeout(() => info.classList.remove("ripple"), 600);
-}
-
-participantes.forEach(participante => {
-    const info = participante.querySelector(".info");
-    info.addEventListener("click", criarRipple);
-
-    info.addEventListener("click", () => {
-        const nome = participante.getAttribute("data-nome");
-
-        if (participante === participanteSelecionado) {
-            deselecionarParticipante(participante);
-            participanteSelecionado = null;
-        } else {
-            if (participanteSelecionado) deselecionarParticipante(participanteSelecionado);
-            selecionarParticipante(participante, nome);
-            participanteSelecionado = participante;
-        }
-    });
-});
-
-function selecionarParticipante(participante, nome) {
-    participante.classList.add("selecionado");
-    const captchaWrapper = participante.querySelector(".captcha-wrapper");
-    captchaWrapper.classList.add("aberto");
-
-    const widgetId = window.recaptchaWidgets[nome];
-    if (widgetId !== undefined) grecaptcha.reset(widgetId);
-}
-
-function deselecionarParticipante(participante) {
-    participante.classList.remove("selecionado");
-    const captchaWrapper = participante.querySelector(".captcha-wrapper");
-    captchaWrapper.classList.remove("aberto");
-    const btnVotar = participante.querySelector(".btn-votar");
-    btnVotar.classList.remove("habilitado");
-    btnVotar.disabled = true;
-}
-
-participantes.forEach(participante => {
-    const btnVotar = participante.querySelector(".btn-votar");
-    btnVotar.addEventListener("click", async (e) => {
-        e.preventDefault();
-        if (!btnVotar.classList.contains("habilitado")) {
-            alert("Complete o reCAPTCHA primeiro!");
-            return;
-        }
-
-        const nome = participante.getAttribute("data-nome");
-        const fotoSrc = participante.querySelector(".foto").src;
-
-        console.log(`Voto para ${nome} registrado com sucesso!`);
-        exibirPopupConfirmacao(nome, fotoSrc);
-
-        // Desabilita outros cards
-        participantes.forEach(p => p.querySelector(".info").style.pointerEvents = 'none');
-    });
-});
-
-function exibirPopupConfirmacao(nome, fotoSrc) {
-    document.getElementById("popupNome").textContent = nome;
-    document.getElementById("popupFoto").src = fotoSrc;
-    popupConfirmacao.classList.add("mostrar");
-}
+console.log("Script enquete iniciado. Coleção usada:", COLECAO_VOTOS);
+console.log("Run _ENQUETE_debug.logParticipants() no console para ver contadores.");
 </script>
 </body>
 </html>
