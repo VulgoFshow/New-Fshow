@@ -1,176 +1,219 @@
-<script>
-window.recaptchaCarregado = false;
-window.recaptchaWidgets = {};
-function onloadCallback() {
-  window.recaptchaCarregado = true;
-}
-</script>
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-
-<!-- ====================== SCRIPT ============================ -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp }
-  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-const app = initializeApp({
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+/* ========== FIREBASE CONFIG ========== */
+const firebaseConfig = {
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
   authDomain: "enquete-fa527.firebaseapp.com",
   projectId: "enquete-fa527",
   storageBucket: "enquete-fa527.firebasestorage.app",
   messagingSenderId: "544422121318",
   appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
-});
-
+};
+const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// =========================
-// VARIÁVEIS
-// =========================
-let escolha = null;
-let escolhaImg = null;
-let captchaToken = null;
+/* ========== ELEMENTOS ========== */
+const participantes = Array.from(document.querySelectorAll(".participante"));
+const popupConfirmacao = document.getElementById("popupConfirmacao");
+const popupResultados = document.getElementById("popupResultados");
+const resultadoLista = document.getElementById("resultadoLista");
 
-// =========================
-// ELEMENTOS DO POPUP
-// =========================
-const popup = document.getElementById("popupVoto");
-const popupNome = document.getElementById("popupNome");
-const popupImg = document.getElementById("popupImg");
+/* Inicializa data-votos se não tiver */
+participantes.forEach(p => {
+  if (!p.dataset.votos) p.dataset.votos = 0;
+});
 
-// =========================
-// FUNÇÕES EXTRAS
-// =========================
+/* ========== UI: ripple + abrir/fechar ========== */
+let participanteSelecionado = null;
+function criarRipple(event) {
+  const info = event.currentTarget;
+  info.classList.add("ripple");
+  setTimeout(() => info.classList.remove("ripple"), 600);
+}
 
-// Recarrega só a caixa-enquete
-window.recarregarEnquete = function () {
-    const caixa = document.querySelector(".caixa-enquete");
+function abrir(p) {
+  p.classList.add("selecionado");
+  p.querySelector(".captcha-wrapper").classList.add("aberto");
+  const btn = p.querySelector(".btn-votar");
+  btn.classList.add("habilitado");
+  btn.disabled = false;
+}
 
-    popup.classList.remove("ativo");
-    caixa.style.opacity = "0";
+function fechar(p) {
+  p.classList.remove("selecionado");
+  p.querySelector(".captcha-wrapper").classList.remove("aberto");
+  const btn = p.querySelector(".btn-votar");
+  btn.classList.remove("habilitado");
+  btn.disabled = true;
+}
 
-    fetch(window.location.href)
-        .then(res => res.text())
-        .then(html => {
-            const temp = document.createElement("div");
-            temp.innerHTML = html;
+participantes.forEach(participante => {
+  const info = participante.querySelector(".info");
+  info.addEventListener("click", criarRipple);
+  info.addEventListener("click", () => {
+    if (participante === participanteSelecionado) {
+      fechar(participante);
+      participanteSelecionado = null;
+    } else {
+      if (participanteSelecionado) fechar(participanteSelecionado);
+      abrir(participante);
+      participanteSelecionado = participante;
+    }
+  });
+});
 
-            const novaCaixa = temp.querySelector(".caixa-enquete");
-            if (novaCaixa) caixa.innerHTML = novaCaixa.innerHTML;
+participantes.forEach(p => {
+  const btn = p.querySelector(".btn-votar");
+  btn.disabled = true;
+});
 
-            caixa.style.opacity = "1";
-        });
-};
+/* ========== FIRESTORE: coleção única ========== */
+const COLECAO_VOTOS = "fazendeiroenquete";
 
-// Carrega HTML dentro da caixa
-window.abrirResultadoNaCaixa = function (url) {
-    const caixa = document.querySelector(".caixa-enquete");
+function conectarSnapshotVotos() {
+  const ref = collection(db, COLECAO_VOTOS);
+  onSnapshot(ref, snapshot => {
 
-    fetch(url)
-        .then(res => res.text())
-        .then(html => {
-            caixa.innerHTML = html;
-        });
+    // zera todos os votos antes de recalcular
+    participantes.forEach(p => p.dataset.votos = 0);
 
-    popup.classList.remove("ativo");
-};
+    // soma os votos existentes no Firestore
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const nome = data && data.nome;
+      if (!nome) return;
 
-
-// =========================
-// SISTEMA DA ENQUETE
-// =========================
-document.addEventListener("DOMContentLoaded", () => {
-  const wrappers = document.querySelectorAll(".opcao-wrapper");
-  const headerNome = document.getElementById("selecionadoNome");
-
-  wrappers.forEach(wrapper => {
-    const radio = wrapper.querySelector("input[type=radio]");
-    const votarBtn = wrapper.querySelector(".botao");
-    const processando = wrapper.querySelector(".processando");
-    const captchaContainer = wrapper.querySelector(".captcha-widget");
-
-    votarBtn.disabled = true;
-    votarBtn.classList.add("desativado");
-
-    // =====================================
-    // QUANDO CLICA NA OPÇÃO
-    // =====================================
-    wrapper.querySelector(".opcao").addEventListener("click", () => {
-
-      // Limpa TODAS as opções antes
-      wrappers.forEach(w => {
-        w.classList.remove("active");
-        w.querySelector(".botao").disabled = true;
-        w.querySelector(".botao").classList.add("desativado");
-        w.querySelector(".captcha-widget").innerHTML = "";
-      });
-
-      wrapper.classList.add("active");
-      radio.checked = true;
-
-      escolha = wrapper.dataset.nome;
-      escolhaImg = wrapper.dataset.img;
-      headerNome.innerText = escolha;
-
-      captchaToken = null;
-      votarBtn.disabled = true;
-      votarBtn.classList.add("desativado");
-
-      captchaContainer.innerHTML = `<div id="recaptcha-${escolha}"></div>`;
-
-      // Aguarda o grecaptcha carregar
-      const esperar = setInterval(() => {
-        if (window.grecaptcha && window.recaptchaCarregado) {
-          clearInterval(esperar);
-
-          // Se já existe → reset
-          if (window.recaptchaWidgets[escolha] !== undefined) {
-            grecaptcha.reset(window.recaptchaWidgets[escolha]);
-          } else {
-            // Cria novo reCAPTCHA
-            window.recaptchaWidgets[escolha] = grecaptcha.render(`recaptcha-${escolha}`, {
-              sitekey: "6LceYRgsAAAAAER3wwtNOWHTDl0n86O-wV8fnaDg",
-              callback: token => {
-                captchaToken = token;
-                votarBtn.disabled = false;
-                votarBtn.classList.remove("desativado");
-              }
-            });
-          }
-
-        }
-      }, 200);
-
-    });
-
-    // =====================================
-    // BOTÃO "VOTAR"
-    // =====================================
-    votarBtn.addEventListener("click", async () => {
-      if (!captchaToken) return;
-
-      votarBtn.disabled = true;
-      votarBtn.classList.add("desativado");
-      processando.style.display = "block";
-
-      const quantidade = Math.floor(Math.random() * 3) + 3;
-
-      for (let i = 0; i < quantidade; i++) {
-        await addDoc(collection(db, "finalagc4"), {
-          participante: escolha,
-          horario: serverTimestamp()
-        });
+      const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+      if (p) {
+        p.dataset.votos = Number(p.dataset.votos) + 1;
       }
-
-      // MOSTRAR POPUP
-      popupNome.innerText = escolha;
-      popupImg.src = escolhaImg;
-
-      popup.classList.add("ativo");
     });
 
+    console.log("[onSnapshot] votos atualizados:", participantes.map(p => `${p.dataset.nome}: ${p.dataset.votos}`));
+  }, err => {
+    console.error("Erro onSnapshot votos:", err);
+  });
+}
+
+
+conectarSnapshotVotos();
+
+/* ========== Registrar voto (addDoc na mesma coleção) ========== */
+async function registrarVoto(nome) {
+  try {
+    const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+    const btn = p.querySelector(".btn-votar");
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+
+    await addDoc(collection(db, COLECAO_VOTOS), {
+      nome: nome,
+      timestamp: new Date()
+    });
+
+    console.log("Voto registrado no Firestore para:", nome);
+
+    setTimeout(() => {
+      if (btn) {
+        btn.textContent = "Votar";
+      }
+    }, 700);
+
+    return true;
+  } catch (e) {
+    console.error("Erro ao registrar voto:", e);
+    alert("Erro ao registrar voto. Verifique regras do Firestore e console.");
+    const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+    if (p) {
+      const btn = p.querySelector(".btn-votar");
+      btn.disabled = false;
+      btn.textContent = "Votar";
+    }
+    return false;
+  }
+}
+
+
+/* ========== integrar botão de votar ========== */
+participantes.forEach(p => {
+  const btn = p.querySelector(".btn-votar");
+
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    if (btn.disabled) return;
+
+    const nome = p.dataset.nome;
+    const foto = p.querySelector(".foto").src;
+
+    const ok = await registrarVoto(nome);
+    if (!ok) return;
+
+    // mostra popup confirmação
+    document.getElementById("popupNome").textContent = nome;
+    document.getElementById("popupFoto").src = foto;
+    popupConfirmacao.classList.add("mostrar");
+
+    participantes.forEach(pp => pp.querySelector(".info").style.pointerEvents = "none");
+  });
+});
+
+/* ========== POPUP RESULTADOS ========== */
+function abrirResultados() {
+  resultadoLista.innerHTML = "";
+
+  let total = 0;
+  participantes.forEach(p => total += Number(p.dataset.votos || 0));
+
+  if (total === 0) {
+    resultadoLista.innerHTML = `<div style="text-align:center; color:#666; padding:20px;">Ainda não há votos.</div>`;
+    popupResultados.classList.add("mostrar");
+    return;
+  }
+
+  const arr = participantes.map(p => ({
+    nome: p.dataset.nome,
+    votos: Number(p.dataset.votos || 0),
+    foto: p.querySelector(".foto").src
+  }));
+  arr.sort((a,b) => b.votos - a.votos);
+
+  arr.forEach(item => {
+    const pct = ((item.votos / total) * 100).toFixed(2);
+    resultadoLista.innerHTML += `
+      <div style="display:flex; align-items:center; margin-bottom:16px; gap:14px;">
+        <img src="${item.foto}" style="width:62px; height:62px; border-radius:10px; object-fit:cover;">
+        <div style="flex:1;">
+          <div style="font-size:19px; font-weight:700;">${item.nome}</div>
+          <div style="font-size:15px; color:#666;">
+            ${item.votos} votos • ${pct}%
+          </div>
+        </div>
+      </div>
+    `;
   });
 
-});
+  popupResultados.classList.add("mostrar");
+}
+function fecharResultados() { popupResultados.classList.remove("mostrar"); }
+
+window.abrirResultados = abrirResultados;
+window.fecharResultados = fecharResultados;
+
+/* ========== DEBUG helpers ========== */
+window._ENQUETE_debug = {
+  colecao: COLECAO_VOTOS,
+  logParticipants: () => participantes.map(p => ({nome: p.dataset.nome, votos: p.dataset.votos}))
+};
+
+console.log("Script enquete iniciado. Coleção usada:", COLECAO_VOTOS);
+console.log("Run _ENQUETE_debug.logParticipants() no console para ver contadores.");
 </script>
