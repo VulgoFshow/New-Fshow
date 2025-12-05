@@ -1,0 +1,1104 @@
+<!DOCTYPE html>  <html lang="pt-BR">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Fshow | Portal Flop - THE NEXT LEVEL</title>  
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">  
+    <style>  
+        /* ==================================== */  
+        /* VARIÁVEIS E CONFIGURAÇÃO GLOBAL */  
+        /* ==================================== */  
+        :root {  
+            --orange-vibrant: #FF8C00;  
+            --purple-dark: #8A2BE2;  
+            --text-primary: #121212;  
+            --text-light: #f0f0f0;  
+            --gradient-main: linear-gradient(90deg, var(--orange-vibrant) 0%, var(--purple-dark) 100%);  
+            --gradient-reversed: linear-gradient(90deg, var(--purple-dark) 0%, var(--orange-vibrant) 100%);  
+            --bg-page: #f9f9f9;  
+        }  * {  
+        margin: 0;  
+        padding: 0;  
+        box-sizing: border-box;  
+    }  
+
+    body {  
+
+        background-color: var(--bg-page);  
+        color: var(--text-primary);  
+        line-height: 1.6;  
+    }  
+
+    a {  
+        text-decoration: none;  
+        color: inherit;  
+    }  
+
+    /* Botão de Ação OUSADO */  
+    .btn-action {  
+        display: inline-block;  
+        padding: 10px 25px;  
+        background: var(--gradient-reversed);  
+        color: white;  
+        font-weight: 700;  
+        border-radius: 5px;  
+        transition: all 0.3s ease;  
+        box-shadow: 0 5px 15px rgba(138, 43, 226, 0.5); /* Sombra roxa ousada */  
+        text-transform: uppercase;  
+    }  
+
+    .btn-action:hover {  
+        box-shadow: 0 8px 25px rgba(255, 140, 0, 0.7); /* Sombra laranja no hover */  
+        transform: translateY(-2px);  
+    }  
+
+    .container {  
+        width: 90%;  
+        max-width: 1300px;  
+        margin: 0 auto;  
+        padding: 30px 0;  
+    }
+
+/* ==================================== /
+/ 1. CABEÇALHO (HEADER CORRIGIDO) /
+/ ==================================== */
+
+/* Header */
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #f5f5f5;
+}
+
+/* Header */
+/* HEADER COMPACTO */
+.header {
+    background: var(--text-primary);
+    padding: 12px 5%;
+    height: 65px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2000;
+}
+
+/* LOGO À DIREITA */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;   /* empurra para direita */
+}
+
+.logo-container img {
+    height: 40px;
+}
+
+.logo-container span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.9em;
+    letter-spacing: 2px;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* BOTÃO HAMBÚRGUER À ESQUERDA */
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    width: 26px;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+}
+
+/* MENU OCULTO */
+.nav-menu {
+    position: absolute;
+    left: 10px;
+    top: 70px;               /* abaixo do header */
+    background: var(--text-primary);
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    z-index: 3000;
+}
+
+.nav-menu.open {
+    display: flex;
+}
+
+.nav-menu a {
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+/* Botão dentro do menu */
+.nav-menu .btn-action {
+    margin-top: 10px;
+}
+
+.hero-banner {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 10px !important; 
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+    .hero-banner img {  
+        width: 100%;  
+        height: auto;  
+        display: block;  
+    }  
+      
+    .blitz-headline {  
+        display: flex;  
+        background: var(--gradient-reversed);  
+        color: white;  
+        border-radius: 10px;  
+        overflow: hidden;  
+        margin-bottom: 50px;  
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);  
+    }  
+
+    .blitz-content {  
+        padding: 40px;  
+        width: 60%;  
+        display: flex;  
+        flex-direction: column;  
+        justify-content: center;  
+    }  
+
+    .blitz-tag {  
+        font-family: 'Bebas Neue', sans-serif;  
+        font-size: 1.8em;  
+        color: var(--text-light);  
+        margin-bottom: 10px;  
+    }  
+
+    .blitz-content h1 {  
+        font-family: 'Bebas Neue', sans-serif;  
+        font-size: 3.8em;  
+        line-height: 1;  
+        margin-bottom: 20px;  
+        letter-spacing: 3px;  
+        color: var(--orange-vibrant); /* Laranja em destaque no fundo roxo */  
+        text-shadow: 2px 2px 0 var(--purple-dark);  
+    }  
+
+    .blitz-img {  
+        width: 40%;  
+        overflow: hidden;  
+    }  
+
+    .blitz-img img {  
+        width: 100%;  
+        height: 100%;  
+        object-fit: cover;  
+        transition: transform 0.5s;  
+    }  
+
+    .blitz-headline:hover .blitz-img img {  
+        transform: scale(1.05);  
+    }  
+
+    .section-title {  
+        font-family: 'Bebas Neue', sans-serif;  
+        font-size: 3em;  
+        letter-spacing: 2px;  
+        margin-bottom: 30px;  
+        color: var(--purple-dark);  
+        border-left: 6px solid var(--orange-vibrant);  
+        padding-left: 15px;  
+        display: inline-block;  
+    }  
+      
+    .news-grid {  
+        display: grid;  
+        grid-template-columns: 2fr 1fr; /* Layout assimétrico: 2/3 e 1/3 */  
+        gap: 40px;  
+    }  
+
+    .main-content {  
+        display: grid;  
+        grid-template-columns: repeat(2, 1fr);  
+        gap: 30px;  
+    }  
+
+    .side-content {  
+        background-color: white;  
+        border-radius: 10px;  
+        padding: 20px;  
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);  
+        border: 1px solid #eee;  
+    }  
+
+    .news-card {  
+        background: white;  
+        border-radius: 10px;  
+        overflow: hidden;  
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);  
+        transition: all 0.3s ease;  
+        position: relative;  
+    }  
+
+    .news-card::after {  
+        content: '';  
+        position: absolute;  
+        bottom: 0;  
+        left: 0;  
+        width: 100%;  
+        height: 5px;  
+        background: var(--gradient-main);  
+        transform: scaleX(0);  
+        transition: transform 0.4s ease-out;  
+        transform-origin: left;  
+    }  
+
+    .news-card:hover {  
+        transform: translateY(-5px);  
+    }  
+
+    .news-card:hover::after {  
+        transform: scaleX(1);  
+    }  
+
+    .card-img {  
+        width: 100%;  
+        height: 220px;  
+        object-fit: cover;  
+    }  
+
+    .card-content {  
+        padding: 20px;  
+    }  
+
+    .card-category {  
+        font-size: 0.9em;  
+        font-weight: 900;  
+        color: var(--purple-dark);  
+        text-transform: uppercase;  
+    }  
+
+    .card-content h3 {  
+        font-family: 'Bebas Neue', sans-serif;  
+        font-size: 1.6em;  
+        line-height: 1.2;  
+        margin: 5px 0 10px 0;  
+        letter-spacing: 0.5px;  
+    }  
+
+    .side-content h4 {  
+        font-family: 'Bebas Neue', sans-serif;  
+        font-size: 2.2em;  
+        color: var(--orange-vibrant);  
+        border-bottom: 3px solid var(--purple-dark);  
+        padding-bottom: 10px;  
+        margin-bottom: 20px;  
+    }  
+
+    .trend-item {  
+        display: flex;  
+        align-items: flex-start;  
+        padding: 15px 0;  
+        border-bottom: 1px dashed #eee;  
+    }  
+      
+    .trend-item:last-child {  
+        border-bottom: none;  
+    }  
+
+    .trend-number {  
+        font-family: 'Bebas Neue', sans-serif;  
+        font-size: 3em;  
+        font-weight: 900;  
+        margin-right: 15px;  
+        background: var(--gradient-main);  
+        -webkit-background-clip: text;  
+        -webkit-text-fill-color: transparent;  
+        line-height: 1;  
+    }  
+
+    .trend-item a {  
+        font-weight: 700;  
+        color: var(--text-primary);  
+        transition: color 0.3s;  
+    }  
+
+    .trend-item a:hover {  
+        color: var(--purple-dark);  
+    }
+
+.footer {
+background: var(--text-primary);
+color: white;
+padding: 45px 5%;
+margin-top: 60px;
+text-align: center;
+}
+
+.footer-logo img {
+height: 55px;
+filter: drop-shadow(0 0 8px var(--orange-vibrant));
+margin-bottom: 18px;
+}
+
+.footer-links {
+margin: 18px 0;
+}
+
+.footer-links a {
+margin: 0 15px;
+font-size: 0.95em;
+opacity: 0.8;
+transition: 0.3s;
+}
+
+.footer-links a:hover {
+opacity: 1;
+color: var(--orange-vibrant);
+}
+
+.social-icons {
+margin-top: 20px;
+}
+
+.social-icons a {
+display: inline-block;
+margin: 0 6px;
+padding: 10px;
+background: var(--purple-dark);
+color: white;
+border-radius: 50%;
+font-weight: 900;
+transition: background 0.3s;
+}
+
+.social-icons a:hover {
+background: var(--orange-vibrant);
+}
+
+@media (max-width: 768px) {
+
+    .header {
+        flex-direction: row;       
+        height: 60px;
+        padding: 10px 4%;
+    }
+
+    .logo-container img {
+        height: 36px;
+    }
+
+    .logo-container span {
+        font-size: 1.6em;
+    }
+
+    .nav-menu {
+        top: 60px;                       
+        left: 10px;
+    }
+}
+.nav-menu a {  
+    font-size: 0.85em;  
+    margin: 0;  
+    display: inline-block;  
+}  
+
+.btn-action {  
+    padding: 8px 16px;  
+    font-size: 0.8em;  
+}  
+
+/* HERO */  
+.hero-banner img {  
+    height: auto;  
+}  
+
+/* BLITZ HEADLINE */  
+.blitz-headline {  
+    flex-direction: column;  
+    text-align: center;  
+}  
+.blitz-content {  
+    width: 100%;  
+    padding: 25px;  
+}  
+.blitz-img {  
+    width: 100%;  
+}  
+.blitz-content h1 {  
+    font-size: 2em;  
+    line-height: 1.1;  
+}  
+
+/* GRID DE NOTÍCIAS */  
+.news-grid {  
+    grid-template-columns: 1fr !important;  
+    gap: 25px;  
+}  
+
+.main-content {  
+    grid-template-columns: 1fr;  
+}  
+
+/* FOOTER */  
+.footer {  
+    padding: 40px 5%;  
+}  
+.footer-links {  
+    display: flex;  
+    flex-direction: column;  
+    gap: 10px;  
+}  
+.footer-links a {  
+    font-size: 0.9em;  
+    margin: 0;  
+}  
+.social-icons a {  
+    margin: 0 5px;  
+    padding: 8px;  
+}
+
+}
+
+.gradient-line {
+width: 100%;
+height: 6px;
+background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+background-size: 300% 300%;
+animation: rotateGradient 5s linear infinite;
+}
+
+/* Animação suave e contínua */
+@keyframes rotateGradient {
+0% { background-position: 0% 50%; }
+100% { background-position: 300% 50%; }
+}
+
+/* ==================================== */
+/* 6. CARROSSEL DE DESTAQUES */
+/* ==================================== */
+
+.carousel-section {
+    padding-top: 50px;
+}
+
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== TRACK ===== */
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* ===== SLIDE ===== */
+.carousel-slide {
+    min-width: 100%;
+    height: 420px;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+/* ===== IMAGEM ===== */
+.slide-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ===== OVERLAY ===== */
+.slide-content-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60%;
+    padding: 30px;
+    background: linear-gradient(90deg, rgba(138,43,226,0.9), rgba(255,140,0,0.85));
+    color: white;
+    border-top-right-radius: 12px;
+    box-shadow: 5px -5px 20px rgba(0,0,0,0.3);
+    z-index: 3; 
+    pointer-events: none; 
+}
+
+/* ===== BOTÕES — AGORA APARECEM ===== */
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 2em;
+    cursor: pointer;
+    z-index: 9999; 
+    border-radius: 8px;
+}
+
+.prev-control { left: 10px; }
+.next-control { right: 10px; }
+
+/* ===== INDICADORES ===== */
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10000;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.indicator.active-indicator {
+    background: var(--orange-vibrant);
+    transform: scale(1.2);
+    border: 2px solid var(--purple-dark);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .carousel-slide {
+        height: 340px;
+    }
+
+    .slide-content-overlay {
+        width: 100%;
+        padding: 15px;
+        border-radius: 0;
+    }
+
+    .carousel-control { display: none; }
+}
+
+/* =============================== */
+/*       BOTÕES DE NAVEGAÇÃO      */
+/* =============================== */
+
+.carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-size: 26px;
+    font-weight: 900;
+    
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(6px);
+
+    color: white;
+    cursor: pointer;
+    border: none;
+
+    border-radius: 50%; /* botão circular bonito */
+    z-index: 999;
+
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+
+    transition: 0.25s ease;
+}
+
+.carousel-control:hover {
+    background: rgba(255,255,255,0.35);
+    transform: translateY(-50%) scale(1.08);
+}
+
+/* Botão esquerdo */
+.prev-control {
+    left: 15px;
+}
+
+/* Botão direito */
+.next-control {
+    right: 15px;
+}
+
+@media (max-width: 768px) {
+    .carousel-control {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+    }
+}
+
+/* ========================= */
+/* STORIES
+/* ========================= */
+
+.stories-wrapper {
+  width: 100vw;
+  margin-left: calc(50% - 50vw); 
+  margin-right: calc(50% - 50vw);
+  background: var(--bg-page);
+  padding: 0px; 
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.stories-container {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 12px;
+  padding: 8px 12px;
+  scrollbar-width: none;
+  white-space: nowrap;       
+  scroll-behavior: smooth;    
+}
+
+.stories-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Bolinhas */
+.story,
+.storye {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: transform 0.25s ease;
+}
+
+/* Ativos */
+.story {
+  border: 3px solid var(--orange-vibrant);
+}
+
+/* Não vistos */
+.storye {
+  border: 3px solid var(--purple-dark);
+  filter: grayscale(100%);
+}
+
+/* Hover */
+.story:hover,
+.storye:hover {
+  transform: scale(1.1);
+}
+
+
+/* Imagem interna */
+.story img,
+.storye img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================= */
+/* ADORNOS ESPECIAIS DO SEU TEMA */
+/* ============================= */
+
+/* Chapéu */
+.story.chapeu::after {
+  content: "";
+  position: absolute;
+  top: -45px;
+  right: -31px;
+  width: 105px;
+  height: 95px;
+  background: url('https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png') no-repeat center/contain;
+  pointer-events: none;
+}
+
+/* Zona (alerta) */
+.story.zona::after {
+  content: "⚠️";
+  position: absolute;
+  top: -16px;
+  right: -11px;
+  font-size: 26px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+}
+
+/* Finalista */
+.story.final::after {
+  content: "🌟";
+  position: absolute;
+  top: -16px;
+  right: -11px;
+  font-size: 26px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+}
+
+/* Lâmpada */
+.story.lamp::after {
+  content: "";
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 60px;
+  height: 50px;
+  background: url('https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png') no-repeat center/contain;
+  pointer-events: none;
+}
+
+/* Inco */
+.story.inco::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -11px;
+  width: 43px;
+  height: 33px;
+  background: url('https://i.ibb.co/fd5gvrfZ/Chat-GPT-Image-26-de-out-de-2025-22-35-43-fotor-bg-remover-20251026223635.png') no-repeat center/contain;
+  pointer-events: none;
+}
+
+/* LINHA GRADIENTE ANIMADA */
+.gradient-line {
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+    background-size: 300% 300%;
+    animation: gradientMove 4s linear infinite;
+}
+
+/* Animação suave do gradiente */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+
+</style>  
+</head>  
+<body>  
+
+<header class="header">  <div class="menu-toggle" onclick="toggleMenu()">  
+    <span></span>  
+    <span></span>  
+    <span></span>  
+</div>  
+  
+<div class="logo-container">  
+    <img src="https://i.ibb.co/3yCzdJ59/logo-fshow.png" alt="Logo">  
+    <span>PORTAL FLOP</span>  
+</div>  
+
+<!-- Menu -->  
+<nav class="nav-menu" id="menu">  
+    <a href="#">Home</a>  
+    <a href="#">Notícias</a>  
+    <a href="#">Divas Pop</a>  
+    <a href="#">Vídeos</a>  
+    <a class="btn-action" href="#">Assinar Agora</a>  
+</nav>
+
+</header>
+
+<div class="gradient-line"></div>  
+    <section class="hero-banner">  
+        <img src="https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/bannerhallowen.png" alt="Banner de Halloween Ousado Fshow">  
+<div class="gradient-line"></div>  
+    </section>
+  
+ <!-- STORIES -->
+<div class="stories-wrapper">
+  <div class="stories-container">
+
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Alysson.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Cicero.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Davi.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Davi-Jose.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Emanuel.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="story final" style="background-image: url('agc/Eueu.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Flavia.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Gabi.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Gean.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Joao.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('/agc/Koyuh.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Lucas.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Luddi.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Ludmila.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Mariana.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('https://i.ibb.co/8nNkKgFW/Mikael-2.jpg');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Rodrigo.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Rose.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Tatah.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Tekitos.webp?raw=true');"></div></a>
+    <a href="index.html"><div class="storye" style="background-image: url('agc/Tety.webp?raw=true');"></div></a>
+
+  </div>
+</div>
+
+  </div>
+  
+    <article class="blitz-headline">  
+        <div class="blitz-content">  
+            <p class="blitz-tag">A FAZENDA 17</p>  
+            <h1>12° Roça formada!</h1>  
+            <p>Quem você quer que FIQUE? Vote na enquete!</p>  
+            <div style="margin-top: 20px;">  
+                <a href="flop-news/novaroça.html" class="btn-action">VOTAR</a>  
+            </div>  
+        </div>  
+        <div class="blitz-img">  
+            <img src="https://i.ibb.co/spmHGg0z/Roca124x3.jpg" alt="Imagem da Manchete Blitz">  
+        </div>  
+    </article>  
+      
+<section class="container carousel-section">
+    <h2 class="section-title">✨ DESTAQUES FSHOW</h2>
+
+    <div class="carousel-container">
+        <div class="carousel-track">
+
+<!-- SLIDE 1 -->
+<article class="carousel-slide current-slide">
+    <a href="https://forms.gle/TWxYq5gE23zeK2HR9" class="carousel-slide-link">
+        <div class="slide-img-wrapper">
+            <img class="slide-image" src="https://i.ibb.co/sdLqFYDd/comuawards.webp" alt="Comu Awards">
+        </div>
+
+        <div class="slide-content-overlay">
+            <p class="slide-tag">COMU AWARDS</p>
+            <h3 class="slide-title">Indicações abertas!</h3>
+        </div>
+    </a>
+</article>
+
+<!-- SLIDE 2 -->
+<article class="carousel-slide">
+    <a href="https://www.wattpad.com/story/404341343-o-%C3%BAltimo-herdeiro" class="carousel-slide-link">
+        <div class="slide-img-wrapper">
+            <img class="slide-image" src="https://i.ibb.co/3mxb4rTz/LastHeir.png" alt="Lest Heir">
+        </div>
+
+        <div class="slide-content-overlay">
+            <p class="slide-tag">WATTPAD</p>
+            <h3 class="slide-title">Lest Heir – Capítulo 3 disponível!</h3>
+        </div>
+    </a>
+</article>
+
+<!-- SLIDE 3 -->
+<article class="carousel-slide">
+    <a href="#" class="carousel-slide-link">
+        <div class="slide-img-wrapper">
+            <img class="slide-image" src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
+        </div>
+
+        <div class="slide-content-overlay">
+            <p class="slide-tag">BREAKING</p>
+            <h3 class="slide-title">Eueu vence A Grande Conquista 4!</h3>
+        </div>
+    </a>
+</article>
+</div>
+        <!-- BOTÕES -->
+        <button class="carousel-control prev-control">&#10094;</button>
+       <button class="carousel-control next-control">&#10095;</button>
+
+
+        <!-- INDICADORES -->
+        <div class="carousel-indicators">
+            <span class="indicator active-indicator" data-slide="0"></span>
+            <span class="indicator" data-slide="1"></span>
+            <span class="indicator" data-slide="2"></span>
+        </div>
+    </div>
+</section>
+
+
+
+    <h2 class="section-title">ÚLTIMAS DO FLOP</h2>  
+    <section class="news-grid">  
+
+        <div class="main-content">  
+       
+       <a href="flop-news/final.html" class="news-card-link">
+    <article class="news-card">  
+        <img class="card-img" src="https://i.ibb.co/HL932NpK/Final.jpg" alt="Notícia 2">  
+        <div class="card-content">  
+            <p class="card-category">A Grande Conquista 4</p>  
+            <h3>Eueu, Gean, Luddy e Mikael são os finalistas!</h3>  
+            <p style="font-size: 0.9em; color: var(--text-secondary);">
+                Vote na enquete! Quem será o campeão?
+            </p>  
+        </div>  
+    </article>  
+</a>
+
+ <a href="flop-news/finalistas2.html" class="news-card-link">
+    <article class="news-card">  
+        <img class="card-img" src="https://i.ibb.co/nMBCDdVZ/eueugean.jpg" alt="Eueu e Gean">  
+        <div class="card-content">  
+            <p class="card-category">A Grande Conquista 4</p>  
+            <h3>Eueu e Gean são os primeiros finalistas da temporada!</h3>  
+            <p style="font-size: 0.9em; color: var(--text-secondary);">
+                Sobreviventes da eliminação dupla, seguem para a grande final.
+            </p>  
+        </div>  
+    </article>  
+</a>
+
+<a href="ads/planos.html" class="news-card-link">
+    <article class="news-card">  
+        <img class="card-img" src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg" alt="Anuncie aqui">  
+        <div class="card-content">  
+            <p class="card-category">ADS</p>  
+            <h3>Anuncie Aqui</h3>  
+        </div>  
+    </article>  
+</a>
+
+        </div>  
+
+        <aside class="side-content">  
+            <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
+            <div class="trend-item">  
+                <span class="trend-number">01</span>  
+                <a href="#">Início das indicatórias ao Comu Awards</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">02</span>  
+                <a href="#">Final A Grande Conquista 4</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">03</span>  
+                <a href="#">Come Back? Tem gente voltando!</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">04</span>  
+                <a href="#">Recap anual do spotfy</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">05</span>  
+                <a href="#">Dudu Fazendeiro pela 4° vez</a>  
+            </div>  
+        </aside>  
+
+    </section>  
+      
+</div>  
+
+<footer class="footer">  
+    <div class="footer-logo">  
+        <img src="https://i.ibb.co/3yCzdJ59/logo-fshow.png" alt="Logo Fshow">  
+    </div>  
+    <div class="footer-links">  
+        <a href="https://www.youtube.com/@VulgoFlopp">YouTube</a>   
+        <a href="https://x.com/Euu_Phillip">X</a>   
+    </div>  
+    <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.6;">&copy; 2025 Fshow | Portal Flop - Pìxeels Productions LTDA</p>  
+</footer>
+
+<script>
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("open");
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.carousel-track');
+    let slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const nextButton = document.querySelector('.next-control');
+    const prevButton = document.querySelector('.prev-control');
+    const indicatorsContainer = document.querySelector('.carousel-indicators');
+
+    if (!slides.length) return;
+
+    slides.forEach(slide => {
+        slide.style.minWidth = '100%';
+    });
+
+    indicatorsContainer.innerHTML = '';
+    slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'indicator' + (i === 0 ? ' active-indicator' : '');
+        dot.type = 'button';
+        dot.setAttribute('data-index', i);
+        indicatorsContainer.appendChild(dot);
+    });
+    let indicators = Array.from(indicatorsContainer.querySelectorAll('.indicator'));
+
+    let currentSlideIndex = 0;
+
+    const updateCarousel = (targetIndex) => {
+        if (targetIndex < 0) targetIndex = slides.length - 1;
+        if (targetIndex >= slides.length) targetIndex = 0;
+
+        track.style.transform = `translateX(-${targetIndex * 100}%)`;
+        currentSlideIndex = targetIndex;
+
+        indicators.forEach(ind => ind.classList.remove('active-indicator'));
+        if (indicators[targetIndex]) indicators[targetIndex].classList.add('active-indicator');
+    };
+
+    nextButton.addEventListener('click', () => updateCarousel(currentSlideIndex + 1));
+    prevButton.addEventListener('click', () => updateCarousel(currentSlideIndex - 1));
+
+    indicatorsContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.indicator');
+        if (!btn) return;
+        const idx = Number(btn.getAttribute('data-index'));
+        if (!Number.isNaN(idx)) updateCarousel(idx);
+    });
+
+    const refreshSlides = () => {
+        slides = Array.from(document.querySelectorAll('.carousel-slide'));
+        indicatorsContainer.innerHTML = '';
+        slides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'indicator' + (i === currentSlideIndex ? ' active-indicator' : '');
+            dot.type = 'button';
+            dot.setAttribute('data-index', i);
+            indicatorsContainer.appendChild(dot);
+        });
+        indicators = Array.from(indicatorsContainer.querySelectorAll('.indicator'));
+        if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
+        updateCarousel(currentSlideIndex);
+    };
+
+    updateCarousel(0);
+});
+
+</script>
+
+
+</body>  
+</html>
