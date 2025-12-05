@@ -455,25 +455,99 @@ background: var(--orange-vibrant);
     grid-template-columns: 1fr;  
 }  
 
-/* FOOTER */  
-.footer {  
-    padding: 40px 5%;  
-}  
-.footer-links {  
-    display: flex;  
-    flex-direction: column;  
-    gap: 10px;  
-}  
-.footer-links a {  
-    font-size: 0.9em;  
-    margin: 0;  
-}  
-.social-icons a {  
-    margin: 0 5px;  
-    padding: 8px;  
+.footer {
+    background: linear-gradient(135deg, #121212, #1a1a1a);
+    padding: 55px 5%;
+    color: #fff;
+    text-align: center;
+    border-top: 4px solid var(--orange-vibrant);
+    position: relative;
 }
 
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+    background-size: 300% 300%;
+    animation: footerGradient 4s linear infinite;
 }
+
+@keyframes footerGradient {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+
+/* Logo */
+.footer-logo img {
+    height: 60px;
+    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.6));
+    margin-bottom: 25px;
+}
+
+/* Links */
+.footer-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 25px;
+    margin: 20px 0 35px 0;
+}
+
+.footer-links a {
+    font-size: 1em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #ddd;
+    transition: 0.3s ease-in-out;
+}
+
+.footer-links a:hover {
+    color: var(--orange-vibrant);
+    transform: translateY(-2px);
+}
+
+/* Redes sociais */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.social-icons a {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    transition: 0.3s ease;
+    font-size: 1.2em;
+}
+
+.social-icons a:hover {
+    background: var(--orange-vibrant);
+    transform: scale(1.15);
+    color: #fff;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .footer-links {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .footer-logo img {
+        height: 50px;
+    }
+}
+
 
 .gradient-line {
 width: 100%;
@@ -803,7 +877,52 @@ animation: rotateGradient 5s linear infinite;
     100% { background-position: 300% 50%; }
 }
 
+.spacer-left,
+.spacer-right {
+    width: 20px;      
+    height: 100%;
+    flex-shrink: 0;
+    pointer-events: none; 
+    background: transparent;
+}
+
 </style>  
+
+<style>
+
+.blitz-headline {
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90% !important;  
+}
+
+.blitz-headline {
+    margin-top: 10px !important;     
+    margin-bottom: 15px !important;  
+}
+
+.blitz-headline .blitz-img img {
+    display: block;
+}
+
+.blitz-headline,
+.news-grid,
+.side-content {
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box; 
+}
+
+@media (min-width: 1024px) {
+    .blitz-headline,
+    .news-grid,
+    .side-content {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+
+</style>
 </head>  
 <body>  
 
@@ -865,20 +984,20 @@ animation: rotateGradient 5s linear infinite;
 </div>
 
   </div>
-  
-    <article class="blitz-headline">  
-        <div class="blitz-content">  
-            <p class="blitz-tag">A FAZENDA 17</p>  
-            <h1>12° Roça formada!</h1>  
-            <p>Quem você quer que FIQUE? Vote na enquete!</p>  
-            <div style="margin-top: 20px;">  
-                <a href="flop-news/novaroça.html" class="btn-action">VOTAR</a>  
-            </div>  
+
+<article class="blitz-headline">  
+    <div class="blitz-content">  
+        <p class="blitz-tag">A FAZENDA 17</p>  
+        <h1>12° Roça formada!</h1>  
+        <p>Quem você quer que FIQUE? Vote na enquete!</p>  
+        <div style="margin-top: 20px;">  
+            <a href="flop-news/novaroça.html" class="btn-action">VOTAR</a>  
         </div>  
-        <div class="blitz-img">  
-            <img src="https://i.ibb.co/spmHGg0z/Roca124x3.jpg" alt="Imagem da Manchete Blitz">  
-        </div>  
-    </article>  
+    </div>  
+    <div class="blitz-img">  
+        <img src="https://i.ibb.co/spmHGg0z/Roca124x3.jpg" alt="Imagem da Manchete Blitz">  
+    </div>  
+</article>  
       
 <section class="container carousel-section">
     <h2 class="section-title">✨ DESTAQUES FSHOW</h2>
@@ -1015,17 +1134,6 @@ animation: rotateGradient 5s linear infinite;
       
 </div>  
 
-<footer class="footer">  
-    <div class="footer-logo">  
-        <img src="https://i.ibb.co/3yCzdJ59/logo-fshow.png" alt="Logo Fshow">  
-    </div>  
-    <div class="footer-links">  
-        <a href="https://www.youtube.com/@VulgoFlopp">YouTube</a>   
-        <a href="https://x.com/Euu_Phillip">X</a>   
-    </div>  
-    <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.6;">&copy; 2025 Fshow | Portal Flop - Pìxeels Productions LTDA</p>  
-</footer>
-
 <script>
 function toggleMenu() {
   document.getElementById("menu").classList.toggle("open");
@@ -1098,6 +1206,36 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
+<footer class="footer">
+    <div class="footer-content">
+
+        <!-- LOGO / NOME DO SITE -->
+        <div class="footer-brand">
+            <h2>Portal Flop</h2>
+            <p>Pìxeels Productions</p>
+        </div>
+
+        <!-- REDES SOCIAIS -->
+        <div class="social-icons">
+            <a href="https://www.youtube.com/@VulgoFlopp" aria-label="Youtube">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="https://www.wattpad.com/user/FelipeLovee" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://x.com/Euu_Phillip" aria-label="Twitter / X">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2025 Fshow — Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+<!-- FontAwesome para os ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
 </body>  
