@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fabiano vence a ultima prova do lampião de A Fazenda 17</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --orange: #FF8C00;
+  --purple: #8A2BE2;
+  --dark: #121212;
+  --gray: #666;
+  --bg: #f9f9f9;
+  --gradient: linear-gradient(90deg, #FF8C00, #8A2BE2);
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--dark);
+  line-height: 1.7;
+}
+
+/* ============================= */
+/* CONTAINER PADRÃO */
+/* ============================= */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* ============================= */
+/* BREADCRUMB */
+/* ============================= */
+.breadcrumb {
+  font-size: 0.85em;
+  color: var(--gray);
+  margin-bottom: 15px;
+}
+
+.breadcrumb a {
+  color: var(--purple);
+  font-weight: 600;
+}
+
+/* ============================= */
+/* TÍTULO */
+/* ============================= */
+.news-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3em;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.news-subtitle {
+  font-size: 1.1em;
+  color: var(--gray);
+  margin-bottom: 25px;
+}
+
+/* ============================= */
+/* META INFO */
+/* ============================= */
+.news-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 0.85em;
+  color: var(--gray);
+  margin-bottom: 25px;
+}
+
+.news-meta span {
+  font-weight: 600;
+}
+
+/* ============================= */
+/* IMAGEM DE DESTAQUE */
+/* ============================= */
+.news-image {
+  width: 100%;
+  height: 420px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* ============================= */
+/* CONTEÚDO */
+/* ============================= */
+.news-content p {
+  margin-bottom: 22px;
+  font-size: 1.05em;
+}
+
+.news-content strong {
+  color: var(--purple);
+}
+
+.quote {
+  margin: 30px 0;
+  padding: 25px;
+  border-left: 6px solid var(--orange);
+  background: rgba(255,140,0,0.08);
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* TAGS */
+/* ============================= */
+.tags {
+  display: flex;
+  gap: 10px;
+  margin: 30px 0;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: var(--gradient);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+.news-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+
+.btn {
+  padding: 12px 22px;
+  font-weight: 700;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(138,43,226,0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--dark);
+  color: var(--dark);
+}
+
+.btn-outline:hover {
+  background: var(--dark);
+  color: #fff;
+}
+
+/* =========================
+   OUTRAS NOTÍCIAS
+========================= */
+.related {
+  margin-top: 70px;
+}
+
+.related h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  margin-bottom: 25px;
+  color: var(--purple);
+  border-left: 6px solid var(--orange);
+  padding-left: 15px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.related-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.related-card:hover {
+  transform: translateY(-6px);
+}
+
+.related-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.related-card-content {
+  padding: 16px;
+}
+
+.related-card-content h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.related-card-content span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+/* ===============================
+   FOOTER
+================================ */
+.footer {
+background: var(--text-primary);
+color: white;
+padding: 45px 5%;
+margin-top: 60px;
+text-align: center;
+}
+
+.footer-logo img {
+height: 55px;
+filter: drop-shadow(0 0 8px var(--orange-vibrant));
+margin-bottom: 18px;
+}
+
+.footer-links {
+margin: 18px 0;
+}
+
+.footer-links a {
+margin: 0 15px;
+font-size: 0.95em;
+opacity: 0.8;
+transition: 0.3s;
+}
+
+.footer-links a:hover {
+opacity: 1;
+color: var(--orange-vibrant);
+}
+
+.social-icons {
+margin-top: 20px;
+}
+
+.social-icons a {
+display: inline-block;
+margin: 0 6px;
+padding: 10px;
+background: var(--purple-dark);
+color: white;
+border-radius: 50%;
+font-weight: 900;
+transition: background 0.3s;
+}
+
+.social-icons a:hover {
+background: var(--orange-vibrant);
+}
+
+@media (max-width: 768px) {
+
+.footer {
+    background: linear-gradient(135deg, #121212, #1a1a1a);
+    padding: 55px 5%;
+    color: #fff;
+    text-align: center;
+    border-top: 4px solid var(--orange-vibrant);
+    position: relative;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+    background-size: 300% 300%;
+    animation: footerGradient 4s linear infinite;
+}
+
+@keyframes footerGradient {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+
+footer {
+  width: 100%;
+  background: #0e0e0e;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 80px;
+  padding: 35px 20px 25px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.footer-links a {
+  color: #bdbdbd;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  transition: all .25s ease;
+}
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #7b2cff, #ff7b00);
+  transition: width .3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+}
+
+@media (max-width: 600px) {
+  .footer-links {
+    gap: 16px;
+  }
+
+  .footer-links a {
+    font-size: 0.9rem;
+  }
+}
+
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.social-icons a {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    transition: 0.3s ease;
+    font-size: 1.2em;
+}
+
+.social-icons a:hover {
+    background: var(--orange-vibrant);
+    transform: scale(1.15);
+    color: #fff;
+}
+
+.gradient-line {
+width: 100%;
+height: 6px;
+background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+background-size: 300% 300%;
+animation: rotateGradient 5s linear infinite;
+}
+
+@keyframes rotateGradient {
+0% { background-position: 0% 50%; }
+100% { background-position: 300% 50%; }
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Início</a> › A Fazenda 17
+  </div>
+
+  <h1 class="news-title">Fabiano vence a última Prova do Lampião de A Fazenda 17</h1>
+  <p class="news-subtitle">
+    Disputa exigiu força, agilidade e precisão; vitória garante vantagem estratégica na reta final
+  </p>
+
+  <div class="news-meta">
+    <span>Por Flop News</span>
+    <span>📅 08 de Dezembro de 2025</span>
+  </div>
+
+  <img src="https://uploads.ric.com.br/uploads/2025/12/fabiano-moraes.jpg" alt="Fabiano vence a última Prova do Lampião" class="news-image">
+
+  <section class="news-content">
+    <p>
+      A última Prova do Lampião de <strong>A Fazenda 17</strong>, exibida pela Record TV,
+      foi marcada por tensão, equilíbrio e alto nível de dificuldade. Em uma disputa decisiva,
+      <strong>Fabiano</strong> levou a melhor e conquistou o poder mais importante da semana,
+      justamente na reta final do reality.
+    </p>
+
+    <p>
+      A dinâmica da prova colocou os peões frente a frente em baterias eliminatórias.
+      O desafio exigia <strong>força física, agilidade e controle emocional</strong>.
+      Os participantes precisavam cumprir todas as etapas no menor tempo possível,
+      enfrentando obstáculos e mantendo a precisão até o fim da tarefa.
+    </p>
+
+    <p>
+      Fabiano competiu diretamente contra outros peões da casa em sua bateria e conseguiu
+      se destacar ao executar a prova com ritmo constante e poucos erros.
+      O bom desempenho garantiu a ele o <strong>melhor tempo geral</strong>,
+      assegurando a vitória e o direito de ficar com o Lampião.
+    </p>
+
+    <div class="quote">
+      “Era a prova mais importante até agora. Sabia que precisava dar tudo de mim
+      porque qualquer erro poderia custar caro”, disse Fabiano após a vitória.
+    </div>
+
+    <p>
+      Com o resultado, Fabiano conquistou o <strong>Poder do Lampião</strong>,
+      que pode influenciar diretamente a formação da próxima roça.
+      A Baia ficou formada por Toninho Tornado, Kathy Maravilha e Duda Wendling .
+    </p>
+
+    <p>
+      A última Prova do Lampião reforça a posição estratégica de Fabiano dentro do reality
+      e aumenta as expectativas para os próximos acontecimentos.
+      Com o poder em mãos, o participante passa a ser peça-chave nas decisões
+      que definirão quem segue na disputa pelo prêmio.
+    </p>
+  </section>
+
+
+  <div class="tags">
+    <span class="tag">A Fazenda 17</span>
+    <span class="tag">Prova do Lampião</span>
+    <span class="tag">Reality</span>
+  </div>
+
+    <div class="news-actions">
+      <a href="index.html" class="btn btn-outline">⬅ Voltar</a>
+      <a href="novaroça.html" class="btn btn-primary">🔥 Votar agora</a>
+      <button class="btn btn-outline" onclick="navigator.share ? navigator.share({title: document.title, url: window.location.href}) : alert('Copie o link da página 😉')">
+        📤 Compartilhar
+      </button>
+    </div>
+
+  </article>
+
+  <!-- OUTRAS NOTÍCIAS -->
+  <section class="related">
+    <h2>Outras notícias</h2>
+
+    <div class="related-grid">
+
+      <a href="#" class="related-card">
+        <img src="https://i.ibb.co/HL932NpK/Final.jpg">
+        <div class="related-card-content">
+          <span>A Grande Conquista</span>
+          <h3>Final definida! Veja quem disputa o título</h3>
+        </div>
+      </a>
+
+      <a href="#" class="related-card">
+        <img src="https://i.ibb.co/nMBCDdVZ/eueugean.jpg">
+        <div class="related-card-content">
+          <span>Reality</span>
+          <h3>Eueu e Gean garantem vaga na final</h3>
+        </div>
+      </a>
+
+      <a href="#" class="related-card">
+        <img src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg">
+        <div class="related-card-content">
+          <span>Publicidade</span>
+          <h3>Anuncie aqui no FLOP News</h3>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h2>Portal Flop</h2>
+            <p>Pìxeels Productions</p>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://www.youtube.com/@VulgoFlopp" aria-label="Youtube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.wattpad.com/user/FelipeLovee" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://x.com/Euu_Phillip" aria-label="Twitter / X">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://discord.gg/t56YN5sB" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+        </div>
+    </div>
+<footer>
+  <div class="footer-links">
+    <a href="termos/sobre.html">Sobre</a>
+    <a href="termos/contato.html">Contato</a>
+    <a href="termos/termos.html">Termos de Uso</a>
+    <a href="termos/privacidade.html">Política de Privacidade</a>
+  </div>
+
+  <div class="footer-copy">
+    © 2025 Fshow • Todos os direitos reservados
+  </div>
+</footer>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</body>
+</html>
