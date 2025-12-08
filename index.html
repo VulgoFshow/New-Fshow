@@ -526,34 +526,76 @@ background: var(--orange-vibrant);
     100% { background-position: 300% 50%; }
 }
 
-/* Logo */
-.footer-logo img {
-    height: 60px;
-    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.6));
-    margin-bottom: 25px;
+/* ===============================
+   FOOTER - LINKS OBRIGATÓRIOS
+================================ */
+footer {
+  width: 100%;
+  background: #0e0e0e;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 80px;
+  padding: 35px 20px 25px;
+  text-align: center;
 }
 
-/* Links */
+/* CONTAINER */
 .footer-links {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 25px;
-    margin: 20px 0 35px 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
 }
 
+/* LINKS */
 .footer-links a {
-    font-size: 1em;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #ddd;
-    transition: 0.3s ease-in-out;
+  color: #bdbdbd;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  transition: all .25s ease;
+}
+
+/* LINHA GRADIENTE NO HOVER */
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #7b2cff, #ff7b00);
+  transition: width .3s ease;
 }
 
 .footer-links a:hover {
-    color: var(--orange-vibrant);
-    transform: translateY(-2px);
+  color: #fff;
 }
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+/* TEXTO FINAL */
+.footer-copy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 600px) {
+  .footer-links {
+    gap: 16px;
+  }
+
+  .footer-links a {
+    font-size: 0.9rem;
+  }
+}
+
 
 /* Redes sociais */
 .social-icons {
@@ -580,19 +622,6 @@ background: var(--orange-vibrant);
     transform: scale(1.15);
     color: #fff;
 }
-
-/* Mobile */
-@media (max-width: 768px) {
-    .footer-links {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .footer-logo img {
-        height: 50px;
-    }
-}
-
 
 .gradient-line {
 width: 100%;
@@ -985,10 +1014,10 @@ animation: rotateGradient 5s linear infinite;
 
 <!-- Menu -->  
 <nav class="nav-menu" id="menu">  
-    <a href="#">Home</a>  
-    <a href="#">Notícias</a>  
-    <a href="#">Divas Pop</a>  
-    <a href="#">Vídeos</a>  
+    <a href="index.html">Home</a>  
+    <a href="flop-news/final.html">Notícias</a>  
+    <a href="snake.html">Snake</a>  
+    <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
     <a class="btn-action" href="#">Assinar Agora</a>  
 </nav>
 
@@ -1269,7 +1298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- REDES SOCIAIS -->
         <div class="social-icons">
             <a href="https://www.youtube.com/@VulgoFlopp" aria-label="Youtube">
-                <i class="fab fa-telegram"></i>
+                <i class="fab fa-youtube"></i>
             </a>
             <a href="https://www.wattpad.com/user/FelipeLovee" aria-label="Instagram">
                 <i class="fab fa-instagram"></i>
@@ -1277,17 +1306,28 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="https://x.com/Euu_Phillip" aria-label="Twitter / X">
                 <i class="fab fa-twitter"></i>
             </a>
+            <a href="https://discord.gg/t56YN5sB" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
         </div>
     </div>
 
-    <div class="footer-bottom">
-        <p>© 2025 Fshow — Todos os direitos reservados.</p>
-    </div>
+<footer>
+  <div class="footer-links">
+    <a href="termos/sobre.html">Sobre</a>
+    <a href="termos/contato.html">Contato</a>
+    <a href="termos/termos.html">Termos de Uso</a>
+    <a href="termos/privacidade.html">Política de Privacidade</a>
+  </div>
+
+  <div class="footer-copy">
+    © 2025 Fshow • Todos os direitos reservados
+  </div>
 </footer>
+
 
 <!-- FontAwesome para os ícones -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 
 </body>  
 </html>
