@@ -834,7 +834,6 @@ animation: rotateGradient 5s linear infinite;
   display: none;
 }
 
-/* Bolinhas */
 .story,
 .storye {
   position: relative;
@@ -848,37 +847,27 @@ animation: rotateGradient 5s linear infinite;
   transition: transform 0.25s ease;
 }
 
-/* Ativos */
 .story {
   border: 3px solid var(--orange-vibrant);
 }
 
-/* Não vistos */
 .storye {
   border: 3px solid var(--purple-dark);
   filter: grayscale(100%);
 }
 
-/* Hover */
 .story:hover,
 .storye:hover {
   transform: scale(1.1);
 }
 
-
-/* Imagem interna */
 .story img,
 .storye img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
-/* ============================= */
-/* ADORNOS ESPECIAIS DO SEU TEMA */
-/* ============================= */
-
-/* Chapéu */
+        
 .story.faz::after {
   content: "";
   position: absolute;
@@ -901,7 +890,6 @@ animation: rotateGradient 5s linear infinite;
   pointer-events: none;
 }
 
-/* Finalista */
 .story.final::after {
   content: "🌟";
   position: absolute;
@@ -912,7 +900,6 @@ animation: rotateGradient 5s linear infinite;
   pointer-events: none;
 }
 
-/* Lâmpada */
 .story.lamp::after {
   content: "";
   position: absolute;
@@ -924,7 +911,6 @@ animation: rotateGradient 5s linear infinite;
   pointer-events: none;
 }
 
-/* Inco */
 .story.inco::after {
   content: "";
   position: absolute;
@@ -936,7 +922,6 @@ animation: rotateGradient 5s linear infinite;
   pointer-events: none;
 }
 
-/* LINHA GRADIENTE ANIMADA */
 .gradient-line {
     width: 100%;
     height: 6px;
@@ -945,7 +930,6 @@ animation: rotateGradient 5s linear infinite;
     animation: gradientMove 4s linear infinite;
 }
 
-/* Animação suave do gradiente */
 @keyframes gradientMove {
     0% { background-position: 0% 50%; }
     100% { background-position: 300% 50%; }
@@ -1015,7 +999,7 @@ animation: rotateGradient 5s linear infinite;
 <!-- Menu -->  
 <nav class="nav-menu" id="menu">  
     <a href="index.html">Home</a>  
-    <a href="flop-news/final.html">Notícias</a>  
+    <a href="flop-news/flopnews.html">Notícias</a>  
     <a href="snake.html">Snake</a>  
     <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
     <a class="btn-action" href="#">Assinar Agora</a>  
@@ -1140,8 +1124,6 @@ animation: rotateGradient 5s linear infinite;
         </div>
     </div>
 </section>
-
-
 
     <h2 class="section-title">ÚLTIMAS DO FLOP</h2>  
     <section class="news-grid">  
