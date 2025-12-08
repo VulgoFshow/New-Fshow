@@ -543,34 +543,27 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que VENCA A Grande Conquista?</h1>
+    <h1>Quem você quer que FIQUE na Fazenda 3?</h1>
     <div class="espacador"></div>
-    
+
 <label class="option">
-    <img src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
+  <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Guilherme">
   <div class="option-content">
-      <input type="radio" name="vote" value="Eueu"> Eueu
+      <input type="radio" name="vote" value="Guilherme"> Guilherme
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/d0Znn920/Gean.jpg" alt="Gean">
+    <img src="https://i.ibb.co/CpzSYbNW/Ines.jpg" alt="Inês">
   <div class="option-content">
-      <input type="radio" name="vote" value="Gean"> Gean
+      <input type="radio" name="vote" value="Inês"> Inês
   </div>
 </label>
 
 <label class="option">
-    <img src="https://i.ibb.co/TxTpFBJC/Luddi.jpg" alt="Luddy">
+  <img src="https://i.ibb.co/fVvM403J/Kristhyan.jpg" alt="Kristhyan">
   <div class="option-content">
-      <input type="radio" name="vote" value="Luddy"> Luddy
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://i.ibb.co/Pskfn3Sm/Mikkael.jpg" alt="Mikael">
-  <div class="option-content">
-      <input type="radio" name="vote" value="Mikael"> Mikael
+      <input type="radio" name="vote" value="Kristhyan"> Kristhyan
   </div>
 </label>
 
@@ -584,7 +577,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>Votar</button>
 
-    <div class="notice">A votação segue aberta até às 19:00 horas.</div>
+    <div class="notice">A votação segue aberta até às 18:00 horas.</div>
   </div>
 
 <!-- POPUP CAPTCHA -->
@@ -618,7 +611,7 @@ button:disabled {
       VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Votação segue aberta até às 19:00</div>
+    <div class="notice">Votação segue aberta até às 18:00</div>
     
   </div>
 </div>
@@ -635,7 +628,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-11-29T19:00:00");
+const encerramentoBR = new Date("2025-12-08T18:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -967,7 +960,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("agc15")  
+      .from("f3roça1")  
       .insert(votosParaEnviar);  
   
     if (error) {  
@@ -990,22 +983,32 @@ confirmTela.style.display = "flex";
 nomeConfirm.textContent = participante;
 
 const fotos = {
-  "Alysson": "https://i.ibb.co/MyshVLrG/Alysson.jpg",
-  "Cícero": "https://i.ibb.co/6xLnxRL/C-cero.jpg",
-  "Davi": "https://i.ibb.co/BHstzy4t/Davi.jpg",
-  "Davi José": "https://i.ibb.co/N2XkzhZc/Davi-Jos-2.jpg",
-  "Emanuel": "https://i.ibb.co/6cQN4Wm5/Emanuel-2.jpg",
-  "Eueu": "https://i.ibb.co/svNCVQZK/Eueu.jpg",
-  "Flávia": "https://i.ibb.co/39W3Ld2t/Fl-via.jpg",
-  "Gean": "https://i.ibb.co/mr6sTbPM/Gean.jpg",
-  "Koyuh": "https://i.ibb.co/dwk3psBx/Koyuh.jpg",
-  "Luddy": "https://i.ibb.co/TxTpFBJC/Luddi.jpg",
-  "Ludmila": "https://i.ibb.co/wrWB49Nd/Ludmila.jpg",
-  "Mariana": "https://i.ibb.co/YFsn03Jc/Mariana.jpg",
-  "Mikael": "https://i.ibb.co/Pskfn3Sm/Mikkael.jpg",
-  "Rodrigo": "https://i.ibb.co/VphZh0pX/Rodrigo.jpg",
-  "Rose": "https://i.ibb.co/GvFbbHkf/Rose-1-2.jpg",
-  "Tekitos": "https://i.ibb.co/F4NLs8TT/Tekitos.jpg"
+  "Adnilton": "https://i.ibb.co/6RwD1PBC/Adnilton.jpg",
+  "Braian": "https://i.ibb.co/1Yh1q5PQ/Braian.jpg",
+  "Cauê": "https://i.ibb.co/Cs22D99c/Caue.jpg",
+  "Davi": "https://i.ibb.co/ymQMNfvZ/davil.jpg",
+  "Dynamite": "https://i.ibb.co/c0H9r4T/Dynamite.jpg",
+  "Ella": "https://i.ibb.co/BHtfXDyr/Ella.jpg",
+  "Eueu": "https://i.ibb.co/mCRNXcf5/Eueu.jpg",
+  "Felipe": "https://i.ibb.co/XZmgWgL1/Felipe.jpg",
+  "Gean": "https://i.ibb.co/KzhhZH7H/Gean.jpg",
+  "Guilherme": "https://i.ibb.co/s9Vp82DB/Guilherme.jpg",
+  "Inês": "https://i.ibb.co/CpzSYbNW/Ines.jpg",
+  "João": "https://i.ibb.co/d4FNx1c8/Joao.jpg",
+  "Koyuh": "https://i.ibb.co/Y7fDVCTr/Koyuh.jpg",
+  "Kristhyan": "https://i.ibb.co/fVvM403J/Kristhyan.jpg",
+  "Luany": "https://i.ibb.co/FqDdQHzN/Luany.jpg",
+  "Luca": "https://i.ibb.co/1txTXwSm/Luca.jpg",
+  "Luddy": "https://i.ibb.co/6cNwCpWV/Luddy.jpg",
+  "Ludmila": "https://i.ibb.co/4QjrrL8/Ludmila.jpg",
+  "Mariana": "https://i.ibb.co/ymDPmccr/Mariana.jpg",
+  "Neto": "https://i.ibb.co/YBP4Hs44/Neto.jpg",
+  "Rafa": "https://i.ibb.co/G47V2xFh/Rafa.jpg",
+  "Renata": "https://i.ibb.co/N2kS8NnP/Renata.jpg",
+  "Sam": "https://i.ibb.co/KxdRJJ8h/Sam.jpg",
+  "Sirleyde": "https://i.ibb.co/RkSZVpt5/Sirleyde.jpg",
+  "Tety": "https://i.ibb.co/gMJ4T0Ts/Tety.jpg",
+  "Vitor": "https://i.ibb.co/1fT3chNR/Vitor.jpg"
 };
 
 fotoConfirm.src = fotos[participante] || "";
