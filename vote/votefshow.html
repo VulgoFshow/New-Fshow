@@ -543,27 +543,27 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que FIQUE na Fazenda 3?</h1>
+    <h1>Quem você quer que fique na Fazenda 3?</h1>
     <div class="espacador"></div>
 
 <label class="option">
-  <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Guilherme">
+  <img src="https://i.ibb.co/Cs22D99c/Caue.jpg" alt="Cauê">
   <div class="option-content">
-      <input type="radio" name="vote" value="Guilherme"> Guilherme
+      <input type="radio" name="vote" value="Cauê"> Cauê
   </div>
 </label>
 
 <label class="option">
-    <img src="https://i.ibb.co/CpzSYbNW/Ines.jpg" alt="Inês">
+    <img src="https://i.ibb.co/FqDdQHzN/Luany.jpg" alt="Luany">
   <div class="option-content">
-      <input type="radio" name="vote" value="Inês"> Inês
+      <input type="radio" name="vote" value="Luany"> Luany
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/fVvM403J/Kristhyan.jpg" alt="Kristhyan">
+  <img src="https://i.ibb.co/RkSZVpt5/Sirleyde.jpg" alt="Sirleidy">
   <div class="option-content">
-      <input type="radio" name="vote" value="Kristhyan"> Kristhyan
+      <input type="radio" name="vote" value="Sirleidy"> Sirleidy
   </div>
 </label>
 
@@ -628,7 +628,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-08T18:00:00");
+const encerramentoBR = new Date("2025-12-09T18:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -960,7 +960,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça1")  
+      .from("f3roça2")  
       .insert(votosParaEnviar);  
   
     if (error) {  
@@ -1006,7 +1006,7 @@ const fotos = {
   "Rafa": "https://i.ibb.co/G47V2xFh/Rafa.jpg",
   "Renata": "https://i.ibb.co/N2kS8NnP/Renata.jpg",
   "Sam": "https://i.ibb.co/KxdRJJ8h/Sam.jpg",
-  "Sirleyde": "https://i.ibb.co/RkSZVpt5/Sirleyde.jpg",
+  "Sirleidy": "https://i.ibb.co/RkSZVpt5/Sirleyde.jpg",
   "Tety": "https://i.ibb.co/gMJ4T0Ts/Tety.jpg",
   "Vitor": "https://i.ibb.co/1fT3chNR/Vitor.jpg"
 };
