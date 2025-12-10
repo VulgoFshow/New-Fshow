@@ -547,16 +547,16 @@ button:disabled {
     <div class="espacador"></div>
 
 <label class="option">
-  <img src="https://i.ibb.co/Cs22D99c/Caue.jpg" alt="Cauê">
+  <img src="https://i.ibb.co/KzhhZH7H/Gean.jpg" alt="Gêan">
   <div class="option-content">
-      <input type="radio" name="vote" value="Cauê"> Cauê
+      <input type="radio" name="vote" value="Gêan"> Gêan
   </div>
 </label>
 
 <label class="option">
-    <img src="https://i.ibb.co/FqDdQHzN/Luany.jpg" alt="Luany">
+    <img src="https://i.ibb.co/G47V2xFh/Rafa.jpg" alt="Rafa">
   <div class="option-content">
-      <input type="radio" name="vote" value="Luany"> Luany
+      <input type="radio" name="vote" value="Rafa"> Rafa
   </div>
 </label>
 
@@ -628,7 +628,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-09T18:00:00");
+const encerramentoBR = new Date("2025-12-10T18:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -960,7 +960,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça2")  
+      .from("f3roça3")  
       .insert(votosParaEnviar);  
   
     if (error) {  
@@ -991,7 +991,7 @@ const fotos = {
   "Ella": "https://i.ibb.co/BHtfXDyr/Ella.jpg",
   "Eueu": "https://i.ibb.co/mCRNXcf5/Eueu.jpg",
   "Felipe": "https://i.ibb.co/XZmgWgL1/Felipe.jpg",
-  "Gean": "https://i.ibb.co/KzhhZH7H/Gean.jpg",
+  "Gêan": "https://i.ibb.co/KzhhZH7H/Gean.jpg",
   "Guilherme": "https://i.ibb.co/s9Vp82DB/Guilherme.jpg",
   "Inês": "https://i.ibb.co/CpzSYbNW/Ines.jpg",
   "João": "https://i.ibb.co/d4FNx1c8/Joao.jpg",
