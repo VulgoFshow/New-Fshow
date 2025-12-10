@@ -313,7 +313,7 @@
       let continuar = true;
       while (continuar) {
         const { data, error } = await supabase
-          .from('f3roça2')
+          .from('f3roça3')
           .select('participante')
           .range(pagina * limitePorPagina, (pagina + 1) * limitePorPagina - 1);
         if (error) { console.error("Erro ao buscar votos:", error); break; }
