@@ -137,20 +137,20 @@ A última prova do fazendeiro da temporada consagrou <strong>Saory</strong> Faze
 <!-- ====================== ENQUETE ====================== -->
 
 <div class="caixa-enquete" id="caixaEnquete">
-
-    <div class="conteudo-enquete" id="conteudo-enquete">
-        <div class="wrapper">
+  <div class="conteudo-enquete" id="conteudo-enquete">
+    <div class="wrapper">
 
 <link rel="preload" href="/css/enquete.css" as="style" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/css/enquete.css"></noscript>
 
+<!-- in -->
 <div class="enquete">
   <div class="header">
     <h1>ENQUETE</h1>
     <p>Quem você quer que FIQUE em "A Fazenda 17"?</p>
   </div>
 
-  <!-- PARTICIPANTE 2 -->
+  <!-- PARTICIPANTE 1 -->
   <div class="participante" data-nome="Duda" data-votos="52" style="--i:1">
     <div class="info">
       <img class="foto" src="https://img.r7.com/images/duda-23092025192343715?dimensions=348x197">
@@ -163,8 +163,8 @@ A última prova do fazendeiro da temporada consagrou <strong>Saory</strong> Faze
       <button class="btn-votar">Votar</button>
     </div>
   </div>
-  
-  <!-- PARTICIPANTE 1 -->
+
+  <!-- PARTICIPANTE 2 -->
   <div class="participante" data-nome="Mesquita" data-votos="37" style="--i:0">
     <div class="info">
       <img class="foto" src="https://img.r7.com/images/mesquita-23092025192344798?dimensions=348x197">
@@ -191,19 +191,21 @@ A última prova do fazendeiro da temporada consagrou <strong>Saory</strong> Faze
       <button class="btn-votar">Votar</button>
     </div>
   </div>
-</div>
 
-<!-- POPUP DE CONFIRMAÇÃO -->
+</div> 
+</div>
+</div> 
+</div> 
+
+<!-- CONFIRMAÇÃO  -->
 <div class="overlay" id="popupConfirmacao">
   <div class="popup">
-
     <div class="popup-top">
       <i>✓</i>
       <span>Voto registrado!</span>
     </div>
 
     <div class="popup-conteudo">
-
       <div class="popup-esq">
         <h2 id="popupNome"></h2>
 
@@ -220,17 +222,11 @@ A última prova do fazendeiro da temporada consagrou <strong>Saory</strong> Faze
     </div>
   </div>
 </div>
-  </div>
-</div>
 
-
-<!-- POPUP DE RESULTADOS  -->
+<!-- RESULTADOS  -->
 <div class="overlay" id="popupResultados">
   <div class="popup" style="max-width:420px; padding:30px">
-
-    <h2 style="margin:0 0 20px; font-size:26px; text-align:center;">
-      Resultados da votação
-    </h2>
+    <h2 style="margin:0 0 20px; font-size:26px; text-align:center;">Resultados da votação</h2>
 
     <div id="resultadoLista"></div>
 
@@ -238,9 +234,9 @@ A última prova do fazendeiro da temporada consagrou <strong>Saory</strong> Faze
       onclick="fecharResultados()">
       Fechar resultados
     </button>
-
   </div>
 </div>
+
 
 </div>
   </div>
