@@ -2,17 +2,17 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Portal FShow – Notícias, Reality Shows, Enquetes e Cobertura Completa</title>
+<title>Portal Flop – Notícias, Reality Shows, Enquetes e Cobertura Completa</title>
 <meta name="description" content="Portal FShow: notícias atualizadas, enquetes, votações, coberturas ao vivo, reality shows como A Fazenda e BBB, vídeos, spoilers e muito mais.">
 <link rel="canonical" href="https://www.fshow.site/">
 
-<meta property="og:title" content="Portal FShow – Notícias e Reality Shows">
+<meta property="og:title" content="Portal Flop – Notícias e Reality Shows">
 <meta property="og:description" content="Cobertura completa, enquetes e notícias atualizadas.">
 <meta property="og:image" content="https://www.fshow.site/imagem-principal.jpg">
 <meta property="og:url" content="https://www.fshow.site/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Portal FShow – Reality Shows e Notícias">
+<meta name="twitter:title" content="Portal Flop – Reality Shows e Notícias">
 <meta name="twitter:description" content="Enquetes, coberturas ao vivo e notícias atualizadas.">
 <meta name="twitter:image" content="https://www.fshow.site/imagem-principal.jpg">
 <meta name="robots" content="index, follow">
@@ -263,18 +263,6 @@ body {
   color: var(--purple);
 }
 
-/* =========================
-   FOOTER
-========================= */
-.footer {
-  margin-top: 80px;
-  padding: 35px 20px;
-  background: var(--dark);
-  color: #fff;
-  text-align: center;
-  font-size: 0.9rem;
-}     
-  
 </style>
 
 <style>
@@ -521,6 +509,64 @@ animation: rotateGradient 5s linear infinite;
 100% { background-position: 300% 50%; }
 }
 
+/* ============================
+   RESPONSIVIDADE MOBILE
+============================ */
+@media (max-width: 768px) {
+
+  .container {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+
+  .news-title {
+    font-size: 2.1em;
+    line-height: 1.15;
+  }
+
+  .news-subtitle {
+    font-size: 1em;
+  }
+
+  .news-meta {
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.78em;
+  }
+
+  .news-image {
+    height: 240px;   /* antes 420px */
+    border-radius: 10px;
+  }
+
+  .news-content p {
+    font-size: 1em;
+    line-height: 1.6;
+  }
+
+  .related h2 {
+    font-size: 1.8rem;
+  }
+
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .related-card img {
+    height: 140px;
+  }
+
+  .caixa-enquete {
+    width: 95%;
+    border-radius: 8px;
+  }
+
+  .caixa-enquete .texto-enquete {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+}
 </style>
 </head>
 
