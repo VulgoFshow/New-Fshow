@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>12ª Roça formada – A Fazenda 17</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --orange: #FF8C00;
+  --purple: #8A2BE2;
+  --dark: #121212;
+  --gray: #666;
+  --bg: #f9f9f9;
+  --gradient: linear-gradient(90deg, #FF8C00, #8A2BE2);
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--dark);
+  line-height: 1.7;
+}
+
+/* ============================= */
+/* CONTAINER PADRÃO */
+/* ============================= */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* ============================= */
+/* BREADCRUMB */
+/* ============================= */
+.breadcrumb {
+  font-size: 0.85em;
+  color: var(--gray);
+  margin-bottom: 15px;
+}
+
+.breadcrumb a {
+  color: var(--purple);
+  font-weight: 600;
+}
+
+/* ============================= */
+/* TÍTULO */
+/* ============================= */
+.news-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3em;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.news-subtitle {
+  font-size: 1.1em;
+  color: var(--gray);
+  margin-bottom: 25px;
+}
+
+/* ============================= */
+/* META INFO */
+/* ============================= */
+.news-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 0.85em;
+  color: var(--gray);
+  margin-bottom: 25px;
+}
+
+.news-meta span {
+  font-weight: 600;
+}
+
+/* ============================= */
+/* IMAGEM DE DESTAQUE */
+/* ============================= */
+.news-image {
+  width: 100%;
+  height: 420px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* ============================= */
+/* CONTEÚDO */
+/* ============================= */
+.news-content p {
+  margin-bottom: 22px;
+  font-size: 1.05em;
+}
+
+.news-content strong {
+  color: var(--purple);
+}
+
+.quote {
+  margin: 30px 0;
+  padding: 25px;
+  border-left: 6px solid var(--orange);
+  background: rgba(255,140,0,0.08);
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* TAGS */
+/* ============================= */
+.tags {
+  display: flex;
+  gap: 10px;
+  margin: 30px 0;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: var(--gradient);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+.news-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+
+.btn {
+  padding: 12px 22px;
+  font-weight: 700;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(138,43,226,0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--dark);
+  color: var(--dark);
+}
+
+.btn-outline:hover {
+  background: var(--dark);
+  color: #fff;
+}
+
+/* =========================
+   OUTRAS NOTÍCIAS
+========================= */
+.related {
+  margin-top: 70px;
+}
+
+.related h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  margin-bottom: 25px;
+  color: var(--purple);
+  border-left: 6px solid var(--orange);
+  padding-left: 15px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.related-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.related-card:hover {
+  transform: translateY(-6px);
+}
+
+.related-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.related-card-content {
+  padding: 16px;
+}
+
+.related-card-content h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.related-card-content span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  margin-top: 80px;
+  padding: 35px 20px;
+  background: var(--dark);
+  color: #fff;
+  text-align: center;
+  font-size: 0.9rem;
+}     
+  
+</style>
+
+<style>
+.caixa-enquete .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+  backdrop-filter: blur(5px);
+}
+
+.caixa-enquete .overlay.mostrar {
+  display: flex;
+}
+
+.caixa-enquete {
+  width: 100%;           
+  max-width: 1200px;      
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  position: relative;           
+  overflow: hidden; 
+  transition: 0.3s ease;
+}
+
+.caixa-enquete::before {
+  content: "";
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(135deg, #0057ff, #7b2fff, #ff4d00);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.conteudo-enquete {
+  padding: 20px;
+}
+
+.conteudo-enquete.ativo {
+  max-height: 100%;  
+  padding-bottom: 20px;
+}
+
+.caixa-enquete .texto-enquete {
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  padding: 15px 20px;
+  margin: 0;
+  background: #f8f8f8;
+  border-bottom: 1px solid #e5e5e5;
+  font-family: "Inter", Arial, sans-serif;
+}
+
+.caixa-enquete .texto-enquete span {
+  color: #0057ff;
+}
+
+.footer {
+background: var(--text-primary);
+color: white;
+padding: 45px 5%;
+margin-top: 60px;
+text-align: center;
+}
+
+.footer-logo img {
+height: 55px;
+filter: drop-shadow(0 0 8px var(--orange-vibrant));
+margin-bottom: 18px;
+}
+
+.footer-links {
+margin: 18px 0;
+}
+
+.footer-links a {
+margin: 0 15px;
+font-size: 0.95em;
+opacity: 0.8;
+transition: 0.3s;
+}
+
+.footer-links a:hover {
+opacity: 1;
+color: var(--orange-vibrant);
+}
+
+.social-icons {
+margin-top: 20px;
+}
+
+.social-icons a {
+display: inline-block;
+margin: 0 6px;
+padding: 10px;
+background: var(--purple-dark);
+color: white;
+border-radius: 50%;
+font-weight: 900;
+transition: background 0.3s;
+}
+
+.social-icons a:hover {
+background: var(--orange-vibrant);
+}
+
+@media (max-width: 768px) {
+
+.footer {
+    background: linear-gradient(135deg, #121212, #1a1a1a);
+    padding: 55px 5%;
+    color: #fff;
+    text-align: center;
+    border-top: 4px solid var(--orange-vibrant);
+    position: relative;
+}
+
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+    background-size: 300% 300%;
+    animation: footerGradient 4s linear infinite;
+}
+
+@keyframes footerGradient {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+
+/* ===============================
+   FOOTER 
+================================ */
+footer {
+  width: 100%;
+  background: #0e0e0e;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 80px;
+  padding: 35px 20px 25px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.footer-links a {
+  color: #bdbdbd;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  transition: all .25s ease;
+}
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #7b2cff, #ff7b00);
+  transition: width .3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 600px) {
+  .footer-links {
+    gap: 16px;
+  }
+
+  .footer-links a {
+    font-size: 0.9rem;
+  }
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.social-icons a {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    transition: 0.3s ease;
+    font-size: 1.2em;
+}
+
+.social-icons a:hover {
+    background: var(--orange-vibrant);
+    transform: scale(1.15);
+    color: #fff;
+}
+
+.gradient-line {
+width: 100%;
+height: 6px;
+background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+background-size: 300% 300%;
+animation: rotateGradient 5s linear infinite;
+}
+
+@keyframes rotateGradient {
+0% { background-position: 0% 50%; }
+100% { background-position: 300% 50%; }
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Início</a> › A Fazenda 17
+  </div>
+
+  <h1 class="news-title">Saory fazendeira e roça formada</h1>
+  <p class="news-subtitle">Saory se consagra a última fazendeira da temporada. Duda, Mesquita e Toninho integram a roça</p>
+
+  <div class="news-meta">
+    <span>Por Flop News</span>
+    <span>📅 11 de Dezembro de 2025</span>
+  </div>
+
+  <img src="https://i.ibb.co/W4RN77HS/G72uz4-EXw-AAIi6n.jpg" alt="Final A Grande Conquista 4" class="news-image">
+
+  <section class="news-content">
+    <p>
+A última prova do fazendeiro da temporada consagrou <strong>Saory</strong> Fazendeira.
+    </p>
+
+    <p>
+    A um passo da final, mais uma roça foi formada. A prova daz vez ezigiu pontaria e sorte dos peões, e como dito anteriormente, Saory levou o chapeu.
+    </p>
+
+    <div class="quote">
+    </div>
+
+    <p>
+    Acompanhe abaixo o possível resultado dessa roça
+    </p>
+  </section>
+
+  <p>Quem você quer que FIQUE? Vote na enquete!</p>
+
+<!-- ====================== ENQUETE ====================== -->
+
+<div class="caixa-enquete" id="caixaEnquete">
+
+    <div class="conteudo-enquete" id="conteudo-enquete">
+        <div class="wrapper">
+
+
+<div class="enquete">
+  <div class="header">
+    <h1>ENQUETE</h1>
+    <p>Quem você quer que FIQUE em "A Fazenda 17"?</p>
+  </div>
+
+  <!-- PARTICIPANTE 2 -->
+  <div class="participante" data-nome="Duda" data-votos="52" style="--i:1">
+    <div class="info">
+      <img class="foto" src="https://img.r7.com/images/duda-23092025192343715?dimensions=348x197">
+      <div class="texto">
+        <div class="nome">Duda</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+    <div class="captcha-wrapper">
+      <button class="btn-votar">Votar</button>
+    </div>
+  </div>
+  
+  <!-- PARTICIPANTE 1 -->
+  <div class="participante" data-nome="Mesquita" data-votos="37" style="--i:0">
+    <div class="info">
+      <img class="foto" src="https://img.r7.com/images/mesquita-23092025192344798?dimensions=348x197">
+      <div class="texto">
+        <div class="nome">Mesquita</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+    <div class="captcha-wrapper">
+      <button class="btn-votar">Votar</button>
+    </div>
+  </div>
+
+  <!-- PARTICIPANTE 3 -->
+  <div class="participante" data-nome="Toninho" data-votos="11" style="--i:2">
+    <div class="info">
+      <img class="foto" src="https://img.r7.com/images/toninho-23092025192343256?dimensions=348x197">
+      <div class="texto">
+        <div class="nome">Toninho</div>
+        <div class="clique">Clique para votar</div>
+      </div>
+    </div>
+    <div class="captcha-wrapper">
+      <button class="btn-votar">Votar</button>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP DE CONFIRMAÇÃO -->
+<div class="overlay" id="popupConfirmacao">
+  <div class="popup">
+
+    <div class="popup-top">
+      <i>✓</i>
+      <span>Voto registrado!</span>
+    </div>
+
+    <div class="popup-conteudo">
+
+      <div class="popup-esq">
+        <h2 id="popupNome"></h2>
+
+        <div class="btn-resultado" onclick="abrirResultados()">
+          Ver resultados <i>→</i>
+        </div>
+
+        <button class="btn-novamente" onclick="resetarEnquete()">
+          Votar novamente
+        </button>
+      </div>
+
+      <img id="popupFoto" class="popup-foto" src="">
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+
+<!-- POPUP DE RESULTADOS  -->
+<div class="overlay" id="popupResultados">
+  <div class="popup" style="max-width:420px; padding:30px">
+
+    <h2 style="margin:0 0 20px; font-size:26px; text-align:center;">
+      Resultados da votação
+    </h2>
+
+    <div id="resultadoLista"></div>
+
+    <button class="btn-novamente" style="margin-top:25px"
+      onclick="fecharResultados()">
+      Fechar resultados
+    </button>
+
+  </div>
+</div>
+
+</div>
+  </div>
+</div>
+</div>
+
+  <div class="tags">
+    <span class="tag">A Fazenda 17</span>
+    <span class="tag">Roça</span>
+    <span class="tag">Fazendeiro</span>
+    <span class="tag">Reality</span>
+  </div>
+
+    <div class="news-actions">
+      <a href="index.html" class="btn btn-outline">⬅ Voltar</a>
+      <a href="https://record.r7.com/a-fazenda/a-fazenda-17/votacao/" class="btn btn-primary">🔥 Votação oficial</a>
+      <button class="btn btn-outline" onclick="navigator.share ? navigator.share({title: document.title, url: window.location.href}) : alert('Copie o link da página 😉')">
+        📤 Compartilhar
+      </button>
+    </div>
+
+  </article>
+
+  <!-- OUTRAS NOTÍCIAS -->
+  <section class="related">
+    <h2>Outras notícias</h2>
+
+    <div class="related-grid">
+
+      <a href="fabianolamp.html" class="related-card">
+        <img src="https://uploads.ric.com.br/uploads/2025/12/fabiano-moraes.jpg">
+        <div class="related-card-content">
+          <span>A Fazenda 17</span>
+          <h3>Fabiano Vence a última prova de fogo da ediçãof</h3>
+        </div>
+      </a>
+      
+      <a href="#" class="related-card">
+        <img src="https://i.ibb.co/HL932NpK/Final.jpg">
+        <div class="related-card-content">
+          <span>A Grande Conquista</span>
+          <h3>Final definida! Veja quem disputa o título</h3>
+        </div>
+      </a>
+
+      <a href="https://fshow.site/ads/planos.html" class="related-card">
+        <img src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg">
+        <div class="related-card-content">
+          <span>Publicidade</span>
+          <h3>Anuncie aqui no FLOP News</h3>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+  
+// ================================
+// ABRIR ENQUETE
+// ================================
+document.getElementById("abrirEnquete").addEventListener("click", () => {
+    document.getElementById("conteudo-enquete").classList.add("ativo");
+    document.getElementById("abrirEnquete").style.display = "none";
+});</script>
+
+<style>
+:root {
+  --cor-primaria: #0aaac0;
+  --cor-primaria-escura: #08889a;
+  --cor-hover: #f5faff;
+  --radius-grande: 28px;
+  --radius-medio: 18px;
+  --radius-pequeno: 14px;
+  --shadow-soft: 0 12px 35px rgba(0,0,0,0.09);
+  --shadow-popup: 0 20px 50px rgba(0,0,0,0.28);
+  --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.25s ease;
+}
+
+/* BASE */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f1f5fa;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.enquete {
+  width: 100%;
+  margin: 0 auto;
+  background: transparent;   
+  border-radius: 0;            
+  overflow: visible;          
+  box-shadow: none;            
+  padding: 0;                  
+  animation: none;             
+}
+
+@keyframes entraEnquete {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* TÍTULO */
+.header {
+  padding: 34px 25px 20px;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  background: linear-gradient(135deg, #0aaac0, #00d4d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: tituloGlow 3s infinite alternate;
+}
+@keyframes tituloGlow {
+  from { filter: brightness(1); }
+  to   { filter: brightness(1.15); }
+}
+
+.header p {
+  margin: 12px 0 0;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #333;
+  animation: fadeInUp 0.8s 0.2s both;
+}
+
+/* PARTICIPANTE */
+.participante {
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s both;
+  animation-delay: calc(0.1s * var(--i, 0));
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 16px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border-radius: var(--radius-pequeno);
+  overflow: hidden;
+  position: relative;
+}
+
+.info::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cor-primaria);
+  transform: scale(0);
+  opacity: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.info.ripple::before {
+  animation: rippleEffect 0.6s ease-out;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.info:hover {
+  background: var(--cor-hover);
+  transform: translateY(-2px);
+}
+
+.foto {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-pequeno);
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transition: var(--transition);
+}
+
+.texto { flex: 1; }
+.nome { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.clique { font-size: 15px; color: #777; }
+
+/* SELECIONADO */
+.participante.selecionado .info {
+  background: var(--cor-primaria);
+  color: #fff;
+  border-radius: var(--radius-medio);
+  margin: 10px 10px 0;
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px rgba(10,170,192,0.35);
+  animation: selecionadoPulse 0.4s ease;
+}
+
+@keyframes selecionadoPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1.02); }
+}
+
+.participante.selecionado .clique { color: #eaffff; }
+.participante.selecionado .foto {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+}
+
+/* CAPTCHA */
+.captcha-wrapper {
+  background: #fafdff;
+  border: 1px solid #cce4f0;
+  margin: 0 10px 10px;
+  border-radius: 0 0 var(--radius-medio) var(--radius-medio);
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 22px;
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.captcha-wrapper.aberto {
+  max-height: 400px;
+  padding: 26px 22px;
+  box-shadow: inset 0 8px 20px rgba(10,170,192,0.12);
+}
+
+/* BOTÃO VOTAR */
+.btn-votar {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 17px;
+  background: #cfcfcf;
+  border: none;
+  color: white;
+  font-size: 19px;
+  font-weight: 600;
+  border-radius: var(--radius-pequeno);
+  cursor: not-allowed;
+  transition: var(--transition-fast);
+}
+
+.btn-votar.habilitado {
+  cursor: pointer;
+  background: var(--cor-primaria);
+  animation: pulseButton 2s infinite;
+}
+
+.btn-votar.habilitado:hover {
+  background: var(--cor-primaria-escura);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(10,170,192,0.4);
+}
+
+@keyframes pulseButton {
+  0%,100% { box-shadow: 0 0 0 0 rgba(10,170,192,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(10,170,192,0); }
+}
+
+/* ==========================
+      POPUP REORGANIZADO
+========================== */
+
+.popup {
+  background: #fff;
+  width: 92%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 28px 26px 30px;
+  overflow: hidden;
+  animation: popupEntrar 0.35s ease-out;
+  box-shadow: var(--shadow-popup);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+@keyframes popupEntrar {
+  from { opacity: 0; transform: scale(.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Topo com ícone + texto */
+.popup-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #00a882;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* CONTEÚDO GERAL */
+.popup-conteudo {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+/* LADO ESQUERDO: títulos */
+.popup-esq {
+  display: flex;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.popup-esq h2 {
+  font-size: 26px;
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #111;
+}
+
+.popup-esq p {
+  font-size: 15px;
+  color: #555;
+  margin: 0;
+}
+
+/* FOTO DO PARTICIPANTE */
+.popup-foto {
+  width: 90px;
+  height: 90px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+}
+
+/* BOTÃO NOVAMENTE */
+.btn-novamente {
+  background: #0aaac0;
+  color: white;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: .25s;
+  margin-top: 5px;
+}
+
+.btn-novamente:hover {
+  background: #08889a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(10,170,192,0.4);
+}
+
+/* VER RESULTADO */
+.btn-resultado {
+  margin-top: -4px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0aaac0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-resultado i {
+  font-size: 18px;
+  transition: .3s;
+}
+
+.btn-resultado:hover i {
+  transform: translateX(4px);
+}
+
+.btn-votar {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 17px;
+  background: #cfcfcf;
+  border: none;
+  color: white;
+  font-size: 19px;
+  font-weight: 600;
+  border-radius: var(--radius-pequeno);
+  cursor: not-allowed;
+  transition: var(--transition-fast);
+}
+.btn-votar.habilitado {
+  cursor: pointer;
+  background: var(--cor-primaria);
+  animation: pulseButton 2s infinite;
+}
+.btn-votar.habilitado:hover {
+  background: var(--cor-primaria-escura);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(10,170,192,0.4);
+}
+@keyframes pulseButton {
+  0%,100% { box-shadow: 0 0 0 0 rgba(10,170,192,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(10,170,192,0); }
+}
+
+</style>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+/* ========== FIREBASE CONFIG ========== */
+const firebaseConfig = {
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVVbVQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ========== ELEMENTOS ========== */
+const participantes = Array.from(document.querySelectorAll(".participante"));
+const popupConfirmacao = document.getElementById("popupConfirmacao");
+const popupResultados = document.getElementById("popupResultados");
+const resultadoLista = document.getElementById("resultadoLista");
+
+participantes.forEach(p => {
+  if (!p.dataset.votos) p.dataset.votos = 0;
+});
+
+let participanteSelecionado = null;
+function criarRipple(event) {
+  const info = event.currentTarget;
+  info.classList.add("ripple");
+  setTimeout(() => info.classList.remove("ripple"), 600);
+}
+
+function abrir(p) {
+  p.classList.add("selecionado");
+  p.querySelector(".captcha-wrapper").classList.add("aberto");
+  const btn = p.querySelector(".btn-votar");
+  btn.classList.add("habilitado");
+  btn.disabled = false;
+}
+
+function fechar(p) {
+  p.classList.remove("selecionado");
+  p.querySelector(".captcha-wrapper").classList.remove("aberto");
+  const btn = p.querySelector(".btn-votar");
+  btn.classList.remove("habilitado");
+  btn.disabled = true;
+}
+
+participantes.forEach(participante => {
+  const info = participante.querySelector(".info");
+  info.addEventListener("click", criarRipple);
+  info.addEventListener("click", () => {
+    if (participante === participanteSelecionado) {
+      fechar(participante);
+      participanteSelecionado = null;
+    } else {
+      if (participanteSelecionado) fechar(participanteSelecionado);
+      abrir(participante);
+      participanteSelecionado = participante;
+    }
+  });
+});
+
+participantes.forEach(p => {
+  const btn = p.querySelector(".btn-votar");
+  btn.disabled = true;
+});
+
+/* ========== FIRESTORE========== */
+const COLECAO_VOTOS = "roça13f17";
+
+function conectarSnapshotVotos() {
+  const ref = collection(db, COLECAO_VOTOS);
+  onSnapshot(ref, snapshot => {
+
+    participantes.forEach(p => p.dataset.votos = 0);
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const nome = data && data.nome;
+      if (!nome) return;
+
+      const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+      if (p) {
+        p.dataset.votos = Number(p.dataset.votos) + 1;
+      }
+    });
+
+    console.log("[onSnapshot] votos atualizados:", participantes.map(p => `${p.dataset.nome}: ${p.dataset.votos}`));
+  }, err => {
+    console.error("Erro onSnapshot votos:", err);
+  });
+}
+
+
+conectarSnapshotVotos();
+
+async function registrarVoto(nome) {
+  try {
+    const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+    const btn = p.querySelector(".btn-votar");
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+
+    await addDoc(collection(db, COLECAO_VOTOS), {
+      nome: nome,
+      timestamp: new Date()
+    });
+
+    console.log("Voto registrado no Firestore para:", nome);
+
+    setTimeout(() => {
+      if (btn) {
+        btn.textContent = "Votar";
+      }
+    }, 700);
+
+    return true;
+  } catch (e) {
+    console.error("Erro ao registrar voto:", e);
+    alert("Erro ao registrar voto. Verifique regras do Firestore e console.");
+    const p = document.querySelector(`.participante[data-nome="${nome}"]`);
+    if (p) {
+      const btn = p.querySelector(".btn-votar");
+      btn.disabled = false;
+      btn.textContent = "Votar";
+    }
+    return false;
+  }
+}
+
+participantes.forEach(p => {
+  const btn = p.querySelector(".btn-votar");
+
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    if (btn.disabled) return;
+
+    const nome = p.dataset.nome;
+    const foto = p.querySelector(".foto").src;
+
+    const ok = await registrarVoto(nome);
+    if (!ok) return;
+
+    // mostra popup confirmação
+    document.getElementById("popupNome").textContent = nome;
+    document.getElementById("popupFoto").src = foto;
+    popupConfirmacao.classList.add("mostrar");
+
+    participantes.forEach(pp => pp.querySelector(".info").style.pointerEvents = "none");
+  });
+});
+
+/* ========== POPUP RESULTADOS ========== */
+function abrirResultados() {
+  resultadoLista.innerHTML = "";
+
+  let total = 0;
+  participantes.forEach(p => total += Number(p.dataset.votos || 0));
+
+  if (total === 0) {
+    resultadoLista.innerHTML = `<div style="text-align:center; color:#666; padding:20px;">Ainda não há votos.</div>`;
+    popupResultados.classList.add("mostrar");
+    return;
+  }
+
+  const arr = participantes.map(p => ({
+    nome: p.dataset.nome,
+    votos: Number(p.dataset.votos || 0),
+    foto: p.querySelector(".foto").src
+  }));
+  arr.sort((a,b) => b.votos - a.votos);
+
+  arr.forEach(item => {
+    const pct = ((item.votos / total) * 100).toFixed(2);
+    resultadoLista.innerHTML += `
+      <div style="display:flex; align-items:center; margin-bottom:16px; gap:14px;">
+        <img src="${item.foto}" style="width:62px; height:62px; border-radius:10px; object-fit:cover;">
+        <div style="flex:1;">
+          <div style="font-size:19px; font-weight:700;">${item.nome}</div>
+          <div style="font-size:15px; color:#666;">
+            ${item.votos} votos • ${pct}%
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  popupResultados.classList.add("mostrar");
+}
+function fecharResultados() { popupResultados.classList.remove("mostrar"); }
+
+/* =====================================================
+   RESETAR ENQUETE 
+===================================================== */
+window.resetarEnquete = function () {
+
+  popupConfirmacao.classList.remove("mostrar");
+  popupResultados.classList.remove("mostrar");
+  participantes.forEach(pp => {
+    pp.querySelector(".info").style.pointerEvents = "auto";
+  });
+
+  participantes.forEach(p => {
+    p.classList.remove("selecionado");
+    p.querySelector(".captcha-wrapper").classList.remove("aberto");
+
+    const btn = p.querySelector(".btn-votar");
+    btn.disabled = true;
+    btn.textContent = "Votar";
+  });
+
+  participanteSelecionado = null;
+
+  document.getElementById("caixaEnquete").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+};
+
+window.abrirResultados = abrirResultados;
+window.fecharResultados = fecharResultados;
+
+/* ========== DEBUG helpers ========== */
+window._ENQUETE_debug = {
+  colecao: COLECAO_VOTOS,
+  logParticipants: () => participantes.map(p => ({nome: p.dataset.nome, votos: p.dataset.votos}))
+};
+
+console.log("Script enquete iniciado. Coleção usada:", COLECAO_VOTOS);
+console.log("Run _ENQUETE_debug.logParticipants() no console para ver contadores.");
+</script>
+<footer class="footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h2>Portal Flop</h2>
+            <p>Pìxeels Productions</p>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://www.youtube.com/@VulgoFlopp" aria-label="Youtube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.wattpad.com/user/FelipeLovee" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://x.com/Euu_Phillip" aria-label="Twitter / X">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://discord.gg/t56YN5sB" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+        </div>
+    </div>
+
+<footer>
+  <div class="footer-links">
+    <a href="termos/sobre.html">Sobre</a>
+    <a href="termos/contato.html">Contato</a>
+    <a href="termos/termos.html">Termos de Uso</a>
+    <a href="termos/privacidade.html">Política de Privacidade</a>
+  </div>
+
+  <div class="footer-copy">
+    © 2025 Fshow • Todos os direitos reservados
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</body>
+</html>
