@@ -862,10 +862,6 @@ animation: rotateGradient 5s linear infinite;
     background: transparent;
 }
 
-</style>  
-
-<style>
-
 .blitz-headline {
     margin-left: 5%;
     margin-right: 5%;
@@ -897,5 +893,3 @@ animation: rotateGradient 5s linear infinite;
         padding-right: 24px;
     }
 }
-
-
