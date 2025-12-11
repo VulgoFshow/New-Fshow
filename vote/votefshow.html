@@ -547,23 +547,23 @@ button:disabled {
     <div class="espacador"></div>
 
 <label class="option">
-  <img src="https://i.ibb.co/KzhhZH7H/Gean.jpg" alt="Gêan">
+  <img src="https://i.ibb.co/ymQMNfvZ/davil.jpg" alt="Davi">
   <div class="option-content">
-      <input type="radio" name="vote" value="Gêan"> Gêan
+      <input type="radio" name="vote" value="Davi"> Davi
   </div>
 </label>
 
 <label class="option">
-    <img src="https://i.ibb.co/G47V2xFh/Rafa.jpg" alt="Rafa">
+    <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Guilherme">
   <div class="option-content">
-      <input type="radio" name="vote" value="Rafa"> Rafa
+      <input type="radio" name="vote" value="Guilherme"> Guilherme
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/RkSZVpt5/Sirleyde.jpg" alt="Sirleidy">
+  <img src="https://i.ibb.co/FqDdQHzN/Luany.jpg" alt="Luany">
   <div class="option-content">
-      <input type="radio" name="vote" value="Sirleidy"> Sirleidy
+      <input type="radio" name="vote" value="Luany"> Luany
   </div>
 </label>
 
@@ -628,7 +628,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-10T18:00:00");
+const encerramentoBR = new Date("2025-12-11T18:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -960,7 +960,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça3")  
+      .from("f3roça4")  
       .insert(votosParaEnviar);  
   
     if (error) {  
