@@ -1,0 +1,235 @@
+:root {
+  --orange: #FF8C00;
+  --purple: #8A2BE2;
+  --dark: #121212;
+  --gray: #666;
+  --bg: #f9f9f9;
+  --gradient: linear-gradient(90deg, #FF8C00, #8A2BE2);
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--dark);
+  line-height: 1.7;
+}
+
+/* ============================= */
+/* CONTAINER PADRÃO */
+/* ============================= */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* ============================= */
+/* BREADCRUMB */
+/* ============================= */
+.breadcrumb {
+  font-size: 0.85em;
+  color: var(--gray);
+  margin-bottom: 15px;
+}
+
+.breadcrumb a {
+  color: var(--purple);
+  font-weight: 600;
+}
+
+/* ============================= */
+/* TÍTULO */
+/* ============================= */
+.news-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3em;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.news-subtitle {
+  font-size: 1.1em;
+  color: var(--gray);
+  margin-bottom: 25px;
+}
+
+/* ============================= */
+/* META INFO */
+/* ============================= */
+.news-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 0.85em;
+  color: var(--gray);
+  margin-bottom: 25px;
+}
+
+.news-meta span {
+  font-weight: 600;
+}
+
+/* ============================= */
+/* IMAGEM DE DESTAQUE */
+/* ============================= */
+.news-image {
+  width: 100%;
+  height: 420px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* ============================= */
+/* CONTEÚDO */
+/* ============================= */
+.news-content p {
+  margin-bottom: 22px;
+  font-size: 1.05em;
+}
+
+.news-content strong {
+  color: var(--purple);
+}
+
+.quote {
+  margin: 30px 0;
+  padding: 25px;
+  border-left: 6px solid var(--orange);
+  background: rgba(255,140,0,0.08);
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* TAGS */
+/* ============================= */
+.tags {
+  display: flex;
+  gap: 10px;
+  margin: 30px 0;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: var(--gradient);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+.news-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+
+.btn {
+  padding: 12px 22px;
+  font-weight: 700;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(138,43,226,0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--dark);
+  color: var(--dark);
+}
+
+.btn-outline:hover {
+  background: var(--dark);
+  color: #fff;
+}
+
+/* =========================
+   OUTRAS NOTÍCIAS
+========================= */
+.related {
+  margin-top: 70px;
+}
+
+.related h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  margin-bottom: 25px;
+  color: var(--purple);
+  border-left: 6px solid var(--orange);
+  padding-left: 15px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.related-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.related-card:hover {
+  transform: translateY(-6px);
+}
+
+.related-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.related-card-content {
+  padding: 16px;
+}
+
+.related-card-content h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.related-card-content span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.footer {
+  margin-top: 80px;
+  padding: 35px 20px;
+  background: var(--dark);
+  color: #fff;
+  text-align: center;
+  font-size: 0.9rem;
+}     
+  
