@@ -328,4 +328,22 @@
   50% { box-shadow: 0 0 0 12px rgba(10,170,192,0); }
 }
 
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: none;           
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
+
+.overlay.ativo {
+  display: flex;         
+}
+
+.popup {
+  position: relative;
+  z-index: 10000;
+}
+
