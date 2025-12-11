@@ -183,10 +183,6 @@
   50% { box-shadow: 0 0 0 12px rgba(10,170,192,0); }
 }
 
-/* ==========================
-      POPUP REORGANIZADO
-========================== */
-
 .popup {
   background: #fff;
   width: 92%;
@@ -318,6 +314,7 @@
   background: var(--cor-primaria);
   animation: pulseButton 2s infinite;
 }
+
 .btn-votar.habilitado:hover {
   background: var(--cor-primaria-escura);
   transform: translateY(-2px);
