@@ -127,8 +127,8 @@ button:hover {
   <div class="card" id="voteScreen">
     <div class="title">Quem você quer que FIQUE?</div>
     <div class="option" onclick="selectOption(this)">Alysson</div>
-    <div class="option" onclick="selectOption(this)">Perfeitz</div>
-    <div class="option" onclick="selectOption(this)">Ella</div>
+    <div class="option" onclick="selectOption(this)">Koyuh</div>
+    <div class="option" onclick="selectOption(this)">Nick</div>
     <button onclick="confirmVote()">VOTAR</button>
   </div>
 
@@ -148,7 +148,7 @@ button:hover {
 <script>
 // ====================== CONTROLE DA VOTAÇÃO ======================
 // MUDE APENAS ESTA LINHA PARA ABRIR OU FECHAR A VOTAÇÃO
-const VOTACAO_ABERTA = false;  
+const VOTACAO_ABERTA = true;  
 // true  → votação aberta
 // false → votação encerrada
 
@@ -209,7 +209,7 @@ async function confirmVote() {
 
   try {
     // Note: Use 'update' or 'set' for single document, 'add' for new documents (votes).
-    await db.collection("jut6").add({ 
+    await db.collection("jut7").add({ 
       nome: selected,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
