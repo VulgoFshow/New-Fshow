@@ -42,8 +42,9 @@ body {
   background: var(--card);
   backdrop-filter: blur(14px);
   border-radius: 22px;
-  padding: 24px;
+  padding: 40px 24px;
   box-shadow: 0 25px 50px rgba(0,0,0,.45);
+  text-align: center;
   animation: fadeUp .5s ease;
 }
 
@@ -53,12 +54,17 @@ body {
 }
 
 .title {
-  text-align: center;
   font-size: 24px;
   font-weight: 800;
   letter-spacing: 1px;
   color: var(--gold);
   margin-bottom: 20px;
+}
+
+.message {
+  font-size: 20px;
+  margin: 20px 0;
+  line-height: 1.5;
 }
 
 .option {
@@ -84,7 +90,7 @@ body {
 button {
   width: 100%;
   padding: 16px;
-  margin-top: 10px;
+  margin-top: 20px;
   border-radius: 18px;
   border: none;
   background: linear-gradient(135deg, #f0d58f, #c7a457);
@@ -112,31 +118,22 @@ button:hover {
   font-weight: bold;
   color: var(--gold);
   margin: 16px 0;
-  animation: pulse .6s ease;
-}
-
-@keyframes pulse {
-  0% {transform: scale(.8); opacity:0;}
-  100% {transform: scale(1); opacity:1;}
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-  <!-- VOTAÇÃO -->
+  <!-- TELA: VOTAÇÃO ABERTA -->
   <div class="card" id="voteScreen">
     <div class="title">Quem você quer que FIQUE?</div>
-
     <div class="option" onclick="selectOption(this)">Eueu</div>
     <div class="option" onclick="selectOption(this)">Guilherme</div>
-
     <button onclick="confirmVote()">VOTAR</button>
   </div>
 
-  <!-- CONFIRMAÇÃO -->
+  <!-- TELA: CONFIRMAÇÃO DE VOTO -->
   <div class="card hidden confirm" id="confirmScreen">
     <div class="title">VOTO REGISTRADO</div>
     <p>Você votou em:</p>
@@ -144,9 +141,20 @@ button:hover {
     <button onclick="voteAgain()">VOTAR NOVAMENTE</button>
   </div>
 
+  <!-- TELA: VOTAÇÃO ENCERRADA -->
+  <div class="card hidden" id="closedScreen">
+    <div class="title">VOTAÇÃO ENCERRADA</div>
+  </div>
+
 </div>
 
 <script>
+// ====================== CONTROLE DA VOTAÇÃO ======================
+// MUDE APENAS ESTA LINHA PARA ABRIR OU FECHAR A VOTAÇÃO
+const VOTACAO_ABERTA = false;  
+// true  → votação aberta
+// false → votação encerrada
+
 /* 🔥 FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
@@ -165,8 +173,25 @@ const db = firebase.firestore();
 let selected = null;
 let sending = false;
 
+/* DECIDE QUAL TELA MOSTRAR */
+function updateScreen() {
+  if (VOTACAO_ABERTA) {
+    document.getElementById("voteScreen").classList.remove("hidden");
+    document.getElementById("closedScreen").classList.add("hidden");
+    document.getElementById("confirmScreen").classList.add("hidden");
+  } else {
+    document.getElementById("voteScreen").classList.add("hidden");
+    document.getElementById("closedScreen").classList.remove("hidden");
+    document.getElementById("confirmScreen").classList.add("hidden");
+  }
+}
+
+/* Chama ao carregar a página */
+updateScreen();
+
 /* 👉 SELEÇÃO */
 function selectOption(el) {
+  if (!VOTACAO_ABERTA) return;
   document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   selected = el.innerText;
@@ -174,11 +199,14 @@ function selectOption(el) {
 
 /* 🗳️ CONFIRMAR VOTO */
 async function confirmVote() {
+  if (!VOTACAO_ABERTA) {
+    alert("A votação está encerrada.");
+    return;
+  }
   if (!selected) {
     alert("Escolha um participante");
     return;
   }
-
   if (sending) return;
   sending = true;
 
@@ -193,13 +221,8 @@ async function confirmVote() {
     document.getElementById("confirmScreen").classList.remove("hidden");
 
   } catch (error) {
-    console.error("❌ Erro ao registrar voto:", error);
-
-    alert(
-      "Erro ao registrar seu voto.\n" +
-      "Verifique sua conexão e tente novamente."
-    );
-
+    console.error("Erro ao registrar voto:", error);
+    alert("Erro ao registrar seu voto.\nVerifique sua conexão e tente novamente.");
   } finally {
     sending = false;
   }
@@ -209,13 +232,10 @@ async function confirmVote() {
 function voteAgain() {
   selected = null;
   sending = false;
-
   document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-  document.getElementById("confirmScreen").classList.add("hidden");
-  document.getElementById("voteScreen").classList.remove("hidden");
+  updateScreen(); // volta para a tela correta (aberta ou encerrada)
 }
 </script>
-
 
 </body>
 </html>
