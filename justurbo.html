@@ -5,7 +5,6 @@
 <title>Julgamento do Público</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -125,16 +124,14 @@ button:hover {
 
 <div class="container">
 
-  <!-- TELA: VOTAÇÃO ABERTA -->
   <div class="card" id="voteScreen">
     <div class="title">Quem você quer que FIQUE?</div>
     <div class="option" onclick="selectOption(this)">Ella</div>
     <div class="option" onclick="selectOption(this)">Guilherme</div>
-        <div class="option" onclick="selectOption(this)">Gean</div>
+    <div class="option" onclick="selectOption(this)">Gean</div>
     <button onclick="confirmVote()">VOTAR</button>
   </div>
 
-  <!-- TELA: CONFIRMAÇÃO DE VOTO -->
   <div class="card hidden confirm" id="confirmScreen">
     <div class="title">VOTO REGISTRADO</div>
     <p>Você votou em:</p>
@@ -142,7 +139,6 @@ button:hover {
     <button onclick="voteAgain()">VOTAR NOVAMENTE</button>
   </div>
 
-  <!-- TELA: VOTAÇÃO ENCERRADA -->
   <div class="card hidden" id="closedScreen">
     <div class="title">VOTAÇÃO ENCERRADA</div>
   </div>
@@ -152,7 +148,7 @@ button:hover {
 <script>
 // ====================== CONTROLE DA VOTAÇÃO ======================
 // MUDE APENAS ESTA LINHA PARA ABRIR OU FECHAR A VOTAÇÃO
-const VOTACAO_ABERTA = false;  
+const VOTACAO_ABERTA = true;  
 // true  → votação aberta
 // false → votação encerrada
 
@@ -212,7 +208,8 @@ async function confirmVote() {
   sending = true;
 
   try {
-    await db.collection("jut3").add({
+    // Note: Use 'update' or 'set' for single document, 'add' for new documents (votes).
+    await db.collection("jut4").add({ 
       nome: selected,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -231,10 +228,8 @@ async function confirmVote() {
 
 /* 🔁 VOTAR NOVAMENTE */
 function voteAgain() {
-  selected = null;
-  sending = false;
-  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-  updateScreen(); // volta para a tela correta (aberta ou encerrada)
+  // ESSA LINHA RECARREGA A PÁGINA COMPLETAMENTE
+  window.location.reload(); 
 }
 </script>
 
