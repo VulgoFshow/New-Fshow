@@ -212,7 +212,7 @@ async function confirmVote() {
   sending = true;
 
   try {
-    await db.collection("jut1").add({
+    await db.collection("jut2").add({
       nome: selected,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
