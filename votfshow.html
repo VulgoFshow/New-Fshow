@@ -1,262 +1,222 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Fshow/Votação</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    :root {
-      --bg: #121212;
-      --card-bg: #2b2b2b;
-      --selected-bg: #3c3c3c;
-      --border-radius: 8px;
-      --accent: #00b7b0;
-      --text: #fff;
-      --muted: #bdbdbd;
-      --panel-bg: #2b2b2b;
-      --panel-border: rgba(255,255,255,0.06);
-    }
+<meta charset="UTF-8">
+<title>Julgamento do Público</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    body {
-      background: transparent !important; 
-      font-family: Arial, sans-serif;
-      color: var(--text);
-      margin: 0;
-      padding: 0;
-    }
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px 15px;
-    }
+<style>
+:root {
+  --bg: radial-gradient(circle at top, #3a1515, #120707);
+  --card: rgba(255,255,255,.06);
+  --gold: #e0c07a;
+  --text: #fff;
+}
 
-    h1 {font-size:20px;font-weight:700;margin-bottom:20px;text-align:left}
-    .option {
-      display:flex;align-items:stretch;background:var(--card-bg);
-      border-radius:var(--border-radius);margin-bottom:12px;
-      overflow:hidden;border:1px solid #fff;cursor:pointer;transition:.2s;
-    }
-    .option img {width:150px;height:auto;object-fit:cover;flex-shrink:0}
-    .option-content {display:flex;align-items:center;padding:0 12px;width:100%;font-size:18px;font-weight:500;position:relative}
-    .option-content input[type="radio"] {
-      appearance:none;-webkit-appearance:none;width:20px;height:20px;
-      border:2px solid var(--muted);border-radius:50%;margin-right:8px;cursor:pointer;position:relative;
-    }
-    .option-content input[type="radio"]:checked {border-color:var(--accent)}
-    .option-content input[type="radio"]:checked::before {
-      content:"";position:absolute;width:10px;height:10px;top:3px;left:3px;border-radius:50%;background:var(--accent);
-    }
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
 
-    button {
-      width:100%;padding:14px;font-size:16px;border:none;border-radius:var(--border-radius);
-      margin-top:15px;cursor:pointer;background:#444;color:var(--muted);
-      font-weight:bold;transition:.3s;
-    }
-    button.active {background:var(--accent);color:#fff}
-    button:disabled {opacity:.6;cursor:not-allowed}
-    .notice {font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    /* tela de confirmação */
-    #confirmTela {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      text-align: center;
-      background: transparent !important;
-      min-height: 85vh;
-    }
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 12px;
+}
 
-    .confirm-card {
-      background: transparent !important; 
-      border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      padding: 20px;
-      max-width: 380px;
-      width: 100%;
-    }
+.card {
+  background: var(--card);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 25px 50px rgba(0,0,0,.45);
+  animation: fadeUp .5s ease;
+}
 
-    #fotoConfirm {
-      width: 100%;
-      display: block;
-      border-radius: 10px 10px 0 0;  
-      border: 1px solid #ddd;
-      border-bottom: none;          
-    }
+@keyframes fadeUp {
+  from {opacity:0; transform: translateY(30px);}
+  to {opacity:1; transform: translateY(0);}
+}
 
-    #nomeConfirm {
-      background: #1F1F1F;             
-      color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-      text-align: center;
-      padding: 14px;
-      border-radius: 0 0 10px 10px; 
-      border: 1px solid #ddd;
-      border-top: none;             
-      margin: 0;
-      box-sizing: border-box;    
-    }
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
 
-    .success-msg {
-      display:flex;align-items:center;justify-content:center;
-      font-size:14px;color:#fff;background:rgba(0,255,100,.15);
-      border:1px solid rgba(0,255,100,.4);border-radius:6px;
-      padding:10px;margin-bottom:18px;
-    }
-    .success-msg::before{content:"✔";color:#00ff6a;margin-right:6px}
-    .voltar{background:var(--accent);color:#fff}
-    
-    /* hCaptcha */
-    .captcha-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-    
-  </style>
+.option {
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.04);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: .25s;
+}
 
-  <!-- hCaptcha -->
-  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-  </head>
+.option:hover {
+  transform: scale(1.02);
+  border-color: rgba(224,192,122,.4);
+}
 
-<!-- Função global para callback -->
-<script>
-  function captchaResolvido(token) {
-    if (token) {
-      const botaoVotar = document.getElementById("botaoVotar");
-      botaoVotar.disabled = false;
-      botaoVotar.classList.add("active");
-    }
-  }
-</script>
+.option.selected {
+  border-color: var(--gold);
+  background: rgba(224,192,122,.15);
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 10px;
+  border-radius: 18px;
+  border: none;
+  background: linear-gradient(135deg, #f0d58f, #c7a457);
+  color: #000;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .25s;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+.hidden {
+  display: none;
+}
+
+.confirm {
+  text-align: center;
+}
+
+.vote-name {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--gold);
+  margin: 16px 0;
+  animation: pulse .6s ease;
+}
+
+@keyframes pulse {
+  0% {transform: scale(.8); opacity:0;}
+  100% {transform: scale(1); opacity:1;}
+}
+</style>
+</head>
 
 <body>
-  <div id="votoTela" class="container">
-    <h1>Quem deve VENCER?</h1>
 
-    <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bflavia.jpg?raw=true" alt="Flávia">
-      <div class="option-content">
-        <input type="radio" name="vote" value="Flávia"> Flávia
-      </div>
-    </label>
+<div class="container">
 
-    <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bluca.jpg?raw=true" alt="Luca">
-      <div class="option-content">
-        <input type="radio" name="vote" value="Luca"> Luca
-      </div>
-    </label>
+  <!-- VOTAÇÃO -->
+  <div class="card" id="voteScreen">
+    <div class="title">JULGAMENTO DO PÚBLICO</div>
 
-    <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bbb/bneto.jpg?raw=true" alt="Neto">
-      <div class="option-content">
-        <input type="radio" name="vote" value="Neto"> Neto
-      </div>
-    </label>
+    <div class="option" onclick="selectOption(this)">Participante 1</div>
+    <div class="option" onclick="selectOption(this)">Participante 2</div>
+    <div class="option" onclick="selectOption(this)">Participante 3</div>
 
-    <!-- hCaptcha renderizado -->
-    <div class="captcha-container">
-      <div class="h-captcha" data-sitekey="ca52a2be-e1e0-4062-a7e0-745018eeeb26" data-callback="captchaResolvido"></div>
-    </div>
-
-    <button id="botaoVotar" disabled>Votar</button>
-
-    <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
+    <button onclick="confirmVote()">VOTAR</button>
   </div>
 
-  <div id="confirmTela">
-    <div class="confirm-card">
-      <img id="fotoConfirm" src="" alt="Foto do participante"/>
-      <p id="nomeConfirm"></p>
-      <button class="voltar" onclick="window.location.href='https://fshow.site'">VOLTAR</button>
-      <div class="success-msg" style="margin-top: 15px;">Você já votou!</div>
-      <div class="notice">São válidos apenas os votos feitos em território nacional.</div>
-    </div>
+  <!-- CONFIRMAÇÃO -->
+  <div class="card hidden confirm" id="confirmScreen">
+    <div class="title">VOTO REGISTRADO</div>
+    <p>Você votou em:</p>
+    <div class="vote-name" id="votedName"></div>
+    <button onclick="voteAgain()">VOTAR NOVAMENTE</button>
   </div>
 
-<script type="module">
-  const VOTACAO_ATUAL = 'a'; // ⚠️ Coloque entre aspas
+</div>
 
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<script>
+/* 🔥 FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  databaseURL: "https://enquete-fa527-default-rtdb.firebaseio.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+};
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyANHVK6lI_uBsQk1_rz2zI5TrJj40P1kV8",
-    authDomain: "votounico-974d7.firebaseapp.com",
-    databaseURL: "https://votounico-974d7-default-rtdb.firebaseio.com",
-    projectId: "votounico-974d7",
-    storageBucket: "votounico-974d7.appspot.com",
-    messagingSenderId: "286853936059",
-    appId: "1:286853936059:web:fbf96050e246b697ea4a9e"
-  };
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+/* 🧠 ESTADO */
+let selected = null;
+let sending = false;
 
-  const votoTela = document.getElementById("votoTela");
-  const confirmTela = document.getElementById("confirmTela");
-  const nomeConfirm = document.getElementById("nomeConfirm");
-  const fotoConfirm = document.getElementById("fotoConfirm");
-  const botaoVotar = document.getElementById("botaoVotar");
+/* 👉 SELEÇÃO */
+function selectOption(el) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selected = el.innerText;
+}
 
-  const LOCAL_KEY = `votou_${VOTACAO_ATUAL}`;
-  const LOCAL_PART = `${LOCAL_KEY}_part`;
-  const LOCAL_IMG = `${LOCAL_KEY}_img`;
-
-  function verificarBloqueio() {
-    if (localStorage.getItem(LOCAL_KEY) === 'true') {
-      votoTela.style.display = "none";
-      confirmTela.style.display = "flex";
-      nomeConfirm.textContent = localStorage.getItem(LOCAL_PART);
-      fotoConfirm.src = localStorage.getItem(LOCAL_IMG);
-    }
+/* 🗳️ CONFIRMAR VOTO */
+async function confirmVote() {
+  if (!selected) {
+    alert("Escolha um participante");
+    return;
   }
 
-  botaoVotar.addEventListener("click", async () => {
-    const escolhido = document.querySelector('input[name="vote"]:checked');
-    if (!escolhido) {
-      alert("Selecione um participante antes de votar!");
-      return;
-    }
+  if (sending) return;
+  sending = true;
 
-    if (localStorage.getItem(LOCAL_KEY) === 'true') {
-      verificarBloqueio();
-      return;
-    }
+  try {
+    await db.collection("jut1").add({
+      nome: selected,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-    const participante = escolhido.value;
-    const img = escolhido.closest(".option").querySelector("img").src;
+    document.getElementById("votedName").innerText = selected;
+    document.getElementById("voteScreen").classList.add("hidden");
+    document.getElementById("confirmScreen").classList.remove("hidden");
 
-    botaoVotar.disabled = true;
-    botaoVotar.textContent = "Enviando...";
+  } catch (error) {
+    console.error("❌ Erro ao registrar voto:", error);
 
-    try {
-      const votoRef = ref(db, `vu1_${VOTACAO_ATUAL}/${participante}`);
-      await runTransaction(votoRef, (current) => (current || 0) + 1);
+    alert(
+      "Erro ao registrar seu voto.\n" +
+      "Verifique sua conexão e tente novamente."
+    );
 
-      localStorage.setItem(LOCAL_KEY, 'true');
-      localStorage.setItem(LOCAL_PART, participante);
-      localStorage.setItem(LOCAL_IMG, img);
+  } finally {
+    sending = false;
+  }
+}
 
-      votoTela.style.display = "none";
-      confirmTela.style.display = "flex";
-      nomeConfirm.textContent = participante;
-      fotoConfirm.src = img;
-    } catch (err) {
-      console.error(err);
-      alert("❌ Erro ao registrar voto. Tente novamente.");
-    } finally {
-      botaoVotar.disabled = false;
-      botaoVotar.textContent = "Votar";
-    }
-  });
+/* 🔁 VOTAR NOVAMENTE */
+function voteAgain() {
+  selected = null;
+  sending = false;
 
-  verificarBloqueio();
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  document.getElementById("confirmScreen").classList.add("hidden");
+  document.getElementById("voteScreen").classList.remove("hidden");
+}
 </script>
+
+
 </body>
 </html>
