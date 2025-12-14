@@ -572,25 +572,32 @@ button:disabled {
     
     <h1>Quem você quer que fique na Fazenda 3?</h1>
     <div class="espacador"></div>
-
+    
 <label class="option">
+    <img src="https://i.ibb.co/1Yh1q5PQ/Braian.jpg" alt="Brian">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Brian"> Brian
+  </div>
+</label>
+  
+<label class="option">
+    <img src="https://i.ibb.co/KzhhZH7H/Gean.jpg" alt="Gean">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Gean"> Gean
+  </div>
+</label>
+
+    <label class="option">
   <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Gui">
   <div class="option-content">
       <input type="radio" name="vote" value="Gui"> Gui
   </div>
-</label>
-
+    </label>
+    
 <label class="option">
-    <img src="https://i.ibb.co/1txTXwSm/Luca.jpg" alt="Luca">
+  <img src="https://i.ibb.co/RkSZVpt5/Sirleyde.jpg" alt="Sirleidy">
   <div class="option-content">
-      <input type="radio" name="vote" value="Luca"> Luca
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://i.ibb.co/6cNwCpWV/Luddy.jpg" alt="Luddy">
-  <div class="option-content">
-      <input type="radio" name="vote" value="Luddy"> Luddy
+      <input type="radio" name="vote" value="Sirleidy"> Sirleidy
   </div>
 </label>
 
@@ -655,7 +662,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-13T18:00:00");
+const encerramentoBR = new Date("2025-12-14T18:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -987,7 +994,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça5")  
+      .from("f3roça6")  
       .insert(votosParaEnviar);  
   
     if (error) {  
@@ -1018,7 +1025,7 @@ const fotos = {
   "Ella": "https://i.ibb.co/BHtfXDyr/Ella.jpg",
   "Eueu": "https://i.ibb.co/mCRNXcf5/Eueu.jpg",
   "Felipe": "https://i.ibb.co/XZmgWgL1/Felipe.jpg",
-  "Gêan": "https://i.ibb.co/KzhhZH7H/Gean.jpg",
+  "Gean": "https://i.ibb.co/KzhhZH7H/Gean.jpg",
   "Gui": "https://i.ibb.co/s9Vp82DB/Guilherme.jpg",
   "Inês": "https://i.ibb.co/CpzSYbNW/Ines.jpg",
   "João": "https://i.ibb.co/d4FNx1c8/Joao.jpg",
