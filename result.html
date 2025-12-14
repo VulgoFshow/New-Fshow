@@ -5,145 +5,142 @@
 <title>Resultado da Votação</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
 :root {
-  --bg: radial-gradient(circle at top, #3a1515, #120707);
-  --card: rgba(255,255,255,.06);
-  --gold: #e0c07a;
-  --text: #fff;
+  --bg: radial-gradient(circle at top, #3a1515, #120707);
+  --card: rgba(255,255,255,.06);
+  --gold: #e0c07a;
+  --text: #fff;
 }
 
 * {
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
-  width: 100%;
-  max-width: 900px;
-  padding: 16px;
+  width: 100%;
+  max-width: 900px;
+  padding: 16px;
 }
 
 .card {
-  background: var(--card);
-  backdrop-filter: blur(14px);
-  border-radius: 22px;
-  padding: 32px 24px;
-  box-shadow: 0 25px 50px rgba(0,0,0,.45);
-  animation: fadeUp .5s ease;
+  background: var(--card);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 32px 24px;
+  box-shadow: 0 25px 50px rgba(0,0,0,.45);
+  animation: fadeUp .5s ease;
 }
 
 @keyframes fadeUp {
-  from {opacity:0; transform: translateY(30px);}
-  to {opacity:1; transform: translateY(0);}
+  from {opacity:0; transform: translateY(30px);}
+  to {opacity:1; transform: translateY(0);}
 }
 
 .title {
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--gold);
-  text-align: center;
-  margin-bottom: 24px;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 24px;
 }
 
 .input-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
 input {
-  flex: 1;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  outline: none;
-  font-size: 16px;
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  font-size: 16px;
 }
 
 button {
-  padding: 14px 22px;
-  border-radius: 14px;
-  border: none;
-  background: linear-gradient(135deg, #f0d58f, #c7a457);
-  font-weight: 800;
-  cursor: pointer;
+  padding: 14px 22px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #f0d58f, #c7a457);
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .result {
-  background: rgba(255,255,255,.04);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
-  border: 2px solid rgba(224,192,122,.25);
+  background: rgba(255,255,255,.04);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  border: 2px solid rgba(224,192,122,.25);
 }
 
 .name {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .bar {
-  width: 100%;
-  height: 12px;
-  background: rgba(255,255,255,.1);
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 8px 0;
+  width: 100%;
+  height: 12px;
+  background: rgba(255,255,255,.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 8px 0;
 }
 
 .fill {
-  height: 100%;
-  background: linear-gradient(90deg, #f0d58f, #c7a457);
+  height: 100%;
+  background: linear-gradient(90deg, #f0d58f, #c7a457);
 }
 
 .percent {
-  font-size: 14px;
-  opacity: .9;
+  font-size: 14px;
+  opacity: .9;
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="card">
-    <div class="title">Resultado da Votação</div>
+  <div class="card">
+    <div class="title">Resultado da Votação</div>
 
-    <!-- INPUT DA COLLECTION -->
-    <div class="input-box">
-      <input type="text" id="collectionName" placeholder="Digite o nome da collection (ex: jut1)">
-      <button onclick="carregarResultados()">VER</button>
-    </div>
+        <div class="input-box">
+      <input type="text" id="collectionName" placeholder="Digite o nome da collection (ex: jut1)">
+      <button onclick="carregarResultados()">VER</button>
+    </div>
 
-    <!-- RESULTADOS -->
-    <div id="results"></div>
-  </div>
+        <div id="results"></div>
+  </div>
 </div>
 
 <script>
 /* 🔥 FIREBASE CONFIG (MESMA DO VOTO) */
 const firebaseConfig = {
-  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
-  authDomain: "enquete-fa527.firebaseapp.com",
-  databaseURL: "https://enquete-fa527-default-rtdb.firebaseio.com",
-  projectId: "enquete-fa527",
-  storageBucket: "enquete-fa527.firebasestorage.app",
-  messagingSenderId: "544422121318",
-  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  databaseURL: "https://enquete-fa527-default-rtdb.firebaseio.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -153,49 +150,59 @@ let unsubscribe = null;
 
 /* 📊 CARREGAR RESULTADOS */
 function carregarResultados() {
-  const collection = document.getElementById("collectionName").value.trim();
-  if (!collection) {
-    alert("Digite o nome da collection");
-    return;
-  }
+  const collection = document.getElementById("collectionName").value.trim();
+  if (!collection) {
+    alert("Digite o nome da collection");
+    return;
+  }
 
-  if (unsubscribe) unsubscribe();
+  if (unsubscribe) unsubscribe();
 
-  unsubscribe = db.collection(collection).onSnapshot(snapshot => {
-    const contagem = {};
-    let total = 0;
+  // Observa as mudanças em tempo real na collection
+  unsubscribe = db.collection(collection).onSnapshot(snapshot => {
+    const contagem = {};
+    let total = 0;
 
-    snapshot.forEach(doc => {
-      const nome = doc.data().nome;
-      contagem[nome] = (contagem[nome] || 0) + 1;
-      total++;
-    });
+    snapshot.forEach(doc => {
+      const nome = doc.data().nome;
+      contagem[nome] = (contagem[nome] || 0) + 1;
+      total++;
+    });
 
-    renderResultados(contagem, total);
-  });
+    renderResultados(contagem, total);
+  }, error => {
+    console.error("Erro ao carregar resultados:", error);
+    document.getElementById("results").innerHTML = `<p style="text-align:center;">Erro ao carregar os dados. Verifique o nome da collection.</p>`;
+  });
 }
 
 /* 🎨 RENDERIZA */
 function renderResultados(dados, total) {
-  const container = document.getElementById("results");
-  container.innerHTML = "";
+  const container = document.getElementById("results");
+  container.innerHTML = "";
+  
+  if (total === 0 && Object.keys(dados).length === 0) {
+    container.innerHTML = `<p style="text-align:center;">A coleção está vazia ou não existe votos registrados.</p>`;
+    return;
+  }
 
-  Object.keys(dados)
-    .sort((a,b) => dados[b] - dados[a])
-    .forEach(nome => {
-      const votos = dados[nome];
-      const perc = total ? ((votos / total) * 100).toFixed(1) : 0;
+  Object.keys(dados)
+    .sort((a,b) => dados[b] - dados[a])
+    .forEach(nome => {
+      const votos = dados[nome];
+      // CORREÇÃO: Utiliza .toFixed(2) para garantir duas casas decimais.
+      const perc = total ? ((votos / total) * 100).toFixed(2) : '0.00';
 
-      container.innerHTML += `
-        <div class="result">
-          <div class="name">${nome} — ${votos} votos</div>
-          <div class="bar">
-            <div class="fill" style="width:${perc}%"></div>
-          </div>
-          <div class="percent">${perc}%</div>
-        </div>
-      `;
-    });
+      container.innerHTML += `
+        <div class="result">
+          <div class="name">${nome} — ${votos} votos</div>
+          <div class="bar">
+            <div class="fill" style="width:${perc}%"></div>
+          </div>
+          <div class="percent">${perc}%</div>
+        </div>
+      `;
+    });
 }
 </script>
 
