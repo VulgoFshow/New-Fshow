@@ -563,8 +563,12 @@ button:disabled {
 
 .espacador { width: 100%; margin: 10px 0; }
 
-/* ===== LAYOUT DESKTOP (IGUAL R7) ===== */
 @media (min-width: 768px) {
+  .option-content {
+    height: 56px;
+    align-items: center;
+  }
+}
 
   .container {
     max-width: 980px;
@@ -640,61 +644,66 @@ button:disabled {
     <h1>Quem você quer que fique na Fazenda 3?</h1>
     <div class="espacador"></div>
     
-<label class="option">
+<div class="options">
+
+  <label class="option">
     <img src="https://i.ibb.co/6RwD1PBC/Adnilton.jpg" alt="Adnilton">
-  <div class="option-content">
+    <div class="option-content">
       <input type="radio" name="vote" value="Adnilton"> Adnilton
-  </div>
-</label>
-  
-<label class="option">
+    </div>
+  </label>
+
+  <label class="option">
     <img src="https://i.ibb.co/ymQMNfvZ/davil.jpg" alt="Davi">
-  <div class="option-content">
+    <div class="option-content">
       <input type="radio" name="vote" value="Davi"> Davi
-  </div>
-</label>
+    </div>
+  </label>
 
-    <label class="option">
-  <img src="https://i.ibb.co/BHtfXDyr/Ella.jpg" alt="Ella">
-  <div class="option-content">
+  <label class="option">
+    <img src="https://i.ibb.co/BHtfXDyr/Ella.jpg" alt="Ella">
+    <div class="option-content">
       <input type="radio" name="vote" value="Ella"> Ella
-  </div>
-    </label>
+    </div>
+  </label>
 
-<label class="option">
-  <img src="https://i.ibb.co/mCRNXcf5/Eueu.jpg" alt="Eueu">
-  <div class="option-content">
+  <label class="option">
+    <img src="https://i.ibb.co/mCRNXcf5/Eueu.jpg" alt="Eueu">
+    <div class="option-content">
       <input type="radio" name="vote" value="Eueu"> Eueu
-  </div>
-</label>
-    
-<label class="option">
-  <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Gui">
-  <div class="option-content">
+    </div>
+  </label>
+
+  <label class="option">
+    <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Gui">
+    <div class="option-content">
       <input type="radio" name="vote" value="Gui"> Gui
-  </div>
-</label>
+    </div>
+  </label>
 
-<label class="option">
+  <label class="option">
     <img src="https://i.ibb.co/fVvM403J/Kristhyan.jpg" alt="Kristhyan">
-  <div class="option-content">
+    <div class="option-content">
       <input type="radio" name="vote" value="Kristhyan"> Kristhyan
-  </div>
-</label>
-  
-<label class="option">
-    <img src="https://i.ibb.co/YBP4Hs44/Neto.jpg" alt="Neto">
-  <div class="option-content">
-      <input type="radio" name="vote" value="Neto"> Neto
-  </div>
-</label>
+    </div>
+  </label>
 
-    <label class="option">
-  <img src="https://i.ibb.co/gMJ4T0Ts/Tety.jpg" alt="Tety">
-  <div class="option-content">
+  <label class="option">
+    <img src="https://i.ibb.co/YBP4Hs44/Neto.jpg" alt="Neto">
+    <div class="option-content">
+      <input type="radio" name="vote" value="Neto"> Neto
+    </div>
+  </label>
+
+  <label class="option">
+    <img src="https://i.ibb.co/gMJ4T0Ts/Tety.jpg" alt="Tety">
+    <div class="option-content">
       <input type="radio" name="vote" value="Tety"> Tety
-  </div>
-    </label>
+    </div>
+  </label>
+
+</div>
+
 
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
