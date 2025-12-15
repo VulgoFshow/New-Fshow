@@ -579,13 +579,6 @@ button:disabled {
       <input type="radio" name="vote" value="Adnilton"> Adnilton
   </div>
 </label>
-  
-<label class="option">
-    <img src="https://i.ibb.co/ymQMNfvZ/davil.jpg" alt="Davi">
-  <div class="option-content">
-      <input type="radio" name="vote" value="Davi"> Davi
-  </div>
-</label>
 
     <label class="option">
   <img src="https://i.ibb.co/BHtfXDyr/Ella.jpg" alt="Ella">
@@ -621,13 +614,6 @@ button:disabled {
       <input type="radio" name="vote" value="Neto"> Neto
   </div>
 </label>
-
-    <label class="option">
-  <img src="https://i.ibb.co/gMJ4T0Ts/Tety.jpg" alt="Tety">
-  <div class="option-content">
-      <input type="radio" name="vote" value="Tety"> Tety
-  </div>
-    </label>
 
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -690,7 +676,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-15T13:00:00");
+const encerramentoBR = new Date("2025-12-16T17:30:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -1022,7 +1008,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça7")  
+      .from("f3roça8")  
       .insert(votosParaEnviar);  
   
     if (error) {  
