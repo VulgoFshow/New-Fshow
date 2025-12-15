@@ -757,7 +757,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-15T13:00:00");
+const encerramentoBR = new Date("2025-12-15T16:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -1089,7 +1089,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça7")  
+      .from("testes")  
       .insert(votosParaEnviar);  
   
     if (error) {  
