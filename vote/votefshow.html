@@ -574,32 +574,60 @@ button:disabled {
     <div class="espacador"></div>
     
 <label class="option">
-    <img src="https://i.ibb.co/1Yh1q5PQ/Braian.jpg" alt="Braian">
+    <img src="https://i.ibb.co/6RwD1PBC/Adnilton.jpg" alt="Adnilton">
   <div class="option-content">
-      <input type="radio" name="vote" value="Braian"> Braian
+      <input type="radio" name="vote" value="Adnilton"> Adnilton
   </div>
 </label>
   
 <label class="option">
-    <img src="https://i.ibb.co/KzhhZH7H/Gean.jpg" alt="Gean">
+    <img src="https://i.ibb.co/ymQMNfvZ/davil.jpg" alt="Davi">
   <div class="option-content">
-      <input type="radio" name="vote" value="Gean"> Gean
+      <input type="radio" name="vote" value="Davi"> Davi
   </div>
 </label>
 
     <label class="option">
-  <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Gui">
+  <img src="https://i.ibb.co/BHtfXDyr/Ella.jpg" alt="Ella">
   <div class="option-content">
-      <input type="radio" name="vote" value="Gui"> Gui
+      <input type="radio" name="vote" value="Ella"> Ella
   </div>
     </label>
-    
+
 <label class="option">
-  <img src="https://i.ibb.co/RkSZVpt5/Sirleyde.jpg" alt="Sirleidy">
+  <img src="https://i.ibb.co/mCRNXcf5/Eueu.jpg" alt="Eueu">
   <div class="option-content">
-      <input type="radio" name="vote" value="Sirleidy"> Sirleidy
+      <input type="radio" name="vote" value="Eueu"> Eueu
   </div>
 </label>
+    
+<label class="option">
+  <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Guilherme">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Guilherme"> Guilherme
+  </div>
+</label>
+
+<label class="option">
+    <img src="https://i.ibb.co/fVvM403J/Kristhyan.jpg" alt="Kristhyan">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Kristhyan"> Kristhyan
+  </div>
+</label>
+  
+<label class="option">
+    <img src="https://i.ibb.co/YBP4Hs44/Neto.jpg" alt="Neto">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Neto"> Neto
+  </div>
+</label>
+
+    <label class="option">
+  <img src="https://i.ibb.co/gMJ4T0Ts/Tety.jpg" alt="Tety">
+  <div class="option-content">
+      <input type="radio" name="vote" value="Tety"> Tety
+  </div>
+    </label>
 
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -611,7 +639,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>Votar</button>
 
-    <div class="notice">A votação segue aberta até às 18:00 horas.</div>
+    <div class="notice">A votação segue aberta até às 13:30</div>
   </div>
   
 <!-- POPUP CAPTCHA -->
@@ -645,7 +673,7 @@ button:disabled {
       VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Votação segue aberta até às 18:00</div>
+    <div class="notice">Votação segue aberta até às 13:30</div>
     
   </div>
 </div>
@@ -662,7 +690,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-14T18:00:00");
+const encerramentoBR = new Date("2025-12-15T13:30:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -994,7 +1022,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça6")  
+      .from("f3roça7")  
       .insert(votosParaEnviar);  
   
     if (error) {  
