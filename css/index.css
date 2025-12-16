@@ -893,3 +893,193 @@ animation: rotateGradient 5s linear infinite;
         padding-right: 24px;
     }
 }
+ /* ======================================
+   DESKTOP / PC 
+====================================== */
+@media (min-width: 1024px) {
+
+  /* ======================
+     BASE / CONTAINER
+  ====================== */
+  body {
+    background: linear-gradient(180deg, #f9f9f9 0%, #f1f1f1 100%);
+  }
+
+  .container {
+    max-width: 1280px;
+    padding: 50px 0;
+  }
+
+  /* ======================
+     HEADER
+  ====================== */
+  .header {
+    height: 75px;
+    padding: 0 6%;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .nav-menu {
+    position: static;
+    display: flex !important;
+    flex-direction: row;
+    background: none;
+    box-shadow: none;
+    gap: 26px;
+    padding: 0;
+  }
+
+  .nav-menu a {
+    font-size: 0.95em;
+    opacity: 0.85;
+    transition: 0.25s;
+  }
+
+  .nav-menu a:hover {
+    opacity: 1;
+    color: var(--orange-vibrant);
+  }
+
+  /* ======================
+     HERO / BANNER
+  ====================== */
+  .hero-banner {
+    margin-bottom: 25px;
+    border-radius: 14px;
+  }
+
+  .hero-banner img {
+    max-height: 520px;
+    object-fit: cover;
+  }
+
+  /* ======================
+     BLITZ (DESTAQUE)
+  ====================== */
+  .blitz-headline {
+    flex-direction: row;
+    border-radius: 16px;
+    margin: 30px auto 60px;
+    max-width: 1280px;
+  }
+
+  .blitz-content {
+    padding: 60px;
+    width: 55%;
+  }
+
+  .blitz-content h1 {
+    font-size: 4.2em;
+  }
+
+  .blitz-tag {
+    font-size: 2em;
+  }
+
+  .blitz-img {
+    width: 45%;
+  }
+
+  /* ======================
+     TÍTULOS
+  ====================== */
+  .section-title {
+    font-size: 3.2em;
+    margin-bottom: 40px;
+  }
+
+  /* ======================
+     GRID DE NOTÍCIAS
+  ====================== */
+  .news-grid {
+    grid-template-columns: 3fr 1.3fr;
+    gap: 50px;
+    align-items: start;
+  }
+
+  .main-content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 35px;
+  }
+
+  /* Cards principais */
+  .news-card {
+    border-radius: 14px;
+  }
+
+  .card-img {
+    height: 260px;
+  }
+
+  .card-content h3 {
+    font-size: 1.8em;
+  }
+
+  /* ======================
+     SIDEBAR
+  ====================== */
+  .side-content {
+    position: sticky;
+    top: 95px;
+    padding: 28px;
+  }
+
+  .side-content h4 {
+    font-size: 2.4em;
+  }
+
+  .trend-item {
+    padding: 18px 0;
+  }
+
+  .trend-number {
+    font-size: 3.4em;
+  }
+
+  /* ======================
+     CARROSSEL
+  ====================== */
+  .carousel-slide {
+    height: 460px;
+  }
+
+  .slide-content-overlay {
+    width: 55%;
+    padding: 40px;
+    font-size: 1.05em;
+  }
+
+  /* ======================
+     STORIES
+  ====================== */
+  .stories-wrapper {
+    padding: 10px 0 15px;
+  }
+
+  .story,
+  .storye {
+    width: 82px;
+    height: 82px;
+  }
+
+  /* ======================
+     FOOTER
+  ====================== */
+  footer {
+    padding: 55px 20px 40px;
+  }
+
+  .footer-links a {
+    font-size: 1rem;
+  }
+
+  .social-icons a {
+    width: 46px;
+    height: 46px;
+    font-size: 1.25em;
+  }
+
+}
