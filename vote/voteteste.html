@@ -562,78 +562,120 @@ button:disabled {
 }
 
 .espacador { width: 100%; margin: 10px 0; }
-
-@media (min-width: 768px) {
-  .option-content {
-    height: 56px;
-    align-items: center;
-  }
-}
+  
+/* =========================
+   DESKTOP 
+   ========================= */
+@media (min-width: 1024px) {
 
   .container {
     max-width: 980px;
+    padding: 40px 30px;
   }
 
+  h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  /* ----- GRID ----- */
   .options {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 22px;
   }
 
   .option {
     flex-direction: column;
-    border-radius: 6px;
+    border-radius: 10px;
     overflow: hidden;
-    border: 1px solid #2f2f2f;
-    background: #1c1c1c;
-    transform: none;
-  }
-
-  .option:hover {
-    transform: none;
-    box-shadow: 0 0 0 2px var(--accent);
+    border: 1px solid rgba(255,255,255,0.15);
+    background: #2b2b2b;
   }
 
   .option img {
     width: 100%;
-    height: 240px;
+    height: 210px;
     object-fit: cover;
   }
 
   .option-content {
-    position: relative;
-    background: #2b2b2b;
     padding: 14px 16px;
     font-size: 18px;
-    font-weight: 600;
-    justify-content: space-between;
+    justify-content: flex-start;
+    background: #222;
   }
 
   .option-content input[type="radio"] {
-    position: absolute;
-    left: 14px;
-    bottom: 14px;
-    margin: 0;
-    background: transparent;
-    border-color: #aaa;
+    margin-right: 10px;
   }
 
-  .option-content input[type="radio"]:checked {
-    border-color: var(--accent);
+  .option:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,.55);
   }
 
-  .option-content span,
-  .option-content label {
-    padding-left: 32px;
-  }
-
+  /* ----- VOTAR ----- */
   button {
-    max-width: 360px;
+    max-width: 420px;
     margin: 30px auto 0;
     display: block;
+    font-size: 17px;
+    padding: 15px;
   }
+
+  /* ----- CAPTCHA ----- */
+  #botaoCaptcha {
+    margin: 25px auto 0;
+  }
+
+  /* =========================
+     CONFIRMAÇÃO
+     ========================= */
+
+  #confirmTela {
+    min-height: auto;
+    padding-top: 60px;
+    opacity: 1;
+    transform: none;
+  }
+
+  .confirm-card {
+    max-width: 640px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.55);
+  }
+
+  .confirm-card .img-container {
+    height: 280px;
+  }
+
+  #nomeConfirm {
+    font-size: 24px;
+    padding: 18px;
+  }
+
+  .success-msg {
+    font-size: 16px;
+    padding: 14px 20px;
+  }
+
+  .voltar {
+    max-width: 420px;
+    margin: 20px auto 0;
+    display: block;
+    font-size: 16px;
+  }
+
+  /* ----- CAPTCHA ----- */
+  .captcha-box {
+    width: 420px;
+  }
+
 }
-  
+
 </style>
 </head>
 <body>
@@ -644,66 +686,47 @@ button:disabled {
     <h1>Quem você quer que fique na Fazenda 3?</h1>
     <div class="espacador"></div>
     
-<div class="options">
-
-  <label class="option">
+<label class="option">
     <img src="https://i.ibb.co/6RwD1PBC/Adnilton.jpg" alt="Adnilton">
-    <div class="option-content">
+  <div class="option-content">
       <input type="radio" name="vote" value="Adnilton"> Adnilton
-    </div>
-  </label>
+  </div>
+</label>
 
-  <label class="option">
-    <img src="https://i.ibb.co/ymQMNfvZ/davil.jpg" alt="Davi">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Davi"> Davi
-    </div>
-  </label>
-
-  <label class="option">
-    <img src="https://i.ibb.co/BHtfXDyr/Ella.jpg" alt="Ella">
-    <div class="option-content">
+    <label class="option">
+  <img src="https://i.ibb.co/BHtfXDyr/Ella.jpg" alt="Ella">
+  <div class="option-content">
       <input type="radio" name="vote" value="Ella"> Ella
-    </div>
-  </label>
+  </div>
+    </label>
 
-  <label class="option">
-    <img src="https://i.ibb.co/mCRNXcf5/Eueu.jpg" alt="Eueu">
-    <div class="option-content">
+<label class="option">
+  <img src="https://i.ibb.co/mCRNXcf5/Eueu.jpg" alt="Eueu">
+  <div class="option-content">
       <input type="radio" name="vote" value="Eueu"> Eueu
-    </div>
-  </label>
-
-  <label class="option">
-    <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Gui">
-    <div class="option-content">
+  </div>
+</label>
+    
+<label class="option">
+  <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Gui">
+  <div class="option-content">
       <input type="radio" name="vote" value="Gui"> Gui
-    </div>
-  </label>
+  </div>
+</label>
 
-  <label class="option">
+<label class="option">
     <img src="https://i.ibb.co/fVvM403J/Kristhyan.jpg" alt="Kristhyan">
-    <div class="option-content">
+  <div class="option-content">
       <input type="radio" name="vote" value="Kristhyan"> Kristhyan
-    </div>
-  </label>
-
-  <label class="option">
+  </div>
+</label>
+  
+<label class="option">
     <img src="https://i.ibb.co/YBP4Hs44/Neto.jpg" alt="Neto">
-    <div class="option-content">
+  <div class="option-content">
       <input type="radio" name="vote" value="Neto"> Neto
-    </div>
-  </label>
-
-  <label class="option">
-    <img src="https://i.ibb.co/gMJ4T0Ts/Tety.jpg" alt="Tety">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Tety"> Tety
-    </div>
-  </label>
-
-</div>
-
+  </div>
+</label>
 
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -766,7 +789,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-15T16:00:00");
+const encerramentoBR = new Date("2025-12-16T17:30:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -1098,7 +1121,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("testes")  
+      .from("f3roça8")  
       .insert(votosParaEnviar);  
   
     if (error) {  
