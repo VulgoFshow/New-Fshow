@@ -22,32 +22,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Método não permitido" });
   }
 
-  const { participante, encerramento, table } = req.body;
+  const { participante, table } = req.body;
 
-  if (!participante || !encerramento || !table) {
+  if (!participante || !table) {
     return res.status(400).json({ error: "Dados inválidos" });
   }
 
-  // ==========================
-  // VALIDA TABLE
-  // ==========================
   if (!TABLES_PERMITIDAS.includes(table)) {
     return res.status(403).json({ error: "Table não autorizada" });
   }
 
-  // ==========================
-  // VALIDA DATA
-  // ==========================
-  const agora = new Date();
-  const dataEncerramento = new Date(encerramento);
-
-  if (agora >= dataEncerramento) {
-    return res.status(410).json({ error: "Votação encerrada" });
-  }
-
-  // ==========================
-  // REGISTRA VOTO
-  // ==========================
   const { error } = await supabase
     .from(table)
     .insert([{ participante }]);
