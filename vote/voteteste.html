@@ -1020,6 +1020,14 @@ button:disabled {
       confirmTela.style.display = "flex";
       nomeConfirm.textContent = participante;
 
+      if (fotos[participante]) {
+  fotoConfirm.src = fotos[participante];
+  fotoConfirm.style.display = "block";
+} else {
+  fotoConfirm.style.display = "none";
+}
+
+
       botaoVotar.textContent = prevText;
       botaoVotar.disabled = false;
 
@@ -1149,16 +1157,14 @@ button:disabled {
   };
   
   // =================== INICIALIZAÇÃO ===================
-  (function init() {
-    const restantes = getVotosRestantes();
-    botaoCaptcha.setAttribute("aria-pressed", restantes > 0 ? "true" : "false");
-    botaoVotar.disabled = restantes <= 0;
-    botaoVotar.classList.toggle("active", restantes > 0);
+(function init() {
+  setVotosRestantes(0);
 
-    if (restantes <= 0) {
-      setVotosRestantes(0);
-    }
-  })();
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoVotar.disabled = true;
+  botaoVotar.classList.remove("active");
+})();
+
 </script>
 </body>  
 </html>
