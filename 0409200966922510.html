@@ -234,6 +234,40 @@
       <h1>Resultado Parcial</h1>
       <p class="subtitle">Acompanhe a votação em tempo real</p>
     </header>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+  <input
+    type="text"
+    id="tableInput"
+    placeholder="Digite o nome da table (ex: f3roça8)"
+    style="
+      flex:1;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(108,92,231,.4);
+      background:#0f0f1a;
+      color:#e2e8f0;
+      font-size:1rem;
+      outline:none;
+    "
+  />
+
+  <button
+    id="loadTableBtn"
+    style="
+      padding:12px 18px;
+      border-radius:12px;
+      border:none;
+      background:linear-gradient(90deg,#6c5ce7,#a29bfe);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    "
+  >
+    Carregar resultados
+  </button>
+    </div>
+    
     <div class="card">
       <div class="chart-container">
         <canvas id="grafico"></canvas>
@@ -307,24 +341,38 @@
     }
 
     async function carregarTodosVotos() {
-      const limitePorPagina = 1000;
-      let pagina = 0;
-      let todosVotos = [];
-      let continuar = true;
-      while (continuar) {
-        const { data, error } = await supabase
-          .from('f3roça8')
-          .select('participante')
-          .range(pagina * limitePorPagina, (pagina + 1) * limitePorPagina - 1);
-        if (error) { console.error("Erro ao buscar votos:", error); break; }
-        if (data.length === 0) { continuar = false; }
-        else {
-          todosVotos = todosVotos.concat(data);
-          pagina++;
-          if (data.length < limitePorPagina) continuar = false;
-        }
-      }
-      return todosVotos;
+  if (!tableAtual) return [];
+
+  const limitePorPagina = 1000;
+  let pagina = 0;
+  let todosVotos = [];
+  let continuar = true;
+
+  while (continuar) {
+    const { data, error } = await supabase
+      .from(tableAtual)
+      .select('participante')
+      .range(
+        pagina * limitePorPagina,
+        (pagina + 1) * limitePorPagina - 1
+      );
+
+    if (error) {
+      console.error("Erro ao buscar votos:", error);
+      alert("Erro ao carregar a table. Verifique o nome.");
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      continuar = false;
+    } else {
+      todosVotos = todosVotos.concat(data);
+      pagina++;
+      if (data.length < limitePorPagina) continuar = false;
+    }
+  }
+
+  return todosVotos;
     }
 
     let ultimoRanking = [];
@@ -426,8 +474,23 @@
       }
     });
 
-    carregarVotos();
-    setInterval(carregarVotos, 1000);
+setInterval(() => {
+  if (tableAtual) carregarVotos();
+}, 1000);
+    
+    let tableAtual = null;
+
+    document.getElementById("loadTableBtn").addEventListener("click", () => {
+  const valor = document.getElementById("tableInput").value.trim();
+
+  if (!valor) {
+    alert("Digite o nome da table.");
+    return;
+  }
+
+  tableAtual = valor;
+  carregarVotos();
+});
   </script>
 </body>
 </html>
