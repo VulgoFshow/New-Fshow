@@ -779,13 +779,6 @@ async function getServerTime() {
   }
 }
 
-    return new Date(data);
-  } catch (e) {
-    console.error("Erro inesperado:", e);
-    return null;
-  }
-}
-
   function toSaoPauloDate(date) {
   const spString = date.toLocaleString("en-US", {
     timeZone: "America/Sao_Paulo"
@@ -993,10 +986,9 @@ async function submitVote(participante) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        participante,
-        encerramento: DATA_ENCERRAMENTO,
-        table: TABLE_VOTACAO
-      })
+  participante,
+  table: TABLE_VOTACAO
+})
     });
 
     // Backend mandou fechar
