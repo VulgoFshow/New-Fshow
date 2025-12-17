@@ -761,11 +761,68 @@ button:disabled {
 
 <script type="module">
   
-// =====================
-// CONFI
-// =====================
-const DATA_ENCERRAMENTO = "2025-12-17T18:00:00-03:00";
+// =================== CONFIG ===================
 const TABLE_VOTACAO = "f3roça9";
+
+const aberturaBR = new Date("2025-11-25T21:00:00");
+const encerramentoBR = new Date("2025-12-17T18:00:00");
+
+// =================== HORA DO SERVIDOR ===================
+async function getServerTime() {
+  try {
+    const { data, error } = await supabase.rpc("get_server_time");
+
+    if (error || !data) {
+      console.error("Erro RPC:", error);
+      return null;
+    }
+
+    return new Date(data);
+  } catch (e) {
+    console.error("Erro inesperado:", e);
+    return null;
+  }
+}
+
+  function toSaoPauloDate(date) {
+  const spString = date.toLocaleString("en-US", {
+    timeZone: "America/Sao_Paulo"
+  });
+  return new Date(spString);
+}
+
+// =================== ABERTURA + ENCERRAMENTO ===================
+async function verificarHorarios() {
+  const agoraServer = await getServerTime();
+
+  if (!agoraServer) {
+    window.location.replace("aguarde.html");
+    return;
+  }
+
+  const agoraBR = toSaoPauloDate(agoraServer);
+
+  console.log(
+    "Hora SP:", agoraBR,
+    "Abertura:", aberturaBR,
+    "Encerramento:", encerramentoBR
+  );
+
+  // ===== AINDA NÃO ABRIU =====
+  if (agoraBR.getTime() < aberturaBR.getTime()) {
+    window.location.replace("aguarde.html");
+    return;
+  }
+
+  // ===== JÁ FECHOU =====
+  if (agoraBR.getTime() > encerramentoBR.getTime()) {
+    window.location.replace("fechada.html");
+    return;
+  }
+
+  // ===== ABERTA =====
+  console.log("VOTAÇÃO ABERTA — UI liberada");
+}
 
 /* =============================
    CONTROLE DE STATUS (BACKEND)
