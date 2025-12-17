@@ -760,6 +760,8 @@ button:disabled {
 </div>
 
 <script type="module">
+  
+const DATA_ENCERRAMENTO = "2025-12-17T18:00:00-03:00";
 
 /* =============================
    CONTROLE DE STATUS (BACKEND)
@@ -938,19 +940,50 @@ verifyBtn.onclick = () => {
    ENVIO DO VOTO (BACKEND)
 ============================= */
 async function submitVote(participante) {
-  botaoVotar.disabled = true;
-  botaoVotar.textContent = "Enviando voto...";
-
   try {
+    botaoVotar.disabled = true;
+    const prevText = botaoVotar.textContent;
+    botaoVotar.textContent = "Enviando voto...";
+
     const res = await fetch("/api/vote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        option: participante,
-        table: "f3roça9",
-        captcha: "ok"
+        participante,
+        encerramento: DATA_ENCERRAMENTO
       })
     });
+
+    // 🚫 Backend mandou fechar
+    if (res.status === 410) {
+      window.location.href = "fechada.html";
+      return;
+    }
+
+    if (!res.ok) {
+      window.location.href = "erro.html";
+      return;
+    }
+
+    // ===== SUCESSO =====
+    let restantes = getVotosRestantes() - 1;
+    setVotosRestantes(Math.max(restantes, 0));
+
+    votoTela.style.display = "none";
+    confirmTela.style.display = "flex";
+    nomeConfirm.textContent = participante;
+
+    botaoVotar.textContent = prevText;
+    botaoVotar.disabled = false;
+
+  } catch (e) {
+    console.error(e);
+    alert("Erro inesperado");
+    botaoVotar.disabled = false;
+    botaoVotar.textContent = "Votar";
+  }
+}
+
 
     const data = await res.json();
     if (!data.success) throw new Error();
