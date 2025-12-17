@@ -902,6 +902,17 @@ button:disabled {
     captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     captchaInstruction.textContent = captchaCurrentPrompt.label;
 
+const ref = captchaCurrentPrompt.images.find(
+  i => i.tag === captchaCurrentPrompt.correctTag
+);
+
+if (ref) {
+  captchaRefImg.src = ref.src;
+  captchaRefImg.style.display = "block";
+} else {
+  captchaRefImg.style.display = "none";
+}
+
     const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
     const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
 
@@ -984,17 +995,20 @@ button:disabled {
   });
 
   // =================== ENVIO DO VOTO ===================
-  async function submitVote(participante) {
-    try {
-      botaoVotar.disabled = true;
-      const prevText = botaoVotar.textContent;
-      botaoVotar.textContent = "Enviando voto...";
+async function submitVote(participante) {
+  try {
+    botaoVotar.disabled = true;
+    const prevText = botaoVotar.textContent;
+    botaoVotar.textContent = "Enviando voto...";
+    
+    await new Promise(resolve => setTimeout(resolve, 600));
 
-      const res = await fetch("/api/vote", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ participante, table: TABLE_VOTACAO })
-      });
+    const res = await fetch("/api/vote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ participante, table: TABLE_VOTACAO })
+    });
+
 
       if (res.status === 410) {
         window.location.href = "fechada.html";
@@ -1168,7 +1182,9 @@ botaoCaptcha.addEventListener("click", () => {
     "Tety": "https://i.ibb.co/gMJ4T0Ts/Tety.jpg",
     "Vitor": "https://i.ibb.co/1fT3chNR/Vitor.jpg"
   };
-  
+
+  const captchaRefImg = document.getElementById("captcha-ref-img");
+
   // =================== INICIALIZAÇÃO ===================
 (function init() {
   captchaVisualLiberado = false;
