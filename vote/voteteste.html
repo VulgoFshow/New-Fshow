@@ -770,12 +770,14 @@ const encerramentoBR = new Date("2025-12-17T18:00:00");
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
   try {
-    const { data, error } = await supabase.rpc("get_server_time");
-
-    if (error || !data) {
-      console.error("Erro RPC:", error);
-      return null;
-    }
+    const res = await fetch("/api/time");
+    const data = await res.json();
+    return new Date(data.now);
+  } catch (e) {
+    console.error("Erro ao verificar horário:", e);
+    return null;
+  }
+}
 
     return new Date(data);
   } catch (e) {
