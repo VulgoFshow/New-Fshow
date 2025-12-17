@@ -824,7 +824,7 @@ async function verificarHorarios() {
   console.log("VOTAÇÃO ABERTA — UI liberada");
 }
 
-verificarStatusVotacao();
+verificarHorarios();
 
 /* =============================
    CAPTCHA + CONTROLE LOCAL
@@ -997,7 +997,7 @@ async function submitVote(participante) {
       })
     });
 
-    // 🚫 Backend mandou fechar
+    // Backend mandou fechar
     if (res.status === 410) {
       window.location.href = "fechada.html";
       return;
@@ -1080,7 +1080,5 @@ const fotos = {
 setVotosRestantes(getVotosRestantes());
 
 </script>
-
-
 </body>  
 </html>
