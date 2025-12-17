@@ -787,10 +787,6 @@ button:disabled {
   // =================== VERIFICAÇÃO DE HORÁRIO ===================
   async function verificarHorarios() {
     const agoraServer = await getServerTime();
-    if (!agoraServer) {
-      window.location.replace("aguarde.html");
-      return;
-    }
 
     const agoraBR = toSaoPauloDate(agoraServer);
 
@@ -804,7 +800,7 @@ button:disabled {
       return;
     }
 
-    console.log("VOTAÇÃO ABERTA — UI liberada");
+    console.log("VOTAÇÃO ABERTA");
   }
 
   verificarHorarios();
@@ -1158,11 +1154,17 @@ button:disabled {
   
   // =================== INICIALIZAÇÃO ===================
 (function init() {
-  setVotosRestantes(0);
+  const restantes = getVotosRestantes();
 
-  botaoCaptcha.setAttribute("aria-pressed", "false");
-  botaoVotar.disabled = true;
-  botaoVotar.classList.remove("active");
+  if (restantes > 0) {
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.disabled = false;
+    botaoVotar.classList.add("active");
+  } else {
+    botaoCaptcha.setAttribute("aria-pressed", "false");
+    botaoVotar.disabled = true;
+    botaoVotar.classList.remove("active");
+  }
 })();
 
 </script>
