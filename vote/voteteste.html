@@ -940,9 +940,7 @@ verifyBtn.onclick = () => {
   }
 };
 
-/* =============================
-   ENVIO DO VOTO (BACKEND)
-============================= */
+  //voto
 async function submitVote(participante) {
   try {
     botaoVotar.disabled = true;
@@ -950,15 +948,14 @@ async function submitVote(participante) {
     botaoVotar.textContent = "Enviando voto...";
 
     const res = await fetch("/api/vote", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    participante,
-    encerramento: DATA_ENCERRAMENTO,
-    table: TABLE_VOTACAO
-  })
-});
-
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        participante,
+        encerramento: DATA_ENCERRAMENTO,
+        table: TABLE_VOTACAO
+      })
+    });
 
     // 🚫 Backend mandou fechar
     if (res.status === 410) {
@@ -984,32 +981,10 @@ async function submitVote(participante) {
 
   } catch (e) {
     console.error(e);
-    alert("Erro inesperado");
-    botaoVotar.disabled = false;
-    botaoVotar.textContent = "Votar";
-  }
-}
-
-
-    const data = await res.json();
-    if (!data.success) throw new Error();
-
-    let restantes = getVotosRestantes() - 1;
-    setVotosRestantes(Math.max(0, restantes));
-
-    votoTela.style.display = "none";
-    confirmTela.style.display = "flex";
-    nomeConfirm.textContent = participante;
-
-    fotoConfirm.src = fotos[participante] || "";
-
-  } catch {
     window.location.href = "erro.html";
-  } finally {
-    botaoVotar.textContent = "Votar";
-    botaoVotar.disabled = false;
   }
 }
+
 
 /* =============================
    CLICK VOTAR
