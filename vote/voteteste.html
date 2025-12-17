@@ -819,6 +819,8 @@ button:disabled {
   const refreshBtn = document.getElementById("captchaRefresh");
   const statusEl = document.getElementById("captchaStatus");
 
+  let captchaVisualLiberado = false;
+
   // =================== CONTROLE DE VOTOS LOCAL ===================
   let pendingVote = null;
   let captchaAberto = false;
@@ -967,6 +969,7 @@ button:disabled {
 
     // Sucesso
     setVotosRestantes(VOTOS_POR_CAPTCHA);
+    captchaVisualLiberado = true;
     botaoCaptcha.setAttribute("aria-pressed", "true");
     botaoVotar.classList.add("active");
 
@@ -1010,6 +1013,7 @@ button:disabled {
       if (restantes <= 0) {
         botaoCaptcha.setAttribute("aria-pressed", "false");
         botaoVotar.classList.remove("active");
+        captchaVisualLiberado = false;
       }
 
       votoTela.style.display = "none";
@@ -1047,10 +1051,23 @@ button:disabled {
     submitVote(escolhido.value);
   });
 
-  botaoCaptcha.addEventListener("click", () => {
-    if (botaoCaptcha.getAttribute("aria-pressed") === "true") return;
-    abrirCaptcha();
-  });
+botaoCaptcha.addEventListener("click", () => {
+  if (captchaVisualLiberado) return;
+
+  const restantes = getVotosRestantes();
+
+  if (restantes > 0) {
+    captchaVisualLiberado = true;
+
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.disabled = false;
+    botaoVotar.classList.add("active");
+    return;
+  }
+
+  abrirCaptcha();
+});
+
 
   // =================== DETECÇÃO DE COMPORTAMENTO SUSPEITO ===================
   let suspeita = 0;
@@ -1154,18 +1171,12 @@ button:disabled {
   
   // =================== INICIALIZAÇÃO ===================
 (function init() {
-  const restantes = getVotosRestantes();
-
-  if (restantes > 0) {
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.disabled = false;
-    botaoVotar.classList.add("active");
-  } else {
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    botaoVotar.disabled = true;
-    botaoVotar.classList.remove("active");
-  }
+  captchaVisualLiberado = false;
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoVotar.disabled = true;
+  botaoVotar.classList.remove("active");
 })();
+
 
 </script>
 </body>  
