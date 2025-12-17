@@ -689,47 +689,26 @@ button:disabled {
 <div class="options">
 
   <label class="option">
-    <img src="https://i.ibb.co/6RwD1PBC/Adnilton.jpg" alt="Adnilton">
+    <img src="https://i.ibb.co/KzhhZH7H/Gean.jpg" alt="Gean">
     <div class="option-content">
-      <input type="radio" name="vote" value="Adnilton"> Adnilton
+      <input type="radio" name="vote" value="Gean"> Gean
     </div>
   </label>
 
   <label class="option">
-    <img src="https://i.ibb.co/BHtfXDyr/Ella.jpg" alt="Ella">
+    <img src="https://i.ibb.co/1txTXwSm/Luca.jpg" alt="Luca">
     <div class="option-content">
-      <input type="radio" name="vote" value="Ella"> Ella
+      <input type="radio" name="vote" value="Luca"> Luca
     </div>
   </label>
 
   <label class="option">
-    <img src="https://i.ibb.co/mCRNXcf5/Eueu.jpg" alt="Eueu">
+    <img src="https://i.ibb.co/KxdRJJ8h/Sam.jpg" alt="Sam">
     <div class="option-content">
-      <input type="radio" name="vote" value="Eueu"> Eueu
+      <input type="radio" name="vote" value="Sam"> Sam
     </div>
   </label>
 
-  <label class="option">
-    <img src="https://i.ibb.co/s9Vp82DB/Guilherme.jpg" alt="Gui">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Gui"> Gui
-    </div>
-  </label>
-
-  <label class="option">
-    <img src="https://i.ibb.co/fVvM403J/Kristhyan.jpg" alt="Kristhyan">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Kristhyan"> Kristhyan
-    </div>
-  </label>
-
-  <label class="option">
-    <img src="https://i.ibb.co/YBP4Hs44/Neto.jpg" alt="Neto">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Neto"> Neto
-    </div>
-  </label>
-</div>
     
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -741,7 +720,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>Votar</button>
 
-    <div class="notice">A votação segue aberta até às 13:00</div>
+    <div class="notice">A votação segue aberta até às 18:00</div>
   </div>
   
 <!-- POPUP CAPTCHA -->
@@ -792,7 +771,7 @@ button:disabled {
 
   // =================== CONFIGURAÇÃO ===================
 const aberturaBR = new Date("2025-11-25T21:00:00");
-const encerramentoBR = new Date("2025-12-16T17:30:00");
+const encerramentoBR = new Date("2025-12-17T18:00:00");
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -1124,7 +1103,7 @@ async function submitVote(participante) {
   
     //TABLE  
 const { data, error } = await window.supabase
-      .from("f3roça8")  
+      .from("f3roça9")  
       .insert(votosParaEnviar);  
   
     if (error) {  
