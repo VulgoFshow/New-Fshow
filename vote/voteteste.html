@@ -824,23 +824,6 @@ async function verificarHorarios() {
   console.log("VOTAÇÃO ABERTA — UI liberada");
 }
 
-/* =============================
-   CONTROLE DE STATUS (BACKEND)
-============================= */
-async function verificarStatusVotacao() {
-  try {
-    const res = await fetch("/api/status");
-    const data = await res.json();
-
-    if (!data.aberta) {
-      window.location.replace("fechada.html");
-      return;
-    }
-  } catch (e) {
-    window.location.replace("aguarde.html");
-  }
-}
-
 verificarStatusVotacao();
 
 /* =============================
