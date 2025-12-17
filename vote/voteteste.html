@@ -761,7 +761,11 @@ button:disabled {
 
 <script type="module">
   
+// =====================
+// CONFI
+// =====================
 const DATA_ENCERRAMENTO = "2025-12-17T18:00:00-03:00";
+const TABLE_VOTACAO = "f3roça9";
 
 /* =============================
    CONTROLE DE STATUS (BACKEND)
@@ -946,13 +950,15 @@ async function submitVote(participante) {
     botaoVotar.textContent = "Enviando voto...";
 
     const res = await fetch("/api/vote", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        participante,
-        encerramento: DATA_ENCERRAMENTO
-      })
-    });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    participante,
+    encerramento: DATA_ENCERRAMENTO,
+    table: TABLE_VOTACAO
+  })
+});
+
 
     // 🚫 Backend mandou fechar
     if (res.status === 410) {
