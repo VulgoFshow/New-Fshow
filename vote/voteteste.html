@@ -36,6 +36,7 @@
 <meta name="msapplication-TileColor" content="#ff8c00">
 <meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 <meta name="theme-color" content="#8a2be2">
+<script src="https://www.google.com/recaptcha/api.js?render=6LevDzAsAAAAABhRU2ALuUHXSeQxGRza6-bKxGJp"></script>
 
 <style>
 /* ===== VARIÁVEIS GLOBAIS ===== */
@@ -689,16 +690,16 @@ button:disabled {
 <div class="options">
 
   <label class="option">
-    <img src="https://i.ibb.co/KzhhZH7H/Gean.jpg" alt="Gean">
+    <img src="https://i.ibb.co/ymQMNfvZ/davil.jpg" alt="Davi">
     <div class="option-content">
-      <input type="radio" name="vote" value="Gean"> Gean
+      <input type="radio" name="vote" value="Davi"> Davi
     </div>
   </label>
 
   <label class="option">
-    <img src="https://i.ibb.co/1txTXwSm/Luca.jpg" alt="Luca">
+    <img src="https://i.ibb.co/mCRNXcf5/Eueu.jpg" alt="Eueu">
     <div class="option-content">
-      <input type="radio" name="vote" value="Luca"> Luca
+      <input type="radio" name="vote" value="Eueu"> Eueu
     </div>
   </label>
 
@@ -761,11 +762,11 @@ button:disabled {
 
 <script type="module">
   // =================== CONFIG ===================
-  const TABLE_VOTACAO = "f3roça9";
+  const TABLE_VOTACAO = "f3roça10";
   const VOTOS_POR_CAPTCHA = 10;
 
   const aberturaBR = new Date("2025-11-16T21:00:00");
-  const encerramentoBR = new Date("2025-12-17T18:00:00");
+  const encerramentoBR = new Date("2025-12-18T18:00:00");
 
   // =================== HORA DO SERVIDOR ===================
   async function getServerTime() {
@@ -1003,12 +1004,22 @@ async function submitVote(participante) {
     
     await new Promise(resolve => setTimeout(resolve, 600));
 
-    const res = await fetch("/api/vote", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ participante, table: TABLE_VOTACAO })
-    });
+let recaptchaToken = null;
 
+if (suspeita >= LIMITE_SUSPEITA) {
+  recaptchaToken = await getRecaptchaToken();
+}
+
+const res = await fetch("/api/vote", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    participante,
+    table: TABLE_VOTACAO,
+    captchaOk: captchaVisualLiberado,
+    recaptchaToken
+  })
+});
 
       if (res.status === 410) {
         window.location.href = "fechada.html";
@@ -1145,13 +1156,21 @@ botaoCaptcha.addEventListener("click", () => {
     if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
   });
 
-  // Zera suspeita ao passar no CAPTCHA
   verifyBtn.addEventListener("click", () => {
     if (statusEl.textContent.includes("Incorreto")) return;
     suspeita = 0;
     tentativasVoto = 0;
     scrollsRecentes = 0;
   });
+
+  async function getRecaptchaToken() {
+  return new Promise(resolve => {
+    grecaptcha.ready(() => {
+      grecaptcha.execute("SUA_SITE_KEY", { action: "vote" })
+        .then(token => resolve(token));
+    });
+  });
+}
 
     // =================== FOTOS DOS PARTICIPANTES ===================
   const fotos = {
