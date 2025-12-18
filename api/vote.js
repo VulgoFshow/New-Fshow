@@ -5,7 +5,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const TABLES_PERMITIDAS = ["f3roça10", "f3roça12", "f3roça13", "f3roça14", "f3roça15", "f3roça16", "f3roça11"];
+const TABLES_PERMITIDAS = ["f3roça10", "f3roça12", "f3roça13", "f3roça14", "f3roça15", "f3roça16", "testes", "f3roça11"];
 
 async function verificarRecaptcha(token) {
   const res = await fetch(
