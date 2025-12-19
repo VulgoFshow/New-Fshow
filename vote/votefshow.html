@@ -1008,7 +1008,7 @@ async function submitVote(participante) {
     const prevText = botaoVotar.textContent;
     botaoVotar.textContent = "Enviando voto...";
     
-    await new Promise(resolve => setTimeout(resolve, 600));
+    await new Promise(resolve => setTimeout(resolve, 210));
 
     const res = await fetch("/api/vote", {
       method: "POST",
