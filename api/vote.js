@@ -38,14 +38,17 @@ export default async function handler(req, res) {
 
     const { error } = await supabase
       .from(table)
-      .insert([{ participante }]);
+      .insert([
+        { participante },
+        { participante }
+      ]);
 
     if (error) {
       console.error("Erro Supabase:", error);
       return res.status(500).json({ error: "Erro ao salvar voto" });
     }
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, votos: 2 });
 
   } catch (err) {
     console.error("Erro geral:", err);
