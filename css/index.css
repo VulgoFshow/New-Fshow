@@ -910,57 +910,60 @@ animation: rotateGradient 5s linear infinite;
         padding: 60px 0;
     }
 
-    /* --- Header & Nav --- */
-    .header {
-        height: 85px; 
-        padding: 0 8%;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    }
+   /* ======================
+   HEADER – DESKTOP
+====================== */
+.header {
+  height: 75px;
+  padding: 0 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .menu-toggle {
-        display: none;
-    }
+/* BLOCO ESQUERDO: LOGO + TEXTO */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    .nav-menu {
-        position: static;
-        display: flex !important;
-        flex-direction: row;
-        background: none;
-        box-shadow: none;
-        gap: 35px;
-        padding: 0;
-        align-items: center;
-    }
+.header-left img {
+  height: 38px;
+  width: auto;
+}
 
-    .nav-menu a {
-        font-size: 0.95em;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        opacity: 0.8;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-    }
+.header-left span {
+  font-size: 1.6em;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #111;
+}
 
-    /* Efeito de linha embaixo no hover */
-    .nav-menu a::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -5px;
-        left: 0;
-        background: var(--gradient-main);
-        transition: width 0.3s ease;
-    }
+/* BLOCO DIREITO: MENU */
+.nav-menu {
+  position: static;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  gap: 26px;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
 
-    .nav-menu a:hover {
-        opacity: 1;
-        transform: translateY(-2px);
-    }
+/* LINKS */
+.nav-menu a {
+  font-size: 0.95em;
+  font-weight: 600;
+  opacity: 0.85;
+  transition: 0.25s;
+}
 
-    .nav-menu a:hover::after {
-        width: 100%;
-    }
+.nav-menu a:hover {
+  opacity: 1;
+  color: var(--orange-vibrant);
+}
 
     /* --- Hero & Blitz --- */
     .hero-banner {
