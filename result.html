@@ -182,11 +182,15 @@ function renderResultados(dados, total) {
 
       container.innerHTML += `
         <div class="result">
-          <div class="name">${nome} — ${votos} votos</div>
+          <!-- 🔁 AGORA MOSTRA PORCENTAGEM AQUI -->
+          <div class="name">${nome} — ${perc}%</div>
+
           <div class="bar">
             <div class="fill" style="width:${perc}%"></div>
           </div>
-          <div class="percent">${perc}%</div>
+
+          <!-- 🔁 E OS VOTOS AQUI -->
+          <div class="percent">${votos} votos</div>
         </div>
       `;
     });
