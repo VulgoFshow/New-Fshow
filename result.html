@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <title>Resultado da Votação</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <style>
 :root {
   --bg: radial-gradient(circle at top, #3a1515, #120707);
@@ -99,21 +101,34 @@ button {
   font-size: 14px;
   opacity: .9;
 }
+.total-votos {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 2px solid rgba(224,192,122,.25);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--gold);
+}
 </style>
 </head>
+
 <body>
 <div class="container">
   <div class="card">
     <div class="title">Resultado da Votação</div>
+
     <!-- INPUT DA COLLECTION -->
     <div class="input-box">
       <input type="text" id="collectionName" placeholder="Digite o nome da collection (ex: jut1)">
       <button onclick="carregarResultados()">VER</button>
     </div>
+
     <!-- RESULTADOS -->
     <div id="results"></div>
   </div>
 </div>
+
 <script>
 /* 🔥 FIREBASE CONFIG (MESMA DO VOTO) */
 const firebaseConfig = {
@@ -125,6 +140,7 @@ const firebaseConfig = {
   messagingSenderId: "544422121318",
   appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let unsubscribe = null;
@@ -136,28 +152,34 @@ function carregarResultados() {
     alert("Digite o nome da collection");
     return;
   }
+
   if (unsubscribe) unsubscribe();
+
   unsubscribe = db.collection(collection).onSnapshot(snapshot => {
     const contagem = {};
     let total = 0;
+
     snapshot.forEach(doc => {
       const nome = doc.data().nome;
       contagem[nome] = (contagem[nome] || 0) + 1;
       total++;
     });
+
     renderResultados(contagem, total);
   });
 }
 
-/* 🎨 RENDERIZA */
+/* 🎨 RENDERIZA RESULTADOS */
 function renderResultados(dados, total) {
   const container = document.getElementById("results");
   container.innerHTML = "";
+
   Object.keys(dados)
     .sort((a,b) => dados[b] - dados[a])
     .forEach(nome => {
       const votos = dados[nome];
-      const perc = total ? ((votos / total) * 100).toFixed(2) : 0;  // ← ALTERADO AQUI: de 1 para 2
+      const perc = total ? ((votos / total) * 100).toFixed(2) : 0;
+
       container.innerHTML += `
         <div class="result">
           <div class="name">${nome} — ${votos} votos</div>
@@ -168,6 +190,13 @@ function renderResultados(dados, total) {
         </div>
       `;
     });
+
+  /* 🔽 TOTAL DE VOTOS */
+  container.innerHTML += `
+    <div class="total-votos">
+      Total de votos: ${total}
+    </div>
+  `;
 }
 </script>
 </body>
