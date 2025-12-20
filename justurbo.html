@@ -148,7 +148,7 @@ button:hover {
 <script>
 // ====================== CONTROLE DA VOTAÇÃO ======================
 // MUDE APENAS ESTA LINHA PARA ABRIR OU FECHAR A VOTAÇÃO
-const VOTACAO_ABERTA = false;  
+const VOTACAO_ABERTA = true;  
 // true  → votação aberta
 // false → votação encerrada
 
@@ -209,7 +209,7 @@ async function confirmVote() {
 
   try {
     // Note: Use 'update' or 'set' for single document, 'add' for new documents (votes).
-    await db.collection("jut10").add({ 
+    await db.collection("roca1").add({ 
       nome: selected,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
