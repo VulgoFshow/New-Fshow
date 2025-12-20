@@ -125,12 +125,10 @@ button:hover {
 <div class="container">
 
   <div class="card" id="voteScreen">
-    <div class="title">Quem deve ir pra FINAL?</div>
-    <div class="option" onclick="selectOption(this)">Dynamite</div>
+    <div class="title">Quem deve VENCER?</div>
     <div class="option" onclick="selectOption(this)">Luca</div>
     <div class="option" onclick="selectOption(this)">Gean</div>
     <div class="option" onclick="selectOption(this)">Koyuh</div>
-    <div class="option" onclick="selectOption(this)">Joã0</div>
     <div class="option" onclick="selectOption(this)">Renata</div>
     <button onclick="confirmVote()">VOTAR</button>
   </div>
@@ -151,7 +149,7 @@ button:hover {
 <script>
 // ====================== CONTROLE DA VOTAÇÃO ======================
 // MUDE APENAS ESTA LINHA PARA ABRIR OU FECHAR A VOTAÇÃO
-const VOTACAO_ABERTA = false;  
+const VOTACAO_ABERTA = true;  
 // true  → votação aberta
 // false → votação encerrada
 
@@ -212,7 +210,7 @@ async function confirmVote() {
 
   try {
     // Note: Use 'update' or 'set' for single document, 'add' for new documents (votes).
-    await db.collection("roca7").add({ 
+    await db.collection("roca8").add({ 
       nome: selected,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
