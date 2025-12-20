@@ -125,11 +125,11 @@ button:hover {
 <div class="container">
 
   <div class="card" id="voteScreen">
-    <div class="title">Quem você quer que VOLTE?</div>
-    <div class="option" onclick="selectOption(this)">Eueu</div>
-    <div class="option" onclick="selectOption(this)">Ana</div>
-    <div class="option" onclick="selectOption(this)">João</div>
-    <div class="option" onclick="selectOption(this)">Gui</div>
+    <div class="title">Quem você quer que FIQUE?</div>
+    <div class="option" onclick="selectOption(this)">Ella</div>
+    <div class="option" onclick="selectOption(this)">Dynamite</div>
+    <div class="option" onclick="selectOption(this)">Gean</div>
+    <div class="option" onclick="selectOption(this)">Perfeitz</div>
     <button onclick="confirmVote()">VOTAR</button>
   </div>
 
@@ -210,7 +210,7 @@ async function confirmVote() {
 
   try {
     // Note: Use 'update' or 'set' for single document, 'add' for new documents (votes).
-    await db.collection("resp").add({ 
+    await db.collection("roca5").add({ 
       nome: selected,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
