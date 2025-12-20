@@ -126,9 +126,10 @@ button:hover {
 
   <div class="card" id="voteScreen">
     <div class="title">Quem você quer que fique?</div>
-    <div class="option" onclick="selectOption(this)">Gean</div>
+    <div class="option" onclick="selectOption(this)">Eueu</div>
     <div class="option" onclick="selectOption(this)">Ana</div>
-    <div class="option" onclick="selectOption(this)">Rayane</div>
+    <div class="option" onclick="selectOption(this)">João</div>
+    <div class="option" onclick="selectOption(this)">Gui</div>
     <button onclick="confirmVote()">VOTAR</button>
   </div>
 
@@ -148,7 +149,7 @@ button:hover {
 <script>
 // ====================== CONTROLE DA VOTAÇÃO ======================
 // MUDE APENAS ESTA LINHA PARA ABRIR OU FECHAR A VOTAÇÃO
-const VOTACAO_ABERTA = false;  
+const VOTACAO_ABERTA = true;  
 // true  → votação aberta
 // false → votação encerrada
 
@@ -209,7 +210,7 @@ async function confirmVote() {
 
   try {
     // Note: Use 'update' or 'set' for single document, 'add' for new documents (votes).
-    await db.collection("roca4").add({ 
+    await db.collection("resp").add({ 
       nome: selected,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
