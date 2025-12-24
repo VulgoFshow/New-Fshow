@@ -1,0 +1,22 @@
+<div id="embed-enquete" class="embed-hidden">
+    <div class="loader">
+        <span></span>
+    </div>
+
+    <iframe
+        id="iframe-enquete"
+        src="https://fshow.site/teste.html"
+        loading="lazy"
+        frameborder="0">
+    </iframe>
+</div>
+
+<script>
+const iframe = document.getElementById("iframe-enquete");
+const loader = document.querySelector(".loader");
+
+iframe.addEventListener("load", () => {
+    loader.style.display = "none";
+    iframe.style.opacity = "1";
+});
+</script>
