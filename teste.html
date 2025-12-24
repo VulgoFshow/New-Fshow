@@ -29,10 +29,10 @@
         </section>
 
         <section id="step-confirmacao" class="step">
-                      <div class="hero-card">
-                <span class="badge">Votação</span>
-                <h1>Escolha seu candidato</h1>
-                <p>Você pode votar em um candidato por vez. Vote várias vezes.</p>
+              <div class="hero-card">
+              <span class="badge">Votação</span>
+              <h1>Candidato selecionado.</h1>
+              <p>Passe pelo catcha para confirmar o seu voto</p>
             </div>
             <h2>Confirme seu voto</h2>
             <div id="selected-candidate-card"></div>
@@ -46,17 +46,13 @@
             </button>
         </section>
 
-        <section id="step-sucesso" class="step">
-                      <div class="hero-card">
-                <span class="badge">Votação</span>
-                <h1>Candidato selecionado</h1>
-                <p>Passe pelo captcha para confirmar o seu voto</p>
-            </div>
-
-            <div class="success-icon">✓</div>
-            <h2>Voto computado com sucesso!</h2>
-            <button class="btn-again" onclick="resetVotacao()">Votar novamente</button>
-        </section>
+<section id="step-sucesso" class="step">
+    <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h2>Voto computado com sucesso!</h2>
+        <button class="btn-again" onclick="resetVotacao()">Votar novamente</button>
+    </div>
+</section>
 
         <footer>
             <p>Essa enquete <strong>não tem</strong> efeito na votação principal</p>
@@ -250,11 +246,16 @@ header {
 }
 
 /* ===== CAPTCHA ===== */
+
 .captcha-container {
-    margin: 22px 0;
-    padding: 16px;
-    background: #141414;
-    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    padding: 24px;
+    background: rgba(0,0,0,.55);
+    border-radius: 22px;
+    backdrop-filter: blur(12px);
 }
 
 /* ===== BOTÕES ===== */
@@ -287,21 +288,63 @@ button:active {
 
 /* ===== SUCESSO ===== */
 #step-sucesso {
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 140px);
+}
+
+#step-sucesso.active {
+    display: flex;
+}
+
+
+.success-card {
+    width: 100%;
+    max-width: 360px;
+    background:
+        linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.85)),
+        url("https://i.ibb.co/h14c6kWP/Chat-GPT-Image-24-de-dez-de-2025-12-57-49.png");
+    background-size: cover;
+    background-position: center;
+    border-radius: 26px;
+    padding: 36px 24px;
     text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+    animation: fadeUp .6s ease;
 }
 
 .success-icon {
-    width: 82px;
-    height: 82px;
-    background: #2ecc71;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    margin: 40px auto 20px;
+    border: 3px solid #5CFF7A;
+    color: #5CFF7A;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 38px;
-    animation: pulse 1.5s infinite;
-    box-shadow: 0 0 35px rgba(46,204,113,.6);
+    font-size: 30px;
+    margin: 0 auto 18px;
+}
+
+.success-card h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 26px;
+}
+
+.btn-again {
+    background: #fff;
+    color: #000;
+    border-radius: 999px;
+    padding: 14px 26px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform .2s ease;
+}
+
+.btn-again:hover {
+    transform: scale(1.04);
 }
 
 @keyframes pulse {
