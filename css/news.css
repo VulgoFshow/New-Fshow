@@ -546,13 +546,13 @@ footer::before {
     padding: 12px;
   }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #f1f5fa;
-    margin: 0;
-    padding: 20px;
-    min-height: 100vh;
-  }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f1f5fa;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
 
   .enquete {
     width: 100%;
