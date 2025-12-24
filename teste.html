@@ -1,1242 +1,415 @@
-<!DOCTYPE html>  <html lang="pt-BR">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Fshow | Portal Flop - THE NEXT LEVEL</title>  
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">  
-    <style>  
-        /* ==================================== */  
-        /* VARIÁVEIS E CONFIGURAÇÃO GLOBAL */  
-        /* ==================================== */  
-        :root {  
-            --orange-vibrant: #FF8C00;  
-            --purple-dark: #8A2BE2;  
-            --text-primary: #121212;  
-            --text-light: #f0f0f0;  
-            --gradient-main: linear-gradient(90deg, var(--orange-vibrant) 0%, var(--purple-dark) 100%);  
-            --gradient-reversed: linear-gradient(90deg, var(--purple-dark) 0%, var(--orange-vibrant) 100%);  
-            --bg-page: #f9f9f9;  
-        }  * {  
-        margin: 0;  
-        padding: 0;  
-        box-sizing: border-box;  
-    }  
-
-    body {  
-
-        background-color: var(--bg-page);  
-        color: var(--text-primary);  
-        line-height: 1.6;  
-    }  
-
-    a {  
-        text-decoration: none;  
-        color: inherit;  
-    }  
-
-    /* Botão de Ação OUSADO */  
-    .btn-action {  
-        display: inline-block;  
-        padding: 10px 25px;  
-        background: var(--gradient-reversed);  
-        color: white;  
-        font-weight: 700;  
-        border-radius: 5px;  
-        transition: all 0.3s ease;  
-        box-shadow: 0 5px 15px rgba(138, 43, 226, 0.5); /* Sombra roxa ousada */  
-        text-transform: uppercase;  
-    }  
-
-    .btn-action:hover {  
-        box-shadow: 0 8px 25px rgba(255, 140, 0, 0.7); /* Sombra laranja no hover */  
-        transform: translateY(-2px);  
-    }  
-
-    .container {  
-        width: 90%;  
-        max-width: 1300px;  
-        margin: 0 auto;  
-        padding: 30px 0;  
-    }
-
-/* ==================================== /
-/ 1. CABEÇALHO (HEADER CORRIGIDO) /
-/ ==================================== */
-
-/* Header */
-body {
-  margin: 0;
-  font-family: 'Montserrat', sans-serif;
-  background: #f5f5f5;
-}
-
-/* Header */
-/* HEADER COMPACTO */
-.header {
-    background: var(--text-primary);
-    padding: 12px 5%;
-    height: 65px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 2000;
-}
-
-/* LOGO À DIREITA */
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-left: auto;   /* empurra para direita */
-}
-
-.logo-container img {
-    height: 40px;
-}
-
-.logo-container span {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.9em;
-    letter-spacing: 2px;
-    background: var(--gradient-main);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* BOTÃO HAMBÚRGUER À ESQUERDA */
-.menu-toggle {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-}
-
-.menu-toggle span {
-    width: 26px;
-    height: 3px;
-    background: white;
-    border-radius: 2px;
-}
-
-/* MENU OCULTO */
-.nav-menu {
-    position: absolute;
-    left: 10px;
-    top: 70px;               /* abaixo do header */
-    background: var(--text-primary);
-    padding: 15px 20px;
-    border-radius: 10px;
-    display: none;
-    flex-direction: column;
-    gap: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    z-index: 3000;
-}
-
-.nav-menu.open {
-    display: flex;
-}
-
-.nav-menu a {
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9em;
-}
-
-/* Botão dentro do menu */
-.nav-menu .btn-action {
-    margin-top: 10px;
-}
-
-.hero-banner {
-    width: 100%;
-    overflow: hidden;
-    margin-bottom: 10px !important; 
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-    .hero-banner img {  
-        width: 100%;  
-        height: auto;  
-        display: block;  
-    }  
-      
-    .blitz-headline {  
-        display: flex;  
-        background: var(--gradient-reversed);  
-        color: white;  
-        border-radius: 10px;  
-        overflow: hidden;  
-        margin-bottom: 50px;  
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);  
-    }  
-
-    .blitz-content {  
-        padding: 40px;  
-        width: 60%;  
-        display: flex;  
-        flex-direction: column;  
-        justify-content: center;  
-    }  
-
-    .blitz-tag {  
-        font-family: 'Bebas Neue', sans-serif;  
-        font-size: 1.8em;  
-        color: var(--text-light);  
-        margin-bottom: 10px;  
-    }  
-
-    .blitz-content h1 {  
-        font-family: 'Bebas Neue', sans-serif;  
-        font-size: 3.8em;  
-        line-height: 1;  
-        margin-bottom: 20px;  
-        letter-spacing: 3px;  
-        color: var(--orange-vibrant); /* Laranja em destaque no fundo roxo */  
-        text-shadow: 2px 2px 0 var(--purple-dark);  
-    }  
-
-    .blitz-img {  
-        width: 40%;  
-        overflow: hidden;  
-    }  
-
-    .blitz-img img {  
-        width: 100%;  
-        height: 100%;  
-        object-fit: cover;  
-        transition: transform 0.5s;  
-    }  
-
-    .blitz-headline:hover .blitz-img img {  
-        transform: scale(1.05);  
-    }  
-
-    .section-title {  
-        font-family: 'Bebas Neue', sans-serif;  
-        font-size: 3em;  
-        letter-spacing: 2px;  
-        margin-bottom: 30px;  
-        color: var(--purple-dark);  
-        border-left: 6px solid var(--orange-vibrant);  
-        padding-left: 15px;  
-        display: inline-block;  
-    }  
-      
-    .news-grid {  
-        display: grid;  
-        grid-template-columns: 2fr 1fr; /* Layout assimétrico: 2/3 e 1/3 */  
-        gap: 40px;  
-    }  
-
-    .main-content {  
-        display: grid;  
-        grid-template-columns: repeat(2, 1fr);  
-        gap: 30px;  
-    }  
-
-    .side-content {  
-        background-color: white;  
-        border-radius: 10px;  
-        padding: 20px;  
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);  
-        border: 1px solid #eee;  
-    }  
-
-    .news-card {  
-        background: white;  
-        border-radius: 10px;  
-        overflow: hidden;  
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);  
-        transition: all 0.3s ease;  
-        position: relative;  
-    }  
-
-    .news-card::after {  
-        content: '';  
-        position: absolute;  
-        bottom: 0;  
-        left: 0;  
-        width: 100%;  
-        height: 5px;  
-        background: var(--gradient-main);  
-        transform: scaleX(0);  
-        transition: transform 0.4s ease-out;  
-        transform-origin: left;  
-    }  
-
-    .news-card:hover {  
-        transform: translateY(-5px);  
-    }  
-
-    .news-card:hover::after {  
-        transform: scaleX(1);  
-    }  
-
-    .card-img {  
-        width: 100%;  
-        height: 220px;  
-        object-fit: cover;  
-    }  
-
-    .card-content {  
-        padding: 20px;  
-    }  
-
-    .card-category {  
-        font-size: 0.9em;  
-        font-weight: 900;  
-        color: var(--purple-dark);  
-        text-transform: uppercase;  
-    }  
-
-    .card-content h3 {  
-        font-family: 'Bebas Neue', sans-serif;  
-        font-size: 1.6em;  
-        line-height: 1.2;  
-        margin: 5px 0 10px 0;  
-        letter-spacing: 0.5px;  
-    }  
-
-    .side-content h4 {  
-        font-family: 'Bebas Neue', sans-serif;  
-        font-size: 2.2em;  
-        color: var(--orange-vibrant);  
-        border-bottom: 3px solid var(--purple-dark);  
-        padding-bottom: 10px;  
-        margin-bottom: 20px;  
-    }  
-
-    .trend-item {  
-        display: flex;  
-        align-items: flex-start;  
-        padding: 15px 0;  
-        border-bottom: 1px dashed #eee;  
-    }  
-      
-    .trend-item:last-child {  
-        border-bottom: none;  
-    }  
-
-    .trend-number {  
-        font-family: 'Bebas Neue', sans-serif;  
-        font-size: 3em;  
-        font-weight: 900;  
-        margin-right: 15px;  
-        background: var(--gradient-main);  
-        -webkit-background-clip: text;  
-        -webkit-text-fill-color: transparent;  
-        line-height: 1;  
-    }  
-
-    .trend-item a {  
-        font-weight: 700;  
-        color: var(--text-primary);  
-        transition: color 0.3s;  
-    }  
-
-    .trend-item a:hover {  
-        color: var(--purple-dark);  
-    }
-
-.footer {
-background: var(--text-primary);
-color: white;
-padding: 45px 5%;
-margin-top: 60px;
-text-align: center;
-}
-
-.footer-logo img {
-height: 55px;
-filter: drop-shadow(0 0 8px var(--orange-vibrant));
-margin-bottom: 18px;
-}
-
-.footer-links {
-margin: 18px 0;
-}
-
-.footer-links a {
-margin: 0 15px;
-font-size: 0.95em;
-opacity: 0.8;
-transition: 0.3s;
-}
-
-.footer-links a:hover {
-opacity: 1;
-color: var(--orange-vibrant);
-}
-
-.social-icons {
-margin-top: 20px;
-}
-
-.social-icons a {
-display: inline-block;
-margin: 0 6px;
-padding: 10px;
-background: var(--purple-dark);
-color: white;
-border-radius: 50%;
-font-weight: 900;
-transition: background 0.3s;
-}
-
-.social-icons a:hover {
-background: var(--orange-vibrant);
-}
-
-@media (max-width: 768px) {
-
-    .header {
-        flex-direction: row;       
-        height: 60px;
-        padding: 10px 4%;
-    }
-
-    .logo-container img {
-        height: 36px;
-    }
-
-    .logo-container span {
-        font-size: 1.6em;
-    }
-
-    .nav-menu {
-        top: 60px;                       
-        left: 10px;
-    }
-}
-.nav-menu a {  
-    font-size: 0.85em;  
-    margin: 0;  
-    display: inline-block;  
-}  
-
-.btn-action {  
-    padding: 8px 16px;  
-    font-size: 0.8em;  
-}  
-
-/* HERO */  
-.hero-banner img {  
-    height: auto;  
-}  
-
-/* BLITZ HEADLINE */  
-.blitz-headline {  
-    flex-direction: column;  
-    text-align: center;  
-}  
-.blitz-content {  
-    width: 100%;  
-    padding: 25px;  
-}  
-.blitz-img {  
-    width: 100%;  
-}  
-.blitz-content h1 {  
-    font-size: 2em;  
-    line-height: 1.1;  
-}  
-
-/* GRID DE NOTÍCIAS */  
-.news-grid {  
-    grid-template-columns: 1fr !important;  
-    gap: 25px;  
-}  
-
-.main-content {  
-    grid-template-columns: 1fr;  
-}  
-
-.footer {
-    background: linear-gradient(135deg, #121212, #1a1a1a);
-    padding: 55px 5%;
-    color: #fff;
-    text-align: center;
-    border-top: 4px solid var(--orange-vibrant);
-    position: relative;
-}
-
-.footer::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
-    background-size: 300% 300%;
-    animation: footerGradient 4s linear infinite;
-}
-
-@keyframes footerGradient {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 300% 50%; }
-}
-
-/* Logo */
-.footer-logo img {
-    height: 60px;
-    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.6));
-    margin-bottom: 25px;
-}
-
-/* Links */
-.footer-links {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 25px;
-    margin: 20px 0 35px 0;
-}
-
-.footer-links a {
-    font-size: 1em;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #ddd;
-    transition: 0.3s ease-in-out;
-}
-
-.footer-links a:hover {
-    color: var(--orange-vibrant);
-    transform: translateY(-2px);
-}
-
-/* Redes sociais */
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
-
-.social-icons a {
-    width: 42px;
-    height: 42px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: rgba(255,255,255,0.12);
-    border-radius: 50%;
-    transition: 0.3s ease;
-    font-size: 1.2em;
-}
-
-.social-icons a:hover {
-    background: var(--orange-vibrant);
-    transform: scale(1.15);
-    color: #fff;
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .footer-links {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .footer-logo img {
-        height: 50px;
-    }
-}
-
-
-.gradient-line {
-width: 100%;
-height: 6px;
-background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
-background-size: 300% 300%;
-animation: rotateGradient 5s linear infinite;
-}
-
-/* Animação suave e contínua */
-@keyframes rotateGradient {
-0% { background-position: 0% 50%; }
-100% { background-position: 300% 50%; }
-}
-
-/* ==================================== */
-/* 6. CARROSSEL DE DESTAQUES */
-/* ==================================== */
-
-.carousel-section {
-    padding-top: 50px;
-}
-
-.carousel-container {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-/* ===== TRACK ===== */
-.carousel-track {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-/* ===== SLIDE ===== */
-.carousel-slide {
-    min-width: 100%;
-    height: 420px;
-    position: relative;
-    overflow: hidden;
-    background: #000;
-}
-
-/* ===== IMAGEM ===== */
-.slide-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-/* ===== OVERLAY ===== */
-.slide-content-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60%;
-    padding: 30px;
-    background: linear-gradient(90deg, rgba(138,43,226,0.9), rgba(255,140,0,0.85));
-    color: white;
-    border-top-right-radius: 12px;
-    box-shadow: 5px -5px 20px rgba(0,0,0,0.3);
-    z-index: 3; 
-    pointer-events: none; 
-}
-
-/* ===== BOTÕES — AGORA APARECEM ===== */
-.carousel-control {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.6);
-    color: white;
-    border: none;
-    padding: 15px;
-    font-size: 2em;
-    cursor: pointer;
-    z-index: 9999; 
-    border-radius: 8px;
-}
-
-.prev-control { left: 10px; }
-.next-control { right: 10px; }
-
-/* ===== INDICADORES ===== */
-.carousel-indicators {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-    z-index: 10000;
-}
-
-.indicator {
-    width: 12px;
-    height: 12px;
-    background: rgba(255,255,255,0.6);
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.indicator.active-indicator {
-    background: var(--orange-vibrant);
-    transform: scale(1.2);
-    border: 2px solid var(--purple-dark);
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-    .carousel-slide {
-        height: 340px;
-    }
-
-    .slide-content-overlay {
-        width: 100%;
-        padding: 15px;
-        border-radius: 0;
-    }
-
-    .carousel-control { display: none; }
-}
-
-/* =============================== */
-/*       BOTÕES DE NAVEGAÇÃO      */
-/* =============================== */
-
-.carousel-control {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    font-size: 26px;
-    font-weight: 900;
-    
-    background: rgba(255,255,255,0.22);
-    backdrop-filter: blur(6px);
-
-    color: white;
-    cursor: pointer;
-    border: none;
-
-    border-radius: 50%; /* botão circular bonito */
-    z-index: 999;
-
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-
-    transition: 0.25s ease;
-}
-
-.carousel-control:hover {
-    background: rgba(255,255,255,0.35);
-    transform: translateY(-50%) scale(1.08);
-}
-
-/* Botão esquerdo */
-.prev-control {
-    left: 15px;
-}
-
-/* Botão direito */
-.next-control {
-    right: 15px;
-}
-
-@media (max-width: 768px) {
-    .carousel-control {
-        width: 40px;
-        height: 40px;
-        font-size: 22px;
-    }
-}
-
-/* ========================= */
-/* STORIES
-/* ========================= */
-
-.stories-wrapper {
-  width: 100vw;
-  margin-left: calc(50% - 50vw); 
-  margin-right: calc(50% - 50vw);
-  background: var(--bg-page);
-  padding: 0px; 
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-
-.stories-container {
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-  gap: 12px;
-  padding: 8px 12px;
-  scrollbar-width: none;
-  white-space: nowrap;       
-  scroll-behavior: smooth;    
-}
-
-.stories-container::-webkit-scrollbar {
-  display: none;
-}
-
-/* Bolinhas */
-.story,
-.storye {
-  position: relative;
-  flex-shrink: 0;
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  transition: transform 0.25s ease;
-}
-
-/* Ativos */
-.story {
-  border: 3px solid var(--orange-vibrant);
-}
-
-/* Não vistos */
-.storye {
-  border: 3px solid var(--purple-dark);
-  filter: grayscale(100%);
-}
-
-/* Hover */
-.story:hover,
-.storye:hover {
-  transform: scale(1.1);
-}
-
-
-/* Imagem interna */
-.story img,
-.storye img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ============================= */
-/* ADORNOS ESPECIAIS DO SEU TEMA */
-/* ============================= */
-
-/* Chapéu */
-.story.chapeu::after {
-  content: "";
-  position: absolute;
-  top: -45px;
-  right: -31px;
-  width: 105px;
-  height: 95px;
-  background: url('https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png') no-repeat center/contain;
-  pointer-events: none;
-}
-
-/* Zona (alerta) */
-.story.zona::after {
-  content: "⚠️";
-  position: absolute;
-  top: -16px;
-  right: -11px;
-  font-size: 26px;
-  transform: rotate(-5deg);
-  pointer-events: none;
-}
-
-/* Finalista */
-.story.final::after {
-  content: "🌟";
-  position: absolute;
-  top: -16px;
-  right: -11px;
-  font-size: 26px;
-  transform: rotate(-5deg);
-  pointer-events: none;
-}
-
-/* Lâmpada */
-.story.lamp::after {
-  content: "";
-  position: absolute;
-  top: -18px;
-  right: -18px;
-  width: 60px;
-  height: 50px;
-  background: url('https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png') no-repeat center/contain;
-  pointer-events: none;
-}
-
-/* Inco */
-.story.inco::after {
-  content: "";
-  position: absolute;
-  top: -8px;
-  right: -11px;
-  width: 43px;
-  height: 33px;
-  background: url('https://i.ibb.co/fd5gvrfZ/Chat-GPT-Image-26-de-out-de-2025-22-35-43-fotor-bg-remover-20251026223635.png') no-repeat center/contain;
-  pointer-events: none;
-}
-
-/* LINHA GRADIENTE ANIMADA */
-.gradient-line {
-    width: 100%;
-    height: 6px;
-    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
-    background-size: 300% 300%;
-    animation: gradientMove 4s linear infinite;
-}
-
-/* Animação suave do gradiente */
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 300% 50%; }
-}
-
-.spacer-left,
-.spacer-right {
-    width: 20px;      
-    height: 100%;
-    flex-shrink: 0;
-    pointer-events: none; 
-    background: transparent;
-}
-
-</style>  
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Voice Brasil - Votação</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="menu-icon"><span></span><span></span><span></span></div>
+            <img src="https://logodownload.org/wp-content/uploads/2020/02/the-voice-brasil-logo.png" alt="The Voice" class="logo">
+            <div class="spacer"></div>
+        </header>
+
+        <section id="step-votação" class="step active">
+            <div class="hero-card">
+                <span class="badge">Votação</span>
+                <h1>Escolha seu candidato</h1>
+                <p>Você pode votar em um candidato por vez. Vote várias vezes.</p>
+            </div>
+
+            <div class="candidate-list" id="candidate-list">
+                </div>
+        </section>
+
+        <section id="step-confirmacao" class="step">
+                      <div class="hero-card">
+                <span class="badge">Votação</span>
+                <h1>Escolha seu candidato</h1>
+                <p>Você pode votar em um candidato por vez. Vote várias vezes.</p>
+            </div>
+            <h2>Confirme seu voto</h2>
+            <div id="selected-candidate-card"></div>
+            
+            <div class="captcha-container">
+                <div class="g-recaptcha" data-sitekey="6Lev1DUsAAAAANzB2nhPDsKVzXZP0daxuDMCil1a" data-callback="onCaptchaSuccess" data-theme="dark"></div>
+            </div>
+
+            <button class="btn-back" onclick="changeStep('votação')">
+                <span class="icon">↺</span> Alterar voto
+            </button>
+        </section>
+
+        <section id="step-sucesso" class="step">
+                      <div class="hero-card">
+                <span class="badge">Votação</span>
+                <h1>Candidato selecionado</h1>
+                <p>Passe pelo captcha para confirmar o seu voto</p>
+            </div>
+
+            <div class="success-icon">✓</div>
+            <h2>Voto computado com sucesso!</h2>
+            <button class="btn-again" onclick="resetVotacao()">Votar novamente</button>
+        </section>
+
+        <footer>
+            <p>Essa enquete <strong>não tem</strong> efeito na votação principal</p>
+            <button class="btn-logout">Sair</button>
+        </footer>
+    </div>
+
+</body>
+</html>
 
 <style>
-
-.blitz-headline {
-    margin-left: 5%;
-    margin-right: 5%;
-    width: 90% !important;  
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
-.blitz-headline {
-    margin-top: 10px !important;     
-    margin-bottom: 15px !important;  
+html {
+    scroll-behavior: smooth;
 }
 
-.blitz-headline .blitz-img img {
+body {
+    background: radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
+    color: #fff;
+}
+
+.container {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== STEPS ===== */
+.step {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: stepIn .45s ease forwards;
+}
+
+.step.active {
     display: block;
 }
 
-.blitz-headline,
-.news-grid,
-.side-content {
-    padding-left: 16px;
-    padding-right: 16px;
-    box-sizing: border-box; 
-}
-
-@media (min-width: 1024px) {
-    .blitz-headline,
-    .news-grid,
-    .side-content {
-        padding-left: 24px;
-        padding-right: 24px;
+@keyframes stepIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-</style>
-</head>  
-<body>  
-
-<header class="header">  <div class="menu-toggle" onclick="toggleMenu()">  
-    <span></span>  
-    <span></span>  
-    <span></span>  
-</div>  
-  
-<div class="logo-container">  
-    <img src="https://i.ibb.co/3yCzdJ59/logo-fshow.png" alt="Logo">  
-    <span>PORTAL FLOP</span>  
-</div>  
-
-<!-- Menu -->  
-<nav class="nav-menu" id="menu">  
-    <a href="#">Home</a>  
-    <a href="#">Notícias</a>  
-    <a href="#">Divas Pop</a>  
-    <a href="#">Vídeos</a>  
-    <a class="btn-action" href="#">Assinar Agora</a>  
-</nav>
-
-</header>
-
-<div class="gradient-line"></div>  
-    <section class="hero-banner">  
-        <img src="https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/bannerhallowen.png" alt="Banner de Halloween Ousado Fshow">  
-<div class="gradient-line"></div>  
-    </section>
-  
- <!-- STORIES -->
-<div class="stories-wrapper">
-  <div class="stories-container">
-
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Alysson.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Cicero.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Davi.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Davi-Jose.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Emanuel.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="story final" style="background-image: url('agc/Eueu.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Flavia.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Gabi.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Gean.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Joao.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('/agc/Koyuh.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Lucas.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Luddi.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Ludmila.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Mariana.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('https://i.ibb.co/8nNkKgFW/Mikael-2.jpg');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Rodrigo.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Rose.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Tatah.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Tekitos.webp?raw=true');"></div></a>
-    <a href="index.html"><div class="storye" style="background-image: url('agc/Tety.webp?raw=true');"></div></a>
-
-  </div>
-</div>
-
-  </div>
-
-<article class="blitz-headline">  
-    <div class="blitz-content">  
-        <p class="blitz-tag">A FAZENDA 17</p>  
-        <h1>12° Roça formada!</h1>  
-        <p>Quem você quer que FIQUE? Vote na enquete!</p>  
-        <div style="margin-top: 20px;">  
-            <a href="flop-news/novaroça.html" class="btn-action">VOTAR</a>  
-        </div>  
-    </div>  
-    <div class="blitz-img">  
-        <img src="https://i.ibb.co/spmHGg0z/Roca124x3.jpg" alt="Imagem da Manchete Blitz">  
-    </div>  
-</article>  
-      
-<section class="container carousel-section">
-    <h2 class="section-title">✨ DESTAQUES FSHOW</h2>
-
-    <div class="carousel-container">
-        <div class="carousel-track">
-
-<!-- SLIDE 1 -->
-<article class="carousel-slide current-slide">
-    <a href="https://forms.gle/TWxYq5gE23zeK2HR9" class="carousel-slide-link">
-        <div class="slide-img-wrapper">
-            <img class="slide-image" src="https://i.ibb.co/sdLqFYDd/comuawards.webp" alt="Comu Awards">
-        </div>
-
-        <div class="slide-content-overlay">
-            <p class="slide-tag">COMU AWARDS</p>
-            <h3 class="slide-title">Indicações abertas!</h3>
-        </div>
-    </a>
-</article>
-
-<!-- SLIDE 2 -->
-<article class="carousel-slide">
-    <a href="https://www.wattpad.com/story/404341343-o-%C3%BAltimo-herdeiro" class="carousel-slide-link">
-        <div class="slide-img-wrapper">
-            <img class="slide-image" src="https://i.ibb.co/3mxb4rTz/LastHeir.png" alt="Lest Heir">
-        </div>
-
-        <div class="slide-content-overlay">
-            <p class="slide-tag">WATTPAD</p>
-            <h3 class="slide-title">Lest Heir – Capítulo 3 disponível!</h3>
-        </div>
-    </a>
-</article>
-
-<!-- SLIDE 3 -->
-<article class="carousel-slide">
-    <a href="#" class="carousel-slide-link">
-        <div class="slide-img-wrapper">
-            <img class="slide-image" src="https://i.ibb.co/svNCVQZK/Eueu.jpg" alt="Eueu">
-        </div>
-
-        <div class="slide-content-overlay">
-            <p class="slide-tag">BREAKING</p>
-            <h3 class="slide-title">Eueu vence A Grande Conquista 4!</h3>
-        </div>
-    </a>
-</article>
-</div>
-        <!-- BOTÕES -->
-        <button class="carousel-control prev-control">&#10094;</button>
-       <button class="carousel-control next-control">&#10095;</button>
-
-
-        <!-- INDICADORES -->
-        <div class="carousel-indicators">
-            <span class="indicator active-indicator" data-slide="0"></span>
-            <span class="indicator" data-slide="1"></span>
-            <span class="indicator" data-slide="2"></span>
-        </div>
-    </div>
-</section>
-
-
-
-    <h2 class="section-title">ÚLTIMAS DO FLOP</h2>  
-    <section class="news-grid">  
-
-        <div class="main-content">  
-       
-       <a href="flop-news/final.html" class="news-card-link">
-    <article class="news-card">  
-        <img class="card-img" src="https://i.ibb.co/HL932NpK/Final.jpg" alt="Notícia 2">  
-        <div class="card-content">  
-            <p class="card-category">A Grande Conquista 4</p>  
-            <h3>Eueu, Gean, Luddy e Mikael são os finalistas!</h3>  
-            <p style="font-size: 0.9em; color: var(--text-secondary);">
-                Vote na enquete! Quem será o campeão?
-            </p>  
-        </div>  
-    </article>  
-</a>
-
- <a href="flop-news/finalistas2.html" class="news-card-link">
-    <article class="news-card">  
-        <img class="card-img" src="https://i.ibb.co/nMBCDdVZ/eueugean.jpg" alt="Eueu e Gean">  
-        <div class="card-content">  
-            <p class="card-category">A Grande Conquista 4</p>  
-            <h3>Eueu e Gean são os primeiros finalistas da temporada!</h3>  
-            <p style="font-size: 0.9em; color: var(--text-secondary);">
-                Sobreviventes da eliminação dupla, seguem para a grande final.
-            </p>  
-        </div>  
-    </article>  
-</a>
-
-<a href="ads/planos.html" class="news-card-link">
-    <article class="news-card">  
-        <img class="card-img" src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg" alt="Anuncie aqui">  
-        <div class="card-content">  
-            <p class="card-category">ADS</p>  
-            <h3>Anuncie Aqui</h3>  
-        </div>  
-    </article>  
-</a>
-
-        </div>  
-
-        <aside class="side-content">  
-            <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
-            <div class="trend-item">  
-                <span class="trend-number">01</span>  
-                <a href="#">Início das indicatórias ao Comu Awards</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">02</span>  
-                <a href="#">Final A Grande Conquista 4</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">03</span>  
-                <a href="#">Come Back? Tem gente voltando!</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">04</span>  
-                <a href="#">Recap anual do spotfy</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">05</span>  
-                <a href="#">Dudu Fazendeiro pela 4° vez</a>  
-            </div>  
-        </aside>  
-
-    </section>  
-      
-</div>  
-
-<script>
-function toggleMenu() {
-  document.getElementById("menu").classList.toggle("open");
+/* ===== HEADER ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
 }
-</script>
+
+.logo {
+    height: 34px;
+}
+
+.menu-icon span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    margin: 4px 0;
+    opacity: .9;
+}
+
+/* ===== HERO ===== */
+.hero-card {
+    position: relative;
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 22px;
+    overflow: hidden;
+    background-image:
+        linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.85)),
+        url("https://i.ibb.co/h14c6kWP/Chat-GPT-Image-24-de-dez-de-2025-12-57-49.png");
+    background-size: cover;
+    background-position: center;
+    animation: fadeUp .6s ease;
+}
+
+/* Gradientes coloridos por cima da imagem */
+.hero-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at top right, rgba(255,0,80,.45), transparent 60%),
+        radial-gradient(circle at bottom left, rgba(120,0,255,.45), transparent 60%);
+    pointer-events: none;
+}
+
+/* Conteúdo acima da imagem */
+.hero-card * {
+    position: relative;
+    z-index: 1;
+}
+
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.badge {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,.3);
+    padding: 4px 14px;
+    border-radius: 30px;
+    font-size: 11px;
+    text-transform: uppercase;
+    opacity: .85;
+}
+
+.hero-card h1 {
+    font-size: 24px;
+    margin-top: 14px;
+    font-weight: 600;
+}
+
+.hero-card p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #cfcfcf;
+}
+
+/* ===== CANDIDATOS ===== */
+.candidate-card {
+    display: flex;
+    align-items: center;
+    background: #1c1f26;
+    margin-bottom: 12px;
+    border-radius: 16px;
+    padding: 12px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,.05);
+    transition: all .25s ease;
+    animation: fadeUp .4s ease;
+}
+
+.candidate-card:hover {
+    background: #262a38;
+    transform: scale(1.02);
+}
+
+.candidate-card:active {
+    transform: scale(.98);
+}
+
+.candidate-card img {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-right: 14px;
+}
+
+.candidate-info h3 {
+    font-size: 16px;
+}
+
+.candidate-info p {
+    font-size: 13px;
+    color: #b5b5b5;
+}
+
+/* ===== CONFIRMAÇÃO ===== */
+#step-confirmacao h2 {
+    margin-bottom: 16px;
+}
+
+#selected-candidate-card .candidate-card {
+    background: #242834;
+    cursor: default;
+}
+
+/* ===== CAPTCHA ===== */
+.captcha-container {
+    margin: 22px 0;
+    padding: 16px;
+    background: #141414;
+    border-radius: 16px;
+}
+
+/* ===== BOTÕES ===== */
+button {
+    background: linear-gradient(135deg, #ff005d, #6a00ff);
+    border: none;
+    color: #fff;
+    padding: 14px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0,0,0,.5);
+}
+
+button:active {
+    transform: scale(.97);
+}
+
+.btn-back {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.25);
+    margin-top: 10px;
+}
+
+/* ===== SUCESSO ===== */
+#step-sucesso {
+    text-align: center;
+}
+
+.success-icon {
+    width: 82px;
+    height: 82px;
+    background: #2ecc71;
+    border-radius: 50%;
+    margin: 40px auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    animation: pulse 1.5s infinite;
+    box-shadow: 0 0 35px rgba(46,204,113,.6);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px rgba(46,204,113,.5); }
+    50% { box-shadow: 0 0 45px rgba(46,204,113,.9); }
+    100% { box-shadow: 0 0 20px rgba(46,204,113,.5); }
+}
+
+/* ===== FOOTER ===== */
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 26px 0;
+    font-size: 13px;
+    color: #9a9a9a;
+}
+
+footer strong {
+    color: #fff;
+}
+
+.btn-logout {
+    background: none;
+    border: none;
+    color: #9a9a9a;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+</style>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const track = document.querySelector('.carousel-track');
-    let slides = Array.from(document.querySelectorAll('.carousel-slide'));
-    const nextButton = document.querySelector('.next-control');
-    const prevButton = document.querySelector('.prev-control');
-    const indicatorsContainer = document.querySelector('.carousel-indicators');
+const _supabase = window.supabase.createClient(
+  'https://rvizztgogtepktmnfdhc.supabase.co',
+  'sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP'
+);
 
-    if (!slides.length) return;
 
-    slides.forEach(slide => {
-        slide.style.minWidth = '100%';
+const candidatos = [
+    { id: 1, nome: 'Bell Éter', time: 'Time Duda', foto: 'https://i.ibb.co/G3ppwjkj/Gean.jpg' },
+    { id: 2, nome: 'Jamah', time: 'Time Péricles', foto: 'https://i.ibb.co/XZmgWgL1/Felipe.jpg' },
+    { id: 3, nome: 'Thiago Garcia', time: 'Time Mumu', foto: 'https://i.ibb.co/YBP4Hs44/Neto.jpg' },
+    { id: 4, nome: 'Jade Salles', time: 'Time M&K', foto: 'https://i.ibb.co/KxdRJJ8h/Sam.jpg' }
+];
+
+let candidatoSelecionado = null;
+
+// Renderizar candidatos
+function renderCandidates() {
+    const list = document.getElementById('candidate-list');
+    list.innerHTML = candidatos.map(c => `
+        <div class="candidate-card" onclick="selectCandidate(${c.id})">
+            <img src="${c.foto}" alt="${c.nome}">
+            <div class="candidate-info">
+                <h3>${c.nome}</h3>
+                <p>${c.time}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectCandidate(id) {
+    candidatoSelecionado = candidatos.find(c => c.id === id);
+    document.getElementById('selected-candidate-card').innerHTML = `
+        <div class="candidate-card">
+            <img src="${candidatoSelecionado.foto}">
+            <div class="candidate-info">
+                <h3>${candidatoSelecionado.nome}</h3>
+                <p>${candidatoSelecionado.time}</p>
+            </div>
+        </div>
+    `;
+    changeStep('confirmacao');
+}
+
+function changeStep(stepId) {
+    const steps = document.querySelectorAll('.step');
+    steps.forEach(s => {
+        s.classList.remove('active');
     });
 
-    indicatorsContainer.innerHTML = '';
-    slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'indicator' + (i === 0 ? ' active-indicator' : '');
-        dot.type = 'button';
-        dot.setAttribute('data-index', i);
-        indicatorsContainer.appendChild(dot);
-    });
-    let indicators = Array.from(indicatorsContainer.querySelectorAll('.indicator'));
+    const target = document.getElementById(`step-${stepId}`);
+    target.classList.add('active');
+    target.scrollIntoView({ behavior: 'smooth' });
+}
 
-    let currentSlideIndex = 0;
+// Callback do Captcha (executa quando o usuário clica no "Não sou um robô")
+async function onCaptchaSuccess() {
+    if (!candidatoSelecionado) return;
 
-    const updateCarousel = (targetIndex) => {
-        if (targetIndex < 0) targetIndex = slides.length - 1;
-        if (targetIndex >= slides.length) targetIndex = 0;
+    // Enviar para o Supabase
+    const { data, error } = await _supabase
+        .from('votos')
+        .insert([{ candidato_id: candidatoSelecionado.id }]);
 
-        track.style.transform = `translateX(-${targetIndex * 100}%)`;
-        currentSlideIndex = targetIndex;
+    if (error) {
+        alert("Erro ao votar: " + error.message);
+    } else {
+        changeStep('sucesso');
+    }
+}
 
-        indicators.forEach(ind => ind.classList.remove('active-indicator'));
-        if (indicators[targetIndex]) indicators[targetIndex].classList.add('active-indicator');
-    };
+function resetVotacao() {
+    candidatoSelecionado = null;
+    grecaptcha.reset(); // Reseta o captcha para novo voto
+    changeStep('votação');
+}
 
-    nextButton.addEventListener('click', () => updateCarousel(currentSlideIndex + 1));
-    prevButton.addEventListener('click', () => updateCarousel(currentSlideIndex - 1));
-
-    indicatorsContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.indicator');
-        if (!btn) return;
-        const idx = Number(btn.getAttribute('data-index'));
-        if (!Number.isNaN(idx)) updateCarousel(idx);
-    });
-
-    const refreshSlides = () => {
-        slides = Array.from(document.querySelectorAll('.carousel-slide'));
-        indicatorsContainer.innerHTML = '';
-        slides.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.className = 'indicator' + (i === currentSlideIndex ? ' active-indicator' : '');
-            dot.type = 'button';
-            dot.setAttribute('data-index', i);
-            indicatorsContainer.appendChild(dot);
-        });
-        indicators = Array.from(indicatorsContainer.querySelectorAll('.indicator'));
-        if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
-        updateCarousel(currentSlideIndex);
-    };
-
-    updateCarousel(0);
-});
-
+// Inicializar
+renderCandidates();
 </script>
-<footer class="footer">
-    <div class="footer-content">
-
-        <!-- LOGO / NOME DO SITE -->
-        <div class="footer-brand">
-            <h2>Portal Flop</h2>
-            <p>Pìxeels Productions</p>
-        </div>
-
-        <!-- REDES SOCIAIS -->
-        <div class="social-icons">
-            <a href="https://www.youtube.com/@VulgoFlopp" aria-label="Youtube">
-                <i class="fab fa-telegram"></i>
-            </a>
-            <a href="https://www.wattpad.com/user/FelipeLovee" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://x.com/Euu_Phillip" aria-label="Twitter / X">
-                <i class="fab fa-twitter"></i>
-            </a>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        <p>© 2025 Fshow — Todos os direitos reservados.</p>
-    </div>
-</footer>
-
-<!-- FontAwesome para os ícones -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-
-</body>  
-</html>
