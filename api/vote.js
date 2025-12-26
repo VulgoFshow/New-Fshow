@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 const TABLES_PERMITIDAS = [
-  "f3roça9",
+  "bvidro",
   "f3roça10",
   "f3roça11",
   "f3roça12",
