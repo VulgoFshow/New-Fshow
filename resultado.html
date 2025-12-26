@@ -1,380 +1,496 @@
-<!DOCTYPE html><html lang="pt-BR"><head>  <meta charset="UTF-8" />  <meta name="viewport" content="width=device-width, initial-scale=1" />  <title>Resultado</title>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />  <style>
-  
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resultados da Votação</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg-dark: #0f0f1a;
+      --card-bg: #1a1a2e;
+      --accent: #6c5ce7;
+      --text: #e2e8f0;
+      --text-light: #94a3b8;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --danger: #e17055;
+      --eliminated: #e74c3c;
+    }
     * {
-  
-      box-sizing: border-box;
-  
       margin: 0;
-  
       padding: 0;
-  
+      box-sizing: border-box;
     }
-  
-
-  
     body {
-  
+      background: linear-gradient(135deg, #0f0f1a 0%, #16213e 100%);
+      color: var(--text);
       font-family: 'Inter', sans-serif;
-  
-      background: #f1f1f1;
-  
-      padding: 40px 20px;
-  
-      color: #222;
-  
+      min-height: 100vh;
+      padding: 20px;
       display: flex;
-  
       flex-direction: column;
-  
       align-items: center;
-  
-    }
-  
-
-  
-    /* Botão fechar (X) */
-  
-    .fechar {
-  
-      position: fixed;
-  
-      top: 10px;
-  
-      right: 16px;
-  
-      background: #ff3b3b;
-  
-      color: white;
-  
-      font-weight: bold;
-  
-      font-size: 20px;
-  
-      border: none;
-  
-      border-radius: 50%;
-  
-      width: 36px;
-  
-      height: 36px;
-  
-      cursor: pointer;
-  
-      z-index: 999;
-  
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  
-    }
-  
-
-  
-    .cabecalho-total {
-  
-      background: #1E9BFF;
-  
-      color: white;
-  
-      padding: 14px 24px;
-  
-      font-size: 20px;
-  
-      font-weight: 700;
-  
-      border-radius: 10px;
-  
-      margin-bottom: 24px;
-  
-      width: 100%;
-  
-      max-width: 720px;
-  
-      text-align: center;
-  
-    }
-  
-
-  
-    .card {
-  
-      display: flex;
-  
-      align-items: stretch;
-  
-      background: #f5f5f5;
-  
-      border-radius: 12px;
-  
-      overflow: hidden;
-  
-      margin-bottom: 16px;
-  
-      width: 100%;
-  
-      max-width: 720px;
-  
-      border: 1px solid #ddd;
-  
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  
-    }
-  
-
-  
-    .card img {
-  
-      width: 120px;
-  
-      height: 100%;
-  
-      object-fit: cover;
-  
-      flex-shrink: 0;
-  
-    }
-  
-
-  
-    .card-info {
-  
-      flex: 1;
-  
-      padding: 16px;
-  
-      display: flex;
-  
-      flex-direction: column;
-  
       justify-content: center;
-  
     }
-  
-
-  
-    .card-info span {
-  
-      font-size: 18px;
-  
-      font-weight: 600;
-  
-      margin-bottom: 6px;
-  
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
     }
-  
-
-  
-    .card-info small {
-  
-      font-size: 14px;
-  
-      color: #666;
-  
+    header {
+      text-align: center;
+      margin-bottom: 30px;
     }
-  
-
-  
-    .card-percent {
-  
-      font-size: 18px;
-  
+    h1 {
+      font-size: 2.5rem;
       font-weight: 700;
-  
-      color: #1E9BFF;
-  
-      text-align: right;
-  
-      padding-right: 16px;
-  
+      background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .chart-container {
+      position: relative;
+      height: 420px;
+      margin: 20px 0;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .stat-item {
+      background: rgba(108, 92, 231, 0.15);
+      padding: 15px;
+      border-radius: 14px;
+      text-align: center;
+      border: 1px solid rgba(108, 92, 231, 0.3);
+    }
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #a29bfe;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    .results-list {
+      margin-top: 25px;
+    }
+    .result-item {
       display: flex;
-  
+      justify-content: space-between;
       align-items: center;
-  
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+      border-left: 4px solid transparent;
     }
-  
-
-  
+    .result-item:hover {
+      background: rgba(108, 92, 231, 0.15);
+      border-left-color: var(--accent);
+    }
+    .result-item.eliminado {
+      background: rgba(231, 76, 60, 0.15);
+      border-left-color: var(--eliminated);
+      color: var(--eliminated);
+    }
+    .result-item.eliminado:hover {
+      background: rgba(231, 76, 60, 0.25);
+    }
+    .result-item.eliminado .bar {
+      background: linear-gradient(90deg, #e74c3c, #c0392b) !important;
+    }
+    .rank {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #a29bfe;
+      width: 32px;
+    }
+    .name {
+      flex: 1;
+      text-align: left;
+      margin-left: 12px;
+      font-weight: 600;
+    }
+    .percentage {
+      font-weight: 700;
+      color: #fff;
+    }
+    .bar-container {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      margin: 0 15px;
+      overflow: hidden;
+    }
+    .bar {
+      height: 100%;
+      background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+      border-radius: 3px;
+      transition: width 0.8s ease;
+    }
+    .winner-badge {
+      background: linear-gradient(45deg, #f39c12, #f1c40f);
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+    .eliminated-badge {
+      background: var(--eliminated);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+    .refresh-info {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    .refresh-info i {
+      color: #a29bfe;
+      margin-right: 6px;
+    }
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(108, 92, 231, 0.2);
+      color: #a29bfe;
+      border: 1px solid rgba(108, 92, 231, 0.4);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 20px auto 0;
+      width: fit-content;
+    }
+    .copy-btn:hover {
+      background: rgba(108, 92, 231, 0.3);
+      transform: translateY(-2px);
+    }
+    .copy-btn i {
+      font-size: 1.1rem;
+    }
+    .copy-btn.copied {
+      background: rgba(0, 184, 148, 0.3);
+      color: #00b894;
+      border-color: rgba(0, 184, 148, 0.5);
+    }
     @media (max-width: 600px) {
-  
-      .card {
-  
-        flex-direction: column;
-  
-      }
-  
-
-  
-      .card img {
-  
-        width: 100%;
-  
-        height: auto;
-  
-      }
-  
-
-  
-      .card-percent {
-  
-        justify-content: center;
-  
-        padding-right: 0;
-  
-        margin-top: 8px;
-  
-      }
-  
-
-  
-      .fechar {
-  
-        top: 8px;
-  
-        right: 8px;
-  
-      }
-  
+      h1 { font-size: 2rem; }
+      .card { padding: 20px; }
+      .chart-container { height: 300px; }
+      .result-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .bar-container { width: 100%; }
+      .copy-btn { font-size: 0.9rem; padding: 8px 14px; }
     }
-  
-  </style></head><body><button class="fechar" onclick="fecharPagina()">×</button>
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Resultado Parcial</h1>
+      <p class="subtitle">Acompanhe a votação em tempo real</p>
+    </header>
 
-<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>  <div class="cabecalho-total" id="total-votos">Carregando votos...</div>  <div id="lista-participantes"></div>  <script type="module">
-  
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-  
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+  <input
+    type="text"
+    id="tableInput"
+    placeholder="Digite o nome da table (ex: f3roça8)"
+    style="
+      flex:1;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(108,92,231,.4);
+      background:#0f0f1a;
+      color:#e2e8f0;
+      font-size:1rem;
+      outline:none;
+    "
+  />
 
-  
-    const supabase = createClient(
-  
-      'https://maroopnrcrpoizpjhmss.supabase.co',
-  
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hcm9vcG5yY3Jwb2l6cGpobXNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI1Mzg1MDQsImV4cCI6MjA2ODExNDUwNH0.2CZWR_1CLCRLtpYkkd7wfMEeIt1oMpfn08ls8ItAXsw'
-  
-    );
-  
-
-  
-    const fotos = {
-  
-      "Bea": "/Estrela/bea.webp", "Biahh": "/Estrela/biahh.webp",
-  
-      "Brenno": "/Estrela/brenno.webp", "Camille": "/Estrela/camille.webp",
-  
-      "Daniel": "/Estrela/daniel.webp", "Gabriel": "/Estrela/gabriel.webp",
-  
-      "Hanii": "/Estrela/hanii.webp", "Janicio": "/Estrela/janicio.webp",
-  
-      "Juceir": "https://s2-gshow.glbimg.com/TSo78Mj01n62NdvGweG0Z_MIt3o=/0x0:1112x627/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2025/i/y/BohcZyTaaXkucqUUKiJQ/quem-e-juceir-junior-do-estrela-da-casa-conheca-representante-do-pop-romantico.jpg", "Nirah": "/Estrela/nirah.webp",
-  
-      "Rauma": "/Estrela/rauma.webp", "Saudario": "/Estrela/saudario.webp",
-  
-      "Taliz": "/Estrela/taliz.webp", "Thaina": "/Estrela/thaina.webp"
-  
-    };
-  
-
-  
-    async function carregarResultados() {
-  
-      const { data, error } = await supabase
-  
-        .from('evotos')
-  
-        .select('participante');
-  
-
-  
-      if (error) {
-  
-        document.getElementById("total-votos").textContent = 'Erro ao carregar resultados.';
-  
-        console.error(error);
-  
-        return;
-  
-      }
-  
-
-  
-      if (!data || data.length === 0) {
-  
-        document.getElementById("total-votos").textContent = 'Nenhum voto registrado ainda.';
-  
-        return;
-  
-      }
-  
-
-  
-      const contagem = {};
-  
-      data.forEach(voto => {
-  
-        contagem[voto.participante] = (contagem[voto.participante] || 0) + 1;
-  
-      });
-  
-
-  
-      const total = Object.values(contagem).reduce((a, b) => a + b, 0);
-  
-      document.getElementById("total-votos").textContent = `${total} Votos`;
-  
-
-  
-      const lista = document.getElementById('lista-participantes');
-  
-      lista.innerHTML = '';
-  
-
-  
-      Object.entries(contagem)
-  
-        .sort((a, b) => b[1] - a[1])
-  
-        .forEach(([nome, votos]) => {
-  
-          const percent = ((votos / total) * 100).toFixed(2);
-  
-          lista.innerHTML += `
-  
-            <div class="card">
-  
-              <img src="${fotos[nome] || '/Estrela/default.webp'}" alt="${nome}">
-  
-              <div class="card-info">
-  
-                <span>${nome}</span>
-  
-                <small>${votos} votos</small>
-  
-              </div>
-  
-              <div class="card-percent">${percent}%</div>
-  
-            </div>
-  
-          `;
-  
-        });
-  
-    }
-  
-
-  
-    carregarResultados();
-  
-
-  
-    // Função do botão fechar
-  
-    window.fecharPagina = () => {
-  
-      window.close();
-  
-    };
-
-  <script async="async" data-cfasync="false" src="//pl27399086.profitableratecpm.com/1faff871cdf0e9772e4c2ca3e13e0bee/invoke.js"></script>
-<div id="container-1faff871cdf0e9772e4c2ca3e13e0bee"></div>
+  <button
+    id="loadTableBtn"
+    style="
+      padding:12px 18px;
+      border-radius:12px;
+      border:none;
+      background:linear-gradient(90deg,#6c5ce7,#a29bfe);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    "
+  >
+    Carregar resultados
+  </button>
+    </div>
     
-  </script></body></html>
+    <div class="card">
+      <div class="chart-container">
+        <canvas id="grafico"></canvas>
+      </div>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="totalVotos">0</div>
+          <div class="stat-label">Total de Votos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="participantes">0</div>
+          <div class="stat-label">Participantes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="lider">—</div>
+          <div class="stat-label">Líder Atual</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom: 15px; font-size: 1.4rem; color: #a29bfe;">Ranking</h2>
+      <div id="resultados" class="results-list">
+        <div class="loading">Carregando resultados...</div>
+      </div>
+    </div>
+    <button class="copy-btn" id="copyBtn">
+      <i class="fas fa-copy"></i>
+      <span>Copiar Resultados</span>
+    </button>
+    <p class="refresh-info">
+      <i class="fas fa-sync-alt"></i>
+      Atualizando a cada segundo
+    </p>
+  </div>
 
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js";
+    const supabaseUrl = "https://vchvvvvzulrkovjmiokg.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4";
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
+    const ctx = document.getElementById("grafico").getContext("2d");
+    const chart = new Chart(ctx, {
+      type: "doughnut",
+      data: { labels: [], datasets: [{ data: [], backgroundColor: ["#6c5ce7", "#a29bfe", "#fd79a8", "#fdcb6e", "#00b894", "#55efc4", "#74b9ff", "#e17055"], borderWidth: 3, borderColor: "#1a1a2e", hoverOffset: 8 }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "68%",
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed;
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(2);
+                return `${context.label}: ${value} votos (${percentage}%)`;
+              }
+            }
+          }
+        },
+        animation: { animateRotate: true, duration: 1200 }
+      }
+    });
+
+    function atualizarGrafico(labels, dados) {
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = dados;
+      chart.update();
+    }
+
+    async function carregarTodosVotos() {
+  if (!tableAtual) return [];
+
+  const limitePorPagina = 1000;
+  let pagina = 0;
+  let todosVotos = [];
+  let continuar = true;
+
+  while (continuar) {
+    const { data, error } = await supabase
+      .from(tableAtual)
+      .select('participante')
+      .range(
+        pagina * limitePorPagina,
+        (pagina + 1) * limitePorPagina - 1
+      );
+
+    if (error) {
+      console.error("Erro ao buscar votos:", error);
+      alert("Erro ao carregar a table. Verifique o nome.");
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      continuar = false;
+    } else {
+      todosVotos = todosVotos.concat(data);
+      pagina++;
+      if (data.length < limitePorPagina) continuar = false;
+    }
+  }
+
+  return todosVotos;
+    }
+
+    let ultimoRanking = [];
+    const NUM_ELIMINADOS = 1; // <<<< NÚMERO DE ELIMINADOS
+
+    async function carregarVotos() {
+      const data = await carregarTodosVotos();
+      if (!data || data.length === 0) {
+        document.getElementById("totalVotos").textContent = "0";
+        document.getElementById("participantes").textContent = "0";
+        document.getElementById("lider").textContent = "—";
+        atualizarGrafico([], []);
+        document.getElementById("resultados").innerHTML = `<div class="loading">Nenhum voto registrado ainda.</div>`;
+        ultimoRanking = [];
+        return;
+      }
+
+      const contagem = {};
+      let total = 0;
+      data.forEach(voto => {
+        const nome = voto.participante?.trim();
+        if (nome) {
+          contagem[nome] = (contagem[nome] || 0) + 1;
+          total++;
+        }
+      });
+
+      const ordenado = Object.entries(contagem).sort((a, b) => b[1] - a[1]);
+      const labels = ordenado.map(item => item[0]);
+      const valores = ordenado.map(item => item[1]);
+
+      atualizarGrafico(labels, valores);
+      document.getElementById("totalVotos").textContent = total.toLocaleString('pt-BR');
+      document.getElementById("participantes").textContent = ordenado.length;
+      document.getElementById("lider").textContent = ordenado[0][0];
+
+      const resultadosDiv = document.getElementById("resultados");
+      resultadosDiv.innerHTML = ordenado.map((item, i) => {
+        const nome = item[0];
+        const votos = item[1];
+        const perc = ((votos / total) * 100).toFixed(2);
+        const isWinner = i === 0 ? `<span class="winner-badge">LÍDER</span>` : '';
+        const medal = i === 0 ? '1º' : i === 1 ? '2º' : i === 2 ? '3º' : `#${i + 1}`;
+        const pos = i + 1;
+        const isEliminado = pos > ordenado.length - NUM_ELIMINADOS && ordenado.length > NUM_ELIMINADOS;
+        const eliminadoBadge = isEliminado ? `<span class="eliminated-badge">ELIMINADO</span>` : '';
+        const eliminadoClass = isEliminado ? 'eliminado' : '';
+
+        return `
+          <div class="result-item ${eliminadoClass}">
+            <div class="rank">${medal}</div>
+            <div class="name">${nome} ${isWinner}${eliminadoBadge}</div>
+            <div class="bar-container"><div class="bar" style="width: ${perc}%"></div></div>
+            <div class="percentage">${perc}%</div>
+          </div>
+        `;
+      }).join("");
+
+      ultimoRanking = ordenado.map((item, i) => {
+        const nome = item[0];
+        const votos = item[1];
+        const perc = ((votos / total) * 100).toFixed(2);
+        const pos = i === 0 ? '1º' : i === 1 ? '2º' : i === 2 ? '3º' : `${i + 1}º`;
+        const isEliminado = (i + 1) > ordenado.length - NUM_ELIMINADOS && ordenado.length > NUM_ELIMINADOS;
+        const eliminadoTag = isEliminado ? ' [ELIMINADO]' : '';
+        return `${pos} ${nome} - ${votos} votos (${perc}%) ${eliminadoTag}`;
+      });
+    }
+
+    const copyBtn = document.getElementById("copyBtn");
+    const copyIcon = copyBtn.querySelector("i");
+    const copyText = copyBtn.querySelector("span");
+    copyBtn.addEventListener("click", async () => {
+      if (ultimoRanking.length === 0) {
+        alert("Nenhum resultado para copiar ainda.");
+        return;
+      }
+      const texto = [
+        "RESULTADO",
+        `Total de votos: ${document.getElementById("totalVotos").textContent}`,
+        `Participantes: ${document.getElementById("participantes").textContent}`,
+        "",
+        "RANKING:",
+        ...ultimoRanking
+      ].join("\n");
+      try {
+        await navigator.clipboard.writeText(texto);
+        copyBtn.classList.add("copied");
+        copyIcon.className = "fas fa-check";
+        copyText.textContent = "Copiado!";
+        setTimeout(() => {
+          copyBtn.classList.remove("copied");
+          copyIcon.className = "fas fa-copy";
+          copyText.textContent = "Copiar Resultados";
+        }, 2000);
+      } catch (err) {
+        alert("Falha ao copiar. Tente novamente.");
+        console.error(err);
+      }
+    });
+
+setInterval(() => {
+  if (tableAtual) carregarVotos();
+}, 1000);
+    
+    let tableAtual = null;
+
+    document.getElementById("loadTableBtn").addEventListener("click", () => {
+  const valor = document.getElementById("tableInput").value.trim();
+
+  if (!valor) {
+    alert("Digite o nome da table.");
+    return;
+  }
+
+  tableAtual = valor;
+  carregarVotos();
+});
+  </script>
+</body>
+</html>
