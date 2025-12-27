@@ -3,54 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Voice Brasil - Votação</title>
+    <title>Big Sims - Votação</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
-<body>
-
-    <div class="container">
-        <section id="step-votação" class="step active">
-            <div class="hero-card">
-                <span class="badge">Votação</span>
-                <h1>Escolha seu candidato</h1>
-                <p>Você pode votar em um candidato por vez. Vote várias vezes.</p>
-            </div>
-
-            <div class="candidate-list" id="candidate-list">
-                </div>
-        </section>
-
-        <section id="step-confirmacao" class="step">
-              <div class="hero-card">
-              <span class="badge">Votação</span>
-              <h1>Candidato selecionado.</h1>
-              <p>Passe pelo catcha para confirmar o seu voto</p>
-            </div>
-            <h2>Confirme seu voto</h2>
-            <div id="selected-candidate-card"></div>
-            
-            <div class="captcha-container">
-                <div class="g-recaptcha" data-sitekey="6Lev1DUsAAAAANzB2nhPDsKVzXZP0daxuDMCil1a" data-callback="onCaptchaSuccess" data-theme="dark"></div>
-            </div>
-
-            <button class="btn-back" onclick="changeStep('votação')">
-                <span class="icon">↺</span> Alterar voto
-            </button>
-        </section>
-
-<section id="step-sucesso" class="step">
-    <div class="success-card">
-        <div class="success-icon">✓</div>
-        <h2>Voto computado com sucesso!</h2>
-        <button class="btn-again" onclick="resetVotacao()">Votar novamente</button>
-    </div>
-</section>
-    </div>
-
-</body>
-</html>
 
 <style>
 * {
@@ -76,7 +33,14 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+
+    border: 2px solid rgba(255,255,255,.25);
+    border-radius: 24px;
+    background: rgba(0,0,0,.35);
+    backdrop-filter: blur(6px);
 }
+
+
 
 /* ===== STEPS ===== */
 .step {
@@ -121,16 +85,17 @@ header {
 /* ===== HERO ===== */
 .hero-card {
     position: relative;
-    border-radius: 20px;
     padding: 22px;
-    margin-bottom: 22px;
+    margin: -16px -16px 22px -16px;
     overflow: hidden;
+
+    border-radius: 0;
+
     background-image:
         linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.85)),
-        url("https://i.ibb.co/h14c6kWP/Chat-GPT-Image-24-de-dez-de-2025-12-57-49.png");
+        url("https://i.ibb.co/8gvrdhDw/colorsplash.png");
     background-size: cover;
     background-position: center;
-    animation: fadeUp .6s ease;
 }
 
 /* Gradientes coloridos por cima da imagem */
@@ -149,7 +114,6 @@ header {
     position: relative;
     z-index: 1;
 }
-
 
 @keyframes fadeUp {
     from {
@@ -186,34 +150,52 @@ header {
 
 /* ===== CANDIDATOS ===== */
 .candidate-card {
+    position: relative;
     display: flex;
     align-items: center;
+    height: 88px;
     background: #1c1f26;
     margin-bottom: 12px;
     border-radius: 16px;
-    padding: 12px;
+    padding: 14px;
     cursor: pointer;
     border: 1px solid rgba(255,255,255,.05);
+    overflow: hidden;
+
     transition: all .25s ease;
     animation: fadeUp .4s ease;
 }
 
 .candidate-card:hover {
-    background: #262a38;
     transform: scale(1.02);
+    background: #262a38;
 }
 
 .candidate-card:active {
     transform: scale(.98);
 }
 
+
 .candidate-card img {
-    width: 64px;
-    height: 64px;
-    border-radius: 12px;
+    position: absolute;
+    top: 0;
+    left: 0;            
+    width: 38%;
+    height: 100%;
     object-fit: cover;
-    margin-right: 14px;
+    object-position: center;
+    border-radius: 16px 0 0 16px;
+    opacity: .9;
 }
+
+
+.candidate-info {
+    position: relative;
+    z-index: 1;
+    width: 62%;
+    margin-left: auto; 
+}
+
 
 .candidate-info h3 {
     font-size: 16px;
@@ -222,6 +204,19 @@ header {
 .candidate-info p {
     font-size: 13px;
     color: #b5b5b5;
+}
+
+.candidate-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to left,
+        rgba(28,31,38,1) 45%,
+        rgba(28,31,38,.6) 65%,
+        transparent 100%
+    );
+    pointer-events: none;
 }
 
 /* ===== CONFIRMAÇÃO ===== */
@@ -363,7 +358,170 @@ footer strong {
     cursor: pointer;
 }
 
+.spacer {
+    width: 100%;
+    height: 24px;   
+    pointer-events: none;
+    user-select: none;
+}
+
+.cronometro-box {
+    margin-top: auto;
+    text-align: center;
+    padding: 14px 0 6px;
+    font-size: 13px;
+    opacity: .85;
+}
+
+.cronometro-box strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
 </style>
+
+<body>
+    <div class="container">
+        <section id="step-votação" class="step active">
+            <div class="hero-card">
+                <span class="badge">Votação</span>
+                <h1>Quem deve ser ELIMINADO?</h1>
+                <p>Você pode votar quantas vezes quiser.</p>
+            </div>
+
+            <div class="candidate-list" id="candidate-list">
+                </div>
+                
+<div class="cronometro-box">
+    <span>Encerramento em</span>
+<strong class="cronometro">--:--</strong>
+</div>
+
+        </section>
+
+        <section id="step-confirmacao" class="step">
+              <div class="hero-card">
+              <span class="badge">Votação</span>
+              <h1>Opção selecionada</h1>
+              <p>Passe pelo catcha para enviar o seu voto</p>
+            </div>
+            <h2>Confirme seu voto</h2>
+            <div id="selected-candidate-card"></div>
+            
+            <div class="captcha-container">
+                <div class="g-recaptcha" data-sitekey="6Lev1DUsAAAAANzB2nhPDsKVzXZP0daxuDMCil1a" data-callback="onCaptchaSuccess" data-theme="dark"></div>
+            </div>
+
+            <button class="btn-back" onclick="changeStep('votação')">
+                <span class="icon">↺</span> Alterar voto
+            </button>
+            
+            <div class="cronometro-box">
+    <span>Encerramento em</span>
+<strong class="cronometro">--:--</strong>
+</div>
+        </section>
+
+<section id="step-sucesso" class="step">
+    <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h2>Voto computado com sucesso!</h2>
+        <button class="btn-again" onclick="resetVotacao()">Votar novamente</button>
+    </div>
+
+<div class="cronometro-box">
+    <span>Encerramento em</span>
+<strong class="cronometro">--:--</strong>
+</div>
+</section>
+    </div>
+
+
+</body>
+</html>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(
+  "https://rvizztgogtepktmnfdhc.supabase.co",
+  "sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP"
+);
+
+/* 🔥 CONTROLE TOTAL */
+const VERSAO_VOTACAO = 1;        // MUDE PARA RESETAR
+const DURACAO_VOTACAO = 5 * 60; // 5 minutos
+
+const timers = document.querySelectorAll(".cronometro");
+let encerramentoServidor = 0;
+
+async function sincronizar() {
+  const { data } = await supabase
+    .from("controle_votacao")
+    .select("versao, encerramento")
+    .eq("id", 1)
+    .single();
+
+  if (data.versao < VERSAO_VOTACAO) {
+    const novoEncerramento = new Date(
+      Date.now() + DURACAO_VOTACAO * 1000
+    ).toISOString();
+
+    await supabase
+      .from("controle_votacao")
+      .update({
+        versao: VERSAO_VOTACAO,
+        encerramento: novoEncerramento
+      })
+      .eq("id", 1);
+
+    encerramentoServidor = new Date(novoEncerramento).getTime();
+  } else {
+    encerramentoServidor = new Date(data.encerramento).getTime();
+  }
+
+  iniciar();
+}
+
+function iniciar() {
+  setInterval(() => {
+    const restante = Math.floor((encerramentoServidor - Date.now()) / 1000);
+
+    if (restante <= 0) {
+      location.href = "fechada.html";
+      return;
+    }
+
+    const min = Math.floor(restante / 60);
+    const sec = restante % 60;
+
+    timers.forEach(el =>
+      el.textContent = `${min}:${sec.toString().padStart(2, "0")}`
+    );
+  }, 1000);
+}
+
+sincronizar();
+
+if (!data.encerramento) {
+  const novoEncerramento = new Date(
+    Date.now() + DURACAO_VOTACAO * 1000
+  ).toISOString();
+
+  await supabase
+    .from("controle_votacao")
+    .update({ encerramento: novoEncerramento })
+    .eq("id", 1);
+
+  encerramentoServidor = new Date(novoEncerramento).getTime();
+} else {
+  encerramentoServidor = new Date(data.encerramento).getTime();
+}
+
+</script>
 
 <script>
 const _supabase = window.supabase.createClient(
