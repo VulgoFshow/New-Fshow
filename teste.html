@@ -7,6 +7,38 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+
+<link rel="apple-touch-icon" sizes="57x57" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+
+<meta name="theme-color" content="#8A2BE2">
+<meta name="msapplication-TileColor" content="#FF8C00">
+<meta name="msapplication-TileImage" content="/favicon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+<link rel="mask-icon" href="/favicon.png" color="#ff8c00">
+<link rel="manifest" href="/favicon.png">
+<meta name="msapplication-TileColor" content="#ff8c00">
+<meta name="msapplication-TileImage" content="/favicon.png">
+<meta name="theme-color" content="#8a2be2">
 </head>
 
 <style>
@@ -39,8 +71,6 @@ body {
     background: rgba(0,0,0,.35);
     backdrop-filter: blur(6px);
 }
-
-
 
 /* ===== STEPS ===== */
 .step {
@@ -381,6 +411,15 @@ footer strong {
     letter-spacing: 1px;
 }
 
+
+@media (min-width: 768px) {
+    .hero-card {
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+    }
+}
+
+
 </style>
 
 <body>
@@ -433,16 +472,88 @@ footer strong {
     </div>
     </div>
 
-<div class="cronometro-box">
-    <span>Encerramento em</span>
-<strong class="cronometro">--:--</strong>
-</div>
 </section>
     </div>
 
-
 </body>
 </html>
+
+<script>
+const _supabase = window.supabase.createClient(
+  'https://rvizztgogtepktmnfdhc.supabase.co',
+  'sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP'
+);
+
+
+const candidatos = [
+    { id: 1, nome: 'Bell Éter', time: 'Time Duda', foto: 'https://i.ibb.co/G3ppwjkj/Gean.jpg' },
+    { id: 2, nome: 'Jamah', time: 'Time Péricles', foto: 'https://i.ibb.co/XZmgWgL1/Felipe.jpg' },
+    { id: 3, nome: 'Thiago Garcia', time: 'Time Mumu', foto: 'https://i.ibb.co/YBP4Hs44/Neto.jpg' },
+    { id: 4, nome: 'Jade Salles', time: 'Time M&K', foto: 'https://i.ibb.co/KxdRJJ8h/Sam.jpg' }
+];
+
+let candidatoSelecionado = null;
+
+function renderCandidates() {
+    const list = document.getElementById('candidate-list');
+    list.innerHTML = candidatos.map(c => `
+        <div class="candidate-card" onclick="selectCandidate(${c.id})">
+            <img src="${c.foto}" alt="${c.nome}">
+            <div class="candidate-info">
+                <h3>${c.nome}</h3>
+                <p>${c.time}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectCandidate(id) {
+    candidatoSelecionado = candidatos.find(c => c.id === id);
+    document.getElementById('selected-candidate-card').innerHTML = `
+        <div class="candidate-card">
+            <img src="${candidatoSelecionado.foto}">
+            <div class="candidate-info">
+                <h3>${candidatoSelecionado.nome}</h3>
+                <p>${candidatoSelecionado.time}</p>
+            </div>
+        </div>
+    `;
+    changeStep('confirmacao');
+}
+
+function changeStep(stepId) {
+    const steps = document.querySelectorAll('.step');
+    steps.forEach(s => {
+        s.classList.remove('active');
+    });
+
+    const target = document.getElementById(`step-${stepId}`);
+    target.classList.add('active');
+    target.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function onCaptchaSuccess() {
+    if (!candidatoSelecionado) return;
+
+    const { data, error } = await _supabase
+        .from('votos') //TABLE
+        .insert([{ candidato_id: candidatoSelecionado.id }]);
+
+    if (error) {
+        alert("Erro ao votar: " + error.message);
+    } else {
+        changeStep('sucesso');
+    }
+}
+
+function resetVotacao() {
+    candidatoSelecionado = null;
+    grecaptcha.reset();
+    changeStep('votação');
+}
+
+renderCandidates();
+</script>
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
@@ -453,8 +564,8 @@ const supabase = createClient(
 );
 
 /* 🔥 CONTROLE TOTAL */
-const VERSAO_VOTACAO = 1;        // MUDE PARA RESETAR
-const DURACAO_VOTACAO = 5 * 60; // 5 minutos
+const VERSAO_VOTACAO = 2;        // RESET
+const DURACAO_VOTACAO = 5 * 60; // TEMPO
 
 const timers = document.querySelectorAll(".cronometro");
 let encerramentoServidor = 0;
@@ -522,85 +633,4 @@ if (!data.encerramento) {
   encerramentoServidor = new Date(data.encerramento).getTime();
 }
 
-</script>
-
-<script>
-const _supabase = window.supabase.createClient(
-  'https://rvizztgogtepktmnfdhc.supabase.co',
-  'sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP'
-);
-
-
-const candidatos = [
-    { id: 1, nome: 'Bell Éter', time: 'Time Duda', foto: 'https://i.ibb.co/G3ppwjkj/Gean.jpg' },
-    { id: 2, nome: 'Jamah', time: 'Time Péricles', foto: 'https://i.ibb.co/XZmgWgL1/Felipe.jpg' },
-    { id: 3, nome: 'Thiago Garcia', time: 'Time Mumu', foto: 'https://i.ibb.co/YBP4Hs44/Neto.jpg' },
-    { id: 4, nome: 'Jade Salles', time: 'Time M&K', foto: 'https://i.ibb.co/KxdRJJ8h/Sam.jpg' }
-];
-
-let candidatoSelecionado = null;
-
-// Renderizar candidatos
-function renderCandidates() {
-    const list = document.getElementById('candidate-list');
-    list.innerHTML = candidatos.map(c => `
-        <div class="candidate-card" onclick="selectCandidate(${c.id})">
-            <img src="${c.foto}" alt="${c.nome}">
-            <div class="candidate-info">
-                <h3>${c.nome}</h3>
-                <p>${c.time}</p>
-            </div>
-        </div>
-    `).join('');
-}
-
-function selectCandidate(id) {
-    candidatoSelecionado = candidatos.find(c => c.id === id);
-    document.getElementById('selected-candidate-card').innerHTML = `
-        <div class="candidate-card">
-            <img src="${candidatoSelecionado.foto}">
-            <div class="candidate-info">
-                <h3>${candidatoSelecionado.nome}</h3>
-                <p>${candidatoSelecionado.time}</p>
-            </div>
-        </div>
-    `;
-    changeStep('confirmacao');
-}
-
-function changeStep(stepId) {
-    const steps = document.querySelectorAll('.step');
-    steps.forEach(s => {
-        s.classList.remove('active');
-    });
-
-    const target = document.getElementById(`step-${stepId}`);
-    target.classList.add('active');
-    target.scrollIntoView({ behavior: 'smooth' });
-}
-
-// Callback do Captcha (executa quando o usuário clica no "Não sou um robô")
-async function onCaptchaSuccess() {
-    if (!candidatoSelecionado) return;
-
-    // Enviar para o Supabase
-    const { data, error } = await _supabase
-        .from('votos')
-        .insert([{ candidato_id: candidatoSelecionado.id }]);
-
-    if (error) {
-        alert("Erro ao votar: " + error.message);
-    } else {
-        changeStep('sucesso');
-    }
-}
-
-function resetVotacao() {
-    candidatoSelecionado = null;
-    grecaptcha.reset(); // Reseta o captcha para novo voto
-    changeStep('votação');
-}
-
-// Inicializar
-renderCandidates();
 </script>
