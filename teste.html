@@ -433,11 +433,6 @@ footer strong {
 
             <div class="candidate-list" id="candidate-list">
                 </div>
-                
-<div class="cronometro-box">
-    <span>Encerramento em</span>
-<strong class="cronometro">--:--</strong>
-</div>
 
         </section>
 
@@ -458,10 +453,6 @@ footer strong {
                 <span class="icon">↺</span> Alterar voto
             </button>
             
-            <div class="cronometro-box">
-    <span>Encerramento em</span>
-<strong class="cronometro">--:--</strong>
-</div>
         </section>
 
 <section id="step-sucesso" class="step">
@@ -472,6 +463,16 @@ footer strong {
     </div>
     </div>
 
+    <!-- POPUP CAPTCHA -->
+<div id="popupCaptcha" class="popup">
+  <div class="captcha-box">
+    <p id="captcha-instrucao"></p>
+    <div id="captchaGrid" class="captcha-grid"></div>
+    <button id="captchaRefresh">Recarregar</button>
+    <button id="captchaConfirm" disabled>Confirmar</button>
+    <div id="captchaStatus"></div>
+  </div>
+</div>
 </section>
     </div>
 
@@ -479,158 +480,180 @@ footer strong {
 </html>
 
 <script>
+/* ===================== CONFIGURAÇÃO ===================== */
+const VOTACAO_ABERTA = true;
+const VOTOS_POR_CAPTCHA = 1;
+
+/* ===================== SUPABASE ===================== */
 const _supabase = window.supabase.createClient(
-  'https://rvizztgogtepktmnfdhc.supabase.co',
-  'sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP'
-);
-
-
-const candidatos = [
-    { id: 1, nome: 'Bell Éter', time: 'Time Duda', foto: 'https://i.ibb.co/G3ppwjkj/Gean.jpg' },
-    { id: 2, nome: 'Jamah', time: 'Time Péricles', foto: 'https://i.ibb.co/XZmgWgL1/Felipe.jpg' },
-    { id: 3, nome: 'Thiago Garcia', time: 'Time Mumu', foto: 'https://i.ibb.co/YBP4Hs44/Neto.jpg' },
-    { id: 4, nome: 'Jade Salles', time: 'Time M&K', foto: 'https://i.ibb.co/KxdRJJ8h/Sam.jpg' }
-];
-
-let candidatoSelecionado = null;
-
-function renderCandidates() {
-    const list = document.getElementById('candidate-list');
-    list.innerHTML = candidatos.map(c => `
-        <div class="candidate-card" onclick="selectCandidate(${c.id})">
-            <img src="${c.foto}" alt="${c.nome}">
-            <div class="candidate-info">
-                <h3>${c.nome}</h3>
-                <p>${c.time}</p>
-            </div>
-        </div>
-    `).join('');
-}
-
-function selectCandidate(id) {
-    candidatoSelecionado = candidatos.find(c => c.id === id);
-    document.getElementById('selected-candidate-card').innerHTML = `
-        <div class="candidate-card">
-            <img src="${candidatoSelecionado.foto}">
-            <div class="candidate-info">
-                <h3>${candidatoSelecionado.nome}</h3>
-                <p>${candidatoSelecionado.time}</p>
-            </div>
-        </div>
-    `;
-    changeStep('confirmacao');
-}
-
-function changeStep(stepId) {
-    const steps = document.querySelectorAll('.step');
-    steps.forEach(s => {
-        s.classList.remove('active');
-    });
-
-    const target = document.getElementById(`step-${stepId}`);
-    target.classList.add('active');
-    target.scrollIntoView({ behavior: 'smooth' });
-}
-
-async function onCaptchaSuccess() {
-    if (!candidatoSelecionado) return;
-
-    const { data, error } = await _supabase
-        .from('votos') //TABLE
-        .insert([{ candidato_id: candidatoSelecionado.id }]);
-
-    if (error) {
-        alert("Erro ao votar: " + error.message);
-    } else {
-        changeStep('sucesso');
-    }
-}
-
-function resetVotacao() {
-    candidatoSelecionado = null;
-    grecaptcha.reset();
-    changeStep('votação');
-}
-
-renderCandidates();
-</script>
-
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-const supabase = createClient(
   "https://rvizztgogtepktmnfdhc.supabase.co",
   "sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP"
 );
 
-/* 🔥 CONTROLE TOTAL */
-const VERSAO_VOTACAO = 2;        // RESET
-const DURACAO_VOTACAO = 5 * 60; // TEMPO
+/* ===================== CANDIDATOS ===================== */
+const candidatos = [
+  { id:1, nome:"Bell Éter", foto:"https://i.ibb.co/G3ppwjkj/Gean.jpg" },
+  { id:2, nome:"Jamah", foto:"https://i.ibb.co/XZmgWgL1/Felipe.jpg" },
+  { id:3, nome:"Thiago Garcia", foto:"https://i.ibb.co/YBP4Hs44/Neto.jpg" },
+  { id:4, nome:"Jade Salles", foto:"https://i.ibb.co/KxdRJJ8h/Sam.jpg" }
+];
 
-const timers = document.querySelectorAll(".cronometro");
-let encerramentoServidor = 0;
+let candidatoSelecionado = null;
+let pendingVote = null;
+let captchaAberto = false;
 
-async function sincronizar() {
-  const { data } = await supabase
-    .from("controle_votacao")
-    .select("versao, encerramento")
-    .eq("id", 1)
-    .single();
+/* ===================== RENDER ===================== */
+function renderCandidates() {
+  const list = document.getElementById("candidate-list");
+  list.innerHTML = candidatos.map(c => `
+    <div class="candidate-card" onclick="selectCandidate(${c.id})">
+      <img src="${c.foto}" width="60">
+      <b>${c.nome}</b>
+    </div>
+  `).join("");
+}
 
-  if (data.versao < VERSAO_VOTACAO) {
-    const novoEncerramento = new Date(
-      Date.now() + DURACAO_VOTACAO * 1000
-    ).toISOString();
+function selectCandidate(id) {
+  candidatoSelecionado = candidatos.find(c => c.id === id);
+}
 
-    await supabase
-      .from("controle_votacao")
-      .update({
-        versao: VERSAO_VOTACAO,
-        encerramento: novoEncerramento
-      })
-      .eq("id", 1);
+/* ===================== CONTROLE LOCAL ===================== */
+function hashTag(v) {
+  let h = 0; const s = v + "CPTX2025";
+  for (let i=0;i<s.length;i++) h=(h<<5)-h+s.charCodeAt(i);
+  return h|0;
+}
 
-    encerramentoServidor = new Date(novoEncerramento).getTime();
-  } else {
-    encerramentoServidor = new Date(data.encerramento).getTime();
+function setVotosRestantes(n){
+  localStorage.setItem("vr", n);
+  localStorage.setItem("vt", hashTag(String(n)));
+}
+function getVotosRestantes(){
+  const v = localStorage.getItem("vr");
+  return hashTag(v) == localStorage.getItem("vt") ? +v : 0;
+}
+
+/* ===================== CAPTCHA ===================== */
+  const prompts = [
+    {
+      label: "Clique nas imagens contendo algo que pode se locomover",
+      correctTag: "202",
+      images: [
+        { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },
+        { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },
+        { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
+        { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
+        { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
+        { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },
+        { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },
+        { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },
+        { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },
+        { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }
+      ]
+    },
+    {
+      label: "Clique nas imagens contendo um animal",
+      correctTag: "706",
+      images: [
+        { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },
+        { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },
+        { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },
+        { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },
+        { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },
+        { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },
+        { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },
+        { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },
+        { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }
+      ]
+    }
+  ];
+
+let captchaAtual = null;
+const grid = document.getElementById("captchaGrid");
+const instrucao = document.getElementById("captcha-instrucao");
+const statusEl = document.getElementById("captchaStatus");
+const btnConfirm = document.getElementById("captchaConfirm");
+
+function abrirCaptcha(){
+  captchaAberto = true;
+  gerarCaptcha();
+  document.getElementById("popupCaptcha").classList.add("active");
+}
+
+function fecharCaptcha(){
+  captchaAberto = false;
+  document.getElementById("popupCaptcha").classList.remove("active");
+}
+
+function gerarCaptcha(){
+  grid.innerHTML="";
+  statusEl.textContent="";
+  btnConfirm.disabled=true;
+  captchaAtual = prompts[0];
+  instrucao.textContent = captchaAtual.label;
+
+  captchaAtual.images.forEach(img=>{
+    const el=document.createElement("img");
+    el.src=img.src;
+    el.dataset.tag=img.tag;
+    el.className="captcha-img";
+    el.onclick=()=>{
+      el.classList.toggle("selected");
+      btnConfirm.disabled = !document.querySelector(".captcha-img.selected");
+    };
+    grid.appendChild(el);
+  });
+}
+
+btnConfirm.onclick = ()=>{
+  let ok=true;
+  document.querySelectorAll(".captcha-img").forEach(img=>{
+    const certo = img.dataset.tag === captchaAtual.correct;
+    if (certo !== img.classList.contains("selected")) ok=false;
+  });
+
+  if(!ok){
+    statusEl.textContent="Incorreto";
+    return gerarCaptcha();
   }
 
-  iniciar();
+  setVotosRestantes(VOTOS_POR_CAPTCHA);
+  document.getElementById("botaoVotar").disabled=false;
+  fecharCaptcha();
+
+  if(pendingVote){
+    pendingVote=null;
+    submitVote();
+  }
+};
+
+/* ===================== VOTO ===================== */
+async function submitVote(){
+  if(!VOTACAO_ABERTA) return alert("Votação encerrada");
+  if(!candidatoSelecionado) return alert("Selecione alguém");
+
+  if(getVotosRestantes()<=0){
+    pendingVote=true;
+    abrirCaptcha();
+    return;
+  }
+
+  setVotosRestantes(getVotosRestantes()-1);
+
+  const { error } = await _supabase
+    .from("votos")
+    .insert([{ candidato_id:candidatoSelecionado.id }]);
+
+  if(error) return alert(error.message);
+  document.getElementById("step-votacao").style.display="none";
+  document.getElementById("step-sucesso").style.display="block";
 }
 
-function iniciar() {
-  setInterval(() => {
-    const restante = Math.floor((encerramentoServidor - Date.now()) / 1000);
+/* ===================== EVENTOS ===================== */
+document.getElementById("botaoCaptcha").onclick = abrirCaptcha;
+document.getElementById("botaoVotar").onclick = submitVote;
+document.getElementById("captchaRefresh").onclick = gerarCaptcha;
 
-    if (restante <= 0) {
-      location.href = "fechada.html";
-      return;
-    }
-
-    const min = Math.floor(restante / 60);
-    const sec = restante % 60;
-
-    timers.forEach(el =>
-      el.textContent = `${min}:${sec.toString().padStart(2, "0")}`
-    );
-  }, 1000);
-}
-
-sincronizar();
-
-if (!data.encerramento) {
-  const novoEncerramento = new Date(
-    Date.now() + DURACAO_VOTACAO * 1000
-  ).toISOString();
-
-  await supabase
-    .from("controle_votacao")
-    .update({ encerramento: novoEncerramento })
-    .eq("id", 1);
-
-  encerramentoServidor = new Date(novoEncerramento).getTime();
-} else {
-  encerramentoServidor = new Date(data.encerramento).getTime();
-}
-
+/* INIT */
+renderCandidates();
 </script>
