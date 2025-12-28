@@ -39,1184 +39,407 @@
 <script src="https://www.google.com/recaptcha/api.js?render=6LevDzAsAAAAABhRU2ALuUHXSeQxGRza6-bKxGJp"></script>
 
 <style>
-/* ===== VARIÁVEIS GLOBAIS ===== */
-:root {
-  --bg: #121212;
-  --card-bg: #2b2b2b;
-  --selected-bg: #3c3c3c;
-  --panel-bg: #2b2b2b;
-  --panel-border: rgba(255, 255, 255, 0.06);
-  --accent: #00b7b0;
-  --text: #fff;
-  --muted: #bdbdbd;
-  --border-radius: 8px;
-  --transition: all 0.3s ease;
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
-  --back: #0d0d0d
+/* ===== RESET E BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
-/* ===== BASE ===== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: "Inter", Arial, sans-serif;
-  color: var(--text);
-
-  background:
-    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
-    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
-    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
-    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
-
-  background-attachment: fixed;
-  background-size: cover;
-  animation: fadeIn 0.7s ease;
+    background: radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== LAYOUT ===== */
 .container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px 15px;
-  animation: slideUp 0.6s ease;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-h1 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-align: left;
-  transition: color 0.3s ease;
-}
-
-/* ===== OPÇÕES (RADIO CARDS) ===== */
-.option {
-  display: flex;
-  background: var(--card-bg);
-  border: 1px solid #fff;
-  border-radius: var(--border-radius);
-  margin-bottom: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
-}
-
-.option:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--accent);
-}
-
-.option img {
-  width: 150px;
-  height: auto;
-  object-fit: cover;
-  flex-shrink: 0;
-  transition: transform 0.4s ease;
-}
-
-.option-content {
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  width: 100%;
-  font-size: 18px;
-  font-weight: 500;
-  transition: background 0.3s ease;
-}
-
-.option-content input[type="radio"] {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--muted);
-  border-radius: 50%;
-  margin-right: 8px;
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.3s ease, transform 0.2s ease;
-}
-
-.option-content input[type="radio"]:hover {
-  transform: scale(1.1);
-}
-
-.option-content input[type="radio"]:checked {
-  border-color: var(--accent);
-}
-
-.option-content input[type="radio"]:checked::before {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-/* ===== BOTÃO PRINCIPAL ===== */
-button {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: var(--border-radius);
-  margin-top: 15px;
-  cursor: pointer;
-  background: #444;
-  color: var(--muted);
-  transition: var(--transition);
-}
-
-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
-}
-
-button.active {
-  background: var(--accent);
-  color: #fff;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.notice {
-  font-size: 12px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 10px;
-}
-
-/* ===== POPUP ===== */
-.popup {
-  display: none;
-  position: fixed;
-  z-index: 1500;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(4px);
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  transition: opacity .25s ease;
-}
-
-.popup.active {
-  display: flex;
-  opacity: 1;
-}
-
-/* ===== CONTAINER ===== */
-.captcha-box {
-  background: #1b1b1b;
-  width: 360px;
-  max-width: 95%;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,.45);
-  animation: fadeIn .3s ease;
-  color: #eee;
-}
-
-/* ===== CABEÇALHO ===== */
-.captcha-header {
-  background: #0f7b82;
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.captcha-header span {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.3;
-  flex: 1;
-  color: #fff;
-}
-
-.captcha-header img {
-  width: 62px;
-  height: 62px;
-  border-radius: 6px;
-  object-fit: cover;
-  margin-left: 12px;
-}
-
-/* ===== GRID ===== */
-.captcha-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  padding: 10px;
-  background: #00000022;
-}
-
-.captcha-img {
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 6px;
-  background: #111;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: .15s;
-}
-
-.captcha-img:hover {
-  transform: scale(1.03);
-}
-
-.captcha-img.selected {
-  border-color: #fff;
-  box-shadow: 0 0 6px rgba(255,255,255,0.5);
-}
-
-/* ===== FOOTER ===== */
-.captcha-footer {
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: flex-end;
-}
-
-/* ===== BOTÃO AVANÇAR ===== */
-.captcha-btn {
-  background: #e6e6e6;
-  color: #222;
-  padding: 10px 22px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-  font-weight: 600;
-  transition: .15s;
-}
-
-.captcha-btn:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-.captcha-btn:hover:not(:disabled) {
-  background: #fff;
-}
-
-/* ===== BOTÃO ICONE ===== */
-.captcha-icon-btn {
-  background: #2b2b2b;
-  border: none;
-  padding: 8px;
-  border-radius: 6px;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: .15s;
-}
-
-.captcha-icon-btn img {
-  width: 20px;
-  opacity: 0.8;
-}
-
-.captcha-icon-btn:hover {
-  background: #333;
-}
-
-/* ===== IMG ===== */
-.captcha-hand img {
-  width: 36px;
-  opacity: 0.85;
-}
-
-/* ===== PAGINAÇÃO ===== */
-
-.captcha-dots {
-  display: flex;
-  gap: 4px;
-  margin-left: auto;
-}
-
-.dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #222;
-  transition: background .15s;
-}
-
-.dot.white {
-  background: #ffffff !important;
-}
-
-.dot.green {
-  background: #4CAF50 !important;
-}
-
-.dot.active {
-  background: none !important;
-}
-
-/* ===== CONFIRMAÇÃO ===== */
-#fotoConfirm {
-  width: 100%;
-  border-radius: 10px 10px 0 0;
-  border: 1px solid #ddd;
-  border-bottom: none;
-  display: block;
-}
-
-#nomeConfirm {
-  background: #1F1F1F;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 700;
-  text-align: center;
-  padding: 14px;
-  border-radius: 0 0 10px 10px;
-  border: 1px solid #ddd;
-  border-top: none;
-  margin: 0;
-}
-
-.success-msg {
-  background: rgba(0, 255, 150, 0.1);
-  border: 1px solid rgba(0, 255, 150, 0.4);
-  border-radius: 8px;
-  padding: 10px 15px;
-  text-align: center;
-  color: #00ff99;
-  font-weight: 600;
-  margin-bottom: 18px;
-  animation: fadeIn 0.6s ease;
-}
-
-.success-msg::before {
-  content: "✔ ";
-  color: #00ff99;
-}
-
-.voltar {
-  background: var(--accent);
-  color: #fff;
-  transition: background 0.3s ease;
-}
-
-.voltar:hover {
-  background: #00c9b8;
-}
-
-#confirmTela {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  text-align: center;
-  background: transparent;
-  min-height: 85vh;
-  animation: slideUp 0.6s ease forwards;
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-
-.confirm-card {
-  background: transparent;
-  border: 2px solid var(--panel-border);
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 450px;
-  width: 100%;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-.confirm-card .img-container {
-  height: 200px;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 16px;
-  background: #f0f0f0;
-}
-
-.confirm-card .img-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-#botaoCaptcha {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  background: #222;
-  border: 1px solid #444;
-  border-radius: 6px;
-  padding: 0 15px;
-  height: 70px;
-  max-width: 320px;
-  width: 320px;
-  margin: 20px auto 0;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: var(--shadow-sm);
-  color: #ccc;
-  font-size: 14px;
-  font-weight: 400;
-  transition: var(--transition);
-}
-
-#botaoCaptcha:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 12px rgba(0, 183, 176, 0.3);
-}
-
-.recaptcha-checkbox {
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  background: #111;
-  border: 2px solid #444;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-}
-
-#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
-  background: #00aaff;
-  border-color: #00aaff;
-}
-
-.checkmark {
-  width: 18px;
-  height: 18px;
-  stroke: white;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  display: none;
-}
-
-#botaoCaptcha[aria-pressed="true"] .checkmark {
-  display: block;
-}
-
-.recaptcha-label {
-  user-select: none;
-  line-height: 1;
-  flex-grow: 1;
-}
-
-.recaptcha-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  object-fit: contain;
-  filter: brightness(0.7);
-  flex-shrink: 0;
-}
-
-#botaoCaptcha:disabled {
-  opacity: 0.6;
-  cursor: ->not-allowed;
-  pointer-events: none;
-}
-
-.bot-bait {
-  pointer-events: none;
-}
-
-.fade-in-element {
-  opacity: 0.6; 
-}
-
-.espacador { width: 100%; margin: 10px 0; }
-  
-/* =========================
-   DESKTOP / PC
-   ========================= */
-@media (min-width: 1024px) {
-
-  /* Container central igual R7 */
-  .container {
-    max-width: 1040px;
+    max-width: 430px;
     margin: 0 auto;
-    padding: 40px 20px;
-  }
-
-  h1 {
-    font-size: 28px;
-    margin-bottom: 32px;
-    text-align: left;
-  }
-
-  /* 🔥 GRID REAL (não lista esticada) */
-  .options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  /* Card vira VERTICAL */
-  .option {
+    padding: 16px;
+    min-height: 100vh;
+    display: flex;
     flex-direction: column;
-    background: #2b2b2b;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease;
-  }
+    border: 2px solid rgba(255,255,255,.1);
+    border-radius: 24px;
+    background: rgba(0,0,0,.35);
+    backdrop-filter: blur(10px);
+}
 
-  .option:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.55);
-  }
+/* ===== ANIMAÇÕES (KEYFRAMES) ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-  /* IMAGEM IGUAL R7 */
-  .option img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    object-position: top;
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulseCheck {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(92, 255, 122, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(92, 255, 122, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(92, 255, 122, 0); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* ===== ESTRUTURA DOS STEPS ===== */
+.step {
+    display: none;
+    opacity: 0;
+}
+
+.step.active {
     display: block;
-  }
+    animation: fadeInUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
 
-  /* FAIXA PRETA COM NOME */
-  .option-content {
-    background: #1f1f1f;
-    padding: 14px 16px;
-    font-size: 17px;
-    font-weight: 500;
+/* Especial para a tela de sucesso centralizar */
+#step-sucesso.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* ===== HERO CARD ===== */
+.hero-card {
+    position: relative;
+    padding: 30px 22px;
+    margin: -16px -16px 25px -16px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
+                url("https://i.ibb.co/8gvrdhDw/colorsplash.png");
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: slideInRight 0.8s ease;
+}
+
+/* ===== CARDS DOS CANDIDATOS ===== */
+.candidate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.candidate-card {
+    position: relative;
     display: flex;
     align-items: center;
-  }
-
-  .option-content input[type="radio"] {
-    margin-right: 10px;
-  }
-
-  /* BOTÃO VOTAR CENTRAL */
-  button {
-    max-width: 420px;
-    margin: 32px auto 0;
-    display: block;
-    font-size: 16px;
-  }
-
-  /* =========================
-     CONFIRMAÇÃO (SUCESSO)
-     ========================= */
-
-  #confirmTela {
-    padding-top: 60px;
-    min-height: auto;
-    opacity: 1;
-    transform: none;
-  }
-
-  .confirm-card {
-    max-width: 620px;
-    margin: 0 auto;
-    padding: 28px;
-    background: rgba(0,0,0,.35);
-    border: 1px solid rgba(255,255,255,.15);
-    box-shadow: 0 15px 40px rgba(0,0,0,.6);
-  }
-
-  .confirm-card .img-container {
-    height: 280px;
-  }
-
-  #nomeConfirm {
-    font-size: 24px;
-    padding: 16px;
-  }
-
-  .success-msg {
-    font-size: 15px;
-    padding: 14px 20px;
-  }
-
-  .voltar {
-    max-width: 420px;
-    margin: 20px auto 0;
-    display: block;
-  }
+    height: 90px;
+    background: #1c1f26;
+    border-radius: 18px;
+    padding: 12px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Animação de entrada em cascata */
+    opacity: 0;
+    animation: slideInRight 0.5s ease forwards;
 }
 
+/* Delay para cada card entrar um após o outro */
+.candidate-card:nth-child(1) { animation-delay: 0.1s; }
+.candidate-card:nth-child(2) { animation-delay: 0.2s; }
+.candidate-card:nth-child(3) { animation-delay: 0.3s; }
+.candidate-card:nth-child(4) { animation-delay: 0.4s; }
+
+.candidate-card:hover {
+    transform: translateX(8px) scale(1.02);
+    background: #262a38;
+    border-color: #ff005d;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.candidate-card:active {
+    transform: scale(0.96);
+}
+
+.candidate-card img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 40%; height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    mask-image: linear-gradient(to right, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
+}
+
+.candidate-info {
+    position: relative;
+    z-index: 2;
+    margin-left: auto;
+    width: 60%;
+    text-align: right;
+    padding-right: 10px;
+}
+
+/* ===== BOTÕES ===== */
+button {
+    width: 100%;
+    padding: 16px;
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-vote {
+    background: linear-gradient(135deg, #ff005d, #6a00ff);
+    color: white;
+    box-shadow: 0 8px 15px rgba(255, 0, 93, 0.3);
+}
+
+.btn-back {
+    background: rgba(255,255,255,0.05);
+    color: #ccc;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-top: 15px;
+}
+
+.btn-back:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* ===== TELA DE SUCESSO ===== */
+.success-card {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    border: 4px solid #5CFF7A;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #5CFF7A;
+    margin: 0 auto 20px;
+    animation: pulseCheck 2s infinite;
+}
+
+.success-card h2 {
+    margin-bottom: 30px;
+    background: linear-gradient(to right, #fff, #5CFF7A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-again {
+    background: #fff;
+    color: #000;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+/* ===== CAPTCHA ===== */
+.captcha-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 20px;
+    margin: 20px 0;
+    animation: fadeInUp 0.8s ease;
+}
 </style>
 </head>
 <body>
-  
-  <div id="votoTela" class="container">
-<div class="espacador"></div>
-    
-    <h1>Quem deve entrar no Big Sims?</h1>
-    <div class="espacador"></div>
-    
-<div class="options">
 
-  <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Anahi.png?raw=true" alt="Anahí Formighero">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Anahí Formighero"> Anahí Formighero
+    <div class="container">
+        <section id="step-votacao" class="step active">
+            <div class="hero-card">
+                <span class="badge">Votação</span>
+                <h1>Quem deve ser ELIMINADO?</h1>
+                <p>Você pode votar quantas vezes quiser.</p>
+            </div>
+            <div class="candidate-list" id="candidate-list">
+                </div>
+        </section>
+
+        <section id="step-confirmacao" class="step">
+            <div class="hero-card">
+                <span class="badge">Votação</span>
+                <h1>Opção selecionada</h1>
+                <p>Passe pelo captcha para enviar o seu voto</p>
+            </div>
+            <h2 style="margin-bottom: 15px;">Confirme seu voto</h2>
+            <div id="selected-candidate-card"></div>
+            
+            <div class="captcha-container">
+                <div class="g-recaptcha" data-sitekey="6Lev1DUsAAAAANzB2nhPDsKVzXZP0daxuDMCil1a" data-callback="onCaptchaSuccess" data-theme="dark"></div>
+            </div>
+
+            <button class="btn-back" onclick="changeStep('votacao')">
+                ↺ Alterar voto
+            </button>
+        </section>
+
+        <section id="step-sucesso" class="step">
+            <div class="success-card">
+                <div class="success-icon">✓</div>
+                <h2>Voto computado com sucesso!</h2>
+                <button class="btn-again" onclick="resetVotacao()">Votar novamente</button>
+            </div>
+        </section>
     </div>
-  </label>
 
-  <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Denyse.png?raw=true" alt="Denyse Pedra">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Denyse Pedra"> Denyse Pedra
-    </div>
-  </label>
+    <script>
+        const VOTACAO_ABERTA = true;
 
-  <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Deolandia.png?raw=true" alt="Doutora Deolândia">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Doutora Deolândia"> Doutora Deolândia
-    </div>
-  </label>
+        // Inicialização Supabase
+        const _supabase = window.supabase.createClient(
+            'https://rvizztgogtepktmnfdhc.supabase.co',
+            'sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP'
+        );
 
-    <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Gil.png?raw=true" alt="Gil do Yogurte">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Gil do Yogurte"> Gil do Yogurte
-    </div>
-  </label>
+        const candidatos = [
+            { id: 1, nome: 'Virgínia Fonte Seca', time: 'Perdeu a prova', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Virginia.png?raw=true' },
+            { id: 2, nome: 'Rodrigo Telespectador', time: 'Indicado pela líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Rodrigo.png?raw=true' },
+            { id: 3, nome: 'Andressa Burach', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Andressa.png?raw=true' }
+        ];
 
-  <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Nady.png?raw=true" alt="Nady">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Nady"> Nady
-    </div>
-  </label>
+        let candidatoSelecionado = null;
 
-  <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Naiara.png?raw=true" alt="Naiara Azedo">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Naiara Azedo"> Naiara Azedo
-    </div>
-  </label>
-
-    </div>
-    <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
-      <span class="recaptcha-checkbox" aria-hidden="true">
-        <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l6 6 10-10"/></svg>
-      </span>
-      <span class="recaptcha-label">Não sou um robô</span>
-      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="FCaptcha" style="width:40px;height:40px;border-radius:4px"/>
-    </button>
-
-    <button id="botaoVotar" disabled>Votar</button>
-
-    <div class="notice">A votação segue aberta até a live</div>
-  </div>
-  
-<!-- POPUP CAPTCHA -->
-<div id="popupCaptcha" class="popup">
-  <div class="captcha-box">
-    <div class="captcha-header">
-      <span id="captcha-instrucao">Toque em itens comumente usados com o item mostrado</span>
-      <img id="captcha-ref-img" src="" alt="Referência">
-    </div>
-    <div id="captchaGrid" class="captcha-grid"></div>
-    <div class="captcha-footer">
-      <button id="captchaRefresh" class="captcha-icon-btn" title="Recarregar">
-        <img src="https://i.ibb.co/MyvQhHP4/Seta.png" alt="reload">
-      </button>
-<div class="captcha-dots">
-  <div class="dot" id="dot1"></div>
-  <div class="dot" id="dot2"></div>
-</div>
-      <button id="captchaConfirm" class="captcha-btn" disabled>Avançar</button>
-<div id="captchaStatus" style="color:#fff; font-size:14px; padding:4px 0;"></div>
-
-    </div>
-  </div>
-</div>
-
-  <div id="confirmTela">
-  <div class="confirm-card">
-    <img id="fotoConfirm" src="" alt="Voto"/>
-    <p id="nomeConfirm"></p>
-    <button class="voltar" onclick="location.reload()">
-     VOTAR NOVAMENTE
-    </button>
-    <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">A votação segue aberta até a live</div>
-    
-  </div>
-</div>
-
-<script type="module">
-  // =================== CONFIG ===================
-  const TABLE_VOTACAO = "bvidro";
-  const VOTOS_POR_CAPTCHA = 50;
-
-  const aberturaBR = new Date("2025-11-16T21:00:00");
-  const encerramentoBR = new Date("2025-12-28T08:17:00");
-
-  // =================== HORA DO SERVIDOR ===================
-  async function getServerTime() {
-    try {
-      const res = await fetch("/api/time");
-      const data = await res.json();
-      return new Date(data.now);
-    } catch (e) {
-      console.error("Erro ao verificar horário:", e);
-      return null;
+function verificarVotacao() {
+    if (!VOTACAO_ABERTA) {
+        window.location.href = "fechada.html"; 
+        return false;
     }
-  }
-
-  function toSaoPauloDate(date) {
-    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    return new Date(spString);
-  }
-
-  // =================== VERIFICAÇÃO DE HORÁRIO ===================
-  async function verificarHorarios() {
-    const agoraServer = await getServerTime();
-
-    const agoraBR = toSaoPauloDate(agoraServer);
-
-    if (agoraBR < aberturaBR) {
-      window.location.replace("aguarde.html");
-      return;
-    }
-
-    if (agoraBR > encerramentoBR) {
-      window.location.replace("fechada.html");
-      return;
-    }
-
-    console.log("VOTAÇÃO ABERTA");
-  }
-
-  verificarHorarios();
-
-  // =================== ELEMENTOS DOM ===================
-  const votoTela = document.getElementById("votoTela");
-  const confirmTela = document.getElementById("confirmTela");
-  const nomeConfirm = document.getElementById("nomeConfirm");
-  const fotoConfirm = document.getElementById("fotoConfirm");
-  const botaoCaptcha = document.getElementById("botaoCaptcha");
-  const botaoVotar = document.getElementById("botaoVotar");
-  const popupCaptcha = document.getElementById("popupCaptcha");
-  const captchaGrid = document.getElementById("captchaGrid");
-  const captchaInstruction = document.getElementById("captcha-instrucao");
-  const verifyBtn = document.getElementById("captchaConfirm");
-  const refreshBtn = document.getElementById("captchaRefresh");
-  const statusEl = document.getElementById("captchaStatus");
-
-  let captchaVisualLiberado = false;
-
-  // =================== CONTROLE DE VOTOS LOCAL ===================
-  let pendingVote = null;
-  let captchaAberto = false;
-
-  function hashTag(tag) {
-    const secret = "CPTX_2025_FSHOW_🔥";
-    let h = 0;
-    const str = tag + secret;
-    for (let i = 0; i < str.length; i++) {
-      h = (h << 5) - h + str.charCodeAt(i);
-      h |= 0;
-    }
-    return h;
-  }
-
-  function getVotosRestantes() {
-    const raw = localStorage.getItem("votosRestantes");
-    const token = localStorage.getItem("token");
-    if (!raw || !token) return 0;
-    return hashTag(raw) == token ? parseInt(raw) : 0;
-  }
-
-  function setVotosRestantes(n) {
-    localStorage.setItem("votosRestantes", String(n));
-    localStorage.setItem("token", hashTag(String(n)));
-  }
-
-  // =================== PROMPTS DO CAPTCHA ===================
-  const prompts = [
-    {
-      label: "Clique nas imagens contendo algo que pode se locomover",
-      correctTag: "202",
-      images: [
-        { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },
-        { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },
-        { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
-        { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
-        { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
-        { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },
-        { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },
-        { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },
-        { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },
-        { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }
-      ]
-    },
-    {
-      label: "Clique nas imagens contendo um animal",
-      correctTag: "706",
-      images: [
-        { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },
-        { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },
-        { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },
-        { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },
-        { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },
-        { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },
-        { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },
-        { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },
-        { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }
-      ]
-    }
-  ];
-
-  let captchaCurrentPrompt = null;
-
-  // =================== FUNÇÕES DO CAPTCHA ===================
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  function generateCaptcha() {
-    captchaGrid.innerHTML = "";
-    statusEl.textContent = "";
-    verifyBtn.disabled = true;
-
-    captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    captchaInstruction.textContent = captchaCurrentPrompt.label;
-
-const ref = captchaCurrentPrompt.images.find(
-  i => i.tag === captchaCurrentPrompt.correctTag
-);
-
-if (ref) {
-  captchaRefImg.src = ref.src;
-  captchaRefImg.style.display = "block";
-} else {
-  captchaRefImg.style.display = "none";
+    return true;
 }
 
-    const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
-    const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
+        function renderCandidates() {
+            const list = document.getElementById('candidate-list');
+            if (!list) return;
 
-    // Garante entre 3 e 5 imagens corretas
-    const correctCount = Math.min(Math.floor(Math.random() * 3) + 3, correctImages.length);
-    const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
-    const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
+            list.innerHTML = candidatos.map(c => `
+                <div class="candidate-card" onclick="selectCandidate(${c.id})">
+                    <img src="${c.foto}" alt="${c.nome}">
+                    <div class="candidate-info">
+                        <h3>${c.nome}</h3>
+                        <p>${c.time}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-    const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+        function selectCandidate(id) {
+            if (!verificarVotacao()) return;
 
-    allImages.forEach(img => {
-      const imgEl = document.createElement("img");
-      imgEl.src = img.src;
-      imgEl.className = "captcha-img";
-      imgEl.dataset.hash = hashTag(img.tag);
+            candidatoSelecionado = candidatos.find(c => c.id === id);
+            const container = document.getElementById('selected-candidate-card');
+            
+            container.innerHTML = `
+                <div class="candidate-card">
+                    <img src="${candidatoSelecionado.foto}" alt="${candidatoSelecionado.nome}">
+                    <div class="candidate-info">
+                        <h3>${candidatoSelecionado.nome}</h3>
+                        <p>${candidatoSelecionado.time}</p>
+                    </div>
+                </div>
+            `;
 
-      imgEl.addEventListener("click", () => {
-        imgEl.classList.toggle("selected");
-        verifyBtn.disabled = !document.querySelectorAll(".captcha-img.selected").length;
-      });
+            changeStep('confirmacao');
+        }
 
-      captchaGrid.appendChild(imgEl);
-    });
-  }
+        function changeStep(stepId) {
+            // Remove active de todos
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            
+            // Adiciona no destino
+            const target = document.getElementById(`step-${stepId}`);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
 
-  function abrirCaptcha() {
-    if (captchaAberto) return;
-    captchaAberto = true;
-    generateCaptcha();
-    popupCaptcha.classList.add("active");
-    botaoVotar.disabled = true;
-  }
+        async function onCaptchaSuccess() {
+            if (!candidatoSelecionado) return;
 
-  function fecharCaptcha() {
-    popupCaptcha.classList.remove("active");
-    captchaAberto = false;
-    botaoVotar.disabled = getVotosRestantes() <= 0;
-  }
+            const { error } = await _supabase
+                .from('simsp1')
+                .insert([{ candidato_id: candidatoSelecionado.id }]);
 
-  // Refresh
-  refreshBtn.addEventListener("click", () => {
-    statusEl.textContent = "";
-    document.querySelectorAll(".captcha-img").forEach(img => img.classList.remove("selected"));
-    verifyBtn.disabled = true;
-    generateCaptcha();
-  });
+            if (error) {
+                alert("Erro ao votar: " + error.message);
+                grecaptcha.reset();
+            } else {
+                changeStep('sucesso');
+            }
+        }
 
-  // Verificação
-  verifyBtn.addEventListener("click", () => {
-    const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
-    let sucesso = true;
+        function resetVotacao() {
+            candidatoSelecionado = null;
+            if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+            changeStep('votacao');
+        }
 
-    document.querySelectorAll(".captcha-img").forEach(img => {
-      const isCorrect = img.dataset.hash == corretoHash;
-      const isSelected = img.classList.contains("selected");
-      if (isCorrect !== isSelected) sucesso = false;
-    });
-
-    if (!sucesso) {
-      statusEl.textContent = "Incorreto. Tente novamente.";
-      statusEl.style.color = "red";
-      setTimeout(generateCaptcha, 1200);
-      return;
-    }
-
-    // Sucesso
-    setVotosRestantes(VOTOS_POR_CAPTCHA);
-    captchaVisualLiberado = true;
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.classList.add("active");
-
-    fecharCaptcha();
-
-    // Se havia voto pendente, envia
-    if (pendingVote) {
-      const voto = pendingVote;
-      pendingVote = null;
-      setTimeout(() => submitVote(voto), 300);
-    }
-  });
-
-  // =================== ENVIO DO VOTO ===================
-async function submitVote(participante) {
-  try {
-    botaoVotar.disabled = true;
-    const prevText = botaoVotar.textContent;
-    botaoVotar.textContent = "Enviando voto...";
-    
-    await new Promise(resolve => setTimeout(resolve, 210));
-
-    const res = await fetch("/api/vote", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ participante, table: TABLE_VOTACAO })
-    });
-
-
-      if (res.status === 410) {
-        window.location.href = "fechada.html";
-        return;
-      }
-
-      if (!res.ok) {
-        window.location.href = "erro.html";
-        return;
-      }
-
-      // Sucesso
-      let restantes = getVotosRestantes() - 1;
-      setVotosRestantes(Math.max(restantes, 0));
-
-      if (restantes <= 0) {
-        botaoCaptcha.setAttribute("aria-pressed", "false");
-        botaoVotar.classList.remove("active");
-        captchaVisualLiberado = false;
-      }
-
-      votoTela.style.display = "none";
-      confirmTela.style.display = "flex";
-      nomeConfirm.textContent = participante;
-
-      if (fotos[participante]) {
-  fotoConfirm.src = fotos[participante];
-  fotoConfirm.style.display = "block";
-} else {
-  fotoConfirm.style.display = "none";
-}
-
-
-      botaoVotar.textContent = prevText;
-      botaoVotar.disabled = false;
-
-    } catch (e) {
-      console.error(e);
-      window.location.href = "erro.html";
-    }
-  }
-
-  // =================== EVENTOS PRINCIPAIS ===================
-  botaoVotar.addEventListener("click", () => {
-    const escolhido = document.querySelector('input[name="vote"]:checked');
-    if (!escolhido) return alert("Selecione alguém para votar!");
-
-    if (getVotosRestantes() <= 0) {
-      pendingVote = escolhido.value;
-      abrirCaptcha();
-      return;
-    }
-
-    submitVote(escolhido.value);
-  });
-
-botaoCaptcha.addEventListener("click", () => {
-  if (captchaVisualLiberado) return;
-
-  const restantes = getVotosRestantes();
-
-  if (restantes > 0) {
-    captchaVisualLiberado = true;
-
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.disabled = false;
-    botaoVotar.classList.add("active");
-    return;
-  }
-
-  abrirCaptcha();
-});
-
-
-  // =================== DETECÇÃO DE COMPORTAMENTO SUSPEITO ===================
-  let suspeita = 0;
-  const LIMITE_SUSPEITA = 6;
-  let ultimoClique = 0;
-  let ultimoMouseX = 0, ultimoMouseY = 0;
-  let ultimaTrocaAba = Date.now();
-  let scrollsRecentes = 0;
-  let tentativasVoto = 0;
-
-  function exigirCaptchaPorSuspeita() {
-    if (captchaAberto) return;
-    console.warn("Atividade suspeita — CAPTCHA exigido");
-    setVotosRestantes(0);
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    botaoVotar.disabled = true;
-    botaoVotar.classList.remove("active");
-    abrirCaptcha();
-  }
-
-  document.addEventListener("click", () => {
-    const agora = Date.now();
-    if (agora - ultimoClique < 50) suspeita++;
-    ultimoClique = agora;
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  document.addEventListener("mousemove", (e) => {
-    const dx = Math.abs(e.clientX - ultimoMouseX);
-    const dy = Math.abs(e.clientY - ultimoMouseY);
-    if (dx > 350 || dy > 350) suspeita++;
-    ultimoMouseX = e.clientX;
-    ultimoMouseY = e.clientY;
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  document.addEventListener("wheel", () => {
-    scrollsRecentes++;
-    if (scrollsRecentes > 14) {
-      suspeita++;
-      scrollsRecentes = 0;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      const agora = Date.now();
-      if (agora - ultimaTrocaAba < 450) suspeita++;
-      ultimaTrocaAba = agora;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  botaoVotar.addEventListener("click", () => {
-    tentativasVoto++;
-    if (tentativasVoto > 3) {
-      suspeita++;
-      tentativasVoto = 0;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  // Zera suspeita ao passar no CAPTCHA
-  verifyBtn.addEventListener("click", () => {
-    if (statusEl.textContent.includes("Incorreto")) return;
-    suspeita = 0;
-    tentativasVoto = 0;
-    scrollsRecentes = 0;
-  });
-
-    // =================== FOTOS DOS PARTICIPANTES ===================
-  const fotos = {
-  "Doutora Deolândia": "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Deolandia.png?raw=true",
-  "Denyse Pedra": "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Denyse.png?raw=true",
-  "Anahí Formighero": "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Anahi.png?raw=true",
-  "Nady": "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Nady.png?raw=true",
-  "Gil do Yogurte": "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Gil.png?raw=true",
-  "Naiara Azedo": "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Naiara.png?raw=true",
-  "Eueu": "https://i.ibb.co/mCRNXcf5/Eueu.jpg",
-  "Felipe": "https://i.ibb.co/XZmgWgL1/Felipe.jpg",
-  "Gean": "https://i.ibb.co/KzhhZH7H/Gean.jpg",
-  "Gui": "https://i.ibb.co/s9Vp82DB/Guilherme.jpg",
-  "Inês": "https://i.ibb.co/CpzSYbNW/Ines.jpg",
-  "João": "https://i.ibb.co/d4FNx1c8/Joao.jpg",
-  "Koyuh": "https://i.ibb.co/Y7fDVCTr/Koyuh.jpg",
-  "Kristhyan": "https://i.ibb.co/fVvM403J/Kristhyan.jpg",
-  "Luany": "https://i.ibb.co/FqDdQHzN/Luany.jpg",
-  "Luca": "https://i.ibb.co/1txTXwSm/Luca.jpg",
-  "Luddy": "https://i.ibb.co/6cNwCpWV/Luddy.jpg",
-  "Ludmila": "https://i.ibb.co/4QjrrL8/Ludmila.jpg",
-  "Mariana": "https://i.ibb.co/ymDPmccr/Mariana.jpg",
-  "Neto": "https://i.ibb.co/YBP4Hs44/Neto.jpg",
-  "Rafa": "https://i.ibb.co/G47V2xFh/Rafa.jpg",
-  "Renata": "https://i.ibb.co/N2kS8NnP/Renata.jpg",
-  "Sam": "https://i.ibb.co/KxdRJJ8h/Sam.jpg",
-  "Sirleidy": "https://i.ibb.co/RkSZVpt5/Sirleyde.jpg",
-  "Tety": "https://i.ibb.co/gMJ4T0Ts/Tety.jpg",
-  "Vitor": "https://i.ibb.co/1fT3chNR/Vitor.jpg"
-};
-
-  const captchaRefImg = document.getElementById("captcha-ref-img");
-
-  // =================== INICIALIZAÇÃO ===================
-(function init() {
-  captchaVisualLiberado = false;
-  botaoCaptcha.setAttribute("aria-pressed", "false");
-  botaoVotar.disabled = true;
-  botaoVotar.classList.remove("active");
-})();
-
-
-</script>
-
-</body>  
+        document.addEventListener('DOMContentLoaded', renderCandidates);
+    </script>
+</body>
 </html>
