@@ -467,6 +467,8 @@ footer strong {
 </html>
 
 <script>
+const VOTACAO_ABERTA = true;
+
 const _supabase = window.supabase.createClient(
   'https://rvizztgogtepktmnfdhc.supabase.co',
   'sb_publishable_5vd5eUluXqj2Wq0xTaWwdA_QUpGP9kP'
@@ -494,6 +496,8 @@ function renderCandidates() {
   if (!verificarVotacao()) return;
 
   const list = document.getElementById('candidate-list');
+  if (!list) return;
+
   list.innerHTML = candidatos.map(c => `
     <div class="candidate-card" onclick="selectCandidate(${c.id})">
       <img src="${c.foto}" alt="${c.nome}">
@@ -505,17 +509,18 @@ function renderCandidates() {
   `).join('');
 }
 
-/* ==============================
-   SELEÇÃO
-   ============================== */
 function selectCandidate(id) {
   if (!verificarVotacao()) return;
 
   candidatoSelecionado = candidatos.find(c => c.id === id);
+  if (!candidatoSelecionado) return;
 
-  document.getElementById('selected-candidate-card').innerHTML = `
+  const container = document.getElementById('selected-candidate-card');
+  if (!container) return;
+
+  container.innerHTML = `
     <div class="candidate-card">
-      <img src="${candidatoSelecionado.foto}">
+      <img src="${candidatoSelecionado.foto}" alt="${candidatoSelecionado.nome}">
       <div class="candidate-info">
         <h3>${candidatoSelecionado.nome}</h3>
         <p>${candidatoSelecionado.time}</p>
@@ -526,21 +531,17 @@ function selectCandidate(id) {
   changeStep('confirmacao');
 }
 
-/* ==============================
-   NAVEGAÇÃO DE ETAPAS
-   ============================== */
 function changeStep(stepId) {
   const steps = document.querySelectorAll('.step');
-  steps.forEach(s => s.classList.remove('active'));
+  steps.forEach(step => step.classList.remove('active'));
 
   const target = document.getElementById(`step-${stepId}`);
+  if (!target) return;
+
   target.classList.add('active');
   target.scrollIntoView({ behavior: 'smooth' });
 }
 
-/* ==============================
-   VOTO (CAPTCHA OK)
-   ============================== */
 async function onCaptchaSuccess() {
   if (!verificarVotacao()) return;
   if (!candidatoSelecionado) return;
@@ -556,19 +557,18 @@ async function onCaptchaSuccess() {
   }
 }
 
-/* ==============================
-   RESET
-   ============================== */
 function resetVotacao() {
   if (!verificarVotacao()) return;
 
   candidatoSelecionado = null;
-  grecaptcha.reset();
+
+  if (typeof grecaptcha !== 'undefined') {
+    grecaptcha.reset();
+  }
+
   changeStep('votacao');
 }
 
-/* ==============================
-   INIT
-   ============================== */
-renderCandidates();
+document.addEventListener('DOMContentLoaded', renderCandidates);
 </script>
+
