@@ -588,7 +588,7 @@ const VOTACAO_ABERTA = false; // false = votação encerrada
 
 function verificarVotacaoAberta() {
   if (!VOTACAO_ABERTA) {
-    changeStep('encerrada');
+    window.location.href = "fechada.html";
     return false;
   }
   return true;
@@ -728,18 +728,10 @@ function selectParticipante(id) {
   changeStep('confirmacao');
 }
 
-/* ================= RESET ================= */
+/* ================= RESET (RELOAD TOTAL) ================= */
 
 function resetVotacao() {
-  participanteSelecionado = null;
-  document.getElementById("selected-candidate-card").innerHTML = "";
-  document.getElementById("botaoVotar").disabled = true;
-
-  const captchaBtn = document.getElementById("botaoCaptcha");
-  captchaBtn.classList.remove("checked");
-  captchaBtn.disabled = false;
-
-  changeStep('votacao');
+  location.reload();
 }
 
 /* ================= INIT ================= */
