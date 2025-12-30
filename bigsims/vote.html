@@ -582,6 +582,18 @@ button {
     </div>
 
 <script>
+/* ================= CONTROLE DA VOTAÇÃO ================= */
+
+const VOTACAO_ABERTA = false; // false = votação encerrada
+
+function verificarVotacaoAberta() {
+  if (!VOTACAO_ABERTA) {
+    changeStep('encerrada');
+    return false;
+  }
+  return true;
+}
+
 /* ================= SUPABASE ================= */
 
 const _supabase = window.supabase.createClient(
@@ -699,6 +711,8 @@ function renderParticipantes() {
 }
 
 function selectParticipante(id) {
+  if (!verificarVotacaoAberta()) return;
+
   participanteSelecionado = participantes.find(p => p.id === id);
 
   document.getElementById('selected-candidate-card').innerHTML = `
@@ -718,7 +732,6 @@ function selectParticipante(id) {
 
 function resetVotacao() {
   participanteSelecionado = null;
-
   document.getElementById("selected-candidate-card").innerHTML = "";
   document.getElementById("botaoVotar").disabled = true;
 
@@ -734,22 +747,23 @@ function resetVotacao() {
 document.addEventListener('DOMContentLoaded', () => {
   renderParticipantes();
 
-document.getElementById("botaoCaptcha").onclick = () => {
-  const captchaBtn = document.getElementById("botaoCaptcha");
+  if (!verificarVotacaoAberta()) return;
 
-  if (getVotosRestantes() > 0) {
-    captchaBtn.classList.add("checked");
-    captchaBtn.setAttribute("aria-checked", "true");
-    captchaBtn.disabled = true;
+  document.getElementById("botaoCaptcha").onclick = () => {
+    if (!verificarVotacaoAberta()) return;
 
-    document.getElementById("botaoVotar").disabled = false;
-    return;
-  }
+    const captchaBtn = document.getElementById("botaoCaptcha");
 
-  generateCaptcha();
-  document.getElementById("popupCaptcha").classList.add("active");
-};
+    if (getVotosRestantes() > 0) {
+      captchaBtn.classList.add("checked");
+      captchaBtn.disabled = true;
+      document.getElementById("botaoVotar").disabled = false;
+      return;
+    }
 
+    generateCaptcha();
+    document.getElementById("popupCaptcha").classList.add("active");
+  };
 
   document.getElementById("captchaConfirm").onclick = () => {
     const correto = hashTag(captchaCurrentPrompt.correctTag);
@@ -768,18 +782,16 @@ document.getElementById("botaoCaptcha").onclick = () => {
 
     setVotosRestantes(VOTOS_POR_CAPTCHA);
 
-const captchaBtn = document.getElementById("botaoCaptcha");
-
-captchaBtn.classList.add("checked");
-captchaBtn.setAttribute("aria-checked", "true");
-captchaBtn.disabled = true;
-
+    const captchaBtn = document.getElementById("botaoCaptcha");
+    captchaBtn.classList.add("checked");
+    captchaBtn.disabled = true;
 
     document.getElementById("popupCaptcha").classList.remove("active");
     document.getElementById("botaoVotar").disabled = false;
   };
 
   document.getElementById("botaoVotar").onclick = async () => {
+    if (!verificarVotacaoAberta()) return;
     if (!participanteSelecionado) return;
 
     const { error } = await _supabase
@@ -796,7 +808,6 @@ captchaBtn.disabled = true;
   };
 });
 </script>
-
 
 </body>
 </html>
