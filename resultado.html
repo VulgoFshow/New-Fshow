@@ -302,195 +302,173 @@
       Atualizando a cada segundo
     </p>
   </div>
+  
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js";
 
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js";
-    const supabaseUrl = "https://vchvvvvzulrkovjmiokg.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4";
-    const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabaseUrl = "https://vchvvvvzulrkovjmiokg.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4";
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const ctx = document.getElementById("grafico").getContext("2d");
-    const chart = new Chart(ctx, {
-      type: "doughnut",
-      data: { labels: [], datasets: [{ data: [], backgroundColor: ["#6c5ce7", "#a29bfe", "#fd79a8", "#fdcb6e", "#00b894", "#55efc4", "#74b9ff", "#e17055"], borderWidth: 3, borderColor: "#1a1a2e", hoverOffset: 8 }] },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: "68%",
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const value = context.parsed;
-                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                const percentage = ((value / total) * 100).toFixed(2);
-                return `${context.label}: ${value} votos (${percentage}%)`;
-              }
+  /* ================= CONFIGURAÇÃO ================= */
+  const TIPO_VOTACAO = "ELIMINAR"; // "ELIMINAR" ou "FICAR"
+  const NUM_ELIMINADOS = 1;       // usado apenas quando for FICAR
+  /* ================================================ */
+
+  const ctx = document.getElementById("grafico").getContext("2d");
+  const chart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+        backgroundColor: [
+          "#6c5ce7", "#a29bfe", "#fd79a8", "#fdcb6e",
+          "#00b894", "#55efc4", "#74b9ff", "#e17055"
+        ],
+        borderWidth: 3,
+        borderColor: "#1a1a2e",
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "68%",
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed;
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = ((value / total) * 100).toFixed(2);
+              return `${context.label}: ${value} votos (${percentage}%)`;
             }
           }
-        },
-        animation: { animateRotate: true, duration: 1200 }
-      }
-    });
-
-    function atualizarGrafico(labels, dados) {
-      chart.data.labels = labels;
-      chart.data.datasets[0].data = dados;
-      chart.update();
-    }
-
-    async function carregarTodosVotos() {
-  if (!tableAtual) return [];
-
-  const limitePorPagina = 1000;
-  let pagina = 0;
-  let todosVotos = [];
-  let continuar = true;
-
-  while (continuar) {
-    const { data, error } = await supabase
-      .from(tableAtual)
-      .select('participante')
-      .range(
-        pagina * limitePorPagina,
-        (pagina + 1) * limitePorPagina - 1
-      );
-
-    if (error) {
-      console.error("Erro ao buscar votos:", error);
-      alert("Erro ao carregar a table. Verifique o nome.");
-      return [];
-    }
-
-    if (!data || data.length === 0) {
-      continuar = false;
-    } else {
-      todosVotos = todosVotos.concat(data);
-      pagina++;
-      if (data.length < limitePorPagina) continuar = false;
-    }
-  }
-
-  return todosVotos;
-    }
-
-    let ultimoRanking = [];
-    const NUM_ELIMINADOS = 1; // <<<< NÚMERO DE ELIMINADOS
-
-    async function carregarVotos() {
-      const data = await carregarTodosVotos();
-      if (!data || data.length === 0) {
-        document.getElementById("totalVotos").textContent = "0";
-        document.getElementById("participantes").textContent = "0";
-        document.getElementById("lider").textContent = "—";
-        atualizarGrafico([], []);
-        document.getElementById("resultados").innerHTML = `<div class="loading">Nenhum voto registrado ainda.</div>`;
-        ultimoRanking = [];
-        return;
-      }
-
-      const contagem = {};
-      let total = 0;
-      data.forEach(voto => {
-        const nome = voto.participante?.trim();
-        if (nome) {
-          contagem[nome] = (contagem[nome] || 0) + 1;
-          total++;
         }
-      });
+      },
+      animation: { animateRotate: true, duration: 1200 }
+    }
+  });
 
-      const ordenado = Object.entries(contagem).sort((a, b) => b[1] - a[1]);
-      const labels = ordenado.map(item => item[0]);
-      const valores = ordenado.map(item => item[1]);
+  function atualizarGrafico(labels, dados) {
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = dados;
+    chart.update();
+  }
 
-      atualizarGrafico(labels, valores);
-      document.getElementById("totalVotos").textContent = total.toLocaleString('pt-BR');
-      document.getElementById("participantes").textContent = ordenado.length;
-      document.getElementById("lider").textContent = ordenado[0][0];
+  async function carregarTodosVotos() {
+    if (!tableAtual) return [];
 
-      const resultadosDiv = document.getElementById("resultados");
-      resultadosDiv.innerHTML = ordenado.map((item, i) => {
-        const nome = item[0];
-        const votos = item[1];
-        const perc = ((votos / total) * 100).toFixed(2);
-        const isWinner = i === 0 ? `<span class="winner-badge">LÍDER</span>` : '';
-        const medal = i === 0 ? '1º' : i === 1 ? '2º' : i === 2 ? '3º' : `#${i + 1}`;
-        const pos = i + 1;
-        const isEliminado = pos > ordenado.length - NUM_ELIMINADOS && ordenado.length > NUM_ELIMINADOS;
-        const eliminadoBadge = isEliminado ? `<span class="eliminated-badge">ELIMINADO</span>` : '';
-        const eliminadoClass = isEliminado ? 'eliminado' : '';
+    const limite = 1000;
+    let pagina = 0;
+    let votos = [];
+    let continuar = true;
 
-        return `
-          <div class="result-item ${eliminadoClass}">
-            <div class="rank">${medal}</div>
-            <div class="name">${nome} ${isWinner}${eliminadoBadge}</div>
-            <div class="bar-container"><div class="bar" style="width: ${perc}%"></div></div>
-            <div class="percentage">${perc}%</div>
-          </div>
-        `;
-      }).join("");
+    while (continuar) {
+      const { data, error } = await supabase
+        .from(tableAtual)
+        .select("participante")
+        .range(pagina * limite, (pagina + 1) * limite - 1);
 
-      ultimoRanking = ordenado.map((item, i) => {
-        const nome = item[0];
-        const votos = item[1];
-        const perc = ((votos / total) * 100).toFixed(2);
-        const pos = i === 0 ? '1º' : i === 1 ? '2º' : i === 2 ? '3º' : `${i + 1}º`;
-        const isEliminado = (i + 1) > ordenado.length - NUM_ELIMINADOS && ordenado.length > NUM_ELIMINADOS;
-        const eliminadoTag = isEliminado ? ' [ELIMINADO]' : '';
-        return `${pos} ${nome} - ${votos} votos (${perc}%) ${eliminadoTag}`;
-      });
+      if (error) {
+        console.error(error);
+        return [];
+      }
+
+      if (!data || data.length === 0) continuar = false;
+      else {
+        votos = votos.concat(data);
+        pagina++;
+        if (data.length < limite) continuar = false;
+      }
     }
 
-    const copyBtn = document.getElementById("copyBtn");
-    const copyIcon = copyBtn.querySelector("i");
-    const copyText = copyBtn.querySelector("span");
-    copyBtn.addEventListener("click", async () => {
-      if (ultimoRanking.length === 0) {
-        alert("Nenhum resultado para copiar ainda.");
-        return;
-      }
-      const texto = [
-        "RESULTADO",
-        `Total de votos: ${document.getElementById("totalVotos").textContent}`,
-        `Participantes: ${document.getElementById("participantes").textContent}`,
-        "",
-        "RANKING:",
-        ...ultimoRanking
-      ].join("\n");
-      try {
-        await navigator.clipboard.writeText(texto);
-        copyBtn.classList.add("copied");
-        copyIcon.className = "fas fa-check";
-        copyText.textContent = "Copiado!";
-        setTimeout(() => {
-          copyBtn.classList.remove("copied");
-          copyIcon.className = "fas fa-copy";
-          copyText.textContent = "Copiar Resultados";
-        }, 2000);
-      } catch (err) {
-        alert("Falha ao copiar. Tente novamente.");
-        console.error(err);
+    return votos;
+  }
+
+  let ultimoRanking = [];
+  let tableAtual = null;
+
+  async function carregarVotos() {
+    const data = await carregarTodosVotos();
+    if (!data.length) return;
+
+    const contagem = {};
+    let total = 0;
+
+    data.forEach(v => {
+      const nome = v.participante?.trim();
+      if (nome) {
+        contagem[nome] = (contagem[nome] || 0) + 1;
+        total++;
       }
     });
 
-setInterval(() => {
-  if (tableAtual) carregarVotos();
-}, 1000);
-    
-    let tableAtual = null;
+    const ordenado = Object.entries(contagem).sort((a, b) => b[1] - a[1]);
 
-    document.getElementById("loadTableBtn").addEventListener("click", () => {
-  const valor = document.getElementById("tableInput").value.trim();
+    atualizarGrafico(
+      ordenado.map(v => v[0]),
+      ordenado.map(v => v[1])
+    );
 
-  if (!valor) {
-    alert("Digite o nome da table.");
-    return;
+    document.getElementById("totalVotos").textContent = total;
+    document.getElementById("participantes").textContent = ordenado.length;
+    document.getElementById("lider").textContent = ordenado[0][0];
+
+    const resultadosDiv = document.getElementById("resultados");
+
+    resultadosDiv.innerHTML = ordenado.map((item, i) => {
+      const nome = item[0];
+      const votos = item[1];
+      const perc = ((votos / total) * 100).toFixed(2);
+
+      let eliminado = false;
+
+      if (TIPO_VOTACAO === "ELIMINAR") {
+        eliminado = i === 0;
+      } else {
+        eliminado = (i + 1) > ordenado.length - NUM_ELIMINADOS;
+      }
+
+      return `
+        <div class="result-item ${eliminado ? "eliminado" : ""}">
+          <div class="rank">${i + 1}º</div>
+          <div class="name">
+            ${nome}
+            ${eliminado ? `<span class="eliminated-badge">ELIMINADO</span>` : ""}
+          </div>
+          <div class="bar-container">
+            <div class="bar" style="width:${perc}%"></div>
+          </div>
+          <div class="percentage">${perc}%</div>
+        </div>
+      `;
+    }).join("");
+
+    ultimoRanking = ordenado.map((item, i) => {
+      const nome = item[0];
+      const votos = item[1];
+      const perc = ((votos / total) * 100).toFixed(2);
+
+      let eliminado =
+        TIPO_VOTACAO === "ELIMINAR"
+          ? i === 0
+          : (i + 1) > ordenado.length - NUM_ELIMINADOS;
+
+      return `${i + 1}º ${nome} - ${votos} votos (${perc}%) ${eliminado ? "[ELIMINADO]" : ""}`;
+    });
   }
 
-  tableAtual = valor;
-  carregarVotos();
-});
-  </script>
-</body>
-</html>
+  setInterval(() => {
+    if (tableAtual) carregarVotos();
+  }, 1000);
+
+  document.getElementById("loadTableBtn").addEventListener("click", () => {
+    const valor = document.getElementById("tableInput").value.trim();
+    if (!valor) return alert("Digite o nome da table.");
+    tableAtual = valor;
+    carregarVotos();
+  });
+</script>
