@@ -604,8 +604,8 @@ const _supabase = window.supabase.createClient(
 /* ================= DADOS ================= */
 
 const participantes = [
-  { id: 1, nome: 'Adriane Galileu', time: 'Perdeu a prova', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/adriane.png?raw=true' },
-  { id: 2, nome: 'Lady Gagá', time: 'Indicado pela líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/lady.png?raw=true' },
+  { id: 1, nome: 'Adriane Galileu', time: 'Perdeu a prova', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Adriane.png?raw=true' },
+  { id: 2, nome: 'Lady Gagá', time: 'Indicado pela líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lady.png?raw=true' },
   { id: 3, nome: 'Andressa Burach', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Andressa.png?raw=true' }
 ];
 
@@ -787,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!participanteSelecionado) return;
 
     const { error } = await _supabase
-      .from('bparedao1')
+      .from('bparedao2')
       .insert([{ participante: participanteSelecionado.nome }]);
 
     if (error) {
