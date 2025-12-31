@@ -515,7 +515,7 @@ button {
         <section id="step-votacao" class="step active">
             <div class="hero-card">
                 <span class="badge">Votação</span>
-                <h1>Quem deve ser ELIMINADO?</h1>
+                <h1>Quem deve FICAR?</h1>
                 <p>Você pode votar quantas vezes quiser.</p>
             </div>
             <div class="candidate-list" id="candidate-list"></div>
@@ -584,7 +584,7 @@ button {
 <script>
 /* ================= CONTROLE DA VOTAÇÃO ================= */
 
-const VOTACAO_ABERTA = false; // false = votação encerrada
+const VOTACAO_ABERTA = true; // false = votação encerrada
 
 function verificarVotacaoAberta() {
   if (!VOTACAO_ABERTA) {
@@ -604,8 +604,8 @@ const _supabase = window.supabase.createClient(
 /* ================= DADOS ================= */
 
 const participantes = [
-  { id: 1, nome: 'Virgínia Fonte Seca', time: 'Perdeu a prova', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Virginia.png?raw=true' },
-  { id: 2, nome: 'Rodrigo Telespectador', time: 'Indicado pela líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Rodrigo.png?raw=true' },
+  { id: 1, nome: 'Adriane Galileu', time: 'Perdeu a prova', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/adriane.png?raw=true' },
+  { id: 2, nome: 'Lady Gagá', time: 'Indicado pela líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/lady.png?raw=true' },
   { id: 3, nome: 'Andressa Burach', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Andressa.png?raw=true' }
 ];
 
