@@ -787,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!participanteSelecionado) return;
 
     const { error } = await _supabase
-      .from('bparedao2')
+      .from('bparedao3')
       .insert([{ participante: participanteSelecionado.nome }]);
 
     if (error) {
