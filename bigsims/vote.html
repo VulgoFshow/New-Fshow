@@ -584,7 +584,7 @@ button {
 <script>
 /* ================= CONTROLE DA VOTAÇÃO ================= */
 
-const VOTACAO_ABERTA = false; // false = votação encerrada
+const VOTACAO_ABERTA = true; // false = votação encerrada
 
 function verificarVotacaoAberta() {
   if (!VOTACAO_ABERTA) {
@@ -604,9 +604,9 @@ const _supabase = window.supabase.createClient(
 /* ================= DADOS ================= */
 
 const participantes = [
-  { id: 1, nome: 'Adriane Galileu', time: 'Perdeu a prova', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Adriane.png?raw=true' },
-  { id: 2, nome: 'Lady Gagá', time: 'Indicado pela líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lady.png?raw=true' },
-  { id: 3, nome: 'Andressa Burach', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Andressa.png?raw=true' }
+  { id: 1, nome: 'Lady Gagá', time: 'Indicado pela líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lady.png?raw=true' },
+  { id: 2, nome: 'Andressa Burach', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Andressa.png?raw=true' },
+  { id: 3, nome: 'Olá Gostaria', time: 'Puxado da Baia', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Ola.png?raw=true' }
 ];
 
 let participanteSelecionado = null;
