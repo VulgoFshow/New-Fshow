@@ -604,9 +604,10 @@ const _supabase = window.supabase.createClient(
 /* ================= DADOS ================= */
 
 const participantes = [
-  { id: 1, nome: 'Andressa Burach', time: 'Indicada pelo líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Andressa.png?raw=true' },
-  { id: 2, nome: 'Little Little', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Bigbig.png?raw=true' },
-  { id: 3, nome: 'Virgínia Fonte Seca', time: 'Puxado da Baia', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Virginia.png?raw=true' }
+  { id: 1, nome: 'Gretla', time: 'Indicada pelo líder', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Gretla.png?raw=true' },
+  { id: 2, nome: 'Lady Gagá', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lady.png?raw=true' },
+  { id: 3, nome: 'Selca', time: 'Mais votada da casa', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Selca.png?raw=true' },
+  { id: 4, nome: 'Felipe Feto', time: 'Puxado da Baia', foto: 'https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Felipe.png?raw=true' }
 ];
 
 let participanteSelecionado = null;
@@ -787,7 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!participanteSelecionado) return;
 
     const { error } = await _supabase
-      .from('bparedao4')
+      .from('bparedao5')
       .insert([{ participante: participanteSelecionado.nome }]);
 
     if (error) {
