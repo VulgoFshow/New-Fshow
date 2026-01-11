@@ -861,24 +861,34 @@ footer::before {
     }
 }
 
- /* ======================================
-   DESKTOP 
-====================================== */
+/* ===============================
+   DESKTOP CLEAN REFACTOR
+================================ */
 
 @media (min-width: 1024px) {
 
   body {
-    background: linear-gradient(180deg, #f9f9f9 0%, #f1f1f1 100%);
+    background: #f4f4f4;
+    font-size: 16px;
   }
 
+  /* ===== CONTAINER ===== */
   .container {
-    max-width: 1280px;
-    padding: 50px 0;
+    max-width: 1240px;
+    padding: 60px 0;
   }
 
+  /* ===== HEADER ===== */
   .header {
-    height: 75px;
-    padding: 0 6%;
+    height: 72px;
+    padding: 0 5%;
+    background: #121212;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+  }
+
+  .logo-container span {
+    font-size: 1.9em;
+    letter-spacing: 2px;
   }
 
   .menu-toggle {
@@ -888,17 +898,17 @@ footer::before {
   .nav-menu {
     position: static;
     display: flex !important;
-    flex-direction: row;
+    gap: 28px;
     background: none;
     box-shadow: none;
-    gap: 26px;
     padding: 0;
   }
 
   .nav-menu a {
     font-size: 0.95em;
-    opacity: 0.85;
-    transition: 0.25s;
+    font-weight: 600;
+    opacity: 0.75;
+    transition: .25s;
   }
 
   .nav-menu a:hover {
@@ -906,9 +916,11 @@ footer::before {
     color: var(--orange-vibrant);
   }
 
+  /* ===== HERO ===== */
   .hero-banner {
-    margin-bottom: 25px;
     border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 30px;
   }
 
   .hero-banner img {
@@ -916,37 +928,46 @@ footer::before {
     object-fit: cover;
   }
 
+  /* ===== BLITZ ===== */
   .blitz-headline {
-    flex-direction: row;
-    border-radius: 16px;
-    margin: 30px auto 60px;
-    max-width: 1280px;
+    display: flex;
+    max-width: 1240px;
+    margin: 40px auto 60px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,.25);
   }
 
   .blitz-content {
-    padding: 60px;
     width: 55%;
-  }
-
-  .blitz-content h1 {
-    font-size: 4.2em;
+    padding: 60px;
   }
 
   .blitz-tag {
-    font-size: 2em;
+    font-size: 1.9em;
+    opacity: 0.9;
+  }
+
+  .blitz-content h1 {
+    font-size: 4.1em;
+    letter-spacing: 2px;
+    text-shadow: none; /* remove peso exagerado */
   }
 
   .blitz-img {
     width: 45%;
   }
 
+  /* ===== TITULOS ===== */
   .section-title {
     font-size: 3.2em;
     margin-bottom: 40px;
+    border-left-width: 5px;
   }
 
+  /* ===== GRID ===== */
   .news-grid {
-    grid-template-columns: 3fr 1.3fr;
+    grid-template-columns: 3fr 1.2fr;
     gap: 50px;
     align-items: start;
   }
@@ -956,64 +977,81 @@ footer::before {
     gap: 35px;
   }
 
+  /* ===== CARD ===== */
   .news-card {
-    border-radius: 14px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.08);
   }
 
-
+  .news-card:hover {
+    transform: translateY(-6px);
+  }
 
   .card-img {
     height: 260px;
   }
 
-  .card-content h3 {
-    font-size: 1.8em;
+  .card-content {
+    padding: 22px;
   }
 
+  .card-content h3 {
+    font-size: 1.75em;
+  }
+
+  /* ===== SIDEBAR ===== */
   .side-content {
     position: sticky;
-    top: 95px;
-    padding: 28px;
+    top: 90px;
+    padding: 26px;
+    border-radius: 16px;
   }
 
   .side-content h4 {
-    font-size: 2.4em;
+    font-size: 2.3em;
   }
 
   .trend-item {
-    padding: 18px 0;
+    padding: 16px 0;
   }
 
   .trend-number {
-    font-size: 3.4em;
+    font-size: 3.2em;
   }
 
+  /* ===== CARROSSEL ===== */
   .carousel-slide {
-    height: 460px;
+    height: 480px;
   }
 
   .slide-content-overlay {
     width: 55%;
     padding: 40px;
     font-size: 1.05em;
-
+    border-radius: 0 18px 0 0;
   }
 
+  .carousel-control {
+    width: 46px;
+    height: 46px;
+    font-size: 24px;
+    background: rgba(255,255,255,.25);
+  }
+
+  /* ===== STORIES ===== */
   .stories-wrapper {
-    padding: 10px 0 15px;
+    padding: 12px 0 18px;
   }
 
   .story,
   .storye {
     width: 82px;
     height: 82px;
-}
-        
-  /* ======================
-     FOOTER
-  ====================== */
+  }
+
+  /* ===== FOOTER ===== */
   footer {
-    padding: 55px 20px 40px;
+    padding: 60px 20px 45px;
   }
 
   .footer-links a {
@@ -1025,5 +1063,4 @@ footer::before {
     height: 46px;
     font-size: 1.25em;
   }
-
 }
