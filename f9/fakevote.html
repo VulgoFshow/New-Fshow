@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Votação</title>
+<title>Votação Livre</title>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
@@ -39,9 +39,8 @@ button {
   cursor: pointer;
 }
 
-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
+button.loading {
+  opacity: .7;
 }
 </style>
 </head>
@@ -51,8 +50,8 @@ button:disabled {
 <div class="container">
 
   <div class="hero-card">
-    <h1>Voto Coletivo</h1>
-    <p>Seu clique envia votos para todos os participantes.</p>
+    <h1>Votação Aberta</h1>
+    <p>Você pode votar quantas vezes quiser.</p>
   </div>
 
   <button id="botaoVotar">VOTAR</button>
@@ -60,7 +59,7 @@ button:disabled {
 </div>
 
 <script>
-/* ================= SUPABASE (IGUAL AO SEU) ================= */
+/* ================= SUPABASE ================= */
 
 const _supabase = window.supabase.createClient(
   'https://vchvvvvzulrkovjmiokg.supabase.co',
@@ -76,29 +75,28 @@ const participantes = [
   'Felipe Feto'
 ];
 
-/* ================= VOTAÇÃO ================= */
+/* ================= VOTAÇÃO LIVRE ================= */
 
 document.getElementById("botaoVotar").onclick = async () => {
   const btn = document.getElementById("botaoVotar");
-  btn.disabled = true;
+  btn.classList.add("loading");
   btn.innerText = "Enviando votos...";
 
   try {
     for (const nome of participantes) {
-      // 2 votos por participante
       await _supabase.from('bparedao5').insert([{ participante: nome }]);
       await _supabase.from('bparedao5').insert([{ participante: nome }]);
     }
 
-    alert("Votos computados com sucesso!");
-    btn.innerText = "VOTOS ENVIADOS ✔";
+    btn.innerText = "VOTAR NOVAMENTE";
 
   } catch (e) {
     console.error(e);
-    alert("Erro ao votar");
-    btn.disabled = false;
+    alert("Erro ao enviar votos");
     btn.innerText = "VOTAR";
   }
+
+  btn.classList.remove("loading");
 };
 </script>
 
