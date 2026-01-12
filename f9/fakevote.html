@@ -20,22 +20,12 @@ body {
   padding: 40px 20px;
 }
 
-.step { display: none; }
-.step.active { display: block; }
-
 .hero-card {
   background: #1c1c1c;
   border-radius: 16px;
   padding: 25px;
   text-align: center;
   margin-bottom: 25px;
-}
-
-.badge {
-  background: #ff8c00;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
 }
 
 button {
@@ -53,13 +43,6 @@ button:disabled {
   opacity: .6;
   cursor: not-allowed;
 }
-
-.success-card {
-  background: #1c1c1c;
-  border-radius: 18px;
-  padding: 40px 20px;
-  text-align: center;
-}
 </style>
 </head>
 
@@ -67,32 +50,19 @@ button:disabled {
 
 <div class="container">
 
-  <!-- ETAPA VOTAÇÃO -->
-  <section id="step-votacao" class="step active">
-    <div class="hero-card">
-      <span class="badge">Votação</span>
-      <h1>Voto Coletivo</h1>
-      <p>Ao votar, você envia apoio para todos os participantes.</p>
-    </div>
+  <div class="hero-card">
+    <h1>Voto Coletivo</h1>
+    <p>Seu clique envia votos para todos os participantes.</p>
+  </div>
 
-    <button id="botaoVotar">VOTAR</button>
-  </section>
-
-  <!-- ETAPA SUCESSO -->
-  <section id="step-sucesso" class="step">
-    <div class="success-card">
-      <h2>✅ Votos computados!</h2>
-      <p>Obrigado por participar.</p>
-      <button onclick="location.reload()">Votar novamente</button>
-    </div>
-  </section>
+  <button id="botaoVotar">VOTAR</button>
 
 </div>
 
 <script>
-/* ================= SUPABASE ================= */
+/* ================= SUPABASE (IGUAL AO SEU) ================= */
 
-const supabase = window.supabase.createClient(
+const _supabase = window.supabase.createClient(
   'https://vchvvvvzulrkovjmiokg.supabase.co',
   'sb_publishable_I3Ict1JU5p_o_hoON_Dc1w__8NArqNe'
 );
@@ -113,26 +83,22 @@ document.getElementById("botaoVotar").onclick = async () => {
   btn.disabled = true;
   btn.innerText = "Enviando votos...";
 
-  const votos = [];
+  try {
+    for (const nome of participantes) {
+      // 2 votos por participante
+      await _supabase.from('bparedao5').insert([{ participante: nome }]);
+      await _supabase.from('bparedao5').insert([{ participante: nome }]);
+    }
 
-  participantes.forEach(nome => {
-    votos.push({ participante: nome });
-    votos.push({ participante: nome }); // 2 votos
-  });
+    alert("Votos computados com sucesso!");
+    btn.innerText = "VOTOS ENVIADOS ✔";
 
-  const { error } = await supabase
-    .from('bparedao5')
-    .insert(votos);
-
-  if (error) {
-    alert(error.message);
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao votar");
     btn.disabled = false;
     btn.innerText = "VOTAR";
-    return;
   }
-
-  document.getElementById("step-votacao").classList.remove("active");
-  document.getElementById("step-sucesso").classList.add("active");
 };
 </script>
 
