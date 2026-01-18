@@ -1,8 +1,12 @@
-import { createClient } from "@supabase/supabase-js";
+const { createClient } = require("@supabase/supabase-js");
+
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+  throw new Error("Variáveis do Supabase não configuradas");
+}
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_ANON_KEY
 );
 
 const TABLES_PERMITIDAS = [
@@ -19,7 +23,7 @@ const TABLES_PERMITIDAS = [
   "finalf10"
 ];
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Método não permitido" });
   }
@@ -40,7 +44,7 @@ export default async function handler(req, res) {
 
     const { error } = await supabase
       .from(table)
-      .insert({ participante });
+      .insert([{ participante }]);
 
     if (error) {
       console.error("Erro Supabase:", error);
@@ -53,4 +57,4 @@ export default async function handler(req, res) {
     console.error("Erro geral:", err);
     return res.status(500).json({ error: "Erro interno" });
   }
-}
+};
