@@ -757,9 +757,9 @@ button:disabled {
   <div class="confirm-card">
     <img id="fotoConfirm" src="" alt="Voto"/>
     <p id="nomeConfirm"></p>
-    <button class="voltar" onclick="location.reload()">
-     VOTAR NOVAMENTE
-    </button>
+<button class="voltar" onclick="location.href='javotou.html'">
+  VOTAR NOVAMENTE
+</button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
     <div class="notice">Votação segue aberta até às 13:00</div>
     
@@ -770,7 +770,7 @@ button:disabled {
   // =================== CONFIG ===================
   const TABLE_VOTACAO = "f3roça11";
   const VOTOS_POR_CAPTCHA = 10;
-  const RESET_VOTACAO = "v1"; // Mude esta const para liberar novos votos para quem já votou
+  const RESET_VOTACAO = "v1"; 
 
   const aberturaBR = new Date("2025-11-16T21:00:00");
   const encerramentoBR = new Date("2026-12-19T18:00:00");
@@ -780,7 +780,6 @@ button:disabled {
     const lastReset = localStorage.getItem("last_reset_voted_" + TABLE_VOTACAO);
     const hasVoted = localStorage.getItem("voted_" + TABLE_VOTACAO);
     
-    // Se já votou e a constante de reset ainda é a mesma, redireciona
     if (hasVoted === "true" && lastReset === RESET_VOTACAO) {
       window.location.replace("javotou.html");
     }
