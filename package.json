@@ -1,5 +1,8 @@
 {
+  "name": "votacao-fshow",
+  "private": true,
+  "type": "module",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
+    "firebase-admin": "^12.0.0"
   }
 }
