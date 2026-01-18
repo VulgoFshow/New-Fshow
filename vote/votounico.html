@@ -768,26 +768,21 @@ button:disabled {
 
 <script type="module">
   // =================== CONFIG ===================
-  const TABLE_VOTACAO = "testes123";
-  const VOTOS_POR_CAPTCHA = 1;
-  const RESET_VOTACAO = "v1"; 
+  const TABLE_VOTACAO = "f3roça11";
+  const VOTOS_POR_CAPTCHA = 10;
+  const RESET_VOTACAO = "v1"; // Mude esta const para liberar novos votos para quem já votou
 
   const aberturaBR = new Date("2025-11-16T21:00:00");
-  const encerramentoBR = new Date("2026-12-19T18:00:00");
+  const encerramentoBR = new Date("2025-12-19T18:00:00");
 
-  // =================== VERIFICAÇÃO DE VOTO POR IP ===================
-  async function verificarVotoUnico() {
-    try {
-      const res = await fetch("/api/vote/check?table=" + TABLE_VOTACAO);
-      const data = await res.json();
-      
-      const lastReset = localStorage.getItem("last_reset_voted_" + TABLE_VOTACAO);
-      
-      if (data.voted && lastReset === RESET_VOTACAO) {
-        window.location.replace("javotou.html");
-      }
-    } catch (e) {
-      console.error("Erro ao verificar voto:", e);
+  // =================== VERIFICAÇÃO DE VOTO ÚNICO ===================
+  function verificarVotoUnico() {
+    const lastReset = localStorage.getItem("last_reset_voted_" + TABLE_VOTACAO);
+    const hasVoted = localStorage.getItem("voted_" + TABLE_VOTACAO);
+    
+    // Se já votou e a constante de reset ainda é a mesma, redireciona
+    if (hasVoted === "true" && lastReset === RESET_VOTACAO) {
+      window.location.replace("javotou.html");
     }
   }
 
@@ -1046,8 +1041,10 @@ async function submitVote(participante) {
         return;
       }
 
-      // Sucesso
+      // Sucesso - Marca que já votou e salva a constante de reset atual
+      localStorage.setItem("voted_" + TABLE_VOTACAO, "true");
       localStorage.setItem("last_reset_voted_" + TABLE_VOTACAO, RESET_VOTACAO);
+
       let restantes = getVotosRestantes() - 1;
       setVotosRestantes(Math.max(restantes, 0));
 
