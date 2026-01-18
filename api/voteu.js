@@ -19,8 +19,9 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
   try {
-    const { participante, table } = req.body;
-    if (!participante || !table) {
+    const { participante, collection } = req.body;
+
+    if (!participante || !collection) {
       return res.status(400).end();
     }
 
@@ -35,7 +36,7 @@ export default async function handler(req, res) {
 
     const votoRef = db
       .collection("votacoes")
-      .doc(table)
+      .doc(collection)
       .collection("votos")
       .doc(ip);
 
@@ -52,7 +53,7 @@ export default async function handler(req, res) {
 
     const contadorRef = db
       .collection("votacoes")
-      .doc(table)
+      .doc(collection)
       .collection("contador")
       .doc(participante);
 
