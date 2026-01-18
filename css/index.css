@@ -1,10 +1,3 @@
-
-/* 
-   ==========================================================================
-   CSS COMPLETO E CORRIGIDO - PORTAL FLOP
-   Foco: Manter 100% dos elementos originais e corrigir o layout para PC.
-   ========================================================================== */
-
 :root {  
     --orange-vibrant: #FF8C00;  
     --purple-dark: #8A2BE2;  
@@ -769,4 +762,110 @@ footer::before {
     .footer-links { gap: 16px; }
     .footer-links a { font-size: 0.9rem; }
     .social-icons a { width: 46px; height: 46px; font-size: 1.25em; }
+}
+
+/* ====== CONTAINER ====== */
+.vote-frame {
+  background: linear-gradient(135deg, #ffd966, #ff914d, #d64545, #5c2c06);
+  padding: 14px;
+  border-radius: 28px;
+  max-width: 640px;
+  width: 92%;
+  margin: 50px auto;
+  box-shadow: 0 10px 40px rgba(40, 20, 0, 0.2);
+  background-size: 300% 300%;
+  animation: gradientMove 5s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==================================== 
+   Vote Hero
+   ==================================== */
+
+.vote-mock {
+  background: rgba(255, 248, 239, 0.9);
+  border-radius: 22px;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+}
+
+/* ====== IMAGEM ====== */
+.vote-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.2);
+}
+
+/* ====== CARTÃO ====== */
+.vote-card {
+  margin: -22px 28px 30px 28px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+  border: 1px solid rgba(80,40,0,0.08);
+  box-shadow: 0 8px 30px rgba(80,40,0,0.08);
+  text-align: center;
+}
+
+.vote-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #3d1a00;
+  margin-bottom: 24px;
+  text-shadow: 0 1px 0 #fff;
+}
+
+/* ====== BOTÃO ====== */
+.vote-btn {
+  border-radius: 18px;
+  padding: 20px 24px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff7e9;
+  background: linear-gradient(90deg,#ff9f4d,#ff6a00);
+  box-shadow: 0 6px 18px rgba(60,20,0,0.2);
+  transition: all .18s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.vote-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  transition: all 0.6s ease;
+}
+
+.vote-btn:hover::before {
+  left: 100%;
+}
+
+.vote-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(60,20,0,0.25);
+}
+
+.vote-icon {
+  font-size: 28px;
 }
