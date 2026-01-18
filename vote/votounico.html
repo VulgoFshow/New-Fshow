@@ -718,13 +718,6 @@ button:disabled {
     </div>
   </label>
 
-    <label class="option">
-    <img src="https://i.ibb.co/1fT3chNR/Vitor.jpg" alt="Vitor">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Vitor"> Vitor
-    </div>
-  </label>
-
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -780,6 +773,8 @@ button:disabled {
   const TABLE_VOTACAO = "paiolf10u";
   const VOTOS_POR_CAPTCHA = 1;
   const RESET_VOTACAO = "paiol"; 
+  const COLLECTION_VOTACAO = "paredao_semana_3";
+
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
   const encerramentoBR = new Date("2026-01-19T19:00:00");
@@ -812,6 +807,16 @@ button:disabled {
     const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
     return new Date(spString);
   }
+
+  const res = await fetch("/api/voteu", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    participante,
+    collection: COLLECTION_VOTACAO
+  })
+});
+
 
   // =================== VERIFICAÇÃO DE HORÁRIO ===================
   async function verificarHorarios() {
