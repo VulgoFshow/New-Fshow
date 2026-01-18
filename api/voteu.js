@@ -20,7 +20,6 @@ export default async function handler(req, res) {
 
   try {
     const { participante, table } = req.body;
-
     if (!participante || !table) {
       return res.status(400).end();
     }
@@ -64,7 +63,7 @@ export default async function handler(req, res) {
 
     return res.status(200).end();
   } catch (err) {
-    console.error(err);
+    console.error("Erro no voto:", err);
     return res.status(500).end();
   }
 }
