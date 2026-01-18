@@ -6,15 +6,18 @@ const supabase = createClient(
 );
 
 const TABLES_PERMITIDAS = [
-  "bvidro",
-  "f3roça10",
-  "f3roça11",
-  "f3roça12",
-  "f3roça13",
-  "f3roça14",
-  "f3roça15",
-  "f3roça16",
-  "f3final"
+  "paiolf10",
+  "roça1f10",
+  "roça2f10",
+  "roça3f10",
+  "roça4f10",
+  "roça5f10",
+  "roça6f10",
+  "roça7f10",
+  "roça8f10",
+  "roça9f10",
+  "finalf10",
+  "roça8f10"
 ];
 
 export default async function handler(req, res) {
