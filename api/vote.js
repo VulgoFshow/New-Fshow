@@ -1,8 +1,8 @@
-const { createClient } = require("@supabase/supabase-js");
+export const config = {
+  runtime: "nodejs"
+};
 
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
-  throw new Error("Variáveis do Supabase não configuradas");
-}
+const { createClient } = require("@supabase/supabase-js");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -48,13 +48,13 @@ module.exports = async function handler(req, res) {
 
     if (error) {
       console.error("Erro Supabase:", error);
-      return res.status(500).json({ error: "Erro ao salvar voto" });
+      return res.status(500).json({ error: error.message });
     }
 
     return res.status(200).json({ success: true });
 
   } catch (err) {
     console.error("Erro geral:", err);
-    return res.status(500).json({ error: "Erro interno" });
+    return res.status(500).json({ error: err.message });
   }
 };
