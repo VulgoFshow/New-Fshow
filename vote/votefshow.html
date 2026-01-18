@@ -772,6 +772,7 @@ button:disabled {
   // =================== CONFIG ===================
   const TABLE_VOTACAO = "paiolf10";
   const VOTOS_POR_CAPTCHA = 10;
+  const DEBUG = true;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
   const encerramentoBR = new Date("2026-01-19T19:00:00");
@@ -792,6 +793,14 @@ button:disabled {
     const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
     return new Date(spString);
   }
+
+  function redirect(url) {
+  if (DEBUG) {
+    console.warn("REDIRECT BLOQUEADO →", url);
+    return;
+  }
+  window.location.href = url;
+}
 
   // =================== VERIFICAÇÃO DE HORÁRIO ===================
   async function verificarHorarios() {
@@ -1025,7 +1034,7 @@ async function submitVote(participante) {
       }
 
       if (!res.ok) {
-        window.location.href = "erro.html";
+       redirect("erro.html");
         return;
       }
 
