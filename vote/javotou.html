@@ -2,132 +2,147 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Você já votou!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: 'Inter', sans-serif;
-      background: #f2f8f9;
-      color: #222;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      width: 100%;
-      max-width: 430px;
-      background: #fff;
-      border-radius: 20px;
-      padding: 40px 32px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-      animation: pop 0.4s ease-out;
-    }
-    @keyframes pop {
-      from { transform: scale(0.85); opacity: 0; }
-      to   { transform: scale(1); opacity: 1; }
-    }
-    .titulo {
-      font-size: 28px;
-      font-weight: 800;
-      color: #0895a0;
-      margin-bottom: 16px;
-    }
-    .foto-voto {
-      width: 140px;
-      height: 140px;
-      border-radius: 20px;
-      object-fit: cover;
-      margin: 20px auto;
-      display: block;
-      border: 6px solid #e6f9fa;
-      box-shadow: 0 4px 15px rgba(8,149,160,0.15);
-    }
-    .nome {
-      font-size: 26px;
-      font-weight: 800;
-      margin: 12px 0 30px;
-      color: #222;
-    }
-    .botao {
-      display: block;
-      width: 100%;
-      background: #0895a0;
-      color: white;
-      padding: 18px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: 700;
-      margin: 20px 0;
-      transition: background 0.2s;
-    }
-    .botao:hover { background: #067f89; }
-    .link-secundario {
-      display: block;
-      margin-top: 16px;
-      color: #0895a0;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .link-secundario:hover { text-decoration: underline; }
-    .emoji { font-size: 42px; margin-bottom: 10px; }
-  </style>
+  <title>Fshow/Votação - Já Votou</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<meta name="theme-color" content="#8A2BE2">
+
+<style>
+/* ===== VARIÁVEIS GLOBAIS (IGUAIS AO ORIGINAL) ===== */
+:root {
+  --bg: #121212;
+  --card-bg: #2b2b2b;
+  --panel-border: rgba(255, 255, 255, 0.06);
+  --accent: #00b7b0;
+  --text: #fff;
+  --muted: #bdbdbd;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== BASE ===== */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
+    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 400px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  animation: slideUp 0.6s ease;
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+p {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+
+.success-icon {
+  font-size: 50px;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+/* ===== BOTÃO ===== */
+.btn-voltar {
+  display: inline-block;
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--border-radius);
+  background: var(--accent);
+  color: #fff;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.btn-voltar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
+  background: #00c9b8;
+}
+
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 20px;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 500px;
+    padding: 60px 40px;
+  }
+}
+</style>
 </head>
 <body>
 
   <div class="container">
-    <div class="emoji">Checkmark</div>
-    <div class="titulo">Voto registrado com sucesso!</div>
-
-    <img id="fotoVotado" class="foto-voto" src="" alt="Participante votado">
-    <div id="nomeVotado" class="nome">Carregando...</div>
-
-    <a href="voto-sem-limites.html" class="botao">
-      Voto sem Limites
-    </a>
-
-    <a href="resultado.html" class="link-secundario">
-      Ver Resultado Parcial →
-    </a>
-
-    <a href="#" id="votarNovamente" class="link-secundario" style="margin-top:24px; display:block;">
-      ← Votar em outro participante
-    </a>
+    <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo Fshow" class="logo">
+    
+    <div class="success-icon">✔</div>
+    
+    <h1>Voto já computado!</h1>
+    
+    <p>Identificamos que você já participou desta rodada de votação. <br> Agradecemos o seu interesse!</p>
+    
+    <a href="index.html" class="btn-voltar">VOLTAR PARA O INÍCIO</a>
+    
+    <div class="notice">A votação segue aberta até às 19:00</div>
   </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const nomeSalvo = localStorage.getItem("ultimoVotoNome");
-      const fotoSalva = localStorage.getItem("ultimoVotoImg");
-
-      const nomeEl = document.getElementById("nomeVotado");
-      const fotoEl = document.getElementById("fotoVotado");
-
-      // Se NÃO tiver voto salvo → manda de volta pra enquete
-      if (!nomeSalvo || !fotoSalva) {
-        window.location.href = "enquete.html";
-        return;
-      }
-
-      nomeEl.textContent = nomeSalvo;
-      fotoEl.src = fotoSalva;
-      fotoEl.alt = "Foto de " + nomeSalvo;
-
-      document.getElementById("votarNovamente").addEventListener("click", (e) => {
-        e.preventDefault();
-        localStorage.removeItem("ultimoVotoNome");
-        localStorage.removeItem("ultimoVotoImg");
-        window.location.href = "enquete.html";
-      });
-    });
-  </script>
 
 </body>
 </html>
