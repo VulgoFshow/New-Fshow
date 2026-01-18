@@ -769,120 +769,108 @@ button:disabled {
 </div>
 
 <script type="module">
-  // =================== CONFIG ===================
-  const TABLE_VOTACAO = "paiolf10u";
-  const VOTOS_POR_CAPTCHA = 1;
-  const RESET_VOTACAO = "paiol"; 
-  const COLLECTION_VOTACAO = "paredao_semana_3";
+/* ======================================================
+   CONFIGURAÇÃO CENTRAL (MUDA SÓ AQUI)
+====================================================== */
+const COLLECTION_VOTACAO = "paredao_semana_3";
+const TABLE_VOTACAO = "paiolf10u";
+const RESET_VOTACAO = "paiol";
+const VOTOS_POR_CAPTCHA = 1;
 
+const aberturaBR = new Date("2026-01-18T19:00:00");
+const encerramentoBR = new Date("2026-01-19T19:00:00");
 
-  const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-01-19T19:00:00");
-
-  // =================== VERIFICAÇÃO DE VOTO ÚNICO ===================
-  function verificarVotoUnico() {
-    const lastReset = localStorage.getItem("last_reset_voted_" + TABLE_VOTACAO);
-    const hasVoted = localStorage.getItem("voted_" + TABLE_VOTACAO);
-    
-    if (hasVoted === "true" && lastReset === RESET_VOTACAO) {
-      window.location.replace("javotou.html");
-    }
+/* ======================================================
+   VOTO ÚNICO LOCAL (UX)
+====================================================== */
+(function verificarVotoUnico() {
+  const lastReset = localStorage.getItem("last_reset_voted_" + TABLE_VOTACAO);
+  const hasVoted = localStorage.getItem("voted_" + TABLE_VOTACAO);
+  if (hasVoted === "true" && lastReset === RESET_VOTACAO) {
+    window.location.replace("javotou.html");
   }
+})();
 
-  verificarVotoUnico();
-
-  // =================== HORA DO SERVIDOR ===================
-  async function getServerTime() {
-    try {
-      const res = await fetch("/api/time");
-      const data = await res.json();
-      return new Date(data.now);
-    } catch (e) {
-      console.error("Erro ao verificar horário:", e);
-      return null;
-    }
+/* ======================================================
+   HORA DO SERVIDOR
+====================================================== */
+async function getServerTime() {
+  try {
+    const res = await fetch("/api/time");
+    const data = await res.json();
+    return new Date(data.now);
+  } catch {
+    return null;
   }
+}
 
-  function toSaoPauloDate(date) {
-    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    return new Date(spString);
+function toSaoPauloDate(date) {
+  return new Date(
+    date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })
+  );
+}
+
+(async function verificarHorarios() {
+  const agoraServer = await getServerTime();
+  if (!agoraServer) return;
+
+  const agoraBR = toSaoPauloDate(agoraServer);
+
+  if (agoraBR < aberturaBR) return window.location.replace("aguarde.html");
+  if (agoraBR > encerramentoBR) return window.location.replace("fechada.html");
+})();
+
+/* ======================================================
+   ELEMENTOS DOM
+====================================================== */
+const votoTela = document.getElementById("votoTela");
+const confirmTela = document.getElementById("confirmTela");
+const nomeConfirm = document.getElementById("nomeConfirm");
+const fotoConfirm = document.getElementById("fotoConfirm");
+
+const botaoCaptcha = document.getElementById("botaoCaptcha");
+const botaoVotar = document.getElementById("botaoVotar");
+
+const popupCaptcha = document.getElementById("popupCaptcha");
+const captchaGrid = document.getElementById("captchaGrid");
+const captchaInstruction = document.getElementById("captcha-instrucao");
+const verifyBtn = document.getElementById("captchaConfirm");
+const refreshBtn = document.getElementById("captchaRefresh");
+const statusEl = document.getElementById("captchaStatus");
+const captchaRefImg = document.getElementById("captcha-ref-img");
+
+/* ======================================================
+   CONTROLE LOCAL DE VOTOS
+====================================================== */
+let captchaVisualLiberado = false;
+let captchaAberto = false;
+let pendingVote = null;
+
+function hashTag(tag) {
+  const secret = "CPTX_2025_FSHOW_🔥";
+  let h = 0;
+  for (let i = 0; i < (tag + secret).length; i++) {
+    h = (h << 5) - h + (tag + secret).charCodeAt(i);
+    h |= 0;
   }
+  return h;
+}
 
-  const res = await fetch("/api/voteu", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    participante,
-    collection: COLLECTION_VOTACAO
-  })
-});
+function getVotosRestantes() {
+  const raw = localStorage.getItem("votosRestantes");
+  const token = localStorage.getItem("token");
+  if (!raw || !token) return 0;
+  return hashTag(raw) == token ? parseInt(raw) : 0;
+}
 
+function setVotosRestantes(n) {
+  localStorage.setItem("votosRestantes", String(n));
+  localStorage.setItem("token", hashTag(String(n)));
+}
 
-  // =================== VERIFICAÇÃO DE HORÁRIO ===================
-  async function verificarHorarios() {
-    const agoraServer = await getServerTime();
-
-    const agoraBR = toSaoPauloDate(agoraServer);
-
-    if (agoraBR < aberturaBR) {
-      window.location.replace("aguarde.html");
-      return;
-    }
-
-    if (agoraBR > encerramentoBR) {
-      window.location.replace("fechada.html");
-      return;
-    }
-
-    console.log("VOTAÇÃO ABERTA");
-  }
-
-  verificarHorarios();
-
-  // =================== ELEMENTOS DOM ===================
-  const votoTela = document.getElementById("votoTela");
-  const confirmTela = document.getElementById("confirmTela");
-  const nomeConfirm = document.getElementById("nomeConfirm");
-  const fotoConfirm = document.getElementById("fotoConfirm");
-  const botaoCaptcha = document.getElementById("botaoCaptcha");
-  const botaoVotar = document.getElementById("botaoVotar");
-  const popupCaptcha = document.getElementById("popupCaptcha");
-  const captchaGrid = document.getElementById("captchaGrid");
-  const captchaInstruction = document.getElementById("captcha-instrucao");
-  const verifyBtn = document.getElementById("captchaConfirm");
-  const refreshBtn = document.getElementById("captchaRefresh");
-  const statusEl = document.getElementById("captchaStatus");
-
-  let captchaVisualLiberado = false;
-
-  // =================== CONTROLE DE VOTOS LOCAL ===================
-  let pendingVote = null;
-  let captchaAberto = false;
-
-  function hashTag(tag) {
-    const secret = "CPTX_2025_FSHOW_🔥";
-    let h = 0;
-    const str = tag + secret;
-    for (let i = 0; i < str.length; i++) {
-      h = (h << 5) - h + str.charCodeAt(i);
-      h |= 0;
-    }
-    return h;
-  }
-
-  function getVotosRestantes() {
-    const raw = localStorage.getItem("votosRestantes");
-    const token = localStorage.getItem("token");
-    if (!raw || !token) return 0;
-    return hashTag(raw) == token ? parseInt(raw) : 0;
-  }
-
-  function setVotosRestantes(n) {
-    localStorage.setItem("votosRestantes", String(n));
-    localStorage.setItem("token", hashTag(String(n)));
-  }
-
-  // =================== PROMPTS DO CAPTCHA ===================
+/* ======================================================
+   CAPTCHA
+====================================================== */
   const prompts = [
     {
       label: "Clique nas imagens contendo algo que pode se locomover",
@@ -917,280 +905,136 @@ button:disabled {
     }
   ];
 
-  let captchaCurrentPrompt = null;
+let captchaCurrentPrompt = null;
 
-  // =================== FUNÇÕES DO CAPTCHA ===================
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
 
-  function generateCaptcha() {
-    captchaGrid.innerHTML = "";
-    statusEl.textContent = "";
-    verifyBtn.disabled = true;
+function generateCaptcha() {
+  captchaGrid.innerHTML = "";
+  statusEl.textContent = "";
+  verifyBtn.disabled = true;
 
-    captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    captchaInstruction.textContent = captchaCurrentPrompt.label;
+  captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+  captchaInstruction.textContent = captchaCurrentPrompt.label;
 
-const ref = captchaCurrentPrompt.images.find(
-  i => i.tag === captchaCurrentPrompt.correctTag
-);
+  const ref = captchaCurrentPrompt.images.find(
+    i => i.tag === captchaCurrentPrompt.correctTag
+  );
 
-if (ref) {
   captchaRefImg.src = ref.src;
   captchaRefImg.style.display = "block";
-} else {
-  captchaRefImg.style.display = "none";
+
+  shuffle(captchaCurrentPrompt.images).slice(0, 9).forEach(img => {
+    const el = document.createElement("img");
+    el.src = img.src;
+    el.className = "captcha-img";
+    el.dataset.hash = hashTag(img.tag);
+
+    el.onclick = () => {
+      el.classList.toggle("selected");
+      verifyBtn.disabled = !document.querySelector(".captcha-img.selected");
+    };
+
+    captchaGrid.appendChild(el);
+  });
 }
 
-    const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
-    const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
-
-    // Garante entre 3 e 5 imagens corretas
-    const correctCount = Math.min(Math.floor(Math.random() * 3) + 3, correctImages.length);
-    const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
-    const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
-
-    const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
-
-    allImages.forEach(img => {
-      const imgEl = document.createElement("img");
-      imgEl.src = img.src;
-      imgEl.className = "captcha-img";
-      imgEl.dataset.hash = hashTag(img.tag);
-
-      imgEl.addEventListener("click", () => {
-        imgEl.classList.toggle("selected");
-        verifyBtn.disabled = !document.querySelectorAll(".captcha-img.selected").length;
-      });
-
-      captchaGrid.appendChild(imgEl);
-    });
-  }
-
-  function abrirCaptcha() {
-    if (captchaAberto) return;
-    captchaAberto = true;
-    generateCaptcha();
-    popupCaptcha.classList.add("active");
-    botaoVotar.disabled = true;
-  }
-
-  function fecharCaptcha() {
-    popupCaptcha.classList.remove("active");
-    captchaAberto = false;
-    botaoVotar.disabled = getVotosRestantes() <= 0;
-  }
-
-  // Refresh
-  refreshBtn.addEventListener("click", () => {
-    statusEl.textContent = "";
-    document.querySelectorAll(".captcha-img").forEach(img => img.classList.remove("selected"));
-    verifyBtn.disabled = true;
-    generateCaptcha();
-  });
-
-  // Verificação
-  verifyBtn.addEventListener("click", () => {
-    const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
-    let sucesso = true;
-
-    document.querySelectorAll(".captcha-img").forEach(img => {
-      const isCorrect = img.dataset.hash == corretoHash;
-      const isSelected = img.classList.contains("selected");
-      if (isCorrect !== isSelected) sucesso = false;
-    });
-
-    if (!sucesso) {
-      statusEl.textContent = "Incorreto. Tente novamente.";
-      statusEl.style.color = "red";
-      setTimeout(generateCaptcha, 1200);
-      return;
-    }
-
-    // Sucesso
-    setVotosRestantes(VOTOS_POR_CAPTCHA);
-    captchaVisualLiberado = true;
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.classList.add("active");
-
-    fecharCaptcha();
-
-    // Se havia voto pendente, envia
-    if (pendingVote) {
-      const voto = pendingVote;
-      pendingVote = null;
-      setTimeout(() => submitVote(voto), 300);
-    }
-  });
-
-  // =================== ENVIO DO VOTO ===================
-async function submitVote(participante) {
-  try {
-    botaoVotar.disabled = true;
-    const prevText = botaoVotar.textContent;
-    botaoVotar.textContent = "Enviando voto...";
-    
-    await new Promise(resolve => setTimeout(resolve, 210));
-
-    const res = await fetch("/api/vote", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ participante, table: TABLE_VOTACAO })
-    });
-
-
-      if (res.status === 410) {
-        window.location.href = "fechada.html";
-        return;
-      }
-
-      if (!res.ok) {
-        window.location.href = "erro.html";
-        return;
-      }
-
-      // Sucesso - Marca que já votou e salva a constante de reset atual
-      localStorage.setItem("voted_" + TABLE_VOTACAO, "true");
-      localStorage.setItem("last_reset_voted_" + TABLE_VOTACAO, RESET_VOTACAO);
-
-      let restantes = getVotosRestantes() - 1;
-      setVotosRestantes(Math.max(restantes, 0));
-
-      if (restantes <= 0) {
-        botaoCaptcha.setAttribute("aria-pressed", "false");
-        botaoVotar.classList.remove("active");
-        captchaVisualLiberado = false;
-      }
-
-      votoTela.style.display = "none";
-      confirmTela.style.display = "flex";
-      nomeConfirm.textContent = participante;
-
-      if (fotos[participante]) {
-  fotoConfirm.src = fotos[participante];
-  fotoConfirm.style.display = "block";
-} else {
-  fotoConfirm.style.display = "none";
+function abrirCaptcha() {
+  if (captchaAberto) return;
+  captchaAberto = true;
+  generateCaptcha();
+  popupCaptcha.classList.add("active");
 }
 
+function fecharCaptcha() {
+  popupCaptcha.classList.remove("active");
+  captchaAberto = false;
+}
 
-      botaoVotar.textContent = prevText;
-      botaoVotar.disabled = false;
+/* ======================================================
+   VERIFICA CAPTCHA
+====================================================== */
+verifyBtn.onclick = () => {
+  const correto = hashTag(captchaCurrentPrompt.correctTag);
+  let ok = true;
 
-    } catch (e) {
-      console.error(e);
-      window.location.href = "erro.html";
-    }
-  }
-
-  // =================== EVENTOS PRINCIPAIS ===================
-  botaoVotar.addEventListener("click", () => {
-    const escolhido = document.querySelector('input[name="vote"]:checked');
-    if (!escolhido) return alert("Selecione alguém para votar!");
-
-    if (getVotosRestantes() <= 0) {
-      pendingVote = escolhido.value;
-      abrirCaptcha();
-      return;
-    }
-
-    submitVote(escolhido.value);
+  document.querySelectorAll(".captcha-img").forEach(img => {
+    const certo = img.dataset.hash == correto;
+    const marcado = img.classList.contains("selected");
+    if (certo !== marcado) ok = false;
   });
 
-botaoCaptcha.addEventListener("click", () => {
-  if (captchaVisualLiberado) return;
-
-  const restantes = getVotosRestantes();
-
-  if (restantes > 0) {
-    captchaVisualLiberado = true;
-
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.disabled = false;
-    botaoVotar.classList.add("active");
+  if (!ok) {
+    statusEl.textContent = "Incorreto. Tente novamente.";
+    setTimeout(generateCaptcha, 1000);
     return;
   }
 
-  abrirCaptcha();
-});
+  setVotosRestantes(VOTOS_POR_CAPTCHA);
+  captchaVisualLiberado = true;
+  botaoVotar.disabled = false;
+  botaoVotar.classList.add("active");
+  fecharCaptcha();
 
+  if (pendingVote) {
+    const v = pendingVote;
+    pendingVote = null;
+    submitVote(v);
+  }
+};
 
-  // =================== DETECÇÃO DE COMPORTAMENTO SUSPEITO ===================
-  let suspeita = 0;
-  const LIMITE_SUSPEITA = 6;
-  let ultimoClique = 0;
-  let ultimoMouseX = 0, ultimoMouseY = 0;
-  let ultimaTrocaAba = Date.now();
-  let scrollsRecentes = 0;
-  let tentativasVoto = 0;
+/* ======================================================
+   ENVIO DO VOTO
+====================================================== */
+async function submitVote(participante) {
+  const res = await fetch("/api/voteu", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      participante,
+      collection: COLLECTION_VOTACAO
+    })
+  });
 
-  function exigirCaptchaPorSuspeita() {
-    if (captchaAberto) return;
-    console.warn("Atividade suspeita — CAPTCHA exigido");
-    setVotosRestantes(0);
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    botaoVotar.disabled = true;
-    botaoVotar.classList.remove("active");
+  if (res.status === 410) return window.location.href = "fechada.html";
+  if (!res.ok) return window.location.href = "erro.html";
+
+  localStorage.setItem("voted_" + TABLE_VOTACAO, "true");
+  localStorage.setItem("last_reset_voted_" + TABLE_VOTACAO, RESET_VOTACAO);
+
+  votoTela.style.display = "none";
+  confirmTela.style.display = "flex";
+  nomeConfirm.textContent = participante;
+
+  if (fotos[participante]) {
+    fotoConfirm.src = fotos[participante];
+    fotoConfirm.style.display = "block";
+  }
+}
+
+/* ======================================================
+   EVENTOS
+====================================================== */
+botaoVotar.onclick = () => {
+  const escolhido = document.querySelector('input[name="vote"]:checked');
+  if (!escolhido) return alert("Selecione alguém!");
+
+  if (getVotosRestantes() <= 0) {
+    pendingVote = escolhido.value;
     abrirCaptcha();
+    return;
   }
 
-  document.addEventListener("click", () => {
-    const agora = Date.now();
-    if (agora - ultimoClique < 50) suspeita++;
-    ultimoClique = agora;
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
+  submitVote(escolhido.value);
+};
 
-  document.addEventListener("mousemove", (e) => {
-    const dx = Math.abs(e.clientX - ultimoMouseX);
-    const dy = Math.abs(e.clientY - ultimoMouseY);
-    if (dx > 350 || dy > 350) suspeita++;
-    ultimoMouseX = e.clientX;
-    ultimoMouseY = e.clientY;
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
+botaoCaptcha.onclick = () => abrirCaptcha();
 
-  document.addEventListener("wheel", () => {
-    scrollsRecentes++;
-    if (scrollsRecentes > 14) {
-      suspeita++;
-      scrollsRecentes = 0;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      const agora = Date.now();
-      if (agora - ultimaTrocaAba < 450) suspeita++;
-      ultimaTrocaAba = agora;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  botaoVotar.addEventListener("click", () => {
-    tentativasVoto++;
-    if (tentativasVoto > 3) {
-      suspeita++;
-      tentativasVoto = 0;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  // Zera suspeita ao passar no CAPTCHA
-  verifyBtn.addEventListener("click", () => {
-    if (statusEl.textContent.includes("Incorreto")) return;
-    suspeita = 0;
-    tentativasVoto = 0;
-    scrollsRecentes = 0;
-  });
-
-    // =================== FOTOS DOS PARTICIPANTES ===================
+/* ======================================================
+   FOTOS
+====================================================== */
   const fotos = {
     "Caio": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Caio.jpg?raw=true",
     "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true",
@@ -1216,17 +1060,13 @@ botaoCaptcha.addEventListener("click", () => {
     "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Vitor.jpg?raw=true"
   };
 
-  const captchaRefImg = document.getElementById("captcha-ref-img");
 
-  // =================== INICIALIZAÇÃO ===================
-(function init() {
-  captchaVisualLiberado = false;
-  botaoCaptcha.setAttribute("aria-pressed", "false");
-  botaoVotar.disabled = true;
-  botaoVotar.classList.remove("active");
-})();
-
-
+/* ======================================================
+   INIT
+====================================================== */
+botaoVotar.disabled = true;
+botaoVotar.classList.remove("active");
 </script>
+
 </body>  
 </html>
