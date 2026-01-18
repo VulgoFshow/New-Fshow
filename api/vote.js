@@ -16,8 +16,7 @@ const TABLES_PERMITIDAS = [
   "roça7f10",
   "roça8f10",
   "roça9f10",
-  "finalf10",
-  "roça8f10"
+  "finalf10"
 ];
 
 export default async function handler(req, res) {
@@ -41,17 +40,14 @@ export default async function handler(req, res) {
 
     const { error } = await supabase
       .from(table)
-      .insert([
-        { participante },
-        { participante }
-      ]);
+      .insert({ participante });
 
     if (error) {
       console.error("Erro Supabase:", error);
       return res.status(500).json({ error: "Erro ao salvar voto" });
     }
 
-    return res.status(200).json({ success: true, votos: 2 });
+    return res.status(200).json({ success: true });
 
   } catch (err) {
     console.error("Erro geral:", err);
