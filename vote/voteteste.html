@@ -289,7 +289,7 @@
     /* ======================================================
        CONFIGURAÇÃO CENTRAL
     ====================================================== */
-    const ROUND_ID = "rodada_01"; 
+    const ROUND_ID = "rodada_00"; 
 
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
@@ -381,8 +381,7 @@
 
         // 1. Verificar se já votou NESTA RODADA (LocalStorage)
         if (localStorage.getItem("voted_fshow_round") === ROUND_ID) {
-          alert("Você já votou nesta rodada!");
-          location.reload();
+          window.location.href = "javotou.html";
           return;
         }
 
