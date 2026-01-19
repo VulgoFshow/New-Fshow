@@ -306,13 +306,13 @@
 <script type="module">
   import { createClient } from "https://esm.sh/@supabase/supabase-js";
 
-  const supabaseUrl = "https://vchvvvvzulrkovjmiokg.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjaHZ2dnZ6dWxya292am1pb2tnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg0NzYwMDIsImV4cCI6MjA3NDA1MjAwMn0.vHgI_JDNKDECR8H1wVC3LwGeMux8gAKkoeCmPSPuSA4";
+  const supabaseUrl = "https://rvizztgogtepktmnfdhc.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ2aXp6dGdvZ3RlcGt0bW5mZGhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyMzMxNTUsImV4cCI6MjA4MTgwOTE1NX0.D99jjvkKafPLy64Dpzl9HPHh6uf-4IzsOwAwu2Q-eK0";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   /* ================= CONFIGURAÇÃO ================= */
-  const TIPO_VOTACAO = "FICAR"; // "ELIMINAR" ou "FICAR"
-  const NUM_ELIMINADOS = 1;       // usado apenas quando for FICAR
+  const TIPO_VOTACAO = "ELIMINAR"; // "ELIMINAR" ou "FICAR"
+  const NUM_ELIMINADOS = 1;       
   /* ================================================ */
 
   const ctx = document.getElementById("grafico").getContext("2d");
@@ -472,4 +472,5 @@
     carregarVotos();
   });
 </script>
+
 
