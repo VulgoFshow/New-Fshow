@@ -683,40 +683,31 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que ENTRE na F10?</h1>
-    <h2>Vote quantas vezes quiser.</h2>
+    <h1>Quem você quer que FIQUE na F10? <br> Vote quantas vezes quiser.</h1>
     <div class="espacador"></div>
     
 <div class="options">
 
   <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true" alt="Ella">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true" alt="Cícero">
     <div class="option-content">
-      <input type="radio" name="vote" value="Ella"> Ella
+      <input type="radio" name="vote" value="Cícero"> Cícero
     </div>
   </label>
 
   <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Eueu.jpg?raw=true" alt="Eueu">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ludmila.jpg?raw=true" alt="Ludmila">
     <div class="option-content">
-      <input type="radio" name="vote" value="Eueu"> Eueu
+      <input type="radio" name="vote" value="Ludmila"> Ludmila
     </div>
   </label>
 
     <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true" alt="Koyuh">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mikael.jpg?raw=true" alt="Mikael">
     <div class="option-content">
-      <input type="radio" name="vote" value="Koyuh"> Koyuh
+      <input type="radio" name="vote" value="Mikael"> Mikael
     </div>
   </label>
-
-    <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Luca">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Luca"> Luca
-    </div>
-  </label>
-
 
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -778,12 +769,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "paiolf10";
+  const TABLE_VOTACAO = "roça 1f10";
   const VOTOS_POR_CAPTCHA = 10;
-  const DEBUG = true;
+  const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-01-19T19:00:00");
+  const encerramentoBR = new Date("2026-01-20T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
