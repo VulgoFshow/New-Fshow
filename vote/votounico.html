@@ -319,6 +319,53 @@
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    const aberturaBR = new Date("2026-01-18T19:00:00");
+    const encerramentoBR = new Date("2026-01-20T19:00:00");
+
+  // =================== HORA DO SERVIDOR (Via API Pública) ===================
+  async function getServerTime() {
+    try {
+      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
+      const data = await res.json();
+      return new Date(data.datetime);
+    } catch (e) {
+      console.error("Erro ao verificar horário:", e);
+      return new Date(); 
+    }
+  }
+
+  function toSaoPauloDate(date) {
+    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+    return new Date(spString);
+  }
+
+  function redirect(url) {
+  if (DEBUG) {
+    console.warn("REDIRECT BLOQUEADO →", url);
+    return;
+  }
+  window.location.href = url;
+}
+
+  // =================== VERIFICAÇÃO DE HORÁRIO ===================
+  async function verificarHorarios() {
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR < aberturaBR) {
+      window.location.replace("aguarde.html");
+      return;
+    }
+
+    if (agoraBR > encerramentoBR) {
+      window.location.replace("fechada.html");
+      return;
+    }
+
+    console.log("VOTAÇÃO ABERTA");
+  }
+
+  verificarHorarios();
     /* ======================================================
        ESTADO E ELEMENTOS
     ====================================================== */
