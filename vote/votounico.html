@@ -1,11 +1,11 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <title>Fshow/Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
- <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
+  <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
@@ -213,6 +213,29 @@
       width: 100%;
     }
 
+    /* ===== TELA DE ERRO ===== */
+    #errorTela {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      min-height: 80vh;
+      text-align: center;
+    }
+
+    .error-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .error-msg { color: #ff6b6b; font-weight: 600; margin: 15px 0; font-size: 18px; }
+    .error-detail { color: var(--muted); font-size: 14px; margin: 10px 0; }
+
     /* DESKTOP */
     @media (min-width: 1024px) {
       .container { max-width: 900px; }
@@ -276,6 +299,14 @@
     </div>
   </div>
 
+  <div id="errorTela">
+    <div class="error-card">
+      <div class="error-msg">⚠ Erro ao Votar</div>
+      <div class="error-detail" id="errorMessage"></div>
+      <button class="voltar" onclick="location.reload()" style="margin-top: 20px;">TENTAR NOVAMENTE</button>
+    </div>
+  </div>
+
   <script>
     /* ======================================================
        CONFIGURAÇÃO CENTRAL
@@ -294,131 +325,209 @@
     const botaoVotar = document.getElementById("botaoVotar");
     const votoTela = document.getElementById("votoTela");
     const confirmTela = document.getElementById("confirmTela");
+    const errorTela = document.getElementById("errorTela");
     const nomeConfirm = document.getElementById("nomeConfirm");
     const fotoConfirm = document.getElementById("fotoConfirm");
+    const errorMessage = document.getElementById("errorMessage");
     
     let captchaToken = null;
     let userIP = null;
 
-  const fotos = {
-    "Caio": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Caio.jpg?raw=true",
-    "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true",
-    "Duck": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Duck.jpg?raw=true",
-    "Ella": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true",
-    "Eueu": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Eueu.jpg?raw=true",
-    "Fernanda": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Fernanda.jpg?raw=true",
-    "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true",
-    "Kelvin": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Kelvin.jpg?raw=true",
-    "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true",
-    "Luca": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true",
-    "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Lucas.jpg?raw=true",
-    "Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true",
-    "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ludmila.jpg?raw=true",
-    "Mari": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mari.jpg?raw=true",
-    "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mariana.jpg?raw=true",
-    "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mikael.jpg?raw=true",
-    "Mira": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mira.jpg?raw=true",
-    "Nick": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Nick.jpg?raw=true",
-    "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true",
-    "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Renata.jpg?raw=true",
-    "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Rose.jpg?raw=true",
-    "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Vitor.jpg?raw=true"
-  };
-
+    const fotos = {
+      "Caio": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Caio.jpg?raw=true",
+      "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true",
+      "Duck": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Duck.jpg?raw=true",
+      "Ella": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true",
+      "Eueu": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Eueu.jpg?raw=true",
+      "Fernanda": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Fernanda.jpg?raw=true",
+      "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true",
+      "Kelvin": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Kelvin.jpg?raw=true",
+      "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true",
+      "Luca": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true",
+      "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Lucas.jpg?raw=true",
+      "Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true",
+      "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ludmila.jpg?raw=true",
+      "Mari": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mari.jpg?raw=true",
+      "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mariana.jpg?raw=true",
+      "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mikael.jpg?raw=true",
+      "Mira": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mira.jpg?raw=true",
+      "Nick": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Nick.jpg?raw=true",
+      "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true",
+      "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Renata.jpg?raw=true",
+      "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Rose.jpg?raw=true",
+      "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Vitor.jpg?raw=true"
+    };
 
     /* ======================================================
        FUNÇÕES
     ====================================================== */
+    
+    /**
+     * Obtém o IP do usuário
+     */
     async function getIP() {
       try {
         const res = await fetch("https://api.ipify.org?format=json");
         const data = await res.json();
+        console.log("IP obtido:", data.ip);
         return data.ip;
-      } catch (e) { return null; }
+      } catch (e) { 
+        console.error("Erro ao obter IP:", e);
+        return null; 
+      }
     }
 
-    // Callback do hCaptcha
+    /**
+     * Callback do hCaptcha - chamado quando o captcha é completado
+     */
     window.onCaptchaSuccess = function(token) {
+      console.log("hCaptcha completado com sucesso");
       captchaToken = token;
       checkReady();
     };
 
-    // Verifica se pode habilitar o botão
+    /**
+     * Verifica se pode habilitar o botão de votação
+     */
     function checkReady() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
       if (selecionado && captchaToken) {
         botaoVotar.disabled = false;
         botaoVotar.classList.add("active");
+        console.log("Botão habilitado - Opção selecionada:", selecionado.value);
       } else {
         botaoVotar.disabled = true;
         botaoVotar.classList.remove("active");
       }
     }
 
-    // Escuta mudanças nos radios
+    /**
+     * Escuta mudanças nos radios de votação
+     */
     document.querySelectorAll('input[name="vote"]').forEach(radio => {
       radio.addEventListener('change', checkReady);
     });
 
+    /**
+     * Mostra tela de erro
+     */
+    function showError(mensagem) {
+      votoTela.style.display = "none";
+      confirmTela.style.display = "none";
+      errorTela.style.display = "flex";
+      errorMessage.textContent = mensagem;
+      console.error("Erro exibido:", mensagem);
+    }
+
+    /**
+     * Função principal de envio de voto
+     */
     async function submitVote() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
-      if (!selecionado || !captchaToken) return;
+      
+      // Validações iniciais
+      if (!selecionado) {
+        alert("Por favor, selecione uma opção!");
+        return;
+      }
 
+      if (!captchaToken) {
+        alert("Por favor, complete o captcha!");
+        return;
+      }
+
+      // Desabilita o botão durante o processamento
       botaoVotar.disabled = true;
       botaoVotar.innerText = "Processando...";
 
       try {
+        // 1. Obter IP do usuário
+        console.log("Iniciando processo de votação...");
         userIP = await getIP();
 
-        // 1. Verificar se já votou NESTA RODADA (LocalStorage)
-        if (localStorage.getItem("voted_fshow_round") === ROUND_ID) {
-          window.location.href = "javotou.html";
+        if (!userIP) {
+          throw new Error("Não foi possível obter seu IP. Verifique sua conexão.");
+        }
+
+        // 2. Verificar se já votou nesta rodada (LocalStorage)
+        const votoAnterior = localStorage.getItem("voted_fshow_round");
+        if (votoAnterior === ROUND_ID) {
+          console.log("Usuário já votou nesta rodada");
+          showError("Você já votou nesta rodada! Apenas um voto por pessoa.");
           return;
         }
 
-        // 2. Enviar para Supabase (Incluindo o round_id)
-        const { error } = await supabaseClient
+        // 3. Enviar voto para Supabase
+        console.log("Enviando voto para Supabase...");
+        const { data, error } = await supabaseClient
           .from(TABLE_NAME)
           .insert([{ 
             participante: selecionado.value, 
             ip: userIP,
             round_id: ROUND_ID,
             hcaptcha_token: captchaToken
-          }]);
+          }])
+          .select();
 
+        // 4. Tratamento de erros do Supabase
         if (error) {
-          // Se o erro for de unicidade (IP + ROUND_ID), significa que já votou
-          if (error.code === '23505') { 
-            alert("Este IP já registrou um voto nesta rodada!");
+          console.error("Erro do Supabase:", error);
+          
+          // Verifica se é erro de constraint (voto duplicado)
+          if (error.code === '23505' || error.message.includes('duplicate')) {
+            console.log("Voto duplicado detectado");
             localStorage.setItem("voted_fshow_round", ROUND_ID);
-          } else {
-            throw error;
+            showError("Este IP já registrou um voto nesta rodada!");
+            return;
           }
-          location.reload();
-          return;
+
+          // Outros erros
+          throw new Error(error.message || "Erro desconhecido ao enviar voto");
         }
 
-        // 3. Sucesso
+        // 5. Verificar se a inserção foi bem-sucedida
+        if (!data || data.length === 0) {
+          throw new Error("Voto não foi registrado no banco de dados");
+        }
+
+        console.log("Voto registrado com sucesso:", data);
+
+        // 6. Marcar como votado no localStorage
         localStorage.setItem("voted_fshow_round", ROUND_ID);
+
+        // 7. Exibir tela de sucesso
         votoTela.style.display = "none";
+        errorTela.style.display = "none";
         confirmTela.style.display = "flex";
         nomeConfirm.textContent = selecionado.value;
         fotoConfirm.src = fotos[selecionado.value] || "";
 
+        console.log("Voto computado com sucesso!");
+
       } catch (e) {
-        console.error(e);
-        alert("Erro ao votar. Tente novamente.");
+        console.error("Erro durante votação:", e);
+        showError(e.message || "Erro ao votar. Tente novamente.");
         botaoVotar.disabled = false;
         botaoVotar.innerText = "Votar";
       }
     }
 
+    /**
+     * Evento de clique do botão de votação
+     */
     botaoVotar.onclick = submitVote;
 
-    // Verificação inicial
+    /**
+     * Verificação inicial ao carregar a página
+     */
     (async function init() {
-      if (localStorage.getItem("voted_fshow_round") === ROUND_ID) {
-        // Opcional: Bloquear interface se já votou na rodada atual
+      console.log("Página carregada");
+      
+      // Se já votou nesta rodada, você pode adicionar lógica aqui
+      const votoAnterior = localStorage.getItem("voted_fshow_round");
+      if (votoAnterior === ROUND_ID) {
+        console.log("Usuário já votou nesta rodada");
+        // Opcional: Mostrar mensagem ou bloquear interface
       }
     })();
   </script>
