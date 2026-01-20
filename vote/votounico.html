@@ -311,11 +311,16 @@
     /* ======================================================
        CONFIGURAÇÃO CENTRAL
     ====================================================== */
-    const ROUND_ID = "rodada_02"; 
+    const ROUND_ID = "rodada_02";
+    const DEBUG = false; // Mude para true para debug
+
+    // Datas de abertura e encerramento
+    const aberturaBR = new Date("2026-01-19T18:00:00");
+    const encerramentoBR = new Date("2026-01-20T19:00:00");
 
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "roça1f10";
+    const TABLE_NAME = "roça 1f10";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -359,9 +364,91 @@
     };
 
     /* ======================================================
-       FUNÇÕES
+       FUNÇÕES DE HORÁRIO
     ====================================================== */
-    
+
+    /**
+     * Obtém a hora do servidor via API pública
+     */
+    async function getServerTime() {
+      try {
+        const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
+        const data = await res.json();
+        console.log("Hora do servidor obtida:", data.datetime);
+        return new Date(data.datetime);
+      } catch (e) {
+        console.error("Erro ao verificar horário:", e);
+        return new Date(); // Fallback para hora local
+      }
+    }
+
+    /**
+     * Converte data para fuso horário de São Paulo
+     */
+    function toSaoPauloDate(date) {
+      const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+      return new Date(spString);
+    }
+
+    /**
+     * Função de redirecionamento com suporte a debug
+     */
+    function redirect(url) {
+      if (DEBUG) {
+        console.warn("REDIRECT BLOQUEADO →", url);
+        return;
+      }
+      window.location.replace(url);
+    }
+
+    /**
+     * Verifica se a votação está aberta
+     */
+    async function verificarHorarios() {
+      console.log("Verificando horários de votação...");
+      
+      const agoraServer = await getServerTime();
+      const agoraBR = toSaoPauloDate(agoraServer);
+
+      console.log("Hora atual (BR):", agoraBR);
+      console.log("Abertura:", aberturaBR);
+      console.log("Encerramento:", encerramentoBR);
+
+      if (agoraBR < aberturaBR) {
+        console.log("Votação ainda não abriu");
+        redirect("aguarde.html");
+        return false;
+      }
+
+      if (agoraBR > encerramentoBR) {
+        console.log("Votação foi encerrada");
+        redirect("fechada.html");
+        return false;
+      }
+
+      console.log("✅ VOTAÇÃO ABERTA");
+      return true;
+    }
+
+    /**
+     * Verifica se o usuário já votou nesta rodada
+     */
+    function verificarVotoAnterior() {
+      const votoAnterior = localStorage.getItem("voted_fshow_round");
+      
+      if (votoAnterior === ROUND_ID) {
+        console.log("Usuário já votou nesta rodada - Redirecionando para javotou.html");
+        redirect("javotou.html");
+        return true;
+      }
+      
+      return false;
+    }
+
+    /* ======================================================
+       FUNÇÕES DE VOTAÇÃO
+    ====================================================== */
+
     /**
      * Obtém o IP do usuário
      */
@@ -441,7 +528,15 @@
       botaoVotar.innerText = "Processando...";
 
       try {
-        // 1. Obter IP do usuário
+        // 1. Verificar horário da votação
+        const votacaoAberta = await verificarHorarios();
+        if (!votacaoAberta) {
+          botaoVotar.disabled = false;
+          botaoVotar.innerText = "Votar";
+          return;
+        }
+
+        // 2. Obter IP do usuário
         console.log("Iniciando processo de votação...");
         userIP = await getIP();
 
@@ -449,7 +544,7 @@
           throw new Error("Não foi possível obter seu IP. Verifique sua conexão.");
         }
 
-        // 2. Verificar se já votou nesta rodada (LocalStorage)
+        // 3. Verificar se já votou nesta rodada (LocalStorage)
         const votoAnterior = localStorage.getItem("voted_fshow_round");
         if (votoAnterior === ROUND_ID) {
           console.log("Usuário já votou nesta rodada");
@@ -457,7 +552,7 @@
           return;
         }
 
-        // 3. Enviar voto para Supabase
+        // 4. Enviar voto para Supabase
         console.log("Enviando voto para Supabase...");
         const { data, error } = await supabaseClient
           .from(TABLE_NAME)
@@ -469,7 +564,7 @@
           }])
           .select();
 
-        // 4. Tratamento de erros do Supabase
+        // 5. Tratamento de erros do Supabase
         if (error) {
           console.error("Erro do Supabase:", error);
           
@@ -485,51 +580,4 @@
           throw new Error(error.message || "Erro desconhecido ao enviar voto");
         }
 
-        // 5. Verificar se a inserção foi bem-sucedida
-        if (!data || data.length === 0) {
-          throw new Error("Voto não foi registrado no banco de dados");
-        }
-
-        console.log("Voto registrado com sucesso:", data);
-
-        // 6. Marcar como votado no localStorage
-        localStorage.setItem("voted_fshow_round", ROUND_ID);
-
-        // 7. Exibir tela de sucesso
-        votoTela.style.display = "none";
-        errorTela.style.display = "none";
-        confirmTela.style.display = "flex";
-        nomeConfirm.textContent = selecionado.value;
-        fotoConfirm.src = fotos[selecionado.value] || "";
-
-        console.log("Voto computado com sucesso!");
-
-      } catch (e) {
-        console.error("Erro durante votação:", e);
-        showError(e.message || "Erro ao votar. Tente novamente.");
-        botaoVotar.disabled = false;
-        botaoVotar.innerText = "Votar";
-      }
-    }
-
-    /**
-     * Evento de clique do botão de votação
-     */
-    botaoVotar.onclick = submitVote;
-
-    /**
-     * Verificação inicial ao carregar a página
-     */
-    (async function init() {
-      console.log("Página carregada");
-      
-      // Se já votou nesta rodada, você pode adicionar lógica aqui
-      const votoAnterior = localStorage.getItem("voted_fshow_round");
-      if (votoAnterior === ROUND_ID) {
-        console.log("Usuário já votou nesta rodada");
-        // Opcional: Mostrar mensagem ou bloquear interface
-      }
-    })();
-  </script>
-</body>
-</html>
+        // 6. Verificar
