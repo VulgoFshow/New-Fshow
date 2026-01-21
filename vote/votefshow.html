@@ -53,7 +53,7 @@
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
-  --back: #0d0d0d
+  --back: #0d0d0d;
 }
 
 /* ===== BASE ===== */
@@ -549,7 +549,7 @@ button:disabled {
 
 #botaoCaptcha:disabled {
   opacity: 0.6;
-  cursor: ->not-allowed;
+  cursor: not-allowed;
   pointer-events: none;
 }
 
@@ -1174,7 +1174,10 @@ botaoCaptcha.addEventListener("click", () => {
     "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Vitor.jpg?raw=true"
   };
 
-  const captchaRefImg = document.getElementById("captcha-ref-img");
+  const captchaRefImg = document.createElement("img");
+  captchaRefImg.id = "captcha-ref-img";
+  captchaRefImg.style.display = "none";
+  document.querySelector(".captcha-header").appendChild(captchaRefImg);
 
   // =================== INICIALIZAÇÃO ===================
 (function init() {
