@@ -689,23 +689,23 @@ button:disabled {
 <div class="options">
 
   <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true" alt="Cícero">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Fernanda.jpg?raw=true" alt="Opção 1">
     <div class="option-content">
-      <input type="radio" name="vote" value="Cícero"> Cícero
+      <input type="radio" name="vote" value="Fernanda"> Fernanda
     </div>
   </label>
 
   <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ludmila.jpg?raw=true" alt="Ludmila">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Kelvin.jpg?raw=true" alt="Opção 2">
     <div class="option-content">
-      <input type="radio" name="vote" value="Ludmila"> Ludmila
+      <input type="radio" name="vote" value="Kelvin"> Kelvin
     </div>
   </label>
 
     <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mikael.jpg?raw=true" alt="Mikael">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Nick.jpg?raw=true" alt="Opção 3">
     <div class="option-content">
-      <input type="radio" name="vote" value="Mikael"> Mikael
+      <input type="radio" name="vote" value="Nick"> Nick
     </div>
   </label>
 
@@ -720,7 +720,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>Votar</button>
 
-    <div class="notice">A votação segue aberta até às 18:00</div>
+    <div class="notice">A votação segue aberta até às 19:00</div>
   </div>
   
 <!-- POPUP CAPTCHA -->
@@ -728,7 +728,6 @@ button:disabled {
   <div class="captcha-box">
     <div class="captcha-header">
       <span id="captcha-instrucao">Toque em itens comumente usados com o item mostrado</span>
-      <img id="captcha-ref-img" src="" alt="Referência">
     </div>
     <div id="captchaGrid" class="captcha-grid"></div>
     <div class="captcha-footer">
@@ -769,12 +768,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "roça1f10";
+  const TABLE_VOTACAO = "roça2f10";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-01-20T19:00:00");
+  const encerramentoBR = new Date("2026-01-21T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
