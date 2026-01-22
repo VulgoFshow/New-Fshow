@@ -312,7 +312,7 @@
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   /* ================= CONFIGURAÇÃO ================= */
-  const TIPO_VOTACAO = "ELIMINAR"; // "ELIMINAR" ou "FICAR"
+  const TIPO_VOTACAO = "FICAR"; // "ELIMINAR" ou "FICAR"
   const NUM_ELIMINADOS = 1;       
   /* ================================================ */
 
@@ -473,6 +473,7 @@
     carregarVotos();
   });
 </script>
+
 
 
 
