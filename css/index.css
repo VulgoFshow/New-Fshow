@@ -922,7 +922,6 @@ footer::before {
         body {
             font-family: 'Inter', 'Segoe UI', sans-serif;
             background: transparent;
-            overflow: hidden;
         }
 
         /* Container Principal */
@@ -1373,6 +1372,16 @@ footer::before {
             z-index: 10001;
             max-width: 350px;
         }
+
+            .poll-wrapper {
+                pointer-events: none;
+            }
+            
+            .poll-button,
+            .poll-modal {
+                pointer-events: auto;
+            }
+
 
         @keyframes slideInRight {
             from {
