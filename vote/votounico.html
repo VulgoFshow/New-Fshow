@@ -260,26 +260,26 @@
     <h1>Quem você quer que FIQUE na F10? <br> Apenas um voto por pessoa. </h1>
     <div class="options">
       
-    <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Caio.jpg?raw=true" alt="Opção 2">
+<label class="option">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Duck.jpg?raw=true" alt="Opção 2">
     <div class="option-content">
-      <input type="radio" name="vote" value="Caio"> Caio
+      <input type="radio" name="vote" value="Duck"> Duck
     </div>
     </label>
   
   <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Fernanda.jpg?raw=true" alt="Opção 1">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Eueu.jpg?raw=true" alt="Opção 1">
     <div class="option-content">
-      <input type="radio" name="vote" value="Fernanda"> Fernanda
+      <input type="radio" name="vote" value="Eueu"> Eueu
     </div>
   </label>
   
     <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true" alt="Opção 3">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Lucas.jpg?raw=true" alt="Opção 3">
     <div class="option-content">
-      <input type="radio" name="vote" value="Paiva"> Paiva
+      <input type="radio" name="vote" value="Lucas"> Lucas
     </div>
-  </label>
+    </label>
   
     </div>
     <div class="captcha-container">
@@ -311,16 +311,16 @@
     /* ======================================================
        CONFIGURAÇÃO CENTRAL
     ====================================================== */
-    const ROUND_ID = "rodada_03"; 
+    const ROUND_ID = "rodada_04"; 
 
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "roça3f10";
+    const TABLE_NAME = "roça4f10";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const aberturaBR = new Date("2026-01-18T19:00:00");
-    const encerramentoBR = new Date("2026-01-22T19:00:00");
+    const encerramentoBR = new Date("2026-01-24T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
