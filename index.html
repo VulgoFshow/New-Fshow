@@ -373,9 +373,9 @@ Portal Flop
 </div>
 </div>
 
-    <div class="poll-wrapper">
+<div class="poll-wrapper">
     <button class="poll-button" onclick="openPoll()">
-        <img src="/favicon.png" alt="Enquete">
+        <img src="https://upload.wikimedia.org/wikipedia/pt/3/34/Logotipo_de_Big_Brother_Brasil.png" alt="Enquete">
         <span>Enquete</span>
     </button>
 
@@ -383,7 +383,7 @@ Portal Flop
         <div class="poll-modal-header">
             <button class="close-btn" onclick="closePoll()">&times;</button>
             <h1>Enquete</h1>
-            <p>Quem é seu Favorito no BBB 26?</p>
+            <p>Quem você quer que FIQUE no BBB 26?</p>
         </div>
 
         <div class="poll-modal-content">
@@ -588,10 +588,6 @@ Portal Flop
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    
 
             <div id="resultsScreen">
                 <div id="resultsList"></div>
@@ -600,6 +596,7 @@ Portal Flop
         </div>
 
         <div class="poll-modal-footer">
+            <div class="security-info">Votação Segura</div>
             <button class="vote-btn" id="voteBtn" onclick="submitVote()">Votar</button>
             <button class="vote-btn reset" id="resetBtn" onclick="resetVote()" style="display: none;">Votar Novamente</button>
         </div>
@@ -607,83 +604,6 @@ Portal Flop
 </div>
 
 <div id="notification" class="notification"></div>
-    </div> 
-    </div>
-</div>
-</div>
-    
-<script>
-function toggleMenu() {
-  document.getElementById("menu").classList.toggle("open");
-}
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const track = document.querySelector('.carousel-track');
-    let slides = Array.from(document.querySelectorAll('.carousel-slide'));
-    const nextButton = document.querySelector('.next-control');
-    const prevButton = document.querySelector('.prev-control');
-    const indicatorsContainer = document.querySelector('.carousel-indicators');
-
-    if (!slides.length) return;
-
-    slides.forEach(slide => {
-        slide.style.minWidth = '100%';
-    });
-
-    indicatorsContainer.innerHTML = '';
-    slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'indicator' + (i === 0 ? ' active-indicator' : '');
-        dot.type = 'button';
-        dot.setAttribute('data-index', i);
-        indicatorsContainer.appendChild(dot);
-    });
-    let indicators = Array.from(indicatorsContainer.querySelectorAll('.indicator'));
-
-    let currentSlideIndex = 0;
-
-    const updateCarousel = (targetIndex) => {
-        if (targetIndex < 0) targetIndex = slides.length - 1;
-        if (targetIndex >= slides.length) targetIndex = 0;
-
-        track.style.transform = `translateX(-${targetIndex * 100}%)`;
-        currentSlideIndex = targetIndex;
-
-        indicators.forEach(ind => ind.classList.remove('active-indicator'));
-        if (indicators[targetIndex]) indicators[targetIndex].classList.add('active-indicator');
-    };
-
-    nextButton.addEventListener('click', () => updateCarousel(currentSlideIndex + 1));
-    prevButton.addEventListener('click', () => updateCarousel(currentSlideIndex - 1));
-
-    indicatorsContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.indicator');
-        if (!btn) return;
-        const idx = Number(btn.getAttribute('data-index'));
-        if (!Number.isNaN(idx)) updateCarousel(idx);
-    });
-
-    const refreshSlides = () => {
-        slides = Array.from(document.querySelectorAll('.carousel-slide'));
-        indicatorsContainer.innerHTML = '';
-        slides.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.className = 'indicator' + (i === currentSlideIndex ? ' active-indicator' : '');
-            dot.type = 'button';
-            dot.setAttribute('data-index', i);
-            indicatorsContainer.appendChild(dot);
-        });
-        indicators = Array.from(indicatorsContainer.querySelectorAll('.indicator'));
-        if (currentSlideIndex >= slides.length) currentSlideIndex = 0;
-        updateCarousel(currentSlideIndex);
-    };
-
-    updateCarousel(0);
-});
-
-</script>
 
 <script>
     const firebaseConfig = {
