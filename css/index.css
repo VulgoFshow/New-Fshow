@@ -934,7 +934,7 @@ footer::before {
         }
 
         .poll-button {
-            width: 70px;
+            width: 40px;
             height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 0 20px 20px 0;
