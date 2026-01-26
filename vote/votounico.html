@@ -383,8 +383,8 @@ button#botaoVotar:disabled {
       <div class="h-captcha" data-sitekey="6dfe175a-b5e8-4474-ac38-a84436a8004c" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
 
-<button class="voltar" onclick="window.location.href='votefshow.html'">
-  Voto da Torcida
+<button id="botaoVotar" onclick="submitVote()" disabled>
+ VOTAR
 </button>
     
     <div class="notice">A votação segue aberta até às 19:00</div>
@@ -395,7 +395,9 @@ button#botaoVotar:disabled {
       <img id="fotoConfirm" src="" alt="Voto"/>
       <p id="nomeConfirm"></p>
       <div class="success-msg">✔ Voto computado com sucesso!</div>
-      <button class="voltar" href="votefshow.html">Voto da Torcida</button>
+<button class="voltar" onclick="window.location.href='votefshow.html'">
+  VOTO DA TORCIDA
+</button>
     </div>
   </div>
 
