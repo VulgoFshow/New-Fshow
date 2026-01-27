@@ -170,8 +170,25 @@ h1 {
   background: var(--accent);
 }
 
-/* ===== BOTÃO PRINCIPAL ===== */
-button {
+  /* ===== SPINNER ===== */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== BOTÃO PRINCIPAL ===== */
+  button {
   width: 100%;
   padding: 14px;
   font-size: 16px;
@@ -696,7 +713,7 @@ button:disabled {
     </label>
 
     <label class="option">
-    <img src="https://i.ibb.co/N65fqCMC/Picsart-26-01-25-22-25-56-893.jpg" alt="Opção 2">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Guilherme.jpg?raw=true" alt="Opção 2">
     <div class="option-content">
       <input type="radio" name="vote" value="Guilherme"> Guilherme
     </div>
@@ -1009,9 +1026,10 @@ async function submitVote(participante) {
   try {
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
-    botaoVotar.textContent = "Enviando voto...";
+    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
     
-    await new Promise(resolve => setTimeout(resolve, 210));
+    // Time
+    await new Promise(resolve => setTimeout(resolve, 550));
 
     const { error } = await supabase
       .from(TABLE_VOTACAO)
@@ -1019,6 +1037,8 @@ async function submitVote(participante) {
 
     if (error) {
       console.error("Erro Supabase:", error);
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = prevText;
       redirect("erro.html");
       return;
     }
@@ -1171,8 +1191,10 @@ botaoCaptcha.addEventListener("click", () => {
     "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true",
     "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Renata.jpg?raw=true",
     "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Rose.jpg?raw=true",
-    "Guilherme": "https://i.ibb.co/N65fqCMC/Picsart-26-01-25-22-25-56-893.jpg",
-    "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Vitor.jpg?raw=true"
+    "Brunno": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Brunno.jpg?raw=true",
+    "Emanuel": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Emanuel.jpg?raw=true",
+    "Guilherme": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Guilherme.jpg?raw=true",
+    "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true"
   };
 
   const captchaRefImg = document.createElement("img");
