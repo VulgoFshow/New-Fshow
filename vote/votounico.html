@@ -365,7 +365,7 @@ button#botaoVotar:disabled {
     </label>
 
     <label class="option">
-    <img src="https://i.ibb.co/N65fqCMC/Picsart-26-01-25-22-25-56-893.jpg" alt="Opção 2">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Guilherme.jpg?raw=true" alt="Opção 2">
     <div class="option-content">
       <input type="radio" name="vote" value="Guilherme"> Guilherme
     </div>
@@ -482,39 +482,38 @@ button#botaoVotar:disabled {
     let captchaToken = null;
     let userIP = null;
 
-    const fotos = {
-      "Caio": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Caio.jpg?raw=true",
-      "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true",
-      "Duck": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Duck.jpg?raw=true",
-      "Ella": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true",
-      "Eueu": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Eueu.jpg?raw=true",
-      "Fernanda": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Fernanda.jpg?raw=true",
-      "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true",
-      "Kelvin": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Kelvin.jpg?raw=true",
-      "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true",
-      "Luca": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true",
-      "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Lucas.jpg?raw=true",
-      "Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true",
-      "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ludmila.jpg?raw=true",
-      "Mari": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mari.jpg?raw=true",
-      "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mariana.jpg?raw=true",
-      "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mikael.jpg?raw=true",
-      "Mira": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mira.jpg?raw=true",
-      "Nick": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Nick.jpg?raw=true",
-      "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true",
-      "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Renata.jpg?raw=true",
-      "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Rose.jpg?raw=true",
-      "Guilherme": "https://i.ibb.co/N65fqCMC/Picsart-26-01-25-22-25-56-893.jpg",
-      "Vitor": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Vitor.jpg?raw=true"
-    };
+  const fotos = {
+    "Caio": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Caio.jpg?raw=true",
+    "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true",
+    "Duck": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Duck.jpg?raw=true",
+    "Ella": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true",
+    "Eueu": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Eueu.jpg?raw=true",
+    "Fernanda": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Fernanda.jpg?raw=true",
+    "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true",
+    "Kelvin": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Kelvin.jpg?raw=true",
+    "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true",
+    "Luca": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true",
+    "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Lucas.jpg?raw=true",
+    "Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true",
+    "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ludmila.jpg?raw=true",
+    "Mari": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mari.jpg?raw=true",
+    "Mariana": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mariana.jpg?raw=true",
+    "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mikael.jpg?raw=true",
+    "Mira": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mira.jpg?raw=true",
+    "Nick": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Nick.jpg?raw=true",
+    "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true",
+    "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Renata.jpg?raw=true",
+    "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Rose.jpg?raw=true",
+    "Brunno": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Brunno.jpg?raw=true",
+    "Emanuel": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Emanuel.jpg?raw=true",
+    "Guilherme": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Guilherme.jpg?raw=true",
+    "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true"
+  };
 
     /* ======================================================
        FUNÇÕES
     ====================================================== */
-    
-    /**
-     * Obtém o IP do usuário
-     */
+
     async function getIP() {
       try {
         const res = await fetch("https://api.ipify.org?format=json");
@@ -527,18 +526,12 @@ button#botaoVotar:disabled {
       }
     }
 
-    /**
-     * Callback do hCaptcha - chamado quando o captcha é completado
-     */
     window.onCaptchaSuccess = function(token) {
       console.log("hCaptcha completado com sucesso");
       captchaToken = token;
       checkReady();
     };
 
-    /**
-     * Verifica se pode habilitar o botão de votação
-     */
     function checkReady() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
       if (selecionado && captchaToken) {
@@ -578,7 +571,6 @@ button#botaoVotar:disabled {
         return;
       }
 
-      // Desabilita o botão durante o processamento
       botaoVotar.disabled = true;
       botaoVotar.innerText = "Processando...";
 
@@ -591,7 +583,7 @@ button#botaoVotar:disabled {
           throw new Error("Não foi possível obter seu IP. Verifique sua conexão.");
         }
 
-        // 2. Verificar se já votou nesta rodada (LocalStorage)
+        // 2. Verificar se já votou 
         const votoAnterior = localStorage.getItem("voted_fshow_round");
         if (votoAnterior === ROUND_ID) {
           console.log("Já votou");
@@ -599,8 +591,8 @@ button#botaoVotar:disabled {
           return;
         }
 
-        // 3. Enviar voto para Supabase
-        console.log("Enviando voto para Supabase...");
+        // 3. Enviar voto 
+        console.log("Enviando voto...");
         const { data, error } = await supabaseClient
           .from(TABLE_NAME)
           .insert([{ 
@@ -611,7 +603,7 @@ button#botaoVotar:disabled {
           }])
           .select();
 
-        // 4. Tratamento de erros do Supabase
+        // 4. Tratamento de erros 
         if (error) {
           console.error("Erro do Supabase:", error);
           
@@ -627,14 +619,14 @@ button#botaoVotar:disabled {
           throw new Error(error.message || "Erro desconhecido ao enviar voto");
         }
 
-        // 5. Verificar se a inserção foi bem-sucedida
+        // 5. Verificar inserção
         if (!data || data.length === 0) {
           throw new Error("Voto não foi registrado no banco de dados");
         }
 
         console.log("Voto registrado com sucesso:", data);
 
-        // 6. Marcar como votado no localStorage
+        // 6. Marcar como votado
         localStorage.setItem("voted_fshow_round", ROUND_ID);
 
         // 7. Exibir tela de sucesso
@@ -660,16 +652,14 @@ button#botaoVotar:disabled {
     botaoVotar.onclick = submitVote;
 
     /**
-     * Verificação inicial ao carregar a página
+     * Verificação de página
      */
     (async function init() {
       console.log("Página carregada");
       
-      // Se já votou nesta rodada, você pode adicionar lógica aqui
       const votoAnterior = localStorage.getItem("voted_fshow_round");
       if (votoAnterior === ROUND_ID) {
         console.log("Usuário já votou nesta rodada");
-        // Opcional: Mostrar mensagem ou bloquear interface
       }
     })();
   </script>
