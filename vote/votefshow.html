@@ -1021,7 +1021,7 @@ if (ref) {
     }
   });
 
-  // =================== ENVIO DO VOTO (DIRETO NO SUPABASE) ===================
+  // =================== ENVIO DO VOTO ===================
 async function submitVote(participante) {
   try {
     botaoVotar.disabled = true;
@@ -1029,7 +1029,7 @@ async function submitVote(participante) {
     botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
     
     // Time
-    await new Promise(resolve => setTimeout(resolve, 550));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     const { error } = await supabase
       .from(TABLE_VOTACAO)
