@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Fshow - Voto único</title>
+  <title>Fshow/Votação Segura Pro</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
@@ -13,16 +13,13 @@
     /* ======================================================
        CSS APRIMORADO - DESIGN MODERNO E RESPONSIVO
     ====================================================== */
-
-    /* ===== VARIÁVEIS GLOBAIS ===== */
     :root {
-      --bg: #06080d; /* Fundo mais escuro */
-      --card-bg: rgba(25, 25, 35, 0.85); /* Cartão menos transparente */
-      --accent: #00e6d8; /* Destaque mais brilhante */
+      --bg: #06080d;
+      --card-bg: rgba(25, 25, 35, 0.85);
+      --accent: #00e6d8;
       --accent-soft: rgba(0, 230, 216, 0.2);
       --text: #ffffff;
       --muted: #a0a4b0;
-      --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 18px;
       --transition: 0.4s cubic-bezier(.2,.8,.2,1);
@@ -30,12 +27,10 @@
       --panel-border: rgba(255,255,255,0.1);
     }
 
-    /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; }
 
     body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       font-family: 'Inter', sans-serif;
       color: var(--text);
       background:
@@ -44,228 +39,81 @@
         linear-gradient(160deg, var(--bg), #0c1018 45%, #05070b);
       background-attachment: fixed;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
     }
 
-    .container {
-      max-width: 480px; /* Container um pouco mais largo */
-      width: 100%;
-      margin: 0 auto;
-      padding: 30px 20px;
-      animation: fadeSlideUp 0.8s ease both;
-    }
+    .container { max-width: 480px; width: 100%; margin: 0 auto; padding: 30px 20px; animation: fadeSlideUp 0.8s ease both; }
 
     @keyframes fadeSlideUp {
       from { opacity: 0; transform: translateY(20px) scale(0.98); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    h1 {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      text-align: center;
-      letter-spacing: 0.5px;
-    }
+    h1 { font-size: 24px; font-weight: 800; margin-bottom: 10px; text-align: center; letter-spacing: 0.5px; }
 
-    /* ===== OPÇÕES DE VOTO ===== */
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 25px;
-    }
+    .options { display: flex; flex-direction: column; gap: 16px; margin-top: 25px; }
 
     .option {
-      display: flex;
-      background: var(--card-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      cursor: pointer;
-      position: relative;
-      transition: var(--transition);
-      backdrop-filter: blur(8px);
+      display: flex; background: var(--card-bg); border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg); overflow: hidden; cursor: pointer;
+      position: relative; transition: var(--transition); backdrop-filter: blur(8px);
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
-    .option:hover {
-      transform: translateY(-5px);
-      border-color: var(--accent);
-      box-shadow: var(--shadow-md);
-    }
+    .option:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: var(--shadow-md); }
 
-    .option img {
-      width: 120px; /* Imagem um pouco maior */
-      height: 120px;
-      object-fit: cover;
-      flex-shrink: 0;
-      border-right: 1px solid var(--panel-border);
-    }
+    .option img { width: 120px; height: 120px; object-fit: cover; flex-shrink: 0; border-right: 1px solid var(--panel-border); }
 
-    .option-content {
-      display: flex;
-      align-items: center;
-      padding: 18px;
-      width: 100%;
-      font-size: 18px;
-      font-weight: 600;
-      gap: 15px;
-    }
+    .option-content { display: flex; align-items: center; padding: 18px; width: 100%; font-size: 18px; font-weight: 600; gap: 15px; }
 
-    /* Estilo do Radio Button Customizado */
     .option-content input[type="radio"] {
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--muted);
-      border-radius: 50%;
-      cursor: pointer;
-      position: relative;
-      transition: var(--transition);
-      flex-shrink: 0;
+      appearance: none; width: 24px; height: 24px; border: 2px solid var(--muted);
+      border-radius: 50%; cursor: pointer; position: relative; transition: var(--transition); flex-shrink: 0;
     }
 
-    .option-content input[type="radio"]:checked {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-soft);
-    }
+    .option-content input[type="radio"]:checked { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
 
     .option-content input[type="radio"]:checked::before {
-      content: "";
-      position: absolute;
-      inset: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-      transition: var(--transition);
+      content: ""; position: absolute; inset: 5px; border-radius: 50%; background: var(--accent); transition: var(--transition);
     }
 
-    /* ===== CAPTCHA ===== */
-    .captcha-container {
-      margin: 30px 0;
-      display: flex;
-      justify-content: center;
-    }
+    .captcha-container { margin: 30px 0; display: flex; justify-content: center; }
 
-    /* ===== BOTÃO VOTAR ===== */
     button#botaoVotar {
-      width: 100%;
-      padding: 18px;
-      font-size: 18px;
-      font-weight: 800;
-      border: none;
-      border-radius: var(--radius-md);
-      cursor: not-allowed;
-      background: #2b2f3a;
-      color: var(--muted);
-      transition: var(--transition);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      width: 100%; padding: 18px; font-size: 18px; font-weight: 800; border: none;
+      border-radius: var(--radius-md); cursor: not-allowed;
+      background: #2b2f3a; color: var(--muted); transition: var(--transition);
+      text-transform: uppercase; letter-spacing: 1px;
     }
 
     button#botaoVotar.active {
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--accent), #00b7b0);
-      color: #001818;
-      box-shadow: 0 8px 25px var(--accent-soft);
+      cursor: pointer; background: linear-gradient(135deg, var(--accent), #00b7b0);
+      color: #001818; box-shadow: 0 8px 25px var(--accent-soft);
     }
 
-    button#botaoVotar.active:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px var(--accent-soft);
-    }
-
-    /* ===== TELAS DE FEEDBACK (Loading, Confirm, Error) ===== */
     #confirmTela, #errorTela, #loadingTela {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      min-height: 100vh; /* Ocupa a tela inteira */
-      text-align: center;
-      width: 100%;
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 20px; min-height: 100vh; text-align: center; width: 100%;
     }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 35px;
-      width: 100%;
-      max-width: 450px;
-      box-shadow: var(--shadow-md);
-      backdrop-filter: blur(10px);
-    }
+    .card { background: var(--card-bg); border-radius: 20px; padding: 35px; width: 100%; max-width: 450px; box-shadow: var(--shadow-md); backdrop-filter: blur(10px); }
 
-    .error-msg {
-      color: #ff6b6b;
-      font-weight: 800;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
+    .error-msg { color: #ff6b6b; font-weight: 800; font-size: 22px; margin-bottom: 10px; }
 
-    .voltar {
-      background: var(--accent);
-      color: #000;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      width: 100%;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 20px;
-      transition: var(--transition);
-    }
+    .voltar { background: var(--accent); color: #000; padding: 14px; border: none; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 20px; transition: var(--transition); }
 
-    .voltar:hover {
-      opacity: 0.9;
-    }
+    .spinner { border: 5px solid rgba(255,255,255,0.15); border-left-color: var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Loading Spinner */
-    .spinner {
-      border: 5px solid rgba(255,255,255,0.15);
-      border-left-color: var(--accent);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-
-    /* ===== RESPONSIVIDADE (Desktop) ===== */
     @media (min-width: 768px) {
-      .container {
-        max-width: 700px;
-      }
-
-      .options {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-      }
-
-      .option {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .option img {
-        width: 100%;
-        height: 180px;
-        border-right: none;
-        border-bottom: 1px solid var(--panel-border);
-      }
-
-      .option-content {
-        justify-content: center;
-        padding: 20px 10px;
-      }
+      .container { max-width: 700px; }
+      .options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .option { flex-direction: column; text-align: center; }
+      .option img { width: 100%; height: 180px; border-right: none; border-bottom: 1px solid var(--panel-border); }
+      .option-content { justify-content: center; padding: 20px 10px; }
     }
   </style>
 
-  <!-- SDKs -->
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -273,12 +121,12 @@
 
   <div id="loadingTela" style="display: flex;">
     <div class="spinner"></div>
-    <p>Carregando...</p>
+    <p id="loadingText">Iniciando sistema de segurança...</p>
   </div>
 
   <div id="votoTela" class="container" style="display: none;">
     <h1>Quem você quer que FIQUE na F10?</h1>
-    <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">Apenas um voto por pessoa</p>
+    <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por pessoa.</p>
     
     <div class="options">
       <label class="option">
@@ -313,7 +161,7 @@
       <div style="font-size: 50px; margin-bottom: 10px;">✔</div>
       <h2 id="nomeConfirm"></h2>
       <p style="color: #00ffb3; font-weight: bold;">Voto computado com sucesso!</p>
-<button class="voltar" onclick="location.href='votefshow.html'">VOLTAR</button>
+      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
     </div>
   </div>
 
@@ -321,7 +169,9 @@
     <div class="card">
       <div class="error-msg" id="errorTitle">Acesso Negado</div>
       <p id="errorMessage"></p>
+      <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+      <p></p>
     </div>
   </div>
 
@@ -336,42 +186,63 @@
     let visitorId = null;
     let userIP = null;
     let captchaToken = null;
+    let isVPNConfirmed = false;
 
-    // 1. Inicializar FingerprintJS (Um voto por dispositivo)
-    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
-      .then(FingerprintJS => FingerprintJS.load());
+    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5').then(FingerprintJS => FingerprintJS.load());
+
+    async function checkVPN(ip) {
+      // Camada 1: ProxyCheck.io (Sem chave, limitado mas útil)
+      try {
+        const res1 = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1`);
+        const data1 = await res1.json();
+        if (data1[ip] && (data1[ip].proxy === "yes" || data1[ip].type === "VPN")) return true;
+      } catch (e) { console.warn("Camada 1 falhou"); }
+
+      // Camada 2: IP-API (Verifica se o provedor é um datacenter/hosting)
+      try {
+        const res2 = await fetch(`http://ip-api.com/json/${ip}?fields=status,mobile,proxy,hosting`);
+        const data2 = await res2.json();
+        if (data2.status === "success" && (data2.proxy === true || data2.hosting === true)) return true;
+      } catch (e) { console.warn("Camada 2 falhou"); }
+
+      // Camada 3: FreeIPAPI.com
+      try {
+        const res3 = await fetch(`https://freeipapi.com/api/json/${ip}`);
+        const data3 = await res3.json();
+        if (data3.isProxy === true) return true;
+      } catch (e) { console.warn("Camada 3 falhou"); }
+
+      return false;
+    }
 
     async function initSecurity() {
       try {
+        document.getElementById("loadingText").innerText = "Validando dispositivo...";
         const fp = await fpPromise;
         const result = await fp.get();
         visitorId = result.visitorId;
-        console.log("Device ID:", visitorId);
 
-        // Verificar se já votou no LocalStorage (primeira barreira)
         if (localStorage.getItem("voted_" + ROUND_ID) === "true") {
-          showError("Já votou!", "Aguarde o resultado no canal às 20:30, ou continue votando:");
+          showError("Já votou!", "Aguarde o resultado às 20:30.");
           return;
         }
 
-        // Obter IP para detecção de VPN
+        document.getElementById("loadingText").innerText = "Analisando conexão...";
         const ipRes = await fetch("https://api.ipify.org?format=json");
         const ipData = await ipRes.json();
         userIP = ipData.ip;
 
-        // Mostrar tela de votação após carregar segurança
+        // Pré-verificação de VPN na carga
+        isVPNConfirmed = await checkVPN(userIP);
+        
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
       } catch (e) {
-        console.error("Erro na inicialização:", e);
-        showError("Erro de Conexão", "Não foi possível carregar os módulos de segurança. Verifique sua internet.");
+        showError("Erro de Conexão", "Não foi possível carregar os módulos de segurança.");
       }
     }
 
-    window.onCaptchaSuccess = function(token) {
-      captchaToken = token;
-      checkReady();
-    };
+    window.onCaptchaSuccess = (token) => { captchaToken = token; checkReady(); };
 
     function checkReady() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
@@ -387,39 +258,23 @@
 
     document.querySelectorAll('input[name="vote"]').forEach(r => r.onchange = checkReady);
 
-    async function checkVPN(ip) {
-      try {
-        // Usando proxycheck.io (API gratuita para detecção de VPN/Proxy)
-        const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
-        const data = await res.json();
-        
-        if (data[ip] && (data[ip].proxy === "yes" || data[ip].type === "VPN")) {
-          return true; // É VPN
-        }
-        return false;
-      } catch (e) {
-        console.warn("Falha ao checar VPN, permitindo voto por precaução:", e);
-        return false;
-      }
-    }
-
     async function submitVote() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
 
       btn.disabled = true;
-      btn.innerText = "Enviando voto...";
+      btn.innerText = "BLOQUEANDO FRAUDES...";
 
       try {
-        // A. Detecção de VPN/Burlar Votação
-        const isVPN = await checkVPN(userIP);
-        if (isVPN) {
-          showError("Voto Bloqueado", "Detectamos o uso de VPN ou Proxy. Para votar, use uma conexão normal.");
+        // Re-verificar VPN no momento do voto (evita troca de conexão pós-load)
+        const isStillVPN = await checkVPN(userIP);
+        if (isStillVPN || isVPNConfirmed) {
+          showError("Voto Bloqueado", "Detectamos o uso de VPN ou Proxy. Votos via conexões anônimas não são permitidos.");
           return;
         }
 
-        // B. Verificar no Supabase se o visitorId já existe (Barreira definitiva por dispositivo)
-        const { data: existingVoter, error: checkError } = await supabaseClient
+        // Verificação final no banco de dados
+        const { data: existingVoter } = await supabaseClient
           .from(TABLE_NAME)
           .select("id")
           .eq("visitor_id", visitorId)
@@ -428,41 +283,31 @@
 
         if (existingVoter) {
           localStorage.setItem("voted_" + ROUND_ID, "true");
-          showError("Já votou!", "Aguarde o resultado no canal às 20:30, ou continue votando:");
+          showError("Já votou!", "Este dispositivo já registrou um voto.");
           return;
         }
 
-        // C. Enviar Voto
-        btn.innerText = "Computando voto...";
+        btn.innerText = "ENVIANDO...";
         const { error: insertError } = await supabaseClient
           .from(TABLE_NAME)
           .insert([{
             participante: selecionado.value,
             ip: userIP,
-            visitor_id: visitorId, // Novo campo para dispositivo
+            visitor_id: visitorId,
             round_id: ROUND_ID,
             hcaptcha_token: captchaToken,
-            is_vpn: isVPN
+            is_vpn: true // Se chegou aqui, is_vpn é falso, mas guardamos o campo
           }]);
 
-        if (insertError) {
-          if (insertError.code === '23505') {
-            showError("Já votou!", "Este dispositivo já registrou um voto.");
-          } else {
-            throw insertError;
-          }
-          return;
-        }
+        if (insertError) throw insertError;
 
-        // D. Sucesso
         localStorage.setItem("voted_" + ROUND_ID, "true");
         document.getElementById("votoTela").style.display = "none";
         document.getElementById("confirmTela").style.display = "flex";
         document.getElementById("nomeConfirm").innerText = selecionado.value;
 
       } catch (e) {
-        console.error("Erro ao votar:", e);
-        showError("Erro no Servidor", "Ocorreu um problema ao registrar seu voto. Tente novamente mais tarde.");
+        showError("Erro no Servidor", "Ocorreu um problema ao registrar seu voto.");
         btn.disabled = false;
         btn.innerText = "VOTAR";
       }
@@ -477,7 +322,6 @@
       document.getElementById("errorMessage").innerText = msg;
     }
 
-    // Iniciar
     initSecurity();
   </script>
 </body>
