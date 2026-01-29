@@ -2,667 +2,483 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Fshow/Votação</title>
+  <title>Fshow - Voto único</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
-  <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-
-  <link rel="apple-touch-icon" sizes="57x57" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-
-  <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-
+  <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <meta name="theme-color" content="#8A2BE2">
-  <meta name="msapplication-TileColor" content="#FF8C00">
-  <meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-  <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <link rel="mask-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" color="#ff8c00">
-  <link rel="manifest" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <meta name="msapplication-TileColor" content="#ff8c00">
-  <meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <meta name="theme-color" content="#8a2be2">
+  <style>
+    /* ======================================================
+       CSS APRIMORADO - DESIGN MODERNO E RESPONSIVO
+    ====================================================== */
 
-<style>
-/* ===== VARIÁVEIS GLOBAIS ===== */
-:root {
-  --bg: #0b0e13;
-  --card-bg: rgba(40, 40, 55, 0.75);
-  --accent: #00d2c6;
-  --accent-soft: rgba(0, 210, 198, 0.15);
-  --text: #ffffff;
-  --muted: #b3b8c4;
+    /* ===== VARIÁVEIS GLOBAIS ===== */
+    :root {
+      --bg: #06080d; /* Fundo mais escuro */
+      --card-bg: rgba(25, 25, 35, 0.85); /* Cartão menos transparente */
+      --accent: #00e6d8; /* Destaque mais brilhante */
+      --accent-soft: rgba(0, 230, 216, 0.2);
+      --text: #ffffff;
+      --muted: #a0a4b0;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --transition: 0.4s cubic-bezier(.2,.8,.2,1);
+      --shadow-md: 0 10px 30px rgba(0,0,0,0.4);
+      --panel-border: rgba(255,255,255,0.1);
+    }
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; }
 
-  --transition-fast: 0.2s ease;
-  --transition: 0.35s cubic-bezier(.2,.8,.2,1);
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(0, 230, 216, 0.2), transparent 55%),
+        radial-gradient(circle at 85% 75%, rgba(80, 120, 255, 0.2), transparent 60%),
+        linear-gradient(160deg, var(--bg), #0c1018 45%, #05070b);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
-  --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
-  --panel-border: rgba(255,255,255,0.08);
-}
+    .container {
+      max-width: 480px; /* Container um pouco mais largo */
+      width: 100%;
+      margin: 0 auto;
+      padding: 30px 20px;
+      animation: fadeSlideUp 0.8s ease both;
+    }
 
-/* ===== RESET & BASE ===== */
-*, *::before, *::after { box-sizing: border-box; }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-  color: var(--text);
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
 
-  background:
-    radial-gradient(circle at 15% 20%, rgba(0, 210, 198, 0.25), transparent 55%),
-    radial-gradient(circle at 85% 75%, rgba(80, 120, 255, 0.25), transparent 60%),
-    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.22), transparent 70%),
-    linear-gradient(160deg, #06080d, #0c1018 45%, #05070b);
+    /* ===== OPÇÕES DE VOTO ===== */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 25px;
+    }
 
-  background-attachment: fixed;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
+    .option {
+      display: flex;
+      background: var(--card-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
 
-/* ===== CONTAINER ===== */
-.container {
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 22px 16px 28px;
-  animation: fadeSlideUp 0.6s ease both;
-}
+    .option:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
 
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(18px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
+    .option img {
+      width: 120px; /* Imagem um pouco maior */
+      height: 120px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border-right: 1px solid var(--panel-border);
+    }
 
-/* ===== TÍTULOS ===== */
-h1 {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  margin-bottom: 6px;
-}
+    .option-content {
+      display: flex;
+      align-items: center;
+      padding: 18px;
+      width: 100%;
+      font-size: 18px;
+      font-weight: 600;
+      gap: 15px;
+    }
 
-h2 {
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 20px;
-  font-weight: 400;
-}
+    /* Estilo do Radio Button Customizado */
+    .option-content input[type="radio"] {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--muted);
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
 
-/* ===== OPÇÕES ===== */
-.options {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
+    .option-content input[type="radio"]:checked {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
 
-.option {
-  display: flex;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
-    var(--card-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(6px);
-}
+    .option-content input[type="radio"]:checked::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: var(--transition);
+    }
 
-.option::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent 30%, var(--accent-soft), transparent 70%);
-  opacity: 0;
-  transition: var(--transition);
-}
+    /* ===== CAPTCHA ===== */
+    .captcha-container {
+      margin: 30px 0;
+      display: flex;
+      justify-content: center;
+    }
 
-.option:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: var(--shadow-md);
-  border-color: var(--accent);
-}
+    /* ===== BOTÃO VOTAR ===== */
+    button#botaoVotar {
+      width: 100%;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 800;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: not-allowed;
+      background: #2b2f3a;
+      color: var(--muted);
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-.option:hover::after {
-  opacity: 1;
-}
+    button#botaoVotar.active {
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), #00b7b0);
+      color: #001818;
+      box-shadow: 0 8px 25px var(--accent-soft);
+    }
 
-.option img {
-  width: 110px;
-  height: 110px;
-  object-fit: cover;
-  flex-shrink: 0;
-  filter: saturate(1.05) contrast(1.05);
-}
+    button#botaoVotar.active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px var(--accent-soft);
+    }
 
-/* ===== CONTEÚDO DA OPÇÃO ===== */
-.option-content {
-  display: flex;
-  align-items: center;
-  padding: 14px 16px;
-  width: 100%;
-  font-size: 17px;
-  font-weight: 600;
-  gap: 10px;
-}
+    /* ===== TELAS DE FEEDBACK (Loading, Confirm, Error) ===== */
+    #confirmTela, #errorTela, #loadingTela {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh; /* Ocupa a tela inteira */
+      text-align: center;
+      width: 100%;
+    }
 
-/* ===== RADIO CUSTOM ===== */
-.option-content input[type="radio"] {
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border: 2px solid var(--muted);
-  border-radius: 50%;
-  cursor: pointer;
-  position: relative;
-  transition: var(--transition-fast);
-  flex-shrink: 0;
-}
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 35px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(10px);
+    }
 
-.option-content input[type="radio"]:hover {
-  border-color: var(--accent);
-}
+    .error-msg {
+      color: #ff6b6b;
+      font-weight: 800;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
 
-.option-content input[type="radio"]:checked {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-soft);
-}
+    .voltar {
+      background: var(--accent);
+      color: #000;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 20px;
+      transition: var(--transition);
+    }
 
-.option-content input[type="radio"]:checked::before {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ffffff, var(--accent));
-}
+    .voltar:hover {
+      opacity: 0.9;
+    }
 
-/* ===== CAPTCHA ===== */
-.captcha-container {
-  margin: 22px 0 18px;
-  display: flex;
-  justify-content: center;
-}
+    /* Loading Spinner */
+    .spinner {
+      border: 5px solid rgba(255,255,255,0.15);
+      border-left-color: var(--accent);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
 
-/* ===== BOTÃO ===== */
-button#botaoVotar {
-  width: 100%;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 800;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: not-allowed;
-  background: linear-gradient(145deg, #2b2f3a, #1f232e);
-  color: var(--muted);
-  transition: var(--transition);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
-}
+    /* ===== RESPONSIVIDADE (Desktop) ===== */
+    @media (min-width: 768px) {
+      .container {
+        max-width: 700px;
+      }
 
-button#botaoVotar.active {
-  cursor: pointer;
-  background: linear-gradient(135deg, #00e6d8, #00b7b0);
-  color: #001818;
-  box-shadow: 0 8px 24px rgba(0,210,198,0.35);
-}
+      .options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
 
-button#botaoVotar.active:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0,210,198,0.45);
-}
+      .option {
+        flex-direction: column;
+        text-align: center;
+      }
 
-button#botaoVotar:disabled {
-  opacity: 0.45;
-}
+      .option img {
+        width: 100%;
+        height: 180px;
+        border-right: none;
+        border-bottom: 1px solid var(--panel-border);
+      }
 
-/* ===== AVISO ===== */
-.notice {
-  font-size: 12px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 14px;
-  line-height: 1.4;
-}
+      .option-content {
+        justify-content: center;
+        padding: 20px 10px;
+      }
+    }
+  </style>
 
-/* ===== TELA DE SUCESSO ===== */
-#confirmTela,
-#errorTela {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  min-height: 80vh;
-  text-align: center;
-  animation: fadeSlideUp 0.5s ease both;
-}
-
-.confirm-card,
-.error-card {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-  border: 1px solid var(--panel-border);
-  border-radius: 18px;
-  padding: 28px;
-  max-width: 420px;
-  width: 100%;
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(8px);
-}
-
-.confirm-card img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 18px;
-}
-
-#nomeConfirm {
-  font-size: 24px;
-  font-weight: 900;
-  margin: 8px 0;
-  letter-spacing: 0.3px;
-}
-
-.success-msg {
-  color: #00ffb3;
-  font-weight: 700;
-  margin: 14px 0;
-}
-
-.voltar {
-  background: linear-gradient(135deg, #00e6d8, #00b7b0);
-  color: #001818;
-  padding: 14px 24px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 800;
-  width: 100%;
-  transition: var(--transition);
-}
-
-.voltar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(0,210,198,0.4);
-}
-
-/* ===== ERRO ===== */
-.error-msg {
-  color: #ff6b6b;
-  font-weight: 800;
-  margin: 14px 0;
-  font-size: 18px;
-}
-
-.error-detail {
-  color: var(--muted);
-  font-size: 14px;
-  margin: 8px 0;
-}
-
-/* ===== DESKTOP ===== */
-@media (min-width: 1024px) {
-  .container { max-width: 920px; }
-
-  .options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
-  }
-
-  .option {
-    flex-direction: column;
-  }
-
-  .option img {
-    width: 100%;
-    height: 210px;
-  }
-
-  .option-content {
-    padding: 16px;
-    background: linear-gradient(180deg, #141821, #10131a);
-  }
-}
-</style>
   <!-- SDKs -->
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <div id="votoTela" class="container">
-    <h1>Quem você quer que FIQUE na F10? <br> Apenas um voto por pessoa. </h1>
-    <div class="options">
-      
-    <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Opção 1">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Luca"> Luca
-    </div>
-    </label>
+  <div id="loadingTela" style="display: flex;">
+    <div class="spinner"></div>
+    <p>Carregando...</p>
+  </div>
 
-    <label class="option">
-    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true" alt="Opção 2">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Luddy"> Luddy
+  <div id="votoTela" class="container" style="display: none;">
+    <h1>Quem você quer que FIQUE na F10?</h1>
+    <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">Apenas um voto por pessoa</p>
+    
+    <div class="options">
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Luca">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Luca"> Luca
+        </div>
+      </label>
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true" alt="Luddy">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Luddy"> Luddy
+        </div>
+      </label>
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true" alt="Tety">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Tety"> Tety
+        </div>
+      </label>
     </div>
-    </label>
-  
-  <label class="option">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true" alt="Opção 3">
-    <div class="option-content">
-      <input type="radio" name="vote" value="Tety"> Tety
-    </div>
-  </label>
-      
-    </div>
+
     <div class="captcha-container">
       <div class="h-captcha" data-sitekey="6dfe175a-b5e8-4474-ac38-a84436a8004c" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
 
-<button id="botaoVotar" onclick="submitVote()" disabled>
- VOTAR
-</button>
-    
-    <div class="notice">A votação segue aberta até às 19:00</div>
+    <button id="botaoVotar" onclick="submitVote()" disabled>VOTAR</button>
   </div>
 
   <div id="confirmTela">
-    <div class="confirm-card">
-      <img id="fotoConfirm" src="" alt="Voto"/>
-      <p id="nomeConfirm"></p>
-      <div class="success-msg">✔ Voto computado com sucesso!</div>
-<button class="voltar" onclick="window.location.href='votefshow.html'">
-  VOTO DA TORCIDA
-</button>
+    <div class="card">
+      <div style="font-size: 50px; margin-bottom: 10px;">✔</div>
+      <h2 id="nomeConfirm"></h2>
+      <p style="color: #00ffb3; font-weight: bold;">Voto computado com sucesso!</p>
+<button class="voltar" onclick="location.href='votefshow.html'">VOLTAR</button>
     </div>
   </div>
 
   <div id="errorTela">
-    <div class="error-card">
-      <div class="error-msg">⚠ Já votou!</div>
-      <div class="error-detail" id="errorMessage"></div>
-      <button class="voltar" onclick="location.reload()" style="margin-top: 20px;">TENTAR NOVAMENTE</button>
+    <div class="card">
+      <div class="error-msg" id="errorTitle">Acesso Negado</div>
+      <p id="errorMessage"></p>
+      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
     </div>
   </div>
 
   <script>
-    /* ======================================================
-       CONFIGURAÇÃO CENTRAL
-    ====================================================== */
-    const ROUND_ID = "rodada_09"; 
-
+    const ROUND_ID = "rodada_09";
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
     const TABLE_NAME = "roça9f10";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const aberturaBR = new Date("2026-01-18T19:00:00");
-    const encerramentoBR = new Date("2026-01-29T19:00:00");
-
-  // =================== HORA DO SERVIDOR (Via API Pública) ===================
-  async function getServerTime() {
-    try {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
-      const data = await res.json();
-      return new Date(data.datetime);
-    } catch (e) {
-      console.error("Erro ao verificar horário:", e);
-      return new Date(); 
-    }
-  }
-
-  function toSaoPauloDate(date) {
-    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    return new Date(spString);
-  }
-
-  function redirect(url) {
-  if (DEBUG) {
-    console.warn("REDIRECT BLOQUEADO →", url);
-    return;
-  }
-  window.location.href = url;
-}
-
-  // =================== VERIFICAÇÃO DE HORÁRIO ===================
-  async function verificarHorarios() {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
-
-    if (agoraBR < aberturaBR) {
-      window.location.replace("aguarde.html");
-      return;
-    }
-
-    if (agoraBR > encerramentoBR) {
-      window.location.replace("fechada.html");
-      return;
-    }
-
-    console.log("VOTAÇÃO ABERTA");
-  }
-
-  verificarHorarios();
-    /* ======================================================
-       ESTADO E ELEMENTOS
-    ====================================================== */
-    const botaoVotar = document.getElementById("botaoVotar");
-    const votoTela = document.getElementById("votoTela");
-    const confirmTela = document.getElementById("confirmTela");
-    const errorTela = document.getElementById("errorTela");
-    const nomeConfirm = document.getElementById("nomeConfirm");
-    const fotoConfirm = document.getElementById("fotoConfirm");
-    const errorMessage = document.getElementById("errorMessage");
-    
-    let captchaToken = null;
+    let visitorId = null;
     let userIP = null;
+    let captchaToken = null;
 
-  const fotos = {
-    "Caio": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Caio.jpg?raw=true",
-    "Cícero": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Cícero.jpg?raw=true",
-    "Duck": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Duck.jpg?raw=true",
-    "Ella": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true",
-    "Eueu": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Eueu.jpg?raw=true",
-    "Fernanda": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Fernanda.jpg?raw=true",
-    "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true",
-    "Kelvin": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Kelvin.jpg?raw=true",
-    "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true",
-    "Luca": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true",
-    "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Lucas.jpg?raw=true",
-    "Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true",
-    "Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ludmila.jpg?raw=true",
-    "Mari": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mari.jpg?raw=true",
-    "João Victor": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mariana.jpg?raw=true",
-    "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mikael.jpg?raw=true",
-    "Mira": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Mira.jpg?raw=true",
-    "Nick": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Nick.jpg?raw=true",
-    "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true",
-    "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Renata.jpg?raw=true",
-    "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Rose.jpg?raw=true",
-    "Brunno": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Brunno.jpg?raw=true",
-    "Emanuel": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Emanuel.jpg?raw=true",
-    "Guilherme": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Guilherme.jpg?raw=true",
-    "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true"
-  };
+    // 1. Inicializar FingerprintJS (Um voto por dispositivo)
+    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
+      .then(FingerprintJS => FingerprintJS.load());
 
-    /* ======================================================
-       FUNÇÕES
-    ====================================================== */
-
-    async function getIP() {
+    async function initSecurity() {
       try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const data = await res.json();
-        console.log("IP obtido:", data.ip);
-        return data.ip;
-      } catch (e) { 
-        console.error("Erro ao obter IP:", e);
-        return null; 
+        const fp = await fpPromise;
+        const result = await fp.get();
+        visitorId = result.visitorId;
+        console.log("Device ID:", visitorId);
+
+        // Verificar se já votou no LocalStorage (primeira barreira)
+        if (localStorage.getItem("voted_" + ROUND_ID) === "true") {
+          showError("Já votou!", "Aguarde o resultado no canal às 20:30, ou continue votando:");
+          return;
+        }
+
+        // Obter IP para detecção de VPN
+        const ipRes = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipRes.json();
+        userIP = ipData.ip;
+
+        // Mostrar tela de votação após carregar segurança
+        document.getElementById("loadingTela").style.display = "none";
+        document.getElementById("votoTela").style.display = "block";
+      } catch (e) {
+        console.error("Erro na inicialização:", e);
+        showError("Erro de Conexão", "Não foi possível carregar os módulos de segurança. Verifique sua internet.");
       }
     }
 
     window.onCaptchaSuccess = function(token) {
-      console.log("hCaptcha completado com sucesso");
       captchaToken = token;
       checkReady();
     };
 
     function checkReady() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
+      const btn = document.getElementById("botaoVotar");
       if (selecionado && captchaToken) {
-        botaoVotar.disabled = false;
-        botaoVotar.classList.add("active");
-        console.log("Botão habilitado - Opção selecionada:", selecionado.value);
+        btn.disabled = false;
+        btn.classList.add("active");
       } else {
-        botaoVotar.disabled = true;
-        botaoVotar.classList.remove("active");
+        btn.disabled = true;
+        btn.classList.remove("active");
       }
     }
 
-    document.querySelectorAll('input[name="vote"]').forEach(radio => {
-      radio.addEventListener('change', checkReady);
-    });
+    document.querySelectorAll('input[name="vote"]').forEach(r => r.onchange = checkReady);
 
-    function showError(mensagem) {
-      votoTela.style.display = "none";
-      confirmTela.style.display = "none";
-      errorTela.style.display = "flex";
-      errorMessage.textContent = mensagem;
-      console.error("Erro exibido:", mensagem);
+    async function checkVPN(ip) {
+      try {
+        // Usando proxycheck.io (API gratuita para detecção de VPN/Proxy)
+        const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
+        const data = await res.json();
+        
+        if (data[ip] && (data[ip].proxy === "yes" || data[ip].type === "VPN")) {
+          return true; // É VPN
+        }
+        return false;
+      } catch (e) {
+        console.warn("Falha ao checar VPN, permitindo voto por precaução:", e);
+        return false;
+      }
     }
-
 
     async function submitVote() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
-      
-      // Validações iniciais
-      if (!selecionado) {
-        alert("Por favor, selecione uma opção!");
-        return;
-      }
+      const btn = document.getElementById("botaoVotar");
 
-      if (!captchaToken) {
-        alert("Por favor, complete o captcha!");
-        return;
-      }
-
-      botaoVotar.disabled = true;
-      botaoVotar.innerText = "Processando...";
+      btn.disabled = true;
+      btn.innerText = "Enviando voto...";
 
       try {
-        // 1. Obter IP do usuário
-        console.log("Iniciando processo de votação...");
-        userIP = await getIP();
-
-        if (!userIP) {
-          throw new Error("Não foi possível obter seu IP. Verifique sua conexão.");
-        }
-
-        // 2. Verificar se já votou 
-        const votoAnterior = localStorage.getItem("voted_fshow_round");
-        if (votoAnterior === ROUND_ID) {
-          console.log("Já votou");
-          showError("É permitido apenas um voto por pessoa.");
+        // A. Detecção de VPN/Burlar Votação
+        const isVPN = await checkVPN(userIP);
+        if (isVPN) {
+          showError("Voto Bloqueado", "Detectamos o uso de VPN ou Proxy. Para votar, use uma conexão normal.");
           return;
         }
 
-        // 3. Enviar voto 
-        console.log("Enviando voto...");
-        const { data, error } = await supabaseClient
+        // B. Verificar no Supabase se o visitorId já existe (Barreira definitiva por dispositivo)
+        const { data: existingVoter, error: checkError } = await supabaseClient
           .from(TABLE_NAME)
-          .insert([{ 
-            participante: selecionado.value, 
+          .select("id")
+          .eq("visitor_id", visitorId)
+          .eq("round_id", ROUND_ID)
+          .maybeSingle();
+
+        if (existingVoter) {
+          localStorage.setItem("voted_" + ROUND_ID, "true");
+          showError("Já votou!", "Aguarde o resultado no canal às 20:30, ou continue votando:");
+          return;
+        }
+
+        // C. Enviar Voto
+        btn.innerText = "Computando voto...";
+        const { error: insertError } = await supabaseClient
+          .from(TABLE_NAME)
+          .insert([{
+            participante: selecionado.value,
             ip: userIP,
+            visitor_id: visitorId, // Novo campo para dispositivo
             round_id: ROUND_ID,
-            hcaptcha_token: captchaToken
-          }])
-          .select();
+            hcaptcha_token: captchaToken,
+            is_vpn: isVPN
+          }]);
 
-        // 4. Tratamento de erros 
-        if (error) {
-          console.error("Erro do Supabase:", error);
-          
-          // Verifica se é erro de constraint (voto duplicado)
-          if (error.code === '23505' || error.message.includes('duplicate')) {
-            console.log("Voto duplicado detectado");
-            localStorage.setItem("voted_fshow_round", ROUND_ID);
-            showError("Este IP já registrou um voto nesta rodada!");
-            return;
+        if (insertError) {
+          if (insertError.code === '23505') {
+            showError("Já votou!", "Este dispositivo já registrou um voto.");
+          } else {
+            throw insertError;
           }
-
-          // Outros erros
-          throw new Error(error.message || "Erro desconhecido ao enviar voto");
+          return;
         }
 
-        // 5. Verificar inserção
-        if (!data || data.length === 0) {
-          throw new Error("Voto não foi registrado no banco de dados");
-        }
-
-        console.log("Voto registrado com sucesso:", data);
-
-        // 6. Marcar como votado
-        localStorage.setItem("voted_fshow_round", ROUND_ID);
-
-        // 7. Exibir tela de sucesso
-        votoTela.style.display = "none";
-        errorTela.style.display = "none";
-        confirmTela.style.display = "flex";
-        nomeConfirm.textContent = selecionado.value;
-        fotoConfirm.src = fotos[selecionado.value] || "";
-
-        console.log("Voto computado com sucesso!");
+        // D. Sucesso
+        localStorage.setItem("voted_" + ROUND_ID, "true");
+        document.getElementById("votoTela").style.display = "none";
+        document.getElementById("confirmTela").style.display = "flex";
+        document.getElementById("nomeConfirm").innerText = selecionado.value;
 
       } catch (e) {
-        console.error("Erro durante votação:", e);
-        showError(e.message || "Erro ao votar. Tente novamente.");
-        botaoVotar.disabled = false;
-        botaoVotar.innerText = "Votar";
+        console.error("Erro ao votar:", e);
+        showError("Erro no Servidor", "Ocorreu um problema ao registrar seu voto. Tente novamente mais tarde.");
+        btn.disabled = false;
+        btn.innerText = "VOTAR";
       }
     }
 
-    /**
-     * Evento de clique do botão de votação
-     */
-    botaoVotar.onclick = submitVote;
+    function showError(title, msg) {
+      document.getElementById("loadingTela").style.display = "none";
+      document.getElementById("votoTela").style.display = "none";
+      document.getElementById("confirmTela").style.display = "none";
+      document.getElementById("errorTela").style.display = "flex";
+      document.getElementById("errorTitle").innerText = title;
+      document.getElementById("errorMessage").innerText = msg;
+    }
 
-    /**
-     * Verificação de página
-     */
-    (async function init() {
-      console.log("Página carregada");
-      
-      const votoAnterior = localStorage.getItem("voted_fshow_round");
-      if (votoAnterior === ROUND_ID) {
-        console.log("Usuário já votou nesta rodada");
-      }
-    })();
+    // Iniciar
+    initSecurity();
   </script>
 </body>
 </html>
-
