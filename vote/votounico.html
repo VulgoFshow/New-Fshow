@@ -129,26 +129,29 @@
     <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por pessoa.</p>
     
     <div class="options">
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Luca">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Luca"> Luca
-        </div>
-      </label>
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luddy.jpg?raw=true" alt="Luddy">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Luddy"> Luddy
-        </div>
-      </label>
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true" alt="Tety">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Tety"> Tety
-        </div>
-      </label>
-    </div>
 
+    <label class="option">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="Opção 1">
+    <div class="option-content">
+      <input type="radio" name="vote" value="João"> João
+    </div>
+    </label>
+  
+    <label class="option">
+    <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Opção 2">
+    <div class="option-content">
+      <input type="radio" name="vote" value="Luca"> Luca
+    </div>
+    </label>
+  
+  <label class="option">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Renata.jpg?raw=true" alt="Opção 3">
+    <div class="option-content">
+      <input type="radio" name="vote" value="Renata"> Renata
+    </div>
+  </label>
+      
+    </div>
     <div class="captcha-container">
       <div class="h-captcha" data-sitekey="6dfe175a-b5e8-4474-ac38-a84436a8004c" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
@@ -176,10 +179,10 @@
   </div>
 
   <script>
-    const ROUND_ID = "rodada_09";
+    const ROUND_ID = "rodada_10";
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "roça9f10";
+    const TABLE_NAME = "roça10f10";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
