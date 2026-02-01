@@ -2,7 +2,7 @@ export const config = {
   runtime: "nodejs"
 };
 
-const { createClient } = require("@supabase/supabase-js");
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -23,7 +23,7 @@ const TABLES_PERMITIDAS = [
   "finalf10"
 ];
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Método não permitido" });
   }
@@ -57,4 +57,4 @@ module.exports = async function handler(req, res) {
     console.error("Erro geral:", err);
     return res.status(500).json({ error: err.message });
   }
-};
+}
