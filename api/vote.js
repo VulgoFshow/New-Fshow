@@ -1,10 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
-
 const TABLES_PERMITIDAS = ["roça12f10"];
 
 module.exports = async function handler(req, res) {
@@ -16,6 +11,11 @@ module.exports = async function handler(req, res) {
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
       throw new Error("Variáveis de ambiente não definidas");
     }
+
+    const supabase = createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_KEY
+    );
 
     const body =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body;
@@ -35,14 +35,13 @@ module.exports = async function handler(req, res) {
       .insert([{ participante }]);
 
     if (error) {
-      console.error("Erro Supabase:", error);
       return res.status(500).json({ error: error.message });
     }
 
     return res.status(200).json({ success: true });
 
   } catch (err) {
-    console.error("🔥 CRASH:", err);
+    console.error("🔥 ERRO FATAL:", err);
     return res.status(500).json({
       error: "Erro interno",
       details: err.message
