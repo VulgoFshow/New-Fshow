@@ -8,13 +8,19 @@ const supabase = createClient(
 const TABLES_PERMITIDAS = ["roça12f10"];
 
 module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método não permitido" });
-  }
-
   try {
-    const { participante, table } =
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Método não permitido" });
+    }
+
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+      throw new Error("Variáveis de ambiente não definidas");
+    }
+
+    const body =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+
+    const { participante, table } = body || {};
 
     if (!participante || !table) {
       return res.status(400).json({ error: "Dados inválidos" });
@@ -30,13 +36,16 @@ module.exports = async function handler(req, res) {
 
     if (error) {
       console.error("Erro Supabase:", error);
-      return res.status(500).json({ error: "Erro ao registrar voto" });
+      return res.status(500).json({ error: error.message });
     }
 
-    res.status(200).json({ success: true });
+    return res.status(200).json({ success: true });
 
   } catch (err) {
-    console.error("Erro geral:", err);
-    res.status(500).json({ error: "Erro interno" });
+    console.error("🔥 CRASH:", err);
+    return res.status(500).json({
+      error: "Erro interno",
+      details: err.message
+    });
   }
 };
