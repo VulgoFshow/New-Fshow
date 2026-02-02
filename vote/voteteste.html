@@ -2,350 +2,309 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Fshow - Voto Único</title>
+  <title>Fshow - Voto Único Seguro</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <meta name="theme-color" content="#8A2BE2">
 
-<style>
-:root {
-  --bg: #06080d;
-  --card-bg: rgba(25, 25, 35, 0.85);
-  --accent: #00e6d8;
-  --accent-2: #4f7cff;
-  --accent-soft: rgba(0, 230, 216, 0.25);
-  --text: #ffffff;
-  --muted: #a0a4b0;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --transition: 0.45s cubic-bezier(.2,.8,.2,1);
-  --shadow-md: 0 10px 30px rgba(0,0,0,0.45);
-  --shadow-glow: 0 0 25px rgba(0,230,216,0.25);
-  --panel-border: rgba(255,255,255,0.1);
-}
+  <style>
+    :root {
+      --bg: #06080d;
+      --card-bg: rgba(25, 25, 35, 0.85);
+      --accent: #00e6d8;
+      --accent-2: #4f7cff;
+      --accent-soft: rgba(0, 230, 216, 0.25);
+      --text: #ffffff;
+      --muted: #a0a4b0;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --transition: 0.45s cubic-bezier(.2,.8,.2,1);
+      --shadow-md: 0 10px 30px rgba(0,0,0,0.45);
+      --shadow-glow: 0 0 25px rgba(0,230,216,0.25);
+      --panel-border: rgba(255,255,255,0.1);
+    }
 
-/* RESET */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+    /* RESET */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0, 230, 216, 0.18), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(79,124,255,0.18), transparent 60%),
+        linear-gradient(160deg, var(--bg), #0c1018 45%, #05070b);
+      background-attachment: fixed;
+      animation: bgFloat 12s ease-in-out infinite alternate;
+    }
 
-  background:
-    radial-gradient(circle at 20% 20%, rgba(0, 230, 216, 0.18), transparent 55%),
-    radial-gradient(circle at 80% 80%, rgba(79,124,255,0.18), transparent 60%),
-    linear-gradient(160deg, var(--bg), #0c1018 45%, #05070b);
+    @keyframes bgFloat {
+      from { background-position: 0% 0%; }
+      to   { background-position: 100% 100%; }
+    }
 
-  background-attachment: fixed;
-  animation: bgFloat 12s ease-in-out infinite alternate;
-}
+    /* CONTAINER */
+    .container {
+      max-width: 480px;
+      width: 100%;
+      padding: 30px 20px;
+      animation: fadeSlideUp 0.9s cubic-bezier(.2,.8,.2,1) both;
+    }
 
-@keyframes bgFloat {
-  from { background-position: 0% 0%; }
-  to   { background-position: 100% 100%; }
-}
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+        filter: blur(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
 
-/* CONTAINER */
-.container {
-  max-width: 480px;
-  width: 100%;
-  padding: 30px 20px;
-  animation: fadeSlideUp 0.9s cubic-bezier(.2,.8,.2,1) both;
-}
+    h1 {
+      font-size: 26px;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 0.6px;
+      margin-bottom: 12px;
+    }
 
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.96);
-    filter: blur(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
+    /* OPÇÕES */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 28px;
+    }
 
-h1 {
-  font-size: 26px;
-  font-weight: 900;
-  text-align: center;
-  letter-spacing: 0.6px;
-  margin-bottom: 12px;
-}
+    .option {
+      position: relative;
+      display: flex;
+      background: var(--card-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      animation: cardIn 0.6s ease both;
+    }
 
-/* OPÇÕES */
-.options {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin-top: 28px;
-}
+    .option:nth-child(1) { animation-delay: .05s; }
+    .option:nth-child(2) { animation-delay: .12s; }
+    .option:nth-child(3) { animation-delay: .18s; }
 
-.option {
-  position: relative;
-  display: flex;
-  background: var(--card-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  transition: var(--transition);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  animation: cardIn 0.6s ease both;
-}
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-.option:nth-child(1) { animation-delay: .05s; }
-.option:nth-child(2) { animation-delay: .12s; }
-.option:nth-child(3) { animation-delay: .18s; }
+    .option::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(0,230,216,0.25), transparent 80%);
+      opacity: 0;
+      transition: opacity .5s ease;
+    }
 
-@keyframes cardIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
+    .option:hover::before { opacity: 1; }
+    .option:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md), var(--shadow-glow);
+    }
 
-/* Glow animado */
-.option::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent 20%,
-    rgba(0,230,216,0.25),
-    transparent 80%
-  );
-  opacity: 0;
-  transition: opacity .5s ease;
-}
+    .option img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border-right: 1px solid var(--panel-border);
+      transition: transform .6s ease;
+    }
 
-.option:hover::before {
-  opacity: 1;
-}
+    .option:hover img { transform: scale(1.05); }
 
-.option:hover {
-  transform: translateY(-6px) scale(1.01);
-  border-color: var(--accent);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-}
+    .option-content {
+      display: flex;
+      align-items: center;
+      padding: 18px;
+      width: 100%;
+      font-size: 18px;
+      font-weight: 600;
+      gap: 15px;
+    }
 
-/* IMAGEM */
-.option img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  flex-shrink: 0;
-  border-right: 1px solid var(--panel-border);
-  transition: transform .6s ease;
-}
+    .option-content input[type="radio"] {
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--muted);
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
 
-.option:hover img {
-  transform: scale(1.05);
-}
+    .option-content input[type="radio"]:checked {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 5px var(--accent-soft);
+    }
 
-/* CONTEÚDO */
-.option-content {
-  display: flex;
-  align-items: center;
-  padding: 18px;
-  width: 100%;
-  font-size: 18px;
-  font-weight: 600;
-  gap: 15px;
-}
+    .option-content input[type="radio"]:checked::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulseRadio .6s ease;
+    }
 
-/* RADIO CUSTOM */
-.option-content input[type="radio"] {
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--muted);
-  border-radius: 50%;
-  cursor: pointer;
-  position: relative;
-  transition: var(--transition);
-}
+    @keyframes pulseRadio {
+      0% { transform: scale(0.4); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
 
-.option-content input[type="radio"]:checked {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 5px var(--accent-soft);
-}
+    /* CAPTCHA */
+    .captcha-container {
+      margin: 32px 0;
+      display: flex;
+      justify-content: center;
+      animation: fadeIn .6s ease both;
+    }
 
-.option-content input[type="radio"]:checked::before {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: pulseRadio .6s ease;
-}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-@keyframes pulseRadio {
-  0% { transform: scale(0.4); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
+    /* BOTÃO */
+    button#botaoVotar {
+      width: 100%;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 900;
+      border: none;
+      border-radius: var(--radius-md);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      background: #2b2f3a;
+      color: var(--muted);
+      cursor: not-allowed;
+      transition: var(--transition);
+    }
 
-/* CAPTCHA */
-.captcha-container {
-  margin: 32px 0;
-  display: flex;
-  justify-content: center;
-  animation: fadeIn .6s ease both;
-}
+    button#botaoVotar.active {
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #001818;
+      box-shadow: 0 10px 30px var(--accent-soft);
+      animation: glowBtn 2.5s infinite alternate;
+    }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+    @keyframes glowBtn {
+      from { box-shadow: 0 0 20px var(--accent-soft); }
+      to   { box-shadow: 0 0 35px rgba(79,124,255,.35); }
+    }
 
-/* BOTÃO */
-button#botaoVotar {
-  width: 100%;
-  padding: 18px;
-  font-size: 18px;
-  font-weight: 900;
-  border: none;
-  border-radius: var(--radius-md);
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  background: #2b2f3a;
-  color: var(--muted);
-  cursor: not-allowed;
-  transition: var(--transition);
-}
+    button#botaoVotar.active:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
 
-button#botaoVotar.active {
-  cursor: pointer;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #001818;
-  box-shadow: 0 10px 30px var(--accent-soft);
-  animation: glowBtn 2.5s infinite alternate;
-}
+    /* TELAS */
+    #confirmTela, #errorTela, #loadingTela {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      width: 100%;
+      animation: fadeSlideUp .7s ease both;
+    }
 
-@keyframes glowBtn {
-  from { box-shadow: 0 0 20px var(--accent-soft); }
-  to   { box-shadow: 0 0 35px rgba(79,124,255,.35); }
-}
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 36px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(12px);
+    }
 
-button#botaoVotar.active:hover {
-  transform: translateY(-3px) scale(1.02);
-}
+    .error-msg {
+      color: #ff6b6b;
+      font-weight: 900;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
 
-/* TELAS */
-#confirmTela, #errorTela, #loadingTela {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  text-align: center;
-  width: 100%;
-  animation: fadeSlideUp .7s ease both;
-}
+    .voltar {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #001818;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: 800;
+      margin-top: 22px;
+      transition: var(--transition);
+    }
 
-.card {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 36px;
-  width: 100%;
-  max-width: 460px;
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(12px);
-}
+    .voltar:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
 
-/* ERRO */
-.error-msg {
-  color: #ff6b6b;
-  font-weight: 900;
-  font-size: 22px;
-  margin-bottom: 12px;
-}
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.15);
+      border-top-color: var(--accent);
+      animation: spin 0.9s linear infinite, pulseSpinner 1.8s ease infinite;
+      margin-bottom: 22px;
+    }
 
-/* BOTÃO VOLTAR */
-.voltar {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #001818;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
-  width: 100%;
-  cursor: pointer;
-  font-weight: 800;
-  margin-top: 22px;
-  transition: var(--transition);
-}
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulseSpinner { 50% { box-shadow: 0 0 25px var(--accent-soft); } }
 
-.voltar:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-glow);
-}
+    @media (min-width: 768px) {
+      .container { max-width: 720px; }
+      .options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+      }
+      .option { flex-direction: column; text-align: center; }
+      .option img {
+        width: 100%;
+        height: 180px;
+        border-right: none;
+        border-bottom: 1px solid var(--panel-border);
+      }
+      .option-content { justify-content: center; padding: 22px 12px; }
+    }
+  </style>
 
-/* SPINNER */
-.spinner {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 4px solid rgba(255,255,255,0.15);
-  border-top-color: var(--accent);
-  animation: spin 0.9s linear infinite, pulseSpinner 1.8s ease infinite;
-  margin-bottom: 22px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes pulseSpinner {
-  50% { box-shadow: 0 0 25px var(--accent-soft); }
-}
-
-/* RESPONSIVO */
-@media (min-width: 768px) {
-  .container { max-width: 720px; }
-
-  .options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
-  }
-
-  .option {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .option img {
-    width: 100%;
-    height: 180px;
-    border-right: none;
-    border-bottom: 1px solid var(--panel-border);
-  }
-
-  .option-content {
-    justify-content: center;
-    padding: 22px 12px;
-  }
-}
-</style>
-
-
-  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+  <!-- Scripts -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -361,21 +320,21 @@ button#botaoVotar.active:hover {
     
     <div class="options">
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Emanuel.jpg?raw=true" alt="Opção 1">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Brunno.jpg?raw=true" alt="Brunno">
         <div class="option-content">
-          <input type="radio" name="vote" value="Emanuel"> Emanuel
+          <input type="radio" name="vote" value="Brunno"> Brunno
         </div>
       </label>
   
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Guilherme.jpg?raw=true" alt="Opção 2">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true" alt="Ella">
         <div class="option-content">
-          <input type="radio" name="vote" value="Guilherme"> Guilherme
+          <input type="radio" name="vote" value="Ella"> Ella
         </div>
       </label>
   
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true" alt="Opção 3">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true" alt="Tety">
         <div class="option-content">
           <input type="radio" name="vote" value="Tety"> Tety
         </div>
@@ -383,7 +342,8 @@ button#botaoVotar.active:hover {
     </div>
 
     <div class="captcha-container">
-      <div class="h-captcha" data-sitekey="6dfe175a-b5e8-4474-ac38-a84436a8004c" data-callback="onCaptchaSuccess" data-theme="dark"></div>
+      <!-- Cloudflare Turnstile -->
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
 
     <button id="botaoVotar" onclick="submitVote()" disabled>VOTAR</button>
@@ -404,107 +364,92 @@ button#botaoVotar.active:hover {
       <p id="errorMessage"></p>
       <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-      <p></p>
     </div>
   </div>
 
   <script>
-    const ROUND_ID = "rodada_12";
+    // Configurações
+    const ROUND_ID = "roça13"; 
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "roça12f10";
+    const TABLE_NAME = "roça13f10";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const aberturaBR = new Date("2026-01-18T19:00:00");
-    const encerramentoBR = new Date("2026-02-01T19:00:00");
-
-  // =================== HORA DO SERVIDOR ===================
-  async function getServerTime() {
-    try {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
-      const data = await res.json();
-      return new Date(data.datetime);
-    } catch (e) {
-      console.error("Erro ao verificar horário:", e);
-      return new Date(); 
-    }
-  }
-
-  function toSaoPauloDate(date) {
-    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    return new Date(spString);
-  }
-
-  function redirect(url) {
-  if (DEBUG) {
-    console.warn("REDIRECT BLOQUEADO →", url);
-    return;
-  }
-  window.location.href = url;
-}
-
-  // =================== VERIFICAÇÃO DE HORÁRIO ===================
-  async function verificarHorarios() {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
-
-    if (agoraBR < aberturaBR) {
-      window.location.replace("aguarde.html");
-      return;
-    }
-
-    if (agoraBR > encerramentoBR) {
-      window.location.replace("fechada.html");
-      return;
-    }
-
-    console.log("VOTAÇÃO ABERTA");
-  }
-
-  verificarHorarios();
+    const encerramentoBR = new Date("2026-02-02T19:00:00");
 
     let visitorId = null;
     let userIP = null;
     let captchaToken = null;
     let isVPNConfirmed = false;
 
-    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5').then(FingerprintJS => FingerprintJS.load());
+    // FingerprintJS
+    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4').then(FingerprintJS => FingerprintJS.load());
 
+    // Obter horário do servidor (evita fraude de relógio local)
+    async function getServerTime() {
+      try {
+        const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
+        const data = await res.json();
+        return new Date(data.datetime);
+      } catch (e) {
+        return new Date(); 
+      }
+    }
+
+    function toSaoPauloDate(date) {
+      return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+    }
+
+    async function verificarHorarios() {
+      const agoraServer = await getServerTime();
+      const agoraBR = toSaoPauloDate(agoraServer);
+
+      if (agoraBR < aberturaBR) {
+        window.location.replace("aguarde.html");
+        return false;
+      }
+      if (agoraBR > encerramentoBR) {
+        window.location.replace("fechada.html");
+        return false;
+      }
+      return true;
+    }
+
+    // Detecção de VPN/Proxy (Múltiplas camadas)
     async function checkVPN(ip) {
-      // Camada 1: ProxyCheck.io 
-      try {
-        const res1 = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1`);
-        const data1 = await res1.json();
-        if (data1[ip] && (data1[ip].proxy === "yes" || data1[ip].type === "VPN")) return true;
-      } catch (e) { console.warn("Camada 1 falhou"); }
+      const providers = [
+        `https://proxycheck.io/v2/${ip}?vpn=1&asn=1`,
+        `https://ipapi.co/${ip}/json/`,
+        `https://freeipapi.com/api/json/${ip}`
+      ];
 
-      // Camada 2: IP-API 
-      try {
-        const res2 = await fetch(`http://ip-api.com/json/${ip}?fields=status,mobile,proxy,hosting`);
-        const data2 = await res2.json();
-        if (data2.status === "success" && (data2.proxy === true || data2.hosting === true)) return true;
-      } catch (e) { console.warn("Camada 2 falhou"); }
-
-      // Camada 3: FreeIPAPI.com
-      try {
-        const res3 = await fetch(`https://freeipapi.com/api/json/${ip}`);
-        const data3 = await res3.json();
-        if (data3.isProxy === true) return true;
-      } catch (e) { console.warn("Camada 3 falhou"); }
-
+      for (let url of providers) {
+        try {
+          const res = await fetch(url);
+          const data = await res.json();
+          // Verificações específicas por provider
+          if (data.proxy === "yes" || data.vpn === "yes" || data.is_vpn === true || data.is_proxy === true) return true;
+          if (data.security && (data.security.vpn || data.security.proxy)) return true;
+        } catch (e) { continue; }
+      }
       return false;
     }
 
     async function initSecurity() {
       try {
+        const estaAberto = await verificarHorarios();
+        if (!estaAberto) return;
+
         document.getElementById("loadingText").innerText = "Validando dispositivo...";
         const fp = await fpPromise;
         const result = await fp.get();
         visitorId = result.visitorId;
 
-        if (localStorage.getItem("voted_" + ROUND_ID) === "true") {
-          showError("Já votou!", "Aguarde o resultado às 20:30.");
+        // Bloqueio por LocalStorage (Primeira barreira)
+        if (localStorage.getItem("voted_" + ROUND_ID)) {
+          showError("Voto já registrado", "Este dispositivo já participou desta votação.");
           return;
         }
 
@@ -513,17 +458,19 @@ button#botaoVotar.active:hover {
         const ipData = await ipRes.json();
         userIP = ipData.ip;
 
-        // Pré-verificação de VPN na carga
         isVPNConfirmed = await checkVPN(userIP);
         
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
       } catch (e) {
-        showError("Erro de Conexão", "Não foi possível carregar os módulos de segurança.");
+        showError("Erro de Inicialização", "Não foi possível carregar os módulos de segurança.");
       }
     }
 
-    window.onCaptchaSuccess = (token) => { captchaToken = token; checkReady(); };
+    window.onCaptchaSuccess = (token) => {
+      captchaToken = token;
+      checkReady();
+    };
 
     function checkReady() {
       const selecionado = document.querySelector('input[name="vote"]:checked');
@@ -544,18 +491,17 @@ button#botaoVotar.active:hover {
       const btn = document.getElementById("botaoVotar");
 
       btn.disabled = true;
-      btn.innerText = "BLOQUEANDO FRAUDES...";
+      btn.innerText = "VALIDANDO...";
 
       try {
-        // Re-verificar VPN no momento do voto 
-        const isStillVPN = await checkVPN(userIP);
-        if (isStillVPN || isVPNConfirmed) {
-          showError("Voto Bloqueado", "Detectamos o uso de VPN ou Proxy. Votos via conexões anônimas não são permitidos.");
+        // 1. Re-verificar VPN
+        if (isVPNConfirmed || await checkVPN(userIP)) {
+          showError("Acesso Negado", "Votos via VPN ou Proxy não são permitidos para garantir a integridade.");
           return;
         }
 
-        // Verificação final 
-        const { data: existingVoter } = await supabaseClient
+        // 2. Verificar duplicidade no Supabase (Visitor ID)
+        const { data: existingVoter, error: checkError } = await supabaseClient
           .from(TABLE_NAME)
           .select("id")
           .eq("visitor_id", visitorId)
@@ -564,10 +510,11 @@ button#botaoVotar.active:hover {
 
         if (existingVoter) {
           localStorage.setItem("voted_" + ROUND_ID, "true");
-          showError("Já votou!", "Este dispositivo já registrou um voto.");
+          showError("Voto Duplicado", "Identificamos que este dispositivo já votou.");
           return;
         }
 
+        // 3. Registrar Voto
         btn.innerText = "ENVIANDO...";
         const { error: insertError } = await supabaseClient
           .from(TABLE_NAME)
@@ -576,19 +523,22 @@ button#botaoVotar.active:hover {
             ip: userIP,
             visitor_id: visitorId,
             round_id: ROUND_ID,
-            hcaptcha_token: captchaToken,
-            is_vpn: true // Se chegou aqui, is_vpn é falso, mas guardamos o campo
+            turnstile_token: captchaToken, // Guardando o token do Cloudflare
+            user_agent: navigator.userAgent,
+            timestamp: new Date().toISOString()
           }]);
 
         if (insertError) throw insertError;
 
+        // Sucesso
         localStorage.setItem("voted_" + ROUND_ID, "true");
         document.getElementById("votoTela").style.display = "none";
         document.getElementById("confirmTela").style.display = "flex";
         document.getElementById("nomeConfirm").innerText = selecionado.value;
 
       } catch (e) {
-        showError("Erro no Servidor", "Ocorreu um problema ao registrar seu voto.");
+        console.error(e);
+        showError("Erro ao Votar", "Ocorreu um problema técnico. Tente novamente mais tarde.");
         btn.disabled = false;
         btn.innerText = "VOTAR";
       }
@@ -597,7 +547,6 @@ button#botaoVotar.active:hover {
     function showError(title, msg) {
       document.getElementById("loadingTela").style.display = "none";
       document.getElementById("votoTela").style.display = "none";
-      document.getElementById("confirmTela").style.display = "none";
       document.getElementById("errorTela").style.display = "flex";
       document.getElementById("errorTitle").innerText = title;
       document.getElementById("errorMessage").innerText = msg;
