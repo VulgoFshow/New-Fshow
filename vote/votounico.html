@@ -361,16 +361,16 @@ button#botaoVotar.active:hover {
     
     <div class="options">
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Emanuel.jpg?raw=true" alt="Opção 1">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Brunno.jpg?raw=true" alt="Opção 1">
         <div class="option-content">
-          <input type="radio" name="vote" value="Emanuel"> Emanuel
+          <input type="radio" name="vote" value="Brunno"> Brunno
         </div>
       </label>
   
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Guilherme.jpg?raw=true" alt="Opção 2">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Ella.jpg?raw=true" alt="Opção 2">
         <div class="option-content">
-          <input type="radio" name="vote" value="Guilherme"> Guilherme
+          <input type="radio" name="vote" value="Ella"> Ella
         </div>
       </label>
   
@@ -409,15 +409,15 @@ button#botaoVotar.active:hover {
   </div>
 
   <script>
-    const ROUND_ID = "rodada_12";
+    const ROUND_ID = "rodada_13";
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "roça12f10";
+    const TABLE_NAME = "roça13f10";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const aberturaBR = new Date("2026-01-18T19:00:00");
-    const encerramentoBR = new Date("2026-02-01T19:00:00");
+    const encerramentoBR = new Date("2026-02-02T19:00:00");
 
   // =================== HORA DO SERVIDOR ===================
   async function getServerTime() {
