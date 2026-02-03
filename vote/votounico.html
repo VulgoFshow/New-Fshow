@@ -306,7 +306,6 @@
   <!-- Scripts -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Carregando FingerprintJS de forma mais estável via script tag -->
   <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
 </head>
 <body>
@@ -344,7 +343,6 @@
     </div>
 
     <div class="captcha-container">
-      <!-- Cloudflare Turnstile -->
       <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
 
@@ -364,242 +362,147 @@
     <div class="card">
       <div class="error-msg" id="errorTitle">Acesso Negado</div>
       <p id="errorMessage"></p>
-      <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
+      <button class="voltar" id="btnTryAgain" onclick="location.reload()">TENTAR NOVAMENTE</button>
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
     </div>
   </div>
 
   <script>
-    // Configurações
     const ROUND_ID = "rodada_14"; 
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
     const TABLE_NAME = "roça14f10";
 
     let supabaseClient = null;
-
-    const aberturaBR = new Date("2026-01-18T19:00:00");
-    const encerramentoBR = new Date("2026-02-03T19:00:00");
-
     let visitorId = null;
     let userIP = null;
     let captchaToken = null;
     let isVPNConfirmed = false;
 
-    // Obter horário do servidor (evita fraude de relógio local)
-    async function getServerTime() {
-      // Lista de APIs para redundância
-      const apis = [
-        "https://worldtimeapi.org/api/timezone/America/Sao_Paulo",
-        "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo"
-      ];
+    const aberturaBR = new Date("2026-01-18T19:00:00");
+    const encerramentoBR = new Date("2026-02-03T19:00:00");
 
+    async function getServerTime() {
+      const apis = ["https://worldtimeapi.org/api/timezone/America/Sao_Paulo", "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo"];
       for (let api of apis) {
         try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
-          const res = await fetch(api, { signal: controller.signal });
+          const res = await fetch(api, { signal: AbortSignal.timeout(3000) });
           const data = await res.json();
-          clearTimeout(timeoutId);
-          
-          if (data.datetime) return new Date(data.datetime);
-          if (data.dateTime) return new Date(data.dateTime);
-        } catch (e) {
-          console.warn(`Falha ao obter tempo de ${api}:`, e);
-          continue;
-        }
-      }
-      return new Date(); // Fallback final
-    }
-
-    function toSaoPauloDate(date) {
-      return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
-    }
-
-    async function verificarHorarios() {
-      try {
-        const agoraServer = await getServerTime();
-        const agoraBR = toSaoPauloDate(agoraServer);
-
-        if (agoraBR < aberturaBR) {
-          window.location.replace("aguarde.html");
-          return false;
-        }
-        if (agoraBR > encerramentoBR) {
-          window.location.replace("fechada.html");
-          return false;
-        }
-        return true;
-      } catch (e) {
-        console.error("Erro ao verificar horários:", e);
-        return true; // Prossegue em caso de erro crítico na verificação de tempo
-      }
-    }
-
-    // Detecção de VPN/Proxy (Múltiplas camadas)
-    async function checkVPN(ip) {
-      if (!ip) return false;
-      const providers = [
-        `https://proxycheck.io/v2/${ip}?vpn=1&asn=1`,
-        `https://ipapi.co/${ip}/json/`
-      ];
-
-      for (let url of providers) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 4000);
-          const res = await fetch(url, { signal: controller.signal });
-          const data = await res.json();
-          clearTimeout(timeoutId);
-          if (data.proxy === "yes" || data.vpn === "yes" || data.is_vpn === true || data.is_proxy === true) return true;
+          if (data.datetime || data.dateTime) return new Date(data.datetime || data.dateTime);
         } catch (e) { continue; }
       }
-      return false;
+      return new Date();
     }
 
     async function getIP() {
-      const providers = [
-        "https://api.ipify.org?format=json",
-        "https://ipapi.co/json/",
-        "https://cloudflare.com/cdn-cgi/trace"
-      ];
-
+      const providers = ["https://api.ipify.org?format=json", "https://ipapi.co/json/", "https://cloudflare.com/cdn-cgi/trace"];
       for (let url of providers) {
         try {
           const res = await fetch(url);
           const text = await res.text();
-          if (url.includes("trace")) {
-            const ipLine = text.split('\n').find(line => line.startsWith('ip='));
-            return ipLine ? ipLine.split('=')[1] : null;
-          }
-          const data = JSON.parse(text);
-          return data.ip;
+          if (url.includes("trace")) return text.split('\n').find(l => l.startsWith('ip=')).split('=')[1];
+          return JSON.parse(text).ip;
         } catch (e) { continue; }
       }
       return null;
     }
 
+    async function checkVPN(ip) {
+      if (!ip) return false;
+      try {
+        const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`, { signal: AbortSignal.timeout(3000) });
+        const data = await res.json();
+        return data.proxy === "yes" || data.vpn === "yes";
+      } catch (e) { return false; }
+    }
+
     async function initSecurity() {
       try {
-        // 1. Inicializar Supabase
-        if (typeof supabase === 'undefined') {
-          throw new Error("Biblioteca Supabase não carregada");
-        }
+        if (typeof supabase === 'undefined') throw new Error("Supabase não carregado");
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 2. Verificar Horários
-        const estaAberto = await verificarHorarios();
-        if (!estaAberto) return;
+        const agora = await getServerTime();
+        const agoraBR = new Date(agora.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+        if (agoraBR < aberturaBR) return window.location.replace("aguarde.html");
+        if (agoraBR > encerramentoBR) return window.location.replace("fechada.html");
 
-        // 3. Fingerprint
+        if (localStorage.getItem("voted_" + ROUND_ID)) return showError("Voto já registrado", "Este dispositivo já participou desta votação.");
+
         document.getElementById("loadingText").innerText = "Validando dispositivo...";
         if (typeof FingerprintJS !== 'undefined') {
           const fp = await FingerprintJS.load();
           const result = await fp.get();
           visitorId = result.visitorId;
-        } else {
-          console.warn("FingerprintJS não carregado, usando fallback");
-          visitorId = "fallback_" + Math.random().toString(36).substr(2, 9);
-        }
+        } else { visitorId = "fb_" + Math.random().toString(36).substr(2, 9); }
 
-        // Bloqueio por LocalStorage
-        if (localStorage.getItem("voted_" + ROUND_ID)) {
-          showError("Voto já registrado", "Este dispositivo já participou desta votação.");
-          return;
-        }
-
-        // 4. Conexão e IP
         document.getElementById("loadingText").innerText = "Analisando conexão...";
         userIP = await getIP();
-        
-        if (userIP) {
-          isVPNConfirmed = await checkVPN(userIP);
-        }
+        if (userIP) isVPNConfirmed = await checkVPN(userIP);
         
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
       } catch (e) {
-        console.error("Erro crítico na inicialização:", e);
-        showError("Erro de Inicialização", "Não foi possível carregar os módulos de segurança. Por favor, recarregue a página ou verifique sua conexão.");
+        console.error("Erro Init:", e);
+        showError("Erro de Inicialização", "Falha nos módulos de segurança. Recarregue a página.");
       }
     }
 
-    window.onCaptchaSuccess = (token) => {
-      captchaToken = token;
-      checkReady();
-    };
-
+    window.onCaptchaSuccess = (token) => { captchaToken = token; checkReady(); };
     function checkReady() {
-      const selecionado = document.querySelector('input[name="vote"]:checked');
+      const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
-      if (selecionado && captchaToken) {
-        btn.disabled = false;
-        btn.classList.add("active");
-      } else {
-        btn.disabled = true;
-        btn.classList.remove("active");
-      }
+      if (sel && captchaToken) { btn.disabled = false; btn.classList.add("active"); }
+      else { btn.disabled = true; btn.classList.remove("active"); }
     }
-
     document.querySelectorAll('input[name="vote"]').forEach(r => r.onchange = checkReady);
 
     async function submitVote() {
-      const selecionado = document.querySelector('input[name="vote"]:checked');
+      const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
-
       btn.disabled = true;
       btn.innerText = "VALIDANDO...";
 
       try {
-        if (!userIP) userIP = await getIP();
+        if (isVPNConfirmed) return showError("Acesso Negado", "VPN detectada.");
 
-        // 1. Re-verificar VPN
-        if (isVPNConfirmed || (userIP && await checkVPN(userIP))) {
-          showError("Acesso Negado", "Votos via VPN ou Proxy não são permitidos para garantir a integridade.");
-          return;
-        }
-
-        // 2. Verificar duplicidade no Supabase
-        const { data: existingVoter, error: checkError } = await supabaseClient
-          .from(TABLE_NAME)
-          .select("id")
-          .eq("visitor_id", visitorId)
-          .eq("round_id", ROUND_ID)
-          .maybeSingle();
-
-        if (existingVoter) {
+        // Verificar duplicidade
+        const { data: existing, error: checkErr } = await supabaseClient
+          .from(TABLE_NAME).select("id").eq("visitor_id", visitorId).eq("round_id", ROUND_ID).maybeSingle();
+        
+        if (checkErr && checkErr.code !== 'PGRST116') throw checkErr;
+        if (existing) {
           localStorage.setItem("voted_" + ROUND_ID, "true");
-          showError("Voto Duplicado", "Identificamos que este dispositivo já votou.");
-          return;
+          return showError("Voto Duplicado", "Este dispositivo já votou.");
         }
 
-        // 3. Registrar Voto
         btn.innerText = "ENVIANDO...";
-        const { error: insertError } = await supabaseClient
-          .from(TABLE_NAME)
-          .insert([{
-            participante: selecionado.value,
-            ip: userIP || "unknown",
-            visitor_id: visitorId,
-            round_id: ROUND_ID,
-            turnstile_token: captchaToken,
-            user_agent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-          }]);
+        const { error: insErr } = await supabaseClient.from(TABLE_NAME).insert([{
+          participante: sel.value,
+          ip: userIP || "0.0.0.0",
+          visitor_id: visitorId,
+          round_id: ROUND_ID,
+          turnstile_token: captchaToken,
+          user_agent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        }]);
 
-        if (insertError) throw insertError;
+        if (insErr) {
+          console.error("Erro Supabase:", insErr);
+          // Se o erro for de RLS (42501), dar uma mensagem mais clara
+          if (insErr.code === '42501') {
+            throw new Error("Permissão negada no banco de dados. Verifique as políticas de RLS.");
+          }
+          throw insErr;
+        }
 
-        // Sucesso
         localStorage.setItem("voted_" + ROUND_ID, "true");
         document.getElementById("votoTela").style.display = "none";
         document.getElementById("confirmTela").style.display = "flex";
-        document.getElementById("nomeConfirm").innerText = selecionado.value;
-
+        document.getElementById("nomeConfirm").innerText = sel.value;
       } catch (e) {
-        console.error("Erro ao votar:", e);
-        showError("Erro ao Votar", "Ocorreu um problema técnico ao processar seu voto. Tente novamente.");
-        btn.disabled = false;
-        btn.innerText = "VOTAR";
+        console.error("Erro Final:", e);
+        showError("Erro ao Votar", e.message || "Problema técnico ao processar voto. Verifique se o banco de dados permite inserções públicas.");
+        document.getElementById("btnTryAgain").style.display = "block";
       }
     }
 
@@ -611,7 +514,6 @@
       document.getElementById("errorMessage").innerText = msg;
     }
 
-    // Iniciar após o carregamento do DOM
     window.addEventListener('DOMContentLoaded', initSecurity);
   </script>
 </body>
