@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Fshow - Voto Único Seguro</title>
+  <title>Fshow - Voto Único</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
@@ -150,23 +150,26 @@
     
     <div class="options">
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Emanuel.jpg?raw=true" alt="Opção 1">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Opção 1">
         <div class="option-content">
-          <input type="radio" name="vote" value="Emanuel"> Emanuel
+          <input type="radio" name="vote" value="Luca"> Luca
         </div>
       </label>
+  
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="Opção 2">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true" alt="Opção 2">
         <div class="option-content">
-          <input type="radio" name="vote" value="João"> João
+          <input type="radio" name="vote" value="Paiva"> Paiva
         </div>
       </label>
+  
       <label class="option">
         <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true" alt="Opção 3">
         <div class="option-content">
           <input type="radio" name="vote" value="Tety"> Tety
         </div>
-      </label>  
+      </label>
+      
     </div>
 
     <div class="captcha-container">
@@ -195,10 +198,10 @@
   </div>
 
   <script>
-    const ROUND_ID = "rodada_14"; 
+    const ROUND_ID = "rodada_15"; 
     const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "roça14f10";
+    const TABLE_NAME = "roça15f10";
 
     let supabaseClient = null;
     let visitorId = null;
@@ -208,7 +211,7 @@
     async function initSecurity() {
       try {
         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        if (localStorage.getItem("voted_" + ROUND_ID)) return showError("Voto já registrado", "Este dispositivo já participou desta votação.");
+        if (localStorage.getItem("voted_" + ROUND_ID)) return showError("Já votou!", "Aguarde o resultado às 20:30.");
 
         document.getElementById("loadingText").innerText = "Validando dispositivo...";
         if (typeof FingerprintJS !== 'undefined') {
