@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Fshow - Voto Único Seguro</title>
+  <title>Fshow - Voto Único</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
   <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
@@ -26,10 +26,7 @@
       --panel-border: rgba(255,255,255,0.1);
     }
 
-    /* RESET */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -44,15 +41,8 @@
         radial-gradient(circle at 80% 80%, rgba(79,124,255,0.18), transparent 60%),
         linear-gradient(160deg, var(--bg), #0c1018 45%, #05070b);
       background-attachment: fixed;
-      animation: bgFloat 12s ease-in-out infinite alternate;
     }
 
-    @keyframes bgFloat {
-      from { background-position: 0% 0%; }
-      to   { background-position: 100% 100%; }
-    }
-
-    /* CONTAINER */
     .container {
       max-width: 480px;
       width: 100%;
@@ -61,33 +51,13 @@
     }
 
     @keyframes fadeSlideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.96);
-        filter: blur(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0);
-      }
+      from { opacity: 0; transform: translateY(30px) scale(0.96); filter: blur(6px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
     }
 
-    h1 {
-      font-size: 26px;
-      font-weight: 900;
-      text-align: center;
-      letter-spacing: 0.6px;
-      margin-bottom: 12px;
-    }
+    h1 { font-size: 26px; font-weight: 900; text-align: center; letter-spacing: 0.6px; margin-bottom: 12px; }
 
-    /* OPÇÕES */
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      margin-top: 28px;
-    }
+    .options { display: flex; flex-direction: column; gap: 18px; margin-top: 28px; }
 
     .option {
       position: relative;
@@ -100,54 +70,17 @@
       backdrop-filter: blur(10px);
       transition: var(--transition);
       box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-      animation: cardIn 0.6s ease both;
     }
 
-    .option:nth-child(1) { animation-delay: .05s; }
-    .option:nth-child(2) { animation-delay: .12s; }
-    .option:nth-child(3) { animation-delay: .18s; }
-
-    @keyframes cardIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .option::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent 20%, rgba(0,230,216,0.25), transparent 80%);
-      opacity: 0;
-      transition: opacity .5s ease;
-    }
-
-    .option:hover::before { opacity: 1; }
     .option:hover {
       transform: translateY(-6px) scale(1.01);
       border-color: var(--accent);
       box-shadow: var(--shadow-md), var(--shadow-glow);
     }
 
-    .option img {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      flex-shrink: 0;
-      border-right: 1px solid var(--panel-border);
-      transition: transform .6s ease;
-    }
+    .option img { width: 120px; height: 120px; object-fit: cover; flex-shrink: 0; border-right: 1px solid var(--panel-border); }
 
-    .option:hover img { transform: scale(1.05); }
-
-    .option-content {
-      display: flex;
-      align-items: center;
-      padding: 18px;
-      width: 100%;
-      font-size: 18px;
-      font-weight: 600;
-      gap: 15px;
-    }
+    .option-content { display: flex; align-items: center; padding: 18px; width: 100%; font-size: 18px; font-weight: 600; gap: 15px; }
 
     .option-content input[type="radio"] {
       appearance: none;
@@ -160,152 +93,49 @@
       transition: var(--transition);
     }
 
-    .option-content input[type="radio"]:checked {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 5px var(--accent-soft);
-    }
-
+    .option-content input[type="radio"]:checked { border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); }
     .option-content input[type="radio"]:checked::before {
-      content: "";
-      position: absolute;
-      inset: 5px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: pulseRadio .6s ease;
+      content: ""; position: absolute; inset: 5px; background: var(--accent); border-radius: 50%;
     }
 
-    @keyframes pulseRadio {
-      0% { transform: scale(0.4); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+    .captcha-container { margin: 32px 0; display: flex; justify-content: center; }
 
-    /* CAPTCHA */
-    .captcha-container {
-      margin: 32px 0;
-      display: flex;
-      justify-content: center;
-      animation: fadeIn .6s ease both;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* BOTÃO */
     button#botaoVotar {
-      width: 100%;
-      padding: 18px;
-      font-size: 18px;
-      font-weight: 900;
-      border: none;
-      border-radius: var(--radius-md);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      background: #2b2f3a;
-      color: var(--muted);
-      cursor: not-allowed;
-      transition: var(--transition);
+      width: 100%; padding: 18px; font-size: 18px; font-weight: 900; border: none; border-radius: var(--radius-md);
+      text-transform: uppercase; letter-spacing: 1.2px; background: #2b2f3a; color: var(--muted); cursor: not-allowed; transition: var(--transition);
     }
 
     button#botaoVotar.active {
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #001818;
+      cursor: pointer; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #001818;
       box-shadow: 0 10px 30px var(--accent-soft);
-      animation: glowBtn 2.5s infinite alternate;
     }
 
-    @keyframes glowBtn {
-      from { box-shadow: 0 0 20px var(--accent-soft); }
-      to   { box-shadow: 0 0 35px rgba(79,124,255,.35); }
-    }
-
-    button#botaoVotar.active:hover {
-      transform: translateY(-3px) scale(1.02);
-    }
-
-    /* TELAS */
     #confirmTela, #errorTela, #loadingTela {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      width: 100%;
-      animation: fadeSlideUp .7s ease both;
+      display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; width: 100%;
     }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 36px;
-      width: 100%;
-      max-width: 460px;
-      box-shadow: var(--shadow-md);
-      backdrop-filter: blur(12px);
-    }
-
-    .error-msg {
-      color: #ff6b6b;
-      font-weight: 900;
-      font-size: 22px;
-      margin-bottom: 12px;
-    }
-
-    .voltar {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #001818;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      width: 100%;
-      cursor: pointer;
-      font-weight: 800;
-      margin-top: 22px;
-      transition: var(--transition);
-    }
-
-    .voltar:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-glow);
-    }
+    .card { background: var(--card-bg); border-radius: 20px; padding: 36px; width: 100%; max-width: 460px; box-shadow: var(--shadow-md); backdrop-filter: blur(12px); }
+    .error-msg { color: #ff6b6b; font-weight: 900; font-size: 22px; margin-bottom: 12px; }
+    .voltar { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #001818; padding: 14px; border: none; border-radius: 10px; width: 100%; cursor: pointer; font-weight: 800; margin-top: 22px; transition: var(--transition); }
 
     .spinner {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 4px solid rgba(255,255,255,0.15);
-      border-top-color: var(--accent);
-      animation: spin 0.9s linear infinite, pulseSpinner 1.8s ease infinite;
-      margin-bottom: 22px;
+      width: 52px; height: 52px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.15); border-top-color: var(--accent);
+      animation: spin 0.9s linear infinite; margin-bottom: 22px;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes pulseSpinner { 50% { box-shadow: 0 0 25px var(--accent-soft); } }
 
     @media (min-width: 768px) {
       .container { max-width: 720px; }
-      .options {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 22px;
-      }
+      .options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
       .option { flex-direction: column; text-align: center; }
-      .option img {
-        width: 100%;
-        height: 180px;
-        border-right: none;
-        border-bottom: 1px solid var(--panel-border);
-      }
+      .option img { width: 100%; height: 180px; border-right: none; border-bottom: 1px solid var(--panel-border); }
       .option-content { justify-content: center; padding: 22px 12px; }
     }
   </style>
 
-  <!-- Scripts -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
 </head>
 <body>
 
@@ -315,34 +145,42 @@
   </div>
 
   <div id="votoTela" class="container" style="display: none;">
-    <h1>Quem você quer que FIQUE na F10?</h1>
+    <h1>Quem você quer que VENÇA a F10?</h1>
     <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por pessoa.</p>
     
     <div class="options">
+
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Emanuel.jpg?raw=true" alt="Opção 1">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Emanuel"> Emanuel
-        </div>
-      </label>
-  
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="Opção 2">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="João">
         <div class="option-content">
           <input type="radio" name="vote" value="João"> João
         </div>
       </label>
+
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true" alt="Koyuh">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Koyuh"> Koyuh
+        </div>
+      </label>
   
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Tety.jpg?raw=true" alt="Opção 3">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Luca">
         <div class="option-content">
-          <input type="radio" name="vote" value="Tety"> Tety
+          <input type="radio" name="vote" value="Luca"> Luca
         </div>
-      </label>  
+      </label>
+  
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true" alt="Paiva">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Paiva"> Paiva
+        </div>
+      </label>
+      
     </div>
 
     <div class="captcha-container">
-      <!-- Cloudflare Turnstile -->
       <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
 
@@ -368,177 +206,152 @@
   </div>
 
   <script>
-    // Configurações
-    const ROUND_ID = "rodada_14"; 
-    const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "roça14f10";
+    /**
+     * SEGURANÇA REFORÇADA - FSHOW VOTAÇÃO
+     * Desenvolvido para máxima proteção contra fraudes.
+     */
+    const CONFIG = {
+      ROUND: "rodada_18",
+      URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
+      KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
+      TABLE: "finalf10",
+      MIN_TIME: 4000 // 4 segundos de tempo mínimo de permanência
+    };
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let state = {
+      client: null,
+      visitorId: null,
+      ip: null,
+      token: null,
+      start: Date.now(),
+      isBot: false
+    };
 
-    const aberturaBR = new Date("2026-01-18T19:00:00");
-    const encerramentoBR = new Date("2026-02-03T19:00:00");
-
-    let visitorId = null;
-    let userIP = null;
-    let captchaToken = null;
-    let isVPNConfirmed = false;
-
-    // FingerprintJS
-    const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4').then(FingerprintJS => FingerprintJS.load());
-
-    // Obter horário do servidor (evita fraude de relógio local)
-    async function getServerTime() {
-      try {
-        const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
-        const data = await res.json();
-        return new Date(data.datetime);
-      } catch (e) {
-        return new Date(); 
-      }
-    }
-
-    function toSaoPauloDate(date) {
-      return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
-    }
-
-    async function verificarHorarios() {
-      const agoraServer = await getServerTime();
-      const agoraBR = toSaoPauloDate(agoraServer);
-
-      if (agoraBR < aberturaBR) {
-        window.location.replace("aguarde.html");
-        return false;
-      }
-      if (agoraBR > encerramentoBR) {
-        window.location.replace("fechada.html");
-        return false;
-      }
-      return true;
-    }
-
-    // Detecção de VPN/Proxy (Múltiplas camadas)
-    async function checkVPN(ip) {
-      const providers = [
-        `https://proxycheck.io/v2/${ip}?vpn=1&asn=1`,
-        `https://ipapi.co/${ip}/json/`,
-        `https://freeipapi.com/api/json/${ip}`
+    // Detecção de Automação (Headless Browsers / Selenium / Puppeteer)
+    function detectBot() {
+      const criteria = [
+        navigator.webdriver,
+        !navigator.languages || navigator.languages.length === 0,
+        /HeadlessChrome/.test(navigator.userAgent),
+        window.outerWidth === 0 && window.outerHeight === 0
       ];
-
-      for (let url of providers) {
-        try {
-          const res = await fetch(url);
-          const data = await res.json();
-          // Verificações específicas por provider
-          if (data.proxy === "yes" || data.vpn === "yes" || data.is_vpn === true || data.is_proxy === true) return true;
-          if (data.security && (data.security.vpn || data.security.proxy)) return true;
-        } catch (e) { continue; }
-      }
-      return false;
+      if (criteria.some(c => !!c)) state.isBot = true;
     }
 
     async function initSecurity() {
+      detectBot();
       try {
-        const estaAberto = await verificarHorarios();
-        if (!estaAberto) return;
+        state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
+        
+        // Verificação rápida local
+        if (localStorage.getItem("voted_" + CONFIG.ROUND)) {
+          return showError("Voto já registrado!", "Você já participou desta rodada.");
+        }
 
         document.getElementById("loadingText").innerText = "Validando dispositivo...";
-        const fp = await fpPromise;
-        const result = await fp.get();
-        visitorId = result.visitorId;
-
-        // Bloqueio por LocalStorage (Primeira barreira)
-        if (localStorage.getItem("voted_" + ROUND_ID)) {
-          showError("Voto já registrado", "Este dispositivo já participou desta votação.");
-          return;
+        
+        // Fingerprinting avançado
+        if (typeof FingerprintJS !== 'undefined') {
+          const fp = await FingerprintJS.load();
+          const result = await fp.get();
+          state.visitorId = result.visitorId;
+        } else {
+          // Fallback robusto
+          state.visitorId = "gen_" + btoa(navigator.userAgent + screen.colorDepth + screen.width).slice(0, 16);
         }
 
         document.getElementById("loadingText").innerText = "Analisando conexão...";
-        const ipRes = await fetch("https://api.ipify.org?format=json");
-        const ipData = await ipRes.json();
-        userIP = ipData.ip;
-
-        isVPNConfirmed = await checkVPN(userIP);
+        try {
+          const res = await fetch("https://api.ipify.org?format=json");
+          const data = await res.json();
+          state.ip = data.ip;
+        } catch (e) { state.ip = "0.0.0.0"; }
         
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
-      } catch (e) {
-        showError("Erro de Inicialização", "Não foi possível carregar os módulos de segurança.");
+      } catch (e) { 
+        showError("Erro de Inicialização", "Falha nos módulos de segurança. Recarregue a página."); 
       }
     }
 
-    window.onCaptchaSuccess = (token) => {
-      captchaToken = token;
-      checkReady();
+    window.onCaptchaSuccess = (token) => { 
+      state.token = token; 
+      checkReady(); 
     };
 
     function checkReady() {
-      const selecionado = document.querySelector('input[name="vote"]:checked');
+      const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
-      if (selecionado && captchaToken) {
-        btn.disabled = false;
-        btn.classList.add("active");
-      } else {
-        btn.disabled = true;
-        btn.classList.remove("active");
+      if (sel && state.token && !state.isBot) { 
+        btn.disabled = false; 
+        btn.classList.add("active"); 
+      } else { 
+        btn.disabled = true; 
+        btn.classList.remove("active"); 
       }
     }
 
     document.querySelectorAll('input[name="vote"]').forEach(r => r.onchange = checkReady);
 
     async function submitVote() {
-      const selecionado = document.querySelector('input[name="vote"]:checked');
+      const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
+      
+      if (btn.disabled || state.isBot) return;
+
+      // Verificação de tempo (Anti-bot rápido)
+      const elapsed = Date.now() - state.start;
+      if (elapsed < CONFIG.MIN_TIME) {
+        return showError("Ação muito rápida", "Por favor, aguarde alguns segundos antes de votar.");
+      }
 
       btn.disabled = true;
       btn.innerText = "VALIDANDO...";
 
       try {
-        // 1. Re-verificar VPN
-        if (isVPNConfirmed || await checkVPN(userIP)) {
-          showError("Acesso Negado", "Votos via VPN ou Proxy não são permitidos para garantir a integridade.");
-          return;
-        }
-
-        // 2. Verificar duplicidade no Supabase (Visitor ID)
-        const { data: existingVoter, error: checkError } = await supabaseClient
-          .from(TABLE_NAME)
+        // 1. Verificação de duplicidade no Banco (Server-side check)
+        const { data: existing, error: checkErr } = await state.client
+          .from(CONFIG.TABLE)
           .select("id")
-          .eq("visitor_id", visitorId)
-          .eq("round_id", ROUND_ID)
+          .eq("visitor_id", state.visitorId)
+          .eq("round_id", CONFIG.ROUND)
           .maybeSingle();
-
-        if (existingVoter) {
-          localStorage.setItem("voted_" + ROUND_ID, "true");
-          showError("Voto Duplicado", "Identificamos que este dispositivo já votou.");
-          return;
+        
+        if (existing) {
+          localStorage.setItem("voted_" + CONFIG.ROUND, "true");
+          return showError("Voto Duplicado", "Este dispositivo já votou nesta rodada.");
         }
 
-        // 3. Registrar Voto
         btn.innerText = "ENVIANDO...";
-        const { error: insertError } = await supabaseClient
-          .from(TABLE_NAME)
-          .insert([{
-            participante: selecionado.value,
-            ip: userIP,
-            visitor_id: visitorId,
-            round_id: ROUND_ID,
-            turnstile_token: captchaToken, // Guardando o token do Cloudflare
-            user_agent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-          }]);
 
-        if (insertError) throw insertError;
+        // 2. Inserção com metadados de auditoria
+        const { error: insErr } = await state.client.from(CONFIG.TABLE).insert([{
+          participante: sel.value,
+          ip: state.ip,
+          visitor_id: state.visitorId,
+          round_id: CONFIG.ROUND,
+          turnstile_token: state.token,
+          user_agent: navigator.userAgent,
+          // Metadados extras para detecção de padrões de fraude
+          audit_data: {
+            d: elapsed,
+            s: screen.width + "x" + screen.height,
+            tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            l: navigator.language
+          }
+        }]);
+
+        if (insErr) throw insErr;
 
         // Sucesso
-        localStorage.setItem("voted_" + ROUND_ID, "true");
+        localStorage.setItem("voted_" + CONFIG.ROUND, "true");
         document.getElementById("votoTela").style.display = "none";
         document.getElementById("confirmTela").style.display = "flex";
-        document.getElementById("nomeConfirm").innerText = selecionado.value;
+        document.getElementById("nomeConfirm").innerText = sel.value;
 
       } catch (e) {
-        console.error(e);
-        showError("Erro ao Votar", "Ocorreu um problema técnico. Tente novamente mais tarde.");
+        console.error("Erro Final:", e);
+        showError("Erro ao Votar", "Houve um problema técnico. Tente novamente mais tarde.");
         btn.disabled = false;
         btn.innerText = "VOTAR";
       }
@@ -552,7 +365,7 @@
       document.getElementById("errorMessage").innerText = msg;
     }
 
-    initSecurity();
+    window.addEventListener('DOMContentLoaded', initSecurity);
   </script>
 </body>
 </html>
