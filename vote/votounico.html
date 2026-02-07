@@ -151,28 +151,28 @@
     <div class="options">
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="Opção 1">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="João">
         <div class="option-content">
           <input type="radio" name="vote" value="João"> João
         </div>
       </label>
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true" alt="Opção 2">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true" alt="Koyuh">
         <div class="option-content">
           <input type="radio" name="vote" value="Koyuh"> Koyuh
         </div>
       </label>
   
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Opção 3">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Luca">
         <div class="option-content">
           <input type="radio" name="vote" value="Luca"> Luca
         </div>
       </label>
   
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true" alt="Opção 4">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true" alt="Paiva">
         <div class="option-content">
           <input type="radio" name="vote" value="Paiva"> Paiva
         </div>
@@ -206,85 +206,144 @@
   </div>
 
   <script>
-    const ROUND_ID = "rodada_18"; 
-    const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    const TABLE_NAME = "finalf10";
+    /**
+     * SEGURANÇA REFORÇADA - FSHOW VOTAÇÃO (CORRIGIDO)
+     * Removido campos extras que podem não existir no seu Supabase.
+     */
+    const CONFIG = {
+      ROUND: "rodada_18",
+      URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
+      KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
+      TABLE: "final10",
+      MIN_TIME: 3000 // Reduzido para 3 segundos
+    };
 
-    let supabaseClient = null;
-    let visitorId = null;
-    let userIP = null;
-    let captchaToken = null;
+    let state = {
+      client: null,
+      visitorId: null,
+      ip: null,
+      token: null,
+      start: Date.now(),
+      isBot: false
+    };
+
+    function detectBot() {
+      const criteria = [
+        navigator.webdriver,
+        !navigator.languages || navigator.languages.length === 0,
+        /HeadlessChrome/.test(navigator.userAgent)
+      ];
+      if (criteria.some(c => !!c)) state.isBot = true;
+    }
 
     async function initSecurity() {
+      detectBot();
       try {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        if (localStorage.getItem("voted_" + ROUND_ID)) return showError("Já votou!", "Aguarde o resultado às 20:30.");
+        state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
+        
+        if (localStorage.getItem("voted_" + CONFIG.ROUND)) {
+          return showError("Voto já registrado!", "Você já participou desta rodada.");
+        }
 
         document.getElementById("loadingText").innerText = "Validando dispositivo...";
+        
         if (typeof FingerprintJS !== 'undefined') {
           const fp = await FingerprintJS.load();
           const result = await fp.get();
-          visitorId = result.visitorId;
-        } else { visitorId = "fb_" + Math.random().toString(36).substr(2, 9); }
+          state.visitorId = result.visitorId;
+        } else {
+          state.visitorId = "gen_" + Math.random().toString(36).substr(2, 10);
+        }
 
         document.getElementById("loadingText").innerText = "Analisando conexão...";
         try {
           const res = await fetch("https://api.ipify.org?format=json");
           const data = await res.json();
-          userIP = data.ip;
-        } catch (e) { userIP = "0.0.0.0"; }
+          state.ip = data.ip;
+        } catch (e) { state.ip = "0.0.0.0"; }
         
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
-      } catch (e) { showError("Erro de Inicialização", "Falha nos módulos. Recarregue a página."); }
+      } catch (e) { 
+        console.error("Erro Init:", e);
+        showError("Erro de Inicialização", "Falha nos módulos de segurança."); 
+      }
     }
 
-    window.onCaptchaSuccess = (token) => { captchaToken = token; checkReady(); };
+    window.onCaptchaSuccess = (token) => { 
+      state.token = token; 
+      checkReady(); 
+    };
+
     function checkReady() {
       const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
-      if (sel && captchaToken) { btn.disabled = false; btn.classList.add("active"); }
-      else { btn.disabled = true; btn.classList.remove("active"); }
+      if (sel && state.token) { 
+        btn.disabled = false; 
+        btn.classList.add("active"); 
+      } else { 
+        btn.disabled = true; 
+        btn.classList.remove("active"); 
+      }
     }
+
     document.querySelectorAll('input[name="vote"]').forEach(r => r.onchange = checkReady);
 
     async function submitVote() {
       const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
+      
+      if (btn.disabled) return;
+
+      const elapsed = Date.now() - state.start;
+      if (elapsed < CONFIG.MIN_TIME && !state.isBot) {
+        return showError("Ação muito rápida", "Por favor, aguarde um momento antes de votar.");
+      }
+
       btn.disabled = true;
       btn.innerText = "VALIDANDO...";
 
       try {
-        // Verificar duplicidade
-        const { data: existing, error: checkErr } = await supabaseClient
-          .from(TABLE_NAME).select("id").eq("visitor_id", visitorId).eq("round_id", ROUND_ID).maybeSingle();
+        // 1. Verificação de duplicidade
+        const { data: existing, error: checkErr } = await state.client
+          .from(CONFIG.TABLE)
+          .select("id")
+          .eq("visitor_id", state.visitorId)
+          .eq("round_id", CONFIG.ROUND)
+          .maybeSingle();
         
         if (existing) {
-          localStorage.setItem("voted_" + ROUND_ID, "true");
-          return showError("Voto Duplicado", "Este dispositivo já votou.");
+          localStorage.setItem("voted_" + CONFIG.ROUND, "true");
+          return showError("Voto Duplicado", "Este dispositivo já votou nesta rodada.");
         }
 
         btn.innerText = "ENVIANDO...";
-        // REMOVIDA A COLUNA 'timestamp' QUE ESTAVA DANDO ERRO
-        const { error: insErr } = await supabaseClient.from(TABLE_NAME).insert([{
+
+        // 2. Inserção (CAMPOS EXATOS DO SEU BANCO)
+        const { error: insErr } = await state.client.from(CONFIG.TABLE).insert([{
           participante: sel.value,
-          ip: userIP || "0.0.0.0",
-          visitor_id: visitorId,
-          round_id: ROUND_ID,
-          turnstile_token: captchaToken,
+          ip: state.ip || "0.0.0.0",
+          visitor_id: state.visitorId,
+          round_id: CONFIG.ROUND,
+          turnstile_token: state.token,
           user_agent: navigator.userAgent
         }]);
 
-        if (insErr) throw insErr;
+        if (insErr) {
+            console.error("Erro Supabase:", insErr);
+            throw insErr;
+        }
 
-        localStorage.setItem("voted_" + ROUND_ID, "true");
+        // Sucesso
+        localStorage.setItem("voted_" + CONFIG.ROUND, "true");
         document.getElementById("votoTela").style.display = "none";
         document.getElementById("confirmTela").style.display = "flex";
         document.getElementById("nomeConfirm").innerText = sel.value;
+
       } catch (e) {
         console.error("Erro Final:", e);
-        showError("Erro ao Votar", e.message || "Problema técnico. Verifique se as colunas no Supabase estão corretas.");
+        // Exibe o erro real no console para você debugar se persistir
+        showError("Erro ao Votar", "Houve um problema ao salvar seu voto. Detalhes no console.");
         btn.disabled = false;
         btn.innerText = "VOTAR";
       }
