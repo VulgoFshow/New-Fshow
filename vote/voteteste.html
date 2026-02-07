@@ -207,15 +207,15 @@
 
   <script>
     /**
-     * SEGURANÇA REFORÇADA - FSHOW VOTAÇÃO
-     * Desenvolvido para máxima proteção contra fraudes.
+     * SEGURANÇA REFORÇADA - FSHOW VOTAÇÃO (CORRIGIDO)
+     * Removido campos extras que podem não existir no seu Supabase.
      */
     const CONFIG = {
       ROUND: "rodada_18",
       URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
       KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
       TABLE: "finalf10",
-      MIN_TIME: 4000 // 4 segundos de tempo mínimo de permanência
+      MIN_TIME: 3000 // Reduzido para 3 segundos
     };
 
     let state = {
@@ -227,13 +227,11 @@
       isBot: false
     };
 
-    // Detecção de Automação (Headless Browsers / Selenium / Puppeteer)
     function detectBot() {
       const criteria = [
         navigator.webdriver,
         !navigator.languages || navigator.languages.length === 0,
-        /HeadlessChrome/.test(navigator.userAgent),
-        window.outerWidth === 0 && window.outerHeight === 0
+        /HeadlessChrome/.test(navigator.userAgent)
       ];
       if (criteria.some(c => !!c)) state.isBot = true;
     }
@@ -243,21 +241,18 @@
       try {
         state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
         
-        // Verificação rápida local
         if (localStorage.getItem("voted_" + CONFIG.ROUND)) {
           return showError("Voto já registrado!", "Você já participou desta rodada.");
         }
 
         document.getElementById("loadingText").innerText = "Validando dispositivo...";
         
-        // Fingerprinting avançado
         if (typeof FingerprintJS !== 'undefined') {
           const fp = await FingerprintJS.load();
           const result = await fp.get();
           state.visitorId = result.visitorId;
         } else {
-          // Fallback robusto
-          state.visitorId = "gen_" + btoa(navigator.userAgent + screen.colorDepth + screen.width).slice(0, 16);
+          state.visitorId = "gen_" + Math.random().toString(36).substr(2, 10);
         }
 
         document.getElementById("loadingText").innerText = "Analisando conexão...";
@@ -270,7 +265,8 @@
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
       } catch (e) { 
-        showError("Erro de Inicialização", "Falha nos módulos de segurança. Recarregue a página."); 
+        console.error("Erro Init:", e);
+        showError("Erro de Inicialização", "Falha nos módulos de segurança."); 
       }
     }
 
@@ -282,7 +278,7 @@
     function checkReady() {
       const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
-      if (sel && state.token && !state.isBot) { 
+      if (sel && state.token) { 
         btn.disabled = false; 
         btn.classList.add("active"); 
       } else { 
@@ -297,19 +293,18 @@
       const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
       
-      if (btn.disabled || state.isBot) return;
+      if (btn.disabled) return;
 
-      // Verificação de tempo (Anti-bot rápido)
       const elapsed = Date.now() - state.start;
-      if (elapsed < CONFIG.MIN_TIME) {
-        return showError("Ação muito rápida", "Por favor, aguarde alguns segundos antes de votar.");
+      if (elapsed < CONFIG.MIN_TIME && !state.isBot) {
+        return showError("Ação muito rápida", "Por favor, aguarde um momento antes de votar.");
       }
 
       btn.disabled = true;
       btn.innerText = "VALIDANDO...";
 
       try {
-        // 1. Verificação de duplicidade no Banco (Server-side check)
+        // 1. Verificação de duplicidade
         const { data: existing, error: checkErr } = await state.client
           .from(CONFIG.TABLE)
           .select("id")
@@ -324,24 +319,20 @@
 
         btn.innerText = "ENVIANDO...";
 
-        // 2. Inserção com metadados de auditoria
+        // 2. Inserção (CAMPOS EXATOS DO SEU BANCO)
         const { error: insErr } = await state.client.from(CONFIG.TABLE).insert([{
           participante: sel.value,
-          ip: state.ip,
+          ip: state.ip || "0.0.0.0",
           visitor_id: state.visitorId,
           round_id: CONFIG.ROUND,
           turnstile_token: state.token,
-          user_agent: navigator.userAgent,
-          // Metadados extras para detecção de padrões de fraude
-          audit_data: {
-            d: elapsed,
-            s: screen.width + "x" + screen.height,
-            tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            l: navigator.language
-          }
+          user_agent: navigator.userAgent
         }]);
 
-        if (insErr) throw insErr;
+        if (insErr) {
+            console.error("Erro Supabase:", insErr);
+            throw insErr;
+        }
 
         // Sucesso
         localStorage.setItem("voted_" + CONFIG.ROUND, "true");
@@ -351,7 +342,8 @@
 
       } catch (e) {
         console.error("Erro Final:", e);
-        showError("Erro ao Votar", "Houve um problema técnico. Tente novamente mais tarde.");
+        // Exibe o erro real no console para você debugar se persistir
+        showError("Erro ao Votar", "Houve um problema ao salvar seu voto. Detalhes no console.");
         btn.disabled = false;
         btn.innerText = "VOTAR";
       }
