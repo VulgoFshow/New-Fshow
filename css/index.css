@@ -912,3 +912,168 @@ footer::before {
   background: linear-gradient(90deg, #6fffd6, #5c43ff);
   z-index: -1;
 }
+
+/* ==================================== 
+   STORIES EM DUPLAS
+   ==================================== */
+
+.stories-wrapper {
+  width: 100%;
+  background: #f9f9f9;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.stories-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 14px;
+  padding: 14px 16px;
+  scrollbar-width: none;
+}
+
+.stories-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==================================== 
+   DUPLA
+   ==================================== */
+
+.story-pair {
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1),
+              filter 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.story-pair:hover {
+  transform: translateY(-8px) scale(1.03);
+}
+
+.story {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: box-shadow 0.3s ease,
+              transform 0.3s ease
+}
+
+/* esquerda */
+.story.left {
+  border: 3px solid #00C79C;
+}
+
+/* direita */
+.story.right {
+  border: 3px solid #FF4FFF;
+  margin-left: -3px; 
+}
+
+.story-pair:hover .story.left {
+  box-shadow: 0 0 14px #00FFCC;
+}
+
+.story-pair:hover .story.right {
+  box-shadow: 0 0 14px #FF4FFF;
+}
+
+/* ==================================== 
+   BADGES
+   ==================================== */
+
+/* FAZ */
+.story.cfaz::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -28px;
+  width: 100px;
+  height: 90px;
+  background: url('https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.story.cpower::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  right: -20px;
+  width: 38px;
+  height: 90px;
+  background: url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/raiopower.png?raw=true') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ROÇA */
+.story.croça::after {
+  content: "🔥";
+  position: absolute;
+  top: 10px;
+  right: -17px;
+  font-size: 26px;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* FINAL */
+.story.cfinal::after {
+  content: "🌟";
+  position: absolute;
+  top: 10px;
+  right: -17px;
+  font-size: 26px;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* LAMP */
+.story.clamp::after {
+  content: "";
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 60px;
+  height: 50px;
+  background: url('https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* INCO */
+.story.cinco::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -11px;
+  width: 43px;
+  height: 33px;
+  background: url('https://i.ibb.co/fd5gvrfZ/Chat-GPT-Image-26-de-out-de-2025-22-35-43-fotor-bg-remover-20251026223635.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ==================================== 
+   RESPONSIVO
+   ==================================== */
+
+@media (max-width: 768px) {
+  .story {
+    width: 66px;
+    height: 66px;
+  }
+
+  .story-pair:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
