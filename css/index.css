@@ -68,7 +68,7 @@ a {
 }
 
 .logo-container {
-    display: block;
+    display: flex;
     align-items: center;
     gap: 10px;
 }
@@ -87,7 +87,7 @@ a {
 }
 
 .logo-container2 {
-    display: flex;
+    display: block;
     align-items: center;
     gap: 10px;
 }
@@ -1008,7 +1008,7 @@ footer::before {
   right: -20px;
   width: 38px;
   height: 90px;
-  background: url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/raiopower.png?raw=true') no-repeat center/contain;
+  background: url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/raiopower.png?raw=true') no-repeat center/contain;
   pointer-events: none;
   z-index: 5;
 }
