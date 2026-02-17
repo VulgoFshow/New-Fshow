@@ -700,36 +700,29 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que VENÇA a F10? <br> Vote quantas vezes quiser.</h1>
+    <h1>Quem você quer que FIQUE no PCF2? <br> Vote quantas vezes quiser.</h1>
     <div class="espacador"></div>
     
 <div class="options">
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="Opção 1">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/EdueSirleidy.jpg?raw=true" alt="Opção 1">
         <div class="option-content">
-          <input type="radio" name="vote" value="João"> João
+          <input type="radio" name="vote" value="Edu e Sirleidy"> Edu e Sirleidy
         </div>
       </label>
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true" alt="Opção 2">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/KoyuheJoão.jpg?raw=true" alt="Opção 2">
         <div class="option-content">
-          <input type="radio" name="vote" value="Koyuh"> Koyuh
+          <input type="radio" name="vote" value="Koyuh e João"> Koyuh e João
         </div>
       </label>
   
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Opção 3">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/ManchinhaeRauilly.jpg?raw=true" alt="Opção 3">
         <div class="option-content">
-          <input type="radio" name="vote" value="Luca"> Luca
-        </div>
-      </label>
-  
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true" alt="Opção 4">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Paiva"> Paiva
+          <input type="radio" name="vote" value="Manchinha e Rauilly"> Manchinha e Rauilly
         </div>
       </label>
   
@@ -792,12 +785,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "finalf10";
+  const TABLE_VOTACAO = "dr1";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-02-08T19:00:00");
+  const encerramentoBR = new Date("2026-02-17T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
