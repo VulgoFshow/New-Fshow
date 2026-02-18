@@ -1,4 +1,4 @@
-:root {  
+  :root {  
     --orange-vibrant: #FF8C00;  
     --purple-dark: #8A2BE2;  
     --text-primary: #121212;  
@@ -1005,7 +1005,7 @@ footer::before {
   content: "";
   position: absolute;
   top: -12px;
-  right: -20px;
+  right: 44px;
   width: 38px;
   height: 90px;
   background: url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/raiopower.png?raw=true') no-repeat center/contain;
@@ -1018,7 +1018,7 @@ footer::before {
   content: "🔥";
   position: absolute;
   top: 10px;
-  right: -17px;
+  right: 45px;
   font-size: 26px;
   transform: rotate(-8deg);
   pointer-events: none;
@@ -1030,7 +1030,7 @@ footer::before {
   content: "🌟";
   position: absolute;
   top: 10px;
-  right: -17px;
+  right: 45px;
   font-size: 26px;
   transform: rotate(-8deg);
   pointer-events: none;
@@ -1104,10 +1104,8 @@ footer::before {
   box-sizing: border-box;
 }
 
-/* ===================================== */
-/* 🎯 BANNER */
-/* ===================================== */
 
+/* BANNER */
 .ad-responsive {
   width: 100%;
   padding: 0 16px;
@@ -1147,10 +1145,7 @@ footer::before {
   }
 }
 
-/* ===================================== */
-/* 🚀 SLIDE POPUP */
-/* ===================================== */
-
+/* SLIDE POPUP */
 .fshow-slide-ad {
   position: fixed;
   bottom: 20px;
@@ -1201,11 +1196,8 @@ footer::before {
   color: var(--ad-muted);
 }
 
-/* ===================================== */
-/* 📰 NEWS POPUP */
-/* ===================================== */
-
-.fshow-news-ad {
+/* NEWS POPUP */
+.fshow-adsnews-ad {
   position: fixed;
   bottom: 20px;
   left: 20px;
@@ -1214,7 +1206,7 @@ footer::before {
   z-index: 9998;
 }
 
-.news-card {
+.adsnews-card {
   background: var(--ad-bg);
   border: 1px solid var(--ad-border);
   border-radius: 18px;
@@ -1225,13 +1217,13 @@ footer::before {
   position: relative;
 }
 
-.news-title {
+.adsnews-title {
   font-weight: 700;
   font-size: 15px;
   margin-bottom: 6px;
 }
 
-.news-text {
+.adsnews-text {
   font-size: 13px;
   color: var(--ad-muted);
   line-height: 1.4;
@@ -1242,6 +1234,77 @@ footer::before {
 .news-link {
   display: block;
   text-decoration: none;
+}
+
+/* SLIDE DUPLO */
+.fshow-slide-ad-top {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 340px;
+  max-width: 95%;
+  transform: translateY(-120%);
+  transition: transform .5s cubic-bezier(.77,0,.18,1);
+  z-index: 9999;
+}
+
+.fshow-slide-ad-top.active {
+  transform: translateY(0);
+}
+
+.slide-content-top {
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 20px;
+  padding: 18px;
+  color: var(--ad-text);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 35px var(--ad-glow);
+  position: relative;
+}
+
+.slide-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Imagens */
+.slide-img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+  transition: transform .3s ease, box-shadow .3s ease;
+  cursor: pointer;
+}
+
+.slide-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 35px rgba(0,255,200,0.5);
+}
+
+/* Botão fechar */
+.slide-close-top {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #00ffd0;
+  font-size: 18px;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  z-index: 10;
+  transition: .2s ease;
+}
+
+.slide-close-top:hover {
+  background: #00ffd0;
+  color: #000;
 }
 
 /* Imagens */
