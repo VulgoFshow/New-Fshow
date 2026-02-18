@@ -459,8 +459,7 @@ Criado por <a href="termos/ferlove.html" class="link">Fer Love</a>
     © 2025 Fshow • Todos os direitos reservados
   </div>
 </footer>
-    
-//ADS
+
 <div class="fshow-slide-ad-top" id="slideAdTop">
   <div class="slide-content-top">
 
@@ -499,5 +498,55 @@ function fecharSlideTop(){
 setTimeout(abrirSlideTop, 1000);
 </script>
 
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const track = document.querySelector(".carousel-track");
+    const slides = Array.from(document.querySelectorAll(".carousel-slide"));
+    const nextBtn = document.querySelector(".next-control");
+    const prevBtn = document.querySelector(".prev-control");
+    const indicators = document.querySelectorAll(".indicator");
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    function updateCarousel(index) {
+
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+
+        currentIndex = index;
+
+        const slideWidth = slides[0].offsetWidth;
+        track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+
+        slides.forEach(slide => slide.classList.remove("current-slide"));
+        slides[currentIndex].classList.add("current-slide");
+
+        indicators.forEach(ind => ind.classList.remove("active-indicator"));
+        indicators[currentIndex].classList.add("active-indicator");
+    }
+
+    nextBtn.addEventListener("click", () => {
+        updateCarousel(currentIndex + 1);
+    });
+
+    prevBtn.addEventListener("click", () => {
+        updateCarousel(currentIndex - 1);
+    });
+
+    indicators.forEach(indicator => {
+        indicator.addEventListener("click", () => {
+            const slideIndex = parseInt(indicator.getAttribute("data-slide"));
+            updateCarousel(slideIndex);
+        });
+    });
+
+    window.addEventListener("resize", () => {
+        updateCarousel(currentIndex);
+    });
+
+});
+</script>
 </body>  
 </html>
