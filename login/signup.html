@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar - Sistema de Contas</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      padding: 2rem;
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .card-title {
+      font-size: 1.75rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-description {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    input:disabled {
+      background: #f3f4f6;
+      cursor: not-allowed;
+    }
+
+    .help-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+
+    .error-message {
+      color: #dc2626;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      text-align: center;
+      margin: 1.5rem 0;
+      color: #9ca3af;
+      font-size: 0.9rem;
+    }
+
+    .link-section {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .link-section p {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .link-section a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .link-section a:hover {
+      text-decoration: underline;
+    }
+
+    /* Alert */
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .alert-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.5rem;
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">Criar Conta</h1>
+        <p class="card-description">Registre-se para acessar o sistema</p>
+      </div>
+
+      <div class="alert alert-error" id="error-alert"></div>
+      <div class="alert alert-success" id="success-alert"></div>
+
+      <form id="signup-form">
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="seu@email.com" 
+            required
+          >
+          <div class="error-message" id="email-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="nickname">Apelido</label>
+          <input 
+            type="text" 
+            id="nickname" 
+            name="nickname" 
+            placeholder="seu_apelido" 
+            required
+          >
+          <p class="help-text">3-30 caracteres, apenas letras, números e underscore</p>
+          <div class="error-message" id="nickname-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="••••••••" 
+            required
+          >
+          <p class="help-text">Mínimo 8 caracteres, 1 maiúscula, 1 minúscula e 1 número</p>
+          <div class="error-message" id="password-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Confirmar Senha</label>
+          <input 
+            type="password" 
+            id="confirm-password" 
+            name="confirm-password" 
+            placeholder="••••••••" 
+            required
+          >
+          <div class="error-message" id="confirm-password-error"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn">
+          Registrar
+        </button>
+      </form>
+
+      <div class="link-section">
+        <p>Já tem uma conta? <a href="login.html">Faça login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+    const form = document.getElementById('signup-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorAlert = document.getElementById('error-alert');
+    const successAlert = document.getElementById('success-alert');
+
+    // Validation functions
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    function validateNickname(nickname) {
+      return /^[a-zA-Z0-9_]{3,30}$/.test(nickname);
+    }
+
+    function validatePassword(password) {
+      return password.length >= 8 &&
+             /[A-Z]/.test(password) &&
+             /[a-z]/.test(password) &&
+             /[0-9]/.test(password);
+    }
+
+    function showError(fieldId, message) {
+      const errorElement = document.getElementById(fieldId + '-error');
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+      }
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.error-message').forEach(el => {
+        el.classList.remove('show');
+        el.textContent = '';
+      });
+    }
+
+    function showAlert(type, message) {
+      const alert = type === 'error' ? errorAlert : successAlert;
+      alert.textContent = message;
+      alert.classList.add('show');
+      setTimeout(() => {
+        alert.classList.remove('show');
+      }, 3000);
+    }
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      const email = document.getElementById('email').value.trim();
+      const nickname = document.getElementById('nickname').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      // Validation
+      let hasError = false;
+
+      if (!validateEmail(email)) {
+        showError('email', 'E-mail inválido');
+        hasError = true;
+      }
+
+      if (!validateNickname(nickname)) {
+        showError('nickname', 'Apelido deve ter 3-30 caracteres, apenas letras, números e underscore');
+        hasError = true;
+      }
+
+      if (!validatePassword(password)) {
+        showError('password', 'Senha deve ter 8+ caracteres, 1 maiúscula, 1 minúscula e 1 número');
+        hasError = true;
+      }
+
+      if (password !== confirmPassword) {
+        showError('confirm-password', 'As senhas não correspondem');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span>Registrando...';
+
+      try {
+        // Create user with Firebase
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        // Save user profile to Firestore
+        await db.collection('users').doc(user.uid).set({
+          email: email,
+          nickname: nickname,
+          photoURL: null,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+
+        showAlert('success', 'Conta criada com sucesso! Redirecionando...');
+        
+        setTimeout(() => {
+          redirectTo('profile.html');
+        }, 1500);
+      } catch (error) {
+        let errorMessage = 'Erro ao registrar';
+        
+        if (error.code === 'auth/email-already-in-use') {
+          errorMessage = 'Este e-mail já está registrado';
+        } else if (error.code === 'auth/weak-password') {
+          errorMessage = 'Senha muito fraca';
+        } else if (error.code === 'auth/invalid-email') {
+          errorMessage = 'E-mail inválido';
+        }
+
+        showAlert('error', errorMessage);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Registrar';
+      }
+    });
+
+    // Check if user is already logged in
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        redirectTo('profile.html');
+      }
+    });
+  </script>
+</body>
+</html>

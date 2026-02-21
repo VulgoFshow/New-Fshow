@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Perfil - Sistema de Contas</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: #2563eb;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #2563eb;
+      border: 2px solid #2563eb;
+    }
+
+    .btn-secondary:hover {
+      background: #f0f9ff;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    /* Main Content */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-description {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* Alert */
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .alert-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* Profile Picture Section */
+    .profile-picture-section {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .avatar-container {
+      position: relative;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      border: 3px solid #e5e7eb;
+      object-fit: cover;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .upload-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .btn-upload {
+      background: #2563eb;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-upload:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-upload:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .upload-help {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    /* Form Section */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    input:disabled {
+      background: #f3f4f6;
+      cursor: not-allowed;
+      color: #6b7280;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Info Section */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .info-item {
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 8px;
+    }
+
+    .info-label {
+      font-size: 0.85rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1f2937;
+      word-break: break-all;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      main {
+        padding: 1rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+
+      .profile-picture-section {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      header {
+        padding: 1rem;
+      }
+
+      .header-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      nav {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">SC</div>
+        <span>Sistema de Contas</span>
+      </a>
+      <nav>
+        <a href="index.html" class="btn btn-secondary">Início</a>
+        <button class="btn btn-danger" id="logout-btn">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="card">
+      <div class="card-header">
+        <h1 class="card-title">Meu Perfil</h1>
+        <p class="card-description">Gerencie suas informações de conta</p>
+      </div>
+
+      <div class="alert alert-error" id="error-alert"></div>
+      <div class="alert alert-success" id="success-alert"></div>
+
+      <!-- Profile Picture Section -->
+      <div class="profile-picture-section">
+        <div class="avatar-container">
+          <div class="avatar" id="avatar">👤</div>
+        </div>
+        <div class="upload-section">
+          <button class="btn-upload" id="upload-btn">📸 Alterar Foto</button>
+          <input type="file" id="file-input" class="file-input" accept="image/*">
+          <p class="upload-help">JPEG, PNG, WebP ou GIF. Máximo 5MB.</p>
+        </div>
+      </div>
+
+      <!-- Form Section -->
+      <form id="profile-form">
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            disabled
+          >
+          <p class="upload-help">O e-mail não pode ser alterado</p>
+        </div>
+
+        <div class="form-group">
+          <label for="nickname">Apelido</label>
+          <input 
+            type="text" 
+            id="nickname" 
+            name="nickname" 
+            placeholder="seu_apelido"
+          >
+          <p class="upload-help">3-30 caracteres, apenas letras, números e underscore</p>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn-primary" id="save-btn">
+            Salvar Alterações
+          </button>
+        </div>
+      </form>
+
+      <!-- Account Info -->
+      <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+        <h3 style="font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">
+          Informações da Conta
+        </h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">ID da Conta</div>
+            <div class="info-value" id="info-id">-</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Membro desde</div>
+            <div class="info-value" id="info-created">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+    const form = document.getElementById('profile-form');
+    const emailInput = document.getElementById('email');
+    const nicknameInput = document.getElementById('nickname');
+    const saveBtn = document.getElementById('save-btn');
+    const uploadBtn = document.getElementById('upload-btn');
+    const fileInput = document.getElementById('file-input');
+    const avatar = document.getElementById('avatar');
+    const logoutBtn = document.getElementById('logout-btn');
+    const errorAlert = document.getElementById('error-alert');
+    const successAlert = document.getElementById('success-alert');
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    function showAlert(type, message) {
+      const alert = type === 'error' ? errorAlert : successAlert;
+      alert.textContent = message;
+      alert.classList.add('show');
+      setTimeout(() => {
+        alert.classList.remove('show');
+      }, 3000);
+    }
+
+    function updateAvatarDisplay() {
+      if (currentProfile && currentProfile.photoURL) {
+        avatar.innerHTML = `<img src="${currentProfile.photoURL}" alt="Avatar">`;
+      } else {
+        const initials = (currentProfile?.nickname || 'U').substring(0, 2).toUpperCase();
+        avatar.textContent = initials;
+      }
+    }
+
+    async function loadProfile() {
+      try {
+        currentUser = await getCurrentUser();
+        
+        if (!currentUser) {
+          redirectTo('login.html');
+          return;
+        }
+
+        currentProfile = await getUserProfile(currentUser.uid);
+        
+        if (currentProfile) {
+          emailInput.value = currentUser.email;
+          nicknameInput.value = currentProfile.nickname || '';
+          document.getElementById('info-id').textContent = currentUser.uid;
+          document.getElementById('info-created').textContent = new Date(currentUser.metadata.creationTime).toLocaleDateString('pt-BR');
+          updateAvatarDisplay();
+        }
+      } catch (error) {
+        showAlert('error', 'Erro ao carregar perfil: ' + error.message);
+      }
+    }
+
+    // Upload button
+    uploadBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // Validate file size
+      if (file.size > 5 * 1024 * 1024) {
+        showAlert('error', 'Arquivo muito grande. Máximo 5MB.');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      if (!allowedTypes.includes(file.type)) {
+        showAlert('error', 'Tipo de arquivo não permitido. Use JPEG, PNG, WebP ou GIF.');
+        return;
+      }
+
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = '⏳ Enviando...';
+
+      try {
+        const storageRef = storage.ref(`profile-pictures/${currentUser.uid}`);
+        const snapshot = await storageRef.put(file);
+        const downloadUrl = await snapshot.ref.getDownloadURL();
+
+        // Update profile
+        await updateUserProfile(currentUser.uid, {
+          photoURL: downloadUrl,
+          updatedAt: new Date()
+        });
+
+        currentProfile.photoURL = downloadUrl;
+        updateAvatarDisplay();
+        showAlert('success', 'Foto de perfil atualizada com sucesso!');
+      } catch (error) {
+        showAlert('error', 'Erro ao fazer upload: ' + error.message);
+      } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = '📸 Alterar Foto';
+        fileInput.value = '';
+      }
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nickname = nicknameInput.value.trim();
+
+      if (!nickname) {
+        showAlert('error', 'Apelido não pode estar vazio');
+        return;
+      }
+
+      if (!/^[a-zA-Z0-9_]{3,30}$/.test(nickname)) {
+        showAlert('error', 'Apelido deve ter 3-30 caracteres, apenas letras, números e underscore');
+        return;
+      }
+
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner"></span>Salvando...';
+
+      try {
+        await updateUserProfile(currentUser.uid, {
+          nickname: nickname,
+          updatedAt: new Date()
+        });
+
+        currentProfile.nickname = nickname;
+        updateAvatarDisplay();
+        showAlert('success', 'Perfil atualizado com sucesso!');
+      } catch (error) {
+        showAlert('error', 'Erro ao atualizar perfil: ' + error.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = 'Salvar Alterações';
+      }
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await auth.signOut();
+        redirectTo('index.html');
+      } catch (error) {
+        showAlert('error', 'Erro ao fazer logout: ' + error.message);
+      }
+    });
+
+    // Load profile on page load
+    loadProfile();
+  </script>
+</body>
+</html>
