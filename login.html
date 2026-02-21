@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fshow - Login & Cadastro</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+
+<link rel="apple-touch-icon" sizes="57x57" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+
+<meta name="theme-color" content="#8A2BE2">
+<meta name="msapplication-TileColor" content="#FF8C00">
+<meta name="msapplication-TileImage" content="/favicon.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+<link rel="mask-icon" href="/favicon.png" color="#ff8c00">
+<link rel="manifest" href="/favicon.png">
+<meta name="msapplication-TileColor" content="#ff8c00">
+<meta name="msapplication-TileImage" content="/favicon.png">
+<meta name="theme-color" content="#8a2be2">
+    
 <style>
 
 /* ===== RESET ===== */
@@ -282,137 +315,123 @@ input:focus {
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
 const SUPABASE_KEY = "SUA_ANON_KEY_AQUI";
 
-let supabase = null;
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ================= INICIALIZAÇÃO ================= */
+    const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
-function initSupabase() {
-    if (window.supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log("✅ Supabase inicializado");
-    } else {
-        setTimeout(initSupabase, 100);
-    }
-}
+    /* ================= TABS ================= */
 
-window.addEventListener("load", initSupabase);
+    function toggleTabs(tab) {
+        const loginForm = document.getElementById("login-form");
+        const signupForm = document.getElementById("signup-form");
+        const buttons = document.querySelectorAll(".tab-btn");
 
-/* ================= TABS ================= */
+        buttons.forEach(btn => btn.classList.remove("active"));
 
-function toggleTabs(tab) {
-    const loginForm = document.getElementById("login-form");
-    const signupForm = document.getElementById("signup-form");
-    const buttons = document.querySelectorAll(".tab-btn");
-
-    buttons.forEach(btn => btn.classList.remove("active"));
-
-    if (tab === "login") {
-        loginForm.classList.add("active");
-        signupForm.classList.remove("active");
-        buttons[0].classList.add("active");
-    } else {
-        signupForm.classList.add("active");
-        loginForm.classList.remove("active");
-        buttons[1].classList.add("active");
-    }
-}
-
-/* ================= SIGN UP ================= */
-
-async function signUp() {
-    if (!supabase) return alert("Aguarde...");
-
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const nickname = document.getElementById("nickname").value.trim();
-    const avatarFile = document.getElementById("avatar").files[0];
-
-    if (!email || !password || !nickname)
-        return alert("Preencha todos os campos!");
-
-    if (password.length < 6)
-        return alert("Senha mínima de 6 caracteres.");
-
-    const { data, error } = await supabase.auth.signUp({ email, password });
-
-    if (error) return alert(error.message);
-
-    const user = data.user;
-    let avatarUrl = null;
-
-    if (avatarFile) {
-        const { error: uploadError } = await supabase.storage
-            .from("avatars")
-            .upload(`public/${user.id}`, avatarFile);
-
-        if (!uploadError) {
-            const { data: publicUrl } = supabase.storage
-                .from("avatars")
-                .getPublicUrl(`public/${user.id}`);
-            avatarUrl = publicUrl.publicUrl;
+        if (tab === "login") {
+            loginForm.classList.add("active");
+            signupForm.classList.remove("active");
+            buttons[0].classList.add("active");
+        } else {
+            signupForm.classList.add("active");
+            loginForm.classList.remove("active");
+            buttons[1].classList.add("active");
         }
     }
 
-    const { error: profileError } = await supabase
-        .from("profiles")
-        .insert({
-            id: user.id,
-            nickname,
-            avatar_url: avatarUrl
+    /* ================= SIGN UP ================= */
+
+    async function signUp() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const nickname = document.getElementById("nickname").value.trim();
+        const avatarFile = document.getElementById("avatar").files[0];
+
+        if (!email || !password || !nickname)
+            return alert("Preencha todos os campos!");
+
+        if (password.length < 6)
+            return alert("Senha mínima de 6 caracteres.");
+
+        const { data, error } = await supabase.auth.signUp({ email, password });
+
+        if (error) return alert(error.message);
+
+        const user = data.user;
+        let avatarUrl = null;
+
+        if (avatarFile) {
+            const { error: uploadError } = await supabase.storage
+                .from("avatars")
+                .upload(`public/${user.id}`, avatarFile);
+
+            if (!uploadError) {
+                const { data: publicUrl } = supabase.storage
+                    .from("avatars")
+                    .getPublicUrl(`public/${user.id}`);
+                avatarUrl = publicUrl.publicUrl;
+            }
+        }
+
+        const { error: profileError } = await supabase
+            .from("profiles")
+            .insert({
+                id: user.id,
+                nickname,
+                avatar_url: avatarUrl
+            });
+
+        if (profileError) return alert(profileError.message);
+
+        alert("Conta criada! Verifique seu e-mail.");
+        document.getElementById("signup-form").reset();
+        toggleTabs("login");
+    }
+
+    /* ================= LOGIN ================= */
+
+    async function login() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        if (!email || !password)
+            return alert("Preencha e-mail e senha.");
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password
         });
 
-    if (profileError) return alert(profileError.message);
+        if (error) return alert(error.message);
 
-    alert("Conta criada! Verifique seu e-mail.");
-    document.getElementById("signup-form").reset();
-    toggleTabs("login");
-}
+        alert("Login realizado!");
+        window.location.href = "/";
+    }
 
-/* ================= LOGIN ================= */
+    /* ================= EVENTOS ================= */
 
-async function login() {
-    if (!supabase) return alert("Aguarde...");
-
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value;
-
-    if (!email || !password)
-        return alert("Preencha e-mail e senha.");
-
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    });
-
-    if (error) return alert(error.message);
-
-    alert("Login realizado!");
-    window.location.href = "/";
-}
-
-/* ================= INICIAR EVENTOS ================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    // Alternar abas
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             toggleTabs(btn.dataset.tab);
         });
     });
 
-    // Botões
     document.getElementById("loginBtn")
         .addEventListener("click", login);
 
     document.getElementById("signupBtn")
         .addEventListener("click", signUp);
+
 });
 </script>
-
 </body>
 </html>
