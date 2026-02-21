@@ -4,39 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fshow - Login & Cadastro</title>
-
-<link rel="icon" href="/favicon.png" type="image/png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-
-<link rel="apple-touch-icon" sizes="57x57" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="60x60" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="72x72" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="114x114" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-
-<meta name="theme-color" content="#8A2BE2">
-<meta name="msapplication-TileColor" content="#FF8C00">
-<meta name="msapplication-TileImage" content="/favicon.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
-<link rel="mask-icon" href="/favicon.png" color="#ff8c00">
-<link rel="manifest" href="/favicon.png">
-<meta name="msapplication-TileColor" content="#ff8c00">
-<meta name="msapplication-TileImage" content="/favicon.png">
-<meta name="theme-color" content="#8a2be2">
-  
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 
 /* ===== RESET ===== */
@@ -220,6 +188,11 @@ input:focus {
     filter: brightness(1.1);
 }
 
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* ===== FILE UPLOAD ===== */
 .file-upload {
     border: 2px dashed rgba(128,0,255,0.4);
@@ -236,6 +209,10 @@ input:focus {
     border-color: #ff8c00;
     color: white;
     background: rgba(128,0,255,0.1);
+}
+
+#avatar {
+    display: none;
 }
 
 /* ===== ANIMAÇÃO ENTRADA ===== */
@@ -260,11 +237,11 @@ input:focus {
         <form id="login-form" class="active">
             <div class="field">
                 <label>E-mail</label>
-                <input type="email" id="loginEmail" placeholder="seu@email.com">
+                <input type="email" id="loginEmail" placeholder="seu@email.com" required>
             </div>
             <div class="field">
                 <label>Senha</label>
-                <input type="password" id="loginPassword" placeholder="Não coloque a senha do seu Email">
+                <input type="password" id="loginPassword" placeholder="Não coloque a senha do seu Email" required>
             </div>
             <button type="button" class="btn-submit" onclick="login()">FAZER LOGIN</button>
         </form>
@@ -272,20 +249,20 @@ input:focus {
         <form id="signup-form">
             <div class="field">
                 <label>Como quer ser chamado?</label>
-                <input type="text" id="nickname" placeholder="Seu apelido">
+                <input type="text" id="nickname" placeholder="Seu apelido" required>
             </div>
             <div class="field">
                 <label>E-mail de Acesso</label>
-                <input type="email" id="email" placeholder="seu@email.com">
+                <input type="email" id="email" placeholder="seu@email.com" required>
             </div>
             <div class="field">
                 <label>Senha Segura</label>
-                <input type="password" id="password" placeholder="Mínimo 6 dígitos">
+                <input type="password" id="password" placeholder="Mínimo 6 dígitos" required minlength="6">
             </div>
             <div class="field">
                 <label>Foto de Perfil</label>
                 <label for="avatar" class="file-upload">Clique para enviar foto 📸</label>
-                <input type="file" id="avatar">
+                <input type="file" id="avatar" accept="image/*">
             </div>
             <button type="button" class="btn-submit" onclick="signUp()">CRIAR CONTA</button>
         </form>
@@ -293,6 +270,13 @@ input:focus {
 </div>
 
 <script>
+    // ===== INICIALIZAÇÃO DO SUPABASE =====
+    const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
+    
+    const supabase = window.supabase.createClient(SUBASE_URL, SUPABASE_KEY);
+
+    // ===== ALTERNAR ABAS =====
     function toggleTabs(tab) {
         const loginForm = document.getElementById('login-form');
         const signupForm = document.getElementById('signup-form');
@@ -310,97 +294,147 @@ input:focus {
             btns[1].classList.add('active');
         }
     }
-</script>
 
-<script>
-const supabase = window.supabase.createClient(
-  "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4"
-);
+    // ===== CADASTRO =====
+    async function signUp() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const nickname = document.getElementById("nickname").value.trim();
+        const avatarFile = document.getElementById("avatar").files[0];
 
-async function signUp() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const nickname = document.getElementById("nickname").value;
-  const avatarFile = document.getElementById("avatar").files[0];
+        // Validações
+        if (!email || !password || !nickname) {
+            alert("Por favor, preencha todos os campos obrigatórios!");
+            return;
+        }
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password
-  });
+        if (password.length < 6) {
+            alert("A senha deve ter no mínimo 6 dígitos!");
+            return;
+        }
 
-  if (error) return alert(error.message);
+        try {
+            // Criar usuário
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password
+            });
 
-  const user = data.user;
+            if (error) {
+                alert("Erro ao criar conta: " + error.message);
+                return;
+            }
 
-  let avatarUrl = null;
+            const user = data.user;
+            let avatarUrl = null;
 
-  if (avatarFile) {
-    const { data: uploadData, error: uploadError } =
-      await supabase.storage
-        .from("avatars")
-        .upload(`public/${user.id}`, avatarFile);
+            // Upload de avatar se fornecido
+            if (avatarFile) {
+                try {
+                    const { data: uploadData, error: uploadError } = await supabase.storage
+                        .from("avatars")
+                        .upload(`public/${user.id}`, avatarFile);
 
-    if (!uploadError) {
-      avatarUrl = `${supabase.storage.from("avatars").getPublicUrl(`public/${user.id}`).data.publicUrl}`;
+                    if (!uploadError) {
+                        const { data: publicUrlData } = supabase.storage
+                            .from("avatars")
+                            .getPublicUrl(`public/${user.id}`);
+                        avatarUrl = publicUrlData.publicUrl;
+                    }
+                } catch (e) {
+                    console.warn("Erro ao fazer upload de avatar:", e);
+                }
+            }
+
+            // Criar perfil do usuário
+            const { error: profileError } = await supabase
+                .from("profiles")
+                .insert({
+                    id: user.id,
+                    nickname,
+                    avatar_url: avatarUrl
+                });
+
+            if (profileError) {
+                alert("Erro ao criar perfil: " + profileError.message);
+                return;
+            }
+
+            alert("Conta criada com sucesso! Verifique seu e-mail para confirmar.");
+            
+            // Limpar formulário
+            document.getElementById("signup-form").reset();
+            toggleTabs('login');
+        } catch (error) {
+            alert("Erro inesperado: " + error.message);
+        }
     }
-  }
 
-  await supabase.from("profiles").insert({
-    id: user.id,
-    nickname,
-    avatar_url: avatarUrl
-  });
+    // ===== LOGIN =====
+    async function login() {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
 
-  alert("Conta criada com sucesso!");
-}
+        if (!email || !password) {
+            alert("Por favor, preencha e-mail e senha!");
+            return;
+        }
 
-async function login() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+            if (error) {
+                alert("Erro ao fazer login: " + error.message);
+                return;
+            }
 
-  if (error) return alert(error.message);
+            alert("Login realizado com sucesso!");
+            window.location.href = "/";
+        } catch (error) {
+            alert("Erro inesperado: " + error.message);
+        }
+    }
 
-  window.location.href = "/";
-}
-</script>
+    // ===== CARREGAR DADOS DO USUÁRIO (se logado) =====
+    async function getUserData() {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
 
-<script type=module>
-const supabase = window.supabase.createClient(
-  "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4"
-);
+            if (!user) return null;
 
-async function getUserData() {
-  const { data: { user } } = await supabase.auth.getUser();
+            const { data, error } = await supabase
+                .from("profiles")
+                .select("*")
+                .eq("id", user.id)
+                .single();
 
-  if (!user) return null;
+            if (error) {
+                console.warn("Erro ao carregar perfil:", error);
+                return null;
+            }
 
-  const { data } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+            return data;
+        } catch (error) {
+            console.warn("Erro ao obter dados do usuário:", error);
+            return null;
+        }
+    }
 
-  return data;
-}
+    // ===== INICIALIZAR PÁGINA =====
+    document.addEventListener("DOMContentLoaded", async () => {
+        const profile = await getUserData();
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const profile = await getUserData();
+        if (profile) {
+            document.querySelectorAll(".user-nickname")
+                .forEach(el => el.innerText = profile.nickname);
 
-  if (profile) {
-    document.querySelectorAll(".user-nickname")
-      .forEach(el => el.innerText = profile.nickname);
-
-    document.querySelectorAll(".user-avatar")
-      .forEach(el => el.src = profile.avatar_url || "default.png");
-  }
-});
+            document.querySelectorAll(".user-avatar")
+                .forEach(el => el.src = profile.avatar_url || "default.png");
+        }
+    });
 </script>
 
 </body>
