@@ -203,6 +203,7 @@ input:focus {
     font-size: 0.9rem;
     color: #bbb;
     transition: 0.3s;
+    display: block;
 }
 
 .file-upload:hover {
@@ -230,211 +231,187 @@ input:focus {
 
     <div class="auth-card">
         <div class="tab-control">
-            <button class="tab-btn active" onclick="toggleTabs('login')">Entrar</button>
-            <button class="tab-btn" onclick="toggleTabs('signup')">Criar Conta</button>
+            <button class="tab-btn active" type="button" data-tab="login">Entrar</button>
+            <button class="tab-btn" type="button" data-tab="signup">Criar Conta</button>
         </div>
 
+        <!-- LOGIN -->
         <form id="login-form" class="active">
             <div class="field">
                 <label>E-mail</label>
-                <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                <input type="email" id="loginEmail" placeholder="exemplo@gmail.com" required>
             </div>
+
             <div class="field">
                 <label>Senha</label>
-                <input type="password" id="loginPassword" placeholder="Não coloque a senha do seu Email" required>
+                <input type="password" id="loginPassword" placeholder="Não coloque a senha do seu email" required>
             </div>
-            <button type="button" class="btn-submit" onclick="login()">FAZER LOGIN</button>
+
+            <button type="button" class="btn-submit" id="loginBtn">
+                FAZER LOGIN
+            </button>
         </form>
 
+        <!-- SIGNUP -->
         <form id="signup-form">
             <div class="field">
                 <label>Como quer ser chamado?</label>
-                <input type="text" id="nickname" placeholder="Seu apelido" required>
+                <input type="text" id="nickname" required>
             </div>
+
             <div class="field">
                 <label>E-mail de Acesso</label>
-                <input type="email" id="email" placeholder="seu@email.com" required>
+                <input type="email" id="email" required>
             </div>
+
             <div class="field">
                 <label>Senha Segura</label>
-                <input type="password" id="password" placeholder="Mínimo 6 dígitos" required minlength="6">
+                <input type="password" id="password" minlength="6" required>
             </div>
+
             <div class="field">
                 <label>Foto de Perfil</label>
                 <label for="avatar" class="file-upload">Clique para enviar foto 📸</label>
                 <input type="file" id="avatar" accept="image/*">
             </div>
-            <button type="button" class="btn-submit" onclick="signUp()">CRIAR CONTA</button>
+
+            <button type="button" class="btn-submit" id="signupBtn">
+                CRIAR CONTA
+            </button>
         </form>
     </div>
 </div>
 
 <script>
-    // ===== INICIALIZAÇÃO DO SUPABASE =====
-    const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
-    
-    const supabase = window.supabase.createClient(SUBASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
+const SUPABASE_KEY = "SUA_ANON_KEY_AQUI";
 
-    // ===== ALTERNAR ABAS =====
-    function toggleTabs(tab) {
-        const loginForm = document.getElementById('login-form');
-        const signupForm = document.getElementById('signup-form');
-        const btns = document.querySelectorAll('.tab-btn');
+let supabase = null;
 
-        if(tab === 'login') {
-            loginForm.classList.add('active');
-            signupForm.classList.remove('active');
-            btns[0].classList.add('active');
-            btns[1].classList.remove('active');
-        } else {
-            loginForm.classList.remove('active');
-            signupForm.classList.add('active');
-            btns[0].classList.remove('active');
-            btns[1].classList.add('active');
+/* ================= INICIALIZAÇÃO ================= */
+
+function initSupabase() {
+    if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("✅ Supabase inicializado");
+    } else {
+        setTimeout(initSupabase, 100);
+    }
+}
+
+window.addEventListener("load", initSupabase);
+
+/* ================= TABS ================= */
+
+function toggleTabs(tab) {
+    const loginForm = document.getElementById("login-form");
+    const signupForm = document.getElementById("signup-form");
+    const buttons = document.querySelectorAll(".tab-btn");
+
+    buttons.forEach(btn => btn.classList.remove("active"));
+
+    if (tab === "login") {
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+        buttons[0].classList.add("active");
+    } else {
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+        buttons[1].classList.add("active");
+    }
+}
+
+/* ================= SIGN UP ================= */
+
+async function signUp() {
+    if (!supabase) return alert("Aguarde...");
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const nickname = document.getElementById("nickname").value.trim();
+    const avatarFile = document.getElementById("avatar").files[0];
+
+    if (!email || !password || !nickname)
+        return alert("Preencha todos os campos!");
+
+    if (password.length < 6)
+        return alert("Senha mínima de 6 caracteres.");
+
+    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    if (error) return alert(error.message);
+
+    const user = data.user;
+    let avatarUrl = null;
+
+    if (avatarFile) {
+        const { error: uploadError } = await supabase.storage
+            .from("avatars")
+            .upload(`public/${user.id}`, avatarFile);
+
+        if (!uploadError) {
+            const { data: publicUrl } = supabase.storage
+                .from("avatars")
+                .getPublicUrl(`public/${user.id}`);
+            avatarUrl = publicUrl.publicUrl;
         }
     }
 
-    // ===== CADASTRO =====
-    async function signUp() {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const nickname = document.getElementById("nickname").value.trim();
-        const avatarFile = document.getElementById("avatar").files[0];
+    const { error: profileError } = await supabase
+        .from("profiles")
+        .insert({
+            id: user.id,
+            nickname,
+            avatar_url: avatarUrl
+        });
 
-        // Validações
-        if (!email || !password || !nickname) {
-            alert("Por favor, preencha todos os campos obrigatórios!");
-            return;
-        }
+    if (profileError) return alert(profileError.message);
 
-        if (password.length < 6) {
-            alert("A senha deve ter no mínimo 6 dígitos!");
-            return;
-        }
+    alert("Conta criada! Verifique seu e-mail.");
+    document.getElementById("signup-form").reset();
+    toggleTabs("login");
+}
 
-        try {
-            // Criar usuário
-            const { data, error } = await supabase.auth.signUp({
-                email,
-                password
-            });
+/* ================= LOGIN ================= */
 
-            if (error) {
-                alert("Erro ao criar conta: " + error.message);
-                return;
-            }
+async function login() {
+    if (!supabase) return alert("Aguarde...");
 
-            const user = data.user;
-            let avatarUrl = null;
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
 
-            // Upload de avatar se fornecido
-            if (avatarFile) {
-                try {
-                    const { data: uploadData, error: uploadError } = await supabase.storage
-                        .from("avatars")
-                        .upload(`public/${user.id}`, avatarFile);
+    if (!email || !password)
+        return alert("Preencha e-mail e senha.");
 
-                    if (!uploadError) {
-                        const { data: publicUrlData } = supabase.storage
-                            .from("avatars")
-                            .getPublicUrl(`public/${user.id}`);
-                        avatarUrl = publicUrlData.publicUrl;
-                    }
-                } catch (e) {
-                    console.warn("Erro ao fazer upload de avatar:", e);
-                }
-            }
-
-            // Criar perfil do usuário
-            const { error: profileError } = await supabase
-                .from("profiles")
-                .insert({
-                    id: user.id,
-                    nickname,
-                    avatar_url: avatarUrl
-                });
-
-            if (profileError) {
-                alert("Erro ao criar perfil: " + profileError.message);
-                return;
-            }
-
-            alert("Conta criada com sucesso! Verifique seu e-mail para confirmar.");
-            
-            // Limpar formulário
-            document.getElementById("signup-form").reset();
-            toggleTabs('login');
-        } catch (error) {
-            alert("Erro inesperado: " + error.message);
-        }
-    }
-
-    // ===== LOGIN =====
-    async function login() {
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value;
-
-        if (!email || !password) {
-            alert("Por favor, preencha e-mail e senha!");
-            return;
-        }
-
-        try {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            });
-
-            if (error) {
-                alert("Erro ao fazer login: " + error.message);
-                return;
-            }
-
-            alert("Login realizado com sucesso!");
-            window.location.href = "/";
-        } catch (error) {
-            alert("Erro inesperado: " + error.message);
-        }
-    }
-
-    // ===== CARREGAR DADOS DO USUÁRIO (se logado) =====
-    async function getUserData() {
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-
-            if (!user) return null;
-
-            const { data, error } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", user.id)
-                .single();
-
-            if (error) {
-                console.warn("Erro ao carregar perfil:", error);
-                return null;
-            }
-
-            return data;
-        } catch (error) {
-            console.warn("Erro ao obter dados do usuário:", error);
-            return null;
-        }
-    }
-
-    // ===== INICIALIZAR PÁGINA =====
-    document.addEventListener("DOMContentLoaded", async () => {
-        const profile = await getUserData();
-
-        if (profile) {
-            document.querySelectorAll(".user-nickname")
-                .forEach(el => el.innerText = profile.nickname);
-
-            document.querySelectorAll(".user-avatar")
-                .forEach(el => el.src = profile.avatar_url || "default.png");
-        }
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
     });
+
+    if (error) return alert(error.message);
+
+    alert("Login realizado!");
+    window.location.href = "/";
+}
+
+/* ================= INICIAR EVENTOS ================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Alternar abas
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            toggleTabs(btn.dataset.tab);
+        });
+    });
+
+    // Botões
+    document.getElementById("loginBtn")
+        .addEventListener("click", login);
+
+    document.getElementById("signupBtn")
+        .addEventListener("click", signUp);
+});
 </script>
 
 </body>
