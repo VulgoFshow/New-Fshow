@@ -315,123 +315,143 @@ input:focus {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-<script>
-const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
+import { 
+    getFirestore, 
+    doc, 
+    setDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+import { 
+    getStorage, 
+    ref, 
+    uploadBytes, 
+    getDownloadURL 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
-    const supabase = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
 
-    /* ================= TABS ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
+  authDomain: "fchat-60461.firebaseapp.com",
+  databaseURL: "https://fchat-60461-default-rtdb.firebaseio.com",
+  projectId: "fchat-60461",
+  storageBucket: "fchat-60461.firebasestorage.app",
+  messagingSenderId: "919618815528",
+  appId: "1:919618815528:web:bcbbccb703e17cf5f4971d",
+  measurementId: "G-15HYVM1QXV"
+};
 
-    function toggleTabs(tab) {
-        const loginForm = document.getElementById("login-form");
-        const signupForm = document.getElementById("signup-form");
-        const buttons = document.querySelectorAll(".tab-btn");
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-        buttons.forEach(btn => btn.classList.remove("active"));
 
-        if (tab === "login") {
-            loginForm.classList.add("active");
-            signupForm.classList.remove("active");
-            buttons[0].classList.add("active");
-        } else {
-            signupForm.classList.add("active");
-            loginForm.classList.remove("active");
-            buttons[1].classList.add("active");
-        }
+/* ================= TABS ================= */
+
+function toggleTabs(tab) {
+    const loginForm = document.getElementById("login-form");
+    const signupForm = document.getElementById("signup-form");
+    const buttons = document.querySelectorAll(".tab-btn");
+
+    buttons.forEach(btn => btn.classList.remove("active"));
+
+    if (tab === "login") {
+        loginForm.classList.add("active");
+        signupForm.classList.remove("active");
+        buttons[0].classList.add("active");
+    } else {
+        signupForm.classList.add("active");
+        loginForm.classList.remove("active");
+        buttons[1].classList.add("active");
     }
+}
 
-    /* ================= SIGN UP ================= */
 
-    async function signUp() {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const nickname = document.getElementById("nickname").value.trim();
-        const avatarFile = document.getElementById("avatar").files[0];
+/* ================= SIGN UP ================= */
 
-        if (!email || !password || !nickname)
-            return alert("Preencha todos os campos!");
+async function signUp() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const nickname = document.getElementById("nickname").value.trim();
+    const avatarFile = document.getElementById("avatar").files[0];
 
-        if (password.length < 6)
-            return alert("Senha mínima de 6 caracteres.");
+    if (!email || !password || !nickname)
+        return alert("Preencha todos os campos!");
 
-        const { data, error } = await supabase.auth.signUp({ email, password });
+    if (password.length < 6)
+        return alert("Senha mínima de 6 caracteres.");
 
-        if (error) return alert(error.message);
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-        const user = data.user;
         let avatarUrl = null;
 
         if (avatarFile) {
-            const { error: uploadError } = await supabase.storage
-                .from("avatars")
-                .upload(`public/${user.id}`, avatarFile);
-
-            if (!uploadError) {
-                const { data: publicUrl } = supabase.storage
-                    .from("avatars")
-                    .getPublicUrl(`public/${user.id}`);
-                avatarUrl = publicUrl.publicUrl;
-            }
+            const avatarRef = ref(storage, `avatars/${user.uid}`);
+            await uploadBytes(avatarRef, avatarFile);
+            avatarUrl = await getDownloadURL(avatarRef);
         }
 
-        const { error: profileError } = await supabase
-            .from("profiles")
-            .insert({
-                id: user.id,
-                nickname,
-                avatar_url: avatarUrl
-            });
+        await setDoc(doc(db, "profiles", user.uid), {
+            nickname: nickname,
+            avatar_url: avatarUrl,
+            email: email,
+            created_at: new Date()
+        });
 
-        if (profileError) return alert(profileError.message);
-
-        alert("Conta criada! Verifique seu e-mail.");
+        alert("Conta criada com sucesso!");
         document.getElementById("signup-form").reset();
         toggleTabs("login");
+
+    } catch (error) {
+        alert(error.message);
     }
+}
 
-    /* ================= LOGIN ================= */
 
-    async function login() {
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value;
+/* ================= LOGIN ================= */
 
-        if (!email || !password)
-            return alert("Preencha e-mail e senha.");
+async function login() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password
-        });
+    if (!email || !password)
+        return alert("Preencha e-mail e senha.");
 
-        if (error) return alert(error.message);
-
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
         alert("Login realizado!");
         window.location.href = "/";
+    } catch (error) {
+        alert(error.message);
     }
+}
 
-    /* ================= EVENTOS ================= */
 
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            toggleTabs(btn.dataset.tab);
-        });
+/* ================= EVENTOS ================= */
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        toggleTabs(btn.dataset.tab);
     });
-
-    document.getElementById("loginBtn")
-        .addEventListener("click", login);
-
-    document.getElementById("signupBtn")
-        .addEventListener("click", signUp);
-
 });
+
+document.getElementById("loginBtn")
+    .addEventListener("click", login);
+
+document.getElementById("signupBtn")
+    .addEventListener("click", signUp);
+
 </script>
 </body>
 </html>
