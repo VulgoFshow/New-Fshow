@@ -10,7 +10,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-<link rel="icon" href="https://via.placeholder.com/32" type="image/png">
 <meta name="theme-color" content="#8A2BE2">
     
 <style>
@@ -375,6 +374,10 @@ function toggleTabs(tab) {
     document.querySelector(`[data-tab="${tab}"]`).classList.add("active");
 }
 
+function saveLoginTimestamp() {
+    localStorage.setItem("lastLoginTime", Date.now().toString());
+}
+
 /* ================= EVENTOS ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -390,33 +393,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const pass = document.getElementById("loginPassword").value;
         if (!email || !pass) return showMsg("loginMessage", "Preencha tudo", "error");
         try {
-    await auth.signInWithEmailAndPassword(email, pass);
-    localStorage.setItem("lastLoginTime", Date.now().toString());
-    const redirectUrl = localStorage.getItem("redirectAfterLogin");
-    
-    if (redirectUrl) {
-        localStorage.removeItem("redirectAfterLogin");
-        window.location.href = redirectUrl;
-    } else {
-        window.location.href = "index.html";
-    }
+            await auth.signInWithEmailAndPassword(email, pass);
+            saveLoginTimestamp();
+            showMsg("loginMessage", "Sucesso!", "success");
+            setTimeout(() => window.location.href = "index.html", 1000);
+        } catch (e) {
+            showMsg("loginMessage", e.message, "error");
+        }
     };
 
     // Google Login
     document.getElementById("googleLoginBtn").onclick = async () => {
         try {
-await auth.signInWithPopup(googleProvider);
-
-localStorage.setItem("lastLoginTime", Date.now().toString());
-
-const redirectUrl = localStorage.getItem("redirectAfterLogin");
-
-if (redirectUrl) {
-    localStorage.removeItem("redirectAfterLogin");
-    window.location.href = redirectUrl;
-} else {
-    window.location.href = "index.html";
-}
+            await auth.signInWithPopup(googleProvider);
+            saveLoginTimestamp();
+            window.location.href = "index.html";
+        } catch (e) {
+            showMsg("loginMessage", e.message, "error");
+        }
     };
 
     // Signup
@@ -435,9 +429,12 @@ if (redirectUrl) {
                 email: email,
                 created_at: new Date()
             });
+            saveLoginTimestamp();
             showMsg("signupMessage", "Conta criada!", "success");
-            setTimeout(() => toggleTabs("login"), 2000);
-        } catch (e) { showMsg("signupMessage", e.message, "error"); }
+            setTimeout(() => window.location.href = "index.html", 2000);
+        } catch (e) {
+            showMsg("signupMessage", e.message, "error");
+        }
     };
 
     // Modal Esqueci Senha
@@ -456,7 +453,9 @@ if (redirectUrl) {
         try {
             await auth.sendPasswordResetEmail(email);
             showMsg("forgotPasswordMessage", "E-mail enviado!", "success");
-        } catch (e) { showMsg("forgotPasswordMessage", e.message, "error"); }
+        } catch (e) {
+            showMsg("forgotPasswordMessage", e.message, "error");
+        }
     };
 });
 
@@ -469,7 +468,7 @@ firebase.auth().onAuthStateChanged((user) => {
             sessionStorage.removeItem("redirectAfterLogin");
             window.location.href = redirectUrl;
         } else {
-            window.location.href = "index.html";
+            window.location.href = "/index.html";
         }
 
     }
