@@ -39,15 +39,17 @@
 
   <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const lastLoginTime = localStorage.getItem("lastLoginTime");
-    const currentTime = new Date().getTime();
-    const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
-
-    if (!lastLoginTime || (currentTime - lastLoginTime > thirtyDaysInMs)) {
-        if (window.location.pathname !== '/login.html') { // Evita loop de redirecionamento na própria página de login
-            window.location.href = "/login.html";
+    firebase.auth().onAuthStateChanged((user) => {
+  
+        if (!user) {
+            if (!window.location.pathname.includes("login")) {
+                sessionStorage.setItem("redirectAfterLogin", window.location.href);
+                window.location.href = "/login.html";
+            }
         }
-    }
+
+    });
+
 });
   </script>
   
