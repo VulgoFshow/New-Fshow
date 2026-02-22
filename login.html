@@ -459,6 +459,21 @@ if (redirectUrl) {
         } catch (e) { showMsg("forgotPasswordMessage", e.message, "error"); }
     };
 });
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+
+        const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
+
+        if (redirectUrl) {
+            sessionStorage.removeItem("redirectAfterLogin");
+            window.location.href = redirectUrl;
+        } else {
+            window.location.href = "index.html";
+        }
+
+    }
+});
 </script>
 </body>
 </html>
