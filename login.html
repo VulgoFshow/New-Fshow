@@ -390,18 +390,33 @@ document.addEventListener("DOMContentLoaded", () => {
         const pass = document.getElementById("loginPassword").value;
         if (!email || !pass) return showMsg("loginMessage", "Preencha tudo", "error");
         try {
-            await auth.signInWithEmailAndPassword(email, pass);
-            showMsg("loginMessage", "Sucesso!", "success");
-            setTimeout(() => window.location.href = "index.html", 1000);
-        } catch (e) { showMsg("loginMessage", e.message, "error"); }
+    await auth.signInWithEmailAndPassword(email, pass);
+    localStorage.setItem("lastLoginTime", Date.now().toString());
+    const redirectUrl = localStorage.getItem("redirectAfterLogin");
+    
+    if (redirectUrl) {
+        localStorage.removeItem("redirectAfterLogin");
+        window.location.href = redirectUrl;
+    } else {
+        window.location.href = "index.html";
+    }
     };
 
     // Google Login
     document.getElementById("googleLoginBtn").onclick = async () => {
         try {
-            await auth.signInWithPopup(googleProvider);
-            window.location.href = "index.html";
-        } catch (e) { showMsg("loginMessage", e.message, "error"); }
+await auth.signInWithPopup(googleProvider);
+
+localStorage.setItem("lastLoginTime", Date.now().toString());
+
+const redirectUrl = localStorage.getItem("redirectAfterLogin");
+
+if (redirectUrl) {
+    localStorage.removeItem("redirectAfterLogin");
+    window.location.href = redirectUrl;
+} else {
+    window.location.href = "index.html";
+}
     };
 
     // Signup
