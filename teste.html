@@ -1,769 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fshow - Login & Cadastro</title>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-    
-    <!-- Google Sign-In SDK -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <meta charset="UTF-8" />
+  <title>Fshow - Votação</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-<link rel="icon" href="/favicon.png" type="image/png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-<link rel="apple-touch-icon" sizes="57x57" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="60x60" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="72x72" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="114x114" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="57x57" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="60x60" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="72x72" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="76x76" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="114x114" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="144x144" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
 <meta name="theme-color" content="#8A2BE2">
 <meta name="msapplication-TileColor" content="#FF8C00">
-<meta name="msapplication-TileImage" content="/favicon.png">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
-<link rel="mask-icon" href="/favicon.png" color="#ff8c00">
-<link rel="manifest" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="mask-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" color="#ff8c00">
+<link rel="manifest" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 <meta name="msapplication-TileColor" content="#ff8c00">
-<meta name="msapplication-TileImage" content="/favicon.png">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 <meta name="theme-color" content="#8a2be2">
-    
-<style>
 
-/* ===== RESET ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+    firebase.auth().onAuthStateChanged((user) => {
+  
+        if (!user) {
+            if (!window.location.pathname.includes("login")) {
+                sessionStorage.setItem("redirectAfterLogin", window.location.href);
+                window.location.href = "/login.html";
+            }
+        }
 
-/* ===== FUNDO ANIMADO ===== */
-body {
-    background: radial-gradient(circle at 20% 20%, rgba(128,0,255,0.25), transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(255,140,0,0.25), transparent 40%),
-                linear-gradient(135deg, #120018, #1d0033, #2a003d);
-    background-size: 200% 200%;
-    animation: gradientMove 12s ease infinite;
-    background-attachment: fixed;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-}
+    });
 
-/* animação do fundo */
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+});
 
-/* ===== CONTAINER ===== */
-.main-wrapper {
-    width: 100%;
-    max-width: 420px;
-    animation: fadeIn 0.8s ease-out;
-}
-
-/* ===== LOGO ===== */
-.logo-fshow {
-    text-align: center;
-    font-size: 3rem;
-    font-weight: 900;
-    margin-bottom: 25px;
-    letter-spacing: -2px;
-    background: linear-gradient(45deg, #8000ff, #ff8c00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 5px 20px rgba(128,0,255,0.4));
-    animation: glowLogo 3s ease-in-out infinite alternate;
-}
-
-@keyframes glowLogo {
-    from { filter: drop-shadow(0 0 10px rgba(128,0,255,0.4)); }
-    to { filter: drop-shadow(0 0 25px rgba(255,140,0,0.6)); }
-}
-
-/* ===== CARD ===== */
-.auth-card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(128,0,255,0.3);
-    border-radius: 26px;
-    padding: 35px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
-                0 0 40px rgba(128,0,255,0.15);
-    transition: 0.4s ease;
-}
-
-.auth-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 30px 70px rgba(0,0,0,0.7),
-                0 0 60px rgba(255,140,0,0.25);
-}
-
-/* ===== ABAS ===== */
-.tab-control {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
-    background: rgba(0,0,0,0.3);
-    padding: 6px;
-    border-radius: 14px;
-}
-
-.tab-btn {
-    flex: 1;
-    padding: 13px;
-    border: none;
-    background: transparent;
-    color: #aaa;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: 0.3s;
-    font-size: 0.9rem;
-}
-
-.tab-btn.active {
-    background: linear-gradient(45deg, #8000ff, #ff8c00);
-    color: white;
-    box-shadow: 0 0 20px rgba(128,0,255,0.4);
-}
-
-/* ===== FORM ===== */
-form {
-    display: none;
-    flex-direction: column;
-    gap: 18px;
-    animation: fadeForm 0.4s ease;
-}
-
-form.active {
-    display: flex;
-}
-
-@keyframes fadeForm {
-    from { opacity: 0; transform: translateX(10px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-/* ===== CAMPOS ===== */
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.field label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: linear-gradient(45deg, #8000ff, #ff8c00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-transform: uppercase;
-    margin-left: 5px;
-}
-
-/* ===== INPUTS ===== */
-input, textarea, select {
-    width: 100%;
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
-    font-size: 1rem;
-    transition: 0.3s;
-}
-
-input::placeholder, textarea::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-input:focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: #8000ff;
-    background: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 0 4px rgba(128, 0, 255, 0.15),
-                0 0 15px rgba(255,140,0,0.3);
-    transform: scale(1.02);
-}
-
-/* ===== BOTÃO ===== */
-.btn-submit {
-    margin-top: 15px;
-    padding: 16px;
-    border-radius: 14px;
-    border: none;
-    background: linear-gradient(45deg, #8000ff, #ff8c00);
-    color: white;
-    font-weight: 800;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: 0.3s ease;
-    box-shadow: 0 10px 30px rgba(128,0,255,0.3);
-}
-
-.btn-submit:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(255,140,0,0.4);
-    filter: brightness(1.1);
-}
-
-.btn-submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* ===== BOTÃO SECUNDÁRIO ===== */
-.btn-secondary {
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(128,0,255,0.5);
-    background: transparent;
-    color: #8000ff;
-    font-weight: 600;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.btn-secondary:hover {
-    background: rgba(128,0,255,0.1);
-    border-color: #ff8c00;
-    color: #ff8c00;
-    transform: translateY(-2px);
-}
-
-/* ===== SEPARADOR ===== */
-.divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 20px 0;
-    color: #888;
-    font-size: 0.85rem;
-}
-
-.divider::before,
-.divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* ===== BOTÃO GOOGLE ===== */
-.btn-google {
-    width: 100%;
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.btn-google:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-}
-
-.btn-google img {
-    width: 20px;
-    height: 20px;
-}
-
-/* ===== FILE UPLOAD ===== */
-.file-upload {
-    border: 2px dashed rgba(128,0,255,0.4);
-    padding: 18px;
-    text-align: center;
-    border-radius: 14px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #bbb;
-    transition: 0.3s;
-    display: block;
-}
-
-.file-upload:hover {
-    border-color: #ff8c00;
-    color: white;
-    background: rgba(128,0,255,0.1);
-}
-
-#avatar {
-    display: none;
-}
-
-/* ===== PREVIEW FOTO DE PERFIL ===== */
-.profile-picture-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.profile-picture {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: linear-gradient(45deg, rgba(128,0,255,0.3), rgba(255,140,0,0.3));
-    border: 3px solid rgba(128,0,255,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    overflow: hidden;
-    box-shadow: 0 0 30px rgba(128,0,255,0.3);
-    transition: 0.3s ease;
-}
-
-.profile-picture:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(255,140,0,0.4);
-}
-
-.profile-picture img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.profile-picture-label {
-    font-size: 0.8rem;
-    color: #aaa;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-/* ===== LINK ESQUECEU SENHA ===== */
-.forgot-password-link {
-    text-align: right;
-    margin-top: -10px;
-}
-
-.forgot-password-link a {
-    color: #ff8c00;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.forgot-password-link a:hover {
-    color: #8000ff;
-    text-decoration: underline;
-}
-
-/* ===== MODAL ===== */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.modal.active {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal-content {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(128,0,255,0.3);
-    border-radius: 26px;
-    padding: 35px;
-    max-width: 420px;
-    width: 100%;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
-                0 0 40px rgba(128,0,255,0.15);
-    animation: slideUp 0.4s ease;
-}
-
-@keyframes slideUp {
-    from { transform: translateY(50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.modal-header h2 {
-    font-size: 1.5rem;
-    background: linear-gradient(45deg, #8000ff, #ff8c00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    color: #aaa;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.modal-close:hover {
-    color: #ff8c00;
-    transform: rotate(90deg);
-}
-
-/* ===== MENSAGENS ===== */
-.message {
-    padding: 12px 15px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-    display: none;
-    animation: slideDown 0.3s ease;
-}
-
-.message.active {
-    display: block;
-}
-
-@keyframes slideDown {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.message.success {
-    background: rgba(76, 175, 80, 0.2);
-    border: 1px solid rgba(76, 175, 80, 0.5);
-    color: #4caf50;
-}
-
-.message.error {
-    background: rgba(244, 67, 54, 0.2);
-    border: 1px solid rgba(244, 67, 54, 0.5);
-    color: #f44336;
-}
-
-.message.info {
-    background: rgba(33, 150, 243, 0.2);
-    border: 1px solid rgba(33, 150, 243, 0.5);
-    color: #2196f3;
-}
-
-/* ===== ANIMAÇÃO ENTRADA ===== */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== GOOGLE SIGN-IN CUSTOMIZADO ===== */
-#g_id_onload {
-    display: none;
-}
-
-/* ===== RESPONSIVO ===== */
-@media (max-width: 480px) {
-    .main-wrapper {
-        max-width: 100%;
-    }
-
-    .auth-card {
-        padding: 25px;
-    }
-
-    .logo-fshow {
-        font-size: 2.5rem;
-        margin-bottom: 20px;
-    }
-
-    .tab-btn {
-        font-size: 0.8rem;
-        padding: 10px;
-    }
-
-    .modal-content {
-        padding: 25px;
-    }
-
-    .profile-picture {
-        width: 100px;
-        height: 100px;
-        font-size: 2.5rem;
-    }
-}
-
-</style>
-</head>
-<body>
-
-<div class="main-wrapper">
-    <h1 class="logo-fshow">FSHOW</h1>
-
-    <div class="auth-card">
-        <div class="tab-control">
-            <button class="tab-btn active" type="button" data-tab="login">Entrar</button>
-            <button class="tab-btn" type="button" data-tab="signup">Criar Conta</button>
-        </div>
-
-        <!-- LOGIN -->
-        <form id="login-form" class="active">
-            <div id="loginMessage" class="message"></div>
-
-            <div class="field">
-                <label>E-mail</label>
-                <input type="email" id="loginEmail" placeholder="exemplo@gmail.com" required>
-            </div>
-
-            <div class="field">
-                <label>Senha</label>
-                <input type="password" id="loginPassword" placeholder="Não coloque a senha do seu email" required>
-            </div>
-
-            <div class="forgot-password-link">
-                <a href="#" id="forgotPasswordLink">Esqueceu a senha?</a>
-            </div>
-
-            <button type="button" class="btn-submit" id="loginBtn">
-                FAZER LOGIN
-            </button>
-
-            <!-- Separador -->
-            <div class="divider">ou</div>
-
-            <!-- Botão Google Login -->
-            <button type="button" class="btn-google" id="googleLoginBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M3.99 12.69c-.18-.66-.27-1.35-.27-2.09 0-.74.09-1.45.26-2.09V5.07H2.18C.635 7.72 0 10.24 0 12.6c0 2.36.635 4.88 2.18 7.53l3.57-2.77c.9-1.05 1.4-2.4 1.4-3.84 0-.74-.09-1.45-.26-2.09v-2.84z" fill="#FBBC05"/>
-                    <path d="M12 4.75c1.77 0 3.29.61 4.53 1.6l3.36-3.36C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.57 2.77c.9-1.05 2.4-2.09 4.25-2.09z" fill="#EA4335"/>
-                </svg>
-                Entrar com Google
-            </button>
-        </form>
-
-        <!-- SIGNUP -->
-        <form id="signup-form">
-            <div id="signupMessage" class="message"></div>
-
-            <div class="profile-picture-container">
-                <div class="profile-picture" id="profilePicturePreview">
-                    👤
-                </div>
-                <label class="profile-picture-label">Foto de Perfil</label>
-                <label class="file-upload" for="avatar">
-                    📷 Clique para adicionar foto
-                </label>
-                <input type="file" id="avatar" accept="image/*">
-            </div>
-
-            <div class="field">
-                <label>Nome de Usuário</label>
-                <input type="text" id="signupNickname" placeholder="Seu nome ou apelido" required>
-            </div>
-
-            <div class="field">
-                <label>E-mail</label>
-                <input type="email" id="signupEmail" placeholder="exemplo@gmail.com" required>
-            </div>
-
-            <div class="field">
-                <label>Senha</label>
-                <input type="password" id="signupPassword" placeholder="Mínimo 6 caracteres" required>
-            </div>
-
-            <div class="field">
-                <label>Confirmar Senha</label>
-                <input type="password" id="signupPasswordConfirm" placeholder="Confirme sua senha" required>
-            </div>
-
-            <button type="button" class="btn-submit" id="signupBtn">
-                CRIAR CONTA
-            </button>
-
-            <!-- Separador -->
-            <div class="divider">ou</div>
-
-            <!-- Botão Google Signup -->
-            <button type="button" class="btn-google" id="googleSignupBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M3.99 12.69c-.18-.66-.27-1.35-.27-2.09 0-.74.09-1.45.26-2.09V5.07H2.18C.635 7.72 0 10.24 0 12.6c0 2.36.635 4.88 2.18 7.53l3.57-2.77c.9-1.05 1.4-2.4 1.4-3.84 0-.74-.09-1.45-.26-2.09v-2.84z" fill="#FBBC05"/>
-                    <path d="M12 4.75c1.77 0 3.29.61 4.53 1.6l3.36-3.36C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.57 2.77c.9-1.05 2.4-2.09 4.25-2.09z" fill="#EA4335"/>
-                </svg>
-                Criar com Google
-            </button>
-        </form>
-    </div>
-</div>
-
-<!-- MODAL RECUPERAR SENHA -->
-<div id="forgotPasswordModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Recuperar Senha</h2>
-            <button type="button" class="modal-close" id="closeForgotPasswordModal">✕</button>
-        </div>
-
-        <div id="forgotPasswordMessage" class="message"></div>
-
-        <form id="forgot-password-form">
-            <div class="field">
-                <label>E-mail</label>
-                <input type="email" id="forgotPasswordEmail" placeholder="Digite seu e-mail registrado" required>
-            </div>
-
-            <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 15px; text-align: center;">
-                Enviaremos um link de recuperação para seu e-mail.
-            </p>
-
-            <button type="button" class="btn-submit" id="sendResetEmailBtn">
-                ENVIAR LINK DE RECUPERAÇÃO
-            </button>
-
-            <button type="button" class="btn-secondary" id="backToLoginBtn" style="width: 100%; margin-top: 10px;">
-                Voltar para Login
-            </button>
-        </form>
-    </div>
-</div>
-
-<!-- MODAL PERFIL DO USUÁRIO -->
-<div id="profileModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Meu Perfil</h2>
-            <button type="button" class="modal-close" id="closeProfileModal">✕</button>
-        </div>
-
-        <div id="profileMessage" class="message"></div>
-
-        <div class="profile-picture-container">
-            <div class="profile-picture" id="profileModalPicture">
-                👤
-            </div>
-            <label class="profile-picture-label">Foto de Perfil</label>
-            <label class="file-upload" for="profileAvatar">
-                📷 Alterar foto
-            </label>
-            <input type="file" id="profileAvatar" accept="image/*">
-        </div>
-
-        <div class="field">
-            <label>Nome de Usuário</label>
-            <input type="text" id="profileNickname" placeholder="Seu nome" disabled>
-        </div>
-
-        <div class="field">
-            <label>E-mail</label>
-            <input type="email" id="profileEmail" placeholder="seu@email.com" disabled>
-        </div>
-
-        <button type="button" class="btn-submit" id="updateProfileBtn">
-            ATUALIZAR PERFIL
-        </button>
-
-        <button type="button" class="btn-secondary" id="changePasswordBtn" style="width: 100%; margin-top: 10px;">
-            Alterar Senha
-        </button>
-
-        <button type="button" class="btn-secondary" id="logoutBtn" style="width: 100%; margin-top: 10px; border-color: #f44336; color: #f44336;">
-            Sair da Conta
-        </button>
-    </div>
-</div>
-
-<!-- MODAL ALTERAR SENHA -->
-<div id="changePasswordModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Alterar Senha</h2>
-            <button type="button" class="modal-close" id="closeChangePasswordModal">✕</button>
-        </div>
-
-        <div id="changePasswordMessage" class="message"></div>
-
-        <form id="changePasswordForm">
-            <div class="field">
-                <label>Senha Atual</label>
-                <input type="password" id="currentPassword" placeholder="Digite sua senha atual" required>
-            </div>
-
-            <div class="field">
-                <label>Nova Senha</label>
-                <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required>
-            </div>
-
-            <div class="field">
-                <label>Confirmar Nova Senha</label>
-                <input type="password" id="confirmNewPassword" placeholder="Confirme a nova senha" required>
-            </div>
-
-            <button type="button" class="btn-submit" id="confirmChangePasswordBtn">
-                ALTERAR SENHA
-            </button>
-
-            <button type="button" class="btn-secondary" id="cancelChangePasswordBtn" style="width: 100%; margin-top: 10px;">
-                Cancelar
-            </button>
-        </form>
-    </div>
-</div>
-
-<script>
-/* ================= FIREBASE CONFIG ================= */
-
-// IMPORTANTE: Substitua com suas credenciais do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
   authDomain: "fchat-60461.firebaseapp.com",
@@ -775,429 +66,1185 @@ const firebaseConfig = {
   measurementId: "G-15HYVM1QXV"
 };
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const googleProvider = new firebase.auth.GoogleAuthProvider();
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+  </script>
+  
+<style>
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --bg: #121212;
+  --card-bg: #2b2b2b;
+  --selected-bg: #3c3c3c;
+  --panel-bg: #2b2b2b;
+  --panel-border: rgba(255, 255, 255, 0.06);
+  --accent: #00b7b0;
+  --text: #fff;
+  --muted: #bdbdbd;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
+  --back: #0d0d0d;
+}
 
-/* ================= VARIÁVEIS GLOBAIS ================= */
+/* ===== BASE ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-let selectedAvatarFile = null;
-let selectedProfileAvatarFile = null;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", Arial, sans-serif;
+  color: var(--text);
 
-/* ================= FUNÇÕES UTILITÁRIAS ================= */
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
+    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
 
-function showMessage(elementId, message, type = 'info') {
-    const messageEl = document.getElementById(elementId);
-    messageEl.textContent = message;
-    messageEl.className = `message active ${type}`;
+  background-attachment: fixed;
+  background-size: cover;
+  animation: fadeIn 0.7s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px 15px;
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: left;
+  transition: color 0.3s ease;
+}
+
+/* ===== OPÇÕES (RADIO CARDS) ===== */
+.option {
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid #fff;
+  border-radius: var(--border-radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
+}
+
+.option:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.option img {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.option-content input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.option-content input[type="radio"]:hover {
+  transform: scale(1.1);
+}
+
+.option-content input[type="radio"]:checked {
+  border-color: var(--accent);
+}
+
+.option-content input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+  /* ===== SPINNER ===== */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== BOTÃO PRINCIPAL ===== */
+  button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius);
+  margin-top: 15px;
+  cursor: pointer;
+  background: #444;
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
+}
+
+button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ===== POPUP ===== */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1500;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity .25s ease;
+}
+
+.popup.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* ===== CONTAINER ===== */
+.captcha-box {
+  background: #1b1b1b;
+  width: 360px;
+  max-width: 95%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.45);
+  animation: fadeIn .3s ease;
+  color: #eee;
+}
+
+/* ===== CABEÇALHO ===== */
+.captcha-header {
+  background: #0f7b82;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.captcha-header span {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  flex: 1;
+  color: #fff;
+}
+
+.captcha-header img {
+  width: 62px;
+  height: 62px;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-left: 12px;
+}
+
+/* ===== GRID ===== */
+.captcha-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 10px;
+  background: #00000022;
+}
+
+.captcha-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #111;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: .15s;
+}
+
+.captcha-img:hover {
+  transform: scale(1.03);
+}
+
+.captcha-img.selected {
+  border-color: #fff;
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+
+/* ===== FOOTER ===== */
+.captcha-footer {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* ===== BOTÃO AVANÇAR ===== */
+.captcha-btn {
+  background: #e6e6e6;
+  color: #222;
+  padding: 10px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: .15s;
+}
+
+.captcha-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.captcha-btn:hover:not(:disabled) {
+  background: #fff;
+}
+
+/* ===== BOTÃO ICONE ===== */
+.captcha-icon-btn {
+  background: #2b2b2b;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .15s;
+}
+
+.captcha-icon-btn img {
+  width: 20px;
+  opacity: 0.8;
+}
+
+.captcha-icon-btn:hover {
+  background: #333;
+}
+
+/* ===== IMG ===== */
+.captcha-hand img {
+  width: 36px;
+  opacity: 0.85;
+}
+
+/* ===== PAGINAÇÃO ===== */
+
+.captcha-dots {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #222;
+  transition: background .15s;
+}
+
+.dot.white {
+  background: #ffffff !important;
+}
+
+.dot.green {
+  background: #4CAF50 !important;
+}
+
+.dot.active {
+  background: none !important;
+}
+
+/* ===== CONFIRMAÇÃO ===== */
+#fotoConfirm {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  display: block;
+}
+
+#nomeConfirm {
+  background: #1F1F1F;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 14px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  margin: 0;
+}
+
+.success-msg {
+  background: rgba(0, 255, 150, 0.1);
+  border: 1px solid rgba(0, 255, 150, 0.4);
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: center;
+  color: #00ff99;
+  font-weight: 600;
+  margin-bottom: 18px;
+  animation: fadeIn 0.6s ease;
+}
+
+.success-msg::before {
+  content: "✔ ";
+  color: #00ff99;
+}
+
+.voltar {
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.voltar:hover {
+  background: #00c9b8;
+}
+
+#confirmTela {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  background: transparent;
+  min-height: 85vh;
+  animation: slideUp 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+
+.confirm-card {
+  background: transparent;
+  border: 2px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.confirm-card .img-container {
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  background: #f0f0f0;
+}
+
+.confirm-card .img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+#botaoCaptcha {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 0 15px;
+  height: 70px;
+  max-width: 320px;
+  width: 320px;
+  margin: 20px auto 0;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: var(--shadow-sm);
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 400;
+  transition: var(--transition);
+}
+
+#botaoCaptcha:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 183, 176, 0.3);
+}
+
+.recaptcha-checkbox {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: #111;
+  border: 2px solid #444;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+  background: #00aaff;
+  border-color: #00aaff;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: none;
+}
+
+#botaoCaptcha[aria-pressed="true"] .checkmark {
+  display: block;
+}
+
+.recaptcha-label {
+  user-select: none;
+  line-height: 1;
+  flex-grow: 1;
+}
+
+.recaptcha-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: contain;
+  filter: brightness(0.7);
+  flex-shrink: 0;
+}
+
+#botaoCaptcha:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.bot-bait {
+  pointer-events: none;
+}
+
+.fade-in-element {
+  opacity: 0.6; 
+}
+
+.espacador { width: 100%; margin: 10px 0; }
+  
+/* =========================
+   DESKTOP / PC
+   ========================= */
+@media (min-width: 1024px) {
+
+  /* Container central igual R7 */
+  .container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  /* 🔥 GRID REAL (não lista esticada) */
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  /* Card vira VERTICAL */
+  .option {
+    flex-direction: column;
+    background: #2b2b2b;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+
+  .option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.55);
+  }
+
+  /* IMAGEM IGUAL R7 */
+  .option img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  /* FAIXA PRETA COM NOME */
+  .option-content {
+    background: #1f1f1f;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  .option-content input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  /* BOTÃO VOTAR CENTRAL */
+  button {
+    max-width: 420px;
+    margin: 32px auto 0;
+    display: block;
+    font-size: 16px;
+  }
+
+  /* =========================
+     CONFIRMAÇÃO (SUCESSO)
+     ========================= */
+
+  #confirmTela {
+    padding-top: 60px;
+    min-height: auto;
+    opacity: 1;
+    transform: none;
+  }
+
+  .confirm-card {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 28px;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 15px 40px rgba(0,0,0,.6);
+  }
+
+  .confirm-card .img-container {
+    height: 280px;
+  }
+
+  #nomeConfirm {
+    font-size: 24px;
+    padding: 16px;
+  }
+
+  .success-msg {
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+
+  .voltar {
+    max-width: 420px;
+    margin: 20px auto 0;
+    display: block;
+  }
+}
+
+</style>
+</head>
+<body>
+  
+  <div id="votoTela" class="container">
+<div class="espacador"></div>
     
-    // Auto-hide após 5 segundos
-    setTimeout(() => {
-        messageEl.classList.remove('active');
-    }, 5000);
+    <h1>Quem você quer que FIQUE no PCF2? <br> Vote quantas vezes quiser.</h1>
+    <div class="espacador"></div>
+    
+<div class="options">
+  
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/MikaeleLudmila.jpg?raw=true" alt="Opção 1">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Mikael e Ludmila"> Mikael e Ludmila
+        </div>
+      </label>
+  
+        <label class="option">
+        <img src="https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Nick%20e%20Renata.jpg" alt="Opção 2">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Nick e Renata"> Nick e Renata
+        </div>
+      </label>
+    </div>
+    <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
+      <span class="recaptcha-checkbox" aria-hidden="true">
+        <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l6 6 10-10"/></svg>
+      </span>
+      <span class="recaptcha-label">Não sou um robô</span>
+      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="FCaptcha" style="width:40px;height:40px;border-radius:4px"/>
+    </button>
+
+    <button id="botaoVotar" disabled>VOTAR</button>
+
+    <div class="notice">A votação segue aberta até às 19:00</div>
+  </div>
+  
+<!-- POPUP CAPTCHA -->
+<div id="popupCaptcha" class="popup">
+  <div class="captcha-box">
+    <div class="captcha-header">
+      <span id="captcha-instrucao">Toque em itens comumente usados com o item mostrado</span>
+    </div>
+    <div id="captchaGrid" class="captcha-grid"></div>
+    <div class="captcha-footer">
+      <button id="captchaRefresh" class="captcha-icon-btn" title="Recarregar">
+        <img src="https://i.ibb.co/MyvQhHP4/Seta.png" alt="reload">
+      </button>
+<div class="captcha-dots">
+  <div class="dot" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+</div>
+      <button id="captchaConfirm" class="captcha-btn" disabled>Avançar</button>
+<div id="captchaStatus" style="color:#fff; font-size:14px; padding:4px 0;"></div>
+
+    </div>
+  </div>
+</div>
+
+  <div id="confirmTela">
+  <div class="confirm-card">
+    <img id="fotoConfirm" src="" alt="Voto"/>
+    <p id="nomeConfirm"></p>
+    <button id="botaoVotarNovamente" class="voltar">
+     VOTAR NOVAMENTE
+    </button>
+    <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
+    <div class="notice">Votação segue aberta até às 19:00</div>
+    
+  </div>
+</div>
+
+<script type="module">
+  // Importando a biblioteca do Supabase
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+  // =================== CONFIG ===================
+
+  const SUPABASE_URL = "https://mmeqirvfbwvabfblovdx.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const TABLE_VOTACAO = "dr7";
+  const VOTOS_POR_CAPTCHA = 10;
+  const DEBUG = false;
+
+  const aberturaBR = new Date("2026-01-18T19:00:00");
+  const encerramentoBR = new Date("2026-03-03T19:00:00");
+
+  // =================== HORA DO SERVIDOR (Via API Pública) ===================
+  async function getServerTime() {
+    try {
+      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
+      const data = await res.json();
+      return new Date(data.datetime);
+    } catch (e) {
+      console.error("Erro ao verificar horário:", e);
+      return new Date(); 
+    }
+  }
+
+  function toSaoPauloDate(date) {
+    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+    return new Date(spString);
+  }
+
+  function redirect(url) {
+  if (DEBUG) {
+    console.warn("REDIRECT BLOQUEADO →", url);
+    return;
+  }
+  window.location.href = url;
 }
 
-function toggleTabs(tabName) {
-    // Esconder todos os forms
-    document.querySelectorAll("form").forEach(form => {
-        form.classList.remove("active");
+  // =================== VERIFICAÇÃO DE HORÁRIO ===================
+  async function verificarHorarios() {
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR < aberturaBR) {
+      window.location.replace("aguarde.html");
+      return;
+    }
+
+    if (agoraBR > encerramentoBR) {
+      window.location.replace("fechada.html");
+      return;
+    }
+
+    console.log("VOTAÇÃO ABERTA");
+  }
+
+  verificarHorarios();
+
+  // =================== ELEMENTOS DOM ===================
+  const votoTela = document.getElementById("votoTela");
+  const confirmTela = document.getElementById("confirmTela");
+  const nomeConfirm = document.getElementById("nomeConfirm");
+  const fotoConfirm = document.getElementById("fotoConfirm");
+  const botaoCaptcha = document.getElementById("botaoCaptcha");
+  const botaoVotar = document.getElementById("botaoVotar");
+  const botaoVotarNovamente = document.getElementById("botaoVotarNovamente");
+  const popupCaptcha = document.getElementById("popupCaptcha");
+  const captchaGrid = document.getElementById("captchaGrid");
+  const captchaInstruction = document.getElementById("captcha-instrucao");
+  const verifyBtn = document.getElementById("captchaConfirm");
+  const refreshBtn = document.getElementById("captchaRefresh");
+  const statusEl = document.getElementById("captchaStatus");
+
+  let captchaVisualLiberado = false;
+
+  // =================== CONTROLE DE VOTOS LOCAL ===================
+  let pendingVote = null;
+  let captchaAberto = false;
+
+  function hashTag(tag) {
+    const secret = "CPTX_2025_FSHOW_🔥";
+    let h = 0;
+    const str = tag + secret;
+    for (let i = 0; i < str.length; i++) {
+      h = (h << 5) - h + str.charCodeAt(i);
+      h |= 0;
+    }
+    return h;
+  }
+
+  function getVotosRestantes() {
+    const raw = localStorage.getItem("votosRestantes");
+    const token = localStorage.getItem("token");
+    if (!raw || !token) return 0;
+    return hashTag(raw) == token ? parseInt(raw) : 0;
+  }
+
+  function setVotosRestantes(n) {
+    localStorage.setItem("votosRestantes", String(n));
+    localStorage.setItem("token", hashTag(String(n)));
+  }
+
+  // =================== PROMPTS DO CAPTCHA ===================
+  const prompts = [
+    {
+      label: "Clique nas imagens contendo algo que pode se locomover",
+      correctTag: "202",
+      images: [
+        { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },
+        { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },
+        { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
+        { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
+        { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
+        { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },
+        { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },
+        { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },
+        { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },
+        { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }
+      ]
+    },
+    {
+      label: "Clique nas imagens contendo um animal",
+      correctTag: "706",
+      images: [
+        { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },
+        { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },
+        { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },
+        { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },
+        { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },
+        { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },
+        { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },
+        { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },
+        { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }
+      ]
+    }
+  ];
+
+  let captchaCurrentPrompt = null;
+
+  // =================== FUNÇÕES DO CAPTCHA ===================
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function generateCaptcha() {
+    captchaGrid.innerHTML = "";
+    statusEl.textContent = "";
+    verifyBtn.disabled = true;
+
+    captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    captchaInstruction.textContent = captchaCurrentPrompt.label;
+
+const ref = captchaCurrentPrompt.images.find(
+  i => i.tag === captchaCurrentPrompt.correctTag
+);
+
+if (ref) {
+  captchaRefImg.src = ref.src;
+  captchaRefImg.style.display = "block";
+} else {
+  captchaRefImg.style.display = "none";
+}
+
+    const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
+    const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
+
+    const correctCount = Math.min(Math.floor(Math.random() * 3) + 3, correctImages.length);
+    const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
+    const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
+
+    const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+
+    allImages.forEach(img => {
+      const imgEl = document.createElement("img");
+      imgEl.src = img.src;
+      imgEl.className = "captcha-img";
+      imgEl.dataset.hash = hashTag(img.tag);
+
+      imgEl.addEventListener("click", () => {
+        imgEl.classList.toggle("selected");
+        verifyBtn.disabled = !document.querySelectorAll(".captcha-img.selected").length;
+      });
+
+      captchaGrid.appendChild(imgEl);
+    });
+  }
+
+  function abrirCaptcha() {
+    if (captchaAberto) return;
+    captchaAberto = true;
+    generateCaptcha();
+    popupCaptcha.classList.add("active");
+    botaoVotar.disabled = true;
+  }
+
+  function fecharCaptcha() {
+    popupCaptcha.classList.remove("active");
+    captchaAberto = false;
+    botaoVotar.disabled = getVotosRestantes() <= 0;
+  }
+
+  refreshBtn.addEventListener("click", () => {
+    statusEl.textContent = "";
+    document.querySelectorAll(".captcha-img").forEach(img => img.classList.remove("selected"));
+    verifyBtn.disabled = true;
+    generateCaptcha();
+  });
+
+  verifyBtn.addEventListener("click", () => {
+    const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
+    let sucesso = true;
+
+    document.querySelectorAll(".captcha-img").forEach(img => {
+      const isCorrect = img.dataset.hash == corretoHash;
+      const isSelected = img.classList.contains("selected");
+      if (isCorrect !== isSelected) sucesso = false;
     });
 
-    // Remover active de todos os botões
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
+    if (!sucesso) {
+      statusEl.textContent = "Incorreto. Tente novamente.";
+      statusEl.style.color = "red";
+      setTimeout(generateCaptcha, 1200);
+      return;
+    }
 
-    // Mostrar form selecionado
-    document.getElementById(`${tabName}-form`).classList.add("active");
+    setVotosRestantes(VOTOS_POR_CAPTCHA);
+    captchaVisualLiberado = true;
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.classList.add("active");
 
-    // Adicionar active ao botão clicado
-    document.querySelector(`[data-tab="${tabName}"]`).classList.add("active");
+    fecharCaptcha();
+
+    if (pendingVote) {
+      const voto = pendingVote;
+      pendingVote = null;
+      setTimeout(() => submitVote(voto), 300);
+    }
+  });
+
+  // =================== ENVIO DO VOTO ===================
+async function submitVote(participante) {
+  try {
+    botaoVotar.disabled = true;
+    const prevText = botaoVotar.textContent;
+    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+    
+    // Time
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    const { error } = await supabase
+      .from(TABLE_VOTACAO)
+      .insert([{ participante: participante }]);
+
+    if (error) {
+      console.error("Erro Supabase:", error);
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = prevText;
+      redirect("erro.html");
+      return;
+    }
+
+    let restantes = getVotosRestantes() - 1;
+    setVotosRestantes(Math.max(restantes, 0));
+
+    if (restantes <= 0) {
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      botaoVotar.classList.remove("active");
+      captchaVisualLiberado = false;
+    }
+
+    votoTela.style.display = "none";
+    confirmTela.style.display = "flex";
+    nomeConfirm.textContent = participante;
+
+    if (fotos[participante]) {
+      fotoConfirm.src = fotos[participante];
+      fotoConfirm.style.display = "block";
+    } else {
+      fotoConfirm.style.display = "none";
+    }
+
+    botaoVotar.textContent = prevText;
+    botaoVotar.disabled = false;
+
+  } catch (e) {
+    console.error(e);
+    window.location.href = "erro.html";
+  }
 }
 
-function openModal(modalId) {
-    document.getElementById(modalId).classList.add("active");
-}
-
-function closeModal(modalId) {
-    document.getElementById(modalId).classList.remove("active");
-}
-
-function convertImageToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
-
-/* ================= UPLOAD DE FOTO ===== */
-
-document.getElementById("avatar").addEventListener("change", async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        selectedAvatarFile = file;
-        const base64 = await convertImageToBase64(file);
-        document.getElementById("profilePicturePreview").innerHTML = `<img src="${base64}" alt="Foto de Perfil">`;
+  // =================== FUNÇÃO PARA VOLTAR À TELA DE VOTAÇÃO ===================
+  function voltarParaVotacao() {
+    confirmTela.style.display = "none";
+    votoTela.style.display = "block";
+    
+    // Limpa a seleção anterior
+    document.querySelector('input[name="vote"]:checked').checked = false;
+    
+    // Habilita o botão de votar se ainda houver votos restantes
+    if (getVotosRestantes() > 0) {
+      botaoVotar.disabled = false;
     }
+  }
+
+  // =================== EVENTOS PRINCIPAIS ===================
+  botaoVotar.addEventListener("click", () => {
+    const escolhido = document.querySelector('input[name="vote"]:checked');
+    if (!escolhido) return alert("Selecione alguém para votar!");
+
+    if (getVotosRestantes() <= 0) {
+      pendingVote = escolhido.value;
+      abrirCaptcha();
+      return;
+    }
+
+    submitVote(escolhido.value);
+  });
+
+  // =================== NOVO EVENTO: BOTÃO VOTAR NOVAMENTE ===================
+  botaoVotarNovamente.addEventListener("click", () => {
+    voltarParaVotacao();
+  });
+
+botaoCaptcha.addEventListener("click", () => {
+  if (captchaVisualLiberado) return;
+  const restantes = getVotosRestantes();
+  if (restantes > 0) {
+    captchaVisualLiberado = true;
+    botaoCaptcha.setAttribute("aria-pressed", "true");
+    botaoVotar.disabled = false;
+    botaoVotar.classList.add("active");
+    return;
+  }
+  abrirCaptcha();
 });
 
-document.getElementById("profileAvatar").addEventListener("change", async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        selectedProfileAvatarFile = file;
-        const base64 = await convertImageToBase64(file);
-        document.getElementById("profileModalPicture").innerHTML = `<img src="${base64}" alt="Foto de Perfil">`;
+  // =================== DETECÇÃO DE COMPORTAMENTO SUSPEITO ===================
+  let suspeita = 0;
+  const LIMITE_SUSPEITA = 6;
+  let ultimoClique = 0;
+  let ultimoMouseX = 0, ultimoMouseY = 0;
+  let ultimaTrocaAba = Date.now();
+  let scrollsRecentes = 0;
+  let tentativasVoto = 0;
+
+  function exigirCaptchaPorSuspeita() {
+    if (captchaAberto) return;
+    console.warn("Atividade suspeita — CAPTCHA exigido");
+    setVotosRestantes(0);
+    botaoCaptcha.setAttribute("aria-pressed", "false");
+    botaoVotar.disabled = true;
+    botaoVotar.classList.remove("active");
+    abrirCaptcha();
+  }
+
+  document.addEventListener("click", () => {
+    const agora = Date.now();
+    if (agora - ultimoClique < 50) suspeita++;
+    ultimoClique = agora;
+    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    const dx = Math.abs(e.clientX - ultimoMouseX);
+    const dy = Math.abs(e.clientY - ultimoMouseY);
+    if (dx > 350 || dy > 350) suspeita++;
+    ultimoMouseX = e.clientX;
+    ultimoMouseY = e.clientY;
+    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+  });
+
+  document.addEventListener("wheel", () => {
+    scrollsRecentes++;
+    if (scrollsRecentes > 14) {
+      suspeita++;
+      scrollsRecentes = 0;
     }
-});
+    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+  });
 
-/* ================= SIGNUP ================= */
-
-async function handleSignUp() {
-    const nickname = document.getElementById("signupNickname").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPassword").value;
-    const passwordConfirm = document.getElementById("signupPasswordConfirm").value;
-
-    if (!nickname || !email || !password || !passwordConfirm) {
-        return showMessage("signupMessage", "Preencha todos os campos.", "error");
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      const agora = Date.now();
+      if (agora - ultimaTrocaAba < 450) suspeita++;
+      ultimaTrocaAba = agora;
     }
+    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+  });
 
-    if (password !== passwordConfirm) {
-        return showMessage("signupMessage", "As senhas não correspondem.", "error");
+  botaoVotar.addEventListener("click", () => {
+    tentativasVoto++;
+    if (tentativasVoto > 3) {
+      suspeita++;
+      tentativasVoto = 0;
     }
+    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+  });
 
-    if (password.length < 6) {
-        return showMessage("signupMessage", "A senha deve ter no mínimo 6 caracteres.", "error");
-    }
+  verifyBtn.addEventListener("click", () => {
+    if (statusEl.textContent.includes("Incorreto")) return;
+    suspeita = 0;
+    tentativasVoto = 0;
+    scrollsRecentes = 0;
+  });
 
-    try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+  // =================== FOTOS DOS PARTICIPANTES ===================
+  const fotos = {
+    "Koyuh e João": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Koyuh%20e%20Jo%C3%A3o.jpg",
+    "Edu e Sirleidy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/EdueSirleidy.jpg?raw=true",
+    "Alysson e Dynamite": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/AlyssoneDynamite.jpg?raw=true",
+    "Braian e Brunno": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/BraianeBruno.jpg?raw=true",
+    "Cícero e Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/CíceroeLuddy.jpg?raw=true",
+    "Luan e Fernanda": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/LuaneFernanda.jpg?raw=true",
+    "Manchinha e Rauilly": "https://i.ibb.co/pvvzCysq/Picsart-26-02-16-21-40-56-718.jpg",
+    "Miguel e Bruna": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/MigueleBruna.jpg?raw=true",
+    "Mikael e Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/MikaeleLudmila.jpg?raw=true",
+    "Neto e Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/NetoeTety.jpg?raw=true",
+    "Nick e Renata": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Nick%20e%20Renata.jpg",
+    "Ray e Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/RayeRose.jpg?raw=true",
+    "Quim e Ella": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Quim%20e%20Ella.jpg",
+    "Vitor e Emanuel": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/VitoreEmanuel.jpg?raw=true",
+    "Yan e Grimes": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Yan%20e%20Grimes.jpg"
+  };
 
-        let avatarUrl = null;
-        if (selectedAvatarFile) {
-            avatarUrl = await convertImageToBase64(selectedAvatarFile);
-        }
+  const captchaRefImg = document.createElement("img");
+  captchaRefImg.id = "captcha-ref-img";
+  captchaRefImg.style.display = "none";
+  document.querySelector(".captcha-header").appendChild(captchaRefImg);
 
-        // Salvar perfil no Firestore
-        await db.collection("profiles").doc(user.uid).set({
-            nickname: nickname,
-            email: email,
-            avatar_url: avatarUrl,
-            created_at: new Date()
-        });
+  // =================== INICIALIZAÇÃO ===================
+(function init() {
+  captchaVisualLiberado = false;
+  botaoCaptcha.setAttribute("aria-pressed", "false");
+  botaoVotar.disabled = true;
+  botaoVotar.classList.remove("active");
+})();
+</script></body>
 
-        showMessage("signupMessage", "Conta criada com sucesso!", "success");
-        
-        setTimeout(() => {
-            document.getElementById("signup-form").reset();
-            document.getElementById("profilePicturePreview").innerHTML = "👤";
-            selectedAvatarFile = null;
-            toggleTabs("login");
-        }, 2000);
-
-    } catch (error) {
-        showMessage("signupMessage", error.message, "error");
-    }
-}
-
-/* ================= LOGIN ================= */
-
-async function handleLogin() {
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value;
-
-    if (!email || !password) {
-        return showMessage("loginMessage", "Preencha e-mail e senha.", "error");
-    }
-
-    try {
-        await auth.signInWithEmailAndPassword(email, password);
-        
-        // INTEGRAÇÃO: Salva o timestamp do login por 30 dias
-        if (window.markAsLoggedIn) {
-            window.markAsLoggedIn();
-        }
-        
-        showMessage("loginMessage", "Login realizado com sucesso!", "success");
-        
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 1500);
-    } catch (error) {
-        showMessage("loginMessage", error.message, "error");
-    }
-}
-
-/* ================= GOOGLE LOGIN ================= */
-
-async function handleGoogleLogin() {
-    try {
-        const result = await auth.signInWithPopup(googleProvider);
-        const user = result.user;
-
-        // Verifica se o perfil já existe
-        const profileSnap = await db.collection("profiles").doc(user.uid).get();
-
-        if (!profileSnap.exists()) {
-            // Se não existe, cria um novo perfil
-            await db.collection("profiles").doc(user.uid).set({
-                nickname: user.displayName || "Usuário",
-                avatar_url: user.photoURL || null,
-                email: user.email,
-                created_at: new Date()
-            });
-        }
-
-        // INTEGRAÇÃO: Salva o timestamp do login por 30 dias
-        if (window.markAsLoggedIn) {
-            window.markAsLoggedIn();
-        }
-
-        showMessage("loginMessage", "Login com Google realizado!", "success");
-        
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 1500);
-    } catch (error) {
-        showMessage("loginMessage", "Erro ao fazer login com Google: " + error.message, "error");
-    }
-}
-
-/* ================= GOOGLE SIGNUP ================= */
-
-async function handleGoogleSignup() {
-    try {
-        const result = await auth.signInWithPopup(googleProvider);
-        const user = result.user;
-
-        // Cria o perfil com dados do Google
-        await db.collection("profiles").doc(user.uid).set({
-            nickname: user.displayName || "Novo Usuário",
-            avatar_url: user.photoURL || null,
-            email: user.email,
-            created_at: new Date()
-        });
-
-        // INTEGRAÇÃO: Salva o timestamp do login por 30 dias
-        if (window.markAsLoggedIn) {
-            window.markAsLoggedIn();
-        }
-
-        showMessage("signupMessage", "Conta criada com sucesso via Google!", "success");
-        
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 1500);
-    } catch (error) {
-        showMessage("signupMessage", "Erro ao criar conta com Google: " + error.message, "error");
-    }
-}
-
-/* ================= RECUPERAR SENHA ================= */
-
-async function handleSendResetEmail() {
-    const email = document.getElementById("forgotPasswordEmail").value.trim();
-
-    if (!email) {
-        return showMessage("forgotPasswordMessage", "Digite seu e-mail.", "error");
-    }
-
-    try {
-        await auth.sendPasswordResetEmail(email);
-        showMessage("forgotPasswordMessage", "Link de recuperação enviado! Verifique seu e-mail.", "success");
-        
-        setTimeout(() => {
-            document.getElementById("forgot-password-form").reset();
-            closeModal("forgotPasswordModal");
-        }, 3000);
-    } catch (error) {
-        showMessage("forgotPasswordMessage", error.message, "error");
-    }
-}
-
-/* ================= CARREGAR PERFIL DO USUÁRIO ================= */
-
-async function loadUserProfile() {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    try {
-        const profileSnap = await db.collection("profiles").doc(user.uid).get();
-
-        if (profileSnap.exists()) {
-            const profileData = profileSnap.data();
-            document.getElementById("profileNickname").value = profileData.nickname || "";
-            document.getElementById("profileEmail").value = user.email || "";
-
-            if (profileData.avatar_url) {
-                document.getElementById("profileModalPicture").innerHTML = `<img src="${profileData.avatar_url}" alt="Foto de Perfil">`;
-            }
-        } else {
-            document.getElementById("profileEmail").value = user.email || "";
-        }
-    } catch (error) {
-        console.error("Erro ao carregar perfil:", error);
-    }
-}
-
-/* ================= ATUALIZAR PERFIL ================= */
-
-async function handleUpdateProfile() {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    try {
-        const nickname = document.getElementById("profileNickname").value.trim();
-        const updateData = { nickname };
-
-        if (selectedProfileAvatarFile) {
-            const base64 = await convertImageToBase64(selectedProfileAvatarFile);
-            updateData.avatar_url = base64;
-        }
-
-        await db.collection("profiles").doc(user.uid).update(updateData);
-        showMessage("profileMessage", "Perfil atualizado com sucesso!", "success");
-        selectedProfileAvatarFile = null;
-    } catch (error) {
-        showMessage("profileMessage", error.message, "error");
-    }
-}
-
-/* ================= ALTERAR SENHA ================= */
-
-async function handleChangePassword() {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    const currentPassword = document.getElementById("currentPassword").value;
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmNewPassword = document.getElementById("confirmNewPassword").value;
-
-    if (!currentPassword || !newPassword || !confirmNewPassword) {
-        return showMessage("changePasswordMessage", "Preencha todos os campos.", "error");
-    }
-
-    if (newPassword !== confirmNewPassword) {
-        return showMessage("changePasswordMessage", "As novas senhas não correspondem.", "error");
-    }
-
-    if (newPassword.length < 6) {
-        return showMessage("changePasswordMessage", "A nova senha deve ter no mínimo 6 caracteres.", "error");
-    }
-
-    try {
-        // Re-autenticar o usuário
-        const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
-        await user.reauthenticateWithCredential(credential);
-
-        // Alterar senha
-        await user.updatePassword(newPassword);
-        showMessage("changePasswordMessage", "Senha alterada com sucesso!", "success");
-
-        setTimeout(() => {
-            document.getElementById("changePasswordForm").reset();
-            closeModal("changePasswordModal");
-        }, 2000);
-    } catch (error) {
-        showMessage("changePasswordMessage", error.message, "error");
-    }
-}
-
-/* ================= LOGOUT ================= */
-
-async function handleLogout() {
-    try {
-        await auth.signOut();
-        closeModal("profileModal");
-        window.location.href = "login.html";
-    } catch (error) {
-        showMessage("profileMessage", error.message, "error");
-    }
-}
-
-/* ================= EVENTOS ================= */
-
-// Abas
-document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        toggleTabs(btn.dataset.tab);
-    });
-});
-
-// Login
-document.getElementById("loginBtn").addEventListener("click", handleLogin);
-document.getElementById("googleLoginBtn").addEventListener("click", handleGoogleLogin);
-
-// Signup
-document.getElementById("signupBtn").addEventListener("click", handleSignUp);
-document.getElementById("googleSignupBtn").addEventListener("click", handleGoogleSignup);
-
-// Recuperar Senha
-document.getElementById("forgotPasswordLink").addEventListener("click", (e) => {
-    e.preventDefault();
-    openModal("forgotPasswordModal");
-});
-
-document.getElementById("closeForgotPasswordModal").addEventListener("click", () => {
-    closeModal("forgotPasswordModal");
-});
-
-document.getElementById("backToLoginBtn").addEventListener("click", (e) => {
-    e.preventDefault();
-    closeModal("forgotPasswordModal");
-});
-
-document.getElementById("sendResetEmailBtn").addEventListener("click", handleSendResetEmail);
-
-// Perfil do Usuário
-document.getElementById("updateProfileBtn").addEventListener("click", handleUpdateProfile);
-document.getElementById("closeProfileModal").addEventListener("click", () => {
-    closeModal("profileModal");
-});
-
-// Alterar Senha
-document.getElementById("changePasswordBtn").addEventListener("click", () => {
-    closeModal("profileModal");
-    openModal("changePasswordModal");
-});
-
-document.getElementById("confirmChangePasswordBtn").addEventListener("click", handleChangePassword);
-document.getElementById("cancelChangePasswordBtn").addEventListener("click", () => {
-    closeModal("changePasswordModal");
-    openModal("profileModal");
-});
-
-document.getElementById("closeChangePasswordModal").addEventListener("click", () => {
-    closeModal("changePasswordModal");
-});
-
-// Logout
-document.getElementById("logoutBtn").addEventListener("click", handleLogout);
-
-// Fechar modais ao clicar fora
-document.getElementById("forgotPasswordModal").addEventListener("click", (e) => {
-    if (e.target === document.getElementById("forgotPasswordModal")) {
-        closeModal("forgotPasswordModal");
-    }
-});
-
-document.getElementById("profileModal").addEventListener("click", (e) => {
-    if (e.target === document.getElementById("profileModal")) {
-        closeModal("profileModal");
-    }
-});
-
-document.getElementById("changePasswordModal").addEventListener("click", (e) => {
-    if (e.target === document.getElementById("changePasswordModal")) {
-        closeModal("changePasswordModal");
-    }
-});
-
-</script>
-</body>
 </html>
