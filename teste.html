@@ -816,7 +816,7 @@ button:disabled {
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-03-02T23:14:00");
+  const encerramentoBR = new Date("2026-03-02T23:22:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
@@ -862,6 +862,17 @@ button:disabled {
   }
 
   verificarHorarios();
+
+  // =================== VERIFICAÇÃO PERIÓDICA DE HORÁRIO (A CADA 5 SEGUNDOS) ===================
+  setInterval(async () => {
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR > encerramentoBR) {
+      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+      window.location.replace("fechada.html");
+    }
+  }, 5000);
 
   // =================== ELEMENTOS DOM ===================
   const votoTela = document.getElementById("votoTela");
@@ -1051,6 +1062,16 @@ if (ref) {
   // =================== ENVIO DO VOTO ===================
 async function submitVote(participante) {
   try {
+    // Verifica se a votação ainda está aberta antes de enviar
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR > encerramentoBR) {
+      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+      window.location.replace("fechada.html");
+      return;
+    }
+
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
     botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
@@ -1115,7 +1136,18 @@ async function submitVote(participante) {
   }
 
   // =================== EVENTOS PRINCIPAIS ===================
-  botaoVotar.addEventListener("click", () => {
+  botaoVotar.addEventListener("click", async () => {
+    // Verifica se a votação ainda está aberta
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR > encerramentoBR) {
+      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+      alert("A votação foi encerrada!");
+      window.location.replace("fechada.html");
+      return;
+    }
+
     const escolhido = document.querySelector('input[name="vote"]:checked');
     if (!escolhido) return alert("Selecione alguém para votar!");
 
