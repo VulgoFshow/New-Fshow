@@ -816,7 +816,7 @@ button:disabled {
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-03-03T19:00:00");
+  const encerramentoBR = new Date("2026-02-03T23:10:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
@@ -1107,10 +1107,11 @@ async function submitVote(participante) {
     // Limpa a seleção anterior
     document.querySelector('input[name="vote"]:checked').checked = false;
     
-    // Habilita o botão de votar se ainda houver votos restantes
-    if (getVotosRestantes() > 0) {
-      botaoVotar.disabled = false;
-    }
+    // Reseta o estado visual do botão de Captcha
+    captchaVisualLiberado = false;
+    botaoCaptcha.setAttribute("aria-pressed", "false");
+    botaoVotar.classList.remove("active");
+    botaoVotar.disabled = true;
   }
 
   // =================== EVENTOS PRINCIPAIS ===================
