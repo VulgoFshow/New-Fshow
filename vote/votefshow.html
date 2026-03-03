@@ -792,7 +792,7 @@ button:disabled {
   <div class="confirm-card">
     <img id="fotoConfirm" src="" alt="Voto"/>
     <p id="nomeConfirm"></p>
-    <button class="voltar" onclick="location.reload()">
+    <button id="botaoVotarNovamente" class="voltar">
      VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
@@ -863,6 +863,17 @@ button:disabled {
 
   verificarHorarios();
 
+  // =================== VERIFICAÇÃO PERIÓDICA DE HORÁRIO (A CADA 5 SEGUNDOS) ===================
+  setInterval(async () => {
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR > encerramentoBR) {
+      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+      window.location.replace("fechada.html");
+    }
+  }, 5000);
+
   // =================== ELEMENTOS DOM ===================
   const votoTela = document.getElementById("votoTela");
   const confirmTela = document.getElementById("confirmTela");
@@ -870,6 +881,7 @@ button:disabled {
   const fotoConfirm = document.getElementById("fotoConfirm");
   const botaoCaptcha = document.getElementById("botaoCaptcha");
   const botaoVotar = document.getElementById("botaoVotar");
+  const botaoVotarNovamente = document.getElementById("botaoVotarNovamente");
   const popupCaptcha = document.getElementById("popupCaptcha");
   const captchaGrid = document.getElementById("captchaGrid");
   const captchaInstruction = document.getElementById("captcha-instrucao");
@@ -1050,6 +1062,16 @@ if (ref) {
   // =================== ENVIO DO VOTO ===================
 async function submitVote(participante) {
   try {
+    // Verifica se a votação ainda está aberta antes de enviar
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR > encerramentoBR) {
+      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+      window.location.replace("fechada.html");
+      return;
+    }
+
     botaoVotar.disabled = true;
     const prevText = botaoVotar.textContent;
     botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
@@ -1098,8 +1120,34 @@ async function submitVote(participante) {
   }
 }
 
+  // =================== FUNÇÃO PARA VOLTAR À TELA DE VOTAÇÃO ===================
+  function voltarParaVotacao() {
+    confirmTela.style.display = "none";
+    votoTela.style.display = "block";
+    
+    // Limpa a seleção anterior
+    document.querySelector('input[name="vote"]:checked').checked = false;
+    
+    // Reseta o estado visual do botão de Captcha
+    captchaVisualLiberado = false;
+    botaoCaptcha.setAttribute("aria-pressed", "false");
+    botaoVotar.classList.remove("active");
+    botaoVotar.disabled = true;
+  }
+
   // =================== EVENTOS PRINCIPAIS ===================
-  botaoVotar.addEventListener("click", () => {
+  botaoVotar.addEventListener("click", async () => {
+    // Verifica se a votação ainda está aberta
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR > encerramentoBR) {
+      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+      alert("A votação foi encerrada!");
+      window.location.replace("fechada.html");
+      return;
+    }
+
     const escolhido = document.querySelector('input[name="vote"]:checked');
     if (!escolhido) return alert("Selecione alguém para votar!");
 
@@ -1110,6 +1158,11 @@ async function submitVote(participante) {
     }
 
     submitVote(escolhido.value);
+  });
+
+  // =================== NOVO EVENTO: BOTÃO VOTAR NOVAMENTE ===================
+  botaoVotarNovamente.addEventListener("click", () => {
+    voltarParaVotacao();
   });
 
 botaoCaptcha.addEventListener("click", () => {
@@ -1225,7 +1278,6 @@ botaoCaptcha.addEventListener("click", () => {
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
 })();
-</script>
-  
-</body>  
+</script></body>
+
 </html>
