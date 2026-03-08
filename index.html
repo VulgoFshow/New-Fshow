@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fshow - Obrigado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            background-color: #050505;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+            position: relative;
+        }
+
+        #canvas-logotipo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .logo-flutuante {
+            position: absolute;
+            bottom: -120px;
+            width: 60px;
+            height: 60px;
+            background-image: url('https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            animation: subir linear infinite;
+        }
+
+        @keyframes subir {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .cartao-mensagem {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 50px;
+            max-width: 90%;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 25px;
+            border: 2px solid #8a2be2;
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.2);
+            animation: entrada 1s ease-out;
+        }
+
+        .titulo {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(90deg, #ff8c00, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .paragrafo {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #efefef;
+            line-height: 1.5;
+        }
+
+        .destaque {
+            color: #ff8c00;
+            font-weight: bold;
+        }
+
+        @keyframes entrada {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-logotipo"></div>
+
+    <div class="cartao-mensagem">
+        <h1 class="titulo">Obrigado por acessar</h1>
+        <p class="paragrafo">
+            Esse site está temporariamente fora do ar.<br>
+            <span class="destaque">Muito obrigado por fazer parte dessa história.</span>
+        </p>
+    </div>
+
+    <script>
+        const container = document.getElementById('canvas-logotipo');
+        
+        function gerarLogo() {
+            const logo = document.createElement('div');
+            logo.className = 'logo-flutuante';
+            
+            const tamanho = Math.random() * (80 - 30) + 30;
+            const posicaoX = Math.random() * 100;
+            const duracao = Math.random() * (12 - 6) + 6;
+            
+            logo.style.width = `${tamanho}px`;
+            logo.style.height = `${tamanho}px`;
+            logo.style.left = `${posicaoX}%`;
+            logo.style.animationDuration = `${duracao}s`;
+            
+            container.appendChild(logo);
+            
+            setTimeout(() => {
+                logo.remove();
+            }, duracao * 1000);
+        }
+
+        setInterval(gerarLogo, 400);
+    </script>
+</body>
+</html>
