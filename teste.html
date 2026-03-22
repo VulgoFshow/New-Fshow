@@ -428,7 +428,7 @@
         } catch (e) { state.ip = "0.0.0.0"; }
         
         state.isVPN = await checkVPN(state.ip);
-
+        
         if (state.isVPN) {
           return showVPNBlocked();
         }
