@@ -638,7 +638,7 @@ async function submitVote() {
       device_fingerprint: state.fingerprint,
       round_id: CONFIG.ROUND,
       turnstile_token: state.token,
-      vpn_detected: true,
+      vpn_detected: state.isVPN,
       vpn_data: state.vpnData ? JSON.stringify(state.vpnData) : null
     }]);
 
