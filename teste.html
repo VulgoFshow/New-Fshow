@@ -417,7 +417,7 @@
         state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
         state.deviceFingerprint = await generateDeviceFingerprint();
         
-        if (localStorage.getItem("voted_device_" + state.deviceFingerprint)) {
+        if (localStorage.getItem("voted_device_" + CONFIG.ROUND + "_" + state.deviceFingerprint)) {
           return showAlreadyVoted();
         }
 
@@ -435,7 +435,7 @@
 
         const { data: existing } = await state.client.from(CONFIG.TABLE).select("id").eq("device_fingerprint", state.deviceFingerprint).eq("round_id", CONFIG.ROUND).maybeSingle();
         if (existing) {
-          localStorage.setItem("voted_device_" + state.deviceFingerprint, "true");
+          localStorage.setItem("voted_device_" + CONFIG.ROUND + "_" + state.deviceFingerprint, "true");
           return showAlreadyVoted();
         }
 
@@ -472,7 +472,7 @@
           vpn_check_status: state.vpnCheckStatus ? JSON.stringify(state.vpnCheckStatus) : null
         }]);
         if (insErr) throw insErr;
-        localStorage.setItem("voted_device_" + state.deviceFingerprint, "true");
+        localStorage.setItem("voted_device_" + CONFIG.ROUND + "_" + state.deviceFingerprint, "true");
         document.getElementById("votoTela").style.display = "none";
         document.getElementById("confirmTela").style.display = "flex";
         document.getElementById("nomeConfirm").innerText = sel.value;
