@@ -282,7 +282,7 @@
       
       <div class="info-box">
         <strong>🛡️ Por que isso?</strong><br>
-        Para garantir a seurança da votação, não é permitido votar usando VPN.
+        Para garantir a segurança da votação, não é permitido votar usando VPN.
       </div>
 
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
@@ -470,10 +470,15 @@ async function checkVPN(ip) {
 
     state.vpnData = info;
 
+    // Lógica rigorosa de bloqueio: vpn, proxy ou tipo hosting (servidores/data centers)
     const isVPN = info.vpn === "yes";
     const isProxy = info.proxy === "yes";
+    const isHosting = info.type === "hosting";
 
-    if (isVPN || isProxy) return true;
+    if (isVPN || isProxy || isHosting) {
+        console.warn("VPN/Proxy/Hosting detectado:", { isVPN, isProxy, isHosting });
+        return true;
+    }
 
     return false;
 
@@ -501,10 +506,13 @@ async function init() {
     if (!horarioOk) return;
 
     state.ip = await getIP();
+    
+    // 🔥 Verificação de VPN Rigorosa antes de qualquer outra ação
     state.isVPN = await checkVPN(state.ip);
 
     if (state.isVPN) {
       state.blocked = true;
+      console.log("Acesso bloqueado por VPN/Proxy.");
       return showTela("vpnBlockedTela");
     }
 
@@ -564,6 +572,7 @@ document.addEventListener("change", (e) => {
 
 // =================== VOTO ===================
 async function submitVote() {
+  // Verificação dupla no momento do voto
   if (state.blocked || state.isVPN) {
     return showTela("vpnBlockedTela");
   }
