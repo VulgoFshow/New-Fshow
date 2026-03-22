@@ -207,10 +207,10 @@
 
   <script>
     const CONFIG = {
-      ROUND: "rodada_01",
+      ROUND: "teste1",
       URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
       KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
-      TABLE: "testes1"
+      TABLE: "testes1",
       MIN_TIME: 3000 
     };
 
@@ -234,13 +234,8 @@
       if (criteria.some(c => !!c)) state.isBot = true;
     }
 
-    /**
-     * Gera um fingerprint robusto do dispositivo usando múltiplas características
-     */
     async function generateDeviceFingerprint() {
       const components = [];
-
-      // 1. Canvas Fingerprint
       try {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -254,11 +249,8 @@
         ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
         ctx.fillText('Browser Fingerprint', 4, 17);
         components.push(canvas.toDataURL());
-      } catch (e) {
-        components.push('canvas_error');
-      }
+      } catch (e) { components.push('canvas_error'); }
 
-      // 2. WebGL Fingerprint
       try {
         const canvas = document.createElement('canvas');
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -269,133 +261,42 @@
             components.push(gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL));
           }
         }
-      } catch (e) {
-        components.push('webgl_error');
-      }
+      } catch (e) { components.push('webgl_error'); }
 
-      // 3. Screen Info
-      components.push(window.screen.width);
-      components.push(window.screen.height);
-      components.push(window.screen.colorDepth);
-      components.push(window.screen.pixelDepth);
-      components.push(window.devicePixelRatio);
-
-      // 4. Navigator Info
-      components.push(navigator.language);
-      components.push(navigator.hardwareConcurrency);
-      components.push(navigator.deviceMemory);
-      components.push(navigator.maxTouchPoints);
-      components.push(navigator.vendor);
-      components.push(navigator.platform);
-      components.push(navigator.userAgent);
-
-      // 5. Timezone
+      components.push(window.screen.width, window.screen.height, window.screen.colorDepth, window.devicePixelRatio);
+      components.push(navigator.language, navigator.hardwareConcurrency, navigator.platform, navigator.userAgent);
       components.push(new Date().getTimezoneOffset());
-
-      // 6. Local Storage Availability
-      try {
-        const test = '__test__';
-        localStorage.setItem(test, test);
-        localStorage.removeItem(test);
-        components.push('localStorage_available');
-      } catch (e) {
-        components.push('localStorage_unavailable');
-      }
-
-      // 7. Session Storage Availability
-      try {
-        const test = '__test__';
-        sessionStorage.setItem(test, test);
-        sessionStorage.removeItem(test);
-        components.push('sessionStorage_available');
-      } catch (e) {
-        components.push('sessionStorage_unavailable');
-      }
-
-      // 8. Plugins
-      if (navigator.plugins && navigator.plugins.length > 0) {
-        for (let i = 0; i < navigator.plugins.length; i++) {
-          components.push(navigator.plugins[i].name);
-        }
-      }
-
-      // 9. IndexedDB Support
-      components.push(!!window.indexedDB);
-
-      // 10. Audio Context
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        components.push(audioContext.sampleRate);
-      } catch (e) {
-        components.push('audio_context_error');
-      }
-
+      
       const fingerprint = components.join('|');
       return await hashString(fingerprint);
     }
 
-    /**
-     * Função para fazer hash SHA-256 de uma string
-     */
     async function hashString(str) {
       const encoder = new TextEncoder();
       const data = encoder.encode(str);
       const hashBuffer = await crypto.subtle.digest('SHA-256', data);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      return hashHex;
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    /**
-     * Detecta VPN usando a API proxycheck.io com tratamento robusto de erros
-     */
     async function checkVPN(ipAddress) {
       try {
-        document.getElementById("loadingText").innerText = "Verificando segurança da conexão...";
-        
-        // Usa timeout para evitar travamentos
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-        const response = await fetch(
-          `https://proxycheck.io/v2/${ipAddress}?vpn=1&asn=1&node=1&inf=1&tag=msg`,
-          { 
-            method: 'GET',
-            signal: controller.signal
-          }
-        );
-
+        const response = await fetch(`https://proxycheck.io/v2/${ipAddress}?vpn=1&asn=1&node=1&inf=1&tag=msg`, { signal: controller.signal });
         clearTimeout(timeoutId);
-
-        if (!response.ok) {
-          console.warn("Erro ao verificar VPN:", response.status);
-          return false;
-        }
-
+        if (!response.ok) return false;
         const data = await response.json();
-        
         if (data[ipAddress]) {
           const ipData = data[ipAddress];
-          
           const isVPN = ipData.vpn === 'yes' || ipData.vpn === true;
           const isProxy = ipData.proxy === 'yes' || ipData.proxy === true;
           const isTor = ipData.type === 'Tor' || ipData.isTor === 'yes' || ipData.isTor === true;
-          
-          state.vpnCheckStatus = {
-            vpn: isVPN,
-            proxy: isProxy,
-            tor: isTor,
-            type: ipData.type || null,
-            provider: ipData.provider || null
-          };
-
+          state.vpnCheckStatus = { vpn: isVPN, proxy: isProxy, tor: isTor, type: ipData.type, provider: ipData.provider };
           return isVPN || isProxy || isTor;
         }
-        
         return false;
       } catch (e) {
-        console.error("Erro na verificação de VPN:", e.message);
-        // Não bloqueia se falhar - permite o voto
         state.vpnCheckStatus = { error: e.message };
         return false;
       }
@@ -405,138 +306,46 @@
       detectBot();
       try {
         state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
-        
-        document.getElementById("loadingText").innerText = "Gerando identificação do dispositivo...";
-        
         state.deviceFingerprint = await generateDeviceFingerprint();
-
         if (localStorage.getItem("voted_device_" + state.deviceFingerprint)) {
-          return showError("Dispositivo já votou", "Este dispositivo já participou desta rodada. Um voto por dispositivo é permitido.");
+          return showError("Dispositivo já votou", "Este dispositivo já participou desta rodada.");
         }
-
-        document.getElementById("loadingText").innerText = "Validando dispositivo...";
-        
-        if (typeof FingerprintJS !== 'undefined') {
-          const fp = await FingerprintJS.load();
-          const result = await fp.get();
-        }
-
-        document.getElementById("loadingText").innerText = "Obtendo seu endereço IP...";
         try {
           const res = await fetch("https://api.ipify.org?format=json");
           const data = await res.json();
           state.ip = data.ip;
-        } catch (e) { 
-          state.ip = "0.0.0.0"; 
-        }
-
-        // Verifica VPN
+        } catch (e) { state.ip = "0.0.0.0"; }
         state.isVPN = await checkVPN(state.ip);
-
         if (state.isVPN) {
-          return showError(
-            "VPN Detectada", 
-            "Não é permitido votar usando VPN, Proxy ou Tor. Por favor, desconecte-se e tente novamente com sua conexão normal."
-          );
+          return showError("VPN Detectada", "Não é permitido votar usando VPN ou Proxy.");
         }
-
-        // Verifica banco de dados
-        const { data: existingByFingerprint, error: checkErr1 } = await state.client
-          .from(CONFIG.TABLE)
-          .select("id")
-          .eq("device_fingerprint", state.deviceFingerprint)
-          .eq("round_id", CONFIG.ROUND)
-          .maybeSingle();
-        
-        if (existingByFingerprint) {
+        const { data: existing } = await state.client.from(CONFIG.TABLE).select("id").eq("device_fingerprint", state.deviceFingerprint).eq("round_id", CONFIG.ROUND).maybeSingle();
+        if (existing) {
           localStorage.setItem("voted_device_" + state.deviceFingerprint, "true");
           return showError("Dispositivo já votou", "Este dispositivo já participou desta rodada.");
         }
-
-        const { data: existingByIP, error: checkErr2 } = await state.client
-          .from(CONFIG.TABLE)
-          .select("id")
-          .eq("ip", state.ip)
-          .eq("round_id", CONFIG.ROUND)
-          .maybeSingle();
-        
-        if (existingByIP) {
-          return showError(
-            "IP já votou", 
-            "Este endereço IP já participou desta rodada. Um voto por dispositivo é permitido."
-          );
-        }
-        
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
-      } catch (e) { 
-        console.error("Erro Init:", e);
-        showError("Erro de Inicialização", "Falha nos módulos de segurança. Verifique o console."); 
-      }
+      } catch (e) { showError("Erro de Inicialização", "Falha nos módulos de segurança."); }
     }
 
-    window.onCaptchaSuccess = (token) => { 
-      state.token = token; 
-      checkReady(); 
-    };
-
+    window.onCaptchaSuccess = (token) => { state.token = token; checkReady(); };
     function checkReady() {
       const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
-      if (sel && state.token) { 
-        btn.disabled = false; 
-        btn.classList.add("active"); 
-      } else { 
-        btn.disabled = true; 
-        btn.classList.remove("active"); 
-      }
+      if (sel && state.token) { btn.disabled = false; btn.classList.add("active"); }
+      else { btn.disabled = true; btn.classList.remove("active"); }
     }
-
     document.querySelectorAll('input[name="vote"]').forEach(r => r.onchange = checkReady);
 
     async function submitVote() {
       const sel = document.querySelector('input[name="vote"]:checked');
       const btn = document.getElementById("botaoVotar");
-      
       if (btn.disabled) return;
-
-      const elapsed = Date.now() - state.start;
-      if (elapsed < CONFIG.MIN_TIME && !state.isBot) {
-        return showError("Ação muito rápida", "Por favor, aguarde um momento antes de votar.");
-      }
-
-      btn.disabled = true;
-      btn.innerText = "VALIDANDO...";
-
+      if ((Date.now() - state.start) < CONFIG.MIN_TIME && !state.isBot) return showError("Ação rápida", "Aguarde um momento.");
+      btn.disabled = true; btn.innerText = "ENVIANDO...";
       try {
-        // Verificação final de duplicidade
-        const { data: existing, error: checkErr } = await state.client
-          .from(CONFIG.TABLE)
-          .select("id")
-          .eq("device_fingerprint", state.deviceFingerprint)
-          .eq("round_id", CONFIG.ROUND)
-          .maybeSingle();
-        
-        if (existing) {
-          localStorage.setItem("voted_device_" + state.deviceFingerprint, "true");
-          return showError("Voto Duplicado", "Este dispositivo já votou nesta rodada.");
-        }
-
-        const { data: existingIP, error: checkErr2 } = await state.client
-          .from(CONFIG.TABLE)
-          .select("id")
-          .eq("ip", state.ip)
-          .eq("round_id", CONFIG.ROUND)
-          .maybeSingle();
-        
-        if (existingIP) {
-          return showError("IP já votou", "Este endereço IP já participou desta rodada.");
-        }
-
-        btn.innerText = "ENVIANDO...";
-
-        // Inserção no banco de dados com apenas as colunas que existem
-        const voteData = {
+        const { error: insErr } = await state.client.from(CONFIG.TABLE).insert([{
           participante: sel.value,
           ip: state.ip || "0.0.0.0",
           device_fingerprint: state.deviceFingerprint,
@@ -544,30 +353,15 @@
           hcaptcha_token: state.token,
           vpn_detected: state.isVPN,
           vpn_check_status: state.vpnCheckStatus ? JSON.stringify(state.vpnCheckStatus) : null
-        };
-
-        console.log("Enviando dados:", voteData);
-
-        const { error: insErr } = await state.client
-          .from(CONFIG.TABLE)
-          .insert([voteData]);
-
-        if (insErr) {
-            console.error("Erro Supabase:", insErr);
-            throw insErr;
-        }
-
-        // Sucesso
+        }]);
+        if (insErr) throw insErr;
         localStorage.setItem("voted_device_" + state.deviceFingerprint, "true");
         document.getElementById("votoTela").style.display = "none";
         document.getElementById("confirmTela").style.display = "flex";
         document.getElementById("nomeConfirm").innerText = sel.value;
-
       } catch (e) {
-        console.error("Erro Final:", e);
-        showError("Erro ao Votar", "Houve um problema ao salvar seu voto. Detalhes no console (F12).");
-        btn.disabled = false;
-        btn.innerText = "VOTAR";
+        showError("Erro ao Votar", "Houve um problema ao salvar seu voto.");
+        btn.disabled = false; btn.innerText = "VOTAR";
       }
     }
 
@@ -578,7 +372,6 @@
       document.getElementById("errorTitle").innerText = title;
       document.getElementById("errorMessage").innerText = msg;
     }
-
     window.addEventListener('DOMContentLoaded', initSecurity);
   </script>
 </body>
