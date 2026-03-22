@@ -307,9 +307,10 @@
     </div>
   </div>
 
+
 <script>
 const CONFIG = {
-  ROUND: "teste72",
+  ROUND: "teste73",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
   KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
   TABLE: "teste1",
@@ -490,7 +491,17 @@ async function getIP() {
 ========================= */
 async function checkVPN(ip) {
   try {
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1`, {
+      signal: controller.signal
+    });
+
+    clearTimeout(timeout);
+
+    if (!res.ok) return false;
+
     const data = await res.json();
     const info = data[ip];
 
@@ -498,16 +509,17 @@ async function checkVPN(ip) {
 
     state.vpnData = info;
 
-    // 🔥 Só bloqueia se for VPN CONFIRMADA
-    if (info.vpn === "yes") {
-      return true;
-    }
+    const isVPN = info.vpn === "yes";
+    const isProxy = info.proxy === "yes";
+    const isHosting = info.type === "hosting"; 
+
+    if (isVPN) return true;
 
     return false;
 
   } catch (e) {
     console.warn("Erro VPN check:", e);
-    return false; 
+    return false;
   }
 }
   
