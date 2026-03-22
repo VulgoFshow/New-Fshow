@@ -443,7 +443,7 @@ async function checkVPN(ip) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`, {
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1&risk=1&port=1&seen=1`, {
       signal: controller.signal
     });
 
@@ -458,8 +458,19 @@ async function checkVPN(ip) {
 
     state.vpnData = info;
 
-    return info.vpn === "yes" || info.proxy === "yes";
-  } catch {
+    const isVPN =
+      info.vpn === "yes" ||
+      info.proxy === "yes" ||
+      info.type === "VPN" ||
+      info.type === "Hosting" ||
+      info.type === "Tor" ||
+      info.risk === "high" ||
+      (info.isp && /vpn|hosting|cloud|amazon|google|microsoft/i.test(info.isp));
+
+    return isVPN;
+
+  } catch (e) {
+    console.warn("Erro ao checar VPN:", e);
     return false;
   }
 }
@@ -586,8 +597,13 @@ async function submitVote() {
     btn.disabled = false;
     btn.innerText = "VOTAR";
   }
-}
 
+
+  if (state.isVPN) {
+  return showTela("vpnBlockedTela");
+  }
+}
+  
 /* =========================
    START
 ========================= */
