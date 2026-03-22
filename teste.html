@@ -207,10 +207,10 @@
 
   <script>
     const CONFIG = {
-      ROUND: "rodada_teste3",
+      ROUND: "rodada_01",
       URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
       KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
-      TABLE: "testes",
+      TABLE: "roca17f10",
       MIN_TIME: 3000 
     };
 
@@ -236,7 +236,6 @@
 
     /**
      * Gera um fingerprint robusto do dispositivo usando múltiplas características
-     * Combina: canvas fingerprint, webgl, screen info, navigator info, storage, etc
      */
     async function generateDeviceFingerprint() {
       const components = [];
@@ -313,7 +312,7 @@
         components.push('sessionStorage_unavailable');
       }
 
-      // 8. Plugins (se disponível)
+      // 8. Plugins
       if (navigator.plugins && navigator.plugins.length > 0) {
         for (let i = 0; i < navigator.plugins.length; i++) {
           components.push(navigator.plugins[i].name);
@@ -331,10 +330,7 @@
         components.push('audio_context_error');
       }
 
-      // Combina todos os componentes em uma string
       const fingerprint = components.join('|');
-
-      // Hash SHA-256 do fingerprint
       return await hashString(fingerprint);
     }
 
@@ -351,31 +347,36 @@
     }
 
     /**
-     * Detecta VPN usando a API proxycheck.io (gratuita, até 100 queries/dia sem registro)
-     * Retorna true se VPN/Proxy detectado, false caso contrário
+     * Detecta VPN usando a API proxycheck.io com tratamento robusto de erros
      */
     async function checkVPN(ipAddress) {
       try {
         document.getElementById("loadingText").innerText = "Verificando segurança da conexão...";
         
-        // Usando proxycheck.io v2 API (gratuita)
+        // Usa timeout para evitar travamentos
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
         const response = await fetch(
           `https://proxycheck.io/v2/${ipAddress}?vpn=1&asn=1&node=1&inf=1&tag=msg`,
-          { method: 'GET' }
+          { 
+            method: 'GET',
+            signal: controller.signal
+          }
         );
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           console.warn("Erro ao verificar VPN:", response.status);
-          return false; // Se falhar, permite o voto (não bloqueia por erro)
+          return false;
         }
 
         const data = await response.json();
         
-        // Verifica se o IP é VPN, Proxy ou Tor
         if (data[ipAddress]) {
           const ipData = data[ipAddress];
           
-          // Verifica os campos de detecção
           const isVPN = ipData.vpn === 'yes' || ipData.vpn === true;
           const isProxy = ipData.proxy === 'yes' || ipData.proxy === true;
           const isTor = ipData.type === 'Tor' || ipData.isTor === 'yes' || ipData.isTor === true;
@@ -384,8 +385,8 @@
             vpn: isVPN,
             proxy: isProxy,
             tor: isTor,
-            type: ipData.type,
-            provider: ipData.provider
+            type: ipData.type || null,
+            provider: ipData.provider || null
           };
 
           return isVPN || isProxy || isTor;
@@ -393,8 +394,10 @@
         
         return false;
       } catch (e) {
-        console.error("Erro na verificação de VPN:", e);
-        return false; // Se falhar, permite o voto (não bloqueia por erro)
+        console.error("Erro na verificação de VPN:", e.message);
+        // Não bloqueia se falhar - permite o voto
+        state.vpnCheckStatus = { error: e.message };
+        return false;
       }
     }
 
@@ -403,27 +406,22 @@
       try {
         state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
         
-        // Verifica se já votou usando localStorage com o fingerprint
         document.getElementById("loadingText").innerText = "Gerando identificação do dispositivo...";
         
-        // Gera fingerprint robusto do dispositivo
         state.deviceFingerprint = await generateDeviceFingerprint();
 
-        // Verifica se este dispositivo já votou
         if (localStorage.getItem("voted_device_" + state.deviceFingerprint)) {
           return showError("Dispositivo já votou", "Este dispositivo já participou desta rodada. Um voto por dispositivo é permitido.");
         }
 
         document.getElementById("loadingText").innerText = "Validando dispositivo...";
         
-        // Também usa FingerprintJS como camada adicional de segurança
         if (typeof FingerprintJS !== 'undefined') {
           const fp = await FingerprintJS.load();
           const result = await fp.get();
-          // Armazena como backup, mas usa nosso fingerprint principal
         }
 
-        document.getElementById("loadingText").innerText = "Analisando conexão...";
+        document.getElementById("loadingText").innerText = "Obtendo seu endereço IP...";
         try {
           const res = await fetch("https://api.ipify.org?format=json");
           const data = await res.json();
@@ -432,8 +430,7 @@
           state.ip = "0.0.0.0"; 
         }
 
-        // Verifica se está usando VPN
-        document.getElementById("loadingText").innerText = "Verificando segurança da conexão...";
+        // Verifica VPN
         state.isVPN = await checkVPN(state.ip);
 
         if (state.isVPN) {
@@ -443,7 +440,7 @@
           );
         }
 
-        // Verifica se já votou no banco de dados
+        // Verifica banco de dados
         const { data: existingByFingerprint, error: checkErr1 } = await state.client
           .from(CONFIG.TABLE)
           .select("id")
@@ -456,7 +453,6 @@
           return showError("Dispositivo já votou", "Este dispositivo já participou desta rodada.");
         }
 
-        // Verifica se o IP já votou (camada adicional de segurança)
         const { data: existingByIP, error: checkErr2 } = await state.client
           .from(CONFIG.TABLE)
           .select("id")
@@ -475,7 +471,7 @@
         document.getElementById("votoTela").style.display = "block";
       } catch (e) { 
         console.error("Erro Init:", e);
-        showError("Erro de Inicialização", "Falha nos módulos de segurança."); 
+        showError("Erro de Inicialização", "Falha nos módulos de segurança. Verifique o console."); 
       }
     }
 
@@ -513,7 +509,7 @@
       btn.innerText = "VALIDANDO...";
 
       try {
-        // 1. Verificação final de duplicidade por fingerprint
+        // Verificação final de duplicidade
         const { data: existing, error: checkErr } = await state.client
           .from(CONFIG.TABLE)
           .select("id")
@@ -526,7 +522,6 @@
           return showError("Voto Duplicado", "Este dispositivo já votou nesta rodada.");
         }
 
-        // 2. Verificação final de duplicidade por IP
         const { data: existingIP, error: checkErr2 } = await state.client
           .from(CONFIG.TABLE)
           .select("id")
@@ -540,17 +535,22 @@
 
         btn.innerText = "ENVIANDO...";
 
-        // 3. Inserção com fingerprint de dispositivo
-        const { error: insErr } = await state.client.from(CONFIG.TABLE).insert([{
+        // Inserção no banco de dados com apenas as colunas que existem
+        const voteData = {
           participante: sel.value,
           ip: state.ip || "0.0.0.0",
           device_fingerprint: state.deviceFingerprint,
           round_id: CONFIG.ROUND,
-          turnstile_token: state.token,
-          user_agent: navigator.userAgent,
+          hcaptcha_token: state.token,
           vpn_detected: state.isVPN,
-          vpn_check_status: JSON.stringify(state.vpnCheckStatus)
-        }]);
+          vpn_check_status: state.vpnCheckStatus ? JSON.stringify(state.vpnCheckStatus) : null
+        };
+
+        console.log("Enviando dados:", voteData);
+
+        const { error: insErr } = await state.client
+          .from(CONFIG.TABLE)
+          .insert([voteData]);
 
         if (insErr) {
             console.error("Erro Supabase:", insErr);
@@ -565,7 +565,7 @@
 
       } catch (e) {
         console.error("Erro Final:", e);
-        showError("Erro ao Votar", "Houve um problema ao salvar seu voto. Detalhes no console.");
+        showError("Erro ao Votar", "Houve um problema ao salvar seu voto. Detalhes no console (F12).");
         btn.disabled = false;
         btn.innerText = "VOTAR";
       }
