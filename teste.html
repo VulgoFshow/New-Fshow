@@ -308,13 +308,14 @@
   </div>
 
 
+
 <script>
 const CONFIG = {
-  ROUND: "teste73",
+  ROUND: "teste74",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
   KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
   TABLE: "teste1",
-  MIN_TIME: 1000
+  MIN_TIME: 3000
 };
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
@@ -617,8 +618,7 @@ document.addEventListener("change", (e) => {
 async function submitVote() {
 
   if (state.blocked || state.isVPN) {
-    return showTela("vpnBlockedTela"); 
-  }
+    return showTela("vpnBlockedTela");
 
   const btn = document.getElementById("botaoVotar");
   const selecionado = document.querySelector('input[name="vote"]:checked');
@@ -645,18 +645,12 @@ async function submitVote() {
 
     if (error) throw error;
 
-    showTela("vpnBlockedTela");
+    showTela("confirmTela"); 
 
   } catch (err) {
     console.error(err);
-    showTela("vpnBlockedTela");
+    showError("Erro ao votar", "Não foi possível registrar seu voto. Tente novamente.");
   }
 }
-
-/* =========================
-   START
-========================= */
-document.addEventListener("DOMContentLoaded", init);
-</script>
 </body>
 </html>
