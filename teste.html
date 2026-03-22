@@ -309,12 +309,15 @@
 
 <script>
 const CONFIG = {
-  ROUND: "teste71",
+  ROUND: "teste72",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
   KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
   TABLE: "teste1",
   MIN_TIME: 1000
 };
+
+  const aberturaBR = new Date("2026-01-18T19:00:00");
+  const encerramentoBR = new Date("2026-03-29T19:00:00");
 
 const state = {
   client: null,
@@ -328,6 +331,62 @@ const state = {
   blocked: false 
 };
 
+    // =================== HORA DO SERVIDOR (Via API Pública) ===================
+  async function getServerTime() {
+    try {
+      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
+      const data = await res.json();
+      return new Date(data.datetime);
+    } catch (e) {
+      console.error("Erro ao verificar horário:", e);
+      return new Date(); 
+    }
+  }
+
+  function toSaoPauloDate(date) {
+    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+    return new Date(spString);
+  }
+
+  function redirect(url) {
+  if (DEBUG) {
+    console.warn("REDIRECT BLOQUEADO →", url);
+    return;
+  }
+  window.location.href = url;
+}
+
+  // =================== VERIFICAÇÃO DE HORÁRIO ===================
+  async function verificarHorarios() {
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR < aberturaBR) {
+      window.location.replace("aguarde.html");
+      return;
+    }
+
+    if (agoraBR > encerramentoBR) {
+      window.location.replace("fechada.html");
+      return;
+    }
+
+    console.log("VOTAÇÃO ABERTA");
+  }
+
+  verificarHorarios();
+
+  // =================== VERIFICAÇÃO PERIÓDICA DE HORÁRIO (A CADA 5 SEGUNDOS) ===================
+  setInterval(async () => {
+    const agoraServer = await getServerTime();
+    const agoraBR = toSaoPauloDate(agoraServer);
+
+    if (agoraBR > encerramentoBR) {
+      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+      window.location.replace("fechada.html");
+    }
+  }, 5000);
+  
 /* =========================
    TELAS
 ========================= */
