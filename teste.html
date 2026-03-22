@@ -197,12 +197,11 @@
 
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
 </head>
 <body>
 
   <!-- Tela de Carregamento -->
-  <div id="loadingTela" style="display: flex;">
+  <div id="loadingTela" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
     <div class="spinner"></div>
     <p id="loadingText">Iniciando sistema de segurança...</p>
   </div>
@@ -267,9 +266,9 @@
       </div>
 
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-<button class="voltar voltar-secondary" onclick="window.location.href='https://fshow.site'">
-  VOLTAR
-</button>
+      <button class="voltar voltar-secondary" onclick="window.location.href='https://fshow.site'">
+        VOLTAR
+      </button>
     </div>
   </div>
 
@@ -284,11 +283,6 @@
       <div class="info-box">
         <strong>🛡️ Por que isso?</strong><br>
         Para garantir a seurança da votação, não é permitido votar usando VPN.
-      </div>
-
-      <div class="info-box">
-        <strong>✅ Como resolver:</strong><br>
-        Desconecte sua VPN ou Proxy e tente novamente com sua conexão normal de internet.
       </div>
 
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
@@ -307,8 +301,6 @@
     </div>
   </div>
 
-
-
 <script>
 const CONFIG = {
   ROUND: "teste74",
@@ -318,8 +310,8 @@ const CONFIG = {
   MIN_TIME: 3000
 };
 
-  const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-03-29T19:00:00");
+const aberturaBR = new Date("2026-01-18T19:00:00");
+const encerramentoBR = new Date("2026-03-29T19:00:00");
 
 const state = {
   client: null,
@@ -333,65 +325,43 @@ const state = {
   blocked: false 
 };
 
-    // =================== HORA DO SERVIDOR (Via API Pública) ===================
-  async function getServerTime() {
-    try {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
-      const data = await res.json();
-      return new Date(data.datetime);
-    } catch (e) {
-      console.error("Erro ao verificar horário:", e);
-      return new Date(); 
-    }
+// =================== HORA DO SERVIDOR (Via API Pública) ===================
+async function getServerTime() {
+  try {
+    const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
+    const data = await res.json();
+    return new Date(data.datetime);
+  } catch (e) {
+    console.error("Erro ao verificar horário:", e);
+    return new Date(); 
   }
-
-  function toSaoPauloDate(date) {
-    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    return new Date(spString);
-  }
-
-  function redirect(url) {
-  if (DEBUG) {
-    console.warn("REDIRECT BLOQUEADO →", url);
-    return;
-  }
-  window.location.href = url;
 }
 
-  // =================== VERIFICAÇÃO DE HORÁRIO ===================
-  async function verificarHorarios() {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
+function toSaoPauloDate(date) {
+  const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+  return new Date(spString);
+}
 
-    if (agoraBR < aberturaBR) {
-      window.location.replace("aguarde.html");
-      return;
-    }
+// =================== VERIFICAÇÃO DE HORÁRIO ===================
+async function verificarHorarios() {
+  const agoraServer = await getServerTime();
+  const agoraBR = toSaoPauloDate(agoraServer);
 
-    if (agoraBR > encerramentoBR) {
-      window.location.replace("fechada.html");
-      return;
-    }
-
-    console.log("VOTAÇÃO ABERTA");
+  if (agoraBR < aberturaBR) {
+    window.location.replace("aguarde.html");
+    return false;
   }
 
-  verificarHorarios();
+  if (agoraBR > encerramentoBR) {
+    window.location.replace("fechada.html");
+    return false;
+  }
 
-  // =================== VERIFICAÇÃO PERIÓDICA DE HORÁRIO (A CADA 5 SEGUNDOS) ===================
-  setInterval(async () => {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
+  console.log("VOTAÇÃO ABERTA");
+  return true;
+}
 
-    if (agoraBR > encerramentoBR) {
-      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
-      window.location.replace("fechada.html");
-    }
-  }, 5000);
-  
-/* =========================
-   TELAS
-========================= */
+// =================== TELAS ===================
 function showTela(id) {
   const telas = [
     "loadingTela",
@@ -411,9 +381,7 @@ function showTela(id) {
   if (target) target.style.display = (id === "votoTela" ? "block" : "flex");
 }
 
-/* =========================
-   BOT DETECT
-========================= */
+// =================== BOT DETECT ===================
 function detectBot() {
   const sinais = [
     navigator.webdriver,
@@ -423,9 +391,7 @@ function detectBot() {
   state.isBot = sinais.some(Boolean);
 }
 
-/* =========================
-   HASH
-========================= */
+// =================== HASH ===================
 async function hash(str) {
   const data = new TextEncoder().encode(str);
   const buffer = await crypto.subtle.digest("SHA-256", data);
@@ -434,9 +400,7 @@ async function hash(str) {
     .join("");
 }
 
-/* =========================
-   FINGERPRINT
-========================= */
+// =================== FINGERPRINT ===================
 async function gerarFingerprint() {
   let parts = [];
 
@@ -474,9 +438,7 @@ async function gerarFingerprint() {
   return await hash(parts.join("|"));
 }
 
-/* =========================
-   IP
-========================= */
+// =================== IP ===================
 async function getIP() {
   try {
     const res = await fetch("https://api.ipify.org?format=json");
@@ -487,9 +449,7 @@ async function getIP() {
   }
 }
 
-/* =========================
-   VPN CHECK 
-========================= */
+// =================== VPN CHECK ===================
 async function checkVPN(ip) {
   try {
     const controller = new AbortController();
@@ -512,9 +472,8 @@ async function checkVPN(ip) {
 
     const isVPN = info.vpn === "yes";
     const isProxy = info.proxy === "yes";
-    const isHosting = info.type === "hosting"; 
 
-    if (isVPN) return true;
+    if (isVPN || isProxy) return true;
 
     return false;
 
@@ -524,28 +483,24 @@ async function checkVPN(ip) {
   }
 }
   
-/* =========================
-   ERRO
-========================= */
+// =================== ERRO ===================
 function showError(titulo, msg) {
   document.getElementById("errorTitle").innerText = titulo;
   document.getElementById("errorMessage").innerText = msg;
   showTela("errorTela");
 }
 
-/* =========================
-   INIT (VPN PRIMEIRO!)
-========================= */
+// =================== INIT ===================
 async function init() {
   detectBot();
 
   try {
     showTela("loadingTela");
 
-    // 🔥 1. PEGAR IP
-    state.ip = await getIP();
+    const horarioOk = await verificarHorarios();
+    if (!horarioOk) return;
 
-    // 🔥 2. CHECAR VPN IMEDIATO
+    state.ip = await getIP();
     state.isVPN = await checkVPN(state.ip);
 
     if (state.isVPN) {
@@ -554,7 +509,6 @@ async function init() {
     }
 
     state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
-
     state.fingerprint = await gerarFingerprint();
 
     if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.fingerprint}`)) {
@@ -581,18 +535,14 @@ async function init() {
   }
 }
 
-/* =========================
-   CAPTCHA
-========================= */
+// =================== CAPTCHA ===================
 window.onCaptchaSuccess = function(token) {
   if (state.blocked) return; 
   state.token = token;
   atualizarBotao();
 };
 
-/* =========================
-   BOTÃO
-========================= */
+// =================== BOTÃO ===================
 function atualizarBotao() {
   if (state.blocked) return;
 
@@ -612,13 +562,11 @@ document.addEventListener("change", (e) => {
   if (e.target.name === "vote") atualizarBotao();
 });
 
-/* =========================
-   VOTO (BLOQUEIO REAL)
-========================= */
+// =================== VOTO ===================
 async function submitVote() {
-
   if (state.blocked || state.isVPN) {
     return showTela("vpnBlockedTela");
+  }
 
   const btn = document.getElementById("botaoVotar");
   const selecionado = document.querySelector('input[name="vote"]:checked');
@@ -650,7 +598,13 @@ async function submitVote() {
   } catch (err) {
     console.error(err);
     showError("Erro ao votar", "Não foi possível registrar seu voto. Tente novamente.");
+    btn.disabled = false;
+    btn.innerText = "VOTAR";
   }
 }
+
+// =================== START ===================
+document.addEventListener("DOMContentLoaded", init);
+</script>
 </body>
 </html>
