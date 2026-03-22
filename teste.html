@@ -486,14 +486,14 @@ async function getIP() {
 }
 
 /* =========================
-   VPN CHECK (PRIORIDADE MÁXIMA)
+   VPN CHECK 
 ========================= */
 async function checkVPN(ip) {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`, {
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1`, {
       signal: controller.signal
     });
 
@@ -508,12 +508,20 @@ async function checkVPN(ip) {
 
     state.vpnData = info;
 
-    return info.vpn === "yes" || info.proxy === "yes";
-  } catch {
+    const isVPN = info.vpn === "yes";
+    const isProxy = info.proxy === "yes";
+    const isHosting = info.type === "hosting"; 
+
+    if (isVPN || isHosting) return true;
+
+    return false;
+
+  } catch (e) {
+    console.warn("Erro VPN check:", e);
     return false;
   }
 }
-
+  
 /* =========================
    ERRO
 ========================= */
@@ -543,7 +551,6 @@ async function init() {
       return showTela("vpnBlockedTela");
     }
 
-    // 🔥 3. SÓ CONTINUA SE NÃO FOR VPN
     state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
 
     state.fingerprint = await gerarFingerprint();
