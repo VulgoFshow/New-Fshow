@@ -234,13 +234,6 @@
           <input type="radio" name="vote" value="Luca"> Luca
         </div>
       </label>
-  
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Paiva.jpg?raw=true" alt="Paiva">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Paiva"> Paiva
-        </div>
-      </label>
       
     </div>
 
@@ -316,7 +309,7 @@
 
 <script>
 const CONFIG = {
-  ROUND: "teste70",
+  ROUND: "teste71",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
   KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
   TABLE: "teste1",
@@ -331,11 +324,12 @@ const state = {
   startTime: Date.now(),
   isBot: false,
   isVPN: false,
-  vpnData: null
+  vpnData: null,
+  blocked: false 
 };
 
 /* =========================
-   TROCA DE TELAS
+   TELAS
 ========================= */
 function showTela(id) {
   const telas = [
@@ -365,7 +359,6 @@ function detectBot() {
     !navigator.languages || navigator.languages.length === 0,
     /HeadlessChrome/i.test(navigator.userAgent)
   ];
-
   state.isBot = sinais.some(Boolean);
 }
 
@@ -389,10 +382,8 @@ async function gerarFingerprint() {
   try {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
-
     ctx.font = "14px Arial";
     ctx.fillText("fingerprint", 2, 15);
-
     parts.push(canvas.toDataURL());
   } catch {
     parts.push("canvas_error");
@@ -436,14 +427,14 @@ async function getIP() {
 }
 
 /* =========================
-   VPN CHECK
+   VPN CHECK (PRIORIDADE MÁXIMA)
 ========================= */
 async function checkVPN(ip) {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1&risk=1&port=1&seen=1`, {
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`, {
       signal: controller.signal
     });
 
@@ -458,19 +449,8 @@ async function checkVPN(ip) {
 
     state.vpnData = info;
 
-    const isVPN =
-      info.vpn === "yes" ||
-      info.proxy === "yes" ||
-      info.type === "VPN" ||
-      info.type === "Hosting" ||
-      info.type === "Tor" ||
-      info.risk === "high" ||
-      (info.isp && /vpn|hosting|cloud|amazon|google|microsoft/i.test(info.isp));
-
-    return isVPN;
-
-  } catch (e) {
-    console.warn("Erro ao checar VPN:", e);
+    return info.vpn === "yes" || info.proxy === "yes";
+  } catch {
     return false;
   }
 }
@@ -485,12 +465,26 @@ function showError(titulo, msg) {
 }
 
 /* =========================
-   INIT
+   INIT (VPN PRIMEIRO!)
 ========================= */
 async function init() {
   detectBot();
 
   try {
+    showTela("loadingTela");
+
+    // 🔥 1. PEGAR IP
+    state.ip = await getIP();
+
+    // 🔥 2. CHECAR VPN IMEDIATO
+    state.isVPN = await checkVPN(state.ip);
+
+    if (state.isVPN) {
+      state.blocked = true;
+      return showTela("vpnBlockedTela");
+    }
+
+    // 🔥 3. SÓ CONTINUA SE NÃO FOR VPN
     state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
 
     state.fingerprint = await gerarFingerprint();
@@ -498,11 +492,6 @@ async function init() {
     if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.fingerprint}`)) {
       return showTela("alreadyVotedTela");
     }
-
-    state.ip = await getIP();
-    state.isVPN = await checkVPN(state.ip);
-
-    if (state.isVPN) return showTela("vpnBlockedTela");
 
     const { data } = await state.client
       .from(CONFIG.TABLE)
@@ -528,6 +517,7 @@ async function init() {
    CAPTCHA
 ========================= */
 window.onCaptchaSuccess = function(token) {
+  if (state.blocked) return; 
   state.token = token;
   atualizarBotao();
 };
@@ -536,6 +526,8 @@ window.onCaptchaSuccess = function(token) {
    BOTÃO
 ========================= */
 function atualizarBotao() {
+  if (state.blocked) return;
+
   const selecionado = document.querySelector('input[name="vote"]:checked');
   const btn = document.getElementById("botaoVotar");
 
@@ -553,9 +545,14 @@ document.addEventListener("change", (e) => {
 });
 
 /* =========================
-   VOTO
+   VOTO (BLOQUEIO REAL)
 ========================= */
 async function submitVote() {
+
+  if (state.blocked || state.isVPN) {
+    return showTela("vpnBlockedTela"); 
+  }
+
   const btn = document.getElementById("botaoVotar");
   const selecionado = document.querySelector('input[name="vote"]:checked');
 
@@ -575,35 +572,20 @@ async function submitVote() {
       device_fingerprint: state.fingerprint,
       round_id: CONFIG.ROUND,
       turnstile_token: state.token,
-      vpn_detected: state.isVPN,
+      vpn_detected: true,
       vpn_data: state.vpnData ? JSON.stringify(state.vpnData) : null
     }]);
 
     if (error) throw error;
 
-    localStorage.setItem(`voted_${CONFIG.ROUND}_${state.fingerprint}`, "1");
-
-    document.getElementById("nomeConfirm").innerText = selecionado.value;
-    showTela("confirmTela");
+    showTela("vpnBlockedTela");
 
   } catch (err) {
     console.error(err);
-
-    if (err.code === "23505") {
-      return showTela("alreadyVotedTela");
-    }
-
-    showError("Erro ao votar", "Não foi possível registrar seu voto.");
-    btn.disabled = false;
-    btn.innerText = "VOTAR";
-  }
-
-
-  if (state.isVPN) {
-  return showTela("vpnBlockedTela");
+    showTela("vpnBlockedTela");
   }
 }
-  
+
 /* =========================
    START
 ========================= */
