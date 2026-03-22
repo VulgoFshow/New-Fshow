@@ -441,9 +441,19 @@
 
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
-      } catch (e) { 
-        showError("Erro de Inicialização", "Falha nos módulos de segurança."); 
-      }
+      } catch (e) {
+  console.error(e);
+
+  // (já votou)
+  if (e.code === "23505" || e.message?.includes("duplicate")) {
+    localStorage.setItem("voted_device_" + CONFIG.ROUND + "_" + state.deviceFingerprint, "true");
+    return showAlreadyVoted();
+  }
+
+  showError("Erro ao Votar", "Houve um problema ao salvar seu voto.");
+  btn.disabled = false;
+  btn.innerText = "VOTAR";
+}
     }
 
     window.onCaptchaSuccess = (token) => { state.token = token; checkReady(); };
