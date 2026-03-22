@@ -24,6 +24,9 @@
       --shadow-md: 0 10px 30px rgba(0,0,0,0.45);
       --shadow-glow: 0 0 25px rgba(0,230,216,0.25);
       --panel-border: rgba(255,255,255,0.1);
+      --warning: #ffa500;
+      --danger: #ff6b6b;
+      --success: #00ffb3;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -110,19 +113,78 @@
       box-shadow: 0 10px 30px var(--accent-soft);
     }
 
-    #confirmTela, #errorTela, #loadingTela {
+    #confirmTela, #errorTela, #loadingTela, #alreadyVotedTela, #vpnBlockedTela {
       display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; width: 100%;
     }
 
     .card { background: var(--card-bg); border-radius: 20px; padding: 36px; width: 100%; max-width: 460px; box-shadow: var(--shadow-md); backdrop-filter: blur(12px); }
-    .error-msg { color: #ff6b6b; font-weight: 900; font-size: 22px; margin-bottom: 12px; }
-    .voltar { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #001818; padding: 14px; border: none; border-radius: 10px; width: 100%; cursor: pointer; font-weight: 800; margin-top: 22px; transition: var(--transition); }
+    
+    .icon-container {
+      font-size: 60px;
+      margin-bottom: 20px;
+      animation: slideDown 0.6s cubic-bezier(.2,.8,.2,1);
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title { font-size: 24px; font-weight: 900; margin-bottom: 12px; letter-spacing: 0.5px; }
+    .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+
+    .error-msg { color: var(--danger); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
+    .warning-msg { color: var(--warning); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
+    .success-msg { color: var(--success); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
+
+    .voltar { 
+      background: linear-gradient(135deg, var(--accent), var(--accent-2)); 
+      color: #001818; 
+      padding: 14px; 
+      border: none; 
+      border-radius: 10px; 
+      width: 100%; 
+      cursor: pointer; 
+      font-weight: 800; 
+      margin-top: 22px; 
+      transition: var(--transition);
+    }
+
+    .voltar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 230, 216, 0.3);
+    }
+
+    .voltar-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      border: 1px solid var(--panel-border);
+      margin-top: 12px;
+    }
+
+    .voltar-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--accent);
+    }
 
     .spinner {
       width: 52px; height: 52px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.15); border-top-color: var(--accent);
       animation: spin 0.9s linear infinite; margin-bottom: 22px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    .info-box {
+      background: rgba(0, 230, 216, 0.1);
+      border: 1px solid rgba(0, 230, 216, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .info-box strong { color: var(--accent); }
 
     @media (min-width: 768px) {
       .container { max-width: 720px; }
@@ -139,11 +201,13 @@
 </head>
 <body>
 
+  <!-- Tela de Carregamento -->
   <div id="loadingTela" style="display: flex;">
     <div class="spinner"></div>
     <p id="loadingText">Iniciando sistema de segurança...</p>
   </div>
 
+  <!-- Tela de Votação -->
   <div id="votoTela" class="container" style="display: none;">
     <h1>Quem você quer que VENÇA a F10?</h1>
     <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por dispositivo.</p>
@@ -187,30 +251,75 @@
     <button id="botaoVotar" onclick="submitVote()" disabled>VOTAR</button>
   </div>
 
+  <!-- Tela de Sucesso -->
   <div id="confirmTela">
     <div class="card">
-      <div style="font-size: 50px; margin-bottom: 10px;">✔</div>
-      <h2 id="nomeConfirm"></h2>
-      <p style="color: #00ffb3; font-weight: bold;">Voto computado com sucesso!</p>
+      <div class="icon-container">✔</div>
+      <h2 id="nomeConfirm" class="title"></h2>
+      <p class="success-msg">Voto computado com sucesso!</p>
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
     </div>
   </div>
 
+  <!-- Tela de Já Votou -->
+  <div id="alreadyVotedTela">
+    <div class="card">
+      <div class="icon-container">⏱️</div>
+      <h2 class="title">Você já votou!</h2>
+      <p class="subtitle">Você já votou nessa votação.</p>
+      
+      <div class="info-box">
+        <strong>ℹ️ Informação:</strong><br>
+        Essa votação permite apenas <strong>um voto por pessoa</strong>. Sua participação foi registrada com sucesso.
+      </div>
+
+      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+<button class="voltar voltar-secondary" onclick="window.location.href='https://fshow.site'">
+  VOLTAR
+</button>
+    </div>
+  </div>
+
+  <!-- Tela de VPN Bloqueada -->
+  <div id="vpnBlockedTela">
+    <div class="card">
+      <div class="icon-container">🔒</div>
+      <h2 class="title">Voto Bloqueado</h2>
+      <p class="warning-msg">VPN ou Proxy Detectado</p>
+      <p class="subtitle">Não é permitido votar usando VPN, Proxy ou Tor. Por favor, seja honesto.</p>
+      
+      <div class="info-box">
+        <strong>🛡️ Por que isso?</strong><br>
+        Para garantir a seurança da votação, não é permitido votar usando VPN.
+      </div>
+
+      <div class="info-box">
+        <strong>✅ Como resolver:</strong><br>
+        Desconecte sua VPN ou Proxy e tente novamente com sua conexão normal de internet.
+      </div>
+
+      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+      <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
+    </div>
+  </div>
+
+  <!-- Tela de Erro Genérico -->
   <div id="errorTela">
     <div class="card">
+      <div class="icon-container">⚠️</div>
       <div class="error-msg" id="errorTitle">Acesso Negado</div>
-      <p id="errorMessage"></p>
+      <p id="errorMessage" class="subtitle"></p>
       <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+      <button class="voltar voltar-secondary" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
     </div>
   </div>
 
   <script>
     const CONFIG = {
-      ROUND: "teste1",
+      ROUND: "teste2",
       URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
       KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
-      TABLE: "teste1",
+      TABLE: "testes1",
       MIN_TIME: 3000 
     };
 
@@ -307,26 +416,34 @@
       try {
         state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
         state.deviceFingerprint = await generateDeviceFingerprint();
+        
         if (localStorage.getItem("voted_device_" + state.deviceFingerprint)) {
-          return showError("Dispositivo já votou", "Este dispositivo já participou desta rodada.");
+          return showAlreadyVoted();
         }
+
         try {
           const res = await fetch("https://api.ipify.org?format=json");
           const data = await res.json();
           state.ip = data.ip;
         } catch (e) { state.ip = "0.0.0.0"; }
+        
         state.isVPN = await checkVPN(state.ip);
+
         if (state.isVPN) {
-          return showError("VPN Detectada", "Não é permitido votar usando VPN ou Proxy.");
+          return showVPNBlocked();
         }
+
         const { data: existing } = await state.client.from(CONFIG.TABLE).select("id").eq("device_fingerprint", state.deviceFingerprint).eq("round_id", CONFIG.ROUND).maybeSingle();
         if (existing) {
           localStorage.setItem("voted_device_" + state.deviceFingerprint, "true");
-          return showError("Dispositivo já votou", "Este dispositivo já participou desta rodada.");
+          return showAlreadyVoted();
         }
+
         document.getElementById("loadingTela").style.display = "none";
         document.getElementById("votoTela").style.display = "block";
-      } catch (e) { showError("Erro de Inicialização", "Falha nos módulos de segurança."); }
+      } catch (e) { 
+        showError("Erro de Inicialização", "Falha nos módulos de segurança."); 
+      }
     }
 
     window.onCaptchaSuccess = (token) => { state.token = token; checkReady(); };
@@ -372,6 +489,19 @@
       document.getElementById("errorTitle").innerText = title;
       document.getElementById("errorMessage").innerText = msg;
     }
+
+    function showAlreadyVoted() {
+      document.getElementById("loadingTela").style.display = "none";
+      document.getElementById("votoTela").style.display = "none";
+      document.getElementById("alreadyVotedTela").style.display = "flex";
+    }
+
+    function showVPNBlocked() {
+      document.getElementById("loadingTela").style.display = "none";
+      document.getElementById("votoTela").style.display = "none";
+      document.getElementById("vpnBlockedTela").style.display = "flex";
+    }
+
     window.addEventListener('DOMContentLoaded', initSecurity);
   </script>
 </body>
