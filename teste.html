@@ -490,17 +490,7 @@ async function getIP() {
 ========================= */
 async function checkVPN(ip) {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1`, {
-      signal: controller.signal
-    });
-
-    clearTimeout(timeout);
-
-    if (!res.ok) return false;
-
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
     const data = await res.json();
     const info = data[ip];
 
@@ -508,17 +498,16 @@ async function checkVPN(ip) {
 
     state.vpnData = info;
 
-    const isVPN = info.vpn === "yes";
-    const isProxy = info.proxy === "yes";
-    const isHosting = info.type === "hosting"; 
-
-    if (isVPN || isHosting) return true;
+    // 🔥 Só bloqueia se for VPN CONFIRMADA
+    if (info.vpn === "yes") {
+      return true;
+    }
 
     return false;
 
   } catch (e) {
     console.warn("Erro VPN check:", e);
-    return false;
+    return false; 
   }
 }
   
