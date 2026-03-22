@@ -8,12 +8,12 @@
 
   <meta charset="UTF-8">
   <link rel="preload"
-        href="css/index.css"
+        href="/css/index.css"
         as="style"
         onload="this.onload=null;this.rel='stylesheet'">
 
   <noscript>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
   </noscript>
 
 <link rel="preload"
@@ -27,7 +27,7 @@
       onload="this.rel='stylesheet'">
 
   <noscript>
-    <link rel="stylesheet" href="css/enquete.css">
+    <link rel="stylesheet" href="https://fshow.site/css/enquete.css">
   </noscript>
 
     <link rel="icon" href="/favicon.png" type="image/png">
@@ -37,6 +37,215 @@
 body {
   background: #ffffff;
   margin: 0;
+}
+
+/* ==================================== 
+   STORIES 
+   ==================================== */
+
+.stories-wrapper {
+  width: 100%;
+  background: var(--bg-page);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.stories-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 5px;
+  padding: 10px 0px;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.stories-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==================================== 
+   STORY SOLO
+   ==================================== */
+
+.story,
+.storye {
+  position: relative;
+  flex-shrink: 0;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: visible; 
+  transition: transform 0.25s ease;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: none;
+  will-change: transform;
+}
+.storye {
+  filter: grayscale(100%);
+}
+
+.story:hover,
+.storye:hover {
+  transform: scale(1.08);
+}
+
+.story img,
+.storye img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* ==================================== 
+   STORY DUPLA
+   ==================================== */
+
+.story-pair {
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1);
+}
+
+.story-pair:hover {
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* círculos dentro da dupla */
+.story.left,
+.story.right {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: none;
+}
+
+.story.right {
+  margin-left: -10px;
+}
+
+/* glow no hover */
+.story-pair:hover .left {
+  box-shadow: 0 0 16px rgba(0,255,200,0.6);
+}
+
+.story-pair:hover .right {
+  box-shadow: 0 0 16px rgba(255,80,255,0.6);
+}
+
+/* ==================================== 
+   BADGES (FUNCIONA EM SOLO E DUPLA)
+   ==================================== */
+
+/* FAZENDA */
+.story.faz::after,
+.story.cfaz::after {
+  content: "";
+  position: absolute;
+  top: -45px;
+  right: -30px;
+  width: 105px;
+  height: 95px;
+  background: url('https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ROÇA */
+.story.roça::after,
+.story.croça::after {
+  content: "🔥";
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  font-size: 26px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* FINAL */
+.story.final::after,
+.story.cfinal::after {
+  content: "🌟";
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  font-size: 26px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* LÂMPADA */
+.story.lamp::after,
+.story.clamp::after {
+  content: "";
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 60px;
+  height: 50px;
+  background: url('https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ÍCONE EXTRA */
+.story.inco::after,
+.story.cinco::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -11px;
+  width: 43px;
+  height: 33px;
+  background: url('https://i.ibb.co/fd5gvrfZ/Chat-GPT-Image-26-de-out-de-2025-22-35-43-fotor-bg-remover-20251026223635.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* PODER (extra da dupla) */
+.story.cpower::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 45px;
+  width: 38px;
+  height: 90px;
+  background: url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/raiopower.png?raw=true') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ==================================== 
+   RESPONSIVO
+   ==================================== */
+
+@media (max-width: 768px) {
+  .story,
+  .storye {
+    width: 70px;
+    height: 70px;
+  }
+
+  .story.left,
+  .story.right {
+    width: 66px;
+    height: 66px;
+  }
+
+  .story.right {
+    margin-left: -8px;
+  }
+
+  .story-pair:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
 }
 </style>
     
@@ -176,79 +385,102 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
 <div class="stories-wrapper">
   <div class="stories-container">
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Alysson.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Dynamite.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ana.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Braian.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Brunno.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Cícero.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Luddy.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Edu.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Sirleidy.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Koyuh.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/João.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/brunno.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="story left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Luan.jpg?raw=true');"></div></a>
-      <a href="#"><div class="story right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Fernanda.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Manchinha.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Rauilly.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/flavia.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Miguel.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Bruna.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/grimes.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Mikael.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right croça" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Ludmila.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Neto.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Tety.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Nick.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right croça" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Renata.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Quim.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Ella.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Ray.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Rose.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Vitor.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Emanuel.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ludmila.png?raw=true">
+    </div>
+    
+        <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luke.png?raw=true">
     </div>
 
-    <div class="story-pair">
-      <a href="#"><div class="storye left" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Yan.jpg?raw=true');"></div></a>
-      <a href="#"><div class="storye right" style="background-image:url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/Grimes.jpg?raw=true');"></div></a>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/nick.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/rose.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/tety.png?raw=true">
+    </div>
+
     </div>
   </div>
 </div>
@@ -459,32 +691,6 @@ Criado por <a href="termos/ferlove.html" class="link">Fer Love</a>
     © 2025 Fshow • Todos os direitos reservados
   </div>
 </footer>
-
-<div class="fshow-slide-ad-top" id="slideAdTop">
-  <div class="slide-content-top">
-
-    <button class="slide-close-top"
-      onclick="fecharSlideTop()">×</button>
-
-    <span class="ad-label">Assista:</span>
-
-    <div class="slide-grid">
-
-      <a href="https://youtube.com/playlist?list=PLtA_W1LOZ7KMp-NNwMmOeABDownxe52eP&si=RcpXlxCCoGY6p77e" target="_blank" class="slide-link">
-        <img src="https://i.ibb.co/sd2B02KD/Temp1.jpg"
-             alt="Bitch! Maravilhosas 1"
-             class="slide-img">
-      </a>
-
-      <a href="https://youtube.com/playlist?list=PLtA_W1LOZ7KOQbumXJOB7zUTEzxzMKFaL&si=_nFJD2v1AAKbmgbQ" target="_blank" class="slide-link">
-        <img src="https://i.ibb.co/R4HVMdM6/Temp2.jpg"
-             alt="Bitch! Maravilhosas 2"
-             class="slide-img">
-             <spam>publicidade</spam>
-      </a>
-    </div>
-  </div>
-</div>
 
 <script>
 function abrirSlideTop(){
