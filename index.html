@@ -8,7 +8,7 @@
 
   <meta charset="UTF-8">
   <link rel="preload"
-        href="/css/index.css"
+        href="css/index.css"
         as="style"
         onload="this.onload=null;this.rel='stylesheet'">
 
@@ -338,6 +338,13 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
 .link:hover {
   filter: brightness(1.2);
 }
+
+.espacador {
+  width: 100%;
+  height: 9px;
+  background: transparent;
+  pointer-events: none;
+}
 </style>
 
     <!-- Google tag (gtag.js) -->
@@ -510,16 +517,17 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
       </div>
         
       <!-- Botões -->
+<a href="vote/votounico.html" class="vote-btn vote-green" id="teamVote">
+  <span>VOTO ÚNICO</span>
+  <div class="vote-icon">👁️</div>
+</a>
+
+<div class="espacador"></div>
+
 <a href="vote/votefshow.html" class="vote-btn vote-purple" id="teamVote">
   <span>VOTO DA TORCIDA</span>
   <div class="vote-icon">👥</div>
 </a>
-
-<a href="vote/votounico.html" class="vote-btn vote-purple" id="teamVote">
-  <span>VOTO ÚNICO</span>
-  <div class="vote-icon">👥</div>
-</a>
-        
       </div>
     </div>
   </div>
