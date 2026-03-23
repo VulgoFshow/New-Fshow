@@ -5,8 +5,8 @@
   <title>Fshow - Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
 <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
@@ -39,37 +39,6 @@
 <meta name="msapplication-TileColor" content="#ff8c00">
 <meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 <meta name="theme-color" content="#8a2be2">
-
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-    firebase.auth().onAuthStateChanged((user) => {
-  
-        if (!user) {
-            if (!window.location.pathname.includes("login")) {
-                sessionStorage.setItem("redirectAfterLogin", window.location.href);
-                window.location.href = "/login.html";
-            }
-        }
-
-    });
-
-});
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
-  authDomain: "fchat-60461.firebaseapp.com",
-  databaseURL: "https://fchat-60461-default-rtdb.firebaseio.com",
-  projectId: "fchat-60461",
-  storageBucket: "fchat-60461.firebasestorage.app",
-  messagingSenderId: "919618815528",
-  appId: "1:919618815528:web:bcbbccb703e17cf5f4971d",
-  measurementId: "G-15HYVM1QXV"
-};
-
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-  </script>
   
 <style>
 /* ===== VARIÁVEIS GLOBAIS ===== */
@@ -114,6 +83,11 @@ body {
   animation: fadeIn 0.7s ease;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
@@ -125,11 +99,6 @@ body {
   margin: 0 auto;
   padding: 20px 15px;
   animation: slideUp 0.6s ease;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
@@ -156,6 +125,17 @@ h1 {
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
   border-color: var(--accent);
+}
+
+.option.selected,
+.option:has(input[type="radio"]:checked) {
+  background: rgba(0, 183, 176, 0.2) !important;
+  border-color: var(--accent) !important;
+}
+
+.option.selected .option-content,
+.option:has(input[type="radio"]:checked) .option-content {
+  background: transparent !important;
 }
 
 .option img {
@@ -437,9 +417,9 @@ button:disabled {
 /* ===== CONFIRMAÇÃO ===== */
 #fotoConfirm {
   width: 100%;
-  border-radius: 10px 10px 0 0;
-  border: 1px solid #ddd;
-  border-bottom: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -493,8 +473,6 @@ button:disabled {
   background: transparent;
   min-height: 85vh;
   animation: slideUp 0.6s ease forwards;
-  opacity: 0;
-  transform: translateY(30px);
 }
 
 
@@ -510,18 +488,29 @@ button:disabled {
 }
 
 .confirm-card .img-container {
-  height: 200px;
-  border-radius: 8px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
   overflow: hidden;
-  margin-bottom: 16px;
-  background: #f0f0f0;
+  background: rgba(0, 183, 176, 0.2); 
+  border: 1px solid rgba(0, 255, 255, 255);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.confirm-card .img-container img {
+#fotoConfirm {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+  .confirm-card .img-container {
+    height: auto; 
+  }
 }
 
 #botaoCaptcha {
@@ -693,8 +682,6 @@ button:disabled {
   #confirmTela {
     padding-top: 60px;
     min-height: auto;
-    opacity: 1;
-    transform: none;
   }
 
   .confirm-card {
@@ -734,24 +721,32 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que FIQUE no PCF2? <br> Vote quantas vezes quiser.</h1>
+    <h1>Quem deve ser ELIMINADO do BBBF6?</h1>
     <div class="espacador"></div>
     
 <div class="options">
   
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/MikaeleLudmila.jpg?raw=true" alt="Opção 1">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Mikael e Ludmila"> Mikael e Ludmila
-        </div>
-      </label>
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Arthur Zago">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Arthur Zago"> Arthur Zago
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true" alt="João Lucas">
+  <div class="option-content">
+    <input type="radio" name="vote" value="João Lucas"> João Lucas
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Sirleidy">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Sirleidy"> Sirleidy
+  </div>
+</label>
   
-        <label class="option">
-        <img src="https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Nick%20e%20Renata.jpg" alt="Opção 2">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Nick e Renata"> Nick e Renata
-        </div>
-      </label>
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -790,7 +785,7 @@ button:disabled {
 
   <div id="confirmTela">
   <div class="confirm-card">
-    <img id="fotoConfirm" src="" alt="Voto"/>
+    <div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
     <p id="nomeConfirm"></p>
     <button id="botaoVotarNovamente" class="voltar">
      VOTAR NOVAMENTE
@@ -800,9 +795,7 @@ button:disabled {
     
   </div>
 </div>
-
 <script type="module">
-  // Importando a biblioteca do Supabase
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
   // =================== CONFIG ===================
@@ -811,12 +804,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "dr7";
+  const TABLE_VOTACAO = "pf61";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-03-03T19:00:00");
+  const encerramentoBR = new Date("2026-03-23T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
@@ -929,11 +922,10 @@ button:disabled {
         { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
         { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
         { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
-        { src: "https://i.ibb.co/1f3FBvb9/montanha2.png", tag: "404" },
-        { src: "https://i.ibb.co/8LztFZt4/montanha.png", tag: "404" },
-        { src: "https://i.ibb.co/XZwwyFZq/arvore.png", tag: "404" },
-        { src: "https://i.ibb.co/ZDG821x/arvore2.png", tag: "404" },
-        { src: "https://thumbs.dreamstime.com/b/rocha-ou-pedra-grande-na-montanha-118007979.jpg", tag: "404" }
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/papel-higi%C3%AAnico.jpg?raw=true", tag: "404" },
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/toalha.jpg?raw=true", tag: "404" },
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/sabonete.jpg?raw=true", tag: "404" },
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/escova-de-dentes.jpg?raw=true", tag: "404" }
       ]
     },
     {
@@ -1062,7 +1054,6 @@ if (ref) {
   // =================== ENVIO DO VOTO ===================
 async function submitVote(participante) {
   try {
-    // Verifica se a votação ainda está aberta antes de enviar
     const agoraServer = await getServerTime();
     const agoraBR = toSaoPauloDate(agoraServer);
 
@@ -1120,24 +1111,21 @@ async function submitVote(participante) {
   }
 }
 
-  // =================== FUNÇÃO PARA VOLTAR À TELA DE VOTAÇÃO ===================
+  // =================== VOLTAR ===================
   function voltarParaVotacao() {
     confirmTela.style.display = "none";
     votoTela.style.display = "block";
     
-    // Limpa a seleção anterior
     document.querySelector('input[name="vote"]:checked').checked = false;
     
-    // Reseta o estado visual do botão de Captcha
     captchaVisualLiberado = false;
     botaoCaptcha.setAttribute("aria-pressed", "false");
     botaoVotar.classList.remove("active");
     botaoVotar.disabled = true;
   }
 
-  // =================== EVENTOS PRINCIPAIS ===================
+  // =================== EVENTOS  ===================
   botaoVotar.addEventListener("click", async () => {
-    // Verifica se a votação ainda está aberta
     const agoraServer = await getServerTime();
     const agoraBR = toSaoPauloDate(agoraServer);
 
@@ -1160,7 +1148,7 @@ async function submitVote(participante) {
     submitVote(escolhido.value);
   });
 
-  // =================== NOVO EVENTO: BOTÃO VOTAR NOVAMENTE ===================
+  // =================== VOTAR NOVAMENTE ===================
   botaoVotarNovamente.addEventListener("click", () => {
     voltarParaVotacao();
   });
@@ -1177,6 +1165,23 @@ botaoCaptcha.addEventListener("click", () => {
   }
   abrirCaptcha();
 });
+
+  // =================== Scroll ===================
+function scrollParaFinal() {
+  setTimeout(() => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
+  }, 100);
+}
+
+document.querySelectorAll('input[name="vote"]').forEach(radio => {
+  radio.addEventListener("change", () => {
+    scrollParaFinal();
+  });
+});
+
 
   // =================== DETECÇÃO DE COMPORTAMENTO SUSPEITO ===================
   let suspeita = 0;
@@ -1249,20 +1254,20 @@ botaoCaptcha.addEventListener("click", () => {
 
   // =================== FOTOS DOS PARTICIPANTES ===================
   const fotos = {
-    "Koyuh e João": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Koyuh%20e%20Jo%C3%A3o.jpg",
-    "Edu e Sirleidy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/EdueSirleidy.jpg?raw=true",
-    "Alysson e Dynamite": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/AlyssoneDynamite.jpg?raw=true",
+    "Arthur Zago": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true",
+    "João Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true",
+    "Sirleidy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true",
     "Braian e Brunno": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/BraianeBruno.jpg?raw=true",
     "Cícero e Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/CíceroeLuddy.jpg?raw=true",
-    "Luan e Fernanda": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/LuaneFernanda.jpg?raw=true",
+    "Luan e Fernanda": "https://i.ibb.co/cSrtQ2Ng/Picsart-26-02-16-21-40-44-894.jpg",
     "Manchinha e Rauilly": "https://i.ibb.co/pvvzCysq/Picsart-26-02-16-21-40-56-718.jpg",
     "Miguel e Bruna": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/MigueleBruna.jpg?raw=true",
-    "Mikael e Ludmila": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/MikaeleLudmila.jpg?raw=true",
+    "Mikael e Ludmila": "https://i.ibb.co/gbWd0qbM/Picsart-26-02-16-21-41-23-331.jpg",
     "Neto e Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/NetoeTety.jpg?raw=true",
     "Nick e Renata": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Nick%20e%20Renata.jpg",
-    "Ray e Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/RayeRose.jpg?raw=true",
+    "Ray e Rose": "https://i.ibb.co/nN1v5jDS/Picsart-26-02-16-21-42-15-986.jpg",
     "Quim e Ella": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Quim%20e%20Ella.jpg",
-    "Vitor e Emanuel": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/VitoreEmanuel.jpg?raw=true",
+    "Vitor e Emanuel": "https://i.ibb.co/M5VyZmB3/Picsart-26-02-16-21-42-24-984.jpg",
     "Yan e Grimes": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Yan%20e%20Grimes.jpg"
   };
 
@@ -1278,6 +1283,7 @@ botaoCaptcha.addEventListener("click", () => {
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
 })();
+
 </script></body>
 
 </html>
