@@ -454,37 +454,48 @@ async function checkVPN(ip) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1`, {
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1&risk=1`, {
       signal: controller.signal
     });
 
     clearTimeout(timeout);
 
-    if (!res.ok) return false;
+    if (!res.ok) return true; // 🔥 FALHOU = SUSPEITO
 
     const data = await res.json();
     const info = data[ip];
 
-    if (!info) return false;
+    if (!info) return true; // 🔥 SEM DADO = SUSPEITO
 
     state.vpnData = info;
 
-    // Lógica rigorosa de bloqueio: vpn, proxy ou tipo hosting (servidores/data centers)
     const isVPN = info.vpn === "yes";
     const isProxy = info.proxy === "yes";
     const isHosting = info.type === "hosting";
+    const highRisk = parseInt(info.risk || "0") >= 70;
 
-    if (isVPN || isProxy || isHosting) {
-        console.warn("VPN/Proxy/Hosting detectado:", { isVPN, isProxy, isHosting });
-        return true;
+    if (isVPN || isProxy || isHosting || highRisk) {
+      console.warn("VPN detectado:", info);
+      return true;
     }
 
     return false;
 
   } catch (e) {
     console.warn("Erro VPN check:", e);
-    return false;
+    return true;
   }
+}
+
+function bloquearVPN() {
+  state.blocked = true;
+  state.isVPN = true;
+
+  console.warn("🚫 BLOQUEADO POR VPN");
+
+  showTela("vpnBlockedTela");
+
+  document.body.innerHTML = document.getElementById("vpnBlockedTela").outerHTML;
 }
   
 // =================== ERRO ===================
@@ -505,15 +516,12 @@ async function init() {
     if (!horarioOk) return;
 
     state.ip = await getIP();
-    
-    // 🔥 Verificação de VPN Rigorosa antes de qualquer outra ação
+  
     state.isVPN = await checkVPN(state.ip);
 
-    if (state.isVPN) {
-      state.blocked = true;
-      console.log("Acesso bloqueado por VPN/Proxy.");
-      return showTela("vpnBlockedTela");
-    }
+if (state.isVPN) {
+  return bloquearVPN();
+}
 
     state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
     state.fingerprint = await gerarFingerprint();
@@ -540,6 +548,14 @@ async function init() {
     console.error(err);
     showError("Erro", "Falha ao iniciar sistema.");
   }
+
+  setInterval(async () => {
+  if (state.blocked) return;
+
+  const vpnNow = await checkVPN(state.ip);
+  if (vpnNow) bloquearVPN();
+
+}, 5000); 
 }
 
 // =================== CAPTCHA ===================
@@ -571,11 +587,15 @@ document.addEventListener("change", (e) => {
 
 // =================== VOTO ===================
 async function submitVote() {
-  // Verificação dupla no momento do voto
   if (state.blocked || state.isVPN) {
     return showTela("vpnBlockedTela");
   }
 
+const vpnNow = await checkVPN(state.ip);
+if (vpnNow) {
+  return bloquearVPN();
+}
+  
   const btn = document.getElementById("botaoVotar");
   const selecionado = document.querySelector('input[name="vote"]:checked');
 
