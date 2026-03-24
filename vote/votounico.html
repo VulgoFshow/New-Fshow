@@ -460,19 +460,25 @@ async function checkVPN(ip) {
 
     clearTimeout(timeout);
 
-    if (!res.ok) return true; // 🔥 FALHOU = SUSPEITO
+    if (!res.ok) {
+      console.warn("API VPN falhou");
+      return false; 
+    }
 
     const data = await res.json();
     const info = data[ip];
 
-    if (!info) return true; // 🔥 SEM DADO = SUSPEITO
+    if (!info) {
+      console.warn("Sem dados de VPN");
+      return false; 
+    }
 
     state.vpnData = info;
 
     const isVPN = info.vpn === "yes";
     const isProxy = info.proxy === "yes";
     const isHosting = info.type === "hosting";
-    const highRisk = parseInt(info.risk || "0") >= 70;
+    const highRisk = parseInt(info.risk || "0") >= 90; 
 
     if (isVPN || isProxy || isHosting || highRisk) {
       console.warn("VPN detectado:", info);
@@ -483,7 +489,7 @@ async function checkVPN(ip) {
 
   } catch (e) {
     console.warn("Erro VPN check:", e);
-    return true;
+    return false; 
   }
 }
 
@@ -549,13 +555,25 @@ if (state.isVPN) {
     showError("Erro", "Falha ao iniciar sistema.");
   }
 
-  setInterval(async () => {
+let vpnSuspeita = 0;
+
+setInterval(async () => {
   if (state.blocked) return;
 
   const vpnNow = await checkVPN(state.ip);
-  if (vpnNow) bloquearVPN();
 
-}, 5000); 
+  if (vpnNow) {
+    vpnSuspeita++;
+
+    if (vpnSuspeita >= 2) {
+      bloquearVPN();
+    }
+
+  } else {
+    vpnSuspeita = 0;
+  }
+
+}, 8000);
 }
 
 // =================== CAPTCHA ===================
@@ -593,6 +611,7 @@ async function submitVote() {
 
 const vpnNow = await checkVPN(state.ip);
 if (vpnNow) {
+  console.warn("VPN detectado no voto");
   return bloquearVPN();
 }
   
