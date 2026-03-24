@@ -1195,7 +1195,7 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   function exigirCaptchaPorSuspeita() {
     if (captchaAberto) return;
     console.warn("Atividade suspeita — CAPTCHA exigido");
-    setVotosRestantes(0);
+    captchaVisualLiberado = false;
     botaoCaptcha.setAttribute("aria-pressed", "false");
     botaoVotar.disabled = true;
     botaoVotar.classList.remove("active");
@@ -1204,7 +1204,7 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
 
   document.addEventListener("click", () => {
     const agora = Date.now();
-    if (agora - ultimoClique < 50) suspeita++;
+    if (agora - ultimoClique < 20) suspeita++;
     ultimoClique = agora;
     if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
   });
@@ -1212,7 +1212,7 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   document.addEventListener("mousemove", (e) => {
     const dx = Math.abs(e.clientX - ultimoMouseX);
     const dy = Math.abs(e.clientY - ultimoMouseY);
-    if (dx > 350 || dy > 350) suspeita++;
+    if (dx > 600 || dy > 600) suspeita++;
     ultimoMouseX = e.clientX;
     ultimoMouseY = e.clientY;
     if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
@@ -1220,7 +1220,7 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
 
   document.addEventListener("wheel", () => {
     scrollsRecentes++;
-    if (scrollsRecentes > 14) {
+      if (scrollsRecentes > 25) {
       suspeita++;
       scrollsRecentes = 0;
     }
