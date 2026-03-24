@@ -292,13 +292,20 @@
   <!-- Tela de Erro Genérico -->
   <div id="errorTela">
     <div class="card">
-      <div class="icon-container">⚠️</div>
-      <div class="error-msg" id="errorTitle">Você já votou.</div>
-      <p id="errorMessage" class="subtitle"></p>
-      <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
-      <button class="voltar voltar-secondary" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+      <div class="icon-container">🔒</div>
+      <h2 class="title">Voto Bloqueado</h2>
+      <p class="warning-msg">VPN ou Proxy Detectado</p>
+      <p class="subtitle">Não é permitido votar usando VPN, Proxy ou Tor. Por favor, seja honesto.</p>
+      
+      <div class="info-box">
+        <strong>🛡️ Por que isso?</strong><br>
+        Para garantir a segurança da votação, não é permitido votar usando VPN.
+      </div>
+
+      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+      <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
     </div>
-  </div>
+  
 
 <script>
 const CONFIG = {
