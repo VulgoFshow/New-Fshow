@@ -1084,7 +1084,11 @@ async function submitVote(participante) {
 
     let restantes = getVotosRestantes() - 1;
     setVotosRestantes(Math.max(restantes, 0));
-
+    
+    suspeita = 0;
+    tentativasVoto = 0;
+    scrollsRecentes = 0;
+        
     if (restantes <= 0) {
       botaoCaptcha.setAttribute("aria-pressed", "false");
       botaoVotar.classList.remove("active");
@@ -1185,7 +1189,7 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
 
   // =================== DETECÇÃO DE COMPORTAMENTO SUSPEITO ===================
   let suspeita = 0;
-  const LIMITE_SUSPEITA = 6;
+  const LIMITE_SUSPEITA = 10;
   let ultimoClique = 0;
   let ultimoMouseX = 0, ultimoMouseY = 0;
   let ultimaTrocaAba = Date.now();
@@ -1202,12 +1206,15 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
     abrirCaptcha();
   }
 
-  document.addEventListener("click", () => {
-    const agora = Date.now();
-    if (agora - ultimoClique < 20) suspeita++;
-    ultimoClique = agora;
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
+document.addEventListener("click", (e) => {
+  if (e.target.closest('input, label')) return;
+
+  const agora = Date.now();
+  if (agora - ultimoClique < 20) suspeita++;
+  ultimoClique = agora;
+
+  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
+});
 
   document.addEventListener("mousemove", (e) => {
     const dx = Math.abs(e.clientX - ultimoMouseX);
