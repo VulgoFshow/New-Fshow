@@ -8,12 +8,12 @@
 
   <meta charset="UTF-8">
   <link rel="preload"
-        href="css/index.css"
+        href="https://fshow.site/css/index.css"
         as="style"
         onload="this.onload=null;this.rel='stylesheet'">
 
   <noscript>
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="https://fshow.site/css/index.css">
   </noscript>
 
 <link rel="preload"
@@ -27,7 +27,7 @@
       onload="this.rel='stylesheet'">
 
   <noscript>
-    <link rel="stylesheet" href="https://fshow.site/css/enquete.css">
+    <link rel="stylesheet" href="/css/enquete.css">
   </noscript>
 
     <link rel="icon" href="/favicon.png" type="image/png">
@@ -167,6 +167,48 @@ body {
   pointer-events: none;
   z-index: 5;
 }
+
+/* PAREDÃO */
+.story.paredao::after,
+.story.cparedao::after {
+  content: "🧱";
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  font-size: 21px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* LÍDER */
+.story.lider::after,
+.story.clider::after {
+  content: "👑";
+  position: absolute;
+  top: -18px;
+  right: -9px;
+  font-size: 27px;
+  transform: rotate(37deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ANJO */
+.story.anjo::after,
+.story.canjo::after {
+  content: "";
+  position: absolute;
+  top: -14px;
+  right: -11px;
+  width: 38px;
+  height: 50px;
+  background: url('https://i.ibb.co/VYX4Bcdj/10808601-m.png') no-repeat center/contain;
+  transform: rotate(16deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
 
 /* FINAL */
 .story.final::after,
@@ -400,7 +442,7 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true">
     </div>
 
-    <div class="story">
+    <div class="storye">
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true">
     </div>
 
@@ -424,7 +466,7 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/grimes.png?raw=true">
     </div>
 
-    <div class="story">
+    <div class="story anjo">
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true">
     </div>
 
@@ -440,7 +482,7 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true">
     </div>
 
-    <div class="story">
+    <div class="story paredao">
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true">
     </div>
 
@@ -448,7 +490,7 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ludmila.png?raw=true">
     </div>
     
-        <div class="story">
+        <div class="story lider">
       <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luke.png?raw=true">
     </div>
 
