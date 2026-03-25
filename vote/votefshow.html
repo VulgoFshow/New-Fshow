@@ -727,23 +727,23 @@ button:disabled {
 <div class="options">
   
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Arthur Zago">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true" alt="Opção 1">
   <div class="option-content">
-    <input type="radio" name="vote" value="Arthur Zago"> Arthur Zago
+    <input type="radio" name="vote" value="Lucas"> Lucas
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luke.png?raw=true" alt="Luke">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true" alt="Opção 2">
   <div class="option-content">
-    <input type="radio" name="vote" value="Luke"> Luke
+    <input type="radio" name="vote" value="Luddy"> Luddy
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true" alt="Manchinha">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Opção 3">
   <div class="option-content">
-    <input type="radio" name="vote" value="Manchinha"> Manchinha
+    <input type="radio" name="vote" value="Mikael"> Mikael
   </div>
 </label>
   
@@ -804,12 +804,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "pf62";
-  const VOTOS_POR_CAPTCHA = 9;
+  const TABLE_VOTACAO = "pf63";
+  const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-03-24T19:00:00");
+  const encerramentoBR = new Date("2026-03-25T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
@@ -1266,9 +1266,9 @@ document.addEventListener("click", (e) => {
     "Sirleidy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true",
     "Luke": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luke.png?raw=true",
     "Manchinha": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true",
-    "Luan e Fernanda": "https://i.ibb.co/cSrtQ2Ng/Picsart-26-02-16-21-40-44-894.jpg",
-    "Manchinha e Rauilly": "https://i.ibb.co/pvvzCysq/Picsart-26-02-16-21-40-56-718.jpg",
-    "Miguel e Bruna": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/MigueleBruna.jpg?raw=true",
+    "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true",
+    "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true",
+    "Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true",
     "Mikael e Ludmila": "https://i.ibb.co/gbWd0qbM/Picsart-26-02-16-21-41-23-331.jpg",
     "Neto e Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/NetoeTety.jpg?raw=true",
     "Nick e Renata": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Nick%20e%20Renata.jpg",
