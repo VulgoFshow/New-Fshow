@@ -727,16 +727,16 @@ button:disabled {
 <div class="options">
   
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true" alt="Opção 1">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.png?raw=true" alt="Opção 1">
   <div class="option-content">
-    <input type="radio" name="vote" value="Arthur"> Arthur
+    <input type="radio" name="vote" value="Koyuh"> Koyuh
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true" alt="Opção 2">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true" alt="Opção 2">
   <div class="option-content">
-    <input type="radio" name="vote" value="Dynamite"> Dynamite
+    <input type="radio" name="vote" value="Maguel"> Maguel
   </div>
 </label>
 
@@ -804,12 +804,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "pf64";
+  const TABLE_VOTACAO = "pf65";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-03-26T19:00:00");
+  const encerramentoBR = new Date("2026-03-27T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
@@ -1262,7 +1262,7 @@ document.addEventListener("click", (e) => {
   // =================== FOTOS DOS PARTICIPANTES ===================
   const fotos = {
     "Arthur": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true",
-    "João Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true",
+    "Maguel": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true",
     "Sirleidy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true",
     "Luke": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luke.png?raw=true",
     "Manchinha": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true",
@@ -1270,7 +1270,7 @@ document.addEventListener("click", (e) => {
     "Mikael": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true",
     "Luddy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true",
     "Dynamite": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true",
-    "ajjd": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/NetoeTety.jpg?raw=true",
+    "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.jpg?raw=true",
     "Nick e Renata": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Nick%20e%20Renata.jpg",
     "Ray e Rose": "https://i.ibb.co/nN1v5jDS/Picsart-26-02-16-21-42-15-986.jpg",
     "Quim e Ella": "https://raw.githubusercontent.com/VulgoFshow/New-Fshow/refs/heads/main/fotos/pcf2/Quim%20e%20Ella.jpg",
