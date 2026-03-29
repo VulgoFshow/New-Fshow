@@ -339,7 +339,7 @@ auth.onAuthStateChanged((user) => {
 const CONFIG = {
   ROUND: "pf67",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
+  KEY: "SUA_KEY_AQUI",
   TABLE: "pf67",
   MIN_TIME: 3000
 };
@@ -356,18 +356,27 @@ const state = {
   isBot: false,
   isVPN: false,
   vpnData: null,
-  blocked: false 
+  blocked: false,
+  userId: null // 🔥 NOVO
 };
 
-// =================== HORA DO SERVIDOR (Via API Pública) ===================
+// =================== FIREBASE USER ===================
+async function getUser() {
+  return new Promise((resolve) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      resolve(user);
+    });
+  });
+}
+
+// =================== HORA ===================
 async function getServerTime() {
   try {
     const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
     const data = await res.json();
     return new Date(data.datetime);
-  } catch (e) {
-    console.error("Erro ao verificar horário:", e);
-    return new Date(); 
+  } catch {
+    return new Date();
   }
 }
 
@@ -376,7 +385,7 @@ function toSaoPauloDate(date) {
   return new Date(spString);
 }
 
-// =================== VERIFICAÇÃO DE HORÁRIO ===================
+// =================== HORÁRIO ===================
 async function verificarHorarios() {
   const agoraServer = await getServerTime();
   const agoraBR = toSaoPauloDate(agoraServer);
@@ -391,7 +400,6 @@ async function verificarHorarios() {
     return false;
   }
 
-  console.log("VOTAÇÃO ABERTA");
   return true;
 }
 
@@ -415,7 +423,7 @@ function showTela(id) {
   if (target) target.style.display = (id === "votoTela" ? "block" : "flex");
 }
 
-// =================== BOT DETECT ===================
+// =================== BOT ===================
 function detectBot() {
   const sinais = [
     navigator.webdriver,
@@ -483,7 +491,7 @@ async function getIP() {
   }
 }
 
-// =================== VPN CHECK ===================
+// =================== VPN ===================
 async function checkVPN(ip) {
   try {
     const controller = new AbortController();
@@ -495,50 +503,33 @@ async function checkVPN(ip) {
 
     clearTimeout(timeout);
 
-    if (!res.ok) {
-      console.warn("API VPN falhou");
-      return false; 
-    }
+    if (!res.ok) return false;
 
     const data = await res.json();
     const info = data[ip];
-
-    if (!info) {
-      console.warn("Sem dados de VPN");
-      return false; 
-    }
+    if (!info) return false;
 
     state.vpnData = info;
 
     const isVPN = info.vpn === "yes";
     const isProxy = info.proxy === "yes";
     const isHosting = info.type === "hosting";
-    const highRisk = parseInt(info.risk || "0") >= 90; 
+    const highRisk = parseInt(info.risk || "0") >= 90;
 
-    if (isVPN || isProxy || isHosting || highRisk) {
-      console.warn("VPN detectado:", info);
-      return true;
-    }
+    return isVPN || isProxy || isHosting || highRisk;
 
+  } catch {
     return false;
-
-  } catch (e) {
-    console.warn("Erro VPN check:", e);
-    return false; 
   }
 }
 
 function bloquearVPN() {
   state.blocked = true;
   state.isVPN = true;
-
-  console.warn("🚫 BLOQUEADO POR VPN");
-
   showTela("vpnBlockedTela");
-
   document.body.innerHTML = document.getElementById("vpnBlockedTela").outerHTML;
 }
-  
+
 // =================== ERRO ===================
 function showError(titulo, msg) {
   document.getElementById("errorTitle").innerText = titulo;
@@ -553,33 +544,40 @@ async function init() {
   try {
     showTela("loadingTela");
 
+    // 🔥 PEGA USUÁRIO
+    const user = await getUser();
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+    state.userId = user.uid;
+
     const horarioOk = await verificarHorarios();
     if (!horarioOk) return;
 
     state.ip = await getIP();
-  
     state.isVPN = await checkVPN(state.ip);
 
-if (state.isVPN) {
-  return bloquearVPN();
-}
+    if (state.isVPN) return bloquearVPN();
 
     state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
     state.fingerprint = await gerarFingerprint();
 
-    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.fingerprint}`)) {
+    // 🔥 BLOQUEIO LOCAL POR CONTA
+    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.userId}`)) {
       return showTela("alreadyVotedTela");
     }
 
+    // 🔥 VERIFICA NO BANCO POR CONTA
     const { data } = await state.client
       .from(CONFIG.TABLE)
       .select("id")
-      .eq("device_fingerprint", state.fingerprint)
+      .eq("user_id", state.userId)
       .eq("round_id", CONFIG.ROUND)
       .maybeSingle();
 
     if (data) {
-      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.fingerprint}`, "1");
+      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
       return showTela("alreadyVotedTela");
     }
 
@@ -590,30 +588,25 @@ if (state.isVPN) {
     showError("Erro", "Falha ao iniciar sistema.");
   }
 
-let vpnSuspeita = 0;
+  let vpnSuspeita = 0;
 
-setInterval(async () => {
-  if (state.blocked) return;
+  setInterval(async () => {
+    if (state.blocked) return;
 
-  const vpnNow = await checkVPN(state.ip);
+    const vpnNow = await checkVPN(state.ip);
 
-  if (vpnNow) {
-    vpnSuspeita++;
-
-    if (vpnSuspeita >= 2) {
-      bloquearVPN();
+    if (vpnNow) {
+      vpnSuspeita++;
+      if (vpnSuspeita >= 2) bloquearVPN();
+    } else {
+      vpnSuspeita = 0;
     }
-
-  } else {
-    vpnSuspeita = 0;
-  }
-
-}, 8000);
+  }, 8000);
 }
 
 // =================== CAPTCHA ===================
 window.onCaptchaSuccess = function(token) {
-  if (state.blocked) return; 
+  if (state.blocked) return;
   state.token = token;
   atualizarBotao();
 };
@@ -644,12 +637,9 @@ async function submitVote() {
     return showTela("vpnBlockedTela");
   }
 
-const vpnNow = await checkVPN(state.ip);
-if (vpnNow) {
-  console.warn("VPN detectado no voto");
-  return bloquearVPN();
-}
-  
+  const vpnNow = await checkVPN(state.ip);
+  if (vpnNow) return bloquearVPN();
+
   const btn = document.getElementById("botaoVotar");
   const selecionado = document.querySelector('input[name="vote"]:checked');
 
@@ -667,6 +657,7 @@ if (vpnNow) {
       participante: selecionado.value,
       ip: state.ip,
       device_fingerprint: state.fingerprint,
+      user_id: state.userId, // 🔥 NOVO
       round_id: CONFIG.ROUND,
       turnstile_token: state.token,
       vpn_detected: state.isVPN,
@@ -675,11 +666,14 @@ if (vpnNow) {
 
     if (error) throw error;
 
-    showTela("confirmTela"); 
+    // 🔥 MARCA LOCAL
+    localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
+
+    showTela("confirmTela");
 
   } catch (err) {
     console.error(err);
-    showError("Erro ao votar", "Não foi possível registrar seu voto. Tente novamente.");
+    showError("Erro ao votar", "Não foi possível registrar seu voto.");
     btn.disabled = false;
     btn.innerText = "VOTAR";
   }
