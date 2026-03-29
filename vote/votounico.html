@@ -9,6 +9,35 @@
   <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <meta name="theme-color" content="#8A2BE2">
 
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
+  authDomain: "fchat-60461.firebaseapp.com",
+  databaseURL: "https://fchat-60461-default-rtdb.firebaseio.com",
+  projectId: "fchat-60461",
+  storageBucket: "fchat-60461.firebasestorage.app",
+  messagingSenderId: "919618815528",
+  appId: "1:919618815528:web:bcbbccb703e17cf5f4971d"
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const auth = firebase.auth();
+
+// LOGIN 
+auth.onAuthStateChanged((user) => {
+    if (!user) {
+        sessionStorage.setItem("redirectAfterLogin", window.location.href);
+        window.location.href = "login.html";
+    }
+});
+</script>
+  
   <style>
     :root {
       --bg: #06080d;
@@ -306,7 +335,6 @@
       <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
     </div>
   
-
 <script>
 const CONFIG = {
   ROUND: "pf67",
