@@ -9,6 +9,35 @@
   <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <meta name="theme-color" content="#8A2BE2">
 
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
+  authDomain: "fchat-60461.firebaseapp.com",
+  databaseURL: "https://fchat-60461-default-rtdb.firebaseio.com",
+  projectId: "fchat-60461",
+  storageBucket: "fchat-60461.firebasestorage.app",
+  messagingSenderId: "919618815528",
+  appId: "1:919618815528:web:bcbbccb703e17cf5f4971d"
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const auth = firebase.auth();
+
+// LOGIN 
+auth.onAuthStateChanged((user) => {
+    if (!user) {
+        sessionStorage.setItem("redirectAfterLogin", window.location.href);
+        window.location.href = "login.html";
+    }
+});
+</script>
+  
   <style>
     :root {
       --bg: #06080d;
@@ -208,34 +237,33 @@
 
   <!-- Tela de Votação -->
   <div id="votoTela" class="container" style="display: none;">
-    <h1>Quem você quer que VENÇA a F10?</h1>
+    <h1>Quem deve ser ELIMINADO do BBBF6?</h1>
     <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por dispositivo.</p>
     
     <div class="options">
+      
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true" alt="Opção 1">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Maguel"> Maguel
+  </div>
+</label>
 
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/João.jpg?raw=true" alt="João">
-        <div class="option-content">
-          <input type="radio" name="vote" value="João"> João
-        </div>
-      </label>
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true" alt="Opção 2">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Paiva"> Paiva
+  </div>
+</label>
 
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Koyuh.jpg?raw=true" alt="Koyuh">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Koyuh"> Koyuh
-        </div>
-      </label>
-  
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/Luca.jpg?raw=true" alt="Luca">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Luca"> Luca
-        </div>
-      </label>
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Opção 3">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Sirleidy"> Sirleidy
+  </div>
+</label>
       
     </div>
-
     <div class="captcha-container">
       <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
@@ -293,20 +321,26 @@
   <!-- Tela de Erro Genérico -->
   <div id="errorTela">
     <div class="card">
-      <div class="icon-container">⚠️</div>
-      <div class="error-msg" id="errorTitle">Acesso Negado</div>
-      <p id="errorMessage" class="subtitle"></p>
-      <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
-      <button class="voltar voltar-secondary" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-    </div>
-  </div>
+      <div class="icon-container">🔒</div>
+      <h2 class="title">Voto Bloqueado</h2>
+      <p class="warning-msg">VPN ou Proxy Detectado</p>
+      <p class="subtitle">Não é permitido votar usando VPN, Proxy ou Tor. Por favor, seja honesto.</p>
+      
+      <div class="info-box">
+        <strong>🛡️ Por que isso?</strong><br>
+        Para garantir a segurança da votação, não é permitido votar usando VPN.
+      </div>
 
+      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+      <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
+    </div>
+  
 <script>
 const CONFIG = {
-  ROUND: "teste74",
+  ROUND: "pf67",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
   KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
-  TABLE: "teste1",
+  TABLE: "pf67",
   MIN_TIME: 3000
 };
 
@@ -455,37 +489,54 @@ async function checkVPN(ip) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1`, {
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1&risk=1`, {
       signal: controller.signal
     });
 
     clearTimeout(timeout);
 
-    if (!res.ok) return false;
+    if (!res.ok) {
+      console.warn("API VPN falhou");
+      return false; 
+    }
 
     const data = await res.json();
     const info = data[ip];
 
-    if (!info) return false;
+    if (!info) {
+      console.warn("Sem dados de VPN");
+      return false; 
+    }
 
     state.vpnData = info;
 
-    // Lógica rigorosa de bloqueio: vpn, proxy ou tipo hosting (servidores/data centers)
     const isVPN = info.vpn === "yes";
     const isProxy = info.proxy === "yes";
     const isHosting = info.type === "hosting";
+    const highRisk = parseInt(info.risk || "0") >= 90; 
 
-    if (isVPN || isProxy || isHosting) {
-        console.warn("VPN/Proxy/Hosting detectado:", { isVPN, isProxy, isHosting });
-        return true;
+    if (isVPN || isProxy || isHosting || highRisk) {
+      console.warn("VPN detectado:", info);
+      return true;
     }
 
     return false;
 
   } catch (e) {
     console.warn("Erro VPN check:", e);
-    return false;
+    return false; 
   }
+}
+
+function bloquearVPN() {
+  state.blocked = true;
+  state.isVPN = true;
+
+  console.warn("🚫 BLOQUEADO POR VPN");
+
+  showTela("vpnBlockedTela");
+
+  document.body.innerHTML = document.getElementById("vpnBlockedTela").outerHTML;
 }
   
 // =================== ERRO ===================
@@ -506,15 +557,12 @@ async function init() {
     if (!horarioOk) return;
 
     state.ip = await getIP();
-    
-    // 🔥 Verificação de VPN Rigorosa antes de qualquer outra ação
+  
     state.isVPN = await checkVPN(state.ip);
 
-    if (state.isVPN) {
-      state.blocked = true;
-      console.log("Acesso bloqueado por VPN/Proxy.");
-      return showTela("vpnBlockedTela");
-    }
+if (state.isVPN) {
+  return bloquearVPN();
+}
 
     state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
     state.fingerprint = await gerarFingerprint();
@@ -541,6 +589,26 @@ async function init() {
     console.error(err);
     showError("Erro", "Falha ao iniciar sistema.");
   }
+
+let vpnSuspeita = 0;
+
+setInterval(async () => {
+  if (state.blocked) return;
+
+  const vpnNow = await checkVPN(state.ip);
+
+  if (vpnNow) {
+    vpnSuspeita++;
+
+    if (vpnSuspeita >= 2) {
+      bloquearVPN();
+    }
+
+  } else {
+    vpnSuspeita = 0;
+  }
+
+}, 8000);
 }
 
 // =================== CAPTCHA ===================
@@ -572,11 +640,16 @@ document.addEventListener("change", (e) => {
 
 // =================== VOTO ===================
 async function submitVote() {
-  // Verificação dupla no momento do voto
   if (state.blocked || state.isVPN) {
     return showTela("vpnBlockedTela");
   }
 
+const vpnNow = await checkVPN(state.ip);
+if (vpnNow) {
+  console.warn("VPN detectado no voto");
+  return bloquearVPN();
+}
+  
   const btn = document.getElementById("botaoVotar");
   const selecionado = document.querySelector('input[name="vote"]:checked');
 
