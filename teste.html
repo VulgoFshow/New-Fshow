@@ -530,6 +530,15 @@ function bloquearVPN() {
   document.body.innerHTML = document.getElementById("vpnBlockedTela").outerHTML;
 }
 
+function resetarBotao() {
+  const btn = document.getElementById("botaoVotar");
+  if (!btn) return;
+
+  btn.disabled = false;
+  btn.innerText = "VOTAR";
+  btn.classList.remove("active");
+}
+
 // =================== ERRO ===================
 function showError(titulo, msg) {
   document.getElementById("errorTitle").innerText = titulo;
@@ -633,31 +642,61 @@ document.addEventListener("change", (e) => {
 
 // =================== VOTO ===================
 async function submitVote() {
+  const btn = document.getElementById("botaoVotar");
+
+  // BLOQUEIO DIRETO
   if (state.blocked || state.isVPN) {
+    resetarBotao();
     return showTela("vpnBlockedTela");
   }
 
+  // VERIFICAÇÃO DE VPN
   const vpnNow = await checkVPN(state.ip);
-  if (vpnNow) return bloquearVPN();
+  if (vpnNow) {
+    resetarBotao();
+    return bloquearVPN();
+  }
 
-  const btn = document.getElementById("botaoVotar");
   const selecionado = document.querySelector('input[name="vote"]:checked');
 
-  if (!selecionado || !state.token) return;
+  // SEM SELEÇÃO OU CAPTCHA
+  if (!selecionado || !state.token) {
+    resetarBotao();
+    return;
+  }
 
+  // TEMPO MÍNIMO
   if ((Date.now() - state.startTime) < CONFIG.MIN_TIME && !state.isBot) {
+    resetarBotao();
     return showError("Calma aí", "Aguarde um instante antes de votar.");
   }
 
+  // TRAVA BOTÃO
   btn.disabled = true;
   btn.innerText = "ENVIANDO...";
 
   try {
+
+    // 🔥 VERIFICAÇÃO
+    const { data } = await state.client
+      .from(CONFIG.TABLE)
+      .select("id")
+      .eq("user_id", state.userId)
+      .eq("round_id", CONFIG.ROUND)
+      .maybeSingle();
+
+    if (data) {
+      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
+      resetarBotao();
+      return showTela("alreadyVotedTela");
+    }
+
+    // VOTO
     const { error } = await state.client.from(CONFIG.TABLE).insert([{
       participante: selecionado.value,
       ip: state.ip,
       device_fingerprint: state.fingerprint,
-      user_id: state.userId, // 🔥 NOVO
+      user_id: state.userId,
       round_id: CONFIG.ROUND,
       turnstile_token: state.token,
       vpn_detected: state.isVPN,
@@ -666,16 +705,16 @@ async function submitVote() {
 
     if (error) throw error;
 
-    // 🔥 MARCA LOCAL
+    // SALVA LOCAL
     localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
 
+    // SUCESSO
     showTela("confirmTela");
 
   } catch (err) {
     console.error(err);
-    showError("Erro ao votar", "Não foi possível registrar seu voto.");
-    btn.disabled = false;
-    btn.innerText = "VOTAR";
+    resetarBotao();
+    showError("Erro ao votar", "Não foi possível registrar seu voto. Tente novamente.");
   }
 }
 
