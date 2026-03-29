@@ -33,7 +33,7 @@ const auth = firebase.auth();
 auth.onAuthStateChanged((user) => {
     if (!user) {
         sessionStorage.setItem("redirectAfterLogin", window.location.href);
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
     }
 });
 </script>
