@@ -335,6 +335,7 @@ auth.onAuthStateChanged((user) => {
     </div>
   
 <script>
+// CONFIGURAÇÕES GERAIS
 const CONFIG = {
   ROUND: "pf68",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
@@ -343,9 +344,11 @@ const CONFIG = {
   MIN_TIME: 3000
 };
 
+// DATAS DE ABERTURA E ENCERRAMENTO (BRT)
 const aberturaBR = new Date("2026-01-18T19:00:00");
 const encerramentoBR = new Date("2026-03-30T19:00:00");
 
+// ESTADO GLOBAL DA APLICAÇÃO
 const state = {
   client: null,
   fingerprint: null,
@@ -359,32 +362,50 @@ const state = {
   userId: null
 };
 
-// =================== FIREBASE USER ===================
+// =================== AUTENTICAÇÃO FIREBASE ===================
+/**
+ * Verifica se o Firebase está carregado e obtém o usuário atual.
+ */
 async function getUser() {
   return new Promise((resolve) => {
-    firebase.auth().onAuthStateChanged((user) => {
+    if (typeof firebase === "undefined" || !firebase.auth) {
+      console.error("Firebase SDK não carregado.");
+      resolve(null);
+      return;
+    }
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      unsubscribe(); // Remove o listener após a primeira resposta
       resolve(user);
     });
   });
 }
 
-// =================== HORA ===================
+// =================== GESTÃO DE TEMPO ===================
+/**
+ * Obtém o horário atual de um servidor confiável para evitar fraudes locais.
+ */
 async function getServerTime() {
   try {
     const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
+    if (!res.ok) throw new Error("Falha na API de tempo");
     const data = await res.json();
     return new Date(data.datetime);
-  } catch {
+  } catch (err) {
+    console.warn("Usando hora local como fallback:", err);
     return new Date();
   }
 }
 
+/**
+ * Converte uma data para o fuso horário de São Paulo.
+ */
 function toSaoPauloDate(date) {
-  const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-  return new Date(spString);
+  return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
 }
 
-// =================== HORÁRIO ===================
+/**
+ * Verifica se a votação está aberta no momento.
+ */
 async function verificarHorarios() {
   const agoraServer = await getServerTime();
   const agoraBR = toSaoPauloDate(agoraServer);
@@ -402,7 +423,10 @@ async function verificarHorarios() {
   return true;
 }
 
-// =================== TELAS ===================
+// =================== INTERFACE (TELAS) ===================
+/**
+ * Gerencia a exibição das diferentes telas da aplicação.
+ */
 function showTela(id) {
   const telas = [
     "loadingTela",
@@ -419,10 +443,15 @@ function showTela(id) {
   });
 
   const target = document.getElementById(id);
-  if (target) target.style.display = (id === "votoTela" ? "block" : "flex");
+  if (target) {
+    target.style.display = (id === "votoTela" ? "block" : "flex");
+  }
 }
 
-// =================== BOT ===================
+// =================== SEGURANÇA E DETECÇÃO ===================
+/**
+ * Tenta detectar comportamentos básicos de bots.
+ */
 function detectBot() {
   const sinais = [
     navigator.webdriver,
@@ -432,19 +461,24 @@ function detectBot() {
   state.isBot = sinais.some(Boolean);
 }
 
-// =================== HASH ===================
+/**
+ * Gera um hash SHA-256 de uma string.
+ */
 async function hash(str) {
   const data = new TextEncoder().encode(str);
   const buffer = await crypto.subtle.digest("SHA-256", data);
-  return [...new Uint8Array(buffer)]
+  return Array.from(new Uint8Array(buffer))
     .map(b => b.toString(16).padStart(2, "0"))
     .join("");
 }
 
-// =================== FINGERPRINT ===================
+/**
+ * Gera uma impressão digital (fingerprint) única para o navegador/dispositivo.
+ */
 async function gerarFingerprint() {
   let parts = [];
 
+  // Canvas Fingerprinting
   try {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -455,8 +489,10 @@ async function gerarFingerprint() {
     parts.push("canvas_error");
   }
 
+  // WebGL Fingerprinting
   try {
-    const gl = document.createElement("canvas").getContext("webgl");
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
     if (gl) {
       const dbg = gl.getExtension("WEBGL_debug_renderer_info");
       if (dbg) {
@@ -467,19 +503,22 @@ async function gerarFingerprint() {
     parts.push("webgl_error");
   }
 
+  // Atributos do Navegador
   parts.push(
     screen.width,
     screen.height,
     navigator.userAgent,
     navigator.language,
-    navigator.hardwareConcurrency,
+    navigator.hardwareConcurrency || "unknown",
     new Date().getTimezoneOffset()
   );
 
   return await hash(parts.join("|"));
 }
 
-// =================== IP ===================
+/**
+ * Obtém o endereço IP público do usuário.
+ */
 async function getIP() {
   try {
     const res = await fetch("https://api.ipify.org?format=json");
@@ -490,8 +529,11 @@ async function getIP() {
   }
 }
 
-// =================== VPN ===================
+/**
+ * Verifica se o IP está associado a uma VPN ou Proxy.
+ */
 async function checkVPN(ip) {
+  if (!ip || ip === "0.0.0.0") return false;
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
@@ -501,7 +543,6 @@ async function checkVPN(ip) {
     });
 
     clearTimeout(timeout);
-
     if (!res.ok) return false;
 
     const data = await res.json();
@@ -516,115 +557,48 @@ async function checkVPN(ip) {
     const highRisk = parseInt(info.risk || "0") >= 90;
 
     return isVPN || isProxy || isHosting || highRisk;
-
   } catch {
     return false;
   }
 }
 
+/**
+ * Bloqueia o acesso se uma VPN for detectada.
+ */
 function bloquearVPN() {
   state.blocked = true;
   state.isVPN = true;
   showTela("vpnBlockedTela");
-  document.body.innerHTML = document.getElementById("vpnBlockedTela").outerHTML;
 }
 
+// =================== CONTROLE DE BOTÃO ===================
+/**
+ * Reseta o botão de votação para o estado inicial.
+ */
 function resetarBotao() {
   const btn = document.getElementById("botaoVotar");
   if (!btn) return;
 
-  btn.disabled = false;
+  btn.disabled = true; // Mantém desativado até nova seleção/captcha
   btn.innerText = "VOTAR";
   btn.classList.remove("active");
-}
-
-// =================== ERRO ===================
-function showError(titulo, msg) {
-  document.getElementById("errorTitle").innerText = titulo;
-  document.getElementById("errorMessage").innerText = msg;
-  showTela("errorTela");
-}
-
-// =================== INIT ===================
-async function init() {
-  detectBot();
-
-  try {
-    showTela("loadingTela");
-
-    // 🔥 PEGA USUÁRIO
-    const user = await getUser();
-    if (!user) {
-      window.location.href = "https://fshow.site/login.html";
-      return;
-    }
-    state.userId = user.uid;
-
-    const horarioOk = await verificarHorarios();
-    if (!horarioOk) return;
-
-    state.ip = await getIP();
-    state.isVPN = await checkVPN(state.ip);
-
-    if (state.isVPN) return bloquearVPN();
-
-    state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
-    state.fingerprint = await gerarFingerprint();
-
-    // 🔥 BLOQUEIO LOCAL POR CONTA
-    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.userId}`)) {
-      return showTela("alreadyVotedTela");
-    }
-
-    // 🔥 VERIFICA NO BANCO POR CONTA
-    const { data } = await state.client
-      .from(CONFIG.TABLE)
-      .select("id")
-      .eq("user_id", state.userId)
-      .eq("round_id", CONFIG.ROUND)
-      .maybeSingle();
-
-    if (data) {
-      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      return showTela("alreadyVotedTela");
-    }
-
-    showTela("votoTela");
-
-  } catch (err) {
-    console.error(err);
-    showError("Erro", "Falha ao iniciar sistema.");
+  
+  // Reseta o token para forçar novo captcha se necessário
+  state.token = null;
+  if (typeof turnstile !== "undefined") {
+    turnstile.reset();
   }
-
-  let vpnSuspeita = 0;
-
-  setInterval(async () => {
-    if (state.blocked) return;
-
-    const vpnNow = await checkVPN(state.ip);
-
-    if (vpnNow) {
-      vpnSuspeita++;
-      if (vpnSuspeita >= 2) bloquearVPN();
-    } else {
-      vpnSuspeita = 0;
-    }
-  }, 8000);
 }
 
-// =================== CAPTCHA ===================
-window.onCaptchaSuccess = function(token) {
-  if (state.blocked) return;
-  state.token = token;
-  atualizarBotao();
-};
-
-// =================== BOTÃO ===================
+/**
+ * Atualiza o estado do botão com base na seleção e no captcha.
+ */
 function atualizarBotao() {
   if (state.blocked) return;
 
   const selecionado = document.querySelector('input[name="vote"]:checked');
   const btn = document.getElementById("botaoVotar");
+  if (!btn) return;
 
   if (selecionado && state.token) {
     btn.disabled = false;
@@ -635,62 +609,152 @@ function atualizarBotao() {
   }
 }
 
-document.addEventListener("change", (e) => {
-  if (e.target.name === "vote") atualizarBotao();
-});
-
-// =================== VOTO ===================
-async function submitVote() {
-  const btn = document.getElementById("botaoVotar");
-
-  // BLOQUEIO DIRETO
-  if (state.blocked || state.isVPN) {
-    resetarBotao();
-    return showTela("vpnBlockedTela");
-  }
-
-  // VERIFICAÇÃO DE VPN
-  const vpnNow = await checkVPN(state.ip);
-  if (vpnNow) {
-    resetarBotao();
-    return bloquearVPN();
-  }
-
-  const selecionado = document.querySelector('input[name="vote"]:checked');
-
-  // SEM SELEÇÃO OU CAPTCHA
-  if (!selecionado || !state.token) {
-    resetarBotao();
-    return;
-  }
-
-  // TEMPO MÍNIMO
-  if ((Date.now() - state.startTime) < CONFIG.MIN_TIME && !state.isBot) {
-    resetarBotao();
-    return showError("Calma aí", "Aguarde um instante antes de votar.");
-  }
-
-  // TRAVA BOTÃO
-  btn.disabled = true;
-  btn.innerText = "ENVIANDO...";
+// =================== INICIALIZAÇÃO ===================
+/**
+ * Função principal de inicialização.
+ */
+async function init() {
+  detectBot();
 
   try {
+    showTela("loadingTela");
 
-    // 🔥 VERIFICAÇÃO
-    const { data } = await state.client
+    // 1. Verifica Usuário
+    const user = await getUser();
+    if (!user) {
+      window.location.href = "https://fshow.site/login.html";
+      return;
+    }
+    state.userId = user.uid;
+
+    // 2. Verifica Horário
+    const horarioOk = await verificarHorarios();
+    if (!horarioOk) return;
+
+    // 3. Verifica Conexão (IP/VPN)
+    state.ip = await getIP();
+    state.isVPN = await checkVPN(state.ip);
+    if (state.isVPN) return bloquearVPN();
+
+    // 4. Inicializa Supabase
+    if (typeof supabase === "undefined") {
+      throw new Error("Supabase SDK não encontrado.");
+    }
+    state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
+    state.fingerprint = await gerarFingerprint();
+
+    // 5. Verifica se já votou (Local)
+    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.userId}`)) {
+      return showTela("alreadyVotedTela");
+    }
+
+    // 6. Verifica se já votou (Banco de Dados)
+    const { data, error } = await state.client
       .from(CONFIG.TABLE)
       .select("id")
       .eq("user_id", state.userId)
       .eq("round_id", CONFIG.ROUND)
       .maybeSingle();
 
+    if (error) console.error("Erro ao verificar voto no banco:", error);
+
     if (data) {
       localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      resetarBotao();
       return showTela("alreadyVotedTela");
     }
 
-    // VOTO
+    // 7. Libera Tela de Voto
+    showTela("votoTela");
+
+  } catch (err) {
+    console.error("Erro na inicialização:", err);
+    showError("Erro", "Falha ao iniciar sistema. Verifique sua conexão.");
+  }
+
+  // Monitoramento contínuo de VPN
+  let vpnSuspeita = 0;
+  setInterval(async () => {
+    if (state.blocked) return;
+    const vpnNow = await checkVPN(state.ip);
+    if (vpnNow) {
+      vpnSuspeita++;
+      if (vpnSuspeita >= 2) bloquearVPN();
+    } else {
+      vpnSuspeita = 0;
+    }
+  }, 15000); // Aumentado para 15s para evitar excesso de requisições
+}
+
+// =================== EVENTOS E CALLBACKS ===================
+/**
+ * Callback chamado pelo Cloudflare Turnstile após sucesso.
+ */
+window.onCaptchaSuccess = function(token) {
+  if (state.blocked) return;
+  state.token = token;
+  atualizarBotao();
+};
+
+/**
+ * Exibe mensagens de erro na tela de erro.
+ */
+function showError(titulo, msg) {
+  const titleEl = document.getElementById("errorTitle");
+  const msgEl = document.getElementById("errorMessage");
+  if (titleEl) titleEl.innerText = titulo;
+  if (msgEl) msgEl.innerText = msg;
+  showTela("errorTela");
+}
+
+// Listener para mudanças na seleção de voto
+document.addEventListener("change", (e) => {
+  if (e.target.name === "vote") atualizarBotao();
+});
+
+// =================== SUBMISSÃO DO VOTO ===================
+/**
+ * Processa o envio do voto para o banco de dados.
+ */
+async function submitVote() {
+  const btn = document.getElementById("botaoVotar");
+  if (!btn || btn.disabled) return;
+
+  // Bloqueios preventivos
+  if (state.blocked || state.isVPN) {
+    return showTela("vpnBlockedTela");
+  }
+
+  // Re-verificação de VPN no momento do clique
+  const vpnNow = await checkVPN(state.ip);
+  if (vpnNow) return bloquearVPN();
+
+  const selecionado = document.querySelector('input[name="vote"]:checked');
+  if (!selecionado || !state.token) return;
+
+  // Proteção contra votos muito rápidos (bots)
+  if ((Date.now() - state.startTime) < CONFIG.MIN_TIME && !state.isBot) {
+    return showError("Calma aí", "Aguarde um instante antes de votar.");
+  }
+
+  // Inicia processo de envio
+  btn.disabled = true;
+  btn.innerText = "ENVIANDO...";
+
+  try {
+    // Verificação final no banco para evitar duplicidade
+    const { data: jaVotou } = await state.client
+      .from(CONFIG.TABLE)
+      .select("id")
+      .eq("user_id", state.userId)
+      .eq("round_id", CONFIG.ROUND)
+      .maybeSingle();
+
+    if (jaVotou) {
+      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
+      return showTela("alreadyVotedTela");
+    }
+
+    // Inserção do voto
     const { error } = await state.client.from(CONFIG.TABLE).insert([{
       participante: selecionado.value,
       ip: state.ip,
@@ -704,21 +768,18 @@ async function submitVote() {
 
     if (error) throw error;
 
-    // SALVA LOCAL
+    // Sucesso
     localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-
-    // SUCESSO
     showTela("confirmTela");
 
   } catch (err) {
-    console.error(err);
+    console.error("Erro ao processar voto:", err);
     resetarBotao();
     showError("Erro ao votar", "Não foi possível registrar seu voto. Tente novamente.");
   }
 }
 
-// =================== START ===================
-document.addEventListener("DOMContentLoaded", init);
-</script>
+// Inicializa quando o DOM estiver pronto
+document.addEventListener("DOMContentLoaded", init);</script>
 </body>
 </html>
