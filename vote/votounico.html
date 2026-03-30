@@ -335,11 +335,11 @@ auth.onAuthStateChanged((user) => {
     </div>
 
 <script>
-// CONFIGURAÇÕES GERAIS
+// CONFIG
 const CONFIG = {
   ROUND: "pf68",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
+  KEY: "SUA_KEY_AQUI",
   TABLE: "pf68",
   MIN_TIME: 3000
 };
@@ -348,7 +348,7 @@ const CONFIG = {
 const aberturaBR = new Date("2026-01-18T19:00:00");
 const encerramentoBR = new Date("2026-03-30T19:00:00");
 
-// ESTADO
+// STATE
 const state = {
   client: null,
   fingerprint: null,
@@ -362,7 +362,7 @@ const state = {
   userId: null
 };
 
-// ================= FIREBASE =================
+// ================= USER =================
 async function getUser() {
   return new Promise((resolve) => {
     if (!firebase?.auth) return resolve(null);
@@ -384,38 +384,30 @@ async function getServerTime() {
   }
 }
 
-function toSaoPauloDate(date) {
+function toBR(date) {
   return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
 }
 
 async function verificarHorarios() {
-  const agora = toSaoPauloDate(await getServerTime());
+  const agora = toBR(await getServerTime());
 
   if (agora < aberturaBR) {
-    window.location.replace("aguarde.html");
+    location.replace("aguarde.html");
     return false;
   }
 
   if (agora > encerramentoBR) {
-    window.location.replace("fechada.html");
+    location.replace("fechada.html");
     return false;
   }
 
   return true;
 }
 
-// ================= TELAS =================
+// ================= UI =================
 function showTela(id) {
-  const telas = [
-    "loadingTela",
-    "votoTela",
-    "confirmTela",
-    "alreadyVotedTela",
-    "vpnBlockedTela",
-    "errorTela"
-  ];
-
-  telas.forEach(t => {
+  ["loadingTela","votoTela","confirmTela","alreadyVotedTela","vpnBlockedTela","errorTela"]
+  .forEach(t => {
     const el = document.getElementById(t);
     if (el) el.style.display = "none";
   });
@@ -439,15 +431,13 @@ async function hash(str) {
 }
 
 async function gerarFingerprint() {
-  const parts = [
+  return hash([
     screen.width,
     screen.height,
     navigator.userAgent,
     navigator.language,
-    navigator.hardwareConcurrency || "unk",
-    new Date().getTimezoneOffset()
-  ];
-  return hash(parts.join("|"));
+    navigator.hardwareConcurrency || "unk"
+  ].join("|"));
 }
 
 async function getIP() {
@@ -459,21 +449,12 @@ async function getIP() {
   }
 }
 
-// ✅ FUNÇÃO VPN CORRIGIDA
+// VPN (leve)
 async function checkVPN(ip) {
-  if (!ip || ip === "0.0.0.0") return false;
-
   try {
     const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
-    if (!res.ok) return false;
-
     const data = await res.json();
-    const info = data[ip];
-    if (!info) return false;
-
-    state.vpnData = info;
-
-    return info.vpn === "yes"; // 🔥 SOMENTE VPN REAL
+    return data[ip]?.vpn === "yes";
   } catch {
     return false;
   }
@@ -481,22 +462,10 @@ async function checkVPN(ip) {
 
 function bloquearVPN() {
   state.blocked = true;
-  state.isVPN = true;
   showTela("vpnBlockedTela");
 }
 
 // ================= BOTÃO =================
-function resetarBotao() {
-  const btn = document.getElementById("botaoVotar");
-  if (!btn) return;
-
-  btn.disabled = true;
-  btn.innerText = "VOTAR";
-  state.token = null;
-
-  if (window.turnstile) turnstile.reset();
-}
-
 function atualizarBotao() {
   if (state.blocked) return;
 
@@ -525,12 +494,9 @@ async function init() {
 
     if (!(await verificarHorarios())) return;
 
-    // 🔥 IP + VPN (UMA VEZ SÓ)
     state.ip = await getIP();
-    const vpn = await checkVPN(state.ip);
-    if (vpn) return bloquearVPN();
+    if (await checkVPN(state.ip)) return bloquearVPN();
 
-    // Supabase
     state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
     state.fingerprint = await gerarFingerprint();
 
@@ -544,7 +510,6 @@ async function init() {
       .from(CONFIG.TABLE)
       .select("id")
       .eq("user_id", state.userId)
-      .eq("round_id", CONFIG.ROUND)
       .maybeSingle();
 
     if (data) {
@@ -556,7 +521,7 @@ async function init() {
 
   } catch (err) {
     console.error(err);
-    showError("Erro", "Falha ao iniciar.");
+    showError("Erro", "Falha ao iniciar");
   }
 }
 
@@ -595,42 +560,53 @@ async function submitVote() {
   btn.innerText = "ENVIANDO...";
 
   try {
-    const { data } = await state.client
+    console.log("ENVIANDO:", {
+      voto: selecionado.value,
+      user: state.userId,
+      token: state.token
+    });
+
+    const { data: jaVotou } = await state.client
       .from(CONFIG.TABLE)
       .select("id")
       .eq("user_id", state.userId)
-      .eq("round_id", CONFIG.ROUND)
       .maybeSingle();
 
-    if (data) {
+    if (jaVotou) {
       localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
       return showTela("alreadyVotedTela");
     }
 
     const { error } = await state.client.from(CONFIG.TABLE).insert([{
       participante: selecionado.value,
+      user_id: state.userId,
       ip: state.ip,
       device_fingerprint: state.fingerprint,
-      user_id: state.userId,
       round_id: CONFIG.ROUND,
-      turnstile_token: state.token,
-      vpn_detected: state.isVPN,
-      vpn_data: state.vpnData ? JSON.stringify(state.vpnData) : null
+      turnstile_token: state.token
     }]);
 
     if (error) throw error;
 
+    // SUCESSO
     localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
     showTela("confirmTela");
 
+    // reset captcha só aqui
+    if (window.turnstile) turnstile.reset();
+    state.token = null;
+
   } catch (err) {
-    console.error(err);
-    resetarBotao();
-    showError("Erro", "Falha ao votar.");
+    console.error("ERRO REAL:", err);
+
+    btn.disabled = false;
+    btn.innerText = "TENTAR NOVAMENTE";
+
+    showError("Erro ao votar", err.message || "Erro desconhecido");
   }
 }
 
 // START
-document.addEventListener("DOMContentLoaded", init);  </script>
-  </body>
+document.addEventListener("DOMContentLoaded", init);
+    </script>  </body>
 </html>
