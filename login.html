@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <meta name="theme-color" content="#8A2BE2">
@@ -156,6 +157,12 @@ input {
     box-shadow: 0 15px 40px rgba(255,140,0,0.4);
 }
 
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .btn-google {
     width: 100%;
     padding: 14px;
@@ -197,6 +204,7 @@ input {
 .message.active { display: block; }
 .message.error { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 1px solid #f44336; }
 .message.success { background: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid #4caf50; }
+.message.info { background: rgba(33, 150, 243, 0.2); color: #2196f3; border: 1px solid #2196f3; }
 
 .modal {
     display: none;
@@ -236,20 +244,57 @@ input {
     font-size: 2.5rem;
     overflow: hidden;
     border: 2px solid #8000ff;
+    position: relative;
 }
 
-.profile-picture img { width: 100%; height: 100%; object-fit: cover; }
+.profile-picture img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.profile-picture.loading::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
 
 .file-upload {
     font-size: 0.8rem;
     color: #8000ff;
     cursor: pointer;
     text-decoration: underline;
+    transition: 0.2s;
+}
+
+.file-upload:hover {
+    color: #ff8c00;
+}
+
+.upload-progress {
+    font-size: 0.75rem;
+    color: #2196f3;
+    display: none;
+}
+
+.upload-progress.active {
+    display: block;
 }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 </style>
 </head>
@@ -299,6 +344,7 @@ input {
                 <div class="profile-picture" id="profilePicturePreview">👤</div>
                 <label class="file-upload" for="avatar">Escolher foto</label>
                 <input type="file" id="avatar" accept="image/*" style="display: none;">
+                <div class="upload-progress" id="uploadProgress"></div>
             </div>
             <div class="field">
                 <label>Nome de Usuário</label>
@@ -331,7 +377,7 @@ input {
             <input type="email" id="forgotPasswordEmail" placeholder="Seu e-mail registrado">
         </div>
         <button type="button" class="btn-submit" id="sendResetEmailBtn" style="width: 100%;">ENVIAR LINK</button>
-        <button type="button" id="closeForgotModal" style="background: none; border: none; color: #888; margin-top: 15px; cursor: pointer; width: 100%;">Voltar</button>
+        <button type="button" id="closeForgotModal" style="width: 100%; margin-top: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">FECHAR</button>
     </div>
 </div>
 
@@ -351,6 +397,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+const storage = firebase.storage();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 let selectedAvatarFile = null;
@@ -377,6 +424,80 @@ function saveLoginTimestamp() {
     localStorage.setItem("lastLoginTime", Date.now().toString());
 }
 
+/**
+ * Upload da foto de perfil para Firebase Storage
+ * @param {File} file - Arquivo de imagem selecionado
+ * @param {string} userId - ID do usuário no Firebase
+ * @returns {Promise<string>} - URL pública da imagem armazenada
+ */
+async function uploadProfilePicture(file, userId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Validar arquivo
+            if (!file || !file.type.startsWith('image/')) {
+                reject(new Error('Selecione uma imagem válida'));
+                return;
+            }
+
+            // Limitar tamanho (5MB)
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                reject(new Error('Imagem muito grande (máximo 5MB)'));
+                return;
+            }
+
+            // Criar referência no Storage
+            const timestamp = Date.now();
+            const fileName = `profile_pictures/${userId}/${timestamp}_${file.name}`;
+            const storageRef = storage.ref(fileName);
+
+            // Mostrar progresso
+            const progressEl = document.getElementById('uploadProgress');
+            progressEl.classList.add('active');
+
+            // Upload com monitoramento de progresso
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    progressEl.textContent = `Enviando: ${Math.round(progress)}%`;
+                },
+                (error) => {
+                    progressEl.classList.remove('active');
+                    reject(new Error(`Erro no upload: ${error.message}`));
+                },
+                async () => {
+                    // Obter URL pública da imagem
+                    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    progressEl.classList.remove('active');
+                    resolve(downloadURL);
+                }
+            );
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+/**
+ * Salvar URL da foto no Firestore
+ * @param {string} userId - ID do usuário
+ * @param {string} photoURL - URL pública da foto
+ */
+async function saveProfilePictureURL(userId, photoURL) {
+    try {
+        await db.collection("profiles").doc(userId).update({
+            profilePictureURL: photoURL,
+            profilePictureUpdatedAt: new Date()
+        });
+    } catch (error) {
+        console.error('Erro ao salvar URL da foto:', error);
+        throw error;
+    }
+}
+
 /* ================= EVENTOS ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -385,6 +506,38 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.onclick = () => toggleTabs(btn.dataset.tab);
     });
+
+    // Seleção de arquivo de avatar
+    document.getElementById("avatar").onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        selectedAvatarFile = file;
+
+        // Validar arquivo
+        if (!file.type.startsWith('image/')) {
+            showMsg("signupMessage", "Selecione uma imagem válida", "error");
+            selectedAvatarFile = null;
+            return;
+        }
+
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            showMsg("signupMessage", "Imagem muito grande (máximo 5MB)", "error");
+            selectedAvatarFile = null;
+            return;
+        }
+
+        // Mostrar preview da imagem
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const preview = document.getElementById("profilePicturePreview");
+            preview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+
+        showMsg("signupMessage", "Foto selecionada com sucesso!", "info");
+    };
 
     // Login
     document.getElementById("loginBtn").onclick = async () => {
@@ -419,20 +572,54 @@ document.addEventListener("DOMContentLoaded", () => {
         const pass = document.getElementById("signupPassword").value;
         const confirm = document.getElementById("signupPasswordConfirm").value;
 
-        if (pass !== confirm) return showMsg("signupMessage", "Senhas não batem", "error");
+        if (!nick || !email || !pass || !confirm) {
+            return showMsg("signupMessage", "Preencha todos os campos", "error");
+        }
+
+        if (pass !== confirm) {
+            return showMsg("signupMessage", "Senhas não batem", "error");
+        }
+
+        // Desabilitar botão durante o processo
+        const signupBtn = document.getElementById("signupBtn");
+        signupBtn.disabled = true;
         
         try {
+            // Criar usuário no Firebase Auth
             const res = await auth.createUserWithEmailAndPassword(email, pass);
-            await db.collection("profiles").doc(res.user.uid).set({
+            const userId = res.user.uid;
+
+            // Inicializar dados do perfil
+            const profileData = {
                 nickname: nick,
                 email: email,
-                created_at: new Date()
-            });
+                created_at: new Date(),
+                profilePictureURL: null,
+                profilePictureUpdatedAt: null
+            };
+
+            // Se houver foto selecionada, fazer upload
+            if (selectedAvatarFile) {
+                try {
+                    showMsg("signupMessage", "Enviando foto de perfil...", "info");
+                    const photoURL = await uploadProfilePicture(selectedAvatarFile, userId);
+                    profileData.profilePictureURL = photoURL;
+                    profileData.profilePictureUpdatedAt = new Date();
+                } catch (uploadError) {
+                    console.error('Erro no upload:', uploadError);
+                    showMsg("signupMessage", `Aviso: Conta criada, mas erro ao salvar foto: ${uploadError.message}`, "error");
+                }
+            }
+
+            // Salvar dados do perfil no Firestore
+            await db.collection("profiles").doc(userId).set(profileData);
+
             saveLoginTimestamp();
-            showMsg("signupMessage", "Conta criada!", "success");
+            showMsg("signupMessage", "Conta criada com sucesso!", "success");
             setTimeout(() => window.location.href = "index.html", 2000);
         } catch (e) {
             showMsg("signupMessage", e.message, "error");
+            signupBtn.disabled = false;
         }
     };
 
@@ -460,16 +647,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-
         const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
-
         if (redirectUrl) {
             sessionStorage.removeItem("redirectAfterLogin");
             window.location.href = redirectUrl;
         } else {
             window.location.href = "/index.html";
         }
-
     }
 });
 </script>
