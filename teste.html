@@ -1,199 +1,393 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>Fshow - Voto Único</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+<!DOCTYPE html>  
+<html lang="pt-BR">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Fshow | Portal Flop</title>  
+    <meta name="description" content="Central Flop">
 
-  <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
-  <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <meta name="theme-color" content="#8A2BE2">
-  
-  <style>
-    :root {
-      --bg: #06080d;
-      --card-bg: rgba(25, 25, 35, 0.85);
-      --accent: #00e6d8;
-      --accent-2: #4f7cff;
-      --accent-soft: rgba(0, 230, 216, 0.25);
-      --text: #ffffff;
-      --muted: #a0a4b0;
-      --radius-md: 12px;
-      --radius-lg: 18px;
-      --transition: 0.45s cubic-bezier(.2,.8,.2,1);
-      --shadow-md: 0 10px 30px rgba(0,0,0,0.45);
-      --shadow-glow: 0 0 25px rgba(0,230,216,0.25);
-      --panel-border: rgba(255,255,255,0.1);
-      --warning: #ffa500;
-      --danger: #ff6b6b;
-      --success: #00ffb3;
-    }
+  <meta charset="UTF-8">
+  <link rel="preload"
+        href="https://fshow.site/css/index.css"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
 
-    *, *::before, *::after { box-sizing: border-box; }
+  <noscript>
+    <link rel="stylesheet" href="https://fshow.site/css/index.css">
+  </noscript>
 
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(0, 230, 216, 0.18), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(79,124,255,0.18), transparent 60%),
-        linear-gradient(160deg, var(--bg), #0c1018 45%, #05070b);
-      background-attachment: fixed;
-    }
+<link rel="preload"
+      href="css/index.css"
+      as="style"
+      onload="this.rel='stylesheet'">
 
-    .container {
-      max-width: 480px;
-      width: 100%;
-      padding: 30px 20px;
-      animation: fadeSlideUp 0.9s cubic-bezier(.2,.8,.2,1) both;
-    }
+<link rel="preload"
+      href="css/enquete.css"
+      as="style"
+      onload="this.rel='stylesheet'">
 
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(30px) scale(0.96); filter: blur(6px); }
-      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-    }
+  <noscript>
+    <link rel="stylesheet" href="/css/enquete.css">
+  </noscript>
 
-    h1 { font-size: 26px; font-weight: 900; text-align: center; letter-spacing: 0.6px; margin-bottom: 12px; }
+    <link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/favicon.png">
 
-    .options { display: flex; flex-direction: column; gap: 18px; margin-top: 28px; }
+<style>
+body {
+  background: #ffffff;
+  margin: 0;
+}
 
-    .option {
-      position: relative;
-      display: flex;
-      background: var(--card-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: var(--transition);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    }
+/* ==================================== 
+   STORIES 
+   ==================================== */
 
-    .option:hover {
-      transform: translateY(-6px) scale(1.01);
-      border-color: var(--accent);
-      box-shadow: var(--shadow-md), var(--shadow-glow);
-    }
+.stories-wrapper {
+  width: 100%;
+  background: var(--bg-page);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  overflow: hidden;
+}
 
-    .option img { width: 120px; height: 120px; object-fit: cover; flex-shrink: 0; border-right: 1px solid var(--panel-border); }
+.stories-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 5px;
+  padding: 10px 0px;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
 
-    .option-content { display: flex; align-items: center; padding: 18px; width: 100%; font-size: 18px; font-weight: 600; gap: 15px; }
+.stories-container::-webkit-scrollbar {
+  display: none;
+}
 
-    .option-content input[type="radio"] {
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--muted);
-      border-radius: 50%;
-      cursor: pointer;
-      position: relative;
-      transition: var(--transition);
-    }
+/* ==================================== 
+   STORY SOLO
+   ==================================== */
 
-    .option-content input[type="radio"]:checked { border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); }
-    .option-content input[type="radio"]:checked::before {
-      content: ""; position: absolute; inset: 5px; background: var(--accent); border-radius: 50%;
-    }
+.story,
+.storye {
+  position: relative;
+  flex-shrink: 0;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  overflow: visible; 
+  transition: transform 0.25s ease;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: none;
+  will-change: transform;
+}
+.storye {
+  filter: grayscale(100%);
+}
 
-    .captcha-container { margin: 32px 0; display: flex; justify-content: center; }
+.story:hover,
+.storye:hover {
+  transform: scale(1.08);
+}
 
-    button#botaoVotar {
-      width: 100%; padding: 18px; font-size: 18px; font-weight: 900; border: none; border-radius: var(--radius-md);
-      text-transform: uppercase; letter-spacing: 1.2px; background: #2b2f3a; color: var(--muted); cursor: not-allowed; transition: var(--transition);
-    }
+.story img,
+.storye img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
 
-    button#botaoVotar.active {
-      cursor: pointer; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #001818;
-      box-shadow: 0 10px 30px var(--accent-soft);
-    }
+/* ==================================== 
+   STORY DUPLA
+   ==================================== */
 
-    #confirmTela, #errorTela, #loadingTela, #alreadyVotedTela, #vpnBlockedTela {
-      display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; width: 100%;
-    }
+.story-pair {
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.35s cubic-bezier(.2,.8,.2,1);
+}
 
-    .card { background: var(--card-bg); border-radius: 20px; padding: 36px; width: 100%; max-width: 460px; box-shadow: var(--shadow-md); backdrop-filter: blur(12px); }
+.story-pair:hover {
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* círculos dentro da dupla */
+.story.left,
+.story.right {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: none;
+}
+
+.story.right {
+  margin-left: -10px;
+}
+
+/* glow no hover */
+.story-pair:hover .left {
+  box-shadow: 0 0 16px rgba(0,255,200,0.6);
+}
+
+.story-pair:hover .right {
+  box-shadow: 0 0 16px rgba(255,80,255,0.6);
+}
+
+/* ==================================== 
+   BADGES (FUNCIONA EM SOLO E DUPLA)
+   ==================================== */
+
+/* FAZENDA */
+.story.faz::after,
+.story.cfaz::after {
+  content: "";
+  position: absolute;
+  top: -45px;
+  right: -30px;
+  width: 105px;
+  height: 95px;
+  background: url('https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ROÇA */
+.story.roça::after,
+.story.croça::after {
+  content: "🔥";
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  font-size: 26px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* PAREDÃO */
+.story.paredao::after,
+.story.cparedao::after {
+  content: "🧱";
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  font-size: 21px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* LÍDER */
+.story.lider::after,
+.story.clider::after {
+  content: "👑";
+  position: absolute;
+  top: -18px;
+  right: -9px;
+  font-size: 27px;
+  transform: rotate(37deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ANJO */
+.story.anjo::after,
+.story.canjo::after {
+  content: "";
+  position: absolute;
+  top: -14px;
+  right: -11px;
+  width: 38px;
+  height: 50px;
+  background: url('https://i.ibb.co/VYX4Bcdj/10808601-m.png') no-repeat center/contain;
+  transform: rotate(16deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+
+/* FINAL */
+.story.final::after,
+.story.cfinal::after {
+  content: "🌟";
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  font-size: 26px;
+  transform: rotate(-5deg);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* LÂMPADA */
+.story.lamp::after,
+.story.clamp::after {
+  content: "";
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 60px;
+  height: 50px;
+  background: url('https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ÍCONE EXTRA */
+.story.inco::after,
+.story.cinco::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -11px;
+  width: 43px;
+  height: 33px;
+  background: url('https://i.ibb.co/fd5gvrfZ/Chat-GPT-Image-26-de-out-de-2025-22-35-43-fotor-bg-remover-20251026223635.png') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* PODER (extra da dupla) */
+.story.cpower::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 45px;
+  width: 38px;
+  height: 90px;
+  background: url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/raiopower.png?raw=true') no-repeat center/contain;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ==================================== 
+   RESPONSIVO
+   ==================================== */
+
+@media (max-width: 768px) {
+  .story,
+  .storye {
+    width: 70px;
+    height: 70px;
+  }
+
+  .story.left,
+  .story.right {
+    width: 66px;
+    height: 66px;
+  }
+
+  .story.right {
+    margin-left: -8px;
+  }
+
+  .story-pair:hover {
+    transform: translateY(-4px) scale(1.02);
+  }
+}
+</style>
     
-    .icon-container {
-      font-size: 60px;
-      margin-bottom: 20px;
-      animation: slideDown 0.6s cubic-bezier(.2,.8,.2,1);
-    }
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">  
 
-    .title { font-size: 24px; font-weight: 900; margin-bottom: 12px; letter-spacing: 0.5px; }
-    .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
 
-    .error-msg { color: var(--danger); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
-    .warning-msg { color: var(--warning); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
-    .success-msg { color: var(--success); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
+<link rel="apple-touch-icon" sizes="57x57" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
 
-    .voltar { 
-      background: linear-gradient(135deg, var(--accent), var(--accent-2)); 
-      color: #001818; 
-      padding: 14px; 
-      border: none; 
-      border-radius: 10px; 
-      width: 100%; 
-      cursor: pointer; 
-      font-weight: 800; 
-      margin-top: 22px; 
-      transition: var(--transition);
-    }
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
 
-    .voltar:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 230, 216, 0.3);
-    }
+<meta name="theme-color" content="#8A2BE2">
+<meta name="msapplication-TileColor" content="#FF8C00">
+<meta name="msapplication-TileImage" content="/favicon.png">
 
-    .voltar-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      border: 1px solid var(--panel-border);
-      margin-top: 12px;
-    }
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+<link rel="mask-icon" href="/favicon.png" color="#ff8c00">
+<link rel="manifest" href="/favicon.png">
+<meta name="msapplication-TileColor" content="#ff8c00">
+<meta name="msapplication-TileImage" content="/favicon.png">
+<meta name="theme-color" content="#8a2be2">
 
-    .voltar-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: var(--accent);
-    }
+<title>Portal Flop – Notícias, Reality Shows, Enquetes e Cobertura Completa</title>
 
-    .spinner {
-      width: 52px; height: 52px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.15); border-top-color: var(--accent);
-      animation: spin 0.9s linear infinite; margin-bottom: 22px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+<meta name="description" content="Portal Flop: Reality shows e comentários.">
 
-    .info-box {
-      background: rgba(0, 230, 216, 0.1);
-      border: 1px solid rgba(0, 230, 216, 0.3);
-      border-radius: 12px;
-      padding: 16px;
-      margin: 20px 0;
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: left;
-    }
+<link rel="canonical" href="https://www.fshow.site/">
+<meta name="robots" content="index, follow">
 
-    .info-box strong { color: var(--accent); }
+<meta property="og:title" content="Portal Flop – Notícias e Reality Shows">
+<meta property="og:description" content="Cobertura completa, enquetes e notícias atualizadas.">
+<meta property="og:image" content="/favicon.png">
+<meta property="og:url" content="https://www.fshow.site/">
+<meta property="og:type" content="website">
 
-    @media (min-width: 768px) {
-      .container { max-width: 720px; }
-      .options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
-      .option { flex-direction: column; text-align: center; }
-      .option img { width: 100%; height: 180px; border-right: none; border-bottom: 1px solid var(--panel-border); }
-      .option-content { justify-content: center; padding: 22px 12px; }
-    }
-    
+<meta name="twitter:card" content="/favicon.png">
+<meta name="twitter:title" content="Portal Flop – Reality Shows e Notícias">
+<meta name="twitter:description" content="Enquetes, coberturas ao vivo e notícias atualizadas.">
+<meta name="twitter:image" content="/favicon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "name": "Portal FShow",
+  "url": "https://www.fshow.site",
+  "logo": "/favicon.png",
+  "sameAs": [
+  ]
+}
+</script>
+
+<meta name="keywords" content="
+reality show, a fazenda 17, bbb 26, a casa do patrão, power couple brasil,
+votação, enquete, roça, paredão, prova do líder, prova do fazendeiro,
+eliminação, reality ao vivo, celebridades, mundo dos famosos, programa, audiência, record, sbt, globo,
+zona de risco, estrela da casa, batalha, eliminação, prova do lampião, prova do anjo, portal flop, fshow,
+Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, Flopei">
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+
+<style>
+.link {
+  background: linear-gradient(90deg, #ff8c00, #7b2cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link:hover {
+  filter: brightness(1.2);
+}
+
+.espacador {
+  width: 100%;
+  height: 9px;
+  background: transparent;
+  pointer-events: none;
+}
+
 /* Container do Perfil */
 .user-profile-wrapper {
     position: fixed;
@@ -278,20 +472,41 @@
     background: rgba(128, 0, 255, 0.2);
     color: #ff8c00;
 }
-  </style>
+</style>
 
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YQHGZNCDWP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  <!-- Tela de Carregamento -->
-  <div id="loadingTela" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
-    <div class="spinner"></div>
-    <p id="loadingText">Iniciando sistema de segurança...</p>
-  </div>
+  gtag('config', 'G-YQHGZNCDWP');
+</script>
+    
+</head>  
+<body>  
 
-  <!-- Tela de Votação -->
+<header class="header">  <div class="menu-toggle" onclick="toggleMenu()">  
+    <span></span>  
+    <span></span>  
+    <span></span>  
+</div>  
+  
+<div class="logo-container">   
+    <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo"> 
+    <span>PORTAL FLOP</span>  
+</div>  
+
+<!-- Menu -->  
+<nav class="nav-menu" id="menu">  
+    <a href="index.html">Home</a>  
+    <a href="flop-news/flopnews.html">Notícias</a>  
+    <a href="snake.html">Snake</a>  
+    <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
+    <a class="btn-action" href="#">Assinar Agora</a>  
+</nav>
+
 <div class="user-profile-wrapper">
     <button class="avatar-btn" id="avatarBtn">
         <img id="headerAvatar" src="https://via.placeholder.com/150" alt="Perfil">
@@ -308,380 +523,395 @@
 </div>
 
 <input type="file" id="updateAvatarInput" accept="image/*" style="display: none;">
+</header>
 
-  <div id="votoTela" class="container" style="display: none;">
-    <h1>Quem deve ser ELIMINADO do BBBF6?</h1>
-    <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por dispositivo.</p>
-    
-    <div class="options">
-      <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true" alt="Opção 1">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Braian"> Braian
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true" alt="Opção 2">
-  <div class="option-content">
-    <input type="radio" name="vote" value="João Pedro"> João Pedro
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true" alt="Opção 3">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Ray"> Ray
-  </div>
-</label>
+<div class="gradient-line"></div>  
+    <section class="hero-banner">  
+        <img src="https://i.ibb.co/hFFtTx63/capa.webp" alt="Banner">  
+<div class="gradient-line"></div>  
+    </section>
   
-    </div>
-    <div class="captcha-container">
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
+ <!-- STORIES -->
+<div class="stories-wrapper">
+  <div class="stories-container">
+
+    <div class="storye">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ana.png?raw=true">
     </div>
 
-    <button id="botaoVotar" onclick="submitVote()" disabled>VOTAR</button>
-  </div>
-
-  <!-- Tela de Sucesso -->
-  <div id="confirmTela">
-    <div class="card">
-      <div class="icon-container">✔</div>
-      <h2 id="nomeConfirm" class="title"></h2>
-      <p class="success-msg">Voto computado com sucesso!</p>
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
+    <div class="storye">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true">
     </div>
-  </div>
 
-  <!-- Tela de Já Votou -->
-  <div id="alreadyVotedTela">
-    <div class="card">
-      <div class="icon-container">⏱️</div>
-      <h2 class="title">Você já votou!</h2>
-      <p class="subtitle">Você já votou nessa votação.</p>
+    <div class="story paredao">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/brunno.png?raw=true">
+    </div>
+
+    <div class="storye">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/flavia.png?raw=true">
+    </div>
+
+    <div class="story paredao">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true">
+    </div>
+
+    <div class="storye">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true">
+    </div>
+
+    <div class="storye">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.png?raw=true">
+    </div>
+
+    <div class="storye">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ludmila.png?raw=true">
+    </div>
+    
+    <div class="story anjo">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/nick.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true">
+    </div>
       
-      <div class="info-box">
-        <strong>ℹ️ Informação:</strong><br>
-        Essa votação permite apenas <strong>um voto por pessoa</strong>. Sua participação foi registrada com sucesso.
-      </div>
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true">
+    </div>
 
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-      <button class="voltar voltar-secondary" onclick="window.location.href='https://fshow.site'">
-        VOLTAR
-      </button>
+    <div class="story paredao">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/rose.png?raw=true">
+    </div>
+
+    <div class="storye">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true">
+    </div>
+
+    <div class="story">
+      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/tety.png?raw=true">
+    </div>
+
     </div>
   </div>
+</div>
+    
+      <!-- BLOCO DE VOTAÇÃO -->
+<div class="vote-frame">
+  <div class="vote-mock">
 
-  <!-- Tela de VPN Bloqueada -->
-  <div id="vpnBlockedTela">
-    <div class="card">
-      <div class="icon-container">🔒</div>
-      <h2 class="title">Voto Bloqueado</h2>
-      <p class="warning-msg">VPN ou Proxy Detectado</p>
-      <p class="subtitle">Não é permitido votar usando VPN, Proxy ou Tor. Por favor, seja honesto.</p>
-      
-      <div class="info-box">
-        <strong>🛡️ Por que isso?</strong><br>
-        Para garantir a segurança da votação, não é permitido votar usando VPN.
+    <!-- HERO -->
+    <div class="vote-hero">
+      <img src="https://i.ibb.co/wN3LWH80/Vote-em-Fshow-Site-20260329-212718-0000.png" alt="Berlinda">
+    </div>
+
+    <!-- Card -->
+    <div class="vote-card">
+      <div class="vote-card-header">
+        <div>
+          <div class="vote-title">Quem deve ser Eliminado do BBBF6?</div>
+        </div>
+
+        <div style="text-align:right">
+          <div class="vote-status">
+            <span class="vote-dot"></span>
+            <span style="font-weight:600;color:#374151;font-size:13px">ABERTA</span>
+          </div>
+        </div>
       </div>
+        
+      <!-- Botões -->
+<a href="vote/votounico.html" class="vote-btn vote-green" id="teamVote">
+  <span>VOTO ÚNICO</span>
+  <div class="vote-icon">👁️</div>
+</a>
 
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-      <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
+<div class="espacador"></div>
+
+<a href="vote/votefshow.html" class="vote-btn vote-purple" id="teamVote">
+  <span>VOTO DA TORCIDA</span>
+  <div class="vote-icon">👥</div>
+</a>
+      </div>
     </div>
   </div>
-
-  <!-- Tela de Erro Genérico -->
-  <div id="errorTela">
-    <div class="card">
-      <div class="icon-container">🔒</div>
-      <h2 class="title">Voto Bloqueado</h2>
-      <p class="warning-msg">VPN ou Proxy Detectado</p>
-      <p class="subtitle">Não é permitido votar usando VPN, Proxy ou Tor. Por favor, seja honesto.</p>
+</div>
       
-      <div class="info-box">
-        <strong>🛡️ Por que isso?</strong><br>
-        Para garantir a segurança da votação, não é permitido votar usando VPN.
-      </div>
+<section class="container carousel-section">
+    <h2 class="section-title">✨ DESTAQUES FSHOW</h2>
 
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-      <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
+    <div class="carousel-container">
+        <div class="carousel-track">
+
+<!-- SLIDE 1 -->
+    <article class="carousel-slide">
+    <a href="#" class="carousel-slide-link">
+        <div class="slide-img-wrapper">
+            <img class="slide-image" src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/f10/Jo%C3%A3o.jpg?raw=true" alt="João">
+        </div>
+
+        <div class="slide-content-overlay">
+            <p class="slide-tag">BREAKING</p>
+            <h3 class="slide-title">João é o campeão de "A Fazenda F0"!</h3>
+        </div>
+    </a>
+</article>
+
+<!-- SLIDE 2 -->
+<article class="carousel-slide">
+    <a href="https://www.wattpad.com/story/404341343-o-%C3%BAltimo-herdeiro" class="carousel-slide-link">
+        <div class="slide-img-wrapper">
+            <img class="slide-image" src="https://i.ibb.co/3mxb4rTz/LastHeir.png" alt="Lest Heir">
+        </div>
+
+        <div class="slide-content-overlay">
+            <p class="slide-tag">WATTPAD</p>
+            <h3 class="slide-title">Lest Heir – Capítulo 3 disponível!</h3>
+        </div>
+    </a>
+</article>
+
+<!-- SLIDE 3 -->
+<article class="carousel-slide current-slide">
+    <a href="flop-news/eliminacao-de-toninho-traz-previa-da-final.html" class="carousel-slide-link">
+        <div class="slide-img-wrapper">
+            <img class="slide-image" src="https://medias.itatiaia.com.br/dims4/default/36b4a05/2147483647/strip/false/crop/1471x1103+345+0/resize/1000x750!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fff%2Fb3%2Fe04f7e654aa0b76d0c3e10b673c5%2Fduda-wendling-4.jpg" alt="roças">
+        </div>
+
+        <div class="slide-content-overlay">
+            <p class="slide-tag">A Fazenda 17</p>
+            <h3 class="slide-title">Duda - A catapulta que pode custar 2 milhões</h3>
+        </div>
+    </a>
+</article>
+</div>
+        
+        <button class="carousel-control prev-control">&#10094;</button>
+       <button class="carousel-control next-control">&#10095;</button>
+
+        <div class="carousel-indicators">
+            <span class="indicator active-indicator" data-slide="0"></span>
+            <span class="indicator" data-slide="1"></span>
+            <span class="indicator" data-slide="2"></span>
+        </div>
     </div>
+</section>
+
+    <h2 class="section-title">ÚLTIMAS DO FLOP</h2>  
+    <section class="news-grid">  
+
+        <div class="main-content">  
+       
+       <a href="flop-news/final.html" class="news-card-link">
+    <article class="news-card">  
+        <img class="card-img" src="https://i.ibb.co/HL932NpK/Final.jpg" alt="Notícia 2">  
+        <div class="card-content">  
+            <p class="card-category">A Grande Conquista 4</p>  
+            <h3>Eueu, Gean, Luddy e Mikael são os finalistas!</h3>  
+            <p style="font-size: 0.9em; color: var(--text-secondary);">
+                Vote na enquete! Quem será o campeão?
+            </p>  
+        </div>  
+    </article>  
+</a>
+
+ <a href="flop-news/finalistas2.html" class="news-card-link">
+    <article class="news-card">  
+        <img class="card-img" src="https://i.ibb.co/nMBCDdVZ/eueugean.jpg" alt="Eueu e Gean">  
+        <div class="card-content">  
+            <p class="card-category">A Grande Conquista 4</p>  
+            <h3>Eueu e Gean são os primeiros finalistas da temporada!</h3>  
+            <p style="font-size: 0.9em; color: var(--text-secondary);">
+                Sobreviventes da eliminação dupla, seguem para a grande final.
+            </p>  
+        </div>  
+    </article>  
+</a>
+
+<a href="ads/planos.html" class="news-card-link">
+    <article class="news-card">  
+        <img class="card-img" src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg" alt="Anuncie aqui">  
+        <div class="card-content">  
+            <p class="card-category">ADS</p>  
+            <h3>Anuncie Aqui</h3>  
+        </div>  
+    </article>  
+</a>
+
+        </div>  
+
+        <aside class="side-content">  
+            <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
+            <div class="trend-item">  
+                <span class="trend-number">01</span>  
+                <a href="#">Vencedores do Comu Awards</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">02</span>  
+                <a href="#">Estreia do Reality do Nick</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">03</span>  
+                <a href="#">Início do Capítulo 4 de Last Heir</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">04</span>  
+                <a href="#">MegaFlop da semana</a>  
+            </div>  
+            <div class="trend-item">  
+                <span class="trend-number">05</span>  
+                <a href="#">Novo Fshow</a>  
+            </div>  
+        </aside>  
+    </section>  
+</div>  
+</div>
+</div>
+    
+<footer class="footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+  <div class="logo-container2">
+    <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Portal Flop">
+</div>
+            
+            <h2>Portal Flop</h2>
+            <p>Pìxeels Productions</p>
+        </div>
+
+        <div class="social-icons">
+            <a href="https://www.youtube.com/@VulgoFlopp" aria-label="Youtube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.wattpad.com/user/FelipeLovee" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://x.com/Euu_Phillip" aria-label="Twitter / X">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://discord.gg/t56YN5sB" aria-label="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+        </div>
+    </div>
+    
+  <div class="footer-links">
+    <a href="termos/sobre.html">Sobre</a>
+    <a href="termos/contato.html">Contato</a>
+    <a href="termos/termos.html">Termos de Uso</a>
+    <a href="termos/privacidade.html">Política de Privacidade</a>
+  </div>
+
+Criado por <a href="termos/ferlove.html" class="link">Fer Love</a>
+    
+  <div class="footer-copy">
+    © 2025 Fshow • Todos os direitos reservados
+  </div>
+</footer>
 
 <script>
-// CONFIG
-const CONFIG = {
-  ROUND: "pf68",
-  URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
-  TABLE: "pf68",
-  MIN_TIME: 3000
-};
+function abrirSlideTop(){
+  document.getElementById("slideAdTop").classList.add("active");
+}
 
-// DATAS
-const aberturaBR = new Date("2026-01-18T19:00:00");
-const encerramentoBR = new Date("2026-03-30T19:00:00");
+function fecharSlideTop(){
+  document.getElementById("slideAdTop").classList.remove("active");
+}
 
-// STATE
-const state = {
-  client: null,
-  fingerprint: null,
-  ip: null,
-  token: null,
-  startTime: Date.now(),
-  isBot: false,
-  isVPN: false,
-  vpnData: null,
-  blocked: false,
-  userId: null
-};
+setTimeout(abrirSlideTop, 1000);
+</script>
 
-// ================= USER =================
-async function getUser() {
-  return new Promise((resolve) => {
-    if (!firebase?.auth) return resolve(null);
-    const unsub = firebase.auth().onAuthStateChanged((user) => {
-      unsub();
-      resolve(user);
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const track = document.querySelector(".carousel-track");
+    const slides = Array.from(document.querySelectorAll(".carousel-slide"));
+    const nextBtn = document.querySelector(".next-control");
+    const prevBtn = document.querySelector(".prev-control");
+    const indicators = document.querySelectorAll(".indicator");
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    function updateCarousel(index) {
+
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+
+        currentIndex = index;
+
+        const slideWidth = slides[0].offsetWidth;
+        track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+
+        slides.forEach(slide => slide.classList.remove("current-slide"));
+        slides[currentIndex].classList.add("current-slide");
+
+        indicators.forEach(ind => ind.classList.remove("active-indicator"));
+        indicators[currentIndex].classList.add("active-indicator");
+    }
+
+    nextBtn.addEventListener("click", () => {
+        updateCarousel(currentIndex + 1);
     });
-  });
-}
 
-// ================= TEMPO =================
-async function getServerTime() {
-  try {
-    const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
-    const data = await res.json();
-    return new Date(data.datetime);
-  } catch {
-    return new Date();
-  }
-}
+    prevBtn.addEventListener("click", () => {
+        updateCarousel(currentIndex - 1);
+    });
 
-function toBR(date) {
-  return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
-}
+    indicators.forEach(indicator => {
+        indicator.addEventListener("click", () => {
+            const slideIndex = parseInt(indicator.getAttribute("data-slide"));
+            updateCarousel(slideIndex);
+        });
+    });
 
-async function verificarHorarios() {
-  const agora = toBR(await getServerTime());
+    window.addEventListener("resize", () => {
+        updateCarousel(currentIndex);
+    });
 
-  if (agora < aberturaBR) {
-    location.replace("aguarde.html");
-    return false;
-  }
-
-  if (agora > encerramentoBR) {
-    location.replace("fechada.html");
-    return false;
-  }
-
-  return true;
-}
-
-// ================= UI =================
-function showTela(id) {
-  ["loadingTela","votoTela","confirmTela","alreadyVotedTela","vpnBlockedTela","errorTela"]
-  .forEach(t => {
-    const el = document.getElementById(t);
-    if (el) el.style.display = "none";
-  });
-
-  const el = document.getElementById(id);
-  if (el) el.style.display = (id === "votoTela" ? "block" : "flex");
-}
-
-// ================= SEGURANÇA =================
-function detectBot() {
-  state.isBot = [
-    navigator.webdriver,
-    !navigator.languages,
-    /HeadlessChrome/i.test(navigator.userAgent)
-  ].some(Boolean);
-}
-
-async function hash(str) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-async function gerarFingerprint() {
-  return hash([
-    screen.width,
-    screen.height,
-    navigator.userAgent,
-    navigator.language,
-    navigator.hardwareConcurrency || "unk"
-  ].join("|"));
-}
-
-async function getIP() {
-  try {
-    const res = await fetch("https://api.ipify.org?format=json");
-    return (await res.json()).ip;
-  } catch {
-    return "0.0.0.0";
-  }
-}
-
-// VPN (leve)
-async function checkVPN(ip) {
-  try {
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
-    const data = await res.json();
-    return data[ip]?.vpn === "yes";
-  } catch {
-    return false;
-  }
-}
-
-function bloquearVPN() {
-  state.blocked = true;
-  showTela("vpnBlockedTela");
-}
-
-// ================= BOTÃO =================
-function atualizarBotao() {
-  if (state.blocked) return;
-
-  const selecionado = document.querySelector('input[name="vote"]:checked');
-  const btn = document.getElementById("botaoVotar");
-
-  if (selecionado && state.token) {
-    btn.disabled = false;
-    btn.classList.add("active");
-  } else {
-    btn.disabled = true;
-    btn.classList.remove("active");
-  }
-}
-
-// ================= INIT =================
-async function init() {
-  detectBot();
-  showTela("loadingTela");
-
-  try {
-    const user = await getUser();
-    if (!user) return location.href = "https://fshow.site/login.html"
-    state.userId = user.uid;
-
-    if (!(await verificarHorarios())) return;
-
-    state.ip = await getIP();
-    if (await checkVPN(state.ip)) return bloquearVPN();
-
-    state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
-    state.fingerprint = await gerarFingerprint();
-
-    // já votou local
-    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.userId}`)) {
-      return showTela("alreadyVotedTela");
-    }
-
-    // já votou banco
-    const { data } = await state.client
-      .from(CONFIG.TABLE)
-      .select("id")
-      .eq("user_id", state.userId)
-      .maybeSingle();
-
-    if (data) {
-      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      return showTela("alreadyVotedTela");
-    }
-
-    showTela("votoTela");
-
-  } catch (err) {
-    console.error(err);
-    showError("Erro", "Falha ao iniciar");
-  }
-}
-
-// ================= CAPTCHA =================
-window.onCaptchaSuccess = (token) => {
-  state.token = token;
-  atualizarBotao();
-};
-
-// ================= ERRO =================
-function showError(t, m) {
-  document.getElementById("errorTitle").innerText = t;
-  document.getElementById("errorMessage").innerText = m;
-  showTela("errorTela");
-}
-
-document.addEventListener("change", (e) => {
-  if (e.target.name === "vote") atualizarBotao();
 });
+</script>
 
-// ================= VOTO =================
-async function submitVote() {
-  const btn = document.getElementById("botaoVotar");
-  if (!btn || btn.disabled) return;
-
-  if (state.blocked) return showTela("vpnBlockedTela");
-
-  const selecionado = document.querySelector('input[name="vote"]:checked');
-  if (!selecionado || !state.token) return;
-
-  if ((Date.now() - state.startTime) < CONFIG.MIN_TIME && !state.isBot) {
-    return showError("Calma", "Espere um pouco antes de votar.");
-  }
-
-  btn.disabled = true;
-  btn.innerText = "ENVIANDO...";
-
-  try {
-    console.log("ENVIANDO:", {
-      voto: selecionado.value,
-      user: state.userId,
-      token: state.token
-    });
-
-    const { data: jaVotou } = await state.client
-      .from(CONFIG.TABLE)
-      .select("id")
-      .eq("user_id", state.userId)
-      .maybeSingle();
-
-    if (jaVotou) {
-      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      return showTela("alreadyVotedTela");
-    }
-
-    const { error } = await state.client.from(CONFIG.TABLE).insert([{
-      participante: selecionado.value,
-      user_id: state.userId,
-      ip: state.ip,
-      device_fingerprint: state.fingerprint,
-      round_id: CONFIG.ROUND,
-      turnstile_token: state.token
-    }]);
-
-    if (error) throw error;
-
-    // SUCESSO
-    localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-    showTela("confirmTela");
-
-    // reset captcha só aqui
-    if (window.turnstile) turnstile.reset();
-    state.token = null;
-
-  } catch (err) {
-    console.error("ERRO REAL:", err);
-
-    btn.disabled = false;
-    btn.innerText = "TENTAR NOVAMENTE";
-
-    showError("Erro ao votar", err.message || "Erro desconhecido");
-  }
-}
-
-// START
-document.addEventListener("DOMContentLoaded", init);
-    </script>  
-    
 <script>
 document.getElementById('avatarBtn').onclick = (e) => {
     e.stopPropagation();
@@ -757,5 +987,7 @@ document.getElementById('updateAvatarInput').onchange = async (e) => {
         }
     }
 };
-</script></body>
+</script>
+  
+</body>  
 </html>
