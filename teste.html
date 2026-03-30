@@ -8,35 +8,6 @@
   <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
   <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <meta name="theme-color" content="#8A2BE2">
-
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAeTHCWC7reX16rEwyWfbV7Qh8fcrCG3bw",
-  authDomain: "fchat-60461.firebaseapp.com",
-  databaseURL: "https://fchat-60461-default-rtdb.firebaseio.com",
-  projectId: "fchat-60461",
-  storageBucket: "fchat-60461.firebasestorage.app",
-  messagingSenderId: "919618815528",
-  appId: "1:919618815528:web:bcbbccb703e17cf5f4971d"
-};
-
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
-
-// LOGIN 
-auth.onAuthStateChanged((user) => {
-    if (!user) {
-        sessionStorage.setItem("redirectAfterLogin", window.location.href);
-        window.location.href = "login.html";
-    }
-});
-</script>
   
   <style>
     :root {
@@ -222,6 +193,91 @@ auth.onAuthStateChanged((user) => {
       .option img { width: 100%; height: 180px; border-right: none; border-bottom: 1px solid var(--panel-border); }
       .option-content { justify-content: center; padding: 22px 12px; }
     }
+    
+/* Container do Perfil */
+.user-profile-wrapper {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.avatar-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #8000ff;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+    transition: 0.3s;
+    box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+}
+
+.avatar-btn:hover {
+    transform: scale(1.1);
+    border-color: #ff8c00;
+}
+
+.avatar-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Dropdown Menu */
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 180px;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(128, 0, 255, 0.3);
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.profile-dropdown.active {
+    display: block;
+}
+
+.dropdown-header {
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #ff8c00;
+    text-align: center;
+}
+
+.dropdown-divider {
+    border: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 8px 0;
+}
+
+.profile-dropdown button {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: 0.2s;
+}
+
+.profile-dropdown button:hover {
+    background: rgba(128, 0, 255, 0.2);
+    color: #ff8c00;
+}
   </style>
 
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -236,33 +292,49 @@ auth.onAuthStateChanged((user) => {
   </div>
 
   <!-- Tela de Votação -->
+<div class="user-profile-wrapper">
+    <button class="avatar-btn" id="avatarBtn">
+        <img id="headerAvatar" src="https://via.placeholder.com/150" alt="Perfil">
+    </button>
+
+    <div class="profile-dropdown" id="profileDropdown">
+        <div class="dropdown-header">
+            <span id="userName">Usuário</span>
+        </div>
+        <hr class="dropdown-divider">
+        <button onclick="triggerPhotoUpdate()">📸 Mudar Foto</button>
+        <button onclick="switchAccount()">🔄 Trocar de Conta</button>
+    </div>
+</div>
+
+<input type="file" id="updateAvatarInput" accept="image/*" style="display: none;">
+
   <div id="votoTela" class="container" style="display: none;">
     <h1>Quem deve ser ELIMINADO do BBBF6?</h1>
     <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por dispositivo.</p>
     
     <div class="options">
-      
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true" alt="Opção 1">
+      <label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true" alt="Opção 1">
   <div class="option-content">
-    <input type="radio" name="vote" value="Maguel"> Maguel
+    <input type="radio" name="vote" value="Braian"> Braian
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true" alt="Opção 2">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true" alt="Opção 2">
   <div class="option-content">
-    <input type="radio" name="vote" value="Paiva"> Paiva
+    <input type="radio" name="vote" value="João Pedro"> João Pedro
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Opção 3">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true" alt="Opção 3">
   <div class="option-content">
-    <input type="radio" name="vote" value="Sirleidy"> Sirleidy
+    <input type="radio" name="vote" value="Ray"> Ray
   </div>
 </label>
-      
+  
     </div>
     <div class="captcha-container">
       <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
@@ -334,19 +406,22 @@ auth.onAuthStateChanged((user) => {
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
       <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
     </div>
-  
+
 <script>
+// CONFIG
 const CONFIG = {
-  ROUND: "testepf67",
+  ROUND: "pf68",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  KEY: "SUA_KEY_AQUI",
-  TABLE: "pf67",
+  KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
+  TABLE: "pf68",
   MIN_TIME: 3000
 };
 
+// DATAS
 const aberturaBR = new Date("2026-01-18T19:00:00");
-const encerramentoBR = new Date("2026-03-29T19:00:00");
+const encerramentoBR = new Date("2026-03-30T19:00:00");
 
+// STATE
 const state = {
   client: null,
   fingerprint: null,
@@ -357,19 +432,21 @@ const state = {
   isVPN: false,
   vpnData: null,
   blocked: false,
-  userId: null // 🔥 NOVO
+  userId: null
 };
 
-// =================== FIREBASE USER ===================
+// ================= USER =================
 async function getUser() {
   return new Promise((resolve) => {
-    firebase.auth().onAuthStateChanged((user) => {
+    if (!firebase?.auth) return resolve(null);
+    const unsub = firebase.auth().onAuthStateChanged((user) => {
+      unsub();
       resolve(user);
     });
   });
 }
 
-// =================== HORA ===================
+// ================= TEMPO =================
 async function getServerTime() {
   try {
     const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
@@ -380,144 +457,77 @@ async function getServerTime() {
   }
 }
 
-function toSaoPauloDate(date) {
-  const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-  return new Date(spString);
+function toBR(date) {
+  return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
 }
 
-// =================== HORÁRIO ===================
 async function verificarHorarios() {
-  const agoraServer = await getServerTime();
-  const agoraBR = toSaoPauloDate(agoraServer);
+  const agora = toBR(await getServerTime());
 
-  if (agoraBR < aberturaBR) {
-    window.location.replace("aguarde.html");
+  if (agora < aberturaBR) {
+    location.replace("aguarde.html");
     return false;
   }
 
-  if (agoraBR > encerramentoBR) {
-    window.location.replace("fechada.html");
+  if (agora > encerramentoBR) {
+    location.replace("fechada.html");
     return false;
   }
 
   return true;
 }
 
-// =================== TELAS ===================
+// ================= UI =================
 function showTela(id) {
-  const telas = [
-    "loadingTela",
-    "votoTela",
-    "confirmTela",
-    "alreadyVotedTela",
-    "vpnBlockedTela",
-    "errorTela"
-  ];
-
-  telas.forEach(t => {
+  ["loadingTela","votoTela","confirmTela","alreadyVotedTela","vpnBlockedTela","errorTela"]
+  .forEach(t => {
     const el = document.getElementById(t);
     if (el) el.style.display = "none";
   });
 
-  const target = document.getElementById(id);
-  if (target) target.style.display = (id === "votoTela" ? "block" : "flex");
+  const el = document.getElementById(id);
+  if (el) el.style.display = (id === "votoTela" ? "block" : "flex");
 }
 
-// =================== BOT ===================
+// ================= SEGURANÇA =================
 function detectBot() {
-  const sinais = [
+  state.isBot = [
     navigator.webdriver,
-    !navigator.languages || navigator.languages.length === 0,
+    !navigator.languages,
     /HeadlessChrome/i.test(navigator.userAgent)
-  ];
-  state.isBot = sinais.some(Boolean);
+  ].some(Boolean);
 }
 
-// =================== HASH ===================
 async function hash(str) {
-  const data = new TextEncoder().encode(str);
-  const buffer = await crypto.subtle.digest("SHA-256", data);
-  return [...new Uint8Array(buffer)]
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-// =================== FINGERPRINT ===================
 async function gerarFingerprint() {
-  let parts = [];
-
-  try {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    ctx.font = "14px Arial";
-    ctx.fillText("fingerprint", 2, 15);
-    parts.push(canvas.toDataURL());
-  } catch {
-    parts.push("canvas_error");
-  }
-
-  try {
-    const gl = document.createElement("canvas").getContext("webgl");
-    if (gl) {
-      const dbg = gl.getExtension("WEBGL_debug_renderer_info");
-      if (dbg) {
-        parts.push(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL));
-      }
-    }
-  } catch {
-    parts.push("webgl_error");
-  }
-
-  parts.push(
+  return hash([
     screen.width,
     screen.height,
     navigator.userAgent,
     navigator.language,
-    navigator.hardwareConcurrency,
-    new Date().getTimezoneOffset()
-  );
-
-  return await hash(parts.join("|"));
+    navigator.hardwareConcurrency || "unk"
+  ].join("|"));
 }
 
-// =================== IP ===================
 async function getIP() {
   try {
     const res = await fetch("https://api.ipify.org?format=json");
-    const data = await res.json();
-    return data.ip;
+    return (await res.json()).ip;
   } catch {
     return "0.0.0.0";
   }
 }
 
-// =================== VPN ===================
+// VPN (leve)
 async function checkVPN(ip) {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1&asn=1&risk=1`, {
-      signal: controller.signal
-    });
-
-    clearTimeout(timeout);
-
-    if (!res.ok) return false;
-
+    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
     const data = await res.json();
-    const info = data[ip];
-    if (!info) return false;
-
-    state.vpnData = info;
-
-    const isVPN = info.vpn === "yes";
-    const isProxy = info.proxy === "yes";
-    const isHosting = info.type === "hosting";
-    const highRisk = parseInt(info.risk || "0") >= 90;
-
-    return isVPN || isProxy || isHosting || highRisk;
-
+    return data[ip]?.vpn === "yes";
   } catch {
     return false;
   }
@@ -525,102 +535,10 @@ async function checkVPN(ip) {
 
 function bloquearVPN() {
   state.blocked = true;
-  state.isVPN = true;
   showTela("vpnBlockedTela");
-  document.body.innerHTML = document.getElementById("vpnBlockedTela").outerHTML;
 }
 
-function resetarBotao() {
-  const btn = document.getElementById("botaoVotar");
-  if (!btn) return;
-
-  btn.disabled = false;
-  btn.innerText = "VOTAR";
-  btn.classList.remove("active");
-}
-
-// =================== ERRO ===================
-function showError(titulo, msg) {
-  document.getElementById("errorTitle").innerText = titulo;
-  document.getElementById("errorMessage").innerText = msg;
-  showTela("errorTela");
-}
-
-// =================== INIT ===================
-async function init() {
-  detectBot();
-
-  try {
-    showTela("loadingTela");
-
-    // 🔥 PEGA USUÁRIO
-    const user = await getUser();
-    if (!user) {
-      window.location.href = "login.html";
-      return;
-    }
-    state.userId = user.uid;
-
-    const horarioOk = await verificarHorarios();
-    if (!horarioOk) return;
-
-    state.ip = await getIP();
-    state.isVPN = await checkVPN(state.ip);
-
-    if (state.isVPN) return bloquearVPN();
-
-    state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
-    state.fingerprint = await gerarFingerprint();
-
-    // 🔥 BLOQUEIO LOCAL POR CONTA
-    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.userId}`)) {
-      return showTela("alreadyVotedTela");
-    }
-
-    // 🔥 VERIFICA NO BANCO POR CONTA
-    const { data } = await state.client
-      .from(CONFIG.TABLE)
-      .select("id")
-      .eq("user_id", state.userId)
-      .eq("round_id", CONFIG.ROUND)
-      .maybeSingle();
-
-    if (data) {
-      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      return showTela("alreadyVotedTela");
-    }
-
-    showTela("votoTela");
-
-  } catch (err) {
-    console.error(err);
-    showError("Erro", "Falha ao iniciar sistema.");
-  }
-
-  let vpnSuspeita = 0;
-
-  setInterval(async () => {
-    if (state.blocked) return;
-
-    const vpnNow = await checkVPN(state.ip);
-
-    if (vpnNow) {
-      vpnSuspeita++;
-      if (vpnSuspeita >= 2) bloquearVPN();
-    } else {
-      vpnSuspeita = 0;
-    }
-  }, 8000);
-}
-
-// =================== CAPTCHA ===================
-window.onCaptchaSuccess = function(token) {
-  if (state.blocked) return;
-  state.token = token;
-  atualizarBotao();
-};
-
-// =================== BOTÃO ===================
+// ================= BOTÃO =================
 function atualizarBotao() {
   if (state.blocked) return;
 
@@ -636,90 +554,208 @@ function atualizarBotao() {
   }
 }
 
-document.addEventListener("change", (e) => {
-  if (e.target.name === "vote") atualizarBotao();
-});
-
-// =================== VOTO ===================
-async function submitVote() {
-  const btn = document.getElementById("botaoVotar");
-
-  // BLOQUEIO DIRETO
-  if (state.blocked || state.isVPN) {
-    resetarBotao();
-    return showTela("vpnBlockedTela");
-  }
-
-  // VERIFICAÇÃO DE VPN
-  const vpnNow = await checkVPN(state.ip);
-  if (vpnNow) {
-    resetarBotao();
-    return bloquearVPN();
-  }
-
-  const selecionado = document.querySelector('input[name="vote"]:checked');
-
-  // SEM SELEÇÃO OU CAPTCHA
-  if (!selecionado || !state.token) {
-    resetarBotao();
-    return;
-  }
-
-  // TEMPO MÍNIMO
-  if ((Date.now() - state.startTime) < CONFIG.MIN_TIME && !state.isBot) {
-    resetarBotao();
-    return showError("Calma aí", "Aguarde um instante antes de votar.");
-  }
-
-  // TRAVA BOTÃO
-  btn.disabled = true;
-  btn.innerText = "ENVIANDO...";
+// ================= INIT =================
+async function init() {
+  detectBot();
+  showTela("loadingTela");
 
   try {
+    const user = await getUser();
+    if (!user) return location.href = "https://fshow.site/login.html"
+    state.userId = user.uid;
 
-    // 🔥 VERIFICAÇÃO
+    if (!(await verificarHorarios())) return;
+
+    state.ip = await getIP();
+    if (await checkVPN(state.ip)) return bloquearVPN();
+
+    state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
+    state.fingerprint = await gerarFingerprint();
+
+    // já votou local
+    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.userId}`)) {
+      return showTela("alreadyVotedTela");
+    }
+
+    // já votou banco
     const { data } = await state.client
       .from(CONFIG.TABLE)
       .select("id")
       .eq("user_id", state.userId)
-      .eq("round_id", CONFIG.ROUND)
       .maybeSingle();
 
     if (data) {
       localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      resetarBotao();
       return showTela("alreadyVotedTela");
     }
 
-    // VOTO
+    showTela("votoTela");
+
+  } catch (err) {
+    console.error(err);
+    showError("Erro", "Falha ao iniciar");
+  }
+}
+
+// ================= CAPTCHA =================
+window.onCaptchaSuccess = (token) => {
+  state.token = token;
+  atualizarBotao();
+};
+
+// ================= ERRO =================
+function showError(t, m) {
+  document.getElementById("errorTitle").innerText = t;
+  document.getElementById("errorMessage").innerText = m;
+  showTela("errorTela");
+}
+
+document.addEventListener("change", (e) => {
+  if (e.target.name === "vote") atualizarBotao();
+});
+
+// ================= VOTO =================
+async function submitVote() {
+  const btn = document.getElementById("botaoVotar");
+  if (!btn || btn.disabled) return;
+
+  if (state.blocked) return showTela("vpnBlockedTela");
+
+  const selecionado = document.querySelector('input[name="vote"]:checked');
+  if (!selecionado || !state.token) return;
+
+  if ((Date.now() - state.startTime) < CONFIG.MIN_TIME && !state.isBot) {
+    return showError("Calma", "Espere um pouco antes de votar.");
+  }
+
+  btn.disabled = true;
+  btn.innerText = "ENVIANDO...";
+
+  try {
+    console.log("ENVIANDO:", {
+      voto: selecionado.value,
+      user: state.userId,
+      token: state.token
+    });
+
+    const { data: jaVotou } = await state.client
+      .from(CONFIG.TABLE)
+      .select("id")
+      .eq("user_id", state.userId)
+      .maybeSingle();
+
+    if (jaVotou) {
+      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
+      return showTela("alreadyVotedTela");
+    }
+
     const { error } = await state.client.from(CONFIG.TABLE).insert([{
       participante: selecionado.value,
+      user_id: state.userId,
       ip: state.ip,
       device_fingerprint: state.fingerprint,
-      user_id: state.userId,
       round_id: CONFIG.ROUND,
-      turnstile_token: state.token,
-      vpn_detected: state.isVPN,
-      vpn_data: state.vpnData ? JSON.stringify(state.vpnData) : null
+      turnstile_token: state.token
     }]);
 
     if (error) throw error;
 
-    // SALVA LOCAL
-    localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-
     // SUCESSO
+    localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
     showTela("confirmTela");
 
+    // reset captcha só aqui
+    if (window.turnstile) turnstile.reset();
+    state.token = null;
+
   } catch (err) {
-    console.error(err);
-    resetarBotao();
-    showError("Erro ao votar", "Não foi possível registrar seu voto. Tente novamente.");
+    console.error("ERRO REAL:", err);
+
+    btn.disabled = false;
+    btn.innerText = "TENTAR NOVAMENTE";
+
+    showError("Erro ao votar", err.message || "Erro desconhecido");
   }
 }
 
-// =================== START ===================
+// START
 document.addEventListener("DOMContentLoaded", init);
-</script>
-</body>
+    </script>  
+    
+<script>
+document.getElementById('avatarBtn').onclick = (e) => {
+    e.stopPropagation();
+    document.getElementById('profileDropdown').classList.toggle('active');
+};
+
+window.onclick = () => {
+    document.getElementById('profileDropdown').classList.remove('active');
+};
+
+async function switchAccount() {
+    try {
+        await auth.signOut();
+        window.location.href = "login.html";
+    } catch (error) {
+        console.error("Erro ao sair:", error);
+    }
+}
+
+function triggerPhotoUpdate() {
+    document.getElementById('updateAvatarInput').click();
+}
+
+auth.onAuthStateChanged(async (user) => {
+    const avatarImg = document.getElementById('headerAvatar');
+    const nameTxt = document.getElementById('userName');
+    const anonPhoto = "https://cdn-icons-png.flaticon.com/512/12225/12225881.png";
+
+    if (user) {
+        try {
+            const profileDoc = await db.collection("profiles").doc(user.uid).get();
+            
+            if (profileDoc.exists) {
+                const data = profileDoc.data();
+                avatarImg.src = data.profilePictureURL || anonPhoto;
+                nameTxt.textContent = data.nickname || "Usuário";
+            } else {
+                avatarImg.src = anonPhoto;
+                nameTxt.textContent = "Usuário";
+            }
+        } catch (error) {
+            console.error("Erro ao carregar perfil:", error);
+            avatarImg.src = anonPhoto;
+        }
+    } else {
+        avatarImg.src = anonPhoto;
+        nameTxt.textContent = "Fazer Login";
+        
+        document.querySelector('.avatar-btn').style.borderColor = "rgba(255,255,255,0.3)";
+    }
+});
+
+const dropdown = document.getElementById('profileDropdown');
+dropdown.innerHTML = `
+    <div class="dropdown-header"><span>Visitante</span></div>
+    <hr class="dropdown-divider">
+    <button onclick="window.location.href='/login.html'">✨ Criar Conta / Entrar</button>
+`;
+
+document.getElementById('updateAvatarInput').onchange = async (e) => {
+    const file = e.target.files[0];
+    const user = auth.currentUser;
+
+    if (file && user) {
+        try {
+            const photoURL = await uploadProfilePicture(file, user.uid);
+            await saveProfilePictureURL(user.uid, photoURL);
+            
+            document.getElementById('headerAvatar').src = photoURL;
+            alert("Foto atualizada com sucesso!");
+        } catch (error) {
+            alert("Erro ao atualizar foto: " + error.message);
+        }
+    }
+};
+</script></body>
 </html>
