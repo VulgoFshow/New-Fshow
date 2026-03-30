@@ -241,28 +241,27 @@ auth.onAuthStateChanged((user) => {
     <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por dispositivo.</p>
     
     <div class="options">
-      
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true" alt="Opção 1">
+      <label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true" alt="Opção 1">
   <div class="option-content">
-    <input type="radio" name="vote" value="Maguel"> Maguel
+    <input type="radio" name="vote" value="Braian"> Braian
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true" alt="Opção 2">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true" alt="Opção 2">
   <div class="option-content">
-    <input type="radio" name="vote" value="Paiva"> Paiva
+    <input type="radio" name="vote" value="João Pedro"> João Pedro
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Opção 3">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true" alt="Opção 3">
   <div class="option-content">
-    <input type="radio" name="vote" value="Sirleidy"> Sirleidy
+    <input type="radio" name="vote" value="Ray"> Ray
   </div>
 </label>
-      
+  
     </div>
     <div class="captcha-container">
       <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
@@ -337,15 +336,15 @@ auth.onAuthStateChanged((user) => {
   
 <script>
 const CONFIG = {
-  ROUND: "testepf67",
+  ROUND: "pf68",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  KEY: "SUA_KEY_AQUI",
-  TABLE: "pf67",
+  KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
+  TABLE: "pf68",
   MIN_TIME: 3000
 };
 
 const aberturaBR = new Date("2026-01-18T19:00:00");
-const encerramentoBR = new Date("2026-03-29T19:00:00");
+const encerramentoBR = new Date("2026-03-30T19:00:00");
 
 const state = {
   client: null,
@@ -357,7 +356,7 @@ const state = {
   isVPN: false,
   vpnData: null,
   blocked: false,
-  userId: null // 🔥 NOVO
+  userId: null
 };
 
 // =================== FIREBASE USER ===================
