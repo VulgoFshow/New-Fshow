@@ -333,7 +333,7 @@ auth.onAuthStateChanged((user) => {
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
       <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
     </div>
-  
+
 <script>
 // CONFIGURAÇÕES GERAIS
 const CONFIG = {
@@ -556,7 +556,9 @@ async function checkVPN(ip) {
     const isHosting = info.type === "hosting";
     const highRisk = parseInt(info.risk || "0") >= 90;
 
-    return isVPN || isProxy || isHosting || highRisk;
+    // Ajuste para reduzir falsos positivos: Bloqueia apenas se for VPN explícita ou risco muito alto.
+    // isProxy e isHosting podem ser comuns em IPs residenciais e não indicam necessariamente fraude.
+    return isVPN || highRisk;
   } catch {
     return false;
   }
@@ -780,6 +782,7 @@ async function submitVote() {
 }
 
 // Inicializa quando o DOM estiver pronto
-document.addEventListener("DOMContentLoaded", init);</script>
-</body>
+document.addEventListener("DOMContentLoaded", init);
+  </script>
+  </body>
 </html>
