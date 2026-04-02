@@ -726,41 +726,40 @@ button:disabled {
     
 <div class="options">
   
-    <div class="options">
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Opção 3">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Arthur Zago">
   <div class="option-content">
     <input type="radio" name="vote" value="Arthur Zago"> Arthur Zago
   </div>
 </label>
   
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Opção 3">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael">
   <div class="option-content">
     <input type="radio" name="vote" value="Mikael"> Mikael
   </div>
 </label>
 
-    <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Opção 2">
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro">
   <div class="option-content">
     <input type="radio" name="vote" value="Pedro"> Pedro
   </div>
-    </label>
+</label>
 
-    </div>
-    <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
-      <span class="recaptcha-checkbox" aria-hidden="true">
-        <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l6 6 10-10"/></svg>
-      </span>
-      <span class="recaptcha-label">Não sou um robô</span>
-      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="FCaptcha" style="width:40px;height:40px;border-radius:4px"/>
-    </button>
+</div>
+<button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
+  <span class="recaptcha-checkbox" aria-hidden="true">
+    <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l6 6 10-10"/></svg>
+  </span>
+  <span class="recaptcha-label">Não sou um robô</span>
+  <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="FCaptcha" style="width:40px;height:40px;border-radius:4px"/>
+</button>
 
-    <button id="botaoVotar" disabled>VOTAR</button>
+<button id="botaoVotar" disabled>VOTAR</button>
 
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
-  </div>
+<div class="notice">Essa votação segue aberta até às 19:00</div>
+</div>
   
 <!-- POPUP CAPTCHA -->
 <div id="popupCaptcha" class="popup">
@@ -783,24 +782,20 @@ button:disabled {
     </div>
   </div>
 </div>
-  </div> 
+
+<div id="confirmTela">
+<div class="confirm-card">
+<div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
+<p id="nomeConfirm"></p>
+<button id="botaoVotarNovamente" class="voltar">
+ VOTAR NOVAMENTE
+</button>
+<div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
+<div class="notice">Essa votação segue aberta até às 19:00</div>
+
 </div>
-  
-  <div id="confirmTela">
-  <div class="confirm-card">
-    <div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
-    <p id="nomeConfirm"></p>
-    <button id="botaoVotarNovamente" class="voltar">
-     VOTAR NOVAMENTE
-    </button>
-    <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
-  </div>
-    
-  </div>
 </div>
-  </div>
-</div>
+
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
@@ -970,17 +965,6 @@ button:disabled {
     captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     captchaInstruction.textContent = captchaCurrentPrompt.label;
 
-const ref = captchaCurrentPrompt.images.find(
-  i => i.tag === captchaCurrentPrompt.correctTag
-);
-
-if (ref) {
-  captchaRefImg.src = ref.src;
-  captchaRefImg.style.display = "block";
-} else {
-  captchaRefImg.style.display = "none";
-}
-
     const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
     const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
 
@@ -998,9 +982,8 @@ if (ref) {
 
       imgEl.addEventListener("click", () => {
         imgEl.classList.toggle("selected");
-        verifyBtn.disabled = !document.querySelectorAll(".captcha-img.selected").length;
+        verifyBtn.disabled = document.querySelectorAll(".captcha-img.selected").length === 0;
       });
-
       captchaGrid.appendChild(imgEl);
     });
   }
@@ -1073,9 +1056,6 @@ async function submitVote(participante) {
     const prevText = botaoVotar.textContent;
     botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
     
-    // Time
-    await new Promise(resolve => setTimeout(resolve, 0));
-
     const { error } = await supabase
       .from(TABLE_VOTACAO)
       .insert([{ participante: participante }]);
@@ -1126,7 +1106,8 @@ async function submitVote(participante) {
     confirmTela.style.display = "none";
     votoTela.style.display = "block";
     
-    document.querySelector('input[name="vote"]:checked').checked = false;
+    const escolhido = document.querySelector('input[name="vote"]:checked');
+    if (escolhido) escolhido.checked = false;
     
     captchaVisualLiberado = false;
     botaoCaptcha.setAttribute("aria-pressed", "false");
@@ -1267,6 +1248,7 @@ document.addEventListener("click", (e) => {
 
   // =================== FOTOS DOS PARTICIPANTES ===================
   const fotos = {
+    "Arthur Zago": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true",
     "Brunno": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/brunno.png?raw=true",
     "Maguel": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true",
     "Flávia": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/flavia.png?raw=true",
@@ -1281,15 +1263,9 @@ document.addEventListener("click", (e) => {
     "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true",
     "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true",
     "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/rose.png?raw=true",
-    "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true",
     "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/tety.png?raw=true",
     "João Pedro": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true"
   };
-
-  const captchaRefImg = document.createElement("img");
-  captchaRefImg.id = "captcha-ref-img";
-  captchaRefImg.style.display = "none";
-  document.querySelector(".captcha-header").appendChild(captchaRefImg);
 
   // =================== INICIALIZAÇÃO ===================
 (function init() {
@@ -1300,5 +1276,4 @@ document.addEventListener("click", (e) => {
 })();
 
 </script></body>
-
 </html>
