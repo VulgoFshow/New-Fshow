@@ -9,35 +9,36 @@
   <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
   <meta name="theme-color" content="#8A2BE2">
 
+  <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCm02TAa_OIQ5tNXtEZX-8HuWm-zOI1Wn0",
-  authDomain: "login-fshow.firebaseapp.com",
-  projectId: "login-fshow",
-  storageBucket: "login-fshow.firebasestorage.app",
-  messagingSenderId: "943567663687",
-  appId: "1:943567663687:web:a3e0be453ed6525f9e3762",
-  measurementId: "G-ES04KHT7TH"
-};
-  
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
-
-// LOGIN 
-auth.onAuthStateChanged((user) => {
-    if (!user) {
-        sessionStorage.setItem("redirectAfterLogin", window.location.href);
-        window.location.href = "https://fshow.site/login.html";
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCm02TAa_OIQ5tNXtEZX-8HuWm-zOI1Wn0",
+      authDomain: "login-fshow.firebaseapp.com",
+      projectId: "login-fshow",
+      storageBucket: "login-fshow.firebasestorage.app",
+      messagingSenderId: "943567663687",
+      appId: "1:943567663687:web:a3e0be453ed6525f9e3762",
+      measurementId: "G-ES04KHT7TH"
+    };
+      
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
     }
-});
-</script>
-  
+
+    const auth = firebase.auth();
+
+    // LOGIN REDIRECT
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            sessionStorage.setItem("redirectAfterLogin", window.location.href);
+            window.location.href = "https://fshow.site/login.html";
+        }
+    });
+  </script>
+    
   <style>
     :root {
       --bg: #06080d;
@@ -241,28 +242,28 @@ auth.onAuthStateChanged((user) => {
     <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por dispositivo.</p>
     
     <div class="options">
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Opção 3">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Arthur Zago"> Arthur Zago
-  </div>
-</label>
-  
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Opção 3">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Mikael"> Mikael
-  </div>
-</label>
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Arthur Zago">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Arthur Zago"> Arthur Zago
+        </div>
+      </label>
+        
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Mikael"> Mikael
+        </div>
+      </label>
 
-    <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Opção 2">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Pedro"> Pedro
-  </div>
-    </label>
-  
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Pedro"> Pedro
+        </div>
+      </label>
     </div>
+
     <div class="captcha-container">
       <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
     </div>
@@ -274,7 +275,7 @@ auth.onAuthStateChanged((user) => {
   <div id="confirmTela">
     <div class="card">
       <div class="icon-container">✔</div>
-      <h2 id="nomeConfirm" class="title"></h2>
+      <h2 id="nomeConfirm" class="title">Sucesso!</h2>
       <p class="success-msg">Voto computado com sucesso!</p>
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
     </div>
@@ -289,7 +290,7 @@ auth.onAuthStateChanged((user) => {
       
       <div class="info-box">
         <strong>ℹ️ Informação:</strong><br>
-        Essa votação permite apenas <strong>um voto por pessoa</strong>. Sua participação foi registrada com sucesso.
+        Essa votação permite apenas <strong>um voto por pessoa</strong>.
       </div>
 
       <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
@@ -320,24 +321,18 @@ auth.onAuthStateChanged((user) => {
   <!-- Tela de Erro Genérico -->
   <div id="errorTela">
     <div class="card">
-      <div class="icon-container">🔒</div>
-      <h2 class="title">Voto Bloqueado</h2>
-      <p class="warning-msg">VPN ou Proxy Detectado</p>
-      <p class="subtitle">Não é permitido votar usando VPN, Proxy ou Tor. Por favor, seja honesto.</p>
+      <div class="icon-container">⚠️</div>
+      <h2 id="errorTitle" class="title">Erro</h2>
+      <p id="errorMessage" class="subtitle">Ocorreu um erro inesperado.</p>
       
-      <div class="info-box">
-        <strong>🛡️ Por que isso?</strong><br>
-        Para garantir a segurança da votação, não é permitido votar usando VPN.
-      </div>
-
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-      <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
+      <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
     </div>
+  </div>
 
 <script>
 // CONFIG
 const CONFIG = {
-  ROUND: "pf610",
+  ROUND: "testepf610",
   URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
   KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
   TABLE: "pf10",
@@ -365,7 +360,7 @@ const state = {
 // ================= USER =================
 async function getUser() {
   return new Promise((resolve) => {
-    if (!firebase?.auth) return resolve(null);
+    if (typeof firebase === "undefined" || !firebase.auth) return resolve(null);
     const unsub = firebase.auth().onAuthStateChanged((user) => {
       unsub();
       resolve(user);
@@ -443,7 +438,8 @@ async function gerarFingerprint() {
 async function getIP() {
   try {
     const res = await fetch("https://api.ipify.org?format=json");
-    return (await res.json()).ip;
+    const data = await res.json();
+    return data.ip;
   } catch {
     return "0.0.0.0";
   }
@@ -451,6 +447,7 @@ async function getIP() {
 
 // VPN (leve)
 async function checkVPN(ip) {
+  if (ip === "0.0.0.0") return false;
   try {
     const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
     const data = await res.json();
@@ -488,7 +485,13 @@ async function init() {
 
   try {
     const user = await getUser();
-    if (!user) return location.href = "https://fshow.site/login.html"
+    if (!user) {
+        // Se não houver usuário, o script no head já redireciona, 
+        // mas garantimos aqui também.
+        sessionStorage.setItem("redirectAfterLogin", window.location.href);
+        window.location.href = "https://fshow.site/login.html";
+        return;
+    }
     state.userId = user.uid;
 
     if (!(await verificarHorarios())) return;
@@ -496,7 +499,12 @@ async function init() {
     state.ip = await getIP();
     if (await checkVPN(state.ip)) return bloquearVPN();
 
-    state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
+    if (typeof supabase !== "undefined") {
+        state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
+    } else {
+        throw new Error("Supabase SDK não carregado.");
+    }
+
     state.fingerprint = await gerarFingerprint();
 
     // já votou local
@@ -505,7 +513,7 @@ async function init() {
     }
 
     // já votou banco
-    const { data } = await state.client
+    const { data, error } = await state.client
       .from(CONFIG.TABLE)
       .select("id")
       .eq("user_id", state.userId)
@@ -520,7 +528,7 @@ async function init() {
 
   } catch (err) {
     console.error(err);
-    showError("Erro", "Falha ao iniciar");
+    showError("Erro", "Falha ao iniciar: " + err.message);
   }
 }
 
@@ -532,8 +540,10 @@ window.onCaptchaSuccess = (token) => {
 
 // ================= ERRO =================
 function showError(t, m) {
-  document.getElementById("errorTitle").innerText = t;
-  document.getElementById("errorMessage").innerText = m;
+  const titleEl = document.getElementById("errorTitle");
+  const msgEl = document.getElementById("errorMessage");
+  if (titleEl) titleEl.innerText = t;
+  if (msgEl) msgEl.innerText = m;
   showTela("errorTela");
 }
 
@@ -559,12 +569,7 @@ async function submitVote() {
   btn.innerText = "ENVIANDO...";
 
   try {
-    console.log("ENVIANDO:", {
-      voto: selecionado.value,
-      user: state.userId,
-      token: state.token
-    });
-
+    // Verificação dupla antes de inserir
     const { data: jaVotou } = await state.client
       .from(CONFIG.TABLE)
       .select("id")
@@ -589,23 +594,24 @@ async function submitVote() {
 
     // SUCESSO
     localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
+    const nomeConfirm = document.getElementById("nomeConfirm");
+    if (nomeConfirm) nomeConfirm.innerText = "Voto para " + selecionado.value;
     showTela("confirmTela");
 
-    // reset captcha só aqui
+    // reset captcha
     if (window.turnstile) turnstile.reset();
     state.token = null;
 
   } catch (err) {
     console.error("ERRO REAL:", err);
-
     btn.disabled = false;
     btn.innerText = "TENTAR NOVAMENTE";
-
     showError("Erro ao votar", err.message || "Erro desconhecido");
   }
 }
 
 // START
 document.addEventListener("DOMContentLoaded", init);
-    </script>  </body>
+</script>
+</body>
 </html>
