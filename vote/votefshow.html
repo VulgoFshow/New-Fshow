@@ -727,23 +727,23 @@ button:disabled {
     <div class="options">
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true" alt="Opção">
         <div class="option-content">
-          <input type="radio" name="vote" value="Mikael"> Mikael
-        </div>
-      </label>
-      
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Arthur Zago">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Pedro"> Pedro
+          <input type="radio" name="vote" value="Manchinha"> Manchinha
         </div>
       </label>
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true" alt="Pedro">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true" alt="Opção">
         <div class="option-content">
-          <input type="radio" name="vote" value="Renata"> Renata
+          <input type="radio" name="vote" value="Paiva"> Paiva
+        </div>
+      </label>
+    
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Opção">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Pedro"> Pedro
         </div>
       </label>
       
@@ -805,12 +805,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "pf613";
+  const TABLE_VOTACAO = "pf614";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-04-06T19:00:00");
+  const encerramentoBR = new Date("2026-04-07T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
