@@ -811,8 +811,8 @@ button:disabled {
 </div>
 </div>
 
-<script type="module">
-
+<script type="module"> 
+  
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
 // =================== CONFIGURAÇÕES ===================
@@ -827,46 +827,42 @@ const DEBUG = false;
 const aberturaBR = new Date("2026-01-18T19:00:00");
 const encerramentoBR = new Date("2026-04-10T19:00:00");
 
-// =================== HORA DO SERVIDOR ===================
-async function getServerTime() {
+// =================== OTIMIZAÇÃO DE HORÁRIO (CACHE) ===================
+let serverTimeOffset = 0;
+let timeSynced = false;
+
+async function syncServerTime() {
   try {
+    const start = Date.now();
     const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
     const data = await res.json();
-    return new Date(data.datetime);
+    const now = Date.now();
+    const latency = (now - start) / 2;
+    const serverTime = new Date(data.datetime).getTime();
+    serverTimeOffset = serverTime - (now - latency);
+    timeSynced = true;
   } catch (e) {
-    console.error("Erro ao verificar horário:", e);
-    return new Date(); 
+    console.error("Erro ao sincronizar horário:", e);
   }
 }
 
-function toSaoPauloDate(date) {
-  const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+function getOptimizedNow() {
+  const localNow = Date.now();
+  const estimatedServerTime = new Date(localNow + serverTimeOffset);
+  const spString = estimatedServerTime.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
   return new Date(spString);
 }
+
+// Sincroniza logo no início para evitar delays futuros
+syncServerTime();
+setInterval(syncServerTime, 60000); // Re-sincroniza a cada minuto
 
 function redirect(url) {
   if (DEBUG) return console.warn("REDIRECT BLOQUEADO →", url);
   window.location.href = url;
 }
 
-// =================== VERIFICAÇÃO DE HORÁRIO ===================
-async function verificarHorarios() {
-  const agoraServer = await getServerTime();
-  const agoraBR = toSaoPauloDate(agoraServer);
-
-  if (agoraBR < aberturaBR) return window.location.replace("aguarde.html");
-  if (agoraBR > encerramentoBR) return window.location.replace("fechada.html");
-  console.log("VOTAÇÃO ABERTA");
-}
-
-verificarHorarios();
-setInterval(async () => {
-  const agoraServer = await getServerTime();
-  const agoraBR = toSaoPauloDate(agoraServer);
-  if (agoraBR > encerramentoBR) window.location.replace("fechada.html");
-}, 5000);
-
-// =================== ELEMENTOS DOM ===================
+// =================== ELEMENTOS DOM (CACHE) ===================
 const votoTela = document.getElementById("votoTela");
 const confirmTela = document.getElementById("confirmTela");
 const nomeConfirm = document.getElementById("nomeConfirm");
@@ -885,20 +881,18 @@ let captchaVisualLiberado = false;
 let pendingVote = null;
 let captchaAberto = false;
 
-// =================== SCROLL AUTOMÁTICO ===================
+// =================== SCROLL AUTOMÁTICO (OTIMIZADO) ===================
 function scrollParaFinal() {
-  setTimeout(() => {
+  requestAnimationFrame(() => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
       behavior: 'smooth'
     });
-  }, 100);
+  });
 }
 
 document.querySelectorAll('input[name="vote"]').forEach(radio => {
-  radio.addEventListener("change", () => {
-    scrollParaFinal();
-  });
+  radio.addEventListener("change", scrollParaFinal);
 });
 
 // =================== CONTROLE DE VOTOS LOCAL ===================
@@ -964,7 +958,7 @@ let captchaCurrentPrompt = null;
 // =================== FUNÇÕES DO CAPTCHA ===================
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = (Math.random() * (i + 1)) | 0;
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
@@ -975,18 +969,19 @@ function generateCaptcha() {
   statusEl.textContent = "";
   verifyBtn.disabled = true;
 
-  captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+  captchaCurrentPrompt = prompts[(Math.random() * prompts.length) | 0];
   captchaInstruction.textContent = captchaCurrentPrompt.label;
 
   const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
   const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
 
-  const correctCount = Math.min(Math.floor(Math.random() * 3) + 3, correctImages.length);
+  const correctCount = ((Math.random() * 3) | 0) + 3;
   const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
   const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
 
   const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
 
+  const fragment = document.createDocumentFragment();
   allImages.forEach(img => {
     const imgEl = document.createElement("img");
     imgEl.src = img.src;
@@ -997,8 +992,9 @@ function generateCaptcha() {
       imgEl.classList.toggle("selected");
       verifyBtn.disabled = document.querySelectorAll(".captcha-img.selected").length === 0;
     });
-    captchaGrid.appendChild(imgEl);
+    fragment.appendChild(imgEl);
   });
+  captchaGrid.appendChild(fragment);
 }
 
 function abrirCaptcha() {
@@ -1049,84 +1045,81 @@ verifyBtn.addEventListener("click", () => {
   if (pendingVote) {
     const voto = pendingVote;
     pendingVote = null;
-    setTimeout(() => submitVote(voto), 300);
+    submitVote(voto);
   }
 });
 
-// =================== ENVIO DO VOTO ===================
+// =================== ENVIO DO VOTO (ULTRA OTIMIZADO) ===================
 async function submitVote(participante) {
-  // CLIQUE ULTRA-RÁPIDO: Bloqueia e muda o texto NO MILISSEGUNDO do clique
-  if (botaoVotar.getAttribute('data-loading') === 'true') return;
-  botaoVotar.setAttribute('data-loading', 'true');
+  if (botaoVotar.disabled) return;
+  
+  // Resposta visual instantânea
   botaoVotar.disabled = true;
   const prevText = botaoVotar.textContent;
   botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
 
-  // Usamos setTimeout para dar tempo do navegador renderizar a mudança visual do botão antes de processar o resto
-  setTimeout(async () => {
-    try {
-      const agoraServer = await getServerTime();
-      const agoraBR = toSaoPauloDate(agoraServer);
-
-      if (agoraBR > encerramentoBR) {
-        alert("A votação foi encerrada!");
-        window.location.replace("fechada.html");
-        return;
-      }
-      
-      const { error } = await supabase
-        .from(TABLE_VOTACAO)
-        .insert([{ participante: participante }]);
-
-      if (error) {
-        console.error("Erro Supabase:", error);
-        botaoVotar.setAttribute('data-loading', 'false');
-        botaoVotar.disabled = false;
-        botaoVotar.textContent = prevText;
-        redirect("erro.html");
-        return;
-      }
-
-      let restantes = getVotosRestantes() - 1;
-      setVotosRestantes(Math.max(restantes, 0));
-      
-      if (restantes <= 0) {
-        botaoCaptcha.setAttribute("aria-pressed", "false");
-        botaoVotar.classList.remove("active");
-        captchaVisualLiberado = false;
-      }
-
-      votoTela.style.display = "none";
-      confirmTela.style.display = "flex";
-      nomeConfirm.textContent = participante;
-
-      if (fotos[participante]) {
-        fotoConfirm.src = fotos[participante];
-        fotoConfirm.style.display = "block";
-      } else {
-        fotoConfirm.style.display = "none";
-      }
-
-      botaoVotar.setAttribute('data-loading', 'false');
-      botaoVotar.textContent = prevText;
-      botaoVotar.disabled = false;
-
-    } catch (e) {
-      console.error(e);
-      window.location.href = "erro.html";
+  try {
+    // Verificação de horário usando o tempo sincronizado (sem fetch extra)
+    const agoraBR = getOptimizedNow();
+    if (agoraBR > encerramentoBR) {
+      alert("A votação foi encerrada!");
+      return window.location.replace("fechada.html");
     }
-  }, 0);
+    
+    // Envio para o Supabase
+    const { error } = await supabase
+      .from(TABLE_VOTACAO)
+      .insert([{ participante: participante }]);
+
+    if (error) {
+      console.error("Erro Supabase:", error);
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = prevText;
+      return redirect("erro.html");
+    }
+
+    // Atualização de estado local
+    let restantes = getVotosRestantes() - 1;
+    setVotosRestantes(Math.max(restantes, 0));
+    
+    if (restantes <= 0) {
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+      botaoVotar.classList.remove("active");
+      captchaVisualLiberado = false;
+    }
+
+    // Transição de tela instantânea
+    votoTela.style.display = "none";
+    confirmTela.style.display = "flex";
+    nomeConfirm.textContent = participante;
+
+    if (fotos[participante]) {
+      fotoConfirm.src = fotos[participante];
+      fotoConfirm.style.display = "block";
+    } else {
+      fotoConfirm.style.display = "none";
+    }
+
+    botaoVotar.textContent = prevText;
+    botaoVotar.disabled = false;
+
+  } catch (e) {
+    console.error(e);
+    window.location.href = "erro.html";
+  }
 }
 
 // =================== EVENTOS ===================
-botaoVotar.addEventListener("click", async () => {
+botaoVotar.addEventListener("click", () => {
+  const agoraBR = getOptimizedNow();
+  if (agoraBR > encerramentoBR) return window.location.replace("fechada.html");
+
   const escolhido = document.querySelector('input[name="vote"]:checked');
   if (!escolhido) return alert("Selecione alguém para votar!");
 
   if (getVotosRestantes() <= 0) {
     pendingVote = escolhido.value;
-    abrirCaptcha();
-    return;
+    return abrirCaptcha();
   }
   submitVote(escolhido.value);
 });
@@ -1145,14 +1138,13 @@ botaoCaptcha.addEventListener("click", () => {
   abrirCaptcha();
 });
 
-// =================== ANTI-BOT E COMPORTAMENTO ===================
+// =================== ANTI-BOT (OTIMIZADO) ===================
 let suspeita = 0;
 const LIMITE_SUSPEITA = 10;
 let ultimoClique = 0;
 let ultimoMouseX = 0, ultimoMouseY = 0;
 let ultimaTrocaAba = Date.now();
 let scrollsRecentes = 0;
-let tentativasVoto = 0;
 
 function exigirCaptchaPorSuspeita() {
   if (captchaAberto) return;
@@ -1169,7 +1161,7 @@ document.addEventListener("click", (e) => {
   if (agora - ultimoClique < 20) suspeita++;
   ultimoClique = agora;
   if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-});
+}, { passive: true });
 
 document.addEventListener("mousemove", (e) => {
   const dx = Math.abs(e.clientX - ultimoMouseX);
@@ -1178,13 +1170,13 @@ document.addEventListener("mousemove", (e) => {
   ultimoMouseX = e.clientX;
   ultimoMouseY = e.clientY;
   if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-});
+}, { passive: true });
 
 document.addEventListener("wheel", () => {
   scrollsRecentes++;
   if (scrollsRecentes > 25) { suspeita++; scrollsRecentes = 0; }
   if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-});
+}, { passive: true });
 
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
@@ -1223,6 +1215,8 @@ const fotos = {
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
 })();
-  
-</script></body>
+
+</script>
+</body>
 </html>
+  
