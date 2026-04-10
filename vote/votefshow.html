@@ -721,7 +721,7 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem deve ser ELIMINADO do BBBF6?</h1>
+    <h1>Quem você quer que FIQUE no BBBF6?</h1>
     <div class="espacador"></div>
   
     <div class="options">
@@ -734,9 +734,24 @@ button:disabled {
       </label>
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true" alt="Opção">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true" alt="Opção">
         <div class="option-content">
-          <input type="radio" name="vote" value="João Pedro"> João Pedro
+          <input type="radio" name="vote" value="João"> João
+        </div>
+      </label>
+
+    
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true" alt="Opção">
+        <div class="option-content">
+          <input type="radio" name="vote" value="João"> João
+        </div>
+      </label>
+
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/Nick.png?raw=true" alt="Opção">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Nick"> Nick
         </div>
       </label>
 
@@ -744,6 +759,14 @@ button:disabled {
         <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Opção">
         <div class="option-content">
           <input type="radio" name="vote" value="Pedro"> Pedro
+        </div>
+      </label>
+
+
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true" alt="Opção">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Renata"> Renata
         </div>
       </label>
       
@@ -805,12 +828,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "pf615";
+  const TABLE_VOTACAO = "pf616";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-04-08T19:00:00");
+  const encerramentoBR = new Date("2026-04-10T19:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
