@@ -1116,19 +1116,6 @@ async function submitVote(participante) {
   }
 }
 
-  // =================== VOLTAR ===================
-  function voltarParaVotacao() {
-    confirmTela.style.display = "none";
-    votoTela.style.display = "block";
-    
-    const escolhido = document.querySelector('input[name="vote"]:checked');
-    if (escolhido) escolhido.checked = false;
-    
-    captchaVisualLiberado = false;
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    botaoVotar.classList.remove("active");
-    botaoVotar.disabled = true;
-  }
 
   // =================== EVENTOS  ===================
   botaoVotar.addEventListener("click", async () => {
