@@ -812,7 +812,7 @@ button:disabled {
 </div>
 
 <script type="module"> 
-  
+
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
 // =================== CONFIGURAÇÕES ===================
@@ -1059,14 +1059,14 @@ async function submitVote(participante) {
   botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
 
   try {
-    // Verificação de horário usando o tempo sincronizado (sem fetch extra)
+    // Verificação de horário
     const agoraBR = getOptimizedNow();
     if (agoraBR > encerramentoBR) {
       alert("A votação foi encerrada!");
       return window.location.replace("fechada.html");
     }
     
-    // Envio para o Supabase
+    // Envio
     const { error } = await supabase
       .from(TABLE_VOTACAO)
       .insert([{ participante: participante }]);
@@ -1088,7 +1088,7 @@ async function submitVote(participante) {
       captchaVisualLiberado = false;
     }
 
-    // Transição de tela instantânea
+    // Transição de tela 
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
@@ -1215,9 +1215,7 @@ const fotos = {
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
 })();
-
 </script>
 </body>
 </html>
  
-
