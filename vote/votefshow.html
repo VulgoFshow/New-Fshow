@@ -885,6 +885,22 @@ let captchaVisualLiberado = false;
 let pendingVote = null;
 let captchaAberto = false;
 
+// =================== SCROLL AUTOMÁTICO ===================
+function scrollParaFinal() {
+  setTimeout(() => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
+  }, 100);
+}
+
+document.querySelectorAll('input[name="vote"]').forEach(radio => {
+  radio.addEventListener("change", () => {
+    scrollParaFinal();
+  });
+});
+
 // =================== CONTROLE DE VOTOS LOCAL ===================
 function hashTag(tag) {
   const secret = "CPTX_2025_FSHOW_🔥";
@@ -1039,67 +1055,71 @@ verifyBtn.addEventListener("click", () => {
 
 // =================== ENVIO DO VOTO ===================
 async function submitVote(participante) {
-  try {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
+  // CLIQUE ULTRA-RÁPIDO: Bloqueia e muda o texto NO MILISSEGUNDO do clique
+  if (botaoVotar.getAttribute('data-loading') === 'true') return;
+  botaoVotar.setAttribute('data-loading', 'true');
+  botaoVotar.disabled = true;
+  const prevText = botaoVotar.textContent;
+  botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
 
-    if (agoraBR > encerramentoBR) {
-      alert("A votação foi encerrada!");
-      window.location.replace("fechada.html");
-      return;
-    }
+  // Usamos setTimeout para dar tempo do navegador renderizar a mudança visual do botão antes de processar o resto
+  setTimeout(async () => {
+    try {
+      const agoraServer = await getServerTime();
+      const agoraBR = toSaoPauloDate(agoraServer);
 
-    botaoVotar.disabled = true;
-    const prevText = botaoVotar.textContent;
-    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
-    
-    const { error } = await supabase
-      .from(TABLE_VOTACAO)
-      .insert([{ participante: participante }]);
+      if (agoraBR > encerramentoBR) {
+        alert("A votação foi encerrada!");
+        window.location.replace("fechada.html");
+        return;
+      }
+      
+      const { error } = await supabase
+        .from(TABLE_VOTACAO)
+        .insert([{ participante: participante }]);
 
-    if (error) {
-      console.error("Erro Supabase:", error);
-      botaoVotar.disabled = false;
+      if (error) {
+        console.error("Erro Supabase:", error);
+        botaoVotar.setAttribute('data-loading', 'false');
+        botaoVotar.disabled = false;
+        botaoVotar.textContent = prevText;
+        redirect("erro.html");
+        return;
+      }
+
+      let restantes = getVotosRestantes() - 1;
+      setVotosRestantes(Math.max(restantes, 0));
+      
+      if (restantes <= 0) {
+        botaoCaptcha.setAttribute("aria-pressed", "false");
+        botaoVotar.classList.remove("active");
+        captchaVisualLiberado = false;
+      }
+
+      votoTela.style.display = "none";
+      confirmTela.style.display = "flex";
+      nomeConfirm.textContent = participante;
+
+      if (fotos[participante]) {
+        fotoConfirm.src = fotos[participante];
+        fotoConfirm.style.display = "block";
+      } else {
+        fotoConfirm.style.display = "none";
+      }
+
+      botaoVotar.setAttribute('data-loading', 'false');
       botaoVotar.textContent = prevText;
-      redirect("erro.html");
-      return;
+      botaoVotar.disabled = false;
+
+    } catch (e) {
+      console.error(e);
+      window.location.href = "erro.html";
     }
-
-    let restantes = getVotosRestantes() - 1;
-    setVotosRestantes(Math.max(restantes, 0));
-    
-    if (restantes <= 0) {
-      botaoCaptcha.setAttribute("aria-pressed", "false");
-      botaoVotar.classList.remove("active");
-      captchaVisualLiberado = false;
-    }
-
-    votoTela.style.display = "none";
-    confirmTela.style.display = "flex";
-    nomeConfirm.textContent = participante;
-
-    if (fotos[participante]) {
-      fotoConfirm.src = fotos[participante];
-      fotoConfirm.style.display = "block";
-    } else {
-      fotoConfirm.style.display = "none";
-    }
-
-    botaoVotar.textContent = prevText;
-    botaoVotar.disabled = false;
-
-  } catch (e) {
-    console.error(e);
-    window.location.href = "erro.html";
-  }
+  }, 0);
 }
 
 // =================== EVENTOS ===================
 botaoVotar.addEventListener("click", async () => {
-  const agoraServer = await getServerTime();
-  const agoraBR = toSaoPauloDate(agoraServer);
-  if (agoraBR > encerramentoBR) return window.location.replace("fechada.html");
-
   const escolhido = document.querySelector('input[name="vote"]:checked');
   if (!escolhido) return alert("Selecione alguém para votar!");
 
@@ -1203,5 +1223,6 @@ const fotos = {
   botaoVotar.disabled = true;
   botaoVotar.classList.remove("active");
 })();
+  
 </script></body>
 </html>
