@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Paredões - Dark Mode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --bg: #121212;
+          --card-bg: #2b2b2b;
+          --selected-bg: #3c3c3c;
+          --panel-bg: #2b2b2b;
+          --panel-border: rgba(255, 255, 255, 0.06);
+          --accent: #00b7b0;
+          --text: #fff;
+          --muted: #bdbdbd;
+          --border-radius: 8px;
+          --transition: all 0.3s ease;
+          --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
+          --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+          --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
+          --back: #0d0d0d;
+          
+          --danger: #ff4d4d;
+          --success: #00e676;
+        }
+
+        *,
+        *::before,
+        *::after {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        body {
+          margin: 0;
+          padding: 15px;
+          font-family: "Inter", Arial, sans-serif;
+          color: var(--text);
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+
+          background:
+            radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
+            radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
+            radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
+            linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
+
+          background-attachment: fixed;
+          background-size: cover;
+          animation: fadeIn 0.7s ease;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--panel-border);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: clamp(28px, 8vw, 48px);
+            font-weight: 900;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .date-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .candidates {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 16px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) transparent;
+        }
+
+        .candidates::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .candidates::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        .candidate-card {
+            background: var(--selected-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            flex: 0 0 calc(33.333% - 11px);
+            min-width: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .candidate-card.eliminated {
+            border: 2px solid var(--danger);
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+        }
+
+        .candidate-card.saved {
+            border: 2px solid var(--success);
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            border: 2px solid var(--panel-border);
+            overflow: hidden;
+            background: var(--panel-bg);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .candidate-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .candidate-percentage {
+            font-family: 'Roboto Mono', monospace;
+            font-size: clamp(22px, 5vw, 32px);
+            font-weight: 700;
+            line-height: 1;
+            margin: 4px 0;
+        }
+
+        .eliminated .candidate-percentage {
+            color: var(--danger);
+        }
+
+        .saved .candidate-percentage {
+            color: var(--success);
+        }
+
+        .candidate-label {
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .stats-section {
+            margin-top: 20px;
+        }
+
+        .stats-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-table {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--panel-border);
+            align-items: center;
+        }
+
+        .stat-row.total-votes {
+            background: rgba(0, 183, 176, 0.1);
+            border-top: 1px solid var(--accent);
+            font-weight: 700;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .stat-value {
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 700;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .stat-value.red {
+            color: var(--danger);
+        }
+
+        .stat-value.green {
+            color: var(--success);
+        }
+
+        .stat-value.accent {
+            color: var(--accent);
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 16px; }
+            .candidate-card { min-width: 95px; padding: 12px; }
+            .stat-row { padding: 12px 8px; }
+            .stat-label { font-size: 12px; }
+            .stat-value { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 1º PAREDÃO -->
+        <div class="card">
+            <div class="header">
+                <h1>1º Paredão</h1>
+                <span class="date-badge">Único | Torcida | Média</span>
+            </div>
+
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true" alt="João Lucas"></div>
+                    <div class="candidate-name">João Lucas</div>
+                    <div class="candidate-percentage">51.15%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Arthur Zago"></div>
+                    <div class="candidate-name">Arthur Zago</div>
+                    <div class="candidate-percentage">46.83%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Sirleidy"></div>
+                    <div class="candidate-name">Sirleidy</div>
+                    <div class="candidate-percentage">2.02%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">João Lucas</div><div class="stat-value red">50.00%</div><div class="stat-value red">52.31%</div><div class="stat-value red">51.15%</div></div>
+                    <div class="stat-row"><div class="stat-label">Arthur Zago</div><div class="stat-value green">47.06%</div><div class="stat-value green">46.60%</div><div class="stat-value green">46.83%</div></div>
+                    <div class="stat-row"><div class="stat-label">Sirleidy</div><div class="stat-value green">2.94%</div><div class="stat-value green">1.30%</div><div class="stat-value green">2.02%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">2.116</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>2º Paredão</h1>
+             <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true" alt="Manchinha"></div>
+                    <div class="candidate-name">Manchinha</div>
+                    <div class="candidate-percentage">47.75%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true" alt="Arthur"></div>
+                    <div class="candidate-name">Arthur</div>
+                    <div class="candidate-percentage">51.28%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luke.png?raw=true" alt="Luke"></div>
+                    <div class="candidate-name">Luke</div>
+                    <div class="candidate-percentage">0.97%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Arthur</div><div class="stat-value green">32.08%</div><div class="stat-value green">70.48%</div><div class="stat-value green">51.28%</div></div>
+                    <div class="stat-row"><div class="stat-label">Manchinha</div><div class="stat-value red">66.04%</div><div class="stat-value red">29.47%</div><div class="stat-value red">47.75%</div></div>
+                    <div class="stat-row"><div class="stat-label">Luke</div><div class="stat-value green">1.89%</div><div class="stat-value green">0.05%</div><div class="stat-value green">0.97%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">10.063</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>3º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true" alt="Lucas"></div>
+                    <div class="candidate-name">Lucas</div>
+                    <div class="candidate-percentage">77.15%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael"></div>
+                    <div class="candidate-name">Mikael</div>
+                    <div class="candidate-percentage">15.71%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true" alt="Luddy"></div>
+                    <div class="candidate-name">Luddy</div>
+                    <div class="candidate-percentage">7.14%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Lucas</div><div class="stat-value red">65.22%</div><div class="stat-value red">89.07%</div><div class="stat-value red">77.15%</div></div>
+                    <div class="stat-row"><div class="stat-label">Mikael</div><div class="stat-value green">21.74%</div><div class="stat-value green">9.68%</div><div class="stat-value green">15.71%</div></div>
+                    <div class="stat-row"><div class="stat-label">Luddy</div><div class="stat-value green">13.04%</div><div class="stat-value green">1.25%</div><div class="stat-value green">7.14%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">1.944</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>4º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true" alt="Dynamite"></div>
+                    <div class="candidate-name">Dynamite</div>
+                    <div class="candidate-percentage">89.60%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Sirleidy"></div>
+                    <div class="candidate-name">Sirleidy</div>
+                    <div class="candidate-percentage">10.28%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true" alt="Arthur"></div>
+                    <div class="candidate-name">Arthur</div>
+                    <div class="candidate-percentage">0.12%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Dynamite</div><div class="stat-value red">80.00%</div><div class="stat-value red">99.21%</div><div class="stat-value red">89.60%</div></div>
+                    <div class="stat-row"><div class="stat-label">Sirleidy</div><div class="stat-value green">20.00%</div><div class="stat-value green">0.57%</div><div class="stat-value green">10.28%</div></div>
+                    <div class="stat-row"><div class="stat-label">Arthur</div><div class="stat-value green">0.00%</div><div class="stat-value green">0.23%</div><div class="stat-value green">0.12%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">894</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>5º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.png?raw=true" alt="Koyuh"></div>
+                    <div class="candidate-name">Koyuh</div>
+                    <div class="candidate-percentage">59.25%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true" alt="Miguel"></div>
+                    <div class="candidate-name">Miguel</div>
+                    <div class="candidate-percentage">37.66%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Sirleidy"></div>
+                    <div class="candidate-name">Sirleidy</div>
+                    <div class="candidate-percentage">3.09%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Koyuh</div><div class="stat-value red">50.00%</div><div class="stat-value red">68.49%</div><div class="stat-value red">59.25%</div></div>
+                    <div class="stat-row"><div class="stat-label">Maguel</div><div class="stat-value green">44.44%</div><div class="stat-value green">30.89%</div><div class="stat-value green">37.66%</div></div>
+                    <div class="stat-row"><div class="stat-label">Sirleidy</div><div class="stat-value green">5.56%</div><div class="stat-value green">0.63%</div><div class="stat-value green">3.09%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">1.135</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>6º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ana.png?raw=true" alt="Ana Sofia"></div>
+                    <div class="candidate-name">Ana Sofia</div>
+                    <div class="candidate-percentage">57.35%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true" alt="Braian"></div>
+                    <div class="candidate-name">Braian</div>
+                    <div class="candidate-percentage">36.66%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true" alt="João"></div>
+                    <div class="candidate-name">João</div>
+                    <div class="candidate-percentage">5.99%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Ana Sofia</div><div class="stat-value red">38.03%</div><div class="stat-value red">76.67%</div><div class="stat-value red">57.35%</div></div>
+                    <div class="stat-row"><div class="stat-label">Braian</div><div class="stat-value green">59.99%</div><div class="stat-value green">13.33%</div><div class="stat-value green">36.66%</div></div>
+                    <div class="stat-row"><div class="stat-label">João</div><div class="stat-value green">1.97%</div><div class="stat-value green">10.00%</div><div class="stat-value green">5.99%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">2.917</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>7º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true" alt="Paiva"></div>
+                    <div class="candidate-name">Paiva</div>
+                    <div class="candidate-percentage">45.28%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Sirleidy"></div>
+                    <div class="candidate-name">Sirleidy</div>
+                    <div class="candidate-percentage">46.83%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true" alt="Maguel"></div>
+                    <div class="candidate-name">Maguel</div>
+                    <div class="candidate-percentage">7.89%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Sirleidy</div><div class="stat-value green">38.46%</div><div class="stat-value green">55.17%</div><div class="stat-value green">46.83%</div></div>
+                    <div class="stat-row"><div class="stat-label">Paiva</div><div class="stat-value red">46.15%</div><div class="stat-value red">44.42%</div><div class="stat-value red">45.28%</div></div>
+                    <div class="stat-row"><div class="stat-label">Maguel</div><div class="stat-value green">15.38%</div><div class="stat-value green">0.41%</div><div class="stat-value green">7.89%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">3.147</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>8º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true" alt="Ray"></div>
+                    <div class="candidate-name">Ray</div>
+                    <div class="candidate-percentage">53.30%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true" alt="João P"></div>
+                    <div class="candidate-name">João P</div>
+                    <div class="candidate-percentage">40.92%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true" alt="Braian"></div>
+                    <div class="candidate-name">Braian</div>
+                    <div class="candidate-percentage">5.78%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Ray</div><div class="stat-value red">72.73%</div><div class="stat-value red">33.87%</div><div class="stat-value red">53.30%</div></div>
+                    <div class="stat-row"><div class="stat-label">João P</div><div class="stat-value green">18.18%</div><div class="stat-value green">63.65%</div><div class="stat-value green">40.92%</div></div>
+                    <div class="stat-row"><div class="stat-label">Braian</div><div class="stat-value green">9.09%</div><div class="stat-value green">2.47%</div><div class="stat-value green">5.78%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">1.062</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>9º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true" alt="Arthur"></div>
+                    <div class="candidate-name">Arthur</div>
+                    <div class="candidate-percentage">26.76%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true" alt="Luddy"></div>
+                    <div class="candidate-name">Luddy</div>
+                    <div class="candidate-percentage">30.56%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true" alt="Maguel"></div>
+                    <div class="candidate-name">Maguel</div>
+                    <div class="candidate-percentage">33.70%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/rose.png?raw=true" alt="Rose"></div>
+                    <div class="candidate-name">Rose</div>
+                    <div class="candidate-percentage">8.98%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Maguel</div><div class="stat-value green">16.67%</div><div class="stat-value green">50.73%</div><div class="stat-value green">33.70%</div></div>
+                    <div class="stat-row"><div class="stat-label">Luddy</div><div class="stat-value green">25.00%</div><div class="stat-value green">36.12%</div><div class="stat-value green">30.56%</div></div>
+                    <div class="stat-row"><div class="stat-label">Arthur</div><div class="stat-value red">41.67%</div><div class="stat-value red">11.86%</div><div class="stat-value red">26.76%</div></div>
+                    <div class="stat-row"><div class="stat-label">Rose</div><div class="stat-value green">16.67%</div><div class="stat-value green">1.29%</div><div class="stat-value green">8.98%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">2.947</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>10º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthur.png?raw=true" alt="Arthur"></div>
+                    <div class="candidate-name">Arthur</div>
+                    <div class="candidate-percentage">57.21%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael"></div>
+                    <div class="candidate-name">Mikael</div>
+                    <div class="candidate-percentage">42.41%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro"></div>
+                    <div class="candidate-name">Pedro</div>
+                    <div class="candidate-percentage">0.39%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Arthur</div><div class="stat-value red">57.21%</div><div class="stat-value red">-</div><div class="stat-value red">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Mikael</div><div class="stat-value green">42.41%</div><div class="stat-value green">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Pedro</div><div class="stat-value green">0.39%</div><div class="stat-value green">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">3.872</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>11º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/tety.png?raw=true" alt="Tety"></div>
+                    <div class="candidate-name">Tety</div>
+                    <div class="candidate-percentage">61.45%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true" alt="Paiva"></div>
+                    <div class="candidate-name">Paiva</div>
+                    <div class="candidate-percentage">30.03%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ludmila.png?raw=true" alt="Ludmila"></div>
+                    <div class="candidate-name">Ludmila</div>
+                    <div class="candidate-percentage">8.52%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Tety</div><div class="stat-value red">33.33%</div><div class="stat-value red">89.57%</div><div class="stat-value red">61.45%</div></div>
+                    <div class="stat-row"><div class="stat-label">Paiva</div><div class="stat-value green">50.00%</div><div class="stat-value green">10.07%</div><div class="stat-value green">30.03%</div></div>
+                    <div class="stat-row"><div class="stat-label">Ludmila</div><div class="stat-value green">16.67%</div><div class="stat-value green">0.36%</div><div class="stat-value green">8.52%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">4.773</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>12º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ludmila.png?raw=true" alt="Ludmila"></div>
+                    <div class="candidate-name">Ludmila</div>
+                    <div class="candidate-percentage">48.81%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true" alt="Renata"></div>
+                    <div class="candidate-name">Renata</div>
+                    <div class="candidate-percentage">26.88%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael"></div>
+                    <div class="candidate-name">Mikael</div>
+                    <div class="candidate-percentage">24.33%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Ludmila</div><div class="stat-value red">16.66%</div><div class="stat-value red">80.96%</div><div class="stat-value red">48.81%</div></div>
+                    <div class="stat-row"><div class="stat-label">Renata</div><div class="stat-value green">41.67%</div><div class="stat-value green">12.10%</div><div class="stat-value green">26.88%</div></div>
+                    <div class="stat-row"><div class="stat-label">Mikael</div><div class="stat-value green">41.67%</div><div class="stat-value green">6.94%</div><div class="stat-value green">24.33%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">1.409</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>13º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael"></div>
+                    <div class="candidate-name">Mikael</div>
+                    <div class="candidate-percentage">71.53%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true" alt="Renata"></div>
+                    <div class="candidate-name">Renata</div>
+                    <div class="candidate-percentage">23.58%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro"></div>
+                    <div class="candidate-name">Pedro</div>
+                    <div class="candidate-percentage">4.89%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Mikael</div><div class="stat-value red">45.45%</div><div class="stat-value red">97.61%</div><div class="stat-value red">71.53%</div></div>
+                    <div class="stat-row"><div class="stat-label">Renata</div><div class="stat-value green">45.45%</div><div class="stat-value green">1.71%</div><div class="stat-value green">23.58%</div></div>
+                    <div class="stat-row"><div class="stat-label">Pedro</div><div class="stat-value green">9.10%</div><div class="stat-value green">0.68%</div><div class="stat-value green">4.89%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">3.107</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>14º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true" alt="Paiva"></div>
+                    <div class="candidate-name">Paiva</div>
+                    <div class="candidate-percentage">59.22%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true" alt="Manchinha"></div>
+                    <div class="candidate-name">Manchinha</div>
+                    <div class="candidate-percentage">33.73%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro"></div>
+                    <div class="candidate-name">Pedro</div>
+                    <div class="candidate-percentage">7.05%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Paiva</div><div class="stat-value red">33.33%</div><div class="stat-value red">85.11%</div><div class="stat-value red">59.22%</div></div>
+                    <div class="stat-row"><div class="stat-label">Manchinha</div><div class="stat-value green">53.34%</div><div class="stat-value green">14.13%</div><div class="stat-value green">33.73%</div></div>
+                    <div class="stat-row"><div class="stat-label">Pedro</div><div class="stat-value green">13.33%</div><div class="stat-value green">0.76%</div><div class="stat-value green">7.05%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">15.198</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>15º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true" alt="João Pedro"></div>
+                    <div class="candidate-name">João Pedro</div>
+                    <div class="candidate-percentage">52.57%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro"></div>
+                    <div class="candidate-name">Pedro</div>
+                    <div class="candidate-percentage">45.51%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/brunno.png?raw=true" alt="Brunno"></div>
+                    <div class="candidate-name">Brunno</div>
+                    <div class="candidate-percentage">1.92%</div>
+                    <div class="candidate-label">Média</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">João Pedro</div><div class="stat-value red">60.00%</div><div class="stat-value red">45.14%</div><div class="stat-value red">52.57%</div></div>
+                    <div class="stat-row"><div class="stat-label">Pedro</div><div class="stat-value green">40.00%</div><div class="stat-value green">51.02%</div><div class="stat-value green">45.51%</div></div>
+                    <div class="stat-row"><div class="stat-label">Brunno</div><div class="stat-value green">0.00%</div><div class="stat-value green">3.84%</div><div class="stat-value green">1.92%</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">2.903</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>16º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true" alt="Renata"></div>
+                    <div class="candidate-name">Renata</div>
+                    <div class="candidate-percentage">33.20%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true" alt="João"></div>
+                    <div class="candidate-name">João</div>
+                    <div class="candidate-percentage">24.44%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/nick.png?raw=true" alt="Nick"></div>
+                    <div class="candidate-name">Nick</div>
+                    <div class="candidate-percentage">20.64%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro"></div>
+                    <div class="candidate-name">Pedro</div>
+                    <div class="candidate-percentage">18.45%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/brunno.png?raw=true" alt="Brunno"></div>
+                    <div class="candidate-name">Brunno</div>
+                    <div class="candidate-percentage">3.27%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Renata</div><div class="stat-value green">33.20%</div><div class="stat-value green">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row"><div class="stat-label">João</div><div class="stat-value green">24.44%</div><div class="stat-value green">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Nick</div><div class="stat-value green">20.64%</div><div class="stat-value green">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Pedro</div><div class="stat-value red">18.45%</div><div class="stat-value red">-</div><div class="stat-value red">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Brunno</div><div class="stat-value red">3.27%</div><div class="stat-value red">-</div><div class="stat-value red">-</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">4.337</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 17º PAREDÃO -->
+        <div class="card">
+            <div class="header"><h1>17º Paredão</h1>
+                            <span class="date-badge">Único | Torcida | Média</span></div>
+            <div class="candidates">
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true" alt="Renata"></div>
+                    <div class="candidate-name">Renata</div>
+                    <div class="candidate-percentage">41.12%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true" alt="Manchinha"></div>
+                    <div class="candidate-name">Manchinha</div>
+                    <div class="candidate-percentage">33.60%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card saved">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/nick.png?raw=true" alt="Nick"></div>
+                    <div class="candidate-name">Nick</div>
+                    <div class="candidate-percentage">8.99%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true" alt="Braian"></div>
+                    <div class="candidate-name">Braian</div>
+                    <div class="candidate-percentage">8.92%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+                <div class="candidate-card eliminated">
+                    <div class="avatar"><img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true" alt="João"></div>
+                    <div class="candidate-name">João</div>
+                    <div class="candidate-percentage">7.37%</div>
+                    <div class="candidate-label">Votação</div>
+                </div>
+            </div>
+            <div class="stats-section">
+                <h2 class="stats-title">📊 Votações</h2>
+                <div class="stats-table">
+                    <div class="stat-row"><div class="stat-label">Renata</div><div class="stat-value green">41.12%</div><div class="stat-value greengreen">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Manchinha</div><div class="stat-value green">33.60%</div><div class="stat-value green">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Nick</div><div class="stat-value green">8.99%</div><div class="stat-value green">-</div><div class="stat-value green">-</div></div>
+                    <div class="stat-row"><div class="stat-label">Braian</div><div class="stat-value red">8.92%</div><div class="stat-value red">-</div><div class="stat-value red">-</div></div>
+                    <div class="stat-row"><div class="stat-label">João</div><div class="stat-value red">7.37%</div><div class="stat-value red">-</div><div class="stat-value red">-</div></div>
+                    <div class="stat-row total-votes"><div class="stat-label">Total de Votos</div><div class="stat-value accent">11.974</div><div class="stat-value accent">-</div><div class="stat-value accent">-</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
