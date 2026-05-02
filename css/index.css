@@ -815,15 +815,25 @@ footer::before {
    ==================================== */
 
 .storyq {
-  position: relative;
   width: 76px;
   height: 76px;
-  border-radius: 1px; 
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  transition: box-shadow 0.3s ease,
-              transform 0.3s ease;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid #00C79C; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.storyq img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.storyq:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 0 12px #00FFCC;
 }
 
 /* ==================================== 
