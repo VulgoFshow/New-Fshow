@@ -414,26 +414,7 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
     <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo"> 
     <span>PORTAL FLOP</span>  
   </div>  
-
-  <nav class="nav-menu" id="menu">  
-    <a href="index.html">Home</a>  
-    <a href="flop-news/home.html">Notícias</a>  
-    <a href="snake.html">Snake</a>  
-    <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
-    <a class="btn-action" href="#">Assinar Agora</a>  
-  </nav>
-
 </header>
-
-<!-- Menu -->  
-<nav class="nav-menu" id="menu">  
-    <a href="index.html">Home</a>  
-    <a href="flop-news/home.html">Notícias</a>  
-    <a href="snake.html">Snake</a>  
-    <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
-    <a class="btn-action" href="#">Assinar Agora</a>  
-</nav>
-
 </header>
 
 <div class="gradient-line"></div>  
@@ -766,35 +747,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateCarousel(currentIndex);
     });
 
-});
-</script>
-
-<script>
-function toggleMenu() {
-  const menu = document.getElementById("menu");
-  const toggle = document.querySelector(".menu-toggle");
-
-  menu.classList.toggle("active");
-  toggle.classList.toggle("active");
-}
-
-/* FECHAR AO CLICAR EM LINK */
-document.querySelectorAll("#menu a").forEach(link => {
-  link.addEventListener("click", () => {
-    document.getElementById("menu").classList.remove("active");
-    document.querySelector(".menu-toggle").classList.remove("active");
-  });
-});
-
-/* FECHAR CLICANDO FORA */
-document.addEventListener("click", function(e) {
-  const menu = document.getElementById("menu");
-  const toggle = document.querySelector(".menu-toggle");
-
-  if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-    menu.classList.remove("active");
-    toggle.classList.remove("active");
-  }
 });
 </script>
     
