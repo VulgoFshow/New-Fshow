@@ -121,32 +121,50 @@ a {
 
 /* MENU */
 .nav-menu {
-    position: absolute;
-    left: 10px;
-    top: 70px;               
-    background: var(--text-primary);
-    padding: 15px 20px;
-    border-radius: 10px;
-    display: none;
-    flex-direction: column;
-    gap: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    z-index: 3000;
+  position: fixed;
+  top: 0;
+  right: -260px; /* escondido */
+  width: 260px;
+  height: 100%;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  padding: 80px 20px 20px;
+  gap: 16px;
+  transition: right 0.35s ease;
+  z-index: 999;
 }
 
-.nav-menu.open {
-    display: flex;
+.nav-menu.active {
+  right: 0;
 }
 
-.nav-menu a {
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.9em;
+.menu-toggle {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 1000;
 }
 
-.nav-menu .btn-action {
-    margin-top: 10px;
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #000;
+  transition: 0.3s;
+}
+
+/* quando ativo */
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 /* ==================================== 
