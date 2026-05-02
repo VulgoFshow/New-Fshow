@@ -292,140 +292,196 @@ body {
 </style>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&display=swap');
 
-    #loader-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at center, #0f0f0f 0%, #000 100%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 99999; /* Garante que fique acima de tudo */
-        overflow: hidden;
-        transition: opacity 1s ease, visibility 1s;
-        font-family: 'Poppins', sans-serif;
-    }
+#loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #0f0f0f 0%, #000 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999; /* Z-index ultra alto para cobrir tudo */
+    overflow: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s;
+    font-family: 'Poppins', sans-serif;
+    touch-action: none; /* Evita interações durante o loading */
+}
 
-    #canvas-logotipo {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        pointer-events: none;
-    }
+/* Container de Logos Caindo */
+#canvas-logotipo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
 
-    .logo-caindo {
-        position: absolute;
-        top: -120px;
-        background-image: url('https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        opacity: 0.2;
-        animation: cair linear forwards;
-    }
+.logo-caindo {
+    position: absolute;
+    top: -100px;
+    background-image: url('https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    animation: cair linear forwards;
+}
 
-    @keyframes cair {
-        0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-        10% { opacity: 0.3; }
-        90% { opacity: 0.3; }
-        100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
-    }
+@keyframes cair {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    15% { opacity: 0.25; }
+    85% { opacity: 0.25; }
+    100% { transform: translateY(115vh) rotate(360deg); opacity: 0; }
+}
 
+/* Cartão Central Glassmorphism */
+.glass-card {
+    position: relative;
+    z-index: 10;
+    padding: 50px 40px;
+    width: 90%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 35px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    animation: card-appear 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+@keyframes card-appear {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Título com Gradiente */
+.brand-title-loader {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.8rem; /* Tamanho padrão PC */
+    line-height: 1.1;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 35px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.25));
+}
+
+/* Loader Container */
+.loader-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-logo-loader {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    z-index: 12;
+    animation: logo-float 3s infinite ease-in-out;
+}
+
+@keyframes logo-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Círculo Animado */
+.ring {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top: 3px solid #FF8C00;
+    border-right: 3px solid #8A2BE2;
+    animation: spin-ring 1.2s linear infinite;
+}
+
+@keyframes spin-ring {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Texto de Status */
+.status-text-loader {
+    margin-top: 30px;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Trava de Scroll */
+body.loading-active {
+    overflow: hidden !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    position: fixed !important; /* Garante trava total no mobile */
+}
+
+/* Classe de Fechamento */
+.loader-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ==================================== 
+   AJUSTES MOBILE (RESPONSIVIDADE)
+   ==================================== */
+@media (max-width: 480px) {
     .glass-card {
-        position: relative;
-        z-index: 10;
-        padding: 40px;
-        width: 90%;
-        max-width: 400px;
-        background: rgba(255, 255, 255, 0.02);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        text-align: center;
-        animation: card-appear 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes card-appear {
-        from { opacity: 0; transform: scale(0.9) translateY(30px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
+        padding: 40px 20px;
+        width: 85%;
+        border-radius: 25px;
     }
 
     .brand-title-loader {
-        font-family: 'Montserrat', sans-serif;
-        font-size: clamp(1.8rem, 8vw, 2.8rem);
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        margin-bottom: 30px;
-        background: linear-gradient(90deg, #FF8C00, #8A2BE2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.2));
+        font-size: 1.8rem; /* Diminui título no celular */
+        letter-spacing: 2px;
+        margin-bottom: 25px;
     }
 
     .loader-container {
-        position: relative;
-        width: 150px;
-        height: 150px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        width: 130px;
+        height: 130px;
     }
 
     .main-logo-loader {
-        width: 85px;
-        height: 85px;
-        object-fit: contain;
-        animation: logo-float 3s infinite ease-in-out;
-    }
-
-    @keyframes logo-float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        width: 70px;
+        height: 70px;
     }
 
     .ring {
-        position: absolute;
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top: 3px solid #FF8C00;
-        border-right: 3px solid #8A2BE2;
-        animation: spin-ring 1.5s linear infinite;
-    }
-
-    @keyframes spin-ring {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        width: 120px;
+        height: 120px;
     }
 
     .status-text-loader {
-        margin-top: 25px;
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 0.75rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 1.5px;
     }
-
-    /* Trava o scroll do site enquanto carrega */
-    body.loading-active {
-        overflow: hidden !important;
-        height: 100vh !important;
+    
+    .logo-caindo {
+        width: 40px !important; 
+        height: 40px !important;
     }
-
-    .loader-hidden {
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-    }
+}
 </style>
     
 <link
