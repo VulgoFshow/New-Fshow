@@ -416,7 +416,7 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
 <!-- Menu -->  
 <nav class="nav-menu" id="menu">  
     <a href="index.html">Home</a>  
-    <a href="flop-news/flopnews.html">Notícias</a>  
+    <a href="flop-news/home.html">Notícias</a>  
     <a href="snake.html">Snake</a>  
     <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
     <a class="btn-action" href="#">Assinar Agora</a>  
@@ -756,5 +756,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+
+    <script id="menujs01">
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  menu.classList.toggle("active");
+}
+</script>
+
+    <script id="menujs02">
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  const toggle = document.querySelector(".menu-toggle");
+
+  menu.classList.toggle("active");
+  toggle.classList.toggle("active");
+}
+</script>
+
+<script id="menujs03">
+document.querySelectorAll("#menu a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.getElementById("menu").classList.remove("active");
+    document.querySelector(".menu-toggle").classList.remove("active");
+  });
+});
+</script>
+    
 </body>  
 </html>
