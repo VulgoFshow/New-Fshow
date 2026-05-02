@@ -402,16 +402,28 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
 </head>  
 <body>  
 
-<header class="header">  <div class="menu-toggle" onclick="toggleMenu()">  
-    <span></span>  
-    <span></span>  
-    <span></span>  
-</div>  
-  
-<div class="logo-container">   
+<header class="header">
+
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="logo-container">   
     <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo"> 
     <span>PORTAL FLOP</span>  
-</div>  
+  </div>  
+
+  <nav class="nav-menu" id="menu">  
+    <a href="index.html">Home</a>  
+    <a href="flop-news/home.html">Notícias</a>  
+    <a href="snake.html">Snake</a>  
+    <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
+    <a class="btn-action" href="#">Assinar Agora</a>  
+  </nav>
+
+</header>
 
 <!-- Menu -->  
 <nav class="nav-menu" id="menu">  
@@ -757,14 +769,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-    <script id="menujs01">
-function toggleMenu() {
-  const menu = document.getElementById("menu");
-  menu.classList.toggle("active");
-}
-</script>
-
-    <script id="menujs02">
+<script>
 function toggleMenu() {
   const menu = document.getElementById("menu");
   const toggle = document.querySelector(".menu-toggle");
@@ -772,14 +777,24 @@ function toggleMenu() {
   menu.classList.toggle("active");
   toggle.classList.toggle("active");
 }
-</script>
 
-<script id="menujs03">
+/* FECHAR AO CLICAR EM LINK */
 document.querySelectorAll("#menu a").forEach(link => {
   link.addEventListener("click", () => {
     document.getElementById("menu").classList.remove("active");
     document.querySelector(".menu-toggle").classList.remove("active");
   });
+});
+
+/* FECHAR CLICANDO FORA */
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("menu");
+  const toggle = document.querySelector(".menu-toggle");
+
+  if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+    menu.classList.remove("active");
+    toggle.classList.remove("active");
+  }
 });
 </script>
     
