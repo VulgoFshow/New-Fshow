@@ -290,7 +290,200 @@ body {
   }
 }
 </style>
-    
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #020202;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Overlay Principal */
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #0f0f0f 0%, #000 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: all 1s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* Container para as logos caindo (estilo Matrix/Chuva) */
+        #canvas-logotipo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .logo-caindo {
+            position: absolute;
+            top: -120px; /* Começa acima da tela */
+            width: 60px;
+            height: 60px;
+            background-image: url('https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.2;
+            animation: cair linear forwards;
+        }
+
+        @keyframes cair {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Cartão Central Glassmorphism */
+        .glass-card {
+            position: relative;
+            z-index: 10;
+            padding: 60px;
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            animation: card-appear 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes card-appear {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Título com Gradiente Laranja e Roxo */
+        .brand-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #FF8C00, #8A2BE2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.2));
+            animation: glow-pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.2)); }
+            50% { filter: drop-shadow(0 0 25px rgba(138, 43, 226, 0.4)); }
+        }
+
+        /* Container da Logo e Loader */
+        .loader-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            z-index: 12;
+            animation: logo-float 3s infinite ease-in-out;
+        }
+
+        @keyframes logo-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Círculo de carregamento */
+        .ring {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+        }
+
+        .ring::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top: 3px solid #FF8C00;
+            border-right: 3px solid #8A2BE2;
+            animation: spin-ring 1.5s linear infinite;
+        }
+
+        @keyframes spin-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Texto de Status */
+        .status-text {
+            margin-top: 35px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Esconder o overlay */
+        .fade-out {
+            opacity: 0;
+            transform: scale(1.05);
+            visibility: hidden;
+        }
+
+        /* Conteúdo fictício do site */
+        .main-content {
+            background-color: #050505;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+    </style>
+
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
@@ -401,6 +594,26 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
     
 </head>  
 <body>  
+
+    <div id="loader-overlay">
+        <div id="canvas-logotipo"></div>
+
+        <div class="glass-card">
+            <h1 class="brand-title">FLOP SHOW</h1>
+            
+            <div class="loader-container">
+                <div class="ring"></div>
+                <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo" class="main-logo">
+            </div>
+
+            <div class="status-text" id="status-text">Carregando</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Hora de Flopar</h1>
+        <p style="color: #666; margin-top: 10px;">Bem-vindo ao Fshow</p>
+    </div>
 
 <header class="header">
 
@@ -749,6 +962,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+    <script>
+        // Lógica de Logos Caindo (Baseada no seu código)
+        const container = document.getElementById('canvas-logotipo');
+        
+        function gerarLogo() {
+            const logo = document.createElement('div');
+            logo.className = 'logo-caindo';
+            
+            const tamanho = Math.random() * (80 - 30) + 30;
+            const posicaoX = Math.random() * 100;
+            const duracao = Math.random() * (10 - 5) + 5; // Queda entre 5 e 10 segundos
+            
+            logo.style.width = `${tamanho}px`;
+            logo.style.height = `${tamanho}px`;
+            logo.style.left = `${posicaoX}%`;
+            logo.style.animationDuration = `${duracao}s`;
+            
+            container.appendChild(logo);
+            
+            // Remove o elemento após a animação para não pesar o navegador
+            setTimeout(() => {
+                logo.remove();
+            }, duracao * 1000);
+        }
+
+        // Gera uma nova logo a cada 400ms
+        const fallingInterval = setInterval(gerarLogo, 400);
+
+        // Texto de status dinâmico
+        const status = document.getElementById('status-text');
+        const steps = ["Carregando Assets...", "Preparando Palco...", "Sincronizando Luzes..."];
+        let step = 0;
+        const statusInterval = setInterval(() => {
+            status.style.opacity = 0;
+            setTimeout(() => {
+                status.innerText = steps[step];
+                status.style.opacity = 1;
+                step = (step + 1) % steps.length;
+            }, 500);
+        }, 2200);
+
+        // Timer para fechar (7.5 segundos)
+        setTimeout(() => {
+            clearInterval(fallingInterval);
+            clearInterval(statusInterval);
+            const overlay = document.getElementById('loader-overlay');
+            overlay.classList.add('fade-out');
+            setTimeout(() => overlay.remove(), 1000);
+        }, 7500);
+    </script>
     
 </body>  
 </html>
