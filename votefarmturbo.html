@@ -212,7 +212,6 @@ let selected = null;
 let sending = false;
 let votacaoAtiva = false;
 let startTime = null;
-let timeOffset = 0;
 
 els.badge.innerText = `ID: ${ID_VOTACAO}`;
 
@@ -242,17 +241,9 @@ async function sincronizar() {
     const data = doc.data();
 
     if (data && data.createdAt) {
-
-      // 🔥 SINCRONIZAÇÃO COM SERVIDOR
-      const serverNow = firebase.firestore.Timestamp.now().toDate().getTime();
-      const localNow = Date.now();
-      timeOffset = serverNow - localNow;
-
       startTime = data.createdAt.toDate().getTime();
-
       showScreen("voteScreen");
       iniciarCronometro();
-
     } else {
       setTimeout(sincronizar, 500);
     }
@@ -267,8 +258,7 @@ function iniciarCronometro() {
   const duracaoMs = DURACAO_MINUTOS * 60 * 1000;
 
   function tick() {
-    const agora = Date.now() + timeOffset;
-    const restanteMs = duracaoMs - (agora - startTime);
+    const restanteMs = duracaoMs - (Date.now() - startTime);
 
     if (restanteMs <= 0) {
       els.countdown.innerText = "00:00";
