@@ -151,11 +151,10 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
         <div class="timer-label">Tempo Restante</div>
         <div class="timer-value" id="countdown">--:--</div>
       </div>
-      <div class="title">Quem deve VENCER?</div>
-      <div class="option" onclick="selectOption(this)">Luca</div>
-      <div class="option" onclick="selectOption(this)">Gean</div>
-      <div class="option" onclick="selectOption(this)">Koyuh</div>
-      <div class="option" onclick="selectOption(this)">Renata</div>
+      <div class="title">Quem deve FICAR?</div>
+      <div class="option" onclick="selectOption(this)">Braian</div>
+      <div class="option" onclick="selectOption(this)">Luddi</div>
+      <div class="option" onclick="selectOption(this)">Paiva</div>
       <button id="voteBtn" onclick="confirmVote()">VOTAR</button>
     </div>
 
@@ -178,7 +177,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 <script>
 // ====================== CONFIGURAÇÃO ======================
-const ID_VOTACAO = "RODADA_69"; 
+const ID_VOTACAO = "Roça-1"; 
 const DURACAO_MINUTOS = 5;
 // ==========================================================
 
@@ -279,9 +278,9 @@ async function confirmVote() {
   els.btn.disabled = true;
   els.btn.innerText = "ENVIANDO...";
 
-  // Otimização: Envio em background enquanto prepara a tela
+  // nome
   try {
-    const votePromise = db.collection("roca8").add({ 
+    const votePromise = db.collection("roca31").add({ 
       nome: selected,
       votacao_id: ID_VOTACAO,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
