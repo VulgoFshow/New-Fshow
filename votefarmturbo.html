@@ -176,12 +176,12 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 </div>
 
 <script>
-// ====================== CONFIGURAÇÃO ======================
-const ID_VOTACAO = "Roça-5"; 
-const DURACAO_MINUTOS = 5;
-// ==========================================================
+// ====================== CONTROLE MANUAL ======================
+const VOTACAO_ABERTA = true;  // mude para false para ENCERRAR a votação
+const ID_VOTACAO = "Roça6"; 
+// =============================================================
 
-// Configurações do Firebase
+// Configurações do Firebase (necessário para enviar os votos)
 const firebaseConfig = {
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
   authDomain: "enquete-fa527.firebaseapp.com",
@@ -197,28 +197,21 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// Cache de elementos do DOM
 const els = {
   loading: document.getElementById("loadingScreen"),
   vote: document.getElementById("voteScreen"),
   confirm: document.getElementById("confirmScreen"),
   closed: document.getElementById("closedScreen"),
   btn: document.getElementById("voteBtn"),
-  countdown: document.getElementById("countdown"),
   votedName: document.getElementById("votedName"),
-  status: document.getElementById("loadingStatus"),
   badge: document.getElementById("votingIdDisplay")
 };
 
 let selected = null;
 let sending = false;
-let votacaoAtiva = false;
-let startTime = null;
-let intervaloCronometro = null;
 
 els.badge.innerText = `ID: ${ID_VOTACAO}`;
 
-// Função para alternar telas
 function showScreen(screenId) {
   const screens = ['loadingScreen', 'voteScreen', 'confirmScreen', 'closedScreen'];
   screens.forEach(id => {
@@ -229,87 +222,32 @@ function showScreen(screenId) {
   });
 }
 
-async function sincronizar() {
-  const docRef = db.collection("config_votacao").doc(ID_VOTACAO);
-  
-  try {
-    let doc = await docRef.get();
-    
-    // Se a votação não existe no banco, cria com o horário atual do servidor
-    if (!doc.exists) {
-      await docRef.set({ 
-        createdAt: firebase.firestore.FieldValue.serverTimestamp() 
-      });
-      // Pequena pausa para o Firebase processar o timestamp
-      setTimeout(sincronizar, 1000);
-      return;
-    }
-
-    const data = doc.data();
-    if (data && data.createdAt) {
-      // Converte o timestamp do Firestore para milissegundos
-      startTime = data.createdAt.toDate().getTime();
-      showScreen("voteScreen");
-      iniciarCronometro();
-    }
-  } catch (error) {
-    console.error("Erro na sincronização:", error);
-    els.status.innerHTML = `<span style="color: #ef4444">Erro de conexão com o banco.</span>`;
+// INICIALIZAÇÃO
+function inicializarVotacao() {
+  if (VOTACAO_ABERTA) {
+    showScreen("voteScreen");
+  } else {
+    showScreen("closedScreen");
   }
 }
 
-function iniciarCronometro() {
-  if (intervaloCronometro) clearInterval(intervaloCronometro);
-
-  const duracaoMs = DURACAO_MINUTOS * 60 * 1000;
-
-  intervaloCronometro = setInterval(() => {
-    const agora = Date.now();
-    const tempoDecorrido = agora - startTime;
-    const restanteMs = duracaoMs - tempoDecorrido;
-
-    if (restanteMs <= 0) {
-      clearInterval(intervaloCronometro);
-      els.countdown.innerText = "00:00";
-      votacaoAtiva = false;
-      showScreen("closedScreen");
-      return;
-    }
-
-    votacaoAtiva = true;
-    const totalSegundos = Math.floor(restanteMs / 1000);
-    const m = Math.floor(totalSegundos / 60);
-    const s = totalSegundos % 60;
-
-    // Formatação garantindo dois dígitos (00:00)
-    els.countdown.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-
-    // Alerta visual nos últimos 30 segundos
-    if (totalSegundos <= 30) {
-      els.countdown.classList.add("warning");
-    } else {
-      els.countdown.classList.remove("warning");
-    }
-  }, 1000);
-}
-
 function selectOption(el) {
-  if (!votacaoAtiva) return;
+  if (!VOTACAO_ABERTA) return;
   document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   selected = el.innerText;
 }
 
 async function confirmVote() {
-  if (!votacaoAtiva || !selected || sending) return;
+  if (!VOTACAO_ABERTA || !selected || sending) return;
   
   sending = true;
   els.btn.disabled = true;
   els.btn.innerText = "ENVIANDO...";
 
   try {
-    // Referência da coleção de votos (usando o ID da roça)
-    await db.collection("votos_realidade").add({ 
+    // Registra o voto no Firestore
+    await db.collection("roca36").add({ 
       candidato: selected,
       votacao_id: ID_VOTACAO,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -318,8 +256,8 @@ async function confirmVote() {
     els.votedName.innerText = selected;
     showScreen("confirmScreen");
   } catch (error) {
-    console.error("Erro ao votar:", error);
-    alert("Erro ao registrar voto. Tente novamente.");
+    console.error(error);
+    alert("Erro ao votar. Tente novamente.");
     els.btn.disabled = false;
     els.btn.innerText = "VOTAR";
   } finally {
@@ -328,6 +266,11 @@ async function confirmVote() {
 }
 
 function resetVoting() {
+  if (!VOTACAO_ABERTA) {
+    showScreen("closedScreen");
+    return;
+  }
+  
   selected = null;
   sending = false;
   els.btn.disabled = false;
@@ -336,8 +279,8 @@ function resetVoting() {
   showScreen("voteScreen");
 }
 
-// Inicia o processo
-sincronizar();
+// Inicia a lógica ao carregar a página
+inicializarVotacao();
 
 </script>
 </body>
