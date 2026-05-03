@@ -52,10 +52,11 @@ body {
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
-  min-height: 300px;
+  min-height: 450px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: transform 0.3s ease;
 }
 
 .voting-id-badge {
@@ -91,13 +92,13 @@ body {
 
 .option {
   position: relative;
-  padding: 18px 24px;
-  margin-bottom: 16px;
+  padding: 16px 24px;
+  margin-bottom: 12px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-size: 18px;
   font-weight: 600;
   color: var(--text-muted);
@@ -113,10 +114,11 @@ body {
 button {
   width: 100%; padding: 18px; margin-top: 16px; border-radius: 16px; border: none;
   background: var(--primary); color: white; font-size: 16px; font-weight: 700;
-  cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.05em;
+  cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.05em;
 }
 
-button:hover { background: var(--primary-hover); transform: translateY(-2px); }
+button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+button:active { transform: translateY(1px); }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .hidden { display: none !important; }
@@ -124,29 +126,32 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .vote-name { font-size: 32px; font-weight: 800; color: var(--accent); margin: 12px 0 32px 0; }
 
 #loadingStatus { color: var(--text-muted); font-size: 14px; }
-
 .error-msg { color: var(--danger); font-size: 14px; margin-top: 10px; }
+
+/* Animações de Transição */
+.fade-in { animation: fadeIn 0.3s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="card">
-    <div class="voting-id-badge" id="votingIdDisplay">VOTAÇÃO</div>
+  <div class="card" id="mainCard">
+    <div class="voting-id-badge" id="votingIdDisplay">ID: --</div>
 
     <!-- TELA DE CARREGAMENTO -->
-    <div id="loadingScreen">
+    <div id="loadingScreen" class="fade-in">
       <div class="title">INICIANDO...</div>
-      <p id="loadingStatus">Conectando ao servidor...</p>
+      <p id="loadingStatus">Otimizando conexão...</p>
     </div>
 
     <!-- TELA DE VOTAÇÃO -->
-    <div id="voteScreen" class="hidden">
+    <div id="voteScreen" class="hidden fade-in">
       <div class="timer-container">
         <div class="timer-label">Tempo Restante</div>
         <div class="timer-value" id="countdown">--:--</div>
       </div>
-      <div class="title">Quem deve FICAR?</div>
+      <div class="title">Quem deve VENCER?</div>
       <div class="option" onclick="selectOption(this)">Luca</div>
       <div class="option" onclick="selectOption(this)">Gean</div>
       <div class="option" onclick="selectOption(this)">Koyuh</div>
@@ -155,28 +160,29 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
     </div>
 
     <!-- TELA DE CONFIRMAÇÃO -->
-    <div id="confirmScreen" class="hidden">
+    <div id="confirmScreen" class="hidden fade-in">
       <div class="title">VOTO REGISTRADO</div>
       <p style="color: var(--text-muted)">Você votou em:</p>
       <div class="vote-name" id="votedName"></div>
-      <button onclick="voteAgain()">VOTAR NOVAMENTE</button>
+      <button onclick="resetVoting()">VOTAR NOVAMENTE</button>
     </div>
 
     <!-- TELA DE ENCERRADO -->
-    <div id="closedScreen" class="hidden">
+    <div id="closedScreen" class="hidden fade-in">
       <div class="title" style="background: linear-gradient(to right, #ef4444, #f87171); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">VOTAÇÃO ENCERRADA</div>
       <p style="color: var(--text-muted)">O tempo para esta rodada expirou.</p>
-      <button onclick="voteAgain()" style="margin-top: 30px;">TENTAR NOVAMENTE</button>
+      <button onclick="window.location.reload()" style="margin-top: 30px;">RECARREGAR</button>
     </div>
   </div>
 </div>
 
 <script>
 // ====================== CONFIGURAÇÃO ======================
-const ID_VOTACAO = "RODADA_02"; // MUDE AQUI PARA NOVA VOTAÇÃO
+const ID_VOTACAO = "RODADA_69"; 
 const DURACAO_MINUTOS = 5;
 // ==========================================================
 
+// Configurações do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
   authDomain: "enquete-fa527.firebaseapp.com",
@@ -190,77 +196,74 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+// Otimização: Cache de elementos do DOM
+const els = {
+  loading: document.getElementById("loadingScreen"),
+  vote: document.getElementById("voteScreen"),
+  confirm: document.getElementById("confirmScreen"),
+  closed: document.getElementById("closedScreen"),
+  btn: document.getElementById("voteBtn"),
+  countdown: document.getElementById("countdown"),
+  votedName: document.getElementById("votedName"),
+  status: document.getElementById("loadingStatus"),
+  badge: document.getElementById("votingIdDisplay")
+};
+
 let selected = null;
 let sending = false;
 let votacaoAtiva = false;
 let startTime = null;
 
-document.getElementById("votingIdDisplay").innerText = `ID: ${ID_VOTACAO}`;
+els.badge.innerText = `ID: ${ID_VOTACAO}`;
 
 function showScreen(screenId) {
-  const screens = ["loadingScreen", "voteScreen", "confirmScreen", "closedScreen"];
-  screens.forEach(id => {
-    document.getElementById(id).classList.toggle("hidden", id !== screenId);
+  Object.keys(els).forEach(key => {
+    if (els[key] instanceof HTMLElement && els[key].id.includes('Screen')) {
+      els[key].classList.toggle("hidden", els[key].id !== screenId);
+    }
   });
 }
 
 async function sincronizar() {
   const docRef = db.collection("config_votacao").doc(ID_VOTACAO);
-  
   try {
     let doc = await docRef.get();
-    
     if (!doc.exists) {
-      document.getElementById("loadingStatus").innerText = "Criando nova rodada...";
-      // Tenta criar se não existir
-      const novoTime = { createdAt: firebase.firestore.FieldValue.serverTimestamp() };
-      await docRef.set(novoTime);
-      // Busca novamente para ter o tempo real
+      await docRef.set({ createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       doc = await docRef.get();
     }
-
     const data = doc.data();
     if (data && data.createdAt) {
       startTime = data.createdAt.toDate().getTime();
       showScreen("voteScreen");
       iniciarCronometro();
     } else {
-      // Caso o timestamp ainda esteja nulo (comum no Firebase logo após o set)
-      setTimeout(sincronizar, 1000);
+      setTimeout(sincronizar, 500); // Tenta novamente mais rápido
     }
-
   } catch (error) {
-    console.error(error);
-    document.getElementById("loadingStatus").innerHTML = 
-      `<span class="error-msg">Erro de conexão ou permissão no Firebase.<br>Verifique as regras do Firestore.</span>`;
+    els.status.innerHTML = `<span class="error-msg">Erro de conexão.</span>`;
   }
 }
 
 function iniciarCronometro() {
-  const display = document.getElementById("countdown");
   const duracaoMs = DURACAO_MINUTOS * 60 * 1000;
-  
-  const timer = setInterval(() => {
-    const agora = new Date().getTime();
-    const decorrido = agora - startTime;
-    const restanteMs = duracaoMs - decorrido;
-
+  const tick = () => {
+    const restanteMs = duracaoMs - (Date.now() - startTime);
     if (restanteMs <= 0) {
-      clearInterval(timer);
-      display.innerText = "00:00";
+      els.countdown.innerText = "00:00";
       votacaoAtiva = false;
       showScreen("closedScreen");
       return;
     }
-
     votacaoAtiva = true;
     let totalSegundos = Math.floor(restanteMs / 1000);
     let m = Math.floor(totalSegundos / 60);
     let s = totalSegundos % 60;
-    display.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-
-    if (totalSegundos <= 30) display.classList.add("warning");
-  }, 1000);
+    els.countdown.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+    if (totalSegundos <= 30) els.countdown.classList.add("warning");
+    requestAnimationFrame(() => setTimeout(tick, 1000));
+  };
+  tick();
 }
 
 function selectOption(el) {
@@ -272,30 +275,39 @@ function selectOption(el) {
 
 async function confirmVote() {
   if (!votacaoAtiva || !selected || sending) return;
-  
   sending = true;
-  const btn = document.getElementById("voteBtn");
-  btn.disabled = true;
-  btn.innerText = "ENVIANDO...";
+  els.btn.disabled = true;
+  els.btn.innerText = "ENVIANDO...";
 
+  // Otimização: Envio em background enquanto prepara a tela
   try {
-    await db.collection("roca8").add({ 
+    const votePromise = db.collection("roca8").add({ 
       nome: selected,
       votacao_id: ID_VOTACAO,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
-    document.getElementById("votedName").innerText = selected;
+    
+    els.votedName.innerText = selected;
+    await votePromise;
     showScreen("confirmScreen");
   } catch (error) {
-    alert("Erro ao votar. Tente novamente.");
-    btn.disabled = false;
-    btn.innerText = "VOTAR";
+    alert("Erro ao votar.");
+    els.btn.disabled = false;
+    els.btn.innerText = "VOTAR";
   } finally {
     sending = false;
   }
 }
 
-function voteAgain() { window.location.reload(); }
+// Otimização: Reset sem reload
+function resetVoting() {
+  selected = null;
+  sending = false;
+  els.btn.disabled = false;
+  els.btn.innerText = "VOTAR";
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  showScreen("voteScreen");
+}
 
 sincronizar();
 </script>
