@@ -63,8 +63,14 @@ body {
 
 .input-box {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 32px;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
 }
 
 input {
@@ -75,7 +81,7 @@ input {
   background: rgba(0,0,0,0.2);
   color: white;
   outline: none;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 button {
@@ -118,10 +124,9 @@ button {
   height: 100%;
   background: var(--primary);
   border-radius: 10px;
-  transition: width 0.3s ease; /* Transição rápida para mudanças de valor, mas sem animação de entrada */
+  transition: width 0.3s ease;
 }
 
-/* Estilo para o menos votado */
 .result-item.least-voted {
   border-color: rgba(239, 68, 68, 0.4);
   background: rgba(239, 68, 68, 0.05);
@@ -153,7 +158,8 @@ button {
   color: var(--text-main);
 }
 
-.empty-msg { text-align: center; color: var(--text-muted); padding: 20px; }
+.empty-msg { text-align: center; color: var(--text-muted); padding: 20px; font-size: 14px; }
+label { font-size: 12px; color: var(--text-muted); margin-left: 5px; text-transform: uppercase; letter-spacing: 1px; }
 </style>
 </head>
 
@@ -163,12 +169,21 @@ button {
     <div class="title">Resultado em Tempo Real</div>
 
     <div class="input-box">
-      <input type="text" id="idVotacao" placeholder="ID da Votação (ex: Roça-1)" value="Roça-1">
-      <button onclick="carregarResultados()">VER</button>
+      <div>
+        <label>Nome da Collection</label>
+        <input type="text" id="collectionName" placeholder="Ex: roca31 ou roca8" value="roca31" style="width: 100%; margin-top: 5px;">
+      </div>
+      <div>
+        <label>ID da Votação</label>
+        <div class="input-row" style="margin-top: 5px;">
+          <input type="text" id="idVotacao" placeholder="Ex: Roça-1" value="Roça-1">
+          <button onclick="carregarResultados()">VER</button>
+        </div>
+      </div>
     </div>
 
     <div id="results">
-      <p class="empty-msg">Clique em VER para acompanhar os resultados.</p>
+      <p class="empty-msg">Configure a collection e o ID acima para ver os resultados.</p>
     </div>
   </div>
 </div>
@@ -189,15 +204,18 @@ const db = firebase.firestore();
 let unsubscribe = null;
 
 function carregarResultados() {
+  const collection = document.getElementById("collectionName").value.trim();
   const idVotacao = document.getElementById("idVotacao").value.trim();
-  if (!idVotacao) {
-    alert("Digite o ID da votação");
+  
+  if (!collection || !idVotacao) {
+    alert("Preencha a Collection e o ID");
     return;
   }
 
   if (unsubscribe) unsubscribe();
 
-  unsubscribe = db.collection("roca31")
+  // Agora a busca é dinâmica baseada nos campos de input
+  unsubscribe = db.collection(collection)
     .where("votacao_id", "==", idVotacao)
     .onSnapshot(snapshot => {
       const contagem = {};
@@ -214,27 +232,25 @@ function carregarResultados() {
 
       renderResultados(contagem, total);
     }, error => {
-      console.error("Erro ao carregar:", error);
-      document.getElementById("results").innerHTML = `<p class="empty-msg" style="color:#ef4444">Erro ao carregar dados.</p>`;
+      console.error("Erro:", error);
+      document.getElementById("results").innerHTML = `<p class="empty-msg" style="color:#ef4444">Erro ao acessar a coleção '${collection}'.<br>Verifique se o nome está correto.</p>`;
     });
 }
 
 function renderResultados(dados, total) {
   const container = document.getElementById("results");
   if (total === 0) {
-    container.innerHTML = `<p class="empty-msg">Nenhum voto registrado para este ID.</p>`;
+    container.innerHTML = `<p class="empty-msg">Nenhum voto encontrado nesta coleção com este ID.</p>`;
     return;
   }
 
   let html = "";
   const nomesOrdenados = Object.keys(dados).sort((a,b) => dados[b] - dados[a]);
-  
-  // Identificar o valor do menos votado para aplicar a cor vermelha
   const menorVoto = Math.min(...Object.values(dados));
 
   nomesOrdenados.forEach(nome => {
     const votos = dados[nome];
-    const perc = ((votos / total) * 100).toFixed(2); // Dois dígitos após a vírgula
+    const perc = ((votos / total) * 100).toFixed(2);
     const isLeastVoted = (votos === menorVoto);
 
     html += `
@@ -251,16 +267,12 @@ function renderResultados(dados, total) {
     `;
   });
 
-  html += `
-    <div class="total-votos">
-      Total: ${total} votos
-    </div>
-  `;
-  
+  html += `<div class="total-votos">Total: ${total} votos</div>`;
   container.innerHTML = html;
 }
 
-if(document.getElementById("idVotacao").value) carregarResultados();
+// Carregar inicial
+carregarResultados();
 </script>
 </body>
 </html>
