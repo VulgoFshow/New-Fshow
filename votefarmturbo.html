@@ -195,7 +195,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Otimização: Cache de elementos do DOM
+// Cache DOM
 const els = {
   loading: document.getElementById("loadingScreen"),
   vote: document.getElementById("voteScreen"),
@@ -212,9 +212,11 @@ let selected = null;
 let sending = false;
 let votacaoAtiva = false;
 let startTime = null;
+let timeOffset = 0;
 
 els.badge.innerText = `ID: ${ID_VOTACAO}`;
 
+// ====================== TELAS ======================
 function showScreen(screenId) {
   Object.keys(els).forEach(key => {
     if (els[key] instanceof HTMLElement && els[key].id.includes('Screen')) {
@@ -223,72 +225,108 @@ function showScreen(screenId) {
   });
 }
 
+// ====================== SINCRONIZAÇÃO ======================
 async function sincronizar() {
   const docRef = db.collection("config_votacao").doc(ID_VOTACAO);
+
   try {
     let doc = await docRef.get();
+
     if (!doc.exists) {
-      await docRef.set({ createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      await docRef.set({
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
       doc = await docRef.get();
     }
+
     const data = doc.data();
+
     if (data && data.createdAt) {
+
+      // 🔥 SINCRONIZAÇÃO COM SERVIDOR
+      const serverNow = firebase.firestore.Timestamp.now().toDate().getTime();
+      const localNow = Date.now();
+      timeOffset = serverNow - localNow;
+
       startTime = data.createdAt.toDate().getTime();
+
       showScreen("voteScreen");
       iniciarCronometro();
+
     } else {
-      setTimeout(sincronizar, 500); // Tenta novamente mais rápido
+      setTimeout(sincronizar, 500);
     }
+
   } catch (error) {
     els.status.innerHTML = `<span class="error-msg">Erro de conexão.</span>`;
   }
 }
 
+// ====================== CRONÔMETRO ======================
 function iniciarCronometro() {
   const duracaoMs = DURACAO_MINUTOS * 60 * 1000;
-  const tick = () => {
-    const restanteMs = duracaoMs - (Date.now() - startTime);
+
+  function tick() {
+    const agora = Date.now() + timeOffset;
+    const restanteMs = duracaoMs - (agora - startTime);
+
     if (restanteMs <= 0) {
       els.countdown.innerText = "00:00";
       votacaoAtiva = false;
       showScreen("closedScreen");
       return;
     }
+
     votacaoAtiva = true;
-    let totalSegundos = Math.floor(restanteMs / 1000);
-    let m = Math.floor(totalSegundos / 60);
-    let s = totalSegundos % 60;
-    els.countdown.innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-    if (totalSegundos <= 30) els.countdown.classList.add("warning");
-    requestAnimationFrame(() => setTimeout(tick, 1000));
-  };
+
+    const totalSegundos = Math.floor(restanteMs / 1000);
+    const m = Math.floor(totalSegundos / 60);
+    const s = totalSegundos % 60;
+
+    els.countdown.innerText =
+      `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+
+    if (totalSegundos <= 30) {
+      els.countdown.classList.add("warning");
+    }
+
+    setTimeout(tick, 1000);
+  }
+
   tick();
 }
 
+// ====================== VOTAÇÃO ======================
 function selectOption(el) {
   if (!votacaoAtiva) return;
-  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+
+  document.querySelectorAll('.option')
+    .forEach(o => o.classList.remove('selected'));
+
   el.classList.add('selected');
   selected = el.innerText;
 }
 
 async function confirmVote() {
   if (!votacaoAtiva || !selected || sending) return;
+
   sending = true;
   els.btn.disabled = true;
   els.btn.innerText = "ENVIANDO...";
 
-  // nome
   try {
     const votePromise = db.collection("roca36").add({ 
       nome: selected,
       votacao_id: ID_VOTACAO,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
-    
+
     els.votedName.innerText = selected;
+
     await votePromise;
+
     showScreen("confirmScreen");
+
   } catch (error) {
     alert("Erro ao votar.");
     els.btn.disabled = false;
@@ -298,17 +336,22 @@ async function confirmVote() {
   }
 }
 
-// Otimização: Reset sem reload
+// ====================== RESET ======================
 function resetVoting() {
   selected = null;
   sending = false;
   els.btn.disabled = false;
   els.btn.innerText = "VOTAR";
-  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+
+  document.querySelectorAll('.option')
+    .forEach(o => o.classList.remove('selected'));
+
   showScreen("voteScreen");
 }
 
+// ====================== INIT ======================
 sincronizar();
+
 </script>
 </body>
 </html>
