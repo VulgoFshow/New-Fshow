@@ -10,198 +10,250 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
 :root {
-  --bg: radial-gradient(circle at top, #3a1515, #120707);
-  --card: rgba(255,255,255,.06);
-  --gold: #e0c07a;
-  --text: #fff;
+  --primary: #6366f1;
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #10b981;
+  --border: #334155;
+  --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
 }
-* {
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+  color: var(--text-main);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
-.container {
-  width: 100%;
-  max-width: 900px;
-  padding: 16px;
-}
+
+.container { width: 100%; max-width: 550px; }
+
 .card {
-  background: var(--card);
-  backdrop-filter: blur(14px);
-  border-radius: 22px;
-  padding: 32px 24px;
-  box-shadow: 0 25px 50px rgba(0,0,0,.45);
-  animation: fadeUp .5s ease;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
 }
-@keyframes fadeUp {
-  from {opacity:0; transform: translateY(30px);}
-  to {opacity:1; transform: translateY(0);}
-}
+
 .title {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 800;
-  color: var(--gold);
-  text-align: center;
   margin-bottom: 24px;
+  text-align: center;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
+
 .input-box {
   display: flex;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
+
 input {
   flex: 1;
-  padding: 14px;
+  padding: 14px 18px;
   border-radius: 14px;
-  border: none;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.2);
+  color: white;
   outline: none;
   font-size: 16px;
+  transition: border-color 0.3s;
 }
+
+input:focus { border-color: var(--primary); }
+
 button {
-  padding: 14px 22px;
+  padding: 14px 24px;
   border-radius: 14px;
   border: none;
-  background: linear-gradient(135deg, #f0d58f, #c7a457);
-  font-weight: 800;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
 }
-.result {
-  background: rgba(255,255,255,.04);
+
+button:hover { transform: translateY(-1px); filter: brightness(1.1); }
+
+.result-item {
+  background: rgba(255,255,255,.03);
   border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
-  border: 2px solid rgba(224,192,122,.25);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  animation: fadeIn 0.4s ease forwards;
 }
-.name {
-  font-size: 18px;
-  font-weight: bold;
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
-.bar {
+
+.name { font-size: 18px; font-weight: 700; color: var(--text-main); }
+.perc-tag { font-size: 16px; font-weight: 800; color: var(--accent); }
+
+.bar-bg {
   width: 100%;
-  height: 12px;
-  background: rgba(255,255,255,.1);
+  height: 10px;
+  background: rgba(255,255,255,.05);
   border-radius: 10px;
   overflow: hidden;
-  margin: 8px 0;
 }
-.fill {
+
+.bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #f0d58f, #c7a457);
+  background: var(--primary);
+  border-radius: 10px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
 }
-.percent {
-  font-size: 14px;
-  opacity: .9;
+
+.vote-count {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  text-align: right;
 }
+
 .total-votos {
-  margin-top: 22px;
-  padding-top: 16px;
-  border-top: 2px solid rgba(224,192,122,.25);
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
   text-align: center;
   font-size: 18px;
   font-weight: 800;
-  color: var(--gold);
+  color: var(--text-main);
 }
+
+.empty-msg { text-align: center; color: var(--text-muted); padding: 20px; }
 </style>
 </head>
 
 <body>
 <div class="container">
   <div class="card">
-    <div class="title">Resultado da Votação</div>
+    <div class="title">Resultado em Tempo Real</div>
 
-    <!-- INPUT DA COLLECTION -->
     <div class="input-box">
-      <input type="text" id="collectionName" placeholder="Digite o nome da collection (ex: jut1)">
+      <input type="text" id="idVotacao" placeholder="ID da Votação (ex: Roça-1)" value="Roça-1">
       <button onclick="carregarResultados()">VER</button>
     </div>
 
-    <!-- RESULTADOS -->
-    <div id="results"></div>
+    <div id="results">
+      <p class="empty-msg">Clique em VER para acompanhar os resultados.</p>
+    </div>
   </div>
 </div>
 
 <script>
+// CONFIGURAÇÕES DO FIREBASE (Sincronizado com a votação atual)
 const firebaseConfig = {
-apiKey: "AIzaSyANHVK6lI_uBsQk1_rz2zI5TrJj40P1kV8",
-  authDomain: "votounico-974d7.firebaseapp.com",
-  databaseURL: "https://votounico-974d7-default-rtdb.firebaseio.com",
-  projectId: "votounico-974d7",
-  storageBucket: "votounico-974d7.firebasestorage.app",
-  messagingSenderId: "286853936059",
-  appId: "1:286853936059:web:fbf96050e246b697ea4a9e",
-  measurementId: "G-2GXLLGKQ9V"
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  databaseURL: "https://enquete-fa527-default-rtdb.firebaseio.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let unsubscribe = null;
 
-/* 📊 CARREGAR RESULTADOS */
 function carregarResultados() {
-  const collection = document.getElementById("collectionName").value.trim();
-  if (!collection) {
-    alert("Digite o nome da collection");
+  const idVotacao = document.getElementById("idVotacao").value.trim();
+  if (!idVotacao) {
+    alert("Digite o ID da votação");
     return;
   }
 
   if (unsubscribe) unsubscribe();
 
-  unsubscribe = db.collection(collection).onSnapshot(snapshot => {
-    const contagem = {};
-    let total = 0;
+  // ATUALIZADO: Agora busca na coleção 'roca31' conforme o novo código de votação
+  unsubscribe = db.collection("roca31")
+    .where("votacao_id", "==", idVotacao)
+    .onSnapshot(snapshot => {
+      const contagem = {};
+      let total = 0;
 
-    snapshot.forEach(doc => {
-      const nome = doc.data().nome;
-      contagem[nome] = (contagem[nome] || 0) + 1;
-      total++;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const nome = data.nome;
+        if (nome) {
+          contagem[nome] = (contagem[nome] || 0) + 1;
+          total++;
+        }
+      });
+
+      renderResultados(contagem, total);
+    }, error => {
+      console.error("Erro ao carregar:", error);
+      document.getElementById("results").innerHTML = `<p class="empty-msg" style="color:#ef4444">Erro ao carregar dados. Verifique o ID e a coleção.</p>`;
     });
-
-    renderResultados(contagem, total);
-  });
 }
 
-/* 🎨 RENDERIZA RESULTADOS */
 function renderResultados(dados, total) {
   const container = document.getElementById("results");
-  container.innerHTML = "";
+  if (total === 0) {
+    container.innerHTML = `<p class="empty-msg">Nenhum voto registrado para este ID na coleção 'roca31' ainda.</p>`;
+    return;
+  }
 
-  Object.keys(dados)
-    .sort((a,b) => dados[b] - dados[a])
-    .forEach(nome => {
-      const votos = dados[nome];
-      const perc = total ? ((votos / total) * 100).toFixed(2) : 0;
+  let html = "";
+  const nomesOrdenados = Object.keys(dados).sort((a,b) => dados[b] - dados[a]);
 
-      container.innerHTML += `
-        <div class="result">
-          <!-- 🔁 AGORA MOSTRA PORCENTAGEM AQUI -->
-          <div class="name">${nome} — ${perc}%</div>
+  nomesOrdenados.forEach(nome => {
+    const votos = dados[nome];
+    const perc = ((votos / total) * 100).toFixed(1);
 
-          <div class="bar">
-            <div class="fill" style="width:${perc}%"></div>
-          </div>
-
-          <!-- 🔁 E OS VOTOS AQUI -->
-          <div class="percent">${votos} votos</div>
+    html += `
+      <div class="result-item">
+        <div class="header-row">
+          <div class="name">${nome}</div>
+          <div class="perc-tag">${perc}%</div>
         </div>
-      `;
-    });
+        <div class="bar-bg">
+          <div class="bar-fill" style="width:${perc}%"></div>
+        </div>
+        <div class="vote-count">${votos} ${votos === 1 ? 'voto' : 'votos'}</div>
+      </div>
+    `;
+  });
 
-  /* 🔽 TOTAL DE VOTOS */
-  container.innerHTML += `
+  html += `
     <div class="total-votos">
-      Total de votos: ${total}
+      Total: ${total} votos
     </div>
   `;
+  
+  container.innerHTML = html;
 }
+
+// Carregar automaticamente ao abrir se houver ID preenchido
+if(document.getElementById("idVotacao").value) carregarResultados();
 </script>
 </body>
 </html>
