@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Julgamento do Público</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+:root {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --bg: #0f172a;
+  --card-bg: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #10b981;
+  --border: #334155;
+  --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  perspective: 1000px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 32px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px) rotateX(-5deg); }
+  to { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+.voting-id-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.05);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.timer-container {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.timer-value {
+  font-size: 36px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--primary);
+  text-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.timer-value.warning {
+  color: var(--danger);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.option {
+  position: relative;
+  padding: 18px 24px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.option:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--primary);
+  color: var(--text-main);
+  transform: translateX(4px);
+}
+
+.option.selected {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--primary);
+  color: var(--text-main);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.option.selected::after {
+  content: '✓';
+  color: var(--primary);
+  font-weight: 800;
+}
+
+button {
+  width: 100%;
+  padding: 18px;
+  margin-top: 16px;
+  border-radius: 16px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+button:disabled {
+  background: var(--border);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.hidden {
+  display: none;
+}
+
+.confirm {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.confirm p {
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.vote-name {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 12px 0 32px 0;
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+#closedScreen .title {
+  background: linear-gradient(to right, #ef4444, #f87171);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.closed-message {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--card-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="card" id="mainCard">
+    <div id="loading" class="loading-overlay">Carregando votação...</div>
+    
+    <div id="voteScreen" class="hidden">
+      <div class="voting-id-badge" id="votingIdDisplay">VOTAÇÃO</div>
+      
+      <div class="timer-container">
+        <div class="timer-label">Tempo Restante</div>
+        <div class="timer-value" id="countdown">--:--</div>
+      </div>
+
+      <div class="title">Quem deve FICAR?</div>
+      
+      <div class="option" onclick="selectOption(this)">Luca</div>
+      <div class="option" onclick="selectOption(this)">Gean</div>
+      <div class="option" onclick="selectOption(this)">Koyuh</div>
+      <div class="option" onclick="selectOption(this)">Renata</div>
+      
+      <button id="voteBtn" onclick="confirmVote()">VOTAR</button>
+    </div>
+
+    <div class="card confirm hidden" id="confirmScreen" style="box-shadow:none; padding:0; background:transparent; border:none; backdrop-filter:none;">
+      <div class="title">VOTO REGISTRADO</div>
+      <p>Você votou em:</p>
+      <div class="vote-name" id="votedName"></div>
+      <button onclick="voteAgain()">VOTAR NOVAMENTE</button>
+    </div>
+
+    <div class="hidden" id="closedScreen">
+      <div class="title">VOTAÇÃO ENCERRADA</div>
+      <p class="closed-message">O tempo limite para esta rodada expirou.</p>
+      <button onclick="voteAgain()" style="margin-top: 30px;">TENTAR NOVAMENTE</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ====================== CONFIGURAÇÃO DA VOTAÇÃO ======================
+
+// 1. IDENTIFICADOR DA VOTAÇÃO (Mude este valor para iniciar uma nova votação)
+// Quando você mudar este ID, o sistema criará um novo registro de tempo no Firebase
+const ID_VOTACAO = "RODADA_01"; 
+
+// 2. TEMPO DE DURAÇÃO (Em minutos)
+const DURACAO_MINUTOS = 5;
+
+// =====================================================================
+
+/* 🔥 FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
+  authDomain: "enquete-fa527.firebaseapp.com",
+  databaseURL: "https://enquete-fa527-default-rtdb.firebaseio.com",
+  projectId: "enquete-fa527",
+  storageBucket: "enquete-fa527.firebasestorage.app",
+  messagingSenderId: "544422121318",
+  appId: "1:544422121318:web:e3d0412f7bf9740e7142a7"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* 🧠 ESTADO */
+let selected = null;
+let sending = false;
+let votacaoAtiva = false;
+let startTime = null;
+
+/* EXIBIR ID DA VOTAÇÃO */
+document.getElementById("votingIdDisplay").innerText = `VOTAÇÃO: ${ID_VOTACAO}`;
+
+/* ⏱️ SINCRONIZAÇÃO DE TEMPO */
+async function sincronizarVotacao() {
+  const docRef = db.collection("config_votacao").doc(ID_VOTACAO);
+  
+  try {
+    const doc = await docRef.get();
+    
+    if (!doc.exists) {
+      // Se a votação não existe, o primeiro usuário a entrar define o horário de início
+      const now = new Date();
+      await docRef.set({
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      // Recarrega para pegar o timestamp exato do servidor
+      location.reload();
+      return;
+    }
+
+    // Pega o tempo de criação do servidor
+    startTime = doc.data().createdAt.toDate().getTime();
+    document.getElementById("loading").classList.add("hidden");
+    iniciarCronometro();
+
+  } catch (error) {
+    console.error("Erro ao sincronizar:", error);
+    alert("Erro ao conectar com o servidor.");
+  }
+}
+
+function iniciarCronometro() {
+  const display = document.getElementById("countdown");
+  const duracaoMs = DURACAO_MINUTOS * 60 * 1000;
+  
+  const timer = setInterval(() => {
+    const agora = new Date().getTime();
+    const decorrido = agora - startTime;
+    const restanteMs = duracaoMs - decorrido;
+
+    if (restanteMs <= 0) {
+      clearInterval(timer);
+      display.innerText = "00:00";
+      encerrarVotacao();
+      return;
+    }
+
+    votacaoAtiva = true;
+    document.getElementById("voteScreen").classList.remove("hidden");
+
+    let totalSegundos = Math.floor(restanteMs / 1000);
+    let minutos = Math.floor(totalSegundos / 60);
+    let segundos = totalSegundos % 60;
+
+    minutos = minutos < 10 ? "0" + minutos : minutos;
+    segundos = segundos < 10 ? "0" + segundos : segundos;
+
+    display.innerText = `${minutos}:${segundos}`;
+
+    if (totalSegundos <= 30) {
+      display.classList.add("warning");
+    }
+  }, 1000);
+}
+
+function encerrarVotacao() {
+  votacaoAtiva = false;
+  document.getElementById("voteScreen").classList.add("hidden");
+  document.getElementById("closedScreen").classList.remove("hidden");
+  document.getElementById("confirmScreen").classList.add("hidden");
+}
+
+/* 👉 SELEÇÃO */
+function selectOption(el) {
+  if (!votacaoAtiva) return;
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selected = el.innerText;
+}
+
+/* 🗳️ CONFIRMAR VOTO */
+async function confirmVote() {
+  if (!votacaoAtiva) {
+    alert("O tempo desta votação acabou!");
+    return;
+  }
+  if (!selected) {
+    alert("Escolha um participante");
+    return;
+  }
+  if (sending) return;
+  
+  sending = true;
+  const btn = document.getElementById("voteBtn");
+  btn.disabled = true;
+  btn.innerText = "ENVIANDO...";
+
+  try {
+    await db.collection("teste1").add({ 
+      nome: selected,
+      votacao_id: ID_VOTACAO,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById("votedName").innerText = selected;
+    document.getElementById("voteScreen").classList.add("hidden");
+    document.getElementById("confirmScreen").classList.remove("hidden");
+
+  } catch (error) {
+    console.error("Erro ao registrar voto:", error);
+    alert("Erro ao registrar seu voto.");
+    btn.disabled = false;
+    btn.innerText = "VOTAR";
+  } finally {
+    sending = false;
+  }
+}
+
+function voteAgain() {
+  window.location.reload(); 
+}
+
+// Iniciar sincronização
+sincronizarVotacao();
+</script>
+
+</body>
+</html>
