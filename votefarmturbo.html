@@ -155,7 +155,8 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
       <div class="title">Quem deve FICAR?</div>
       <div class="option" onclick="selectOption(this)">Braian</div>
       <div class="option" onclick="selectOption(this)">Brunno</div>
-      <div class="option" onclick="selectOption(this)">Luddi</div>
+      <div class="option" onclick="selectOption(this)">João</div>
+      <div class="option" onclick="selectOption(this)">Dynamite</div>
       <button id="voteBtn" onclick="confirmVote()">VOTAR</button>
     </div>
 
@@ -178,7 +179,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 <script>
 // ====================== CONFIGURAÇÃO ======================
-const ID_VOTACAO = "Roça-5"; 
+const ID_VOTACAO = "Roça-7"; 
 const DURACAO_MINUTOS = 1;
 // ==========================================================
 
@@ -319,7 +320,7 @@ async function confirmVote() {
   els.btn.innerText = "ENVIANDO...";
 
   try {
-    await db.collection("roca35").add({ 
+    await db.collection("roca37").add({ 
       nome: selected,
       votacao_id: ID_VOTACAO,
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
