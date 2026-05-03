@@ -21,6 +21,7 @@
   --accent: #10b981;
   --border: #334155;
   --shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --danger: #ef4444;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
@@ -75,10 +76,7 @@ input {
   color: white;
   outline: none;
   font-size: 16px;
-  transition: border-color 0.3s;
 }
-
-input:focus { border-color: var(--primary); }
 
 button {
   padding: 14px 24px;
@@ -88,10 +86,7 @@ button {
   color: white;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
 }
-
-button:hover { transform: translateY(-1px); filter: brightness(1.1); }
 
 .result-item {
   background: rgba(255,255,255,.03);
@@ -99,10 +94,7 @@ button:hover { transform: translateY(-1px); filter: brightness(1.1); }
   padding: 16px 20px;
   margin-bottom: 16px;
   border: 1px solid var(--border);
-  animation: fadeIn 0.4s ease forwards;
 }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 .header-row {
   display: flex;
@@ -126,8 +118,22 @@ button:hover { transform: translateY(-1px); filter: brightness(1.1); }
   height: 100%;
   background: var(--primary);
   border-radius: 10px;
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  transition: width 0.3s ease; /* Transição rápida para mudanças de valor, mas sem animação de entrada */
+}
+
+/* Estilo para o menos votado */
+.result-item.least-voted {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.result-item.least-voted .bar-fill {
+  background: var(--danger);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.result-item.least-voted .perc-tag {
+  color: var(--danger);
 }
 
 .vote-count {
@@ -168,7 +174,6 @@ button:hover { transform: translateY(-1px); filter: brightness(1.1); }
 </div>
 
 <script>
-// CONFIGURAÇÕES DO FIREBASE (Sincronizado com a votação atual)
 const firebaseConfig = {
   apiKey: "AIzaSyD6NAWtJ1bOD-vdVbSQuf5440XaBkg6uaU",
   authDomain: "enquete-fa527.firebaseapp.com",
@@ -192,7 +197,6 @@ function carregarResultados() {
 
   if (unsubscribe) unsubscribe();
 
-  // ATUALIZADO: Agora busca na coleção 'roca31' conforme o novo código de votação
   unsubscribe = db.collection("roca31")
     .where("votacao_id", "==", idVotacao)
     .onSnapshot(snapshot => {
@@ -211,26 +215,30 @@ function carregarResultados() {
       renderResultados(contagem, total);
     }, error => {
       console.error("Erro ao carregar:", error);
-      document.getElementById("results").innerHTML = `<p class="empty-msg" style="color:#ef4444">Erro ao carregar dados. Verifique o ID e a coleção.</p>`;
+      document.getElementById("results").innerHTML = `<p class="empty-msg" style="color:#ef4444">Erro ao carregar dados.</p>`;
     });
 }
 
 function renderResultados(dados, total) {
   const container = document.getElementById("results");
   if (total === 0) {
-    container.innerHTML = `<p class="empty-msg">Nenhum voto registrado para este ID na coleção 'roca31' ainda.</p>`;
+    container.innerHTML = `<p class="empty-msg">Nenhum voto registrado para este ID.</p>`;
     return;
   }
 
   let html = "";
   const nomesOrdenados = Object.keys(dados).sort((a,b) => dados[b] - dados[a]);
+  
+  // Identificar o valor do menos votado para aplicar a cor vermelha
+  const menorVoto = Math.min(...Object.values(dados));
 
   nomesOrdenados.forEach(nome => {
     const votos = dados[nome];
-    const perc = ((votos / total) * 100).toFixed(1);
+    const perc = ((votos / total) * 100).toFixed(2); // Dois dígitos após a vírgula
+    const isLeastVoted = (votos === menorVoto);
 
     html += `
-      <div class="result-item">
+      <div class="result-item ${isLeastVoted ? 'least-voted' : ''}">
         <div class="header-row">
           <div class="name">${nome}</div>
           <div class="perc-tag">${perc}%</div>
@@ -252,7 +260,6 @@ function renderResultados(dados, total) {
   container.innerHTML = html;
 }
 
-// Carregar automaticamente ao abrir se houver ID preenchido
 if(document.getElementById("idVotacao").value) carregarResultados();
 </script>
 </body>
