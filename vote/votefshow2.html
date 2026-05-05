@@ -721,67 +721,46 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que VOLTE pro BBBF6?</h1>
+    <h1>Quem você quer que ENTRE no CDF?</h1>
     <div class="espacador"></div>
     
 <div class="options">
   
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true" alt="Opção 1">
+  <img src="https://i.ibb.co/FqYZgtjt/Picsart-26-05-04-22-52-34-444-2.jpg" alt="Opção 1">
   <div class="option-content">
-    <input type="radio" name="vote" value="João Lucas"> João Lucas
+    <input type="radio" name="vote" value="Albert"> Albert
   </div>
 </label>
 
   <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Opção 3">
+  <img src="https://i.ibb.co/N65GsR8X/Picsart-26-05-04-22-52-54-541-2.jpg" alt="Opção 3">
   <div class="option-content">
-    <input type="radio" name="vote" value="Arthur Zago"> Arthur Zago
+    <input type="radio" name="vote" value="Arthur"> Arthur
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true" alt="Opção 1">
+  <img src="https://i.ibb.co/XZYcndgm/Picsart-26-05-04-22-53-12-961-2.jpg" alt="Opção 1">
   <div class="option-content">
-    <input type="radio" name="vote" value="Lucas"> Lucas
+    <input type="radio" name="vote" value="Gabi"> Gabi
   </div>
 </label>
   
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true" alt="Opção 2">
+  <img src="https://i.ibb.co/7tCqrqR1/Picsart-26-05-04-22-53-46-434-2.jpg" alt="Opção 2">
   <div class="option-content">
-    <input type="radio" name="vote" value="Dynamite"> Dynamite
+    <input type="radio" name="vote" value="Gêan"> Gêan
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.png?raw=true" alt="Opção 3">
+  <img src="https://i.ibb.co/jdJXcnC/Picsart-26-05-04-22-53-29-712-2.jpg" alt="Opção 3">
   <div class="option-content">
-    <input type="radio" name="vote" value="Koyuh"> Koyuh
+    <input type="radio" name="vote" value="Ludmila"> Ludmila
   </div>
 </label>
-
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ana.png?raw=true" alt="Opção 2">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Ana Sofia"> Ana Sofia
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true" alt="Opção 2">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Sirleidy"> Sirleidy
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true" alt="Opção 3">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Ray"> Ray
-  </div>
-</label>
-
+  
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -793,7 +772,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>VOTAR</button>
 
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
+    <div class="notice">Essa votação segue aberta até às 11:00</div>
   </div>
   
 <!-- POPUP CAPTCHA -->
@@ -826,7 +805,7 @@ button:disabled {
      VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
+    <div class="notice">Essa votação segue aberta até às 11:00</div>
     
   </div>
 </div>
@@ -839,12 +818,12 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "lab";
+  const TABLE_VOTACAO = "cdf1";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-03-31T19:32:00");
+  const encerramentoBR = new Date("2026-05-04T11a:00:00");
 
   // =================== HORA DO SERVIDOR (Via API Pública) ===================
   async function getServerTime() {
@@ -1296,11 +1275,11 @@ document.addEventListener("click", (e) => {
 
   // =================== FOTOS DOS PARTICIPANTES ===================
   const fotos = {
-    "Arthur Zago": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true",
-    "Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true",
-    "Dynamite": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true",
-    "Koyuh": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.png?raw=true",
-    "Ana Sofia": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ana.png?raw=true",
+    "Arthur": "https://i.ibb.co/N65GsR8X/Picsart-26-05-04-22-52-54-541-2.jpg",
+    "Albert": "https://i.ibb.co/FqYZgtjt/Picsart-26-05-04-22-52-34-444-2.jpg",
+    "Gêan": "https://i.ibb.co/7tCqrqR1/Picsart-26-05-04-22-53-46-434-2.jpg",
+    "Gabi": "https://i.ibb.co/XZYcndgm/Picsart-26-05-04-22-53-12-961-2.jpg",
+    "Ludmila": "https://i.ibb.co/jdJXcnC/Picsart-26-05-04-22-53-29-712-2.jpg",
     "Sirleidy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true",
     "Ray": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true",
     "Nick": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/nick.png?raw=true",
