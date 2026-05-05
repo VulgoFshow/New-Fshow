@@ -820,10 +820,10 @@ button:disabled {
 
   const TABLE_VOTACAO = "cdf1";
   const VOTOS_POR_CAPTCHA = 10;
-  const DEBUG = true;
+  const DEBUG = false;
 
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-05-04T11:00:00"); // Corrigido '11a' para '11'
+  const encerramentoBR = new Date("2026-05-05T11:00:00"); 
 
   // =================== HORA DO SERVIDOR (Via API Pública com Fallback) ===================
   let serverTimeOffset = 0; // Diferença entre local e servidor
@@ -863,13 +863,13 @@ button:disabled {
 
     if (agoraBR < aberturaBR) {
       console.log("Votação ainda não abriu");
-      // window.location.replace("aguarde.html"); // Descomente se quiser redirecionar
+      /window.location.replace("aguarde.html"); 
       return;
     }
 
     if (agoraBR > encerramentoBR) {
       console.warn("VOTAÇÃO ENCERRADA");
-      // window.location.replace("fechada.html"); // Descomente se quiser redirecionar
+      window.location.replace("fechada.html"); 
       return;
     }
 
