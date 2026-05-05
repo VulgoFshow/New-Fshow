@@ -808,7 +808,9 @@ button:disabled {
     <div class="notice">Essa votação segue aberta até às 11:00</div>
     
   </div>
-</div>
+</div> 
+O que eu fiz de errado?
+
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
@@ -865,9 +867,33 @@ button:disabled {
   const refreshBtn = document.getElementById("captchaRefresh");
   const statusEl = document.getElementById("captchaStatus");
 
-  let captchaVisualLiberado = false;
+  
   let pendingVote = null;
+
   let captchaAberto = false;
+  let captchaClicado = false;
+
+  function updateBotoesEstado() {
+    const restantes = getVotosRestantes();
+    
+    // O botão de votar só é liberado se o CAPTCHA foi clicado E ainda há votos
+    if (captchaClicado && restantes > 0) {
+      botaoVotar.disabled = false;
+      botaoVotar.classList.add("active");
+    } else {
+      botaoVotar.disabled = true;
+      botaoVotar.classList.remove("active");
+    }
+
+    // O estado visual do botão de CAPTCHA depende de ter votos ou não
+    if (restantes > 0) {
+      botaoCaptcha.setAttribute("aria-pressed", "true");
+    } else {
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+    }
+  }
+
+
 
   function hashTag(tag) {
     const secret = "CPTX_2025_FSHOW_🔥";
@@ -938,6 +964,7 @@ button:disabled {
   function generateCaptcha() {
     captchaGrid.innerHTML = "";
     statusEl.textContent = "";
+    updateBotoesEstado();
     verifyBtn.disabled = true;
     captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     captchaInstruction.textContent = captchaCurrentPrompt.label;
@@ -968,11 +995,14 @@ button:disabled {
     botaoVotar.disabled = true;
   }
 
-  function fecharCaptcha() {
-    popupCaptcha.classList.remove("active");
-    captchaAberto = false;
-    botaoVotar.disabled = getVotosRestantes() <= 0;
-  }
+function fecharCaptcha() {
+  popupCaptcha.classList.remove("active");
+  captchaAberto = false;
+  
+  // Se fechou o captcha (sucesso ou não), resetamos o clique para obrigar nova interação se necessário
+  // Mas no caso de sucesso, o verifyBtn já terá setado captchaClicado = true
+  updateBotoesEstado();
+}
 
   refreshBtn.addEventListener("click", () => {
     generateCaptcha();
@@ -992,18 +1022,42 @@ button:disabled {
       setTimeout(generateCaptcha, 1200);
       return;
     }
-    setVotosRestantes(VOTOS_POR_CAPTCHA);
-    captchaVisualLiberado = true;
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.classList.add("active");
-    fecharCaptcha();
+    
+setVotosRestantes(VOTOS_POR_CAPTCHA);
+captchaClicado = true; // Liberamos o botão após resolver o desafio
+updateBotoesEstado();
+
+fecharCaptcha();
+
     if (pendingVote) {
       const voto = pendingVote;
       pendingVote = null;
       setTimeout(() => submitVote(voto), 300);
     }
-  });
+  })
+  
+  
 
+botaoVotar.addEventListener("click", () => {
+  const escolhido = document.querySelector('input[name="vote"]:checked');
+  
+  if (!escolhido) {
+    alert("Selecione alguém para votar!");
+    return;
+  }
+
+  if (!captchaClicado) {
+    alert("Clique no botão de CAPTCHA antes de votar!");
+    return;
+  }
+
+  if (getVotosRestantes() <= 0) {
+    alert("Resolva o CAPTCHA para liberar votos!");
+    return;
+  }
+
+  submitVote(escolhido.value);
+});
 async function submitVote(participante) {
   try {
     const agoraBR = toSaoPauloDate(getNow());
@@ -1027,14 +1081,11 @@ async function submitVote(participante) {
       botaoVotar.textContent = prevText;
       return;
     }
+    
+setVotosRestantes(Math.max(getVotosRestantes() - 1, 0));
+captchaClicado = false; // Resetamos para obrigar clicar no CAPTCHA novamente no próximo ciclo
+updateBotoesEstado();
 
-    let restantes = getVotosRestantes() - 1;
-    setVotosRestantes(Math.max(restantes, 0));
-    if (restantes <= 0) {
-      botaoCaptcha.setAttribute("aria-pressed", "false");
-      botaoVotar.classList.remove("active");
-      captchaVisualLiberado = false;
-    }
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
@@ -1050,43 +1101,32 @@ async function submitVote(participante) {
   }
 }
 
-  function voltarParaVotacao() {
-    confirmTela.style.display = "none";
-    votoTela.style.display = "block";
-    const checked = document.querySelector('input[name="vote"]:checked');
-    if (checked) checked.checked = false;
-    const restantes = getVotosRestantes();
-    if (restantes <= 0) {
-      captchaVisualLiberado = false;
-      botaoCaptcha.setAttribute("aria-pressed", "false");
-      botaoVotar.classList.remove("active");
-      botaoVotar.disabled = true;
-    } else {
-      botaoVotar.disabled = false;
-      botaoVotar.classList.add("active");
-      botaoCaptcha.setAttribute("aria-pressed", "true");
-      captchaVisualLiberado = true;
-    }
-  }
+function voltarParaVotacao() {
+  confirmTela.style.display = "none";
+  votoTela.style.display = "block";
 
-  botaoVotar.addEventListener("click", () => {
-    const escolhido = document.querySelector('input[name="vote"]:checked');
-    if (!escolhido) return alert("Selecione alguém para votar!");
-    if (getVotosRestantes() <= 0) {
-      pendingVote = escolhido.value;
-      abrirCaptcha();
-      return;
-    }
-    submitVote(escolhido.value);
-  });
+  const checked = document.querySelector('input[name="vote"]:checked');
+  if (checked) checked.checked = false;
+
+  captchaClicado = false; // Garante que ao voltar, o botão esteja bloqueado
+  updateBotoesEstado();
+}
 
   botaoVotarNovamente.addEventListener("click", () => {
     voltarParaVotacao();
-  });
-
+  })
+  
+  updateBotoesEstado();
+  
 botaoCaptcha.addEventListener("click", () => {
-  if (captchaVisualLiberado) return;
-  abrirCaptcha();
+  const restantes = getVotosRestantes();
+  if (restantes <= 0) {
+    abrirCaptcha(); 
+  } else {
+    // Se já tem votos, apenas liberamos o botão de votar
+    captchaClicado = true;
+    updateBotoesEstado();
+  }
 });
 
 function scrollParaFinal() {
@@ -1108,12 +1148,10 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   };
 
 (function init() {
-  localStorage.removeItem("votosRestantes");
-  localStorage.removeItem("token");
-  captchaVisualLiberado = false;
-  botaoCaptcha.setAttribute("aria-pressed", "false");
-  botaoVotar.disabled = true;
-  botaoVotar.classList.remove("active");
+  // Mantemos o estado inicial bloqueado
+  captchaClicado = false;
+  updateBotoesEstado();
 })();
-</script></body>
+</script>
+</body>
 </html>
