@@ -269,13 +269,15 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 /* COOKIE CONSENT */
 #cookie-consent { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--bg-card); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 5000; border: 1px solid var(--border-color); display: none; }
 
+/* MAIS FLOPADAS */
 .side-content {  
-    background-color: white;  
+    background-color: var(--bg-card); 
     border-radius: 10px;  
     padding: 20px;  
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);  
-    border: 1px solid #eee;  
+    border: 1px solid var(--border-color); 
     height: fit-content;
+    transition: background-color 0.3s, border-color 0.3s;
 }  
 
 .side-content h4 {  
@@ -291,7 +293,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     display: flex;  
     align-items: flex-start;  
     padding: 15px 0;  
-    border-bottom: 1px dashed #eee;  
+    border-bottom: 1px dashed var(--border-color); 
 }  
 
 .trend-item:last-child { border-bottom: none; }
@@ -309,12 +311,12 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .trend-item a {  
     font-weight: 700;  
-    color: var(--text-primary);  
+    color: var(--text-primary); 
     transition: color 0.3s;  
 }  
 
 .trend-item a:hover { color: var(--purple-dark); }
-    
+
 </style>
 <style>
 .social-icon-btn {
@@ -445,29 +447,32 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     </main>
 </div>        
 <div style="height: 10px;"></div>
+    
+<!-- HTML DA SIDEBAR -->
 <aside class="side-content">  
-            <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
-            <div class="trend-item">  
-                <span class="trend-number">01</span>  
-                <a href="#">Vencedores do Comu Awards</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">02</span>  
-                <a href="#">Estreia do Reality do Nick</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">03</span>  
-                <a href="#">Início do Capítulo 4 de Last Heir</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">04</span>  
-                <a href="#">MegaFlop da semana</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">05</span>  
-                <a href="#">Novo Fshow</a>  
-            </div>  
-        </aside>  
+    <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
+    <div class="trend-item">  
+        <span class="trend-number">01</span>  
+        <a href="#">Vencedores do Comu Awards</a>  
+    </div>  
+    <div class="trend-item">  
+        <span class="trend-number">02</span>  
+        <a href="#">Estreia do Reality do Nick</a>  
+    </div>  
+    <div class="trend-item">  
+        <span class="trend-number">03</span>  
+        <a href="#">Início do Capítulo 4 de Last Heir</a>  
+    </div>  
+    <div class="trend-item">  
+        <span class="trend-number">04</span>  
+        <a href="#">MegaFlop da semana</a>  
+    </div>  
+    <div class="trend-item">  
+        <span class="trend-number">05</span>  
+        <a href="#">Novo Fshow</a>  
+    </div>  
+</aside>
+
     </section>  
     </div>
 
