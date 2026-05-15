@@ -1,0 +1,507 @@
+<!DOCTYPE html>  
+<html lang="pt-BR">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>FlopShow | Notícias, Reality Shows e Enquetes</title>  
+    <meta name="description" content="FlopShow: Acompanhe as principais notícias de reality shows, enquetes e coberturas completas.">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+
+<style>
+/* ==================================== 
+   VARIÁVEIS E TEMA
+   ==================================== */
+:root {  
+    --orange-vibrant: #FF8C00;  
+    --purple-dark: #8A2BE2;  
+    --text-primary: #121212;  
+    --text-secondary: #555;
+    --text-light: #f0f0f0;  
+    --gradient-main: linear-gradient(90deg, var(--orange-vibrant) 0%, var(--purple-dark) 100%);  
+    --gradient-reversed: linear-gradient(90deg, var(--purple-dark) 0%, var(--orange-vibrant) 100%);  
+    --bg-page: #f9f9f9;  
+    --bg-card: #ffffff;
+    --header-bg: #121212;
+    --footer-bg: #121212;
+    --border-color: rgba(0,0,0,0.08);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* MODO ESCURO AJUSTADO */
+body.dark-mode {
+    --text-primary: #f5f5f5;
+    --text-secondary: #bbb;
+    --bg-page: #1e1e1e; 
+    --bg-card: #252525;
+    --header-bg: #0d0d0d;
+    --footer-bg: #0d0d0d;
+    --border-color: #444; 
+}
+
+* {  
+    margin: 0;  
+    padding: 0;  
+    box-sizing: border-box;  
+}
+
+body {  
+    background-color: var(--bg-page);  
+    color: var(--text-primary);  
+    line-height: 1.6;  
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+a { text-decoration: none; color: inherit; transition: var(--transition); }
+
+/* ==================================== 
+   HEADER
+   ==================================== */
+.header {
+    background: var(--header-bg);
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    height: 35px;
+    width: auto;
+}
+
+.brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: white;
+}
+
+.header-actions i {
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.gradient-line {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+}
+
+/* ==================================== 
+   BANNER ABAIXO DO HEADER
+   ==================================== */
+.top-banner-wrapper {
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-page);
+    display: flex;
+    justify-content: center;
+    padding: 0; 
+    margin: 0;
+    border-bottom: 1px solid var(--border-color);
+    line-height: 0; 
+}
+
+.top-banner-img {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    padding: 0;
+    transition: var(--transition);
+}
+
+@media (max-width: 768px) {
+    .top-banner-img {
+        max-height: 150px;
+    }
+}
+
+/* ==================================== 
+   STORIES RESTAURADOS
+   ==================================== */
+.stories-wrapper {
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.stories-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 0 5%;
+  scrollbar-width: none;
+}
+
+.stories-container::-webkit-scrollbar { display: none; }
+
+.story-item {
+  position: relative;
+  flex-shrink: 0;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  padding: 3px;
+  background: var(--gradient-main);
+  transition: var(--transition);
+}
+
+.story-item:hover { transform: scale(1.05); }
+
+.story-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--bg-page);
+}
+
+.story-item.badge-fire::after { content: "🔥"; position: absolute; top: -5px; right: -5px; font-size: 1.2rem; }
+.story-item.badge-crown::after { content: "👑"; position: absolute; top: -5px; right: -5px; font-size: 1.2rem; }
+
+.story-pair { display: flex; flex-shrink: 0; margin-right: 10px; }
+.story-pair .story-item { width: 66px; height: 66px; }
+.story-pair .story-item:last-child { margin-left: -20px; }
+
+/* ==================================== 
+   DESTAQUES & CARROSSEL
+   ==================================== */
+.section-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 30px 5% 20px;
+}
+
+.section-indicator { width: 5px; height: 35px; background: #ddd; border-radius: 3px; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; }
+
+.carousel-container {
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.carousel-track { display: flex; transition: transform 0.5s ease; }
+.carousel-slide { min-width: 100%; height: 450px; position: relative; }
+.slide-image { width: 100%; height: 100%; object-fit: cover; }
+.slide-overlay { position: absolute; bottom: 20px; left: 20px; right: 20px; background: linear-gradient(90deg, rgba(255,140,0,0.9), rgba(138,43,226,0.8)); padding: 20px; border-radius: 12px; color: white; max-width: 400px; }
+.slide-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; }
+.carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.3); border: none; color: white; padding: 15px; cursor: pointer; border-radius: 50%; }
+.prev-control { left: 15px; }
+.next-control { right: 15px; }
+
+/* ==================================== 
+   GRID DE NOTÍCIAS
+   ==================================== */
+.news-grid { display: grid; grid-template-columns: 1fr; gap: 25px; padding: 0 5%; margin-top: 30px; }
+@media (min-width: 992px) { .news-grid { grid-template-columns: 2.5fr 1fr; } }
+.main-news { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.news-card { background: var(--bg-card); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: var(--transition); }
+.news-card:hover { transform: translateY(-5px); }
+.card-img { width: 100%; height: 180px; object-fit: cover; }
+.card-content { padding: 15px; }
+.card-tag { color: var(--purple-dark); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
+.card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; margin: 5px 0; }
+.sidebar { background: var(--bg-card); border-radius: 15px; padding: 20px; border: 1px solid var(--border-color); height: fit-content; }
+.sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--orange-vibrant); border-bottom: 2px solid var(--purple-dark); margin-bottom: 15px; }
+
+/* ==================================== 
+   FOOTER (ESTILO IMAGEM)
+   ==================================== */
+.footer { background: var(--footer-bg); color: white; padding: 50px 5% 30px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.1); }
+.footer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
+.footer-logo { height: 35px; width: auto; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; }
+.footer-section h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+.footer-section p { color: #aaa; font-size: 0.95rem; line-height: 1.6; }
+.footer-links-list { list-style: none; }
+.footer-links-list li { margin-bottom: 12px; }
+.footer-links-list a { color: #eee; font-size: 0.95rem; transition: var(--transition); }
+.footer-links-list a:hover { color: var(--orange-vibrant); padding-left: 5px; }
+.social-icons-footer { display: flex; gap: 15px; margin-top: 20px; }
+.social-icon-btn { width: 45px; height: 45px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 1.2rem; transition: var(--transition); }
+.social-icon-btn:hover { background: var(--orange-vibrant); transform: scale(1.1); }
+.footer-bottom { margin-top: 50px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.copyright-text { color: #666; font-size: 0.85rem; }
+
+/* Botão Flutuante */
+.floating-btn { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: white; color: #121212; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); font-size: 1.5rem; z-index: 1000; }
+
+/* COOKIE CONSENT */
+#cookie-consent { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--bg-card); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 5000; border: 1px solid var(--border-color); display: none; }
+</style>
+<style>
+.social-icon-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-decoration: none;
+  background: #222;
+}
+
+.custom-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-link {
+    min-width: 100%;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+</style>
+
+</head>
+<body class="light-mode">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo" class="logo-img">
+            <span class="brand-name">FLOP SHOW</span>
+        </div>
+        <div class="header-actions">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-moon" id="theme-toggle"></i>
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <div class="top-banner-wrapper">
+        <img src="https://fshow.site/fotos/bannerfshow.png" alt="Banner FlopShow" class="top-banner-img">
+    </div>
+    <div class="gradient-line"></div>
+
+    <!-- Stories Restaurados -->
+    <div class="stories-wrapper">
+        <div class="stories-container">
+            <div class="story-item badge-fire"><img src="https://i.ibb.co/8nTJgs39/Braian.png" alt="Braian"></div>
+            <div class="story-pair">
+                <div class="story-item"><img src="https://i.ibb.co/s96D1FGM/Grimes.png" alt="Grimes"></div>
+                <div class="story-item"><img src="https://i.ibb.co/rKk3wcF9/Joao.png" alt="João"></div>
+            </div>
+            <div class="story-item badge-crown"><img src="https://i.ibb.co/pBqyfQMx/Joao-Lucas.png" alt="Joao Lucas"></div>
+            <div class="story-item"><img src="https://i.ibb.co/4ZnRKp9k/Koyuh.png" alt="Koyuh"></div>
+            <div class="story-item"><img src="https://i.ibb.co/TMs2c7Dz/Luddi.png" alt="Luddi"></div>
+            <div class="story-item"><img src="https://i.ibb.co/n8KCBjy9/Manchinha.png" alt="Manchinha"></div>
+            <div class="story-item"><img src="https://i.ibb.co/fV6PDjFF/Mikael.png" alt="Mikael"></div>
+        </div>
+    </div>
+
+    <!-- Destaques -->
+    <div class="section-title-wrapper">
+        <div class="section-indicator"></div>
+        <h2 class="section-title">✨ DESTAQUES FLOP SHOW</h2>
+    </div>
+
+<section class="carousel-container">
+    <div class="carousel-track">
+
+        <a href="https://www.fshow.site/flop-news/cdf11.html" class="carousel-link">
+            <article class="carousel-slide">
+                <img src="https://i.ibb.co/BK22phxP/cdf.png" alt="CDF" class="slide-image">
+                <div class="slide-overlay">
+                    <h3 class="slide-title">CDF - Veja o resumo da estreia</h3>
+                </div>
+            </article>
+        </a>
+
+        <a href="https://fshow.site/bbb/paredoesbbbf6.html" class="carousel-link">
+            <article class="carousel-slide">
+                <img src="https://i.ibb.co/zWWCq4Mb/Gemini-Generated-Image-jts7cojts7cojts7-Photoroom.png" alt="BBB" class="slide-image">
+                <div class="slide-overlay">
+                    <h3 class="slide-title">Hora da verdade! Confira o resultado dos paredões.</h3>
+                </div>
+            </article>
+        </a>
+
+    </div>
+
+    <button class="carousel-control prev-control">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+
+    <button class="carousel-control next-control">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</section>
+
+<!-- Notícias -->
+<div class="news-grid">
+    <main class="main-news">
+
+        <a href="flop-news/final.html" class="news-link">
+            <article class="news-card">
+                <img src="https://i.ibb.co/HL932NpK/Final.jpg" alt="Final" class="card-img">
+                <div class="card-content">
+                    <span class="card-tag">Reality</span>
+                    <h3 class="card-title">Eueu, Gean, Luddy e Mikael são os finalistas!</h3>
+                </div>
+            </article>
+        </a>
+
+        <a href="ads/planos.html" class="news-link">
+            <article class="news-card">
+                <img src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg" alt="Finalistas" class="card-img">
+                <div class="card-content">
+                    <span class="card-tag">Espaço Publicitário</span>
+                    <h3 class="card-title">Clique para anunciar aqui</h3>
+                </div>
+            </article>
+        </a>
+
+    </main>
+</div>
+        <aside class="sidebar">
+            <h3 class="sidebar-title">MAIS FLOPADAS</h3>
+            <div style="padding: 10px 0; border-bottom: 1px dashed var(--border-color);">01. Vencedores do Comu Awards</div>
+            <div style="padding: 10px 0; border-bottom: 1px dashed var(--border-color);">02. Estreia do Reality do Nick</div>
+            <div style="padding: 10px 0; border-bottom: 1px dashed var(--border-color);">03. Início do Capítulo 4 de Last Heir</div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-header">
+            <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo" class="footer-logo">
+            <span class="brand-name">FLOP SHOW</span>
+        </div>
+        
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>SOBRE</h4>
+                <p>Sua fonte de notícias, enquetes e cobertura completa de reality shows brasileiros.</p>
+            </div>
+            <div class="footer-section">
+                <h4>NAVEGAÇÃO</h4>
+                <ul class="footer-links-list">
+                    <li><a href="#">Notícias</a></li>
+                    <li><a href="#">Enquetes</a></li>
+                    <li><a href="#">Categorias</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>LEGAL</h4>
+                <ul class="footer-links-list">
+                    <li><a href="termos/privacidade.html">Política de Privacidade</a></li>
+                    <li><a href="termos/termos.html">Termos de Uso</a></li>
+                    <li><a href="termos/contato.html">Contato</a></li>
+                    <li><a href="termos/contato.html">Sobre Nós</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>REDES SOCIAIS</h4>
+                <div class="social-icons-footer">
+                 <a href="https://discord.gg/yUVY2uJvU3" class="social-icon-btn"> <img src="https://i.ibb.co/5gfbSTqZ/Background-Eraser-20260514-212337182.png" alt="Ícone" class="custom-icon"></a>
+                    <a href="https://x.com/Euu_Phillip" class="social-icon-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/vulgoflopp?igsh=MWhycmQxOTZnNnI1eQ==" class="social-icon-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="https://youtube.com/@vulgoflopp?si=PYen993T6KsYhKgd" class="social-icon-btn"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright-text">© 2026 FlopShow • Pixeels Productions</div>
+        </div>
+    </footer>
+
+    <!-- Botão Flutuante -->
+    <div class="floating-btn">
+        <i class="fas fa-bell"></i>
+    </div>
+
+    <!-- Cookie Consent -->
+    <div id="cookie-consent">
+        <p>Este site utiliza cookies para melhorar sua experiência.</p>
+        <button style="background:var(--gradient-main); color:white; border:none; padding:10px; width:100%; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="acceptCookies()">Aceitar</button>
+    </div>
+
+<script>
+// MODO ESCURO
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    themeToggle.classList.replace(isDark ? 'fa-moon' : 'fa-sun', isDark ? 'fa-sun' : 'fa-moon');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggle.classList.replace('fa-moon', 'fa-sun');
+}
+
+// CARROSSEL
+const track = document.querySelector('.carousel-track');
+const slides = Array.from(track.children);
+const nextBtn = document.querySelector('.next-control');
+const prevBtn = document.querySelector('.prev-control');
+let currentSlide = 0;
+
+function updateCarousel(index) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    currentSlide = index;
+    track.style.transform = `translateX(-${index * 100}%)`;
+}
+
+nextBtn.addEventListener('click', () => updateCarousel(currentSlide + 1));
+prevBtn.addEventListener('click', () => updateCarousel(currentSlide - 1));
+
+// COOKIES
+function acceptCookies() {
+    localStorage.setItem('cookiesAccepted', 'true');
+    document.getElementById('cookie-consent').style.display = 'none';
+}
+if (!localStorage.getItem('cookiesAccepted')) {
+    setTimeout(() => document.getElementById('cookie-consent').style.display = 'block', 2000);
+}
+</script>
+</body>
+</html>
