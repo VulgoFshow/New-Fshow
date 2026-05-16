@@ -430,7 +430,7 @@ input::placeholder {
 const client = new Appwrite.Client();
 
 client
-    .setEndpoint("https://nyc.cloud.appwrite.io/v1" ) 
+    .setEndpoint("https://cloud.appwrite.io/v1") // Endpoint padrão (ajuste se necessário para nyc.cloud...)
     .setProject("6a07b38c00004e1645ee");
 
 const account = new Appwrite.Account(client);
@@ -441,17 +441,12 @@ const DATABASE_ID = "6a07b77b0016f7c90141";
 const PROFILES_COLLECTION_ID = "profiles"; 
 const AVATARS_BUCKET_ID = "6a07b91a000e61c9e4b3";
 
+// URL FIXA DO SITE PARA REDIRECIONAMENTOS
+const SITE_URL = "https://www.fshow.site/";
+
 let selectedAvatarFile = null;
 
 /* ================= FUNÇÕES AUXILIARES ================= */
-
-// Detecta automaticamente a URL base para redirecionamentos
-function getBaseUrl() {
-    if (window.location.protocol === 'file:') {
-        return "ERRO_FILE_PROTOCOL";
-    }
-    return window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/';
-}
 
 function showMsg(id, text, type) {
     const el = document.getElementById(id);
@@ -537,7 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await account.createEmailPasswordSession(email, pass);
             saveLoginTimestamp();
             showMsg("loginMessage", "Sucesso! Redirecionando...", "success");
-            setTimeout(() => window.location.href = "index.html", 1000);
+            setTimeout(() => window.location.href = SITE_URL + "index.html", 1000);
         } catch (e) {
             showMsg("loginMessage", e.message, "error");
             document.getElementById("loginBtn").disabled = false;
@@ -547,12 +542,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== LOGIN GOOGLE =====
     document.getElementById("googleLoginBtn").onclick = async () => {
-        const baseUrl = getBaseUrl();
-        if (baseUrl === "ERRO_FILE_PROTOCOL") {
-            return alert("ERRO: O login do Google não funciona abrindo o arquivo direto da pasta. Você precisa usar um servidor local (como Live Server do VS Code).");
-        }
         try {
-            await account.createOAuth2Session("google", baseUrl + "index.html", baseUrl + "login.html");
+            await account.createOAuth2Session(
+                "google", 
+                SITE_URL + "index.html", 
+                SITE_URL + "login.html"
+            );
         } catch (e) {
             showMsg("loginMessage", "Erro no login Google: " + e.message, "error");
         }
@@ -560,12 +555,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== LOGIN DISCORD =====
     document.getElementById("discordLoginBtn").onclick = async () => {
-        const baseUrl = getBaseUrl();
-        if (baseUrl === "ERRO_FILE_PROTOCOL") {
-            return alert("ERRO: O login do Discord não funciona abrindo o arquivo direto da pasta. Você precisa usar um servidor local.");
-        }
         try {
-            await account.createOAuth2Session("discord", baseUrl + "index.html", baseUrl + "login.html");
+            await account.createOAuth2Session(
+                "discord", 
+                SITE_URL + "index.html", 
+                SITE_URL + "login.html"
+            );
         } catch (e) {
             showMsg("loginMessage", "Erro no login Discord: " + e.message, "error");
         }
@@ -602,7 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await account.createEmailPasswordSession(email, pass);
             saveLoginTimestamp();
             showMsg("signupMessage", "Conta criada com sucesso!", "success");
-            setTimeout(() => window.location.href = "index.html", 1500);
+            setTimeout(() => window.location.href = SITE_URL + "index.html", 1500);
         } catch (e) {
             console.error("Erro no cadastro:", e);
             showMsg("signupMessage", e.message, "error");
@@ -624,10 +619,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("sendResetEmailBtn").onclick = async () => {
         const email = document.getElementById("forgotPasswordEmail").value;
         if (!email) return showMsg("forgotPasswordMessage", "Digite o e-mail", "error");
-        const baseUrl = getBaseUrl();
 
         try {
-            await account.createRecovery(email, baseUrl + "reset-password.html");
+            await account.createRecovery(email, SITE_URL + "reset-password.html");
             showMsg("forgotPasswordMessage", "Link de recuperação enviado!", "success");
         } catch (e) {
             showMsg("forgotPasswordMessage", e.message, "error");
@@ -639,7 +633,7 @@ document.addEventListener("DOMContentLoaded", () => {
 (async () => {
     try {
         await account.get();
-        window.location.href = "index.html";
+        window.location.href = SITE_URL + "index.html";
     } catch (e) {
         console.log("Usuário não autenticado.");
     }
