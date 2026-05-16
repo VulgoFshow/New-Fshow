@@ -649,14 +649,54 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 });
-
+    
 /* ===== VERIFICAÇÃO DE LOGIN ===== */
 (async () => {
     try {
-        await account.get();
+
+        // pega usuário logado
+        const user = await account.get();
+
+        let avatarUrl = null;
+
+        // tenta buscar perfil no banco
+        try {
+
+            const profile = await databases.getDocument(
+                DATABASE_ID,
+                PROFILES_COLLECTION_ID,
+                user.$id
+            );
+
+            // se tiver avatar salvo
+            if (profile.avatarFileId) {
+
+                avatarUrl = storage.getFileView(
+                    AVATARS_BUCKET_ID,
+                    profile.avatarFileId
+                );
+
+            }
+
+        } catch(profileError) {
+            console.log("Perfil não encontrado.");
+        }
+
+        // SALVA no localStorage pro header usar
+        localStorage.setItem("fshow_user", JSON.stringify({
+            id: user.$id,
+            name: user.name,
+            email: user.email,
+            avatar: avatarUrl
+        }));
+
+        // redireciona
         window.location.href = SITE_URL + "index.html";
+
     } catch (e) {
+
         console.log("Usuário não autenticado.");
+
     }
 })();
 </script>
