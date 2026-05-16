@@ -696,8 +696,7 @@ if (prevBtn) {
 /* ============================================================
    PERFIL
 ============================================================ */
-(async function () {
-
+    
     // ================= APPWRITE =================
 document.addEventListener("DOMContentLoaded", async function () {
 
@@ -743,7 +742,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     let currentUser = null;
     let currentProfile = null;
 
-<script>
 // ================= DROPDOWN PERFIL =================
 const trigger = document.getElementById('fshowTrigger');
 const dropdown = document.getElementById('fshowDropdown');
@@ -1020,14 +1018,10 @@ if (trigger && dropdown && widget) {
                 alert('Erro ao atualizar foto.');
 
                 console.error(error);
-
             }
-
         });
-
     }
-
-})();
+});
 
 /* ============================================================
    TEMA ESCURO / CLARO
