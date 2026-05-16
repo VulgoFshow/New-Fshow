@@ -253,6 +253,7 @@ input::placeholder {
     padding: 35px;
     max-width: 420px;
     width: 90%;
+    text-align: center;
 }
 
 .profile-picture-container {
@@ -312,6 +313,39 @@ input::placeholder {
 
 .upload-progress.active {
     display: block;
+}
+
+/* Styles for the Logged In Popup */
+#alreadyLoggedInModal .user-info {
+    margin: 20px 0;
+}
+#alreadyLoggedInModal .user-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+#alreadyLoggedInModal .user-email {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+#alreadyLoggedInModal .modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+}
+#alreadyLoggedInModal .btn-secondary {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 16px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+#alreadyLoggedInModal .btn-secondary:hover {
+    background: rgba(255,255,255,0.15);
 }
 
 @keyframes fadeIn {
@@ -430,7 +464,27 @@ input::placeholder {
             <input type="email" id="forgotPasswordEmail" placeholder="Seu e-mail registrado">
         </div>
         <button type="button" class="btn-submit" id="sendResetEmailBtn" style="width: 100%;">ENVIAR LINK</button>
-        <button type="button" id="closeForgotModal" style="width: 100%; margin-top: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 16px; color: white; cursor: pointer; transition: 0.3s ease;">FECHAR</button>
+        <button type="button" id="closeForgotModal" class="btn-secondary" style="width: 100%; margin-top: 10px;">FECHAR</button>
+    </div>
+</div>
+
+<!-- MODAL USUÁRIO JÁ LOGADO -->
+<div id="alreadyLoggedInModal" class="modal">
+    <div class="modal-content">
+        <h2 style="margin-bottom: 10px; color: #8000ff;">Você já está logado em:</h2>
+        
+        <div class="user-info">
+            <div class="profile-picture-container">
+                <div class="profile-picture" id="loggedInAvatar">👤</div>
+            </div>
+            <div class="user-name" id="loggedInName">Carregando...</div>
+            <div class="user-email" id="loggedInEmail">Carregando...</div>
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-submit" id="stayLoggedInBtn" style="width: 100%; margin-top: 0;">Permanecer logado</button>
+            <button type="button" class="btn-secondary" id="logoutAndSwitchBtn" style="width: 100%;">Logar em outra conta</button>
+        </div>
     </div>
 </div>
 
@@ -445,6 +499,7 @@ client
 const account = new Appwrite.Account(client);
 const databases = new Appwrite.Databases(client);
 const storage = new Appwrite.Storage(client);
+const avatars = new Appwrite.Avatars(client);
 
 const DATABASE_ID = "6a07b77b0016f7c90141"; 
 const PROFILES_COLLECTION_ID = "profiles"; 
@@ -504,10 +559,46 @@ async function uploadProfilePicture(file, userId) {
     }
 }
 
+async function checkSession() {
+    try {
+        const user = await account.get();
+        if (user) {
+            // User is logged in, show the popup
+            document.getElementById("loggedInName").textContent = user.name || "Usuário";
+            document.getElementById("loggedInEmail").textContent = user.email;
+            
+            // Try to get avatar
+            try {
+                const profile = await databases.getDocument(DATABASE_ID, PROFILES_COLLECTION_ID, user.$id);
+                if (profile && profile.avatarFileId) {
+                    const avatarUrl = storage.getFileView(AVATARS_BUCKET_ID, profile.avatarFileId);
+                    document.getElementById("loggedInAvatar").innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
+                } else {
+                    // Fallback to initials if no custom avatar
+                    const avatarInitials = avatars.getInitials(user.name);
+                    document.getElementById("loggedInAvatar").innerHTML = `<img src="${avatarInitials}" alt="Avatar">`;
+                }
+            } catch (e) {
+                // Fallback to initials if profile document doesn't exist yet
+                const avatarInitials = avatars.getInitials(user.name);
+                document.getElementById("loggedInAvatar").innerHTML = `<img src="${avatarInitials}" alt="Avatar">`;
+            }
+
+            document.getElementById("alreadyLoggedInModal").classList.add("active");
+        }
+    } catch (error) {
+        // No active session, stay on login page
+        console.log("Nenhuma sessão ativa encontrada.");
+    }
+}
+
 /* ================= EVENT LISTENERS ================= */
 
 document.addEventListener("DOMContentLoaded", () => {
     
+    // Check if user is already logged in
+    checkSession();
+
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.onclick = () => toggleTabs(btn.dataset.tab);
     });
@@ -524,6 +615,20 @@ document.addEventListener("DOMContentLoaded", () => {
             preview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
         };
         reader.readAsDataURL(file);
+    };
+
+    // Already Logged In Modal Actions
+    document.getElementById("stayLoggedInBtn").onclick = () => {
+        window.location.href = SITE_URL + "index.html";
+    };
+
+    document.getElementById("logoutAndSwitchBtn").onclick = async () => {
+        try {
+            await account.deleteSession('current');
+            document.getElementById("alreadyLoggedInModal").classList.remove("active");
+        } catch (e) {
+            showMsg("loginMessage", "Erro ao sair: " + e.message, "error");
+        }
     };
 
     // ===== LOGIN E-MAIL/SENHA =====
@@ -596,38 +701,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!nick || !email || !pass || !confirm) return showMsg("signupMessage", "Preencha tudo", "error");
         if (pass !== confirm) return showMsg("signupMessage", "Senhas não batem", "error");
+        if (pass.length < 6) return showMsg("signupMessage", "Senha muito curta", "error");
 
-        const signupBtn = document.getElementById("signupBtn");
-        signupBtn.disabled = true;
-        signupBtn.innerHTML = '<span class="spinner"></span>Criando...';
-        
         try {
+            const signupBtn = document.getElementById("signupBtn");
+            signupBtn.disabled = true;
+            signupBtn.innerHTML = '<span class="spinner"></span>Criando...';
+
+            // 1. Criar conta
             const user = await account.create(Appwrite.ID.unique(), email, pass, nick);
+            
+            // 2. Login automático
+            await account.createEmailPasswordSession(email, pass);
+            
+            // 3. Criar documento de perfil no banco de dados
+            await databases.createDocument(DATABASE_ID, PROFILES_COLLECTION_ID, user.$id, {
+                nickname: nick,
+                email: email,
+                createdAt: new Date().toISOString()
+            });
 
-            await databases.createDocument(
-                DATABASE_ID,
-                PROFILES_COLLECTION_ID,
-                user.$id,
-                { userId: user.$id, nickname: nick }
-            );
-
+            // 4. Upload da foto se houver
             if (selectedAvatarFile) {
                 await uploadProfilePicture(selectedAvatarFile, user.$id);
             }
 
-            await account.createEmailPasswordSession(email, pass);
             saveLoginTimestamp();
             showMsg("signupMessage", "Conta criada com sucesso!", "success");
             setTimeout(() => window.location.href = SITE_URL + "index.html", 1500);
         } catch (e) {
-            console.error("Erro no cadastro:", e);
             showMsg("signupMessage", e.message, "error");
-            signupBtn.disabled = false;
-            signupBtn.innerHTML = "CRIAR CONTA";
+            document.getElementById("signupBtn").disabled = false;
+            document.getElementById("signupBtn").textContent = "CRIAR CONTA";
         }
     };
 
-    // ===== RECUPERAR SENHA =====
+    // Forgot Password Logic
     document.getElementById("forgotPasswordLink").onclick = (e) => {
         e.preventDefault();
         document.getElementById("forgotPasswordModal").classList.add("active");
@@ -639,66 +748,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("sendResetEmailBtn").onclick = async () => {
         const email = document.getElementById("forgotPasswordEmail").value;
-        if (!email) return showMsg("forgotPasswordMessage", "Digite o e-mail", "error");
+        if (!email) return showMsg("forgotPasswordMessage", "Informe o e-mail", "error");
 
         try {
             await account.createRecovery(email, SITE_URL + "reset-password.html");
-            showMsg("forgotPasswordMessage", "Link de recuperação enviado!", "success");
+            showMsg("forgotPasswordMessage", "E-mail de recuperação enviado!", "success");
         } catch (e) {
             showMsg("forgotPasswordMessage", e.message, "error");
         }
     };
 });
-    
-/* ===== VERIFICAÇÃO DE LOGIN ===== */
-(async () => {
-    try {
-
-        // pega usuário logado
-        const user = await account.get();
-
-        let avatarUrl = null;
-
-        // tenta buscar perfil no banco
-        try {
-
-            const profile = await databases.getDocument(
-                DATABASE_ID,
-                PROFILES_COLLECTION_ID,
-                user.$id
-            );
-
-            // se tiver avatar salvo
-            if (profile.avatarFileId) {
-
-                avatarUrl = storage.getFileView(
-                    AVATARS_BUCKET_ID,
-                    profile.avatarFileId
-                );
-
-            }
-
-        } catch(profileError) {
-            console.log("Perfil não encontrado.");
-        }
-
-        // SALVA no localStorage pro header usar
-        localStorage.setItem("fshow_user", JSON.stringify({
-            id: user.$id,
-            name: user.name,
-            email: user.email,
-            avatar: avatarUrl
-        }));
-
-        // redireciona
-        window.location.href = SITE_URL + "index.html";
-
-    } catch (e) {
-
-        console.log("Usuário não autenticado.");
-
-    }
-})();
 </script>
 </body>
 </html>
