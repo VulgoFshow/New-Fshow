@@ -743,21 +743,42 @@ document.addEventListener("DOMContentLoaded", async function () {
     let currentUser = null;
     let currentProfile = null;
 
-    // ================= DROPDOWN =================
-    if (trigger && dropdown) {
+<script>
+// ================= DROPDOWN PERFIL =================
+const trigger = document.getElementById('fshowTrigger');
+const dropdown = document.getElementById('fshowDropdown');
+const widget = document.getElementById('fshowWidget');
 
-        trigger.addEventListener('click', function (e) {
-            e.stopPropagation();
-            dropdown.classList.toggle('fshow-active');
-        });
+if (trigger && dropdown && widget) {
 
-        document.addEventListener('click', function (e) {
-            if (widget && !widget.contains(e.target)) {
-                dropdown.classList.remove('fshow-active');
-            }
-        });
+    // ABRIR / FECHAR
+    trigger.addEventListener('click', function(e) {
 
-    }
+        e.stopPropagation();
+
+        dropdown.classList.toggle('fshow-active');
+
+    });
+
+    // IMPEDIR FECHAMENTO AO CLICAR DENTRO
+    dropdown.addEventListener('click', function(e) {
+
+        e.stopPropagation();
+
+    });
+
+    // FECHAR AO CLICAR FORA
+    document.addEventListener('click', function(e) {
+
+        if (!widget.contains(e.target)) {
+
+            dropdown.classList.remove('fshow-active');
+
+        }
+
+    });
+
+}
 
     // ================= CONTINUAR ANÔNIMO =================
     if (anonBtn) {
