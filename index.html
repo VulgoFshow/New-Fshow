@@ -165,8 +165,18 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     border: 1px solid var(--border-color);
 }
 
-.carousel-track { display: flex; transition: transform 0.5s ease; }
-.carousel-slide { min-width: 100%; height: 450px; position: relative; }
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 100%;
+}
+
+.carousel-link {
+    min-width: 100%;
+    width: 100%;
+    flex: 0 0 100%;
+}
+.carousel-slide { width: 100%; height: 450px; position: relative; }
 .slide-image { width: 100%; height: 100%; object-fit: cover; }
 .slide-overlay { position: absolute; bottom: 20px; left: 20px; right: 20px; background: linear-gradient(90deg, rgba(255,140,0,0.9), rgba(138,43,226,0.8)); padding: 20px; border-radius: 12px; color: white; max-width: 400px; }
 .slide-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; }
@@ -447,7 +457,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     <!-- Header -->
 <header class="header">
     <div class="logo-container">
-        <img src="/logo.png" alt="FlopShow" class="logo-img">
+        <img src="https://fshow.site/favicon.png" alt="FlopShow" class="logo-img">
         <span class="brand-name">FlopShow</span>
     </div>
 
@@ -592,17 +602,11 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
         <a href="#">Início do Capítulo 4 de Last Heir</a>  
     </div>  
     <div class="trend-item">  
+       
         <span class="trend-number">04</span>  
-        <a href="#">MegaFlop da semana</a>  
-    </div>  
-    <div class="trend-item">  
-        <span class="trend-number">05</span>  
-        <a href="#">Novo Fshow</a>  
+        <a href="#">Enquete da semana: quem merece ganhar?</a>  
     </div>  
 </aside>
-
-    </section>  
-    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -637,7 +641,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
             <div class="footer-section">
                 <h4>REDES SOCIAIS</h4>
                 <div class="social-icons-footer">
-                 <a href="https://discord.gg/yUVY2uJvU3" class="social-icon-btn"> <img src="https://i.ibb.co/5gfbSTqZ/Background-Eraser-20260514-212337182.png" alt="Ícone" class="custom-icon"></a>
                     <a href="https://x.com/Euu_Phillip" class="social-icon-btn"><i class="fab fa-twitter"></i></a>
                     <a href="https://www.instagram.com/vulgoflopp?igsh=MWhycmQxOTZnNnI1eQ==" class="social-icon-btn"><i class="fab fa-instagram"></i></a>
                     <a href="https://youtube.com/@vulgoflopp?si=PYen993T6KsYhKgd" class="social-icon-btn"><i class="fab fa-youtube"></i></a>
@@ -649,130 +652,139 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
             <div class="copyright-text">© 2026 FlopShow • Pixeels Productions</div>
         </div>
     </footer>
-    
+
 <script>
-// MODO ESCURO
-const themeToggle = document.getElementById('theme-toggle');
-themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    themeToggle.classList.replace(isDark ? 'fa-moon' : 'fa-sun', isDark ? 'fa-sun' : 'fa-moon');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-});
-
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.classList.replace('fa-moon', 'fa-sun');
-}
-
-// CARROSSEL
+// Carrosel
 const track = document.querySelector('.carousel-track');
-const slides = Array.from(track.children);
+const slides = document.querySelectorAll('.carousel-link');
 const nextBtn = document.querySelector('.next-control');
 const prevBtn = document.querySelector('.prev-control');
-let currentSlide = 0;
 
-function updateCarousel(index) {
-    if (index < 0) index = slides.length - 1;
-    if (index >= slides.length) index = 0;
-    currentSlide = index;
-    track.style.transform = `translateX(-${index * 100}%)`;
+let currentIndex = 0;
+
+function updateCarousel() {
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
 }
 
-nextBtn.addEventListener('click', () => updateCarousel(currentSlide + 1));
-prevBtn.addEventListener('click', () => updateCarousel(currentSlide - 1));
+nextBtn.addEventListener('click', () => {
+    currentIndex++;
 
-// COOKIES
-function acceptCookies() {
-    localStorage.setItem('cookiesAccepted', 'true');
-    document.getElementById('cookie-consent').style.display = 'none';
-}
-if (!localStorage.getItem('cookiesAccepted')) {
-    setTimeout(() => document.getElementById('cookie-consent').style.display = 'block', 2000);
-}
-</script>
-<script>
-/* ==================================== 
-   PERFIL
-   ==================================== */
-(function() {
-    const client = new Appwrite.Client();
-    client.setEndpoint("https://nyc.cloud.appwrite.io/v1").setProject("6a07b38c00004e1645ee");
-
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
-    const storage = new Appwrite.Storage(client);
-
-    const DB_ID = "6a07b77b0016f7c90141"; 
-    const COL_ID = "profiles"; 
-    const BUCK_ID = "6a07b91a000e61c9e4b3";
-
-    let currentUser = null;
-
-    async function init() {
-        try {
-            currentUser = await account.get();
-            const profile = await databases.getDocument(DB_ID, COL_ID, currentUser.$id);
-            
-            document.getElementById("fshowUserName").textContent = profile.nickname || currentUser.name;
-            document.getElementById("fshowUserStatus").textContent = "Membro";
-            document.getElementById("fshowLoggedOptions").style.display = "flex";
-            document.getElementById("fshowAnonOptions").style.display = "none";
-
-            const container = document.getElementById("fshowAvatarContainer");
-            if (profile.avatarFileId) {
-                container.innerHTML = `<img src="${storage.getFileView(BUCK_ID, profile.avatarFileId)}" alt="Perfil">`;
-            } else {
-                container.innerHTML = `<img src="https://ui-avatars.com/api/?name=${encodeURIComponent(profile.nickname)}&background=8000ff&color=fff" alt="Perfil">`;
-            }
-        } catch (e) {
-            console.log("Fshow: Visitante anônimo.");
-        }
+    if (currentIndex >= slides.length) {
+        currentIndex = 0;
     }
 
-    const trigger = document.getElementById("fshowTrigger");
-    const dropdown = document.getElementById("fshowDropdown");
+    updateCarousel();
+});
 
-    trigger.addEventListener("click", function(e) {
+prevBtn.addEventListener('click', () => {
+    currentIndex--;
+
+    if (currentIndex < 0) {
+        currentIndex = slides.length - 1;
+    }
+
+    updateCarousel();
+});
+
+// ============================================================
+// WIDGET DE PERFIL
+// ============================================================
+(function() {
+    const trigger  = document.getElementById('fshowTrigger');
+    const dropdown = document.getElementById('fshowDropdown');
+    const widget   = document.getElementById('fshowWidget');
+
+    if (!trigger || !dropdown) return;
+
+    // Abre/fecha o dropdown ao clicar no avatar
+    trigger.addEventListener('click', function(e) {
         e.stopPropagation();
-        dropdown.classList.toggle("fshow-active");
+        dropdown.classList.toggle('fshow-active');
     });
 
-    document.addEventListener("click", function() {
-        dropdown.classList.remove("fshow-active");
-    });
-
-    dropdown.addEventListener("click", function(e) {
-        e.stopPropagation();
-    });
-
-    document.getElementById("fshowContinueAnonBtn").onclick = () => {
-        dropdown.classList.remove("fshow-active");
-    };
-
-    document.getElementById("fshowLogoutBtn").onclick = async () => {
-        await account.deleteSession('current');
-        window.location.reload();
-    };
-
-    document.getElementById("fshowChangeAvatarInput").onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file || !currentUser) return;
-        
-        try {
-            trigger.style.opacity = "0.5";
-            const up = await storage.createFile(BUCK_ID, Appwrite.ID.unique(), file);
-            await databases.updateDocument(DB_ID, COL_ID, currentUser.$id, { avatarFileId: up.$id });
-            document.getElementById("fshowAvatarContainer").innerHTML = `<img src="${storage.getFileView(BUCK_ID, up.$id)}" alt="Perfil">`;
-            trigger.style.opacity = "1";
-            alert("Foto atualizada!");
-        } catch (err) {
-            alert("Erro ao mudar foto.");
-            trigger.style.opacity = "1";
+    // Fecha ao clicar fora
+    document.addEventListener('click', function(e) {
+        if (widget && !widget.contains(e.target)) {
+            dropdown.classList.remove('fshow-active');
         }
-    };
+    });
 
-    init();
+    // Botão "Continuar Anônimo"
+    const anonBtn = document.getElementById('fshowContinueAnonBtn');
+    if (anonBtn) {
+        anonBtn.addEventListener('click', function() {
+            dropdown.classList.remove('fshow-active');
+        });
+    }
+
+    // Botão de logout
+    const logoutBtn = document.getElementById('fshowLogoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('fshow_user');
+            location.reload();
+        });
+    }
+
+    // Troca de avatar
+    const avatarInput = document.getElementById('fshowChangeAvatarInput');
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const container = document.getElementById('fshowAvatarContainer');
+                if (container) {
+                    container.innerHTML = '<img src="' + ev.target.result + '" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Verifica sessão salva no localStorage
+    try {
+        const saved = localStorage.getItem('fshow_user');
+        if (saved) {
+            const user = JSON.parse(saved);
+            const nameEl   = document.getElementById('fshowUserName');
+            const statusEl = document.getElementById('fshowUserStatus');
+            const loggedOpts = document.getElementById('fshowLoggedOptions');
+            const anonOpts   = document.getElementById('fshowAnonOptions');
+            if (nameEl)   nameEl.textContent   = user.name  || 'Usuário';
+            if (statusEl) statusEl.textContent = user.email || 'Membro';
+            if (loggedOpts) loggedOpts.style.display = 'flex';
+            if (anonOpts)   anonOpts.style.display   = 'none';
+            if (user.avatar) {
+                const container = document.getElementById('fshowAvatarContainer');
+                if (container) {
+                    container.innerHTML = '<img src="' + user.avatar + '" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+                }
+            }
+        }
+    } catch(err) { /* sem sessão salva */ }
+})();
+
+// ============================================================
+// TEMA ESCURO / CLARO
+// ============================================================
+(function() {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+    const saved = localStorage.getItem('fshow_theme');
+    if (saved === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.body.classList.remove('light-mode');
+        toggle.classList.replace('fa-moon', 'fa-sun');
+    }
+    toggle.addEventListener('click', function() {
+        const isDark = document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode', !isDark);
+        toggle.classList.toggle('fa-moon', !isDark);
+        toggle.classList.toggle('fa-sun', isDark);
+        localStorage.setItem('fshow_theme', isDark ? 'dark' : 'light');
+    });
 })();
 </script>
 </body>
