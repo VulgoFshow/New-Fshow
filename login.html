@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fshow - Login & Cadastro</title>
     
-    <!-- PocketBase SDK -->
-    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@11.0.0"></script>
 
-<meta name="theme-color" content="#8A2BE2">
+    <meta name="theme-color" content="#8A2BE2">
     
 <style>
 /* ===== RESET ===== */
@@ -335,7 +335,7 @@ input::placeholder {
 <body>
 
 <div class="main-wrapper">
-    <h1 class="logo-fshow">FSHOW</h1>
+    <h1 class="logo-fshow">FlopShow</h1>
 
     <div class="auth-card">
         <div class="tab-control">
@@ -426,9 +426,20 @@ input::placeholder {
 </div>
 
 <script>
-/* ================= POCKETBASE CONFIG ================= */
-// IMPORTANTE: Se o seu servidor PocketBase estiver em outro endereço, altere aqui.
-const pb = new PocketBase('http://127.0.0.1:8090');
+/* ================= APPWRITE CONFIG ================= */
+const client = new Appwrite.Client();
+
+client
+    .setEndpoint("https://nyc.cloud.appwrite.io/v1") 
+    .setProject("6a07b38c00004e1645ee"); 
+
+const account = new Appwrite.Account(client);
+const databases = new Appwrite.Databases(client);
+const storage = new Appwrite.Storage(client);
+
+const DATABASE_ID = "6a07b77b0016f7c90141"; 
+const PROFILES_COLLECTION_ID = "profiles"; 
+const AVATARS_BUCKET_ID = "6a07b91a000e61c9e4b3";
 
 let selectedAvatarFile = null;
 
@@ -447,7 +458,7 @@ function toggleTabs(tab) {
     document.querySelectorAll("form").forEach(f => f.classList.remove("active"));
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     document.getElementById(`${tab}-form`).classList.add("active");
-    document.querySelector(`[data-tab="${tab}"]`).classList.add("active");
+    document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add("active");
 }
 
 function saveLoginTimestamp() {
@@ -455,9 +466,9 @@ function saveLoginTimestamp() {
 }
 
 /**
- * Upload da foto de perfil para PocketBase
+ * Upload da foto de perfil para Appwrite Storage
  * @param {File} file - Arquivo de imagem selecionado
- * @param {string} userId - ID do usuário no PocketBase
+ * @param {string} userId - ID do usuário no Appwrite
  */
 async function uploadProfilePicture(file, userId) {
     try {
@@ -465,14 +476,25 @@ async function uploadProfilePicture(file, userId) {
         progressEl.classList.add('active');
         progressEl.textContent = 'Enviando foto...';
 
-        const formData = new FormData();
-        formData.append('avatar', file);
+        const uploadedFile = await storage.createFile(
+            AVATARS_BUCKET_ID,
+            Appwrite.ID.unique(),
+            file
+        );
 
-        await pb.collection('users').update(userId, formData);
+        // Atualiza o perfil do usuário com o ID do arquivo do avatar
+        await databases.updateDocument(
+            DATABASE_ID,
+            PROFILES_COLLECTION_ID,
+            userId,
+            { avatarFileId: uploadedFile.$id }
+        );
 
         progressEl.textContent = 'Foto enviada!';
         setTimeout(() => progressEl.classList.remove('active'), 2000);
+        return uploadedFile.$id;
     } catch (error) {
+        console.error("Erro ao fazer upload da foto de perfil:", error);
         throw error;
     }
 }
@@ -516,7 +538,7 @@ document.addEventListener("DOMContentLoaded", () => {
             loginBtn.disabled = true;
             loginBtn.innerHTML = '<span class="spinner"></span>Entrando...';
 
-            await pb.collection('users').authWithPassword(email, pass);
+            await account.createEmailPasswordSession(email, pass);
             
             saveLoginTimestamp();
             showMsg("loginMessage", "Sucesso! Redirecionando...", "success");
@@ -531,9 +553,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===== LOGIN GOOGLE =====
     document.getElementById("googleLoginBtn").onclick = async () => {
         try {
-            await pb.collection('users').authWithOAuth2({ provider: 'google' });
-            saveLoginTimestamp();
-            window.location.href = "index.html";
+            // Adapte as URLs de sucesso e falha para o seu domínio
+            await account.createOAuth2Session("google", "http://localhost:8000/index.html", "http://localhost:8000/login.html");
         } catch (e) {
             showMsg("loginMessage", "Erro no login Google: " + e.message, "error");
         }
@@ -542,9 +563,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===== LOGIN DISCORD =====
     document.getElementById("discordLoginBtn").onclick = async () => {
         try {
-            await pb.collection('users').authWithOAuth2({ provider: 'discord' });
-            saveLoginTimestamp();
-            window.location.href = "index.html";
+            // Adapte as URLs de sucesso e falha para o seu domínio
+            await account.createOAuth2Session("discord", "http://localhost:8000/index.html", "http://localhost:8000/login.html");
         } catch (e) {
             showMsg("loginMessage", "Erro no login Discord: " + e.message, "error");
         }
@@ -565,24 +585,29 @@ document.addEventListener("DOMContentLoaded", () => {
         signupBtn.innerHTML = '<span class="spinner"></span>Criando...';
         
         try {
-            const data = {
-                email: email,
-                password: pass,
-                passwordConfirm: confirm,
-                nickname: nick,
-            };
+            // 1. Criar o usuário
+            const user = await account.create(Appwrite.ID.unique(), email, pass, nick);
 
-            const record = await pb.collection('users').create(data);
+            // 2. Criar o documento de perfil no banco de dados
+            await databases.createDocument(
+                DATABASE_ID,
+                PROFILES_COLLECTION_ID,
+                user.$id, // Usar o ID do usuário como ID do documento
+                { userId: user.$id, nickname: nick }
+            );
 
+            // 3. Fazer upload da foto, se selecionada
             if (selectedAvatarFile) {
-                await uploadProfilePicture(selectedAvatarFile, record.id);
+                await uploadProfilePicture(selectedAvatarFile, user.$id);
             }
 
-            await pb.collection('users').authWithPassword(email, pass);
+            // 4. Logar automaticamente
+            await account.createEmailPasswordSession(email, pass);
             saveLoginTimestamp();
             showMsg("signupMessage", "Conta criada com sucesso!", "success");
             setTimeout(() => window.location.href = "index.html", 1500);
         } catch (e) {
+            console.error("Erro no cadastro:", e);
             showMsg("signupMessage", e.message, "error");
             signupBtn.disabled = false;
             signupBtn.innerHTML = "CRIAR CONTA";
@@ -604,8 +629,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!email) return showMsg("forgotPasswordMessage", "Digite o e-mail", "error");
 
         try {
-            await pb.collection('users').requestPasswordReset(email);
-            showMsg("forgotPasswordMessage", "Link enviado para o seu e-mail!", "success");
+            // Adapte a URL de reset para a sua página de definição de nova senha
+            await account.createRecovery(email, "http://localhost:8000/reset-password.html");
+            showMsg("forgotPasswordMessage", "Link de recuperação enviado para o seu e-mail!", "success");
         } catch (e) {
             showMsg("forgotPasswordMessage", e.message, "error");
         }
@@ -613,9 +639,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ===== REDIRECIONAMENTO SE JÁ LOGADO ===== */
-if (pb.authStore.isValid) {
-    window.location.href = "index.html";
-}
+(async () => {
+    try {
+        await account.get(); // Tenta obter a sessão atual
+        window.location.href = "index.html";
+    } catch (e) {
+        console.log("Usuário não autenticado.");
+    }
+})();
 </script>
 </body>
 </html>
