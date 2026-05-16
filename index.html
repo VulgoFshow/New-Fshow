@@ -63,61 +63,6 @@ body {
 a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 /* ==================================== 
-   HEADER
-   ==================================== */
-.header {
-    background: var(--header-bg);
-    height: 70px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    position: sticky;
-    top: 0;
-    z-index: 2000;
-}
-
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo-img {
-    height: 35px;
-    width: auto;
-}
-
-.brand-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-    background: linear-gradient(90deg, #FF8C00, #8A2BE2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    color: white;
-}
-
-.header-actions i {
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.gradient-line {
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
-}
-
-/* ==================================== 
    BANNER ABAIXO DO HEADER
    ==================================== */
 .top-banner-wrapper {
@@ -319,59 +264,84 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 </style>
 <style>
-.social-icon-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  text-decoration: none;
-  background: #222;
+    .header {
+    background: var(--header-bg);
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 2000;
 }
 
-.custom-icon {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.carousel-link {
-    min-width: 100%;
-    display: block;
-    text-decoration: none;
-    color: inherit;
+.logo-img {
+    height: 35px;
+    width: auto;
 }
-</style>
 
-<style>
+.brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: white;
+}
+
+.header-actions i {
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.gradient-line {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+}
+
+/* ==================================== 
+   ESTILOS DO WIDGET DE PERFIL (INTEGRADO NO HEADER)
+   ==================================== */
 .fshow-profile-widget {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 99999; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative; /* Mudado de fixed para relative para caber no header */
+    font-family: 'Poppins', sans-serif;
 }
 
 .fshow-profile-trigger {
-    width: 50px;
-    height: 50px;
+    width: 40px; /* Reduzi um pouco para caber melhor no header */
+    height: 40px;
     border-radius: 50%;
-    border: 2px solid #8000ff;
+    border: 2px solid var(--purple-dark);
     cursor: pointer;
     overflow: hidden;
     background: #222;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: var(--transition);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .fshow-profile-trigger:hover {
-    transform: scale(1.1);
-    border-color: #ff8c00;
+    transform: scale(1.05);
+    border-color: var(--orange-vibrant);
 }
 
 .fshow-profile-trigger img {
@@ -381,54 +351,53 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 .fshow-profile-trigger .anon-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #888;
 }
 
 .fshow-profile-dropdown {
     position: absolute;
-    top: 60px;
+    top: 50px;
     right: 0;
     background: rgba(20, 20, 20, 0.98);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(128, 0, 255, 0.3);
-    border-radius: 20px;
-    padding: 20px;
-    width: 240px;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.7);
-    display: none; /* Controlado pelo JS */
+    border-radius: 15px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     animation: fshowSlideDown 0.3s ease-out;
 }
 
-/* Classe para mostrar o menu */
 .fshow-profile-dropdown.fshow-active {
     display: flex !important;
 }
 
 @keyframes fshowSlideDown {
-    from { opacity: 0; transform: translateY(-15px); }
+    from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .fshow-user-info {
     text-align: center;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .fshow-user-name {
     font-weight: 800;
-    font-size: 1.1rem;
-    background: linear-gradient(45deg, #8000ff, #ff8c00);
+    font-size: 1rem;
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .fshow-user-status {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -436,12 +405,12 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .fshow-btn {
     width: 100%;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 10px;
+    border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.1);
     background: rgba(255,255,255,0.06);
     color: white;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
@@ -458,7 +427,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 .fshow-btn-primary {
-    background: linear-gradient(45deg, #8000ff, #ff8c00);
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
     border: none;
 }
 
@@ -476,17 +445,49 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 <body class="light-mode">
 
     <!-- Header -->
-    <header class="header">
-        <div class="logo-container">
-            <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo" class="logo-img">
-            <span class="brand-name">FLOP SHOW</span>
+<header class="header">
+    <div class="logo-container">
+        <img src="/logo.png" alt="FlopShow" class="logo-img">
+        <span class="brand-name">FlopShow</span>
+    </div>
+
+    <div class="header-actions">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-solid fa-moon" id="theme-toggle"></i>
+        
+        <!-- PERFIL -->
+        <div class="fshow-profile-widget" id="fshowWidget">
+            <div class="fshow-profile-trigger" id="fshowTrigger">
+                <div id="fshowAvatarContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                    <span class="anon-icon">👤</span>
+                </div>
+            </div>
+            
+            <div class="fshow-profile-dropdown" id="fshowDropdown">
+                <div class="fshow-user-info">
+                    <div class="fshow-user-name" id="fshowUserName">Anônimo</div>
+                    <div class="fshow-user-status" id="fshowUserStatus">Visitante</div>
+                </div>
+                
+                <div id="fshowLoggedOptions" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+                    <label class="fshow-btn" for="fshowChangeAvatarInput">
+                        📸 Mudar Foto
+                    </label>
+                    <input type="file" id="fshowChangeAvatarInput" accept="image/*" style="display: none;">
+                    <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">
+                        🚪 Sair da Conta
+                    </button>
+                </div>
+
+                <div id="fshowAnonOptions" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                    <a href="login.html" class="fshow-btn fshow-btn-primary">🔑 Fazer Login</a>
+                    <button class="fshow-btn" id="fshowContinueAnonBtn">👀 Continuar Anônimo</button>
+                </div>
+            </div>
         </div>
-        <div class="header-actions">
-            <i class="fas fa-search"></i>
-            <i class="fas fa-moon" id="theme-toggle"></i>
-            <i class="fas fa-bars"></i>
-        </div>
-    </header>
+    </div>
+</header>
+<div class="gradient-line"></div>
 
     <div class="top-banner-wrapper">
         <img src="https://fshow.site/fotos/bannerfshow.png" alt="Banner FlopShow" class="top-banner-img">
@@ -648,53 +649,53 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
             <div class="copyright-text">© 2026 FlopShow • Pixeels Productions</div>
         </div>
     </footer>
-
-    <!-- Botão Flutuante -->
-    <div class="floating-btn">
-        <i class="fas fa-bell"></i>
-    </div>
-
-    <!-- Cookie Consent -->
-    <div id="cookie-consent">
-        <p>Este site utiliza cookies para melhorar sua experiência.</p>
-        <button style="background:var(--gradient-main); color:white; border:none; padding:10px; width:100%; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="acceptCookies()">Aceitar</button>
-    </div>
-
-<div class="fshow-profile-widget" id="fshowWidget">
-    <div class="fshow-profile-trigger" id="fshowTrigger">
-        <div id="fshowAvatarContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
-            <span class="anon-icon">👤</span>
-        </div>
-    </div>
     
-    <div class="fshow-profile-dropdown" id="fshowDropdown">
-        <div class="fshow-user-info">
-            <div class="fshow-user-name" id="fshowUserName">Anônimo</div>
-            <div class="fshow-user-status" id="fshowUserStatus">Visitante</div>
-        </div>
-        
-        <!-- Opções Logado -->
-        <div id="fshowLoggedOptions" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
-            <label class="fshow-btn" for="fshowChangeAvatarInput">
-                📸 Mudar Foto
-            </label>
-            <input type="file" id="fshowChangeAvatarInput" accept="image/*" style="display: none;">
-            <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">
-                🚪 Sair da Conta
-            </button>
-        </div>
-
-        <!-- Opções Anônimo -->
-        <div id="fshowAnonOptions" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-            <a href="login.html" class="fshow-btn fshow-btn-primary">🔑 Fazer Login</a>
-            <button class="fshow-btn" id="fshowContinueAnonBtn">👀 Continuar Anônimo</button>
-        </div>
-    </div>
-</div>
-
 <script>
+// MODO ESCURO
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    themeToggle.classList.replace(isDark ? 'fa-moon' : 'fa-sun', isDark ? 'fa-sun' : 'fa-moon');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    themeToggle.classList.replace('fa-moon', 'fa-sun');
+}
+
+// CARROSSEL
+const track = document.querySelector('.carousel-track');
+const slides = Array.from(track.children);
+const nextBtn = document.querySelector('.next-control');
+const prevBtn = document.querySelector('.prev-control');
+let currentSlide = 0;
+
+function updateCarousel(index) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    currentSlide = index;
+    track.style.transform = `translateX(-${index * 100}%)`;
+}
+
+nextBtn.addEventListener('click', () => updateCarousel(currentSlide + 1));
+prevBtn.addEventListener('click', () => updateCarousel(currentSlide - 1));
+
+// COOKIES
+function acceptCookies() {
+    localStorage.setItem('cookiesAccepted', 'true');
+    document.getElementById('cookie-consent').style.display = 'none';
+}
+if (!localStorage.getItem('cookiesAccepted')) {
+    setTimeout(() => document.getElementById('cookie-consent').style.display = 'block', 2000);
+}
+</script>
+<script>
+/* ==================================== 
+   PERFIL
+   ==================================== */
 (function() {
-    // Configurações Appwrite
     const client = new Appwrite.Client();
     client.setEndpoint("https://nyc.cloud.appwrite.io/v1").setProject("6a07b38c00004e1645ee");
 
@@ -708,7 +709,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
     let currentUser = null;
 
-    // Inicialização
     async function init() {
         try {
             currentUser = await account.get();
@@ -730,7 +730,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
         }
     }
 
-    // Lógica de Clique para Abrir/Fechar
     const trigger = document.getElementById("fshowTrigger");
     const dropdown = document.getElementById("fshowDropdown");
 
@@ -775,48 +774,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
     init();
 })();
-</script>
-    
-<script>
-// MODO ESCURO
-const themeToggle = document.getElementById('theme-toggle');
-themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const isDark = document.body.classList.contains('dark-mode');
-    themeToggle.classList.replace(isDark ? 'fa-moon' : 'fa-sun', isDark ? 'fa-sun' : 'fa-moon');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-});
-
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    themeToggle.classList.replace('fa-moon', 'fa-sun');
-}
-
-// CARROSSEL
-const track = document.querySelector('.carousel-track');
-const slides = Array.from(track.children);
-const nextBtn = document.querySelector('.next-control');
-const prevBtn = document.querySelector('.prev-control');
-let currentSlide = 0;
-
-function updateCarousel(index) {
-    if (index < 0) index = slides.length - 1;
-    if (index >= slides.length) index = 0;
-    currentSlide = index;
-    track.style.transform = `translateX(-${index * 100}%)`;
-}
-
-nextBtn.addEventListener('click', () => updateCarousel(currentSlide + 1));
-prevBtn.addEventListener('click', () => updateCarousel(currentSlide - 1));
-
-// COOKIES
-function acceptCookies() {
-    localStorage.setItem('cookiesAccepted', 'true');
-    document.getElementById('cookie-consent').style.display = 'none';
-}
-if (!localStorage.getItem('cookiesAccepted')) {
-    setTimeout(() => document.getElementById('cookie-consent').style.display = 'block', 2000);
-}
 </script>
 </body>
 </html>
