@@ -699,6 +699,9 @@ if (prevBtn) {
 (async function () {
 
     // ================= APPWRITE =================
+document.addEventListener("DOMContentLoaded", async function () {
+
+    // ================= APPWRITE =================
     const client = new Appwrite.Client();
 
     client
@@ -717,6 +720,11 @@ if (prevBtn) {
     const trigger = document.getElementById('fshowTrigger');
     const dropdown = document.getElementById('fshowDropdown');
     const widget = document.getElementById('fshowWidget');
+
+    if (!trigger || !dropdown || !widget) {
+        console.log("Widget não encontrado.");
+        return;
+    }
 
     const avatarContainer = document.getElementById('fshowAvatarContainer');
 
