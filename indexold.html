@@ -6,6 +6,11 @@
     <title>Fshow | Portal Flop</title>  
     <meta name="description" content="Central Flop">
 
+        <!-- Appwrite SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@11.0.0"></script>
+
+    <meta name="theme-color" content="#8A2BE2">
+    
   <meta charset="UTF-8">
   <link rel="preload"
         href="https://fshow.site/css/index.css"
@@ -33,6 +38,169 @@
     <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/favicon.png">
 
+    <style>
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #120018;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ===== WIDGET DE PERFIL (CANTO SUPERIOR ESQUERDO) ===== */
+.profile-widget {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.profile-trigger {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #8000ff;
+    cursor: pointer;
+    overflow: hidden;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.profile-trigger:hover {
+    transform: scale(1.1);
+    border-color: #ff8c00;
+}
+
+.profile-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ===== MENU SUSPENSO DO PERFIL ===== */
+.profile-dropdown {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background: rgba(25, 25, 25, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(128, 0, 255, 0.3);
+    border-radius: 18px;
+    padding: 20px;
+    width: 220px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.profile-dropdown.active {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.user-name {
+    font-weight: 800;
+    font-size: 1.1rem;
+    background: linear-gradient(45deg, #8000ff, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.dropdown-btn:hover {
+    background: rgba(128, 0, 255, 0.2);
+    border-color: rgba(128, 0, 255, 0.5);
+}
+
+.btn-logout {
+    color: #ff4d4d;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 77, 77, 0.1);
+    border-color: rgba(255, 77, 77, 0.3);
+}
+
+/* ===== CONTEÚDO PRINCIPAL (EXEMPLO) ===== */
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 20px;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #8000ff, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+/* ===== LOADING OVERLAY ===== */
+#loadingOverlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #120018;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(128, 0, 255, 0.3);
+    border-top-color: #8000ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+    
 <style>
 body {
   background: #ffffff;
@@ -893,6 +1061,36 @@ Criado por <a href="termos/ferlove.html" class="link">Fer Love</a>
   </div>
 </footer>
 
+    <div id="loadingOverlay">
+    <div class="spinner"></div>
+</div>
+
+<!-- WIDGET DE PERFIL -->
+<div class="profile-widget">
+    <div class="profile-trigger" id="profileTrigger">
+        <img id="userAvatar" src="https://via.placeholder.com/100" alt="Perfil">
+    </div>
+    
+    <div class="profile-dropdown" id="profileDropdown">
+        <div class="user-name" id="userName">Carregando...</div>
+        
+        <label class="dropdown-btn" for="changeAvatarInput">
+            📸 Mudar Foto
+        </label>
+        <input type="file" id="changeAvatarInput" accept="image/*" style="display: none;">
+        
+        <button class="dropdown-btn btn-logout" id="logoutBtn">
+            🚪 Sair da Conta
+        </button>
+    </div>
+</div>
+
+<!-- CONTEÚDO DA PÁGINA -->
+<section class="hero">
+    <h1>FSHOW</h1>
+    <p>Bem-vindo ao futuro do entretenimento.</p>
+</section>
+    
 <script>
 function abrirSlideTop(){
   document.getElementById("slideAdTop").classList.add("active");
@@ -1004,6 +1202,103 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 7000);
     })();
 </script>
-    
+
+<script>
+/* ================= APPWRITE CONFIG ================= */
+const client = new Appwrite.Client();
+client
+    .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+    .setProject("6a07b38c00004e1645ee");
+
+const account = new Appwrite.Account(client);
+const databases = new Appwrite.Databases(client);
+const storage = new Appwrite.Storage(client);
+
+const DATABASE_ID = "6a07b77b0016f7c90141"; 
+const PROFILES_COLLECTION_ID = "profiles"; 
+const AVATARS_BUCKET_ID = "6a07b91a000e61c9e4b3";
+
+let currentUser = null;
+
+/* ================= FUNÇÕES DE PERFIL ================= */
+async function loadUserData() {
+    try {
+        currentUser = await account.get();
+
+        const profile = await databases.getDocument(DATABASE_ID, PROFILES_COLLECTION_ID, currentUser.$id);
+        
+        document.getElementById("userName").textContent = profile.nickname || currentUser.name;
+
+        if (profile.avatarFileId) {
+            const avatarUrl = storage.getFileView(AVATARS_BUCKET_ID, profile.avatarFileId);
+            document.getElementById("userAvatar").src = avatarUrl;
+        } else {
+            document.getElementById("userAvatar").src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.nickname)}&background=8000ff&color=fff`;
+        }
+
+        // Remove o loading
+        document.getElementById("loadingOverlay").style.opacity = "0";
+        setTimeout(() => document.getElementById("loadingOverlay").style.display = "none", 500);
+
+    } catch (error) {
+        console.error("Erro ao carergar dados:", error);
+        window.location.href = "login.html"; 
+    }
+}
+
+// Troca a foto de perfil
+async function changeAvatar(file) {
+    try {
+        const trigger = document.getElementById("profileTrigger");
+        trigger.style.opacity = "0.5";
+
+        const uploadedFile = await storage.createFile(AVATARS_BUCKET_ID, Appwrite.ID.unique(), file);
+
+        await databases.updateDocument(DATABASE_ID, PROFILES_COLLECTION_ID, currentUser.$id, {
+            avatarFileId: uploadedFile.$id
+        });
+
+        const newUrl = storage.getFileView(AVATARS_BUCKET_ID, uploadedFile.$id);
+        document.getElementById("userAvatar").src = newUrl;
+        
+        trigger.style.opacity = "1";
+        alert("Foto atualizada com sucesso!");
+        
+    } catch (error) {
+        console.error("Erro ao mudar foto:", error);
+        alert("Erro ao atualizar foto: " + error.message);
+        document.getElementById("profileTrigger").style.opacity = "1";
+    }
+}
+
+/* ================= EVENT LISTENERS ================= */
+document.getElementById("profileTrigger").onclick = (e) => {
+    e.stopPropagation();
+    document.getElementById("profileDropdown").classList.toggle("active");
+};
+
+document.addEventListener("click", () => {
+    document.getElementById("profileDropdown").classList.remove("active");
+});
+
+document.getElementById("profileDropdown").onclick = (e) => e.stopPropagation();
+
+document.getElementById("logoutBtn").onclick = async () => {
+    try {
+        await account.deleteSession('current');
+        window.location.href = "login.html";
+    } catch (error) {
+        alert("Erro ao sair: " + error.message);
+    }
+};
+
+document.getElementById("changeAvatarInput").onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) changeAvatar(file);
+};
+
+loadUserData();
+
+</script>
 </body>  
 </html>
