@@ -696,7 +696,7 @@ prevBtn.addEventListener('click', () => {
 
     if (!trigger || !dropdown) return;
 
-    // Abre/fecha o dropdown ao clicar no avatar
+    // Abre/fecha dropdown
     trigger.addEventListener('click', function(e) {
         e.stopPropagation();
         dropdown.classList.toggle('fshow-active');
@@ -709,7 +709,7 @@ prevBtn.addEventListener('click', () => {
         }
     });
 
-    // Botão "Continuar Anônimo"
+    // Continuar anônimo
     const anonBtn = document.getElementById('fshowContinueAnonBtn');
     if (anonBtn) {
         anonBtn.addEventListener('click', function() {
@@ -717,7 +717,7 @@ prevBtn.addEventListener('click', () => {
         });
     }
 
-    // Botão de logout
+    // Logout
     const logoutBtn = document.getElementById('fshowLogoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function() {
@@ -726,44 +726,114 @@ prevBtn.addEventListener('click', () => {
         });
     }
 
-    // Troca de avatar
+    // ============================================================
+    // FUNÇÃO PARA ATUALIZAR AVATAR
+    // ============================================================
+    function updateAvatar(src) {
+        const container = document.getElementById('fshowAvatarContainer');
+
+        if (container) {
+            container.innerHTML = `
+                <img 
+                    src="${src}" 
+                    alt="Avatar"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        border-radius:50%;
+                    "
+                >
+            `;
+        }
+    }
+
+    // ============================================================
+    // VERIFICA LOGIN
+    // ============================================================
+    let currentUser = null;
+
+    try {
+        const saved = localStorage.getItem('fshow_user');
+
+        if (saved) {
+            const user = JSON.parse(saved);
+            currentUser = user;
+
+            const nameEl      = document.getElementById('fshowUserName');
+            const statusEl    = document.getElementById('fshowUserStatus');
+            const loggedOpts  = document.getElementById('fshowLoggedOptions');
+            const anonOpts    = document.getElementById('fshowAnonOptions');
+
+            if (nameEl) {
+                nameEl.textContent = user.name || 'Usuário';
+            }
+
+            if (statusEl) {
+                statusEl.textContent = user.email || 'Membro';
+            }
+
+            // MOSTRA opções de usuário logado
+            if (loggedOpts) {
+                loggedOpts.style.display = 'flex';
+            }
+
+            // ESCONDE opções de visitante
+            if (anonOpts) {
+                anonOpts.style.display = 'none';
+            }
+
+            // Avatar salvo
+            if (user.avatar) {
+                updateAvatar(user.avatar);
+            }
+        }
+
+    } catch(err) {
+        console.log('Sem sessão salva');
+    }
+
+    // ============================================================
+    // TROCAR FOTO (somente logado)
+    // ============================================================
     const avatarInput = document.getElementById('fshowChangeAvatarInput');
+
     if (avatarInput) {
         avatarInput.addEventListener('change', function(e) {
+
+            // impede visitante
+            if (!currentUser) {
+                alert('Faça login para trocar sua foto.');
+                return;
+            }
+
             const file = e.target.files[0];
+
             if (!file) return;
+
             const reader = new FileReader();
+
             reader.onload = function(ev) {
-                const container = document.getElementById('fshowAvatarContainer');
-                if (container) {
-                    container.innerHTML = '<img src="' + ev.target.result + '" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
-                }
+
+                const avatarBase64 = ev.target.result;
+
+                // Atualiza visualmente
+                updateAvatar(avatarBase64);
+
+                // Salva no usuário
+                currentUser.avatar = avatarBase64;
+
+                // Atualiza localStorage
+                localStorage.setItem(
+                    'fshow_user',
+                    JSON.stringify(currentUser)
+                );
             };
+
             reader.readAsDataURL(file);
         });
     }
 
-    // Verifica sessão salva no localStorage
-    try {
-        const saved = localStorage.getItem('fshow_user');
-        if (saved) {
-            const user = JSON.parse(saved);
-            const nameEl   = document.getElementById('fshowUserName');
-            const statusEl = document.getElementById('fshowUserStatus');
-            const loggedOpts = document.getElementById('fshowLoggedOptions');
-            const anonOpts   = document.getElementById('fshowAnonOptions');
-            if (nameEl)   nameEl.textContent   = user.name  || 'Usuário';
-            if (statusEl) statusEl.textContent = user.email || 'Membro';
-            if (loggedOpts) loggedOpts.style.display = 'flex';
-            if (anonOpts)   anonOpts.style.display   = 'none';
-            if (user.avatar) {
-                const container = document.getElementById('fshowAvatarContainer');
-                if (container) {
-                    container.innerHTML = '<img src="' + user.avatar + '" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
-                }
-            }
-        }
-    } catch(err) { /* sem sessão salva */ }
 })();
 
 // ============================================================
