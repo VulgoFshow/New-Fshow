@@ -449,6 +449,14 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     background: rgba(255, 77, 77, 0.1);
     border-color: rgba(255, 77, 77, 0.3);
 }
+
+.fshow-profile-dropdown{
+    z-index: 999999 !important;
+}
+
+.fshow-profile-widget{
+    z-index: 999999 !important;
+}
 </style>
 
 </head>
@@ -696,8 +704,6 @@ if (prevBtn) {
 /* ============================================================
    PERFIL
 ============================================================ */
-    
-    // ================= APPWRITE =================
 document.addEventListener("DOMContentLoaded", async function () {
 
     // ================= APPWRITE =================
@@ -716,79 +722,79 @@ document.addEventListener("DOMContentLoaded", async function () {
     const BUCKET_ID = "6a07b91a000e61c9e4b3";
 
     // ================= ELEMENTOS =================
-    const trigger = document.getElementById('fshowTrigger');
-    const dropdown = document.getElementById('fshowDropdown');
-    const widget = document.getElementById('fshowWidget');
+    const trigger = document.getElementById("fshowTrigger");
+    const dropdown = document.getElementById("fshowDropdown");
+    const widget = document.getElementById("fshowWidget");
+
+    const avatarContainer = document.getElementById("fshowAvatarContainer");
+
+    const userName = document.getElementById("fshowUserName");
+    const userStatus = document.getElementById("fshowUserStatus");
+
+    const loggedOptions = document.getElementById("fshowLoggedOptions");
+    const anonOptions = document.getElementById("fshowAnonOptions");
+
+    const avatarInput = document.getElementById("fshowChangeAvatarInput");
+
+    const logoutBtn = document.getElementById("fshowLogoutBtn");
+
+    const anonBtn = document.getElementById("fshowContinueAnonBtn");
 
     if (!trigger || !dropdown || !widget) {
         console.log("Widget não encontrado.");
         return;
     }
 
-    const avatarContainer = document.getElementById('fshowAvatarContainer');
-
-    const userName = document.getElementById('fshowUserName');
-    const userStatus = document.getElementById('fshowUserStatus');
-
-    const loggedOptions = document.getElementById('fshowLoggedOptions');
-    const anonOptions = document.getElementById('fshowAnonOptions');
-
-    const avatarInput = document.getElementById('fshowChangeAvatarInput');
-
-    const logoutBtn = document.getElementById('fshowLogoutBtn');
-
-    const anonBtn = document.getElementById('fshowContinueAnonBtn');
-
     let currentUser = null;
     let currentProfile = null;
 
-// ================= DROPDOWN PERFIL =================
-const trigger = document.getElementById('fshowTrigger');
-const dropdown = document.getElementById('fshowDropdown');
-const widget = document.getElementById('fshowWidget');
+    // ============================================================
+    // DROPDOWN
+    // ============================================================
 
-if (trigger && dropdown && widget) {
-
-    // ABRIR / FECHAR
-    trigger.addEventListener('click', function(e) {
+    trigger.addEventListener("click", function (e) {
 
         e.stopPropagation();
 
-        dropdown.classList.toggle('fshow-active');
+        dropdown.classList.toggle("fshow-active");
 
     });
 
-    // IMPEDIR FECHAMENTO AO CLICAR DENTRO
-    dropdown.addEventListener('click', function(e) {
+    dropdown.addEventListener("click", function (e) {
 
         e.stopPropagation();
 
     });
 
-    // FECHAR AO CLICAR FORA
-    document.addEventListener('click', function(e) {
+    document.addEventListener("click", function (e) {
 
         if (!widget.contains(e.target)) {
 
-            dropdown.classList.remove('fshow-active');
+            dropdown.classList.remove("fshow-active");
 
         }
 
     });
 
-}
+    // ============================================================
+    // CONTINUAR ANÔNIMO
+    // ============================================================
 
-    // ================= CONTINUAR ANÔNIMO =================
     if (anonBtn) {
-        anonBtn.addEventListener('click', function () {
-            dropdown.classList.remove('fshow-active');
+
+        anonBtn.addEventListener("click", function () {
+
+            dropdown.classList.remove("fshow-active");
+
         });
+
     }
 
-    // ================= ATUALIZAR AVATAR =================
-    function updateAvatar(src) {
+    // ============================================================
+    // AVATAR
+    // ============================================================
 
-        if (!avatarContainer) return;
+    function updateAvatar(src) {
 
         avatarContainer.innerHTML = `
             <img
@@ -802,18 +808,20 @@ if (trigger && dropdown && widget) {
                 "
             >
         `;
+
     }
 
-    // ================= CARREGAR USUÁRIO =================
+    // ============================================================
+    // CARREGAR USUÁRIO
+    // ============================================================
+
     try {
 
         currentUser = await account.get();
 
-        // MOSTRA INTERFACE LOGADA
-        if (loggedOptions) loggedOptions.style.display = 'flex';
-        if (anonOptions) anonOptions.style.display = 'none';
+        if (loggedOptions) loggedOptions.style.display = "flex";
+        if (anonOptions) anonOptions.style.display = "none";
 
-        // BUSCA PERFIL
         try {
 
             currentProfile = await databases.getDocument(
@@ -823,26 +831,36 @@ if (trigger && dropdown && widget) {
             );
 
         } catch (err) {
+
             console.log("Perfil não encontrado.");
+
         }
 
-        // NOME
+        // Nome
         if (userName) {
+
             userName.textContent =
                 currentProfile?.nickname ||
                 currentUser.name ||
-                'Usuário';
+                "Usuário";
+
         }
 
-        // STATUS
+        // Status
         if (userStatus) {
-            userStatus.textContent = currentUser.email || 'Membro';
+
+            userStatus.textContent =
+                currentUser.email || "Membro";
+
         }
 
-        // ================= FOTO =================
+        // ============================================================
+        // FOTO
+        // ============================================================
+
         let avatarUrl = null;
 
-        // FOTO PERSONALIZADA
+        // FOTO CUSTOMIZADA
         if (currentProfile?.avatarFileId) {
 
             avatarUrl = storage.getFileView(
@@ -862,58 +880,6 @@ if (trigger && dropdown && widget) {
 
         }
 
-        // FOTO OAuth
-        else {
-
-            try {
-
-                const sessions = await account.listSessions();
-
-                const currentSession = sessions.sessions.find(
-                    s => s.current === true
-                );
-
-                // GOOGLE
-                if (currentSession?.provider === "google") {
-
-                    avatarUrl =
-                        `https://lh3.googleusercontent.com/a/default-user=s256-c`;
-
-                }
-
-                // DISCORD
-                else if (
-                    currentSession?.provider === "discord" &&
-                    currentSession.providerAccessToken
-                ) {
-
-                    const discordData = await fetch(
-                        "https://discord.com/api/users/@me",
-                        {
-                            headers: {
-                                Authorization:
-                                    `Bearer ${currentSession.providerAccessToken}`
-                            }
-                        }
-                    ).then(r => r.json());
-
-                    if (discordData.avatar) {
-
-                        avatarUrl =
-                            `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.png`;
-
-                    }
-
-                }
-
-            } catch (oauthErr) {
-
-                console.log("Erro ao obter avatar OAuth.");
-
-            }
-
-        }
-
         // FALLBACK
         if (!avatarUrl) {
 
@@ -921,21 +887,12 @@ if (trigger && dropdown && widget) {
                 `https://ui-avatars.com/api/?name=${encodeURIComponent(
                     currentProfile?.nickname ||
                     currentUser.name ||
-                    'User'
+                    "User"
                 )}&background=8000ff&color=fff`;
 
         }
 
-        // EXIBE AVATAR
         updateAvatar(avatarUrl);
-
-        // SALVA LOCALSTORAGE
-        localStorage.setItem('fshow_user', JSON.stringify({
-            id: currentUser.$id,
-            name: currentProfile?.nickname || currentUser.name,
-            email: currentUser.email,
-            avatar: avatarUrl
-        }));
 
     } catch (err) {
 
@@ -943,18 +900,21 @@ if (trigger && dropdown && widget) {
 
     }
 
-    // ================= LOGOUT =================
+    // ============================================================
+    // LOGOUT
+    // ============================================================
+
     if (logoutBtn) {
 
-        logoutBtn.addEventListener('click', async function () {
+        logoutBtn.addEventListener("click", async function () {
 
             try {
 
-                await account.deleteSession('current');
+                await account.deleteSession("current");
 
             } catch (e) {}
 
-            localStorage.removeItem('fshow_user');
+            localStorage.removeItem("fshow_user");
 
             location.reload();
 
@@ -962,10 +922,13 @@ if (trigger && dropdown && widget) {
 
     }
 
-    // ================= TROCAR FOTO =================
+    // ============================================================
+    // TROCAR FOTO
+    // ============================================================
+
     if (avatarInput) {
 
-        avatarInput.addEventListener('change', async function (e) {
+        avatarInput.addEventListener("change", async function (e) {
 
             const file = e.target.files[0];
 
@@ -973,7 +936,7 @@ if (trigger && dropdown && widget) {
 
             try {
 
-                trigger.style.opacity = '0.5';
+                trigger.style.opacity = "0.5";
 
                 const uploaded = await storage.createFile(
                     BUCKET_ID,
@@ -981,7 +944,6 @@ if (trigger && dropdown && widget) {
                     file
                 );
 
-                // atualiza banco
                 await databases.updateDocument(
                     DB_ID,
                     COL_ID,
@@ -991,7 +953,6 @@ if (trigger && dropdown && widget) {
                     }
                 );
 
-                // nova foto
                 const newAvatar = storage.getFileView(
                     BUCKET_ID,
                     uploaded.$id
@@ -999,28 +960,24 @@ if (trigger && dropdown && widget) {
 
                 updateAvatar(newAvatar);
 
-                // atualiza localstorage
-                localStorage.setItem('fshow_user', JSON.stringify({
-                    id: currentUser.$id,
-                    name: currentProfile?.nickname || currentUser.name,
-                    email: currentUser.email,
-                    avatar: newAvatar
-                }));
+                trigger.style.opacity = "1";
 
-                trigger.style.opacity = '1';
-
-                alert('Foto atualizada!');
+                alert("Foto atualizada!");
 
             } catch (error) {
 
-                trigger.style.opacity = '1';
+                trigger.style.opacity = "1";
 
-                alert('Erro ao atualizar foto.');
+                alert("Erro ao atualizar foto.");
 
                 console.error(error);
+
             }
+
         });
+
     }
+
 });
 
 /* ============================================================
@@ -1028,34 +985,34 @@ if (trigger && dropdown && widget) {
 ============================================================ */
 (function () {
 
-    const toggle = document.getElementById('theme-toggle');
+    const toggle = document.getElementById("theme-toggle");
 
     if (!toggle) return;
 
-    const saved = localStorage.getItem('fshow_theme');
+    const saved = localStorage.getItem("fshow_theme");
 
-    if (saved === 'dark') {
+    if (saved === "dark") {
 
-        document.body.classList.add('dark-mode');
-        document.body.classList.remove('light-mode');
+        document.body.classList.add("dark-mode");
+        document.body.classList.remove("light-mode");
 
-        toggle.classList.remove('fa-moon');
-        toggle.classList.add('fa-sun');
+        toggle.classList.remove("fa-moon");
+        toggle.classList.add("fa-sun");
 
     }
 
-    toggle.addEventListener('click', function () {
+    toggle.addEventListener("click", function () {
 
-        const isDark = document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.toggle("dark-mode");
 
-        document.body.classList.toggle('light-mode', !isDark);
+        document.body.classList.toggle("light-mode", !isDark);
 
-        toggle.classList.toggle('fa-moon', !isDark);
-        toggle.classList.toggle('fa-sun', isDark);
+        toggle.classList.toggle("fa-moon", !isDark);
+        toggle.classList.toggle("fa-sun", isDark);
 
         localStorage.setItem(
-            'fshow_theme',
-            isDark ? 'dark' : 'light'
+            "fshow_theme",
+            isDark ? "dark" : "light"
         );
 
     });
