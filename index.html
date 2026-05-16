@@ -654,7 +654,9 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     </footer>
 
 <script>
-// Carrosel
+/* ============================================================
+   CARROSSEL
+============================================================ */
 const track = document.querySelector('.carousel-track');
 const slides = document.querySelectorAll('.carousel-link');
 const nextBtn = document.querySelector('.next-control');
@@ -663,198 +665,378 @@ const prevBtn = document.querySelector('.prev-control');
 let currentIndex = 0;
 
 function updateCarousel() {
+    if (!track) return;
     track.style.transform = `translateX(-${currentIndex * 100}%)`;
 }
 
-nextBtn.addEventListener('click', () => {
-    currentIndex++;
+if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+        currentIndex++;
 
-    if (currentIndex >= slides.length) {
-        currentIndex = 0;
-    }
+        if (currentIndex >= slides.length) {
+            currentIndex = 0;
+        }
 
-    updateCarousel();
-});
+        updateCarousel();
+    });
+}
 
-prevBtn.addEventListener('click', () => {
-    currentIndex--;
+if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+        currentIndex--;
 
-    if (currentIndex < 0) {
-        currentIndex = slides.length - 1;
-    }
+        if (currentIndex < 0) {
+            currentIndex = slides.length - 1;
+        }
 
-    updateCarousel();
-});
+        updateCarousel();
+    });
+}
 
-// ============================================================
-// WIDGET DE PERFIL
-// ============================================================
-(function() {
-    const trigger  = document.getElementById('fshowTrigger');
+/* ============================================================
+   PERFIL
+============================================================ */
+(async function () {
+
+    // ================= APPWRITE =================
+    const client = new Appwrite.Client();
+
+    client
+        .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+        .setProject("6a07b38c00004e1645ee");
+
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+    const storage = new Appwrite.Storage(client);
+
+    const DB_ID = "6a07b77b0016f7c90141";
+    const COL_ID = "profiles";
+    const BUCKET_ID = "6a07b91a000e61c9e4b3";
+
+    // ================= ELEMENTOS =================
+    const trigger = document.getElementById('fshowTrigger');
     const dropdown = document.getElementById('fshowDropdown');
-    const widget   = document.getElementById('fshowWidget');
+    const widget = document.getElementById('fshowWidget');
 
-    if (!trigger || !dropdown) return;
+    const avatarContainer = document.getElementById('fshowAvatarContainer');
 
-    // Abre/fecha dropdown
-    trigger.addEventListener('click', function(e) {
-        e.stopPropagation();
-        dropdown.classList.toggle('fshow-active');
-    });
+    const userName = document.getElementById('fshowUserName');
+    const userStatus = document.getElementById('fshowUserStatus');
 
-    // Fecha ao clicar fora
-    document.addEventListener('click', function(e) {
-        if (widget && !widget.contains(e.target)) {
-            dropdown.classList.remove('fshow-active');
-        }
-    });
+    const loggedOptions = document.getElementById('fshowLoggedOptions');
+    const anonOptions = document.getElementById('fshowAnonOptions');
 
-    // Continuar anônimo
-    const anonBtn = document.getElementById('fshowContinueAnonBtn');
-    if (anonBtn) {
-        anonBtn.addEventListener('click', function() {
-            dropdown.classList.remove('fshow-active');
-        });
-    }
-
-    // Logout
-    const logoutBtn = document.getElementById('fshowLogoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
-            localStorage.removeItem('fshow_user');
-            location.reload();
-        });
-    }
-
-    // ============================================================
-    // FUNÇÃO PARA ATUALIZAR AVATAR
-    // ============================================================
-    function updateAvatar(src) {
-        const container = document.getElementById('fshowAvatarContainer');
-
-        if (container) {
-            container.innerHTML = `
-                <img 
-                    src="${src}" 
-                    alt="Avatar"
-                    style="
-                        width:100%;
-                        height:100%;
-                        object-fit:cover;
-                        border-radius:50%;
-                    "
-                >
-            `;
-        }
-    }
-
-    // ============================================================
-    // VERIFICA LOGIN
-    // ============================================================
-    let currentUser = null;
-
-    try {
-        const saved = localStorage.getItem('fshow_user');
-
-        if (saved) {
-            const user = JSON.parse(saved);
-            currentUser = user;
-
-            const nameEl      = document.getElementById('fshowUserName');
-            const statusEl    = document.getElementById('fshowUserStatus');
-            const loggedOpts  = document.getElementById('fshowLoggedOptions');
-            const anonOpts    = document.getElementById('fshowAnonOptions');
-
-            if (nameEl) {
-                nameEl.textContent = user.name || 'Usuário';
-            }
-
-            if (statusEl) {
-                statusEl.textContent = user.email || 'Membro';
-            }
-
-            // MOSTRA opções de usuário logado
-            if (loggedOpts) {
-                loggedOpts.style.display = 'flex';
-            }
-
-            // ESCONDE opções de visitante
-            if (anonOpts) {
-                anonOpts.style.display = 'none';
-            }
-
-            // Avatar salvo
-            if (user.avatar) {
-                updateAvatar(user.avatar);
-            }
-        }
-
-    } catch(err) {
-        console.log('Sem sessão salva');
-    }
-
-    // ============================================================
-    // TROCAR FOTO (somente logado)
-    // ============================================================
     const avatarInput = document.getElementById('fshowChangeAvatarInput');
 
-    if (avatarInput) {
-        avatarInput.addEventListener('change', function(e) {
+    const logoutBtn = document.getElementById('fshowLogoutBtn');
 
-            // impede visitante
-            if (!currentUser) {
-                alert('Faça login para trocar sua foto.');
-                return;
+    const anonBtn = document.getElementById('fshowContinueAnonBtn');
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    // ================= DROPDOWN =================
+    if (trigger && dropdown) {
+
+        trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('fshow-active');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (widget && !widget.contains(e.target)) {
+                dropdown.classList.remove('fshow-active');
             }
+        });
+
+    }
+
+    // ================= CONTINUAR ANÔNIMO =================
+    if (anonBtn) {
+        anonBtn.addEventListener('click', function () {
+            dropdown.classList.remove('fshow-active');
+        });
+    }
+
+    // ================= ATUALIZAR AVATAR =================
+    function updateAvatar(src) {
+
+        if (!avatarContainer) return;
+
+        avatarContainer.innerHTML = `
+            <img
+                src="${src}"
+                alt="Avatar"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                "
+            >
+        `;
+    }
+
+    // ================= CARREGAR USUÁRIO =================
+    try {
+
+        currentUser = await account.get();
+
+        // MOSTRA INTERFACE LOGADA
+        if (loggedOptions) loggedOptions.style.display = 'flex';
+        if (anonOptions) anonOptions.style.display = 'none';
+
+        // BUSCA PERFIL
+        try {
+
+            currentProfile = await databases.getDocument(
+                DB_ID,
+                COL_ID,
+                currentUser.$id
+            );
+
+        } catch (err) {
+            console.log("Perfil não encontrado.");
+        }
+
+        // NOME
+        if (userName) {
+            userName.textContent =
+                currentProfile?.nickname ||
+                currentUser.name ||
+                'Usuário';
+        }
+
+        // STATUS
+        if (userStatus) {
+            userStatus.textContent = currentUser.email || 'Membro';
+        }
+
+        // ================= FOTO =================
+        let avatarUrl = null;
+
+        // FOTO PERSONALIZADA
+        if (currentProfile?.avatarFileId) {
+
+            avatarUrl = storage.getFileView(
+                BUCKET_ID,
+                currentProfile.avatarFileId
+            );
+
+        }
+
+        // FOTO GOOGLE
+        else if (
+            currentUser.prefs &&
+            currentUser.prefs.avatar
+        ) {
+
+            avatarUrl = currentUser.prefs.avatar;
+
+        }
+
+        // FOTO OAuth
+        else {
+
+            try {
+
+                const sessions = await account.listSessions();
+
+                const currentSession = sessions.sessions.find(
+                    s => s.current === true
+                );
+
+                // GOOGLE
+                if (currentSession?.provider === "google") {
+
+                    avatarUrl =
+                        `https://lh3.googleusercontent.com/a/default-user=s256-c`;
+
+                }
+
+                // DISCORD
+                else if (
+                    currentSession?.provider === "discord" &&
+                    currentSession.providerAccessToken
+                ) {
+
+                    const discordData = await fetch(
+                        "https://discord.com/api/users/@me",
+                        {
+                            headers: {
+                                Authorization:
+                                    `Bearer ${currentSession.providerAccessToken}`
+                            }
+                        }
+                    ).then(r => r.json());
+
+                    if (discordData.avatar) {
+
+                        avatarUrl =
+                            `https://cdn.discordapp.com/avatars/${discordData.id}/${discordData.avatar}.png`;
+
+                    }
+
+                }
+
+            } catch (oauthErr) {
+
+                console.log("Erro ao obter avatar OAuth.");
+
+            }
+
+        }
+
+        // FALLBACK
+        if (!avatarUrl) {
+
+            avatarUrl =
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    currentProfile?.nickname ||
+                    currentUser.name ||
+                    'User'
+                )}&background=8000ff&color=fff`;
+
+        }
+
+        // EXIBE AVATAR
+        updateAvatar(avatarUrl);
+
+        // SALVA LOCALSTORAGE
+        localStorage.setItem('fshow_user', JSON.stringify({
+            id: currentUser.$id,
+            name: currentProfile?.nickname || currentUser.name,
+            email: currentUser.email,
+            avatar: avatarUrl
+        }));
+
+    } catch (err) {
+
+        console.log("Visitante anônimo.");
+
+    }
+
+    // ================= LOGOUT =================
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener('click', async function () {
+
+            try {
+
+                await account.deleteSession('current');
+
+            } catch (e) {}
+
+            localStorage.removeItem('fshow_user');
+
+            location.reload();
+
+        });
+
+    }
+
+    // ================= TROCAR FOTO =================
+    if (avatarInput) {
+
+        avatarInput.addEventListener('change', async function (e) {
 
             const file = e.target.files[0];
 
-            if (!file) return;
+            if (!file || !currentUser) return;
 
-            const reader = new FileReader();
+            try {
 
-            reader.onload = function(ev) {
+                trigger.style.opacity = '0.5';
 
-                const avatarBase64 = ev.target.result;
-
-                // Atualiza visualmente
-                updateAvatar(avatarBase64);
-
-                // Salva no usuário
-                currentUser.avatar = avatarBase64;
-
-                // Atualiza localStorage
-                localStorage.setItem(
-                    'fshow_user',
-                    JSON.stringify(currentUser)
+                const uploaded = await storage.createFile(
+                    BUCKET_ID,
+                    Appwrite.ID.unique(),
+                    file
                 );
-            };
 
-            reader.readAsDataURL(file);
+                // atualiza banco
+                await databases.updateDocument(
+                    DB_ID,
+                    COL_ID,
+                    currentUser.$id,
+                    {
+                        avatarFileId: uploaded.$id
+                    }
+                );
+
+                // nova foto
+                const newAvatar = storage.getFileView(
+                    BUCKET_ID,
+                    uploaded.$id
+                );
+
+                updateAvatar(newAvatar);
+
+                // atualiza localstorage
+                localStorage.setItem('fshow_user', JSON.stringify({
+                    id: currentUser.$id,
+                    name: currentProfile?.nickname || currentUser.name,
+                    email: currentUser.email,
+                    avatar: newAvatar
+                }));
+
+                trigger.style.opacity = '1';
+
+                alert('Foto atualizada!');
+
+            } catch (error) {
+
+                trigger.style.opacity = '1';
+
+                alert('Erro ao atualizar foto.');
+
+                console.error(error);
+
+            }
+
         });
+
     }
 
 })();
 
-// ============================================================
-// TEMA ESCURO / CLARO
-// ============================================================
-(function() {
+/* ============================================================
+   TEMA ESCURO / CLARO
+============================================================ */
+(function () {
+
     const toggle = document.getElementById('theme-toggle');
+
     if (!toggle) return;
+
     const saved = localStorage.getItem('fshow_theme');
+
     if (saved === 'dark') {
+
         document.body.classList.add('dark-mode');
         document.body.classList.remove('light-mode');
-        toggle.classList.replace('fa-moon', 'fa-sun');
+
+        toggle.classList.remove('fa-moon');
+        toggle.classList.add('fa-sun');
+
     }
-    toggle.addEventListener('click', function() {
+
+    toggle.addEventListener('click', function () {
+
         const isDark = document.body.classList.toggle('dark-mode');
+
         document.body.classList.toggle('light-mode', !isDark);
+
         toggle.classList.toggle('fa-moon', !isDark);
         toggle.classList.toggle('fa-sun', isDark);
-        localStorage.setItem('fshow_theme', isDark ? 'dark' : 'light');
+
+        localStorage.setItem(
+            'fshow_theme',
+            isDark ? 'dark' : 'light'
+        );
+
     });
+
 })();
 </script>
 </body>
