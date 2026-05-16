@@ -335,7 +335,7 @@ input::placeholder {
 <body>
 
 <div class="main-wrapper">
-    <h1 class="logo-fshow">FlopShow</h1>
+    <h1 class="logo-fshow">FSHOW</h1>
 
     <div class="auth-card">
         <div class="tab-control">
@@ -430,7 +430,7 @@ input::placeholder {
 const client = new Appwrite.Client();
 
 client
-    .setEndpoint("https://nyc.cloud.appwrite.io/v1") 
+    .setEndpoint("https://cloud.appwrite.io/v1") 
     .setProject("6a07b38c00004e1645ee"); 
 
 const account = new Appwrite.Account(client);
@@ -444,6 +444,14 @@ const AVATARS_BUCKET_ID = "6a07b91a000e61c9e4b3";
 let selectedAvatarFile = null;
 
 /* ================= FUNÇÕES AUXILIARES ================= */
+
+// Detecta automaticamente a URL base para redirecionamentos
+function getBaseUrl() {
+    if (window.location.protocol === 'file:') {
+        return "ERRO_FILE_PROTOCOL";
+    }
+    return window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/') + '/';
+}
 
 function showMsg(id, text, type) {
     const el = document.getElementById(id);
@@ -465,11 +473,6 @@ function saveLoginTimestamp() {
     localStorage.setItem("lastLoginTime", Date.now().toString());
 }
 
-/**
- * Upload da foto de perfil para Appwrite Storage
- * @param {File} file - Arquivo de imagem selecionado
- * @param {string} userId - ID do usuário no Appwrite
- */
 async function uploadProfilePicture(file, userId) {
     try {
         const progressEl = document.getElementById('uploadProgress');
@@ -482,7 +485,6 @@ async function uploadProfilePicture(file, userId) {
             file
         );
 
-        // Atualiza o perfil do usuário com o ID do arquivo do avatar
         await databases.updateDocument(
             DATABASE_ID,
             PROFILES_COLLECTION_ID,
@@ -503,19 +505,14 @@ async function uploadProfilePicture(file, userId) {
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Alternar abas (Entrar / Criar Conta)
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.onclick = () => toggleTabs(btn.dataset.tab);
     });
 
-    // Seleção de foto de perfil
     document.getElementById("avatar").onchange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
-        if (!file.type.startsWith('image/')) {
-            return showMsg("signupMessage", "Selecione uma imagem válida", "error");
-        }
+        if (!file.type.startsWith('image/')) return showMsg("signupMessage", "Selecione uma imagem válida", "error");
 
         selectedAvatarFile = file;
         const reader = new FileReader();
@@ -530,7 +527,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loginBtn").onclick = async () => {
         const email = document.getElementById("loginEmail").value;
         const pass = document.getElementById("loginPassword").value;
-        
         if (!email || !pass) return showMsg("loginMessage", "Preencha tudo", "error");
 
         try {
@@ -539,7 +535,6 @@ document.addEventListener("DOMContentLoaded", () => {
             loginBtn.innerHTML = '<span class="spinner"></span>Entrando...';
 
             await account.createEmailPasswordSession(email, pass);
-            
             saveLoginTimestamp();
             showMsg("loginMessage", "Sucesso! Redirecionando...", "success");
             setTimeout(() => window.location.href = "index.html", 1000);
@@ -552,9 +547,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== LOGIN GOOGLE =====
     document.getElementById("googleLoginBtn").onclick = async () => {
+        const baseUrl = getBaseUrl();
+        if (baseUrl === "ERRO_FILE_PROTOCOL") {
+            return alert("ERRO: O login do Google não funciona abrindo o arquivo direto da pasta. Você precisa usar um servidor local (como Live Server do VS Code).");
+        }
         try {
-            // Adapte as URLs de sucesso e falha para o seu domínio
-            await account.createOAuth2Session("google", "http://localhost:8000/index.html", "http://localhost:8000/login.html");
+            await account.createOAuth2Session("google", baseUrl + "index.html", baseUrl + "login.html");
         } catch (e) {
             showMsg("loginMessage", "Erro no login Google: " + e.message, "error");
         }
@@ -562,9 +560,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== LOGIN DISCORD =====
     document.getElementById("discordLoginBtn").onclick = async () => {
+        const baseUrl = getBaseUrl();
+        if (baseUrl === "ERRO_FILE_PROTOCOL") {
+            return alert("ERRO: O login do Discord não funciona abrindo o arquivo direto da pasta. Você precisa usar um servidor local.");
+        }
         try {
-            // Adapte as URLs de sucesso e falha para o seu domínio
-            await account.createOAuth2Session("discord", "http://localhost:8000/index.html", "http://localhost:8000/login.html");
+            await account.createOAuth2Session("discord", baseUrl + "index.html", baseUrl + "login.html");
         } catch (e) {
             showMsg("loginMessage", "Erro no login Discord: " + e.message, "error");
         }
@@ -585,23 +586,19 @@ document.addEventListener("DOMContentLoaded", () => {
         signupBtn.innerHTML = '<span class="spinner"></span>Criando...';
         
         try {
-            // 1. Criar o usuário
             const user = await account.create(Appwrite.ID.unique(), email, pass, nick);
 
-            // 2. Criar o documento de perfil no banco de dados
             await databases.createDocument(
                 DATABASE_ID,
                 PROFILES_COLLECTION_ID,
-                user.$id, // Usar o ID do usuário como ID do documento
+                user.$id,
                 { userId: user.$id, nickname: nick }
             );
 
-            // 3. Fazer upload da foto, se selecionada
             if (selectedAvatarFile) {
                 await uploadProfilePicture(selectedAvatarFile, user.$id);
             }
 
-            // 4. Logar automaticamente
             await account.createEmailPasswordSession(email, pass);
             saveLoginTimestamp();
             showMsg("signupMessage", "Conta criada com sucesso!", "success");
@@ -627,21 +624,21 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("sendResetEmailBtn").onclick = async () => {
         const email = document.getElementById("forgotPasswordEmail").value;
         if (!email) return showMsg("forgotPasswordMessage", "Digite o e-mail", "error");
+        const baseUrl = getBaseUrl();
 
         try {
-            // Adapte a URL de reset para a sua página de definição de nova senha
-            await account.createRecovery(email, "http://localhost:8000/reset-password.html");
-            showMsg("forgotPasswordMessage", "Link de recuperação enviado para o seu e-mail!", "success");
+            await account.createRecovery(email, baseUrl + "reset-password.html");
+            showMsg("forgotPasswordMessage", "Link de recuperação enviado!", "success");
         } catch (e) {
             showMsg("forgotPasswordMessage", e.message, "error");
         }
     };
 });
 
-/* ===== REDIRECIONAMENTO SE JÁ LOGADO ===== */
+/* ===== VERIFICAÇÃO DE LOGIN ===== */
 (async () => {
     try {
-        await account.get(); // Tenta obter a sessão atual
+        await account.get();
         window.location.href = "index.html";
     } catch (e) {
         console.log("Usuário não autenticado.");
