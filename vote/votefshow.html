@@ -1053,34 +1053,52 @@ button:disabled {
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
+  <script>
+  // =================== HORÁRIOS ===================
   const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-06-17T19:00:00"); 
+  const encerramentoBR = new Date("2026-06-17T19:00:00");
+
+  // Página para redirecionar
+  const PAGINA_REDIRECIONAMENTO = "https://seusite.com/encerrado.html";
 
   // =================== HORA DO SERVIDOR ===================
-  let serverTimeOffset = 0; 
+  let serverTimeOffset = 0;
 
   async function syncServerTime() {
     try {
       const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo").catch(() => null);
+
       if (res && res.ok) {
         const data = await res.json();
         const serverDate = new Date(data.datetime);
+
         serverTimeOffset = serverDate.getTime() - Date.now();
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log("Erro ao sincronizar horário");
+    }
+
+    verificarHorario();
   }
 
   function getNow() {
     return new Date(Date.now() + serverTimeOffset);
   }
 
-  function toSaoPauloDate(date) {
-    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    return new Date(spString);
+  function verificarHorario() {
+    const agora = getNow();
+
+    // Antes da abertura OU depois do encerramento
+    if (agora < aberturaBR || agora > encerramentoBR) {
+      window.location.href = "https://fshow.site/vote/fechada.html";
+    }
   }
 
+  // Inicia verificação
   syncServerTime();
 
+  // Verifica continuamente
+  setInterval(verificarHorario, 10000);
   // ================= APPWRITE LOGIN =================
 
 const appwriteClient = new Appwrite.Client();
