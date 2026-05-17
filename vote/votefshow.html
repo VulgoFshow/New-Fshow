@@ -846,6 +846,86 @@ button:disabled {
 .fshow-profile-widget{
     z-index: 999999 !important;
 }
+
+  .peso-voto-badge{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 15px;
+
+  border-radius:999px;
+
+  background:
+  linear-gradient(
+    135deg,
+    rgba(126,0,255,.18),
+    rgba(255,120,0,.18)
+  );
+
+  border:1px solid rgba(255,255,255,.08);
+
+  backdrop-filter:blur(12px);
+
+  width:max-content;
+
+  color:white;
+
+  font-family:'Poppins',sans-serif;
+  font-size:13px;
+  font-weight:500;
+
+  box-shadow:
+  0 4px 18px rgba(0,0,0,.25);
+
+  transition:.3s;
+}
+
+.peso-voto-badge.ativo{
+  background:
+  linear-gradient(
+    135deg,
+    rgba(145,0,255,.35),
+    rgba(255,140,0,.35)
+  );
+
+  border:1px solid rgba(255,170,0,.25);
+
+  animation:pulsePeso 2s infinite alternate;
+}
+
+.peso-voto-badge b{
+  color:#ffb347;
+}
+
+.peso-bolinha{
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:#00ff95;
+
+  box-shadow:
+  0 0 10px #00ff95,
+  0 0 20px #00ff95;
+}
+
+.peso-cadeado{
+  font-size:15px;
+}
+
+@keyframes pulsePeso{
+  from{
+    box-shadow:
+    0 0 10px rgba(140,0,255,.2);
+  }
+
+  to{
+    box-shadow:
+    0 0 25px rgba(255,128,0,.35);
+  }
+}
 </style>
 </head>
 <body>
@@ -927,7 +1007,9 @@ button:disabled {
     
   </div>
 </div> 
-
+  
+<div id="pesoDoVotoBadge" class="peso-voto-badge"></div>
+  
         <!-- PERFIL -->
         <div class="fshow-profile-widget" id="fshowWidget">
             <div class="fshow-profile-trigger" id="fshowTrigger">
