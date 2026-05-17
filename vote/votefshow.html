@@ -716,12 +716,15 @@ button:disabled {
 </style>
 <style>
 .fshow-profile-widget {
-    position: relative; /* Mudado de fixed para relative para caber no header */
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 999999 !important;
     font-family: 'Poppins', sans-serif;
 }
 
 .fshow-profile-trigger {
-    width: 40px; /* Reduzi um pouco para caber melhor no header */
+    width: 40px; 
     height: 40px;
     border-radius: 50%;
     border: 2px solid var(--purple-dark);
