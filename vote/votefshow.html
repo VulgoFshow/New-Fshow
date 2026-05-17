@@ -999,6 +999,65 @@ button:disabled {
 
   syncServerTime();
 
+  // ================= APPWRITE LOGIN =================
+
+const appwriteClient = new Appwrite.Client();
+
+appwriteClient
+  .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+  .setProject("6a07b38c00004e1645ee");
+
+const appwriteAccount = new Appwrite.Account(appwriteClient);
+
+let usuarioLogado = false;
+let pesoVoto = 1;
+let usuarioAtual = null;
+
+async function verificarUsuarioLogado() {
+  try {
+    const user = await appwriteAccount.get();
+
+    if (user) {
+      usuarioLogado = true;
+      pesoVoto = 2;
+      usuarioAtual = user;
+
+      atualizarBadgePeso();
+    }
+  } catch (err) {
+    usuarioLogado = false;
+    pesoVoto = 1;
+    usuarioAtual = null;
+
+    atualizarBadgePeso();
+  }
+}
+
+function atualizarBadgePeso() {
+  const badge = document.getElementById("pesoDoVotoBadge");
+
+  if (!badge) return;
+
+  if (usuarioLogado) {
+    badge.innerHTML = `
+      <div class="peso-bolinha"></div>
+      <span>Seu voto vale <b>2x</b></span>
+    `;
+
+    badge.classList.add("ativo");
+
+  } else {
+    badge.innerHTML = `
+      <span class="peso-cadeado">🔒</span>
+      <span>Login = voto peso 2</span>
+    `;
+
+    badge.classList.remove("ativo");
+  }
+}
+
+verificarUsuarioLogado();
+  
   // =================== ELEMENTOS DOM ===================
   const votoTela = document.getElementById("votoTela");
   const confirmTela = document.getElementById("confirmTela");
@@ -1221,10 +1280,19 @@ async function submitVote(participante) {
     const prevText = botaoVotar.textContent;
     botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
     
-    const { error } = await supabase
-      .from(TABLE_VOTACAO)
-      .insert([{ participante: participante }]);
+    const votos = [];
 
+for (let i = 0; i < pesoVoto; i++) {
+  votos.push({
+    participante: participante,
+    usuario: usuarioAtual?.$id || null
+  });
+}
+
+const { error } = await supabase
+  .from(TABLE_VOTACAO)
+  .insert(votos);
+    
     if (error) {
       console.error("Erro Supabase:", error);
       let msgErro = error.message || JSON.stringify(error);
@@ -1235,7 +1303,7 @@ async function submitVote(participante) {
     }
     
 setVotosRestantes(Math.max(getVotosRestantes() - 1, 0));
-captchaClicado = false; // Resetamos para obrigar clicar no CAPTCHA novamente no próximo ciclo
+captchaClicado = false;
 updateBotoesEstado();
 
     votoTela.style.display = "none";
@@ -1261,7 +1329,7 @@ function voltarParaVotacao() {
   const checked = document.querySelector('input[name="vote"]:checked');
   if (checked) checked.checked = false;
 
-  captchaClicado = false; // Garante que ao voltar, o botão esteja bloqueado
+  captchaClicado = false; 
   updateBotoesEstado();
 }
 
@@ -1276,7 +1344,6 @@ botaoCaptcha.addEventListener("click", () => {
   if (restantes <= 0) {
     abrirCaptcha(); 
   } else {
-    // Se já tem votos, apenas liberamos o botão de votar
     captchaClicado = true;
     updateBotoesEstado();
   }
@@ -1293,11 +1360,11 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
 });
 
 (function init() {
-  // Mantemos o estado inicial bloqueado
   captchaClicado = false;
   updateBotoesEstado();
 })();
 </script>
+          
 <script>
 /* ============================================================
    PERFIL
