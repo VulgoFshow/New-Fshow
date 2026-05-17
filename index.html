@@ -457,6 +457,345 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 .fshow-profile-widget{
     z-index: 999999 !important;
 }
+
+/* =========================
+   BLOCO DE VOTAÇÃO - FSHOW
+========================= */
+
+.vote-frame{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding:30px 15px;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+.vote-mock{
+    width:100%;
+    max-width:430px;
+    border-radius:32px;
+    overflow:hidden;
+    position:relative;
+    
+    background:
+        linear-gradient(145deg,
+        #2d1146 0%,
+        #45106b 35%,
+        #5b1590 65%,
+        #7b1fa2 100%);
+        
+    box-shadow:
+        0 25px 60px rgba(91,21,144,.45),
+        0 10px 25px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+/* efeitos decorativos */
+
+.vote-mock::before{
+    content:'';
+    position:absolute;
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    background:radial-gradient(circle,
+        rgba(255,136,0,.35) 0%,
+        transparent 70%);
+    top:-120px;
+    right:-120px;
+    z-index:0;
+}
+
+.vote-mock::after{
+    content:'';
+    position:absolute;
+    width:240px;
+    height:240px;
+    border-radius:50%;
+    background:radial-gradient(circle,
+        rgba(255,98,0,.18) 0%,
+        transparent 70%);
+    bottom:-120px;
+    left:-100px;
+    z-index:0;
+}
+
+/* HERO */
+
+.vote-hero{
+    position:relative;
+    width:100%;
+    height:250px;
+    overflow:hidden;
+}
+
+.vote-hero img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .6s ease;
+}
+
+.vote-mock:hover .vote-hero img{
+    transform:scale(1.06);
+}
+
+/* overlay hero */
+
+.vote-hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(to top,
+        rgba(45,17,70,1) 0%,
+        rgba(45,17,70,.4) 50%,
+        rgba(0,0,0,.1) 100%);
+    z-index:1;
+}
+
+.vote-hero::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(135deg,
+        rgba(255,136,0,.18),
+        rgba(123,31,162,.15));
+    z-index:2;
+}
+
+/* CARD */
+
+.vote-card{
+    position:relative;
+    z-index:5;
+    padding:24px;
+}
+
+/* HEADER */
+
+.vote-card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    margin-bottom:26px;
+}
+
+.vote-title{
+    font-size:1.45rem;
+    font-weight:900;
+    line-height:1.1;
+    letter-spacing:-0.8px;
+    color:white;
+    text-transform:uppercase;
+    
+    text-shadow:
+        0 2px 10px rgba(0,0,0,.35);
+}
+
+/* STATUS */
+
+.vote-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    
+    padding:9px 14px;
+    border-radius:999px;
+
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
+}
+
+.vote-status span:last-child{
+    color:#fff !important;
+    font-size:12px !important;
+    letter-spacing:.5px;
+}
+
+/* bolinha */
+
+.vote-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00ff88;
+
+    box-shadow:
+        0 0 12px #00ff88,
+        0 0 24px rgba(0,255,136,.7);
+
+    animation:onlinePulse 1.8s infinite;
+}
+
+@keyframes onlinePulse{
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+    50%{
+        transform:scale(1.45);
+        opacity:.55;
+    }
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/* BOTÃO */
+
+.vote-btn{
+    width:100%;
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:18px 20px;
+    border-radius:24px;
+
+    text-decoration:none;
+    overflow:hidden;
+
+    transition:.28s ease;
+}
+
+/* gradiente principal */
+
+.vote-purple{
+    background:
+        linear-gradient(135deg,
+        #ff7a00 0%,
+        #b026ff 45%,
+        #7a00ff 100%);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 15px 30px rgba(122,0,255,.35),
+        0 5px 18px rgba(255,122,0,.18),
+        inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* brilho animado */
+
+.vote-purple::before{
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(120deg,
+        transparent 20%,
+        rgba(255,255,255,.22) 50%,
+        transparent 80%);
+
+    transform:translateX(-120%);
+    transition:1s;
+}
+
+.vote-purple:hover::before{
+    transform:translateX(120%);
+}
+
+/* hover */
+
+.vote-btn:hover{
+    transform:
+        translateY(-4px)
+        scale(1.015);
+
+    box-shadow:
+        0 20px 45px rgba(122,0,255,.45),
+        0 10px 25px rgba(255,122,0,.22);
+}
+
+.vote-btn:active{
+    transform:scale(.985);
+}
+
+/* texto botão */
+
+.vote-btn span{
+    position:relative;
+    z-index:3;
+
+    color:white;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.6px;
+}
+
+/* ícone */
+
+.vote-icon{
+    position:relative;
+    z-index:3;
+
+    width:46px;
+    height:46px;
+    border-radius:16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.18);
+
+    backdrop-filter:blur(12px);
+
+    font-size:21px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* RESPONSIVO */
+
+@media(max-width:480px){
+
+    .vote-frame{
+        padding:20px 10px;
+    }
+
+    .vote-hero{
+        height:220px;
+    }
+
+    .vote-card{
+        padding:20px;
+    }
+
+    .vote-title{
+        font-size:1.18rem;
+    }
+
+    .vote-btn{
+        padding:16px 18px;
+    }
+
+    .vote-btn span{
+        font-size:13px;
+    }
+
+    .vote-icon{
+        width:42px;
+        height:42px;
+        font-size:18px;
+    }
+
+}
 </style>
 
 </head>
@@ -527,6 +866,42 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
             <div class="story-item"><img src="https://i.ibb.co/fV6PDjFF/Mikael.png" alt="Mikael"></div>
         </div>
     </div>
+    
+        <!-- BLOCO DE VOTAÇÃO -->
+<div class="vote-frame">
+  <div class="vote-mock">
+
+    <!-- HERO -->
+    <div class="vote-hero">
+      <img src="https://i.ibb.co/NdRFkd7y/Vote-em-Fshow-Site-20260411-210922-0000.png" alt="Berlinda">
+    </div>
+
+    <!-- Card -->
+    <div class="vote-card">
+      <div class="vote-card-header">
+        <div>
+          <div class="vote-title">1° Apuros - Quem você quer que FIQUE?</div>
+        </div>
+
+        <div style="text-align:right">
+          <div class="vote-status">
+            <span class="vote-dot"></span>
+            <span style="font-weight:600;color:#374151;font-size:13px">ABERTA</span>
+          </div>
+        </div>
+      </div>
+        
+      <!-- Botões -->
+        
+<a href="vote/votefshow.html" class="vote-btn vote-purple" id="teamVote">
+  <span>VOTO DA TORCIDA</span>
+  <div class="vote-icon">👥</div>
+</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- Destaques -->
     <div class="section-title-wrapper">
