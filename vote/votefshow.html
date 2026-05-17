@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Fshow - Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
@@ -713,7 +713,136 @@ button:disabled {
     display: block;
   }
 }
+</style>
+<style>
+.fshow-profile-widget {
+    position: relative; /* Mudado de fixed para relative para caber no header */
+    font-family: 'Poppins', sans-serif;
+}
 
+.fshow-profile-trigger {
+    width: 40px; /* Reduzi um pouco para caber melhor no header */
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--purple-dark);
+    cursor: pointer;
+    overflow: hidden;
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.fshow-profile-trigger:hover {
+    transform: scale(1.05);
+    border-color: var(--orange-vibrant);
+}
+
+.fshow-profile-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fshow-profile-trigger .anon-icon {
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.fshow-profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(128, 0, 255, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: fshowSlideDown 0.3s ease-out;
+}
+
+.fshow-profile-dropdown.fshow-active {
+    display: flex !important;
+}
+
+@keyframes fshowSlideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fshow-user-info {
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.fshow-user-name {
+    font-weight: 800;
+    font-size: 1rem;
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2px;
+}
+
+.fshow-user-status {
+    font-size: 0.65rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.fshow-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.06);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.fshow-btn:hover {
+    background: rgba(128, 0, 255, 0.2);
+    border-color: rgba(128, 0, 255, 0.5);
+}
+
+.fshow-btn-primary {
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
+    border: none;
+}
+
+.fshow-btn-logout {
+    color: #ff4d4d;
+}
+
+.fshow-btn-logout:hover {
+    background: rgba(255, 77, 77, 0.1);
+    border-color: rgba(255, 77, 77, 0.3);
+}
+
+.fshow-profile-dropdown{
+    z-index: 999999 !important;
+}
+
+.fshow-profile-widget{
+    z-index: 999999 !important;
+}
 </style>
 </head>
 <body>
@@ -795,6 +924,36 @@ button:disabled {
     
   </div>
 </div> 
+
+        <!-- PERFIL -->
+        <div class="fshow-profile-widget" id="fshowWidget">
+            <div class="fshow-profile-trigger" id="fshowTrigger">
+                <div id="fshowAvatarContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                    <span class="anon-icon">👤</span>
+                </div>
+            </div>
+            
+            <div class="fshow-profile-dropdown" id="fshowDropdown">
+                <div class="fshow-user-info">
+                    <div class="fshow-user-name" id="fshowUserName">Anônimo</div>
+                    <div class="fshow-user-status" id="fshowUserStatus">Visitante</div>
+                </div>
+                
+                <div id="fshowLoggedOptions" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+                    <label class="fshow-btn" for="fshowChangeAvatarInput">
+                        📸 Mudar Foto
+                    </label>
+                    <input type="file" id="fshowChangeAvatarInput" accept="image/*" style="display: none;">
+                    <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">
+                        🚪 Sair da Conta
+                    </button>
+                </div>
+
+                <div id="fshowAnonOptions" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                    <a href="login.html" class="fshow-btn fshow-btn-primary">🔑 Fazer Login</a>
+                    <button class="fshow-btn" id="fshowContinueAnonBtn">👀 Continuar Anônimo</button>
+                </div>
+            </div>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
@@ -1136,5 +1295,326 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   updateBotoesEstado();
 })();
 </script>
+<script>
+/* ============================================================
+   PERFIL
+============================================================ */
+document.addEventListener("DOMContentLoaded", async function () {
+
+    // ================= APPWRITE =================
+    const client = new Appwrite.Client();
+
+    client
+        .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+        .setProject("6a07b38c00004e1645ee");
+
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+    const storage = new Appwrite.Storage(client);
+
+    const DB_ID = "6a07b77b0016f7c90141";
+    const COL_ID = "profiles";
+    const BUCKET_ID = "6a07b91a000e61c9e4b3";
+
+    // ================= ELEMENTOS =================
+    const trigger = document.getElementById("fshowTrigger");
+    const dropdown = document.getElementById("fshowDropdown");
+    const widget = document.getElementById("fshowWidget");
+
+    const avatarContainer = document.getElementById("fshowAvatarContainer");
+
+    const userName = document.getElementById("fshowUserName");
+    const userStatus = document.getElementById("fshowUserStatus");
+
+    const loggedOptions = document.getElementById("fshowLoggedOptions");
+    const anonOptions = document.getElementById("fshowAnonOptions");
+
+    const avatarInput = document.getElementById("fshowChangeAvatarInput");
+
+    const logoutBtn = document.getElementById("fshowLogoutBtn");
+
+    const anonBtn = document.getElementById("fshowContinueAnonBtn");
+
+    if (!trigger || !dropdown || !widget) {
+        console.log("Widget não encontrado.");
+        return;
+    }
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    // ============================================================
+    // DROPDOWN
+    // ============================================================
+
+    trigger.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        dropdown.classList.toggle("fshow-active");
+
+    });
+
+    dropdown.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+    });
+
+    document.addEventListener("click", function (e) {
+
+        if (!widget.contains(e.target)) {
+
+            dropdown.classList.remove("fshow-active");
+
+        }
+
+    });
+
+    // ============================================================
+    // CONTINUAR ANÔNIMO
+    // ============================================================
+
+    if (anonBtn) {
+
+        anonBtn.addEventListener("click", function () {
+
+            dropdown.classList.remove("fshow-active");
+
+        });
+
+    }
+
+    // ============================================================
+    // AVATAR
+    // ============================================================
+
+    function updateAvatar(src) {
+
+        avatarContainer.innerHTML = `
+            <img
+                src="${src}"
+                alt="Avatar"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                "
+            >
+        `;
+
+    }
+
+    // ============================================================
+    // CARREGAR USUÁRIO
+    // ============================================================
+
+    try {
+
+        currentUser = await account.get();
+
+        if (loggedOptions) loggedOptions.style.display = "flex";
+        if (anonOptions) anonOptions.style.display = "none";
+
+        try {
+
+            currentProfile = await databases.getDocument(
+                DB_ID,
+                COL_ID,
+                currentUser.$id
+            );
+
+        } catch (err) {
+
+            console.log("Perfil não encontrado.");
+
+        }
+
+        // Nome
+        if (userName) {
+
+            userName.textContent =
+                currentProfile?.nickname ||
+                currentUser.name ||
+                "Usuário";
+
+        }
+
+        // Status
+        if (userStatus) {
+
+            userStatus.textContent =
+                currentUser.email || "Membro";
+
+        }
+
+        // ============================================================
+        // FOTO
+        // ============================================================
+
+        let avatarUrl = null;
+
+        // FOTO CUSTOMIZADA
+        if (currentProfile?.avatarFileId) {
+
+            avatarUrl = storage.getFileView(
+                BUCKET_ID,
+                currentProfile.avatarFileId
+            );
+
+        }
+
+        // FOTO GOOGLE
+        else if (
+            currentUser.prefs &&
+            currentUser.prefs.avatar
+        ) {
+
+            avatarUrl = currentUser.prefs.avatar;
+
+        }
+
+        // FALLBACK
+        if (!avatarUrl) {
+
+            avatarUrl =
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    currentProfile?.nickname ||
+                    currentUser.name ||
+                    "User"
+                )}&background=8000ff&color=fff`;
+
+        }
+
+        updateAvatar(avatarUrl);
+
+    } catch (err) {
+
+        console.log("Visitante anônimo.");
+
+    }
+
+    // ============================================================
+    // LOGOUT
+    // ============================================================
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener("click", async function () {
+
+            try {
+
+                await account.deleteSession("current");
+
+            } catch (e) {}
+
+            localStorage.removeItem("fshow_user");
+
+            location.reload();
+
+        });
+
+    }
+
+    // ============================================================
+    // TROCAR FOTO
+    // ============================================================
+
+    if (avatarInput) {
+
+        avatarInput.addEventListener("change", async function (e) {
+
+            const file = e.target.files[0];
+
+            if (!file || !currentUser) return;
+
+            try {
+
+                trigger.style.opacity = "0.5";
+
+                const uploaded = await storage.createFile(
+                    BUCKET_ID,
+                    Appwrite.ID.unique(),
+                    file
+                );
+
+                await databases.updateDocument(
+                    DB_ID,
+                    COL_ID,
+                    currentUser.$id,
+                    {
+                        avatarFileId: uploaded.$id
+                    }
+                );
+
+                const newAvatar = storage.getFileView(
+                    BUCKET_ID,
+                    uploaded.$id
+                );
+
+                updateAvatar(newAvatar);
+
+                trigger.style.opacity = "1";
+
+                alert("Foto atualizada!");
+
+            } catch (error) {
+
+                trigger.style.opacity = "1";
+
+                alert("Erro ao atualizar foto.");
+
+                console.error(error);
+
+            }
+
+        });
+
+    }
+
+});
+
+/* ============================================================
+   TEMA ESCURO / CLARO
+============================================================ */
+(function () {
+
+    const toggle = document.getElementById("theme-toggle");
+
+    if (!toggle) return;
+
+    const saved = localStorage.getItem("fshow_theme");
+
+    if (saved === "dark") {
+
+        document.body.classList.add("dark-mode");
+        document.body.classList.remove("light-mode");
+
+        toggle.classList.remove("fa-moon");
+        toggle.classList.add("fa-sun");
+
+    }
+
+    toggle.addEventListener("click", function () {
+
+        const isDark = document.body.classList.toggle("dark-mode");
+
+        document.body.classList.toggle("light-mode", !isDark);
+
+        toggle.classList.toggle("fa-moon", !isDark);
+        toggle.classList.toggle("fa-sun", isDark);
+
+        localStorage.setItem(
+            "fshow_theme",
+            isDark ? "dark" : "light"
+        );
+
+    });
+
+})();
+</script>
+</script>
+        
 </body>
 </html>
