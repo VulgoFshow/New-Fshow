@@ -1160,7 +1160,7 @@ verificarUsuarioLogado();
 
   let captchaAberto = false;
   let captchaClicado = false;
-
+vot
   function updateBotoesEstado() {
     const restantes = getVotosRestantes();
     
@@ -1365,10 +1365,9 @@ async function submitVote(participante) {
     const votos = [];
 
 for (let i = 0; i < pesoVoto; i++) {
-  votos.push({
-    participante: participante,
-    usuario: usuarioAtual?.$id || null
-  });
+votos.push({
+  participante: participante
+});
 }
 
 const { error } = await supabase
