@@ -1052,28 +1052,32 @@ button:disabled {
   const TABLE_VOTACAO = "apuros2";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
-
-  // =================== HORÁRIOS ===================
-  const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-06-18T19:00:00");
   
+  // =================== HORÁRIOS ===================
+
+  // Horário de Brasília (UTC-3)
+  const aberturaBR = new Date("2026-01-18T22:00:00Z");
+  const encerramentoBR = new Date("2026-06-18T19:00:00Z");
+
   const PAGINA_REDIRECIONAMENTO = "https://fshow.site/vote/fechada.html";
 
   // =================== HORA DO SERVIDOR ===================
+
   let serverTimeOffset = 0;
 
   async function syncServerTime() {
     try {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo").catch(() => null);
+      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
 
-      if (res && res.ok) {
+      if (res.ok) {
         const data = await res.json();
+
         const serverDate = new Date(data.datetime);
 
         serverTimeOffset = serverDate.getTime() - Date.now();
       }
     } catch (e) {
-      console.log("Erro ao sincronizar horário");
+      console.log("Erro ao sincronizar horário:", e);
     }
 
     verificarHorario();
@@ -1086,14 +1090,31 @@ button:disabled {
   function verificarHorario() {
     const agora = getNow();
 
-    if (agora < aberturaBR || agora > encerramentoBR) {
-      window.location.href = "https://fshow.site/vote/fechada.html";
+    console.log("Agora:", agora);
+    console.log("Abertura:", aberturaBR);
+    console.log("Encerramento:", encerramentoBR);
+
+    // ANTES da abertura
+    if (agora.getTime() < aberturaBR.getTime()) {
+      window.location.replace(PAGINA_REDIRECIONAMENTO);
+      return;
+    }
+
+    // DEPOIS do encerramento
+    if (agora.getTime() > encerramentoBR.getTime()) {
+      window.location.replace(PAGINA_REDIRECIONAMENTO);
+      return;
     }
   }
 
+  // Verifica IMEDIATAMENTE ao entrar
+  verificarHorario();
+
+  // Sincroniza com servidor
   syncServerTime();
 
-  setInterval(verificarHorario, 10000);
+  // Continua verificando
+  setInterval(verificarHorario, 1000);
   
   // ================= APPWRITE LOGIN =================
 
