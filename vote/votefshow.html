@@ -1053,13 +1053,11 @@ button:disabled {
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
-  <script>
   // =================== HORÁRIOS ===================
   const aberturaBR = new Date("2026-01-18T19:00:00");
   const encerramentoBR = new Date("2026-06-18T19:00:00");
-
-  // Página para redirecionar
-  const PAGINA_REDIRECIONAMENTO = "https://seusite.com/encerrado.html";
+  
+  const PAGINA_REDIRECIONAMENTO = "https://fshow.site/vote/fechada.html";
 
   // =================== HORA DO SERVIDOR ===================
   let serverTimeOffset = 0;
@@ -1088,17 +1086,15 @@ button:disabled {
   function verificarHorario() {
     const agora = getNow();
 
-    // Antes da abertura OU depois do encerramento
     if (agora < aberturaBR || agora > encerramentoBR) {
       window.location.href = "https://fshow.site/vote/fechada.html";
     }
   }
 
-  // Inicia verificação
   syncServerTime();
 
-  // Verifica continuamente
   setInterval(verificarHorario, 10000);
+  
   // ================= APPWRITE LOGIN =================
 
 const appwriteClient = new Appwrite.Client();
@@ -1362,7 +1358,7 @@ botaoVotar.addEventListener("click", () => {
 
 async function submitVote(participante) {
   try {
-    const agoraBR = toSaoPauloDate(getNow());
+    const agoraBR = getNow();
     if (agoraBR > encerramentoBR) {
       alert("A votação foi encerrada!");
       return;
@@ -1371,7 +1367,6 @@ async function submitVote(participante) {
     const inputEscolhido = document.querySelector('input[name="vote"]:checked');
     if (!inputEscolhido) return;
 
-    // Pegamos a imagem do card pai do input radio
     const cardPai = inputEscolhido.closest('.option');
     const imagemVotada = cardPai.querySelector('img').src;
 
@@ -1781,7 +1776,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
 })();
-</script>
 </script>
         
 </body>
