@@ -2,616 +2,1855 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Fshow - Voto Único</title>
+  <title>Fshow - Votação</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-  <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
-  <link rel="apple-touch-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <meta name="theme-color" content="#8A2BE2">
+<link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-  <!-- Firebase Compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<link rel="apple-touch-icon" sizes="57x57" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="60x60" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="72x72" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="76x76" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="114x114" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="144x144" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCm02TAa_OIQ5tNXtEZX-8HuWm-zOI1Wn0",
-      authDomain: "login-fshow.firebaseapp.com",
-      projectId: "login-fshow",
-      storageBucket: "login-fshow.firebasestorage.app",
-      messagingSenderId: "943567663687",
-      appId: "1:943567663687:web:a3e0be453ed6525f9e3762",
-      measurementId: "G-ES04KHT7TH"
-    };
-      
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-    const auth = firebase.auth();
+<meta name="theme-color" content="#8A2BE2">
+<meta name="msapplication-TileColor" content="#FF8C00">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
 
-    // LOGIN REDIRECT
-    auth.onAuthStateChanged((user) => {
-        if (!user) {
-            sessionStorage.setItem("redirectAfterLogin", window.location.href);
-            window.location.href = "https://fshow.site/login.html";
-        }
-    });
-  </script>
-    
-  <style>
-    :root {
-      --bg: #06080d;
-      --card-bg: rgba(25, 25, 35, 0.85);
-      --accent: #00e6d8;
-      --accent-2: #4f7cff;
-      --accent-soft: rgba(0, 230, 216, 0.25);
-      --text: #ffffff;
-      --muted: #a0a4b0;
-      --radius-md: 12px;
-      --radius-lg: 18px;
-      --transition: 0.45s cubic-bezier(.2,.8,.2,1);
-      --shadow-md: 0 10px 30px rgba(0,0,0,0.45);
-      --shadow-glow: 0 0 25px rgba(0,230,216,0.25);
-      --panel-border: rgba(255,255,255,0.1);
-      --warning: #ffa500;
-      --danger: #ff6b6b;
-      --success: #00ffb3;
-    }
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="mask-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" color="#ff8c00">
+<link rel="manifest" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<meta name="msapplication-TileColor" content="#ff8c00">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<meta name="theme-color" content="#8a2be2">
+  
+<style>
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --bg: #121212;
+  --card-bg: #2b2b2b;
+  --selected-bg: #3c3c3c;
+  --panel-bg: #2b2b2b;
+  --panel-border: rgba(255, 255, 255, 0.06);
+  --accent: #00b7b0;
+  --text: #fff;
+  --muted: #bdbdbd;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
+  --back: #0d0d0d;
+}
 
-    *, *::before, *::after { box-sizing: border-box; }
+/* ===== BASE ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(0, 230, 216, 0.18), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(79,124,255,0.18), transparent 60%),
-        linear-gradient(160deg, var(--bg), #0c1018 45%, #05070b);
-      background-attachment: fixed;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", Arial, sans-serif;
+  color: var(--text);
 
-    .container {
-      max-width: 480px;
-      width: 100%;
-      padding: 30px 20px;
-      animation: fadeSlideUp 0.9s cubic-bezier(.2,.8,.2,1) both;
-    }
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
+    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
 
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(30px) scale(0.96); filter: blur(6px); }
-      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-    }
+  background-attachment: fixed;
+  background-size: cover;
+  animation: fadeIn 0.7s ease;
+}
 
-    h1 { font-size: 26px; font-weight: 900; text-align: center; letter-spacing: 0.6px; margin-bottom: 12px; }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-    .options { display: flex; flex-direction: column; gap: 18px; margin-top: 28px; }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    .option {
-      position: relative;
-      display: flex;
-      background: var(--card-bg);
-      border: 1px solid var(--panel-border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: var(--transition);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    }
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px 15px;
+  animation: slideUp 0.6s ease;
+}
 
-    .option:hover {
-      transform: translateY(-6px) scale(1.01);
-      border-color: var(--accent);
-      box-shadow: var(--shadow-md), var(--shadow-glow);
-    }
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: left;
+  transition: color 0.3s ease;
+}
 
-    .option img { width: 120px; height: 120px; object-fit: cover; flex-shrink: 0; border-right: 1px solid var(--panel-border); }
+/* ===== OPÇÕES (RADIO CARDS) ===== */
+.option {
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid #fff;
+  border-radius: var(--border-radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
+}
 
-    .option-content { display: flex; align-items: center; padding: 18px; width: 100%; font-size: 18px; font-weight: 600; gap: 15px; }
+.option:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
 
-    .option-content input[type="radio"] {
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--muted);
-      border-radius: 50%;
-      cursor: pointer;
-      position: relative;
-      transition: var(--transition);
-    }
+.option.selected,
+.option:has(input[type="radio"]:checked) {
+  background: rgba(0, 183, 176, 0.2) !important;
+  border-color: var(--accent) !important;
+}
 
-    .option-content input[type="radio"]:checked { border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); }
-    .option-content input[type="radio"]:checked::before {
-      content: ""; position: absolute; inset: 5px; background: var(--accent); border-radius: 50%;
-    }
+.option.selected .option-content,
+.option:has(input[type="radio"]:checked) .option-content {
+  background: transparent !important;
+}
 
-    .captcha-container { margin: 32px 0; display: flex; justify-content: center; }
+.option img {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
 
-    button#botaoVotar {
-      width: 100%; padding: 18px; font-size: 18px; font-weight: 900; border: none; border-radius: var(--radius-md);
-      text-transform: uppercase; letter-spacing: 1.2px; background: #2b2f3a; color: var(--muted); cursor: not-allowed; transition: var(--transition);
-    }
+.option-content {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
 
-    button#botaoVotar.active {
-      cursor: pointer; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #001818;
-      box-shadow: 0 10px 30px var(--accent-soft);
-    }
+.option-content input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
 
-    #confirmTela, #errorTela, #loadingTela, #alreadyVotedTela, #vpnBlockedTela {
-      display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; width: 100%;
-    }
+.option-content input[type="radio"]:hover {
+  transform: scale(1.1);
+}
 
-    .card { background: var(--card-bg); border-radius: 20px; padding: 36px; width: 100%; max-width: 460px; box-shadow: var(--shadow-md); backdrop-filter: blur(12px); }
-    
-    .icon-container {
-      font-size: 60px;
-      margin-bottom: 20px;
-      animation: slideDown 0.6s cubic-bezier(.2,.8,.2,1);
-    }
+.option-content input[type="radio"]:checked {
+  border-color: var(--accent);
+}
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.option-content input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
 
-    .title { font-size: 24px; font-weight: 900; margin-bottom: 12px; letter-spacing: 0.5px; }
-    .subtitle { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+  /* ===== SPINNER ===== */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
 
-    .error-msg { color: var(--danger); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
-    .warning-msg { color: var(--warning); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
-    .success-msg { color: var(--success); font-weight: 900; font-size: 22px; margin-bottom: 12px; }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
 
-    .voltar { 
-      background: linear-gradient(135deg, var(--accent), var(--accent-2)); 
-      color: #001818; 
-      padding: 14px; 
-      border: none; 
-      border-radius: 10px; 
-      width: 100%; 
-      cursor: pointer; 
-      font-weight: 800; 
-      margin-top: 22px; 
-      transition: var(--transition);
-    }
+  /* ===== BOTÃO PRINCIPAL ===== */
+  button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius);
+  margin-top: 15px;
+  cursor: pointer;
+  background: #444;
+  color: var(--muted);
+  transition: var(--transition);
+}
 
-    .voltar:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 230, 216, 0.3);
-    }
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
+}
 
-    .voltar-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      border: 1px solid var(--panel-border);
-      margin-top: 12px;
-    }
+button.active {
+  background: var(--accent);
+  color: #fff;
+}
 
-    .voltar-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: var(--accent);
-    }
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-    .spinner {
-      width: 52px; height: 52px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.15); border-top-color: var(--accent);
-      animation: spin 0.9s linear infinite; margin-bottom: 22px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
 
-    .info-box {
-      background: rgba(0, 230, 216, 0.1);
-      border: 1px solid rgba(0, 230, 216, 0.3);
-      border-radius: 12px;
-      padding: 16px;
-      margin: 20px 0;
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: left;
-    }
+/* ===== POPUP ===== */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1500;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity .25s ease;
+}
 
-    .info-box strong { color: var(--accent); }
+.popup.active {
+  display: flex;
+  opacity: 1;
+}
 
-    @media (min-width: 768px) {
-      .container { max-width: 720px; }
-      .options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
-      .option { flex-direction: column; text-align: center; }
-      .option img { width: 100%; height: 180px; border-right: none; border-bottom: 1px solid var(--panel-border); }
-      .option-content { justify-content: center; padding: 22px 12px; }
-    }
-  </style>
+/* ===== CONTAINER ===== */
+.captcha-box {
+  background: #1b1b1b;
+  width: 360px;
+  max-width: 95%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.45);
+  animation: fadeIn .3s ease;
+  color: #eee;
+}
 
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+/* ===== CABEÇALHO ===== */
+.captcha-header {
+  background: #0f7b82;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.captcha-header span {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  flex: 1;
+  color: #fff;
+}
+
+.captcha-header img {
+  width: 62px;
+  height: 62px;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-left: 12px;
+}
+
+/* ===== GRID ===== */
+.captcha-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 10px;
+  background: #00000022;
+}
+
+.captcha-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #111;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: .15s;
+}
+
+.captcha-img:hover {
+  transform: scale(1.03);
+}
+
+.captcha-img.selected {
+  border-color: #fff;
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+
+/* ===== FOOTER ===== */
+.captcha-footer {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* ===== BOTÃO AVANÇAR ===== */
+.captcha-btn {
+  background: #e6e6e6;
+  color: #222;
+  padding: 10px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: .15s;
+}
+
+.captcha-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.captcha-btn:hover:not(:disabled) {
+  background: #fff;
+}
+
+/* ===== BOTÃO ICONE ===== */
+.captcha-icon-btn {
+  background: #2b2b2b;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .15s;
+}
+
+.captcha-icon-btn img {
+  width: 20px;
+  opacity: 0.8;
+}
+
+.captcha-icon-btn:hover {
+  background: #333;
+}
+
+/* ===== IMG ===== */
+.captcha-hand img {
+  width: 36px;
+  opacity: 0.85;
+}
+
+/* ===== PAGINAÇÃO ===== */
+
+.captcha-dots {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #222;
+  transition: background .15s;
+}
+
+.dot.white {
+  background: #ffffff !important;
+}
+
+.dot.green {
+  background: #4CAF50 !important;
+}
+
+.dot.active {
+  background: none !important;
+}
+
+/* ===== CONFIRMAÇÃO ===== */
+#fotoConfirm {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+#nomeConfirm {
+  background: #1F1F1F;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 14px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  margin: 0;
+}
+
+.success-msg {
+  background: rgba(0, 255, 150, 0.1);
+  border: 1px solid rgba(0, 255, 150, 0.4);
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: center;
+  color: #00ff99;
+  font-weight: 600;
+  margin-bottom: 18px;
+  animation: fadeIn 0.6s ease;
+}
+
+.success-msg::before {
+  content: "✔ ";
+  color: #00ff99;
+}
+
+.voltar {
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.voltar:hover {
+  background: #00c9b8;
+}
+
+#confirmTela {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  background: transparent;
+  min-height: 85vh;
+  animation: slideUp 0.6s ease forwards;
+}
+
+
+.confirm-card {
+  background: transparent;
+  border: 2px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.confirm-card .img-container {
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  background: rgba(0, 183, 176, 0.2); 
+  border: 1px solid rgba(0, 255, 255, 255);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#fotoConfirm {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+  .confirm-card .img-container {
+    height: auto; 
+  }
+}
+
+#botaoCaptcha {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 0 15px;
+  height: 70px;
+  max-width: 320px;
+  width: 320px;
+  margin: 20px auto 0;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: var(--shadow-sm);
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 400;
+  transition: var(--transition);
+}
+
+#botaoCaptcha:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 183, 176, 0.3);
+}
+
+.recaptcha-checkbox {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: #111;
+  border: 2px solid #444;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+  background: #00aaff;
+  border-color: #00aaff;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: none;
+}
+
+#botaoCaptcha[aria-pressed="true"] .checkmark {
+  display: block;
+}
+
+.recaptcha-label {
+  user-select: none;
+  line-height: 1;
+  flex-grow: 1;
+}
+
+.recaptcha-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: contain;
+  filter: brightness(0.7);
+  flex-shrink: 0;
+}
+
+#botaoCaptcha:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.bot-bait {
+  pointer-events: none;
+}
+
+.fade-in-element {
+  opacity: 0.6; 
+}
+
+.espacador { width: 100%; margin: 10px 0; }
+  
+/* =========================
+   DESKTOP / PC
+   ========================= */
+@media (min-width: 1024px) {
+
+  .container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .option {
+    flex-direction: column;
+    background: #2b2b2b;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+
+  .option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.55);
+  }
+
+  .option img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  .option-content {
+    background: #1f1f1f;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  .option-content input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  button {
+    max-width: 420px;
+    margin: 32px auto 0;
+    display: block;
+    font-size: 16px;
+  }
+
+  /* =========================
+     CONFIRMAÇÃO (SUCESSO)
+     ========================= */
+
+  #confirmTela {
+    padding-top: 60px;
+    min-height: auto;
+  }
+
+  .confirm-card {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 28px;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 15px 40px rgba(0,0,0,.6);
+  }
+
+  .confirm-card .img-container {
+    height: 280px;
+  }
+
+  #nomeConfirm {
+    font-size: 24px;
+    padding: 16px;
+  }
+
+  .success-msg {
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+
+  .voltar {
+    max-width: 420px;
+    margin: 20px auto 0;
+    display: block;
+  }
+}
+</style>
+<style>
+.fshow-profile-widget {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 999999 !important;
+    font-family: 'Poppins', sans-serif;
+}
+
+.fshow-profile-trigger {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--purple-dark);
+    cursor: pointer;
+    overflow: hidden;
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.fshow-profile-trigger:hover {
+    transform: scale(1.05);
+    border-color: var(--orange-vibrant);
+}
+
+.fshow-profile-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fshow-profile-trigger .anon-icon {
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.fshow-profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(128, 0, 255, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: fshowSlideDown 0.3s ease-out;
+}
+
+.fshow-profile-dropdown.fshow-active {
+    display: flex !important;
+}
+
+@keyframes fshowSlideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fshow-user-info {
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.fshow-user-name {
+    font-weight: 800;
+    font-size: 1rem;
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2px;
+}
+
+.fshow-user-status {
+    font-size: 0.65rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.fshow-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.06);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.fshow-btn:hover {
+    background: rgba(128, 0, 255, 0.2);
+    border-color: rgba(128, 0, 255, 0.5);
+}
+
+.fshow-btn-primary {
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
+    border: none;
+}
+
+.fshow-btn-logout {
+    color: #ff4d4d;
+}
+
+.fshow-btn-logout:hover {
+    background: rgba(255, 77, 77, 0.1);
+    border-color: rgba(255, 77, 77, 0.3);
+}
+
+.fshow-profile-dropdown{
+    z-index: 999999 !important;
+}
+
+.fshow-profile-widget{
+    z-index: 999999 !important;
+}
+
+  .peso-voto-badge{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 15px;
+
+  border-radius:999px;
+
+  background:
+  linear-gradient(
+    135deg,
+    rgba(126,0,255,.18),
+    rgba(255,120,0,.18)
+  );
+
+  border:1px solid rgba(255,255,255,.08);
+
+  backdrop-filter:blur(12px);
+
+  width:max-content;
+
+  color:white;
+
+  font-family:'Poppins',sans-serif;
+  font-size:13px;
+  font-weight:500;
+
+  box-shadow:
+  0 4px 18px rgba(0,0,0,.25);
+
+  transition:.3s;
+}
+
+.peso-voto-badge.ativo{
+  background:
+  linear-gradient(
+    135deg,
+    rgba(145,0,255,.35),
+    rgba(255,140,0,.35)
+  );
+
+  border:1px solid rgba(255,170,0,.25);
+
+  animation:pulsePeso 2s infinite alternate;
+}
+
+.peso-voto-badge b{
+  color:#ffb347;
+}
+
+.peso-bolinha{
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:#00ff95;
+
+  box-shadow:
+  0 0 10px #00ff95,
+  0 0 20px #00ff95;
+}
+
+.peso-cadeado{
+  font-size:15px;
+}
+
+@keyframes pulsePeso{
+  from{
+    box-shadow:
+    0 0 10px rgba(140,0,255,.2);
+  }
+
+  to{
+    box-shadow:
+    0 0 25px rgba(255,128,0,.35);
+  }
+}
+</style>
 </head>
 <body>
 
-  <!-- Tela de Carregamento -->
-  <div id="loadingTela" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
-    <div class="spinner"></div>
-    <p id="loadingText">Iniciando sistema de segurança...</p>
-  </div>
-
-  <!-- Tela de Votação -->
-  <div id="votoTela" class="container" style="display: none;">
-    <h1>Quem deve ser ELIMINADO do BBBF6?</h1>
-    <p style="text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 20px;">É permitido apenas um voto por dispositivo.</p>
+  <div id="votoTela" class="container">
+<div class="espacador"></div>
     
-    <div class="options">
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true" alt="Arthur Zago">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Arthur Zago"> Arthur Zago
-        </div>
-      </label>
-        
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true" alt="Mikael">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Mikael"> Mikael
-        </div>
-      </label>
-
-      <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true" alt="Pedro">
-        <div class="option-content">
-          <input type="radio" name="vote" value="Pedro"> Pedro
-        </div>
-      </label>
-    </div>
-
-    <div class="captcha-container">
-      <div class="cf-turnstile" data-sitekey="0x4AAAAAACEGre7O4wmrWp4M" data-callback="onCaptchaSuccess" data-theme="dark"></div>
-    </div>
-
-    <button id="botaoVotar" onclick="submitVote()" disabled>VOTAR</button>
+    <h1>Quem você quer que FIQUE?</h1>
+    <div class="espacador"></div>
+    
+<div class="options">
+  
+  <label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/AnaPaula.webp?raw=true" alt="Opção 1">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Ana Paula"> Ana Paula
   </div>
+</label>
 
-  <!-- Tela de Sucesso -->
-  <div id="confirmTela">
-    <div class="card">
-      <div class="icon-container">✔</div>
-      <h2 id="nomeConfirm" class="title">Sucesso!</h2>
-      <p class="success-msg">Voto computado com sucesso!</p>
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-    </div>
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Gabriel.webp?raw=true" alt="Opção 2">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Gabriel"> Gabriel
   </div>
+</label>
 
-  <!-- Tela de Já Votou -->
-  <div id="alreadyVotedTela">
-    <div class="card">
-      <div class="icon-container">⏱️</div>
-      <h2 class="title">Você já votou!</h2>
-      <p class="subtitle">Você já votou nessa votação.</p>
-      
-      <div class="info-box">
-        <strong>ℹ️ Informação:</strong><br>
-        Essa votação permite apenas <strong>um voto por pessoa</strong>.
-      </div>
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Paiva.webp?raw=true" alt="Opção 3">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Paiva"> Paiva
+  </div>
+</label>
+  
+    </div>
+    <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
+      <span class="recaptcha-checkbox" aria-hidden="true">
+        <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l6 6 10-10"/></svg>
+      </span>
+      <span class="recaptcha-label">Não sou um robô</span>
+      <img class="recaptcha-icon" src="https://i.ibb.co/gZZrBqq0/Chat-GPT-Image-16-de-mai-de-2026-13-55-49-1.png" alt="FCaptcha" style="width:50px;height:50px;border-radius:4px"/>
+    </button>
 
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-      <button class="voltar voltar-secondary" onclick="window.location.href='https://fshow.site'">
-        VOLTAR
+    <button id="botaoVotar" disabled>VOTAR</button>
+
+    <div class="notice">Essa votação segue aberta até às 19:00</div>
+</div>
+  
+<!-- POPUP CAPTCHA -->
+<div id="popupCaptcha" class="popup">
+  <div class="captcha-box">
+    <div class="captcha-header">
+      <span id="captcha-instrucao">Toque em itens comumente usados com o item mostrado</span>
+    </div>
+    <div id="captchaGrid" class="captcha-grid"></div>
+    <div class="captcha-footer">
+      <button id="captchaRefresh" class="captcha-icon-btn" title="Recarregar">
+        <img src="https://i.ibb.co/MyvQhHP4/Seta.png" alt="reload">
       </button>
+<div class="captcha-dots">
+  <div class="dot" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+</div>
+      <button id="captchaConfirm" class="captcha-btn" disabled>Avançar</button>
+<div id="captchaStatus" style="color:#fff; font-size:14px; padding:4px 0;"></div>
+
     </div>
   </div>
+</div>
 
-  <!-- Tela de VPN Bloqueada -->
-  <div id="vpnBlockedTela">
-    <div class="card">
-      <div class="icon-container">🔒</div>
-      <h2 class="title">Voto Bloqueado</h2>
-      <p class="warning-msg">VPN ou Proxy Detectado</p>
-      <p class="subtitle">Não é permitido votar usando VPN, Proxy ou Tor. Por favor, seja honesto.</p>
-      
-      <div class="info-box">
-        <strong>🛡️ Por que isso?</strong><br>
-        Para garantir a segurança da votação, não é permitido votar usando VPN.
-      </div>
-
-      <button class="voltar" onclick="location.href='votefshow.html'">VOTO DA TORCIDA</button>
-      <button class="voltar voltar-secondary" onclick="location.reload()">TENTAR NOVAMENTE</button>
-    </div>
+  <div id="confirmTela">
+  <div class="confirm-card">
+    <div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
+    <p id="nomeConfirm"></p>
+    <button id="botaoVotarNovamente" class="voltar">
+     VOTAR NOVAMENTE
+    </button>
+    <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
+    <div class="notice">Essa votação segue aberta até às 19:00</div>
+    
   </div>
+</div> 
+  
+<div id="pesoDoVotoBadge" class="peso-voto-badge"></div>
+  
+        <!-- PERFIL -->
+        <div class="fshow-profile-widget" id="fshowWidget">
+            <div class="fshow-profile-trigger" id="fshowTrigger">
+                <div id="fshowAvatarContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                    <span class="anon-icon">👤</span>
+                </div>
+            </div>
+            
+            <div class="fshow-profile-dropdown" id="fshowDropdown">
+                <div class="fshow-user-info">
+                    <div class="fshow-user-name" id="fshowUserName">Anônimo</div>
+                    <div class="fshow-user-status" id="fshowUserStatus">Visitante</div>
+                </div>
+                
+                <div id="fshowLoggedOptions" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+                    <label class="fshow-btn" for="fshowChangeAvatarInput">
+                        📸 Mudar Foto
+                    </label>
+                    <input type="file" id="fshowChangeAvatarInput" accept="image/*" style="display: none;">
+                    <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">
+                        🚪 Sair da Conta
+                    </button>
+                </div>
 
-  <!-- Tela de Erro Genérico -->
-  <div id="errorTela">
-    <div class="card">
-      <div class="icon-container">⚠️</div>
-      <h2 id="errorTitle" class="title">Erro</h2>
-      <p id="errorMessage" class="subtitle">Ocorreu um erro inesperado.</p>
-      
-      <button class="voltar" onclick="location.reload()">TENTAR NOVAMENTE</button>
-    </div>
-  </div>
+                <div id="fshowAnonOptions" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                    <a href="/login.html" class="fshow-btn fshow-btn-primary">🔑 Fazer Login</a>
+                    <button class="fshow-btn" id="fshowContinueAnonBtn">👀 Continuar Anônimo</button>
+                </div>
+            </div>
 
-<script>
-// CONFIG
-const CONFIG = {
-  ROUND: "testepf610",
-  URL: "https://beuqcarjvvjjmwoedvsc.supabase.co",
-  KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4",
-  TABLE: "pfteste",
-  MIN_TIME: 3000
-};
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-// DATAS
-const aberturaBR = new Date("2026-01-18T19:00:00");
-const encerramentoBR = new Date("2026-04-03T19:00:00");
+  // =================== CONFIG ===================
 
-// STATE
-const state = {
-  client: null,
-  fingerprint: null,
-  ip: null,
-  token: null,
-  startTime: Date.now(),
-  isBot: false,
-  isVPN: false,
-  vpnData: null,
-  blocked: false,
-  userId: null
-};
+  const SUPABASE_URL = "https://beuqcarjvvjjmwoedvsc.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ================= USER =================
-async function getUser() {
-  return new Promise((resolve) => {
-    if (typeof firebase === "undefined" || !firebase.auth) return resolve(null);
-    const unsub = firebase.auth().onAuthStateChanged((user) => {
-      unsub();
-      resolve(user);
-    });
-  });
-}
+  const TABLE_VOTACAO = "apuros3";
+  const VOTOS_POR_CAPTCHA = 10;
+  const DEBUG = false;
 
-// ================= TEMPO =================
-async function getServerTime() {
+// =================== HORÁRIOS ===================
+
+// 19h no horário de Brasília
+const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-06-18T22:11:00-03:00").getTime();
+
+
+// =================== CONTROLE ===================
+
+let votacaoBloqueada = false;
+let serverTimeOffset = 0;
+
+
+// =================== SINCRONIZAR HORA ===================
+
+async function syncServerTime() {
   try {
-    const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
-    const data = await res.json();
-    return new Date(data.datetime);
-  } catch {
-    return new Date();
+    const res = await fetch(
+      "https://worldtimeapi.org/api/timezone/America/Sao_Paulo"
+    );
+
+    if (res.ok) {
+      const data = await res.json();
+
+      const serverDate = new Date(data.datetime);
+
+      serverTimeOffset = serverDate.getTime() - Date.now();
+    }
+  } catch (e) {
+    console.log("Erro ao sincronizar horário:", e);
   }
 }
 
-function toBR(date) {
-  return new Date(date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }));
+function getNow() {
+  return Date.now() + serverTimeOffset;
 }
 
-async function verificarHorarios() {
-  const agora = toBR(await getServerTime());
 
+// =================== POPUP BLOQUEIO ===================
+
+async function abrirTelaFechada() {
+
+  if (document.getElementById("vote-block-overlay")) return;
+
+  votacaoBloqueada = true;
+
+  document.body.style.overflow = "hidden";
+
+  const overlay = document.createElement("div");
+
+  overlay.id = "vote-block-overlay";
+
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100vw";
+  overlay.style.height = "100vh";
+  overlay.style.background = "#000";
+  overlay.style.zIndex = "999999";
+
+  overlay.innerHTML = `
+    <iframe 
+      src="https://fshow.site/vote/fechada.html"
+      style="
+        width:100%;
+        height:100%;
+        border:none;
+        display:block;
+      "
+    ></iframe>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
+
+// =================== VERIFICAR HORÁRIO ===================
+
+async function verificarHorarioAntesDoVoto() {
+
+  await syncServerTime();
+
+  const agora = getNow();
+
+  console.log("Agora:", new Date(agora));
+  console.log("Abertura:", new Date(aberturaBR));
+  console.log("Encerramento:", new Date(encerramentoBR));
+
+  // Antes da abertura
   if (agora < aberturaBR) {
-    location.replace("aguarde.html");
+
+    console.log("Votação ainda não abriu");
+
+    await abrirTelaFechada();
+
     return false;
   }
 
+  // Depois do encerramento
   if (agora > encerramentoBR) {
-    location.replace("fechada.html");
+
+    console.log("Votação encerrada");
+
+    await abrirTelaFechada();
+
     return false;
   }
 
   return true;
 }
 
-// ================= UI =================
-function showTela(id) {
-  ["loadingTela","votoTela","confirmTela","alreadyVotedTela","vpnBlockedTela","errorTela"]
-  .forEach(t => {
-    const el = document.getElementById(t);
-    if (el) el.style.display = "none";
+
+// =================== EXEMPLO ===================
+
+async function enviarVoto() {
+
+  const permitido = await verificarHorarioAntesDoVoto();
+
+  if (!permitido) return;
+
+  console.log("Voto enviado!");
+}
+  
+  // ================= APPWRITE LOGIN =================
+
+const appwriteClient = new Appwrite.Client();
+
+appwriteClient
+  .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+  .setProject("6a07b38c00004e1645ee");
+
+const appwriteAccount = new Appwrite.Account(appwriteClient);
+
+let usuarioLogado = false;
+let pesoVoto = 1;
+let usuarioAtual = null;
+
+async function verificarUsuarioLogado() {
+  try {
+    const user = await appwriteAccount.get();
+
+    if (user) {
+      usuarioLogado = true;
+      pesoVoto = 2;
+      usuarioAtual = user;
+
+      atualizarBadgePeso();
+    }
+  } catch (err) {
+    usuarioLogado = false;
+    pesoVoto = 1;
+    usuarioAtual = null;
+
+    atualizarBadgePeso();
+  }
+}
+
+function atualizarBadgePeso() {
+  const badge = document.getElementById("pesoDoVotoBadge");
+
+  if (!badge) return;
+
+  if (usuarioLogado) {
+    badge.innerHTML = `
+      <div class="peso-bolinha"></div>
+      <span>Seu voto vale <b>2x</b></span>
+    `;
+
+    badge.classList.add("ativo");
+
+  } else {
+    badge.innerHTML = `
+      <span class="peso-cadeado">🔒</span>
+      <span>Faça login para ter voto peso 2</span>
+    `;
+
+    badge.classList.remove("ativo");
+  }
+}
+
+verificarUsuarioLogado();
+  
+  // =================== ELEMENTOS DOM ===================
+  const votoTela = document.getElementById("votoTela");
+  const confirmTela = document.getElementById("confirmTela");
+  const nomeConfirm = document.getElementById("nomeConfirm");
+  const fotoConfirm = document.getElementById("fotoConfirm");
+  const botaoCaptcha = document.getElementById("botaoCaptcha");
+  const botaoVotar = document.getElementById("botaoVotar");
+  const botaoVotarNovamente = document.getElementById("botaoVotarNovamente");
+  const popupCaptcha = document.getElementById("popupCaptcha");
+  const captchaGrid = document.getElementById("captchaGrid");
+  const captchaInstruction = document.getElementById("captcha-instrucao");
+  const verifyBtn = document.getElementById("captchaConfirm");
+  const refreshBtn = document.getElementById("captchaRefresh");
+  const statusEl = document.getElementById("captchaStatus");
+
+  
+  let pendingVote = null;
+
+  let captchaAberto = false;
+  let captchaClicado = false;
+  function updateBotoesEstado() {
+    const restantes = getVotosRestantes();
+    
+    if (captchaClicado && restantes > 0) {
+      botaoVotar.disabled = false;
+      botaoVotar.classList.add("active");
+    } else {
+      botaoVotar.disabled = true;
+      botaoVotar.classList.remove("active");
+    }
+
+    if (captchaClicado) {
+      botaoCaptcha.setAttribute("aria-pressed", "true");
+    } else {
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+    }
+  }
+
+
+
+  function hashTag(tag) {
+    const secret = "CPTX_2025_FSHOW_🔥";
+    let h = 0;
+    const str = tag + secret;
+    for (let i = 0; i < str.length; i++) {
+      h = (h << 5) - h + str.charCodeAt(i);
+      h |= 0;
+    }
+    return h;
+  }
+
+  function getVotosRestantes() {
+    const raw = localStorage.getItem("votosRestantes");
+    const token = localStorage.getItem("token");
+    if (!raw || !token) return 0;
+    return hashTag(raw) == token ? parseInt(raw) : 0;
+  }
+
+  function setVotosRestantes(n) {
+    localStorage.setItem("votosRestantes", String(n));
+    localStorage.setItem("token", hashTag(String(n)));
+  }
+
+  const prompts = [
+    {
+      label: "Clique nas imagens contendo algo que pode se locomover",
+      correctTag: "202",
+      images: [
+        { src: "https://i.ibb.co/cSMQWgx4/car1.png", tag: "202" },
+        { src: "https://i.ibb.co/d0CCf03S/moto1.png", tag: "202" },
+        { src: "https://i.ibb.co/tp8Mxrd9/car3.png", tag: "202" },
+        { src: "https://i.ibb.co/vtwFRhB/moto2.png", tag: "202" },
+        { src: "https://i.ibb.co/kVQVS7yD/car4.png", tag: "202" },
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/papel-higi%C3%AAnico.jpg?raw=true", tag: "404" },
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/toalha.jpg?raw=true", tag: "404" },
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/sabonete.jpg?raw=true", tag: "404" },
+        { src: "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/captcha/cap1/banheiro/escova-de-dentes.jpg?raw=true", tag: "404" }
+      ]
+    },
+    {
+      label: "Clique nas imagens contendo um animal",
+      correctTag: "706",
+      images: [
+        { src: "https://i.ibb.co/PZPW0gzR/elefante.jpg", tag: "706" },
+        { src: "https://i.ibb.co/zHZ6BhsR/cavalo.jpg", tag: "706" },
+        { src: "https://i.ibb.co/Nw9HKGp/leao.jpg", tag: "706" },
+        { src: "https://i.ibb.co/VcBzNJsw/rino.jpg", tag: "706" },
+        { src: "https://i.ibb.co/0jr3fwBd/girafa.jpg", tag: "706" },
+        { src: "https://i.ibb.co/WNh2CsLC/torta.png", tag: "1412" },
+        { src: "https://i.ibb.co/BHvGC4Cr/cookie.png", tag: "1412" },
+        { src: "https://i.ibb.co/35sfVQvY/donuts.png", tag: "1412" },
+        { src: "https://i.ibb.co/rRT6hz08/bolo.png", tag: "1412" }
+      ]
+    }
+  ];
+
+  let captchaCurrentPrompt = null;
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function generateCaptcha() {
+    captchaGrid.innerHTML = "";
+    statusEl.textContent = "";
+    updateBotoesEstado();
+    verifyBtn.disabled = true;
+    captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    captchaInstruction.textContent = captchaCurrentPrompt.label;
+    const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
+    const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
+    const correctCount = Math.min(Math.floor(Math.random() * 3) + 3, correctImages.length);
+    const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
+    const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
+    const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
+    allImages.forEach(img => {
+      const imgEl = document.createElement("img");
+      imgEl.src = img.src;
+      imgEl.className = "captcha-img";
+      imgEl.dataset.hash = hashTag(img.tag);
+      imgEl.addEventListener("click", () => {
+        imgEl.classList.toggle("selected");
+        verifyBtn.disabled = !document.querySelectorAll(".captcha-img.selected").length;
+      });
+      captchaGrid.appendChild(imgEl);
+    });
+  }
+
+  function abrirCaptcha() {
+    if (captchaAberto) return;
+    captchaAberto = true;
+    generateCaptcha();
+    popupCaptcha.classList.add("active");
+    botaoVotar.disabled = true;
+  }
+
+function fecharCaptcha() {
+  popupCaptcha.classList.remove("active");
+  captchaAberto = false;
+  
+  updateBotoesEstado();
+}
+
+  refreshBtn.addEventListener("click", () => {
+    generateCaptcha();
   });
 
-  const el = document.getElementById(id);
-  if (el) el.style.display = (id === "votoTela" ? "block" : "flex");
-}
-
-// ================= SEGURANÇA =================
-function detectBot() {
-  state.isBot = [
-    navigator.webdriver,
-    !navigator.languages,
-    /HeadlessChrome/i.test(navigator.userAgent)
-  ].some(Boolean);
-}
-
-async function hash(str) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-async function gerarFingerprint() {
-  return hash([
-    screen.width,
-    screen.height,
-    navigator.userAgent,
-    navigator.language,
-    navigator.hardwareConcurrency || "unk"
-  ].join("|"));
-}
-
-async function getIP() {
-  try {
-    const res = await fetch("https://api.ipify.org?format=json");
-    const data = await res.json();
-    return data.ip;
-  } catch {
-    return "0.0.0.0";
-  }
-}
-
-// VPN (leve)
-async function checkVPN(ip) {
-  if (ip === "0.0.0.0") return false;
-  try {
-    const res = await fetch(`https://proxycheck.io/v2/${ip}?vpn=1`);
-    const data = await res.json();
-    return data[ip]?.vpn === "yes";
-  } catch {
-    return false;
-  }
-}
-
-function bloquearVPN() {
-  state.blocked = true;
-  showTela("vpnBlockedTela");
-}
-
-// ================= BOTÃO =================
-function atualizarBotao() {
-  if (state.blocked) return;
-
-  const selecionado = document.querySelector('input[name="vote"]:checked');
-  const btn = document.getElementById("botaoVotar");
-
-  if (selecionado && state.token) {
-    btn.disabled = false;
-    btn.classList.add("active");
-  } else {
-    btn.disabled = true;
-    btn.classList.remove("active");
-  }
-}
-
-// ================= INIT =================
-async function init() {
-  detectBot();
-  showTela("loadingTela");
-
-  try {
-    const user = await getUser();
-    if (!user) {
-        // Se não houver usuário, o script no head já redireciona, 
-        // mas garantimos aqui também.
-        sessionStorage.setItem("redirectAfterLogin", window.location.href);
-        window.location.href = "https://fshow.site/login.html";
-        return;
+  verifyBtn.addEventListener("click", () => {
+    const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
+    let sucesso = true;
+    document.querySelectorAll(".captcha-img").forEach(img => {
+      const isCorrect = img.dataset.hash == corretoHash;
+      const isSelected = img.classList.contains("selected");
+      if (isCorrect !== isSelected) sucesso = false;
+    });
+    if (!sucesso) {
+      statusEl.textContent = "Incorreto. Tente novamente.";
+      statusEl.style.color = "red";
+      setTimeout(generateCaptcha, 1200);
+      return;
     }
-    state.userId = user.uid;
+    
+setVotosRestantes(VOTOS_POR_CAPTCHA);
+captchaClicado = true; 
+updateBotoesEstado();
 
-    if (!(await verificarHorarios())) return;
+fecharCaptcha();
 
-    state.ip = await getIP();
-    if (await checkVPN(state.ip)) return bloquearVPN();
-
-    if (typeof supabase !== "undefined") {
-        state.client = supabase.createClient(CONFIG.URL, CONFIG.KEY);
-    } else {
-        throw new Error("Supabase SDK não carregado.");
+    if (pendingVote) {
+      const voto = pendingVote;
+      pendingVote = null;
+      setTimeout(() => submitVote(voto), 300);
     }
+  })
+  
+  
 
-    state.fingerprint = await gerarFingerprint();
-
-    // já votou local
-    if (localStorage.getItem(`voted_${CONFIG.ROUND}_${state.userId}`)) {
-      return showTela("alreadyVotedTela");
-    }
-
-    // já votou banco
-    const { data, error } = await state.client
-      .from(CONFIG.TABLE)
-      .select("id")
-      .eq("user_id", state.userId)
-      .maybeSingle();
-
-    if (data) {
-      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      return showTela("alreadyVotedTela");
-    }
-
-    showTela("votoTela");
-
-  } catch (err) {
-    console.error(err);
-    showError("Erro", "Falha ao iniciar: " + err.message);
+botaoVotar.addEventListener("click", () => {
+  const escolhido = document.querySelector('input[name="vote"]:checked');
+  
+  if (!escolhido) {
+    alert("Selecione alguém para votar!");
+    return;
   }
-}
 
-// ================= CAPTCHA =================
-window.onCaptchaSuccess = (token) => {
-  state.token = token;
-  atualizarBotao();
-};
+  if (!captchaClicado) {
+    alert("Clique no botão de CAPTCHA antes de votar!");
+    return;
+  }
 
-// ================= ERRO =================
-function showError(t, m) {
-  const titleEl = document.getElementById("errorTitle");
-  const msgEl = document.getElementById("errorMessage");
-  if (titleEl) titleEl.innerText = t;
-  if (msgEl) msgEl.innerText = m;
-  showTela("errorTela");
-}
+  if (getVotosRestantes() <= 0) {
+    alert("Resolva o CAPTCHA para liberar votos!");
+    return;
+  }
 
-document.addEventListener("change", (e) => {
-  if (e.target.name === "vote") atualizarBotao();
+  submitVote(escolhido.value);
 });
 
-// ================= VOTO =================
-async function submitVote() {
-  const btn = document.getElementById("botaoVotar");
-  if (!btn || btn.disabled) return;
-
-  if (state.blocked) return showTela("vpnBlockedTela");
-
-  const selecionado = document.querySelector('input[name="vote"]:checked');
-  if (!selecionado || !state.token) return;
-
-  if ((Date.now() - state.startTime) < CONFIG.MIN_TIME && !state.isBot) {
-    return showError("Calma", "Espere um pouco antes de votar.");
-  }
-
-  btn.disabled = true;
-  btn.innerText = "ENVIANDO...";
-
+async function submitVote(participante) {
   try {
-    // Verificação dupla antes de inserir
-    const { data: jaVotou } = await state.client
-      .from(CONFIG.TABLE)
-      .select("id")
-      .eq("user_id", state.userId)
-      .maybeSingle();
-
-    if (jaVotou) {
-      localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-      return showTela("alreadyVotedTela");
+    const agoraBR = getNow();
+    if (agoraBR > encerramentoBR) {
+      alert("A votação foi encerrada!");
+      return;
     }
 
-    const { error } = await state.client.from(CONFIG.TABLE).insert([{
-      participante: selecionado.value,
-      user_id: state.userId,
-      ip: state.ip,
-      device_fingerprint: state.fingerprint,
-      round_id: CONFIG.ROUND,
-      turnstile_token: state.token
-    }]);
+    const inputEscolhido = document.querySelector('input[name="vote"]:checked');
+    if (!inputEscolhido) return;
 
-    if (error) throw error;
+    const cardPai = inputEscolhido.closest('.option');
+    const imagemVotada = cardPai.querySelector('img').src;
 
-    // SUCESSO
-    localStorage.setItem(`voted_${CONFIG.ROUND}_${state.userId}`, "1");
-    const nomeConfirm = document.getElementById("nomeConfirm");
-    if (nomeConfirm) nomeConfirm.innerText = "Voto para " + selecionado.value;
-    showTela("confirmTela");
+    botaoVotar.disabled = true;
+    const prevText = botaoVotar.textContent;
+    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+    
+    const votos = [];
 
-    // reset captcha
-    if (window.turnstile) turnstile.reset();
-    state.token = null;
+for (let i = 0; i < pesoVoto; i++) {
+votos.push({
+  participante: participante
+});
+}
 
-  } catch (err) {
-    console.error("ERRO REAL:", err);
-    btn.disabled = false;
-    btn.innerText = "TENTAR NOVAMENTE";
-    showError("Erro ao votar", err.message || "Erro desconhecido");
+const { error } = await supabase
+  .from(TABLE_VOTACAO)
+  .insert(votos);
+    
+    if (error) {
+      console.error("Erro Supabase:", error);
+      let msgErro = error.message || JSON.stringify(error);
+      alert("ERRO NO SUPABASE:\n" + msgErro + "\n\n1. Verifique se a tabela 'cdf1' existe no seu banco.\n2. Verifique se o RLS permite inserção pública.");
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = prevText;
+      return;
+    }
+    
+setVotosRestantes(Math.max(getVotosRestantes() - 1, 0));
+captchaClicado = false;
+updateBotoesEstado();
+
+    votoTela.style.display = "none";
+    confirmTela.style.display = "flex";
+    nomeConfirm.textContent = participante;
+    
+    // Usamos a imagem capturada do card no momento do voto
+    fotoConfirm.src = imagemVotada;
+    fotoConfirm.style.display = "block";
+    
+    botaoVotar.textContent = prevText;
+    botaoVotar.disabled = false;
+  } catch (e) {
+    alert("Erro inesperado: " + e.message);
+    botaoVotar.disabled = false;
   }
 }
 
-// START
-document.addEventListener("DOMContentLoaded", init);
+function voltarParaVotacao() {
+  confirmTela.style.display = "none";
+  votoTela.style.display = "block";
+
+  const checked = document.querySelector('input[name="vote"]:checked');
+  if (checked) checked.checked = false;
+
+  captchaClicado = false; 
+  updateBotoesEstado();
+}
+
+  botaoVotarNovamente.addEventListener("click", () => {
+    voltarParaVotacao();
+  })
+  
+  updateBotoesEstado();
+  
+botaoCaptcha.addEventListener("click", () => {
+  const restantes = getVotosRestantes();
+  if (restantes <= 0) {
+    abrirCaptcha(); 
+  } else {
+    captchaClicado = true;
+    updateBotoesEstado();
+  }
+});
+
+function scrollParaFinal() {
+  setTimeout(() => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  }, 100);
+}
+
+document.querySelectorAll('input[name="vote"]').forEach(radio => {
+  radio.addEventListener("change", () => { scrollParaFinal(); });
+});
+
+(function init() {
+  captchaClicado = false;
+  updateBotoesEstado();
+})();
 </script>
+          
+<script>
+/* ============================================================
+   PERFIL
+============================================================ */
+document.addEventListener("DOMContentLoaded", async function () {
+
+    // ================= APPWRITE =================
+    const client = new Appwrite.Client();
+
+    client
+        .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+        .setProject("6a07b38c00004e1645ee");
+
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+    const storage = new Appwrite.Storage(client);
+
+    const DB_ID = "6a07b77b0016f7c90141";
+    const COL_ID = "profiles";
+    const BUCKET_ID = "6a07b91a000e61c9e4b3";
+
+    // ================= ELEMENTOS =================
+    const trigger = document.getElementById("fshowTrigger");
+    const dropdown = document.getElementById("fshowDropdown");
+    const widget = document.getElementById("fshowWidget");
+
+    const avatarContainer = document.getElementById("fshowAvatarContainer");
+
+    const userName = document.getElementById("fshowUserName");
+    const userStatus = document.getElementById("fshowUserStatus");
+
+    const loggedOptions = document.getElementById("fshowLoggedOptions");
+    const anonOptions = document.getElementById("fshowAnonOptions");
+
+    const avatarInput = document.getElementById("fshowChangeAvatarInput");
+
+    const logoutBtn = document.getElementById("fshowLogoutBtn");
+
+    const anonBtn = document.getElementById("fshowContinueAnonBtn");
+
+    if (!trigger || !dropdown || !widget) {
+        console.log("Widget não encontrado.");
+        return;
+    }
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    // ============================================================
+    // DROPDOWN
+    // ============================================================
+
+    trigger.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        dropdown.classList.toggle("fshow-active");
+
+    });
+
+    dropdown.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+    });
+
+    document.addEventListener("click", function (e) {
+
+        if (!widget.contains(e.target)) {
+
+            dropdown.classList.remove("fshow-active");
+
+        }
+
+    });
+
+    // ============================================================
+    // CONTINUAR ANÔNIMO
+    // ============================================================
+
+    if (anonBtn) {
+
+        anonBtn.addEventListener("click", function () {
+
+            dropdown.classList.remove("fshow-active");
+
+        });
+
+    }
+
+    // ============================================================
+    // AVATAR
+    // ============================================================
+
+    function updateAvatar(src) {
+
+        avatarContainer.innerHTML = `
+            <img
+                src="${src}"
+                alt="Avatar"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                "
+            >
+        `;
+
+    }
+
+    // ============================================================
+    // CARREGAR USUÁRIO
+    // ============================================================
+
+    try {
+
+        currentUser = await account.get();
+
+        if (loggedOptions) loggedOptions.style.display = "flex";
+        if (anonOptions) anonOptions.style.display = "none";
+
+        try {
+
+            currentProfile = await databases.getDocument(
+                DB_ID,
+                COL_ID,
+                currentUser.$id
+            );
+
+        } catch (err) {
+
+            console.log("Perfil não encontrado.");
+
+        }
+
+        // Nome
+        if (userName) {
+
+            userName.textContent =
+                currentProfile?.nickname ||
+                currentUser.name ||
+                "Usuário";
+
+        }
+
+        // Status
+        if (userStatus) {
+
+            userStatus.textContent =
+                currentUser.email || "Membro";
+
+        }
+
+        // ============================================================
+        // FOTO
+        // ============================================================
+
+        let avatarUrl = null;
+
+        // FOTO CUSTOMIZADA
+        if (currentProfile?.avatarFileId) {
+
+            avatarUrl = storage.getFileView(
+                BUCKET_ID,
+                currentProfile.avatarFileId
+            );
+
+        }
+
+        // FOTO GOOGLE
+        else if (
+            currentUser.prefs &&
+            currentUser.prefs.avatar
+        ) {
+
+            avatarUrl = currentUser.prefs.avatar;
+
+        }
+
+        // FALLBACK
+        if (!avatarUrl) {
+
+            avatarUrl =
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    currentProfile?.nickname ||
+                    currentUser.name ||
+                    "User"
+                )}&background=8000ff&color=fff`;
+
+        }
+
+        updateAvatar(avatarUrl);
+
+    } catch (err) {
+
+        console.log("Visitante anônimo.");
+
+    }
+
+    // ============================================================
+    // LOGOUT
+    // ============================================================
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener("click", async function () {
+
+            try {
+
+                await account.deleteSession("current");
+
+            } catch (e) {}
+
+            localStorage.removeItem("fshow_user");
+
+            location.reload();
+
+        });
+
+    }
+
+    // ============================================================
+    // TROCAR FOTO
+    // ============================================================
+
+    if (avatarInput) {
+
+        avatarInput.addEventListener("change", async function (e) {
+
+            const file = e.target.files[0];
+
+            if (!file || !currentUser) return;
+
+            try {
+
+                trigger.style.opacity = "0.5";
+
+                const uploaded = await storage.createFile(
+                    BUCKET_ID,
+                    Appwrite.ID.unique(),
+                    file
+                );
+
+                await databases.updateDocument(
+                    DB_ID,
+                    COL_ID,
+                    currentUser.$id,
+                    {
+                        avatarFileId: uploaded.$id
+                    }
+                );
+
+                const newAvatar = storage.getFileView(
+                    BUCKET_ID,
+                    uploaded.$id
+                );
+
+                updateAvatar(newAvatar);
+
+                trigger.style.opacity = "1";
+
+                alert("Foto atualizada!");
+
+            } catch (error) {
+
+                trigger.style.opacity = "1";
+
+                alert("Erro ao atualizar foto.");
+
+                console.error(error);
+
+            }
+
+        });
+
+    }
+
+});
+
+/* ============================================================
+   TEMA ESCURO / CLARO
+============================================================ */
+(function () {
+
+    const toggle = document.getElementById("theme-toggle");
+
+    if (!toggle) return;
+
+    const saved = localStorage.getItem("fshow_theme");
+
+    if (saved === "dark") {
+
+        document.body.classList.add("dark-mode");
+        document.body.classList.remove("light-mode");
+
+        toggle.classList.remove("fa-moon");
+        toggle.classList.add("fa-sun");
+
+    }
+
+    toggle.addEventListener("click", function () {
+
+        const isDark = document.body.classList.toggle("dark-mode");
+
+        document.body.classList.toggle("light-mode", !isDark);
+
+        toggle.classList.toggle("fa-moon", !isDark);
+        toggle.classList.toggle("fa-sun", isDark);
+
+        localStorage.setItem(
+            "fshow_theme",
+            isDark ? "dark" : "light"
+        );
+
+    });
+
+})();
+</script>
+        
 </body>
 </html>
