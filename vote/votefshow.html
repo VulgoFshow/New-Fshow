@@ -1048,127 +1048,132 @@ button:disabled {
 
   // =================== HORÁRIOS ===================
 
-  // 19h Brasília = 22h UTC
-  const aberturaBR = new Date("2026-01-18T22:00:00Z");
-  const encerramentoBR = new Date("2026-06-19T22:00:00Z");
+// Horário de Brasília (-03:00)
+const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-05-19T19:00:00-03:00").getTime();
 
-  // =================== CONTROLE ===================
 
-  let votacaoBloqueada = false;
-  let serverTimeOffset = 0;
+// =================== HORA DO SERVIDOR ===================
 
-  // =================== SINCRONIZAR HORA ===================
+async function getServerTime() {
 
-  async function syncServerTime() {
-    try {
-      const res = await fetch(
-        "https://worldtimeapi.org/api/timezone/America/Sao_Paulo"
-      );
+  try {
 
-      if (res.ok) {
-        const data = await res.json();
-
-        const serverDate = new Date(data.datetime);
-
-        serverTimeOffset = serverDate.getTime() - Date.now();
+    const res = await fetch(
+      "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo",
+      {
+        cache: "no-store"
       }
-    } catch (e) {
-      console.log("Erro ao sincronizar horário:", e);
-    }
-  }
+    );
 
-  function getNow() {
-    return new Date(Date.now() + serverTimeOffset);
-  }
-
-  // =================== POPUP BLOQUEIO ===================
-
-  async function abrirTelaFechada() {
-    votacaoBloqueada = true;
-
-    // Impede scroll
-    document.body.style.overflow = "hidden";
-
-    // Cria overlay
-    const overlay = document.createElement("div");
-
-    overlay.id = "vote-block-overlay";
-
-    overlay.style.position = "fixed";
-    overlay.style.top = "0";
-    overlay.style.left = "0";
-    overlay.style.width = "100vw";
-    overlay.style.height = "100vh";
-    overlay.style.background = "#000";
-    overlay.style.zIndex = "999999";
-    overlay.style.overflow = "hidden";
-
-    // iframe com fechada.html
-    overlay.innerHTML = `
-      <iframe 
-        src="https://fshow.site/vote/fechada.html"
-        style="
-          width:100%;
-          height:100%;
-          border:none;
-          display:block;
-          background:#000;
-        "
-      ></iframe>
-    `;
-
-    document.body.appendChild(overlay);
-
-    // Desativa TODOS os botões
-    document.querySelectorAll("button").forEach(btn => {
-      btn.disabled = true;
-      btn.style.pointerEvents = "none";
-      btn.style.opacity = "0.5";
-    });
-
-    // Bloqueia cliques
-    document.body.style.pointerEvents = "none";
-    overlay.style.pointerEvents = "all";
-  }
-
-  // =================== VERIFICAR HORÁRIO ===================
-
-  async function verificarHorarioAntesDoVoto() {
-    await syncServerTime();
-
-    const agora = getNow();
-
-    console.log("Agora:", agora);
-    console.log("Abertura:", aberturaBR);
-    console.log("Encerramento:", encerramentoBR);
-
-    // Antes da abertura
-    if (agora.getTime() < aberturaBR.getTime()) {
-      await abrirTelaFechada();
-      return false;
+    if (!res.ok) {
+      throw new Error("Falha ao buscar horário");
     }
 
-    // Depois do encerramento
-    if (agora.getTime() > encerramentoBR.getTime()) {
-      await abrirTelaFechada();
-      return false;
-    }
+    const data = await res.json();
 
-    return true;
+    // Cria data corretamente
+    const serverDate = new Date(
+      data.year,
+      data.month - 1,
+      data.day,
+      data.hour,
+      data.minute,
+      data.seconds
+    );
+
+    return serverDate.getTime();
+
+  } catch (e) {
+
+    console.error("Erro ao verificar horário:", e);
+
+    // fallback pro horário local
+    return Date.now();
+  }
+}
+
+
+// =================== REDIRECT ===================
+
+function redirect(url) {
+
+  if (typeof DEBUG !== "undefined" && DEBUG) {
+
+    console.warn("REDIRECT BLOQUEADO →", url);
+
+    return;
   }
 
-  // =================== EXEMPLO DE USO ===================
+  window.location.replace(url);
+}
 
-  async function enviarVoto() {
 
-    const permitido = await verificarHorarioAntesDoVoto();
+// =================== VERIFICAÇÃO DE HORÁRIO ===================
 
-    if (!permitido) {
-      return;
-    }
+async function verificarHorarios() {
 
-    console.log("Voto enviado!");
+  const agoraBR = await getServerTime();
+
+  console.log("Agora:", new Date(agoraBR));
+  console.log("Abertura:", new Date(aberturaBR));
+  console.log("Encerramento:", new Date(encerramentoBR));
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+
+    console.warn("Votação ainda não abriu");
+
+    redirect("aguarde.html");
+
+    return;
   }
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+
+    console.warn("Votação encerrada");
+
+    redirect("fechada.html");
+
+    return;
+  }
+
+  console.log("VOTAÇÃO ABERTA");
+}
+
+
+// Executa ao carregar
+verificarHorarios();
+
+
+// =================== VERIFICAÇÃO PERIÓDICA ===================
+
+setInterval(async () => {
+
+  const agoraBR = await getServerTime();
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+
+    console.warn("Ainda não abriu");
+
+    redirect("aguarde.html");
+
+    return;
+  }
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+
+    console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+
+    redirect("fechada.html");
+
+    return;
+  }
+
+}, 5000);
   
   // ================= APPWRITE LOGIN =================
 
@@ -1433,7 +1438,7 @@ botaoVotar.addEventListener("click", () => {
 
 async function submitVote(participante) {
   try {
-    const agoraBR = getNow();
+    const agoraBR = await getServerTime();
     if (agoraBR > encerramentoBR) {
       alert("A votação foi encerrada!");
       return;
