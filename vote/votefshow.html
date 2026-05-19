@@ -608,7 +608,6 @@ button:disabled {
    ========================= */
 @media (min-width: 1024px) {
 
-  /* Container central igual R7 */
   .container {
     max-width: 1040px;
     margin: 0 auto;
@@ -621,14 +620,11 @@ button:disabled {
     text-align: left;
   }
 
-  /* 🔥 GRID REAL (não lista esticada) */
   .options {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
-
-  /* Card vira VERTICAL */
   .option {
     flex-direction: column;
     background: #2b2b2b;
@@ -644,7 +640,6 @@ button:disabled {
     box-shadow: 0 10px 30px rgba(0,0,0,.55);
   }
 
-  /* IMAGEM IGUAL R7 */
   .option img {
     width: 100%;
     height: 200px;
@@ -653,7 +648,6 @@ button:disabled {
     display: block;
   }
 
-  /* FAIXA PRETA COM NOME */
   .option-content {
     background: #1f1f1f;
     padding: 14px 16px;
@@ -667,7 +661,6 @@ button:disabled {
     margin-right: 10px;
   }
 
-  /* BOTÃO VOTAR CENTRAL */
   button {
     max-width: 420px;
     margin: 32px auto 0;
@@ -1052,8 +1045,7 @@ button:disabled {
   const TABLE_VOTACAO = "apuros3";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
-  
-  <script>
+
   // =================== HORÁRIOS ===================
 
   // 19h Brasília = 22h UTC
