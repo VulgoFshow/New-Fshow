@@ -926,36 +926,71 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que FIQUE?</h1>
+    <h1>Quem você quer que ENTRE?</h1>
     <div class="espacador"></div>
     
 <div class="options">
   
   <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Gean.webp?raw=true" alt="Opção 1">
+  <img src="https://iili.io/C9Zk8Qf.jpg" alt="Opção 1">
   <div class="option-content">
-    <input type="radio" name="vote" value="Gêan"> Gêan
+    <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Guilherme.webp?raw=true" alt="Opção 2">
+  <img src="https://iili.io/C9Zkiv9.jpg" alt="Opção 2">
   <div class="option-content">
-    <input type="radio" name="vote" value="Guilherme"> Guilherme
+    <input type="radio" name="vote" value="Arthur Camargo"> Arthur Camargo
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Ludmila.webp?raw=true" alt="Opção 3">
+  <img src="https://iili.io/C9ZkckF.jpg" alt="Opção 3">
   <div class="option-content">
-    <input type="radio" name="vote" value="Ludmila"> Ludmila
+    <input type="radio" name="vote" value="Arthur Reality"> Arthur Reality
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Pedro.webp?raw=true" alt="Opção 3">
+  <img src="https://iili.io/C9ZkEhJ.jpg" alt="Opção 3">
   <div class="option-content">
-    <input type="radio" name="vote" value="Pedro"> Pedro
+    <input type="radio" name="vote" value="Cícero"> Cícero
+  </div>
+</label>
+
+  <label class="option">
+  <img src="https://iili.io/C9Zkj2I.jpg" alt="Opção 1">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Davi"> Davi
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://iili.io/C9ZkAqQ.jpg" alt="Opção 2">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Gabi"> Gabi
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://iili.io/C9ZkGLv.jpg" alt="Opção 3">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Lana"> Lana
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://iili.io/C9ZkgEl.jpg" alt="Opção 3">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Neto"> Neto
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://iili.io/C9ZkPY7.jpg" alt="Opção 2">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Tety"> Tety
   </div>
 </label>
   
@@ -1049,7 +1084,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "apuros4";
+  const TABLE_VOTACAO = "apurossub";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
@@ -1057,7 +1092,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-05-21T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-05-22T19:00:00-03:00").getTime();
 
 
 // =================== HORA DO SERVIDOR ===================
