@@ -930,27 +930,36 @@ button:disabled {
     <div class="espacador"></div>
     
 <div class="options">
+
+<label class="option">
+  <img src="/fotos/pea/Bryan.webp" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Bryan"> Bryan
+  </div>
+</label>
+
+
+<label class="option">
+  <img src="/fotos/pea/Joao.webp" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="João"> João
+  </div>
+</label>
   
-  <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/AnaPaula.webp?raw=true" alt="Opção 1">
+<label class="option">
+  <img src="/fotos/pea/Mikael.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Ana Paula"> Ana Paula
+    <input type="radio" name="vote" value="Mikael"> Mikael
   </div>
 </label>
 
 <label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Gabriel.webp?raw=true" alt="Opção 2">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Gabriel"> Gabriel
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pea/Paiva.webp?raw=true" alt="Opção 3">
+  <img src="/fotos/pea/Paiva.webp" alt="Opção">
   <div class="option-content">
     <input type="radio" name="vote" value="Paiva"> Paiva
   </div>
 </label>
+  
   
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -1042,132 +1051,135 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "apuros3";
+  const TABLE_VOTACAO = "apuros8";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
-// =================== HORÁRIOS ===================
+  // =================== HORÁRIOS ===================
 
-// 19h no horário de Brasília
+// Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-06-18T22:11:00-03:00").getTime();
+const encerramentoBR = new Date("2026-06-04T19:00:00-03:00").getTime();
 
 
-// =================== CONTROLE ===================
-
-let votacaoBloqueada = false;
-let serverTimeOffset = 0;
-
-
-// =================== SINCRONIZAR HORA ===================
-
-async function syncServerTime() {
+// =================== HORA DO SERVIDOR ===================
+async function getServerTime() {
   try {
+
     const res = await fetch(
-      "https://worldtimeapi.org/api/timezone/America/Sao_Paulo"
+      "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo",
+      {
+        cache: "no-store"
+      }
     );
 
-    if (res.ok) {
-      const data = await res.json();
-
-      const serverDate = new Date(data.datetime);
-
-      serverTimeOffset = serverDate.getTime() - Date.now();
+    if (!res.ok) {
+      throw new Error("Falha ao buscar horário");
     }
+
+    const data = await res.json();
+
+    const serverDate = new Date(
+      data.year,
+      data.month - 1,
+      data.day,
+      data.hour,
+      data.minute,
+      data.seconds
+    );
+
+    return serverDate.getTime();
+
   } catch (e) {
-    console.log("Erro ao sincronizar horário:", e);
+
+    console.error("Erro ao verificar horário:", e);
+
+    // fallback pro horário local
+    return Date.now();
   }
 }
 
-function getNow() {
-  return Date.now() + serverTimeOffset;
+
+// =================== REDIRECT ===================
+
+function redirect(url) {
+
+  if (typeof DEBUG !== "undefined" && DEBUG) {
+
+    console.warn("REDIRECT BLOQUEADO →", url);
+
+    return;
+  }
+
+  window.location.replace(url);
 }
 
 
-// =================== POPUP BLOQUEIO ===================
+// =================== VERIFICAÇÃO DE HORÁRIO ===================
 
-async function abrirTelaFechada() {
+async function verificarHorarios() {
 
-  if (document.getElementById("vote-block-overlay")) return;
+  const agoraBR = await getServerTime();
 
-  votacaoBloqueada = true;
-
-  document.body.style.overflow = "hidden";
-
-  const overlay = document.createElement("div");
-
-  overlay.id = "vote-block-overlay";
-
-  overlay.style.position = "fixed";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100vw";
-  overlay.style.height = "100vh";
-  overlay.style.background = "#000";
-  overlay.style.zIndex = "999999";
-
-  overlay.innerHTML = `
-    <iframe 
-      src="https://fshow.site/vote/fechada.html"
-      style="
-        width:100%;
-        height:100%;
-        border:none;
-        display:block;
-      "
-    ></iframe>
-  `;
-
-  document.body.appendChild(overlay);
-}
-
-
-// =================== VERIFICAR HORÁRIO ===================
-
-async function verificarHorarioAntesDoVoto() {
-
-  await syncServerTime();
-
-  const agora = getNow();
-
-  console.log("Agora:", new Date(agora));
+  console.log("Agora:", new Date(agoraBR));
   console.log("Abertura:", new Date(aberturaBR));
   console.log("Encerramento:", new Date(encerramentoBR));
 
   // Antes da abertura
-  if (agora < aberturaBR) {
+  if (agoraBR < aberturaBR) {
 
-    console.log("Votação ainda não abriu");
+    console.warn("Votação ainda não abriu");
 
-    await abrirTelaFechada();
+    redirect("aguarde.html");
 
-    return false;
+    return;
   }
 
   // Depois do encerramento
-  if (agora > encerramentoBR) {
+  if (agoraBR > encerramentoBR) {
 
-    console.log("Votação encerrada");
+    console.warn("Votação encerrada");
 
-    await abrirTelaFechada();
+    redirect("fechada.html");
 
-    return false;
+    return;
   }
 
-  return true;
+  console.log("VOTAÇÃO ABERTA");
 }
 
 
-// =================== EXEMPLO ===================
+// Executa ao carregar
+verificarHorarios();
 
-async function enviarVoto() {
 
-  const permitido = await verificarHorarioAntesDoVoto();
+// =================== VERIFICAÇÃO PERIÓDICA ===================
 
-  if (!permitido) return;
+setInterval(async () => {
 
-  console.log("Voto enviado!");
-}
+  const agoraBR = await getServerTime();
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+
+    console.warn("Ainda não abriu");
+
+    redirect("aguarde.html");
+
+    return;
+  }
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+
+    console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+
+    redirect("fechada.html");
+
+    return;
+  }
+
+}, 5000);
   
   // ================= APPWRITE LOGIN =================
 
@@ -1432,7 +1444,7 @@ botaoVotar.addEventListener("click", () => {
 
 async function submitVote(participante) {
   try {
-    const agoraBR = getNow();
+    const agoraBR = await getServerTime();
     if (agoraBR > encerramentoBR) {
       alert("A votação foi encerrada!");
       return;
