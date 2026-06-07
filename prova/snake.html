@@ -258,7 +258,7 @@
         <h1>🐍 Prova do Destino</h1>
         <p>Você terá 60 segundos para fazer a maior pontuação. Desafie seus limites!</p>
         <input type="text" id="playerName" placeholder="Seu apelido de guerreiro" maxlength="30">
-        <button id="startBtn" onclick="startLogin()">Começar Desafio</button>
+        <button id="startBtn" onclick="window.gameApp.startLogin()">Começar Desafio</button>
         <p id="loadingStatus" style="margin-top: 20px; font-size: 12px; display: none;">Carregando...</p>
     </div>
 
@@ -273,10 +273,10 @@
             <canvas id="game" width="400" height="400"></canvas>
 
             <div class="controls">
-                <div class="control-btn up" onmousedown="changeDirection('UP')" ontouchstart="changeDirection('UP')">▲</div>
-                <div class="control-btn left" onmousedown="changeDirection('LEFT')" ontouchstart="changeDirection('LEFT')">◀</div>
-                <div class="control-btn down" onmousedown="changeDirection('DOWN')" ontouchstart="changeDirection('DOWN')">▼</div>
-                <div class="control-btn right" onmousedown="changeDirection('RIGHT')" ontouchstart="changeDirection('RIGHT')">▶</div>
+                <div class="control-btn up" onmousedown="window.gameApp.changeDirection('UP')" ontouchstart="window.gameApp.changeDirection('UP')">▲</div>
+                <div class="control-btn left" onmousedown="window.gameApp.changeDirection('LEFT')" ontouchstart="window.gameApp.changeDirection('LEFT')">◀</div>
+                <div class="control-btn down" onmousedown="window.gameApp.changeDirection('DOWN')" ontouchstart="window.gameApp.changeDirection('DOWN')">▼</div>
+                <div class="control-btn right" onmousedown="window.gameApp.changeDirection('RIGHT')" ontouchstart="window.gameApp.changeDirection('RIGHT')">▶</div>
             </div>
             
             <p style="margin-top: 10px; font-size: 12px;">Use as setas ou botões para jogar</p>
@@ -304,295 +304,312 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    // Configurações Supabase
-    const SUPABASE_URL = "https://mmeqirvfbwvabfblovdx.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
-    
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Aplicação do Jogo - Encapsulada em um objeto para evitar conflitos globais
+    window.gameApp = {
+        // Configurações Supabase
+        SUPABASE_URL: "https://mmeqirvfbwvabfblovdx.supabase.co",
+        SUPABASE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM",
+        
+        supabaseClient: null,
 
-    // Estado do Jogo
-    let playerName = "";
-    let playerIP = "";
-    let score = 0;
-    let timeLeft = 60;
-    let timerInterval;
-    let gameLoop;
-    
-    const canvas = document.getElementById("game");
-    const ctx = canvas.getContext("2d");
-    const box = 20;
-    const gridCount = 20;
+        // Estado do Jogo
+        playerName: "",
+        playerIP: "",
+        score: 0,
+        timeLeft: 60,
+        timerInterval: null,
+        gameLoop: null,
+        
+        canvas: null,
+        ctx: null,
+        box: 20,
+        gridCount: 20,
 
-    let snake;
-    let food;
-    let direction;
-    let nextDirection;
-    let isGameRunning = false;
-    let hasAlreadyPlayed = false;
+        snake: [],
+        food: null,
+        direction: "RIGHT",
+        nextDirection: "RIGHT",
+        isGameRunning: false,
+        hasAlreadyPlayed: false,
 
-    // Obter IP do usuário
-    async function getPlayerIP() {
-        try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            playerIP = data.ip;
-            console.log("IP detectado:", playerIP);
-            return playerIP;
-        } catch (err) {
-            console.error("Erro ao obter IP:", err);
-            playerIP = "unknown";
-            return playerIP;
-        }
-    }
+        // Inicializar a aplicação
+        init() {
+            this.canvas = document.getElementById("game");
+            this.ctx = this.canvas.getContext("2d");
+            this.supabaseClient = window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_KEY);
+            
+            // Obter IP ao carregar a página
+            this.getPlayerIP();
+        },
 
-    // Verificar se o IP já jogou
-    async function checkIfIPAlreadyPlayed() {
-        try {
-            const { data, error } = await supabase
-                .from("ranking_snake")
-                .select("*")
-                .eq("ip_address", playerIP)
-                .limit(1);
+        // Obter IP do usuário
+        async getPlayerIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                this.playerIP = data.ip;
+                console.log("IP detectado:", this.playerIP);
+            } catch (err) {
+                console.error("Erro ao obter IP:", err);
+                this.playerIP = "unknown";
+            }
+        },
 
-            if (error) {
-                console.error("Erro ao verificar IP:", error);
+        // Verificar se o IP já jogou
+        async checkIfIPAlreadyPlayed() {
+            try {
+                const { data, error } = await this.supabaseClient
+                    .from("ranking_snake")
+                    .select("*")
+                    .eq("ip_address", this.playerIP)
+                    .limit(1);
+
+                if (error) {
+                    console.error("Erro ao verificar IP:", error);
+                    return false;
+                }
+
+                return data && data.length > 0;
+            } catch (err) {
+                console.error("Erro na verificação:", err);
                 return false;
             }
+        },
 
-            return data && data.length > 0;
-        } catch (err) {
-            console.error("Erro na verificação:", err);
-            return false;
-        }
-    }
-
-    async function startLogin() {
-        const name = document.getElementById("playerName").value.trim();
-        if (name.length < 2) {
-            alert("Por favor, digite um nome válido (mínimo 2 caracteres).");
-            return;
-        }
-
-        playerName = name;
-        
-        // Desabilitar botão e mostrar carregamento
-        document.getElementById("startBtn").disabled = true;
-        document.getElementById("loadingStatus").style.display = "block";
-
-        // Obter IP
-        await getPlayerIP();
-
-        // Verificar se já jogou
-        hasAlreadyPlayed = await checkIfIPAlreadyPlayed();
-
-        if (hasAlreadyPlayed) {
-            // Mostrar ranking sem permitir jogar
-            document.getElementById("loadingStatus").style.display = "none";
-            showCard("resultCard");
-            document.getElementById("alreadyPlayedMessage").classList.remove("hidden");
-            document.getElementById("finalScore").textContent = "—";
-            await loadRanking();
-        } else {
-            // Permitir jogar
-            document.getElementById("loadingStatus").style.display = "none";
-            showCard("gameCard");
-            startGame();
-        }
-    }
-
-    function showCard(cardId) {
-        document.getElementById("loginCard").classList.add("hidden");
-        document.getElementById("gameCard").classList.add("hidden");
-        document.getElementById("resultCard").classList.add("hidden");
-        document.getElementById(cardId).classList.remove("hidden");
-    }
-
-    function startGame() {
-        // Reset de estado
-        snake = [{x: 10, y: 10}];
-        direction = "RIGHT";
-        nextDirection = "RIGHT";
-        score = 0;
-        timeLeft = 60;
-        isGameRunning = true;
-        
-        food = randomFood();
-
-        document.getElementById("score").textContent = score;
-        document.getElementById("timer").textContent = timeLeft;
-
-        // Limpar intervalos existentes
-        clearInterval(timerInterval);
-        clearInterval(gameLoop);
-
-        // Timer
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            document.getElementById("timer").textContent = timeLeft;
-            if (timeLeft <= 0) {
-                finishGame();
+        // Iniciar login
+        async startLogin() {
+            const name = document.getElementById("playerName").value.trim();
+            if (name.length < 2) {
+                alert("Por favor, digite um nome válido (mínimo 2 caracteres).");
+                return;
             }
-        }, 1000);
 
-        // Game Loop
-        gameLoop = setInterval(draw, 100);
-    }
+            this.playerName = name;
+            
+            // Desabilitar botão e mostrar carregamento
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("loadingStatus").style.display = "block";
 
-    function randomFood() {
-        let newFood;
-        let isOccupied = true;
-        
-        while (isOccupied) {
-            newFood = {
-                x: Math.floor(Math.random() * gridCount),
-                y: Math.floor(Math.random() * gridCount)
-            };
-            // Garantir que a comida não nasça no corpo da cobra
-            isOccupied = snake.some(part => part.x === newFood.x && part.y === newFood.y);
+            // Verificar se já jogou
+            this.hasAlreadyPlayed = await this.checkIfIPAlreadyPlayed();
+
+            if (this.hasAlreadyPlayed) {
+                // Mostrar ranking sem permitir jogar
+                document.getElementById("loadingStatus").style.display = "none";
+                this.showCard("resultCard");
+                document.getElementById("alreadyPlayedMessage").classList.remove("hidden");
+                document.getElementById("finalScore").textContent = "—";
+                await this.loadRanking();
+            } else {
+                // Permitir jogar
+                document.getElementById("loadingStatus").style.display = "none";
+                this.showCard("gameCard");
+                this.startGame();
+            }
+        },
+
+        // Mostrar card específico
+        showCard(cardId) {
+            document.getElementById("loginCard").classList.add("hidden");
+            document.getElementById("gameCard").classList.add("hidden");
+            document.getElementById("resultCard").classList.add("hidden");
+            document.getElementById(cardId).classList.remove("hidden");
+        },
+
+        // Iniciar jogo
+        startGame() {
+            // Reset de estado
+            this.snake = [{x: 10, y: 10}];
+            this.direction = "RIGHT";
+            this.nextDirection = "RIGHT";
+            this.score = 0;
+            this.timeLeft = 60;
+            this.isGameRunning = true;
+            
+            this.food = this.randomFood();
+
+            document.getElementById("score").textContent = this.score;
+            document.getElementById("timer").textContent = this.timeLeft;
+
+            // Limpar intervalos existentes
+            clearInterval(this.timerInterval);
+            clearInterval(this.gameLoop);
+
+            // Timer
+            this.timerInterval = setInterval(() => {
+                this.timeLeft--;
+                document.getElementById("timer").textContent = this.timeLeft;
+                if (this.timeLeft <= 0) {
+                    this.finishGame();
+                }
+            }, 1000);
+
+            // Game Loop
+            this.gameLoop = setInterval(() => this.draw(), 100);
+        },
+
+        // Gerar comida aleatória
+        randomFood() {
+            let newFood;
+            let isOccupied = true;
+            
+            while (isOccupied) {
+                newFood = {
+                    x: Math.floor(Math.random() * this.gridCount),
+                    y: Math.floor(Math.random() * this.gridCount)
+                };
+                // Garantir que a comida não nasça no corpo da cobra
+                isOccupied = this.snake.some(part => part.x === newFood.x && part.y === newFood.y);
+            }
+            return newFood;
+        },
+
+        // Mudar direção
+        changeDirection(newDir) {
+            if (newDir === "UP" && this.direction !== "DOWN") this.nextDirection = "UP";
+            if (newDir === "DOWN" && this.direction !== "UP") this.nextDirection = "DOWN";
+            if (newDir === "LEFT" && this.direction !== "RIGHT") this.nextDirection = "LEFT";
+            if (newDir === "RIGHT" && this.direction !== "LEFT") this.nextDirection = "RIGHT";
+        },
+
+        // Desenhar jogo
+        draw() {
+            if (!this.isGameRunning) return;
+
+            // Atualiza direção atual com a próxima direção validada
+            this.direction = this.nextDirection;
+
+            // Limpar canvas
+            this.ctx.fillStyle = "black";
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+            // Desenhar Cobra
+            this.snake.forEach((part, index) => {
+                this.ctx.fillStyle = index === 0 ? "#2ea043" : "#58a6ff";
+                this.ctx.strokeStyle = "#0d1117";
+                this.ctx.fillRect(part.x * this.box, part.y * this.box, this.box, this.box);
+                this.ctx.strokeRect(part.x * this.box, part.y * this.box, this.box, this.box);
+            });
+
+            // Desenhar Comida
+            this.ctx.fillStyle = "#f85149";
+            this.ctx.beginPath();
+            this.ctx.arc(this.food.x * this.box + this.box/2, this.food.y * this.box + this.box/2, this.box/2.5, 0, Math.PI * 2);
+            this.ctx.fill();
+
+            // Lógica de Movimento
+            let head = { ...this.snake[0] };
+
+            if (this.direction === "UP") head.y--;
+            if (this.direction === "DOWN") head.y++;
+            if (this.direction === "LEFT") head.x--;
+            if (this.direction === "RIGHT") head.x++;
+
+            // Atravessar paredes
+            if (head.x < 0) head.x = this.gridCount - 1;
+            if (head.x >= this.gridCount) head.x = 0;
+            if (head.y < 0) head.y = this.gridCount - 1;
+            if (head.y >= this.gridCount) head.y = 0;
+
+            // Colisão com o próprio corpo
+            if (this.snake.some(part => part.x === head.x && part.y === head.y)) {
+                this.finishGame();
+                return;
+            }
+
+            this.snake.unshift(head);
+
+            // Comer comida
+            if (head.x === this.food.x && head.y === this.food.y) {
+                this.score++;
+                document.getElementById("score").textContent = this.score;
+                this.food = this.randomFood();
+            } else {
+                this.snake.pop();
+            }
+        },
+
+        // Finalizar jogo
+        async finishGame() {
+            if (!this.isGameRunning) return;
+            this.isGameRunning = false;
+
+            clearInterval(this.timerInterval);
+            clearInterval(this.gameLoop);
+
+            this.showCard("resultCard");
+            document.getElementById("finalScore").textContent = this.score;
+            document.getElementById("alreadyPlayedMessage").classList.add("hidden");
+
+            await this.saveScore();
+            await this.loadRanking();
+        },
+
+        // Salvar score
+        async saveScore() {
+            try {
+                await this.supabaseClient.from("ranking_snake").insert([
+                    { 
+                        nome: this.playerName, 
+                        score: this.score,
+                        ip_address: this.playerIP
+                    }
+                ]);
+                console.log("Score salvo com sucesso");
+            } catch (err) {
+                console.error("Erro ao salvar score:", err);
+            }
+        },
+
+        // Carregar ranking
+        async loadRanking() {
+            const list = document.getElementById("rankingList");
+            list.innerHTML = "<p style='text-align: center; color: #8b949e;'>Carregando ranking...</p>";
+
+            try {
+                const { data, error } = await this.supabaseClient
+                    .from("ranking_snake")
+                    .select("*")
+                    .order("score", { ascending: false })
+                    .limit(10);
+
+                if (error) throw error;
+
+                list.innerHTML = "";
+                if (data && data.length > 0) {
+                    data.forEach((player, index) => {
+                        const li = document.createElement("li");
+                        const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
+                        li.innerHTML = `
+                            <span>${medal}${player.nome}</span>
+                            <span class="score-val">${player.score} pts</span>
+                        `;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = "<li style='text-align: center; color: #8b949e;'>Nenhum score registrado ainda.</li>";
+                }
+            } catch (err) {
+                console.error("Erro ao carregar ranking:", err);
+                list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking.</li>";
+            }
         }
-        return newFood;
-    }
+    };
 
     // Controle por Teclado
     document.addEventListener("keydown", (e) => {
-        if (!isGameRunning) return;
+        if (!window.gameApp.isGameRunning) return;
         
         const key = e.key;
-        if (key === "ArrowUp") changeDirection("UP");
-        if (key === "ArrowDown") changeDirection("DOWN");
-        if (key === "ArrowLeft") changeDirection("LEFT");
-        if (key === "ArrowRight") changeDirection("RIGHT");
+        if (key === "ArrowUp") window.gameApp.changeDirection("UP");
+        if (key === "ArrowDown") window.gameApp.changeDirection("DOWN");
+        if (key === "ArrowLeft") window.gameApp.changeDirection("LEFT");
+        if (key === "ArrowRight") window.gameApp.changeDirection("RIGHT");
     });
 
-    function changeDirection(newDir) {
-        if (newDir === "UP" && direction !== "DOWN") nextDirection = "UP";
-        if (newDir === "DOWN" && direction !== "UP") nextDirection = "DOWN";
-        if (newDir === "LEFT" && direction !== "RIGHT") nextDirection = "LEFT";
-        if (newDir === "RIGHT" && direction !== "LEFT") nextDirection = "RIGHT";
-    }
-
-    function draw() {
-        if (!isGameRunning) return;
-
-        // Atualiza direção atual com a próxima direção validada
-        direction = nextDirection;
-
-        // Limpar canvas
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Desenhar Cobra
-        snake.forEach((part, index) => {
-            ctx.fillStyle = index === 0 ? "#2ea043" : "#58a6ff";
-            ctx.strokeStyle = "#0d1117";
-            ctx.fillRect(part.x * box, part.y * box, box, box);
-            ctx.strokeRect(part.x * box, part.y * box, box, box);
-        });
-
-        // Desenhar Comida
-        ctx.fillStyle = "#f85149";
-        ctx.beginPath();
-        ctx.arc(food.x * box + box/2, food.y * box + box/2, box/2.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Lógica de Movimento
-        let head = { ...snake[0] };
-
-        if (direction === "UP") head.y--;
-        if (direction === "DOWN") head.y++;
-        if (direction === "LEFT") head.x--;
-        if (direction === "RIGHT") head.x++;
-
-        // Atravessar paredes
-        if (head.x < 0) head.x = gridCount - 1;
-        if (head.x >= gridCount) head.x = 0;
-        if (head.y < 0) head.y = gridCount - 1;
-        if (head.y >= gridCount) head.y = 0;
-
-        // Colisão com o próprio corpo
-        if (snake.some(part => part.x === head.x && part.y === head.y)) {
-            finishGame();
-            return;
-        }
-
-        snake.unshift(head);
-
-        // Comer comida
-        if (head.x === food.x && head.y === food.y) {
-            score++;
-            document.getElementById("score").textContent = score;
-            food = randomFood();
-        } else {
-            snake.pop();
-        }
-    }
-
-    async function finishGame() {
-        if (!isGameRunning) return;
-        isGameRunning = false;
-
-        clearInterval(timerInterval);
-        clearInterval(gameLoop);
-
-        showCard("resultCard");
-        document.getElementById("finalScore").textContent = score;
-        document.getElementById("alreadyPlayedMessage").classList.add("hidden");
-
-        await saveScore();
-        await loadRanking();
-    }
-
-    async function saveScore() {
-        try {
-            await supabase.from("ranking_snake").insert([
-                { 
-                    nome: playerName, 
-                    score: score,
-                    ip_address: playerIP
-                }
-            ]);
-            console.log("Score salvo com sucesso");
-        } catch (err) {
-            console.error("Erro ao salvar score:", err);
-        }
-    }
-
-    async function loadRanking() {
-        const list = document.getElementById("rankingList");
-        list.innerHTML = "<p style='text-align: center; color: #8b949e;'>Carregando ranking...</p>";
-
-        try {
-            const { data, error } = await supabase
-                .from("ranking_snake")
-                .select("*")
-                .order("score", { ascending: false })
-                .limit(10);
-
-            if (error) throw error;
-
-            list.innerHTML = "";
-            if (data && data.length > 0) {
-                data.forEach((player, index) => {
-                    const li = document.createElement("li");
-                    const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-                    li.innerHTML = `
-                        <span>${medal}${player.nome}</span>
-                        <span class="score-val">${player.score} pts</span>
-                    `;
-                    list.appendChild(li);
-                });
-            } else {
-                list.innerHTML = "<li style='text-align: center; color: #8b949e;'>Nenhum score registrado ainda.</li>";
-            }
-        } catch (err) {
-            console.error("Erro ao carregar ranking:", err);
-            list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking.</li>";
-        }
-    }
-
-    // Inicializar: obter IP ao carregar a página
-    window.addEventListener("load", async () => {
-        await getPlayerIP();
+    // Inicializar aplicação ao carregar
+    window.addEventListener("load", () => {
+        window.gameApp.init();
     });
 </script>
 
