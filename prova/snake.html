@@ -95,13 +95,18 @@
             width: 100%;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             background: var(--primary-hover);
             transform: translateY(-2px);
         }
 
-        button:active {
+        button:active:not(:disabled) {
             transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .hidden {
@@ -137,6 +142,7 @@
             box-shadow: 0 0 20px rgba(46, 160, 67, 0.2);
             max-width: 100%;
             height: auto;
+            display: block;
         }
 
         /* Controles Mobile */
@@ -147,6 +153,10 @@
                 "left down right";
             gap: 10px;
             margin-top: 20px;
+            width: 100%;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .control-btn {
@@ -161,6 +171,7 @@
             user-select: none;
             cursor: pointer;
             border: 1px solid #484f58;
+            touch-action: manipulation;
         }
 
         .control-btn:active {
@@ -211,9 +222,29 @@
             font-weight: bold;
         }
 
+        .warning-message {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background: rgba(46, 160, 67, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
         @media (min-width: 768px) {
             .controls {
-                display: none; /* Esconde botões no desktop se quiser, ou mantém para acessibilidade */
+                display: none;
             }
         }
     </style>
@@ -227,7 +258,8 @@
         <h1>🐍 Prova do Destino</h1>
         <p>Você terá 60 segundos para fazer a maior pontuação. Desafie seus limites!</p>
         <input type="text" id="playerName" placeholder="Seu apelido de guerreiro" maxlength="30">
-        <button onclick="startLogin()">Começar Desafio</button>
+        <button id="startBtn" onclick="startLogin()">Começar Desafio</button>
+        <p id="loadingStatus" style="margin-top: 20px; font-size: 12px; display: none;">Carregando...</p>
     </div>
 
     <!-- Game Card -->
@@ -257,7 +289,9 @@
         <p>O destino foi selado.</p>
         <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Score: <span id="finalScore" style="color: var(--primary-hover);">0</span></h2>
         
-        <button onclick="restartGame()" style="margin-bottom: 20px;">Tentar Novamente</button>
+        <div id="alreadyPlayedMessage" class="warning-message hidden">
+            ⚠️ Você já completou o desafio neste dispositivo. Seu score foi registrado no ranking global.
+        </div>
 
         <div id="ranking">
             <h2>🏆 Ranking Global</h2>
@@ -278,6 +312,7 @@
 
     // Estado do Jogo
     let playerName = "";
+    let playerIP = "";
     let score = 0;
     let timeLeft = 60;
     let timerInterval;
@@ -293,16 +328,76 @@
     let direction;
     let nextDirection;
     let isGameRunning = false;
+    let hasAlreadyPlayed = false;
 
-    function startLogin() {
+    // Obter IP do usuário
+    async function getPlayerIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            playerIP = data.ip;
+            console.log("IP detectado:", playerIP);
+            return playerIP;
+        } catch (err) {
+            console.error("Erro ao obter IP:", err);
+            playerIP = "unknown";
+            return playerIP;
+        }
+    }
+
+    // Verificar se o IP já jogou
+    async function checkIfIPAlreadyPlayed() {
+        try {
+            const { data, error } = await supabase
+                .from("ranking_snake")
+                .select("*")
+                .eq("ip_address", playerIP)
+                .limit(1);
+
+            if (error) {
+                console.error("Erro ao verificar IP:", error);
+                return false;
+            }
+
+            return data && data.length > 0;
+        } catch (err) {
+            console.error("Erro na verificação:", err);
+            return false;
+        }
+    }
+
+    async function startLogin() {
         const name = document.getElementById("playerName").value.trim();
         if (name.length < 2) {
             alert("Por favor, digite um nome válido (mínimo 2 caracteres).");
             return;
         }
+
         playerName = name;
-        showCard("gameCard");
-        startGame();
+        
+        // Desabilitar botão e mostrar carregamento
+        document.getElementById("startBtn").disabled = true;
+        document.getElementById("loadingStatus").style.display = "block";
+
+        // Obter IP
+        await getPlayerIP();
+
+        // Verificar se já jogou
+        hasAlreadyPlayed = await checkIfIPAlreadyPlayed();
+
+        if (hasAlreadyPlayed) {
+            // Mostrar ranking sem permitir jogar
+            document.getElementById("loadingStatus").style.display = "none";
+            showCard("resultCard");
+            document.getElementById("alreadyPlayedMessage").classList.remove("hidden");
+            document.getElementById("finalScore").textContent = "—";
+            await loadRanking();
+        } else {
+            // Permitir jogar
+            document.getElementById("loadingStatus").style.display = "none";
+            showCard("gameCard");
+            startGame();
+        }
     }
 
     function showCard(cardId) {
@@ -341,11 +436,6 @@
 
         // Game Loop
         gameLoop = setInterval(draw, 100);
-    }
-
-    function restartGame() {
-        showCard("gameCard");
-        startGame();
     }
 
     function randomFood() {
@@ -446,6 +536,7 @@
 
         showCard("resultCard");
         document.getElementById("finalScore").textContent = score;
+        document.getElementById("alreadyPlayedMessage").classList.add("hidden");
 
         await saveScore();
         await loadRanking();
@@ -454,8 +545,13 @@
     async function saveScore() {
         try {
             await supabase.from("ranking_snake").insert([
-                { nome: playerName, score: score }
+                { 
+                    nome: playerName, 
+                    score: score,
+                    ip_address: playerIP
+                }
             ]);
+            console.log("Score salvo com sucesso");
         } catch (err) {
             console.error("Erro ao salvar score:", err);
         }
@@ -463,7 +559,7 @@
 
     async function loadRanking() {
         const list = document.getElementById("rankingList");
-        list.innerHTML = "<p>Carregando ranking...</p>";
+        list.innerHTML = "<p style='text-align: center; color: #8b949e;'>Carregando ranking...</p>";
 
         try {
             const { data, error } = await supabase
@@ -475,20 +571,29 @@
             if (error) throw error;
 
             list.innerHTML = "";
-            data.forEach((player, index) => {
-                const li = document.createElement("li");
-                const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-                li.innerHTML = `
-                    <span>${medal}${player.nome}</span>
-                    <span class="score-val">${player.score} pts</span>
-                `;
-                list.appendChild(li);
-            });
+            if (data && data.length > 0) {
+                data.forEach((player, index) => {
+                    const li = document.createElement("li");
+                    const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
+                    li.innerHTML = `
+                        <span>${medal}${player.nome}</span>
+                        <span class="score-val">${player.score} pts</span>
+                    `;
+                    list.appendChild(li);
+                });
+            } else {
+                list.innerHTML = "<li style='text-align: center; color: #8b949e;'>Nenhum score registrado ainda.</li>";
+            }
         } catch (err) {
             console.error("Erro ao carregar ranking:", err);
-            list.innerHTML = "<li>Erro ao carregar o ranking.</li>";
+            list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking.</li>";
         }
     }
+
+    // Inicializar: obter IP ao carregar a página
+    window.addEventListener("load", async () => {
+        await getPlayerIP();
+    });
 </script>
 
 </body>
