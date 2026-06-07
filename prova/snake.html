@@ -242,6 +242,15 @@
             font-size: 14px;
         }
 
+        .reset-button {
+            background: var(--accent-color);
+            margin-top: 20px;
+        }
+
+        .reset-button:hover {
+            background: #79c0ff;
+        }
+
         @media (min-width: 768px) {
             .controls {
                 display: none;
@@ -253,13 +262,20 @@
 
 <div class="container">
 
-    <!-- Login Card -->
-    <div id="loginCard" class="card">
+    <!-- Loading Card (para verificação inicial de IP) -->
+    <div id="loadingCard" class="card">
         <h1>🐍 Prova do Destino</h1>
-        <p>Você terá 60 segundos para fazer a maior pontuação. Desafie seus limites!</p>
+        <p>Verificando acesso...</p>
+        <p id="loadingStatus" style="margin-top: 20px; font-size: 12px;">Carregando...</p>
+    </div>
+
+    <!-- Login Card -->
+    <div id="loginCard" class="card hidden">
+        <h1>🐍 Prova do Destino</h1>
+        <p>Você terá 60 segundos para fazer a maior pontuação.</p>
         <input type="text" id="playerName" placeholder="Seu apelido de guerreiro" maxlength="30">
-        <button id="startBtn" onclick="window.gameApp.startLogin()">Começar Desafio</button>
-        <p id="loadingStatus" style="margin-top: 20px; font-size: 12px; display: none;">Carregando...</p>
+        <button id="startBtn" onclick="window.gameApp.startLogin()">Começar Prova</button>
+        <p id="loginLoadingStatus" style="margin-top: 20px; font-size: 12px; display: none;">Carregando...</p>
     </div>
 
     <!-- Game Card -->
@@ -286,17 +302,19 @@
     <!-- Result Card -->
     <div id="resultCard" class="card hidden">
         <h1>Fim de Jogo!</h1>
-        <p>O destino foi selado.</p>
+        <p>Aguarde o resultado nos comentários.</p>
         <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Score: <span id="finalScore" style="color: var(--primary-hover);">0</span></h2>
         
         <div id="alreadyPlayedMessage" class="warning-message hidden">
-            ⚠️ Você já completou o desafio neste dispositivo. Seu score foi registrado no ranking global.
+            ⚠️ Você já completou o desafio. Seu score foi registrado no ranking.
         </div>
 
         <div id="ranking">
             <h2>🏆 Ranking Global</h2>
             <ol id="rankingList"></ol>
         </div>
+
+        <button id="resetBtn" class="reset-button hidden" onclick="window.gameApp.resetGame()">Jogar Novamente</button>
     </div>
 
 </div>
@@ -338,8 +356,32 @@
             this.ctx = this.canvas.getContext("2d");
             this.supabaseClient = window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_KEY);
             
-            // Obter IP ao carregar a página
-            this.getPlayerIP();
+            // Obter IP e verificar ao carregar a página
+            this.initializeApp();
+        },
+
+        // Inicializar app com verificação de IP
+        async initializeApp() {
+            try {
+                await this.getPlayerIP();
+                const alreadyPlayed = await this.checkIfIPAlreadyPlayed();
+                
+                if (alreadyPlayed) {
+                    // IP já jogou - mostrar ranking direto
+                    this.hasAlreadyPlayed = true;
+                    this.showCard("resultCard");
+                    document.getElementById("alreadyPlayedMessage").classList.remove("hidden");
+                    document.getElementById("finalScore").textContent = "—";
+                    document.getElementById("resetBtn").classList.add("hidden");
+                    await this.loadRanking();
+                } else {
+                    // IP não jogou - mostrar tela de login
+                    this.showCard("loginCard");
+                }
+            } catch (err) {
+                console.error("Erro ao inicializar app:", err);
+                this.showCard("loginCard");
+            }
         },
 
         // Obter IP do usuário
@@ -388,21 +430,22 @@
             
             // Desabilitar botão e mostrar carregamento
             document.getElementById("startBtn").disabled = true;
-            document.getElementById("loadingStatus").style.display = "block";
+            document.getElementById("loginLoadingStatus").style.display = "block";
 
-            // Verificar se já jogou
+            // Verificar novamente se já jogou (por segurança)
             this.hasAlreadyPlayed = await this.checkIfIPAlreadyPlayed();
 
             if (this.hasAlreadyPlayed) {
                 // Mostrar ranking sem permitir jogar
-                document.getElementById("loadingStatus").style.display = "none";
+                document.getElementById("loginLoadingStatus").style.display = "none";
                 this.showCard("resultCard");
                 document.getElementById("alreadyPlayedMessage").classList.remove("hidden");
                 document.getElementById("finalScore").textContent = "—";
+                document.getElementById("resetBtn").classList.add("hidden");
                 await this.loadRanking();
             } else {
                 // Permitir jogar
-                document.getElementById("loadingStatus").style.display = "none";
+                document.getElementById("loginLoadingStatus").style.display = "none";
                 this.showCard("gameCard");
                 this.startGame();
             }
@@ -410,6 +453,7 @@
 
         // Mostrar card específico
         showCard(cardId) {
+            document.getElementById("loadingCard").classList.add("hidden");
             document.getElementById("loginCard").classList.add("hidden");
             document.getElementById("gameCard").classList.add("hidden");
             document.getElementById("resultCard").classList.add("hidden");
@@ -464,41 +508,25 @@
             return newFood;
         },
 
-        // Mudar direção
-        changeDirection(newDir) {
-            if (newDir === "UP" && this.direction !== "DOWN") this.nextDirection = "UP";
-            if (newDir === "DOWN" && this.direction !== "UP") this.nextDirection = "DOWN";
-            if (newDir === "LEFT" && this.direction !== "RIGHT") this.nextDirection = "LEFT";
-            if (newDir === "RIGHT" && this.direction !== "LEFT") this.nextDirection = "RIGHT";
-        },
-
         // Desenhar jogo
         draw() {
-            if (!this.isGameRunning) return;
-
-            // Atualiza direção atual com a próxima direção validada
-            this.direction = this.nextDirection;
-
             // Limpar canvas
-            this.ctx.fillStyle = "black";
+            this.ctx.fillStyle = "#000";
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-            // Desenhar Cobra
-            this.snake.forEach((part, index) => {
-                this.ctx.fillStyle = index === 0 ? "#2ea043" : "#58a6ff";
-                this.ctx.strokeStyle = "#0d1117";
-                this.ctx.fillRect(part.x * this.box, part.y * this.box, this.box, this.box);
-                this.ctx.strokeRect(part.x * this.box, part.y * this.box, this.box, this.box);
+            // Desenhar cobra
+            this.ctx.fillStyle = "#2ea043";
+            this.snake.forEach(part => {
+                this.ctx.fillRect(part.x * this.box, part.y * this.box, this.box - 2, this.box - 2);
             });
 
-            // Desenhar Comida
+            // Desenhar comida
             this.ctx.fillStyle = "#f85149";
-            this.ctx.beginPath();
-            this.ctx.arc(this.food.x * this.box + this.box/2, this.food.y * this.box + this.box/2, this.box/2.5, 0, Math.PI * 2);
-            this.ctx.fill();
+            this.ctx.fillRect(this.food.x * this.box, this.food.y * this.box, this.box - 2, this.box - 2);
 
-            // Lógica de Movimento
-            let head = { ...this.snake[0] };
+            // Atualizar posição
+            this.direction = this.nextDirection;
+            const head = {x: this.snake[0].x, y: this.snake[0].y};
 
             if (this.direction === "UP") head.y--;
             if (this.direction === "DOWN") head.y++;
@@ -540,6 +568,7 @@
             this.showCard("resultCard");
             document.getElementById("finalScore").textContent = this.score;
             document.getElementById("alreadyPlayedMessage").classList.add("hidden");
+            document.getElementById("resetBtn").classList.add("hidden");
 
             await this.saveScore();
             await this.loadRanking();
@@ -593,6 +622,32 @@
                 console.error("Erro ao carregar ranking:", err);
                 list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking.</li>";
             }
+        },
+
+        // Mudar direção
+        changeDirection(newDirection) {
+            if (!this.isGameRunning) return;
+            
+            const opposites = {
+                "UP": "DOWN",
+                "DOWN": "UP",
+                "LEFT": "RIGHT",
+                "RIGHT": "LEFT"
+            };
+
+            if (this.nextDirection !== opposites[newDirection]) {
+                this.nextDirection = newDirection;
+            }
+        },
+
+        // Resetar jogo (para testes - não será usado no fluxo normal)
+        resetGame() {
+            this.playerName = "";
+            this.score = 0;
+            this.timeLeft = 60;
+            this.hasAlreadyPlayed = false;
+            document.getElementById("playerName").value = "";
+            this.showCard("loginCard");
         }
     };
 
@@ -607,8 +662,8 @@
         if (key === "ArrowRight") window.gameApp.changeDirection("RIGHT");
     });
 
-    // Inicializar aplicação ao carregar
-    window.addEventListener("load", () => {
+    // Inicializar app quando o DOM estiver pronto
+    document.addEventListener("DOMContentLoaded", () => {
         window.gameApp.init();
     });
 </script>
