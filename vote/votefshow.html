@@ -932,34 +932,26 @@ button:disabled {
 <div class="options">
 
 <label class="option">
-  <img src="/fotos/pea/Alysson.webp" alt="Opção">
+  <img src="/fotos/pea/Bryan.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Alysson"> Alysson
+    <input type="radio" name="vote" value="Bryan"> Bryan
   </div>
 </label>
 
 
 <label class="option">
-  <img src="/fotos/pea/Gabi.webp" alt="Opção">
+  <img src="/fotos/pea/Joao.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Gabi"> Gabi
+    <input type="radio" name="vote" value="João"> João
   </div>
 </label>
   
 <label class="option">
-  <img src="/fotos/pea/Grimes.webp" alt="Opção">
+  <img src="/fotos/pea/Pedro.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Grimes"> Grimes
+    <input type="radio" name="vote" value="Pedro"> Pedro
   </div>
 </label>
-
-<label class="option">
-  <img src="/fotos/pea/Paiva.webp" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Paiva"> Paiva
-  </div>
-</label>
-  
   
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -1051,7 +1043,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "apuros10";
+  const TABLE_VOTACAO = "apuros11";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
@@ -1059,7 +1051,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-06-06T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-06-07T19:00:00-03:00").getTime();
 
 
 // =================== HORA DO SERVIDOR ===================
