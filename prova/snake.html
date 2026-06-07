@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snake Challenge - Prova do Destino</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --primary-color: #2ea043;
+            --primary-hover: #3fb950;
+            --text-main: #c9d1d9;
+            --text-bright: #ffffff;
+            --accent-color: #58a6ff;
+            --danger-color: #f85149;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            color: var(--text-bright);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+            color: #8b949e;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: #010409;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 16px;
+            color: var(--text-bright);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #gameArea {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .info-item span {
+            color: var(--text-bright);
+        }
+
+        canvas {
+            background: #000;
+            border: 4px solid var(--primary-color);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(46, 160, 67, 0.2);
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Controles Mobile */
+        .controls {
+            display: grid;
+            grid-template-areas: 
+                ". up ."
+                "left down right";
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background: #30363d;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            user-select: none;
+            cursor: pointer;
+            border: 1px solid #484f58;
+        }
+
+        .control-btn:active {
+            background: #484f58;
+            transform: scale(0.95);
+        }
+
+        .up { grid-area: up; }
+        .down { grid-area: down; }
+        .left { grid-area: left; }
+        .right { grid-area: right; }
+
+        #ranking {
+            margin-top: 30px;
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        #ranking h2 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: var(--text-bright);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #rankingList {
+            list-style: none;
+        }
+
+        #rankingList li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        #rankingList li:last-child {
+            border-bottom: none;
+        }
+
+        .score-val {
+            color: var(--primary-hover);
+            font-weight: bold;
+        }
+
+        @media (min-width: 768px) {
+            .controls {
+                display: none; /* Esconde botões no desktop se quiser, ou mantém para acessibilidade */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Login Card -->
+    <div id="loginCard" class="card">
+        <h1>🐍 Prova do Destino</h1>
+        <p>Você terá 60 segundos para fazer a maior pontuação. Desafie seus limites!</p>
+        <input type="text" id="playerName" placeholder="Seu apelido de guerreiro" maxlength="30">
+        <button onclick="startLogin()">Começar Desafio</button>
+    </div>
+
+    <!-- Game Card -->
+    <div id="gameCard" class="card hidden">
+        <div id="gameArea">
+            <div id="info">
+                <div class="info-item">⏱️ <span id="timer">60</span>s</div>
+                <div class="info-item">⭐ <span id="score">0</span></div>
+            </div>
+
+            <canvas id="game" width="400" height="400"></canvas>
+
+            <div class="controls">
+                <div class="control-btn up" onmousedown="changeDirection('UP')" ontouchstart="changeDirection('UP')">▲</div>
+                <div class="control-btn left" onmousedown="changeDirection('LEFT')" ontouchstart="changeDirection('LEFT')">◀</div>
+                <div class="control-btn down" onmousedown="changeDirection('DOWN')" ontouchstart="changeDirection('DOWN')">▼</div>
+                <div class="control-btn right" onmousedown="changeDirection('RIGHT')" ontouchstart="changeDirection('RIGHT')">▶</div>
+            </div>
+            
+            <p style="margin-top: 10px; font-size: 12px;">Use as setas ou botões para jogar</p>
+        </div>
+    </div>
+
+    <!-- Result Card -->
+    <div id="resultCard" class="card hidden">
+        <h1>Fim de Jogo!</h1>
+        <p>O destino foi selado.</p>
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Score: <span id="finalScore" style="color: var(--primary-hover);">0</span></h2>
+        
+        <button onclick="restartGame()" style="margin-bottom: 20px;">Tentar Novamente</button>
+
+        <div id="ranking">
+            <h2>🏆 Ranking Global</h2>
+            <ol id="rankingList"></ol>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Configurações Supabase
+    const SUPABASE_URL = "https://mmeqirvfbwvabfblovdx.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM";
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Estado do Jogo
+    let playerName = "";
+    let score = 0;
+    let timeLeft = 60;
+    let timerInterval;
+    let gameLoop;
+    
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const box = 20;
+    const gridCount = 20;
+
+    let snake;
+    let food;
+    let direction;
+    let nextDirection;
+    let isGameRunning = false;
+
+    function startLogin() {
+        const name = document.getElementById("playerName").value.trim();
+        if (name.length < 2) {
+            alert("Por favor, digite um nome válido (mínimo 2 caracteres).");
+            return;
+        }
+        playerName = name;
+        showCard("gameCard");
+        startGame();
+    }
+
+    function showCard(cardId) {
+        document.getElementById("loginCard").classList.add("hidden");
+        document.getElementById("gameCard").classList.add("hidden");
+        document.getElementById("resultCard").classList.add("hidden");
+        document.getElementById(cardId).classList.remove("hidden");
+    }
+
+    function startGame() {
+        // Reset de estado
+        snake = [{x: 10, y: 10}];
+        direction = "RIGHT";
+        nextDirection = "RIGHT";
+        score = 0;
+        timeLeft = 60;
+        isGameRunning = true;
+        
+        food = randomFood();
+
+        document.getElementById("score").textContent = score;
+        document.getElementById("timer").textContent = timeLeft;
+
+        // Limpar intervalos existentes
+        clearInterval(timerInterval);
+        clearInterval(gameLoop);
+
+        // Timer
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById("timer").textContent = timeLeft;
+            if (timeLeft <= 0) {
+                finishGame();
+            }
+        }, 1000);
+
+        // Game Loop
+        gameLoop = setInterval(draw, 100);
+    }
+
+    function restartGame() {
+        showCard("gameCard");
+        startGame();
+    }
+
+    function randomFood() {
+        let newFood;
+        let isOccupied = true;
+        
+        while (isOccupied) {
+            newFood = {
+                x: Math.floor(Math.random() * gridCount),
+                y: Math.floor(Math.random() * gridCount)
+            };
+            // Garantir que a comida não nasça no corpo da cobra
+            isOccupied = snake.some(part => part.x === newFood.x && part.y === newFood.y);
+        }
+        return newFood;
+    }
+
+    // Controle por Teclado
+    document.addEventListener("keydown", (e) => {
+        if (!isGameRunning) return;
+        
+        const key = e.key;
+        if (key === "ArrowUp") changeDirection("UP");
+        if (key === "ArrowDown") changeDirection("DOWN");
+        if (key === "ArrowLeft") changeDirection("LEFT");
+        if (key === "ArrowRight") changeDirection("RIGHT");
+    });
+
+    function changeDirection(newDir) {
+        if (newDir === "UP" && direction !== "DOWN") nextDirection = "UP";
+        if (newDir === "DOWN" && direction !== "UP") nextDirection = "DOWN";
+        if (newDir === "LEFT" && direction !== "RIGHT") nextDirection = "LEFT";
+        if (newDir === "RIGHT" && direction !== "LEFT") nextDirection = "RIGHT";
+    }
+
+    function draw() {
+        if (!isGameRunning) return;
+
+        // Atualiza direção atual com a próxima direção validada
+        direction = nextDirection;
+
+        // Limpar canvas
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Desenhar Cobra
+        snake.forEach((part, index) => {
+            ctx.fillStyle = index === 0 ? "#2ea043" : "#58a6ff";
+            ctx.strokeStyle = "#0d1117";
+            ctx.fillRect(part.x * box, part.y * box, box, box);
+            ctx.strokeRect(part.x * box, part.y * box, box, box);
+        });
+
+        // Desenhar Comida
+        ctx.fillStyle = "#f85149";
+        ctx.beginPath();
+        ctx.arc(food.x * box + box/2, food.y * box + box/2, box/2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Lógica de Movimento
+        let head = { ...snake[0] };
+
+        if (direction === "UP") head.y--;
+        if (direction === "DOWN") head.y++;
+        if (direction === "LEFT") head.x--;
+        if (direction === "RIGHT") head.x++;
+
+        // Atravessar paredes
+        if (head.x < 0) head.x = gridCount - 1;
+        if (head.x >= gridCount) head.x = 0;
+        if (head.y < 0) head.y = gridCount - 1;
+        if (head.y >= gridCount) head.y = 0;
+
+        // Colisão com o próprio corpo
+        if (snake.some(part => part.x === head.x && part.y === head.y)) {
+            finishGame();
+            return;
+        }
+
+        snake.unshift(head);
+
+        // Comer comida
+        if (head.x === food.x && head.y === food.y) {
+            score++;
+            document.getElementById("score").textContent = score;
+            food = randomFood();
+        } else {
+            snake.pop();
+        }
+    }
+
+    async function finishGame() {
+        if (!isGameRunning) return;
+        isGameRunning = false;
+
+        clearInterval(timerInterval);
+        clearInterval(gameLoop);
+
+        showCard("resultCard");
+        document.getElementById("finalScore").textContent = score;
+
+        await saveScore();
+        await loadRanking();
+    }
+
+    async function saveScore() {
+        try {
+            await supabase.from("ranking_snake").insert([
+                { nome: playerName, score: score }
+            ]);
+        } catch (err) {
+            console.error("Erro ao salvar score:", err);
+        }
+    }
+
+    async function loadRanking() {
+        const list = document.getElementById("rankingList");
+        list.innerHTML = "<p>Carregando ranking...</p>";
+
+        try {
+            const { data, error } = await supabase
+                .from("ranking_snake")
+                .select("*")
+                .order("score", { ascending: false })
+                .limit(10);
+
+            if (error) throw error;
+
+            list.innerHTML = "";
+            data.forEach((player, index) => {
+                const li = document.createElement("li");
+                const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
+                li.innerHTML = `
+                    <span>${medal}${player.nome}</span>
+                    <span class="score-val">${player.score} pts</span>
+                `;
+                list.appendChild(li);
+            });
+        } catch (err) {
+            console.error("Erro ao carregar ranking:", err);
+            list.innerHTML = "<li>Erro ao carregar o ranking.</li>";
+        }
+    }
+</script>
+
+</body>
+</html>
