@@ -932,9 +932,9 @@ button:disabled {
 <div class="options">
 
 <label class="option">
-  <img src="/fotos/pea/Bryan.webp" alt="Opção">
+  <img src="/fotos/pea/Alysson.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Bryan"> Bryan
+    <input type="radio" name="vote" value="Alysson"> Braian
   </div>
 </label>
 
@@ -947,19 +947,11 @@ button:disabled {
 </label>
   
 <label class="option">
-  <img src="/fotos/pea/Mikael.webp" alt="Opção">
+  <img src="/fotos/pea/Mira.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Mikael"> Mikael
+    <input type="radio" name="vote" value="Mira"> Mira
   </div>
 </label>
-
-<label class="option">
-  <img src="/fotos/pea/Paiva.webp" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Paiva"> Paiva
-  </div>
-</label>
-  
   
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -1042,7 +1034,7 @@ button:disabled {
                 </div>
             </div>
 
-<script type="module">
+          <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
   // =================== CONFIG ===================
@@ -1051,7 +1043,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "apuros8";
+  const TABLE_VOTACAO = "apuros14";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
@@ -1059,7 +1051,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-06-04T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-06-11T19:00:00-03:00").getTime();
 
 
 // =================== HORA DO SERVIDOR ===================
@@ -1439,6 +1431,10 @@ botaoVotar.addEventListener("click", () => {
     return;
   }
 
+  // BLOQUEIO IMEDIATO AQUI
+  botaoVotar.disabled = true;
+  botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+
   submitVote(escolhido.value);
 });
 
@@ -1447,18 +1443,24 @@ async function submitVote(participante) {
     const agoraBR = await getServerTime();
     if (agoraBR > encerramentoBR) {
       alert("A votação foi encerrada!");
+      // Reativa se falhar por horário
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = "VOTAR";
       return;
     }
 
     const inputEscolhido = document.querySelector('input[name="vote"]:checked');
-    if (!inputEscolhido) return;
+    if (!inputEscolhido) {
+       botaoVotar.disabled = false;
+       botaoVotar.textContent = "VOTAR";
+       return;
+    }
 
     const cardPai = inputEscolhido.closest('.option');
     const imagemVotada = cardPai.querySelector('img').src;
 
-    botaoVotar.disabled = true;
-    const prevText = botaoVotar.textContent;
-    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+    // Já está desativado pelo clique, mas garantimos aqui e salvamos o texto anterior
+    const prevText = "VOTAR";
     
     const votos = [];
 
@@ -1498,6 +1500,7 @@ updateBotoesEstado();
   } catch (e) {
     alert("Erro inesperado: " + e.message);
     botaoVotar.disabled = false;
+    botaoVotar.textContent = "VOTAR";
   }
 }
 
@@ -1542,327 +1545,8 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   captchaClicado = false;
   updateBotoesEstado();
 })();
-</script>
-          
-<script>
-/* ============================================================
-   PERFIL
-============================================================ */
-document.addEventListener("DOMContentLoaded", async function () {
-
-    // ================= APPWRITE =================
-    const client = new Appwrite.Client();
-
-    client
-        .setEndpoint("https://nyc.cloud.appwrite.io/v1")
-        .setProject("6a07b38c00004e1645ee");
-
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
-    const storage = new Appwrite.Storage(client);
-
-    const DB_ID = "6a07b77b0016f7c90141";
-    const COL_ID = "profiles";
-    const BUCKET_ID = "6a07b91a000e61c9e4b3";
-
-    // ================= ELEMENTOS =================
-    const trigger = document.getElementById("fshowTrigger");
-    const dropdown = document.getElementById("fshowDropdown");
-    const widget = document.getElementById("fshowWidget");
-
-    const avatarContainer = document.getElementById("fshowAvatarContainer");
-
-    const userName = document.getElementById("fshowUserName");
-    const userStatus = document.getElementById("fshowUserStatus");
-
-    const loggedOptions = document.getElementById("fshowLoggedOptions");
-    const anonOptions = document.getElementById("fshowAnonOptions");
-
-    const avatarInput = document.getElementById("fshowChangeAvatarInput");
-
-    const logoutBtn = document.getElementById("fshowLogoutBtn");
-
-    const anonBtn = document.getElementById("fshowContinueAnonBtn");
-
-    if (!trigger || !dropdown || !widget) {
-        console.log("Widget não encontrado.");
-        return;
-    }
-
-    let currentUser = null;
-    let currentProfile = null;
-
-    // ============================================================
-    // DROPDOWN
-    // ============================================================
-
-    trigger.addEventListener("click", function (e) {
-
-        e.stopPropagation();
-
-        dropdown.classList.toggle("fshow-active");
-
-    });
-
-    dropdown.addEventListener("click", function (e) {
-
-        e.stopPropagation();
-
-    });
-
-    document.addEventListener("click", function (e) {
-
-        if (!widget.contains(e.target)) {
-
-            dropdown.classList.remove("fshow-active");
-
-        }
-
-    });
-
-    // ============================================================
-    // CONTINUAR ANÔNIMO
-    // ============================================================
-
-    if (anonBtn) {
-
-        anonBtn.addEventListener("click", function () {
-
-            dropdown.classList.remove("fshow-active");
-
-        });
-
-    }
-
-    // ============================================================
-    // AVATAR
-    // ============================================================
-
-    function updateAvatar(src) {
-
-        avatarContainer.innerHTML = `
-            <img
-                src="${src}"
-                alt="Avatar"
-                style="
-                    width:100%;
-                    height:100%;
-                    object-fit:cover;
-                    border-radius:50%;
-                "
-            >
-        `;
-
-    }
-
-    // ============================================================
-    // CARREGAR USUÁRIO
-    // ============================================================
-
-    try {
-
-        currentUser = await account.get();
-
-        if (loggedOptions) loggedOptions.style.display = "flex";
-        if (anonOptions) anonOptions.style.display = "none";
-
-        try {
-
-            currentProfile = await databases.getDocument(
-                DB_ID,
-                COL_ID,
-                currentUser.$id
-            );
-
-        } catch (err) {
-
-            console.log("Perfil não encontrado.");
-
-        }
-
-        // Nome
-        if (userName) {
-
-            userName.textContent =
-                currentProfile?.nickname ||
-                currentUser.name ||
-                "Usuário";
-
-        }
-
-        // Status
-        if (userStatus) {
-
-            userStatus.textContent =
-                currentUser.email || "Membro";
-
-        }
-
-        // ============================================================
-        // FOTO
-        // ============================================================
-
-        let avatarUrl = null;
-
-        // FOTO CUSTOMIZADA
-        if (currentProfile?.avatarFileId) {
-
-            avatarUrl = storage.getFileView(
-                BUCKET_ID,
-                currentProfile.avatarFileId
-            );
-
-        }
-
-        // FOTO GOOGLE
-        else if (
-            currentUser.prefs &&
-            currentUser.prefs.avatar
-        ) {
-
-            avatarUrl = currentUser.prefs.avatar;
-
-        }
-
-        // FALLBACK
-        if (!avatarUrl) {
-
-            avatarUrl =
-                `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                    currentProfile?.nickname ||
-                    currentUser.name ||
-                    "User"
-                )}&background=8000ff&color=fff`;
-
-        }
-
-        updateAvatar(avatarUrl);
-
-    } catch (err) {
-
-        console.log("Visitante anônimo.");
-
-    }
-
-    // ============================================================
-    // LOGOUT
-    // ============================================================
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener("click", async function () {
-
-            try {
-
-                await account.deleteSession("current");
-
-            } catch (e) {}
-
-            localStorage.removeItem("fshow_user");
-
-            location.reload();
-
-        });
-
-    }
-
-    // ============================================================
-    // TROCAR FOTO
-    // ============================================================
-
-    if (avatarInput) {
-
-        avatarInput.addEventListener("change", async function (e) {
-
-            const file = e.target.files[0];
-
-            if (!file || !currentUser) return;
-
-            try {
-
-                trigger.style.opacity = "0.5";
-
-                const uploaded = await storage.createFile(
-                    BUCKET_ID,
-                    Appwrite.ID.unique(),
-                    file
-                );
-
-                await databases.updateDocument(
-                    DB_ID,
-                    COL_ID,
-                    currentUser.$id,
-                    {
-                        avatarFileId: uploaded.$id
-                    }
-                );
-
-                const newAvatar = storage.getFileView(
-                    BUCKET_ID,
-                    uploaded.$id
-                );
-
-                updateAvatar(newAvatar);
-
-                trigger.style.opacity = "1";
-
-                alert("Foto atualizada!");
-
-            } catch (error) {
-
-                trigger.style.opacity = "1";
-
-                alert("Erro ao atualizar foto.");
-
-                console.error(error);
-
-            }
-
-        });
-
-    }
-
-});
-
-/* ============================================================
-   TEMA ESCURO / CLARO
-============================================================ */
-(function () {
-
-    const toggle = document.getElementById("theme-toggle");
-
-    if (!toggle) return;
-
-    const saved = localStorage.getItem("fshow_theme");
-
-    if (saved === "dark") {
-
-        document.body.classList.add("dark-mode");
-        document.body.classList.remove("light-mode");
-
-        toggle.classList.remove("fa-moon");
-        toggle.classList.add("fa-sun");
-
-    }
-
-    toggle.addEventListener("click", function () {
-
-        const isDark = document.body.classList.toggle("dark-mode");
-
-        document.body.classList.toggle("light-mode", !isDark);
-
-        toggle.classList.toggle("fa-moon", !isDark);
-        toggle.classList.toggle("fa-sun", isDark);
-
-        localStorage.setItem(
-            "fshow_theme",
-            isDark ? "dark" : "light"
-        );
-
-    });
-
-})();
-</script>
-        
+    </script>
+        </div>
+  
 </body>
 </html>
