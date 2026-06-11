@@ -934,22 +934,22 @@ button:disabled {
 <label class="option">
   <img src="/fotos/pea/Alysson.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Alysson"> Alysson
+    <input type="radio" name="vote" value="Alysson"> Braian
   </div>
 </label>
 
 
-<label class="option">
-  <img src="/fotos/pea/Braian.webp" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Braian"> Braian
-  </div>
-</label>
-  
 <label class="option">
   <img src="/fotos/pea/Joao.webp" alt="Opção">
   <div class="option-content">
     <input type="radio" name="vote" value="João"> João
+  </div>
+</label>
+  
+<label class="option">
+  <img src="/fotos/pea/Mira.webp" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Mira"> Mira
   </div>
 </label>
   
@@ -1034,7 +1034,7 @@ button:disabled {
                 </div>
             </div>
 
-<script type="module">
+          <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
   // =================== CONFIG ===================
@@ -1043,7 +1043,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "apuros13";
+  const TABLE_VOTACAO = "apuros14";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
 
@@ -1051,7 +1051,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-06-10T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-06-11T19:00:00-03:00").getTime();
 
 
 // =================== HORA DO SERVIDOR ===================
@@ -1431,6 +1431,10 @@ botaoVotar.addEventListener("click", () => {
     return;
   }
 
+  // BLOQUEIO IMEDIATO AQUI
+  botaoVotar.disabled = true;
+  botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+
   submitVote(escolhido.value);
 });
 
@@ -1439,18 +1443,24 @@ async function submitVote(participante) {
     const agoraBR = await getServerTime();
     if (agoraBR > encerramentoBR) {
       alert("A votação foi encerrada!");
+      // Reativa se falhar por horário
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = "VOTAR";
       return;
     }
 
     const inputEscolhido = document.querySelector('input[name="vote"]:checked');
-    if (!inputEscolhido) return;
+    if (!inputEscolhido) {
+       botaoVotar.disabled = false;
+       botaoVotar.textContent = "VOTAR";
+       return;
+    }
 
     const cardPai = inputEscolhido.closest('.option');
     const imagemVotada = cardPai.querySelector('img').src;
 
-    botaoVotar.disabled = true;
-    const prevText = botaoVotar.textContent;
-    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+    // Já está desativado pelo clique, mas garantimos aqui e salvamos o texto anterior
+    const prevText = "VOTAR";
     
     const votos = [];
 
@@ -1490,6 +1500,7 @@ updateBotoesEstado();
   } catch (e) {
     alert("Erro inesperado: " + e.message);
     botaoVotar.disabled = false;
+    botaoVotar.textContent = "VOTAR";
   }
 }
 
@@ -1534,8 +1545,9 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   captchaClicado = false;
   updateBotoesEstado();
 })();
-</script>
-          
+    </script>
+        </div>
+
 <script>
 /* ============================================================
    PERFIL
@@ -1855,6 +1867,5 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 })();
 </script>
-        
 </body>
 </html>
