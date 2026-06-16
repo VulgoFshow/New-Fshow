@@ -539,41 +539,6 @@
         .success-pulse {
             animation: successPulse 0.6s ease-out;
         }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 16px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            z-index: 2000;
-            animation: slideInRight 0.3s ease-out;
-            max-width: 300px;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .toast.success {
-            border-left: 4px solid #10b981;
-            color: #065f46;
-        }
-
-        .toast.error {
-            border-left: 4px solid #ef4444;
-            color: #991b1b;
-        }
     </style>
 </head>
 <body>
@@ -671,11 +636,23 @@
     let currentUser = null;
     let userAlbum = null;
     let ownedStickers = [];
+    let isInitializing = false;
+    let initializationAttempts = 0;
+    const MAX_INIT_ATTEMPTS = 3;
 
     // ============================================================
-    // INICIALIZAÇÃO
+    // INICIALIZAÇÃO COM PROTEÇÃO CONTRA LOOP INFINITO
     // ============================================================
     async function initialize() {
+        // Evitar múltiplas inicializações simultâneas
+        if (isInitializing) {
+            console.log('Inicialização já em progresso...');
+            return;
+        }
+
+        isInitializing = true;
+        initializationAttempts++;
+
         try {
             // Inicializar Appwrite
             client = new Appwrite.Client();
@@ -684,8 +661,21 @@
             account = new Appwrite.Account(client);
             databases = new Appwrite.Databases(client);
 
-            // Verificar autenticação
-            currentUser = await account.get();
+            // Verificar autenticação com timeout
+            let currentUser_temp;
+            try {
+                currentUser_temp = await Promise.race([
+                    account.get(),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Timeout na autenticação')), 5000)
+                    )
+                ]);
+            } catch (authError) {
+                console.error('Erro ao verificar autenticação:', authError.message);
+                throw authError;
+            }
+
+            currentUser = currentUser_temp;
             
             // Carregar álbum do usuário
             await loadUserAlbum();
@@ -699,10 +689,27 @@
             // Esconder loading
             document.getElementById('loadingScreen').style.display = 'none';
             
+            // Reset tentativas após sucesso
+            initializationAttempts = 0;
+            isInitializing = false;
+            
         } catch (error) {
-            console.error('Erro na inicialização:', error);
-            // Redirecionar para login se não autenticado
-            window.location.href = '/login.html';
+            console.error('Erro na inicialização (tentativa ' + initializationAttempts + '):', error);
+            isInitializing = false;
+
+            // Se não conseguir autenticar após 3 tentativas, redirecionar
+            if (initializationAttempts >= MAX_INIT_ATTEMPTS) {
+                console.log('Máximo de tentativas atingido. Redirecionando para login...');
+                // Adicionar um pequeno delay para evitar redirecionamento imediato
+                setTimeout(() => {
+                    window.location.replace('/login.html');
+                }, 500);
+            } else {
+                // Tentar novamente após 1 segundo
+                setTimeout(() => {
+                    initialize();
+                }, 1000);
+            }
         }
     }
 
@@ -719,17 +726,25 @@
             ownedStickers = userAlbum.stickers || [];
         } catch (error) {
             // Criar novo álbum se não existir
-            userAlbum = await databases.createDocument(
-                APPWRITE_DB_ID,
-                APPWRITE_COLLECTION_ID,
-                currentUser.$id,
-                {
-                    userId: currentUser.$id,
-                    stickers: [],
-                    createdAt: new Date().toISOString()
-                }
-            );
-            ownedStickers = [];
+            console.log('Criando novo álbum para o usuário...');
+            try {
+                userAlbum = await databases.createDocument(
+                    APPWRITE_DB_ID,
+                    APPWRITE_COLLECTION_ID,
+                    currentUser.$id,
+                    {
+                        userId: currentUser.$id,
+                        stickers: [],
+                        createdAt: new Date().toISOString()
+                    }
+                );
+                ownedStickers = [];
+            } catch (createError) {
+                console.error('Erro ao criar álbum:', createError);
+                // Se não conseguir criar, usar um álbum vazio em memória
+                userAlbum = { stickers: [] };
+                ownedStickers = [];
+            }
         }
     }
 
@@ -881,7 +896,6 @@
     }
 
     function playSound() {
-        // Criar som com Web Audio API
         try {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioContext.createOscillator();
@@ -905,11 +919,16 @@
 
     function logout() {
         if (confirm('Tem certeza que deseja sair?')) {
-            account.deleteSession('current').then(() => {
-                window.location.href = '/login.html';
-            }).catch(() => {
-                window.location.href = '/login.html';
-            });
+            account.deleteSession('current')
+                .then(() => {
+                    // Usar replace para evitar voltar com o botão voltar
+                    window.location.replace('/login.html');
+                })
+                .catch((error) => {
+                    console.error('Erro ao fazer logout:', error);
+                    // Mesmo com erro, redirecionar
+                    window.location.replace('/login.html');
+                });
         }
     }
 
