@@ -370,19 +370,25 @@ async function init() {
     }
 }
 
-    async function loadAlbum() {
+async function loadAlbum() {
+    try {
+        const doc = await databases.getDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id);
+        ownedStickers = doc.stickers || [];
+    } catch (error) {
+        console.log("Criando novo registro de álbum...");
         try {
-            const doc = await databases.getDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id);
-            ownedStickers = doc.stickers || [];
-        } catch (error) {
-            console.log("Criando novo registro de álbum...");
             await databases.createDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
                 userId: currentUser.$id,
-                stickers: []
+                stickers: [],
+                nickname: currentUser.name || "Colecionador" 
             });
             ownedStickers = [];
+        } catch (createError) {
+            console.error("Erro crítico ao criar documento:", createError);
+            throw createError; 
         }
     }
+}
 
     function renderSlots() {
         const left = document.getElementById('leftPage');
