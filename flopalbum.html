@@ -3,354 +3,456 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Álbum Virtual - Edição Especial</title>
+    <title>Meu Álbum Virtual - Edição Premium</title>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-/* =====================================================
-   ÁLBUM PREMIUM
-===================================================== */
-
-.album-container{
-    width:100%;
-    display:flex;
-    gap:35px;
-
-    overflow-x:auto;
-    overflow-y:hidden;
-
-    scroll-snap-type:x mandatory;
-
-    padding:30px 25px 50px;
-
-    scrollbar-width:none;
-
-    position:relative;
-}
-
-.album-container::-webkit-scrollbar{
-    display:none;
-}
-
-/* =====================================================
-   PÁGINAS
-===================================================== */
-
-.page{
-    flex:0 0 92%;
-
-    min-height:820px;
-
-    scroll-snap-align:center;
-
-    position:relative;
-
-    padding:28px;
-
-    border-radius:32px;
-
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-
-    gap:18px;
-
-    align-content:start;
-
-    overflow:hidden;
-
-    backdrop-filter:blur(10px);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.92),
-            rgba(245,245,245,.96)
-        );
-
-    border:
-        1px solid rgba(255,255,255,.8);
-
-    box-shadow:
-        0 30px 60px rgba(0,0,0,.35),
-        0 10px 20px rgba(0,0,0,.15),
-        inset 0 0 0 1px rgba(255,255,255,.7),
-        inset 0 0 50px rgba(0,0,0,.03);
-}
-
-/* brilho superior */
-
-.page::before{
-    content:"";
-
-    position:absolute;
-
-    top:0;
-    left:0;
-
-    width:100%;
-    height:180px;
-
-    background:
-        linear-gradient(
-            rgba(255,255,255,.6),
-            transparent
-        );
-
-    pointer-events:none;
-}
-
-/* sombra lateral */
-
-.page::after{
-    content:"";
-
-    position:absolute;
-
-    top:0;
-    right:0;
-
-    width:40px;
-    height:100%;
-
-    background:
-        linear-gradient(
-            to left,
-            rgba(0,0,0,.08),
-            transparent
-        );
-
-    pointer-events:none;
-}
-
-/* =====================================================
-   CABEÇALHO DA PÁGINA
-===================================================== */
-
-.page-title{
-    grid-column:span 2;
-
-    text-align:center;
-
-    font-size:28px;
-
-    font-weight:900;
-
-    letter-spacing:3px;
-
-    text-transform:uppercase;
-
-    color:#2d2d2d;
-
-    padding-bottom:15px;
-
-    margin-bottom:8px;
-
-    border-bottom:4px solid rgba(0,0,0,.08);
-
-    position:relative;
-}
-
-.page-title::after{
-    content:"";
-
-    position:absolute;
-
-    bottom:-4px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:120px;
-    height:4px;
-
-    border-radius:999px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #ffd700,
-            #ffef85,
-            #ffd700
-        );
-}
-
-/* =====================================================
-   SLOT DAS FIGURINHAS
-===================================================== */
-
-.slot{
-    aspect-ratio:2.5/3.5;
-
-    position:relative;
-
-    border-radius:16px;
-
-    overflow:hidden;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    transition:
-        transform .3s ease,
-        box-shadow .3s ease;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(240,240,240,.95),
-            rgba(225,225,225,.95)
-        );
-
-    border:3px dashed rgba(120,120,120,.35);
-
-    box-shadow:
-        inset 0 0 20px rgba(0,0,0,.05);
-}
-
-/* efeito hover */
-
-.slot:hover{
-    transform:
-        translateY(-4px)
-        scale(1.02);
-
-    box-shadow:
-        0 12px 25px rgba(0,0,0,.18);
-}
-
-/* número */
-
-.slot::before{
-    content:attr(data-number);
-
-    position:absolute;
-
-    top:8px;
-    left:10px;
-
-    font-size:13px;
-
-    font-weight:900;
-
-    color:#666;
-
-    z-index:5;
-}
-
-/* texto padrão */
-
-.slot::after{
-    content:"COLE A FIGURINHA";
-
-    position:absolute;
-
-    text-align:center;
-
-    font-size:11px;
-
-    font-weight:700;
-
-    color:#9a9a9a;
-
-    letter-spacing:1px;
-}
-
-/* =====================================================
-   FIGURINHA COLADA
-===================================================== */
-
-.slot.filled{
-    border:none;
-
-    background:white;
-
-    box-shadow:
-        0 12px 25px rgba(0,0,0,.22),
-        0 3px 8px rgba(0,0,0,.15);
-}
-
-.slot.filled::after{
-    display:none;
-}
-
-/* brilho da figurinha */
-
-.slot.filled::before{
-    z-index:10;
-
-    color:white;
-
-    text-shadow:
-        0 2px 5px rgba(0,0,0,.8);
-}
-
-.sticker-img{
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-
-    transition:transform .4s ease;
-}
-
-.slot.filled:hover .sticker-img{
-    transform:scale(1.05);
-}
-
-/* =====================================================
-   INDICADOR DE DESLIZAR
-===================================================== */
-
-.page:first-child .page-title::before{
-    content:"← deslize →";
-
-    position:absolute;
-
-    top:-18px;
-    right:0;
-
-    font-size:12px;
-
-    letter-spacing:1px;
-
-    color:#777;
-}
-
-/* =====================================================
-   RESPONSIVO
-===================================================== */
-
-@media(max-width:768px){
-
-    .album-container{
-        padding:18px;
-        gap:22px;
-    }
-
-    .page{
-        flex:0 0 92%;
-        min-height:auto;
-        padding:18px;
-        border-radius:24px;
-    }
-
-    .page-title{
-        font-size:20px;
-    }
-
-    .slot{
-        border-radius:12px;
-    }
- </style>
+        /* =====================================================
+           VARIÁVEIS E RESET
+        ===================================================== */
+        :root {
+            --primary-color: #6a07b3;
+            --secondary-color: #00d2ff;
+            --gold-light: #ffef85;
+            --gold-main: #ffd700;
+            --gold-dark: #b8860b;
+            --bg-dark: #0f0c29;
+            --text-main: #2d2d2d;
+            --text-light: #9a9a9a;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark), #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* =====================================================
+           TELA DE CARREGAMENTO
+        ===================================================== */
+        .loading-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--gold-main);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* =====================================================
+           CABEÇALHO (DASHBOARD)
+        ===================================================== */
+        header {
+            background: rgba(15, 12, 41, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 24px;
+            background: linear-gradient(to right, var(--gold-light), var(--gold-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0px 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .stats-bar b { color: var(--gold-main); font-size: 16px; }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--gold-main), var(--gold-dark));
+            color: #111;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            text-transform: uppercase;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-main:active { transform: translateY(1px); }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+        }
+        
+        .btn-danger:hover { box-shadow: 0 8px 20px rgba(255, 65, 108, 0.5); }
+
+        /* =====================================================
+           ÁLBUM CONTAINER E PÁGINAS
+        ===================================================== */
+        .album-container {
+            width: 100%;
+            display: flex;
+            gap: 40px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            padding: 40px 50px 80px;
+            scrollbar-width: none; /* Firefox */
+            flex-grow: 1;
+        }
+
+        .album-container::-webkit-scrollbar { display: none; } /* Chrome */
+
+        .page {
+            flex: 0 0 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            min-height: 850px;
+            scroll-snap-align: center;
+            position: relative;
+            padding: 40px;
+            border-radius: 20px 40px 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 25px;
+            align-content: start;
+            
+            /* Efeito de Papel Premium / Vidro */
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-left: 5px solid #e0e0e0; /* Lombada da página */
+            
+            box-shadow: 
+                30px 30px 60px rgba(0,0,0,0.4),
+                inset 20px 0 30px rgba(0,0,0,0.05), /* Sombra da dobra */
+                inset -2px 0 10px rgba(255,255,255,0.8);
+            
+            transition: transform 0.4s ease;
+        }
+
+        /* Indicador de Deslize */
+        .page:first-child::before {
+            content: "← DESLIZE PARA VER MAIS →";
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.6);
+            animation: pulseText 2s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* =====================================================
+           CABEÇALHO DA PÁGINA
+        ===================================================== */
+        .page-title {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-main);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 5px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, transparent, var(--gold-main), transparent);
+        }
+
+        /* =====================================================
+           SLOT DAS FIGURINHAS
+        ===================================================== */
+        .slot {
+            aspect-ratio: 2.5 / 3.5;
+            position: relative;
+            border-radius: 8px; /* Bordas mais retas parecem cards reais */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 2px dashed rgba(100, 100, 100, 0.4);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+        }
+
+        /* Número de Fundo */
+        .slot::before {
+            content: attr(data-number);
+            position: absolute;
+            font-size: 45px;
+            font-weight: 900;
+            color: rgba(0, 0, 0, 0.05);
+            z-index: 1;
+        }
+
+        /* Texto Padrão */
+        .slot::after {
+            content: "COLE AQUI";
+            position: absolute;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 800;
+            color: rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            z-index: 2;
+        }
+
+        /* =====================================================
+           FIGURINHA COLADA (ESTADO PREENCHIDO)
+        ===================================================== */
+        .slot.filled {
+            border: none;
+            background: white;
+            box-shadow: 
+                0 10px 20px rgba(0,0,0,0.2),
+                0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .slot.filled::before, 
+        .slot.filled::after {
+            display: none; /* Esconde os textos de fundo */
+        }
+
+        .sticker-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            z-index: 5;
+        }
+
+        /* Efeito de Holograma / Reflexo ao passar o mouse */
+        .slot.filled::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.6) 50%, 
+                rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            z-index: 10;
+            display: block; /* Reativa o after para o brilho */
+            pointer-events: none;
+            transition: none;
+        }
+
+        .slot.filled:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.3),
+                0 0 20px rgba(255, 215, 0, 0.4);
+            z-index: 20;
+        }
+
+        .slot.filled:hover::after {
+            animation: shine 0.8s ease-in-out;
+        }
+
+        @keyframes shine {
+            100% { left: 200%; }
+        }
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            padding: 40px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--glass-border);
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-content h2 {
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+            color: var(--primary-color);
+            letter-spacing: 2px;
+        }
+
+        .modal-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(106, 7, 179, 0.2);
+        }
+
+        /* =====================================================
+           RESPONSIVIDADE (MOBILE)
+        ===================================================== */
+        @media(max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+            
+            .stats-bar {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .album-container {
+                padding: 30px 15px;
+                gap: 20px;
+            }
+
+            .page {
+                flex: 0 0 95%;
+                padding: 25px 15px;
+                grid-template-columns: repeat(2, 1fr);
+                min-height: auto;
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+
+            .slot::before {
+                font-size: 30px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="bg-fixed"></div>
-
 <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
-    <p style="margin-top:20px;">Abrindo Álbum...</p>
+    <p style="margin-top:20px; font-weight: 600; letter-spacing: 2px; color: #fff;">CARREGANDO ÁLBUM...</p>
 </div>
 
 <header>
@@ -361,111 +463,44 @@
         <span>Progresso: <b id="percent">0%</b></span>
     </div>
 
-    <div style="display:flex;gap:10px;">
+    <div style="display:flex; gap:10px;">
         <button class="btn-main" onclick="openModal()">
-            COLAR FIGURINHA
+            Colar Figurinha
         </button>
 
-        <button class="btn-main" style="background:#444;" onclick="logout()">
-            SAIR
+        <button class="btn-main btn-danger" onclick="logout()">
+            Sair
         </button>
     </div>
 </header>
 
 <div class="album-container">
 
-    <!-- Página Esquerda -->
     <div class="page" id="leftPage">
-
-        <div class="page-title">
-            Página 1
+        <div class="page-title">Página 1</div>
         </div>
 
-        <div class="slot" data-number="01"></div>
-        <div class="slot" data-number="02"></div>
-        <div class="slot" data-number="03"></div>
-        <div class="slot" data-number="04"></div>
-        <div class="slot" data-number="05"></div>
-        <div class="slot" data-number="06"></div>
-        <div class="slot" data-number="07"></div>
-        <div class="slot" data-number="08"></div>
-        <div class="slot" data-number="09"></div>
-        <div class="slot" data-number="10"></div>
-        <div class="slot" data-number="11"></div>
-
-    </div>
-
-    <!-- Página Direita -->
     <div class="page" id="rightPage">
-
-        <div class="page-title">
-            Página 2
+        <div class="page-title">Página 2</div>
         </div>
-
-        <div class="slot" data-number="12"></div>
-        <div class="slot" data-number="13"></div>
-        <div class="slot" data-number="14"></div>
-        <div class="slot" data-number="15"></div>
-        <div class="slot" data-number="16"></div>
-        <div class="slot" data-number="17"></div>
-        <div class="slot" data-number="18"></div>
-        <div class="slot" data-number="19"></div>
-        <div class="slot" data-number="20"></div>
-        <div class="slot" data-number="21"></div>
-        <div class="slot" data-number="22"></div>
-
-    </div>
 
 </div>
-
-<!-- Modal -->
 
 <div class="modal" id="modal">
-
     <div class="modal-content">
-
         <h2>Nova Figurinha</h2>
+        <p>Digite o código para adicionar ao álbum</p>
 
-        <p>Digite o código da figurinha para colar</p>
+        <input type="text" id="stickerCode" class="modal-input" placeholder="EX: FIG-02">
 
-        <input
-            type="text"
-            id="stickerCode"
-            class="modal-input"
-            placeholder="Ex: ABC123"
-        >
-
-        <div style="display:flex;gap:10px;margin-top:15px;">
-
-            <button
-                class="btn-main"
-                style="flex:1;"
-                onclick="confirmSticker()"
-            >
-                CONFIRMAR
-            </button>
-
-            <button
-                class="btn-main"
-                style="flex:1;background:#991b1b;"
-                onclick="closeModal()"
-            >
-                CANCELAR
-            </button>
-
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button class="btn-main" style="flex:1;" onclick="confirmSticker()">Confirmar</button>
+            <button class="btn-main btn-danger" style="flex:1;" onclick="closeModal()">Cancelar</button>
         </div>
 
-        <p
-            id="modalMsg"
-            style="margin-top:15px;font-weight:600;font-size:14px;"
-        ></p>
-
+        <p id="modalMsg" style="margin-top:20px; font-weight:700; font-size:14px; margin-bottom: 0;"></p>
     </div>
-
 </div>
-
-</body>
-```
 
 <script>
     // ================= CONFIGURAÇÕES APPWRITE =================
@@ -475,7 +510,6 @@
     const APPWRITE_COLLECTION_ID = "profiles";
 
     // ================= CONSTANTES DAS FIGURINHAS =================
-    // Você pode alterar os links das imagens aqui
     const STICKERS_DATA = {
         'P': { slot: 1, url: 'https://i.ibb.co/DH4Hb5z7/Picsart-26-06-15-22-04-31-956.webp' },
         'FIG-02': { slot: 2, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-02' },
@@ -510,75 +544,73 @@
     let ownedStickers = [];
 
     // ================= INICIALIZAÇÃO =================
-async function init() {
-    try {
-        currentUser = await account.get();
-        await loadAlbum();
-        renderSlots();
-        updateStats();
-        document.getElementById('loadingScreen').style.display = 'none';
-    } catch (error) {
-        // Exibe o erro real no console do F12
-        console.error("Erro detalhado do Appwrite:", error);
-        
-        // Alerta na tela para você ver o código do erro (ex: 401, 403)
-        alert("Erro no login: " + error.message + " (Código: " + error.code + ")");
-        
-        // Aguarda 5 segundos antes de redirecionar para você conseguir ler
-        setTimeout(() => {
-            window.location.replace('/login.html');
-        }, 5000);
-    }
-}
-
-async function loadAlbum() {
-    try {
-        const doc = await databases.getDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id);
-        ownedStickers = doc.stickers || [];
-    } catch (error) {
-        console.log("Criando novo registro de álbum...");
+    async function init() {
         try {
-            await databases.createDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
-                userId: currentUser.$id,
-                stickers: [],
-                nickname: currentUser.name || "Colecionador" 
-            });
-            ownedStickers = [];
-        } catch (createError) {
-            console.error("Erro crítico ao criar documento:", createError);
-            throw createError; 
+            currentUser = await account.get();
+            await loadAlbum();
+            renderSlots();
+            updateStats();
+            document.getElementById('loadingScreen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.display = 'none';
+            }, 500);
+        } catch (error) {
+            console.error("Erro detalhado do Appwrite:", error);
+            alert("Erro no login: " + error.message + " (Código: " + error.code + ")");
+            setTimeout(() => {
+                window.location.replace('/login.html');
+            }, 5000);
         }
     }
-}
+
+    async function loadAlbum() {
+        try {
+            const doc = await databases.getDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id);
+            ownedStickers = doc.stickers || [];
+        } catch (error) {
+            console.log("Criando novo registro de álbum...");
+            try {
+                await databases.createDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
+                    userId: currentUser.$id,
+                    stickers: [],
+                    nickname: currentUser.name || "Colecionador" 
+                });
+                ownedStickers = [];
+            } catch (createError) {
+                console.error("Erro crítico ao criar documento:", createError);
+                throw createError; 
+            }
+        }
+    }
 
     function renderSlots() {
         const left = document.getElementById('leftPage');
         const right = document.getElementById('rightPage');
         
-        // Limpar slots mas manter título
         const titles = document.querySelectorAll('.page-title');
         left.innerHTML = ''; left.appendChild(titles[0]);
         right.innerHTML = ''; right.appendChild(titles[1]);
 
-        // Criar os 22 slots baseados na numeração
         for(let i=1; i<=22; i++) {
-const slot = document.createElement('div');
-slot.className = 'slot';
-slot.id = `slot-${i}`;
-slot.setAttribute('data-number', String(i).padStart(2, '0'));
+            const slot = document.createElement('div');
+            slot.className = 'slot';
+            slot.id = `slot-${i}`;
+            slot.setAttribute('data-number', String(i).padStart(2, '0'));
 
             const stickerCode = Object.keys(STICKERS_DATA).find(key => STICKERS_DATA[key].slot === i);
             
+            // CORREÇÃO: Faltava fechar a chave desse IF no seu código original!
             if(stickerCode && ownedStickers.includes(stickerCode)) {
-slot.classList.add('filled');
-slot.innerHTML = `
-    <img
-        src="${STICKERS_DATA[stickerCode].url}"
-        class="sticker-img"
-        alt="${stickerCode}"
-        loading="lazy"
-    >
-`;
+                slot.classList.add('filled');
+                slot.innerHTML = `
+                    <img
+                        src="${STICKERS_DATA[stickerCode].url}"
+                        class="sticker-img"
+                        alt="${stickerCode}"
+                        loading="lazy"
+                    >
+                `;
+            }
 
             if(i <= 11) left.appendChild(slot);
             else right.appendChild(slot);
@@ -602,24 +634,21 @@ slot.innerHTML = `
         const code = input.value.toUpperCase().trim();
         const msg = document.getElementById('modalMsg');
 
-        // 1. Verificar se o código existe na constante STICKERS_DATA
         if(!STICKERS_DATA[code]) {
-            msg.textContent = "❌ Código inválido! Verifique o código digitado.";
-            msg.style.color = "#991b1b";
+            msg.textContent = "❌ CÓDIGO INVÁLIDO!";
+            msg.style.color = "#ff4b2b";
             return;
         }
 
-        // 2. Verificar se já colou
         if(ownedStickers.includes(code)) {
-            msg.textContent = "⚠️ Você já colou esta figurinha!";
-            msg.style.color = "#b45309";
+            msg.textContent = "⚠️ VOCÊ JÁ COLOU ESTA FIGURINHA!";
+            msg.style.color = "#b8860b";
             return;
         }
 
-        // 3. Salvar no Appwrite
         try {
-            msg.textContent = "⏳ Colando...";
-            msg.style.color = "#4b0082";
+            msg.textContent = "⏳ COLANDO...";
+            msg.style.color = "var(--primary-color)";
             
             const newList = [...ownedStickers, code];
             await databases.updateDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
@@ -628,7 +657,6 @@ slot.innerHTML = `
 
             ownedStickers = newList;
             
-            // 4. Animar na interface usando o slot definido na constante
             const stickerInfo = STICKERS_DATA[code];
             const slot = document.getElementById(`slot-${stickerInfo.slot}`);
             
@@ -645,8 +673,8 @@ slot.innerHTML = `
 
         } catch (error) {
             console.error(error);
-            msg.textContent = "❌ Erro ao salvar. Tente novamente.";
-            msg.style.color = "#991b1b";
+            msg.textContent = "❌ ERRO AO SALVAR. TENTE NOVAMENTE.";
+            msg.style.color = "#ff4b2b";
         }
     }
 
