@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Álbum de Figurinhas - Copa do Mundo</title>
+    <title>Meu Álbum Virtual - Edição Especial</title>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -14,25 +14,37 @@
         }
 
         :root {
-            --primary: #1e40af;
-            --secondary: #fbbf24;
-            --accent: #ef4444;
-            --dark: #1f2937;
-            --light: #f3f4f6;
-            --border-radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary: #6a07b3;
+            --secondary: #00d2ff;
+            --dark: #1a1a1a;
+            --light: #f4f4f4;
+            --gold: #ffd700;
+            --paper: #fff9e6;
+            --border-radius: 15px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #121212;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 10px;
+            color: white;
             overflow-x: hidden;
+        }
+
+        /* Background Overlay */
+        .bg-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.ibb.co/JwbxBVdq/17020fb0-692a-11f1-9692-e5d4d6a13428.png') center/cover no-repeat;
+            z-index: -2;
+            filter: brightness(0.4) blur(3px);
         }
 
         /* Loading Screen */
@@ -42,219 +54,141 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--dark);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            backdrop-filter: blur(5px);
         }
 
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top: 4px solid var(--secondary);
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: white;
-            margin-top: 20px;
-            font-size: 16px;
-            text-align: center;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Header */
         header {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
             padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            z-index: 10;
         }
 
-        .header-title {
-            color: white;
-            font-size: 28px;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .header-stats {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        .stat {
-            color: white;
-            text-align: center;
-        }
-
-        .stat-value {
+        .logo {
             font-size: 24px;
             font-weight: 800;
-            color: var(--secondary);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-add {
-            background: linear-gradient(135deg, var(--secondary), #f59e0b);
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary), #4b0082);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 14px;
+            padding: 12px 25px;
+            border-radius: 30px;
             font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 5px 15px rgba(106, 7, 179, 0.4);
             transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
-        }
+        .btn-main:hover { transform: translateY(-3px) scale(1.05); }
 
-        .btn-add:active {
-            transform: translateY(0);
-        }
-
-        .user-info {
-            color: white;
-            text-align: right;
-            font-size: 12px;
-        }
-
-        .user-name {
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 6px;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Album Container */
-        .album-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            background: url('https://i.ibb.co/JwbxBVdq/17020fb0-692a-11f1-9692-e5d4d6a13428.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            border-radius: var(--border-radius);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            overflow: hidden;
+        /* Album Container (The Magazine) */
+        .album-container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 20px auto;
+            background: var(--paper);
+            border-radius: 10px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            display: flex;
             position: relative;
+            min-height: 700px;
+            padding: 10px;
+            border: 1px solid #ddd;
         }
 
-        .album-wrapper::before {
+        /* Center Fold Shadow */
+        .album-container::after {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 1;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 100%;
+            background: linear-gradient(to right, 
+                rgba(0,0,0,0.1) 0%, 
+                rgba(0,0,0,0.2) 40%, 
+                rgba(255,255,255,0.5) 50%, 
+                rgba(0,0,0,0.2) 60%, 
+                rgba(0,0,0,0.1) 100%);
+            pointer-events: none;
+            z-index: 5;
         }
 
-        .album-content {
-            display: flex;
-            position: relative;
-            z-index: 2;
-            min-height: 600px;
-        }
-
-        /* Center Divider */
-        .album-divider {
-            width: 4px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8));
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Page Styles */
         .page {
             flex: 1;
-            padding: 40px 30px;
+            padding: 30px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 20px;
             align-content: start;
+            position: relative;
         }
 
-        .page-left {
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-        }
-
-        .page-right {
-            background: linear-gradient(270deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        .page-title {
+            grid-column: 1 / -1;
+            color: #333;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
         /* Sticker Slot */
-        .sticker-slot {
-            aspect-ratio: 2/3;
-            background: rgba(255, 255, 255, 0.08);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
+        .slot {
+            aspect-ratio: 2.5/3.5;
+            background: #e0e0e0;
+            border: 2px dashed #bbb;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
+            font-size: 24px;
+            font-weight: 800;
+            color: #999;
             position: relative;
             overflow: hidden;
             transition: var(--transition);
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 18px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        .sticker-slot:hover:not(.filled) {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: scale(1.02);
-        }
-
-        .sticker-slot.filled {
+        .slot.filled {
             border: none;
             background: white;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-            animation: stickerGlue 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: glueSticker 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes glueSticker {
+            0% { transform: scale(2) rotate(15deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .sticker-img {
@@ -264,20 +198,6 @@
             border-radius: 6px;
         }
 
-        @keyframes stickerGlue {
-            0% {
-                transform: scale(0.3) rotate(-25deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.1) rotate(5deg);
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
         /* Modal */
         .modal {
             position: fixed;
@@ -285,671 +205,283 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0,0,0,0.9);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            backdrop-filter: blur(5px);
-            animation: fadeIn 0.3s ease-out;
+            padding: 20px;
         }
 
-        .modal.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
+        .modal.active { display: flex; }
 
         .modal-content {
             background: white;
+            color: var(--dark);
             padding: 40px;
             border-radius: var(--border-radius);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
             max-width: 400px;
-            width: 90%;
-            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 10px;
             text-align: center;
-        }
-
-        .modal-subtitle {
-            font-size: 14px;
-            color: #6b7280;
-            text-align: center;
-            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(106, 7, 179, 0.5);
         }
 
         .modal-input {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 20px;
-            transition: var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .modal-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn-confirm {
-            flex: 1;
-            background: linear-gradient(135deg, var(--primary), #1e3a8a);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-confirm:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
-        }
-
-        .btn-confirm:active {
-            transform: translateY(0);
-        }
-
-        .btn-cancel {
-            flex: 1;
-            background: #e5e7eb;
-            color: var(--dark);
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-cancel:hover {
-            background: #d1d5db;
-        }
-
-        .modal-message {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 18px;
             text-align: center;
-            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .modal-input:focus { outline: none; border-color: var(--primary); }
+
+        /* Stats */
+        .stats-bar {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 30px;
+            border-radius: 50px;
+            margin-bottom: 20px;
             font-weight: 600;
-            min-height: 20px;
+            display: flex;
+            gap: 20px;
         }
 
-        .modal-message.success {
-            background: #d1fae5;
-            color: #065f46;
-        }
+        .stats-bar span b { color: var(--gold); }
 
-        .modal-message.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .modal-message.warning {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px;
-            }
-
-            .header-title {
-                font-size: 22px;
-            }
-
-            .header-stats {
-                gap: 20px;
-            }
-
-            .stat-value {
-                font-size: 20px;
-            }
-
-            .album-content {
-                flex-direction: column;
-                min-height: auto;
-            }
-
-            .album-divider {
-                width: 100%;
-                height: 2px;
-            }
-
-            .page {
-                padding: 30px 20px;
-                gap: 15px;
-            }
-
-            .modal-content {
-                padding: 30px 20px;
-            }
-
-            .modal-title {
-                font-size: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-title {
-                font-size: 18px;
-            }
-
-            .header-stats {
-                gap: 15px;
-            }
-
-            .stat-value {
-                font-size: 18px;
-            }
-
-            .stat-label {
-                font-size: 10px;
-            }
-
-            .btn-add {
-                padding: 10px 16px;
-                font-size: 12px;
-            }
-
-            .page {
-                padding: 20px 15px;
-                gap: 12px;
-            }
-
-            .sticker-slot {
-                font-size: 14px;
-            }
-
-            .modal-content {
-                padding: 25px 15px;
-                max-width: 90%;
-            }
-
-            .modal-title {
-                font-size: 18px;
-            }
-
-            .modal-subtitle {
-                font-size: 12px;
-            }
-
-            .modal-input {
-                padding: 12px;
-                font-size: 14px;
-            }
-        }
-
-        /* Success Animation */
-        @keyframes successPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .success-pulse {
-            animation: successPulse 0.6s ease-out;
+            .album-container { flex-direction: column; min-height: auto; }
+            .album-container::after { display: none; }
+            .page { padding: 20px; grid-template-columns: repeat(3, 1fr); }
+            .slot { font-size: 16px; }
+            header { flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
 <body>
 
-<!-- Loading Screen -->
+<div class="bg-fixed"></div>
+
 <div class="loading-screen" id="loadingScreen">
-    <div style="text-align: center;">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Carregando seu álbum...</div>
-    </div>
+    <div class="spinner"></div>
+    <p style="margin-top: 20px;">Abrindo Álbum...</p>
 </div>
 
-<!-- Header -->
 <header>
-    <div class="header-title">🏆 Álbum de Figurinhas</div>
-    <div class="header-stats">
-        <div class="stat">
-            <div class="stat-value" id="stickerCount">0</div>
-            <div class="stat-label">Figurinhas</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value" id="progressPercent">0%</div>
-            <div class="stat-label">Completo</div>
-        </div>
+    <div class="logo">MY STICKER ALBUM</div>
+    <div class="stats-bar">
+        <span>Coladas: <b id="count">0</b>/22</span>
+        <span>Progresso: <b id="percent">0%</b></span>
     </div>
-    <button class="btn-add" onclick="openModal()">+ Colar Figurinha</button>
-    <div class="user-info">
-        <div class="user-name" id="userName">Usuário</div>
-        <button class="logout-btn" onclick="logout()">Sair</button>
+    <div style="display: flex; gap: 10px;">
+        <button class="btn-main" onclick="openModal()">COLAR FIGURINHA</button>
+        <button class="btn-main" style="background: #444;" onclick="logout()">SAIR</button>
     </div>
 </header>
 
-<!-- Album -->
-<div class="album-wrapper">
-    <div class="album-content">
-        <div class="page page-left" id="leftPage"></div>
-        <div class="album-divider"></div>
-        <div class="page page-right" id="rightPage"></div>
+<div class="album-container">
+    <div class="page" id="leftPage">
+        <div class="page-title">Página Esquerda</div>
+    </div>
+    <div class="page" id="rightPage">
+        <div class="page-title">Página Direita</div>
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" id="stickerModal">
+<div class="modal" id="modal">
     <div class="modal-content">
-        <div class="modal-title">Colar Figurinha</div>
-        <div class="modal-subtitle">Digite o código da figurinha (FIG-01 até FIG-22)</div>
-        <input type="text" class="modal-input" id="stickerCode" placeholder="Ex: FIG-01" maxlength="6">
-        <div class="modal-buttons">
-            <button class="btn-confirm" onclick="redeemSticker()">Confirmar</button>
-            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+        <h2>Nova Figurinha</h2>
+        <p>Digite o código da figurinha para colar</p>
+        <input type="text" id="stickerCode" class="modal-input" placeholder="EX: FIG-01">
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-main" style="flex: 1;" onclick="confirmSticker()">CONFIRMAR</button>
+            <button class="btn-main" style="flex: 1; background: #991b1b;" onclick="closeModal()">CANCELAR</button>
         </div>
-        <div class="modal-message" id="modalMessage"></div>
+        <p id="modalMsg" style="margin-top: 15px; font-weight: 600; font-size: 14px;"></p>
     </div>
 </div>
 
 <script>
-    // ============================================================
-    // CONFIGURAÇÃO APPWRITE
-    // ============================================================
+    // ================= CONFIGURAÇÕES APPWRITE =================
     const APPWRITE_ENDPOINT = "https://nyc.cloud.appwrite.io/v1";
     const APPWRITE_PROJECT_ID = "6a07b38c00004e1645ee";
     const APPWRITE_DB_ID = "6a07b77b0016f7c90141";
     const APPWRITE_COLLECTION_ID = "profiles";
 
-    // Dados das figurinhas
+    // ================= CONSTANTES DAS FIGURINHAS =================
+    // Você pode alterar os links das imagens aqui
     const STICKERS_DATA = {
-        'FIG-01': { id: 1, name: 'Figurinha 01', image: 'https://via.placeholder.com/200x300/FF6B6B/FFFFFF?text=FIG-01' },
-        'FIG-02': { id: 2, name: 'Figurinha 02', image: 'https://via.placeholder.com/200x300/4ECDC4/FFFFFF?text=FIG-02' },
-        'FIG-03': { id: 3, name: 'Figurinha 03', image: 'https://via.placeholder.com/200x300/45B7D1/FFFFFF?text=FIG-03' },
-        'FIG-04': { id: 4, name: 'Figurinha 04', image: 'https://via.placeholder.com/200x300/FFA502/FFFFFF?text=FIG-04' },
-        'FIG-05': { id: 5, name: 'Figurinha 05', image: 'https://via.placeholder.com/200x300/95E1D3/FFFFFF?text=FIG-05' },
-        'FIG-06': { id: 6, name: 'Figurinha 06', image: 'https://via.placeholder.com/200x300/F38181/FFFFFF?text=FIG-06' },
-        'FIG-07': { id: 7, name: 'Figurinha 07', image: 'https://via.placeholder.com/200x300/AA96DA/FFFFFF?text=FIG-07' },
-        'FIG-08': { id: 8, name: 'Figurinha 08', image: 'https://via.placeholder.com/200x300/FCBAD3/FFFFFF?text=FIG-08' },
-        'FIG-09': { id: 9, name: 'Figurinha 09', image: 'https://via.placeholder.com/200x300/A8D8EA/FFFFFF?text=FIG-09' },
-        'FIG-10': { id: 10, name: 'Figurinha 10', image: 'https://via.placeholder.com/200x300/AA96DA/FFFFFF?text=FIG-10' },
-        'FIG-11': { id: 11, name: 'Figurinha 11', image: 'https://via.placeholder.com/200x300/FCBAD3/FFFFFF?text=FIG-11' },
-        'FIG-12': { id: 12, name: 'Figurinha 12', image: 'https://via.placeholder.com/200x300/FFD3B6/FFFFFF?text=FIG-12' },
-        'FIG-13': { id: 13, name: 'Figurinha 13', image: 'https://via.placeholder.com/200x300/FFAAA5/FFFFFF?text=FIG-13' },
-        'FIG-14': { id: 14, name: 'Figurinha 14', image: 'https://via.placeholder.com/200x300/FF8B94/FFFFFF?text=FIG-14' },
-        'FIG-15': { id: 15, name: 'Figurinha 15', image: 'https://via.placeholder.com/200x300/A8E6CF/FFFFFF?text=FIG-15' },
-        'FIG-16': { id: 16, name: 'Figurinha 16', image: 'https://via.placeholder.com/200x300/FFD3B6/FFFFFF?text=FIG-16' },
-        'FIG-17': { id: 17, name: 'Figurinha 17', image: 'https://via.placeholder.com/200x300/FFAAA5/FFFFFF?text=FIG-17' },
-        'FIG-18': { id: 18, name: 'Figurinha 18', image: 'https://via.placeholder.com/200x300/FF8B94/FFFFFF?text=FIG-18' },
-        'FIG-19': { id: 19, name: 'Figurinha 19', image: 'https://via.placeholder.com/200x300/A8E6CF/FFFFFF?text=FIG-19' },
-        'FIG-20': { id: 20, name: 'Figurinha 20', image: 'https://via.placeholder.com/200x300/C7CEEA/FFFFFF?text=FIG-20' },
-        'FIG-21': { id: 21, name: 'Figurinha 21', image: 'https://via.placeholder.com/200x300/B5EAD7/FFFFFF?text=FIG-21' },
-        'FIG-22': { id: 22, name: 'Figurinha 22', image: 'https://via.placeholder.com/200x300/E0BBE4/FFFFFF?text=FIG-22' }
+        'PA-MIRA1': { slot: 1, url: 'https://i.ibb.co/DH4Hb5z7/Picsart-26-06-15-22-04-31-956.webp' },
+        'FIG-02': { slot: 2, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-02' },
+        'FIG-03': { slot: 3, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-03' },
+        'FIG-04': { slot: 4, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-04' },
+        'FIG-05': { slot: 5, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-05' },
+        'FIG-06': { slot: 6, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-06' },
+        'FIG-07': { slot: 7, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-07' },
+        'FIG-08': { slot: 8, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-08' },
+        'FIG-09': { slot: 9, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-09' },
+        'FIG-10': { slot: 10, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-10' },
+        'FIG-11': { slot: 11, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-11' },
+        'FIG-12': { slot: 12, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-12' },
+        'FIG-13': { slot: 13, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-13' },
+        'FIG-14': { slot: 14, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-14' },
+        'FIG-15': { slot: 15, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-15' },
+        'FIG-16': { slot: 16, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-16' },
+        'FIG-17': { slot: 17, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-17' },
+        'FIG-18': { slot: 18, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-18' },
+        'FIG-19': { slot: 19, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-19' },
+        'FIG-20': { slot: 20, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-20' },
+        'FIG-21': { slot: 21, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-21' },
+        'FIG-22': { slot: 22, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-22' }
     };
 
-    // ============================================================
-    // VARIÁVEIS GLOBAIS
-    // ============================================================
-    let client, account, databases;
+    // ================= APPWRITE SETUP =================
+    const client = new Appwrite.Client().setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+
     let currentUser = null;
-    let userAlbum = null;
     let ownedStickers = [];
-    let isInitializing = false;
-    let initializationAttempts = 0;
-    const MAX_INIT_ATTEMPTS = 3;
 
-    // ============================================================
-    // INICIALIZAÇÃO COM PROTEÇÃO CONTRA LOOP INFINITO
-    // ============================================================
-    async function initialize() {
-        // Evitar múltiplas inicializações simultâneas
-        if (isInitializing) {
-            console.log('Inicialização já em progresso...');
-            return;
-        }
-
-        isInitializing = true;
-        initializationAttempts++;
-
+    // ================= INICIALIZAÇÃO =================
+    async function init() {
         try {
-            // Inicializar Appwrite
-            client = new Appwrite.Client();
-            client.setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
-            
-            account = new Appwrite.Account(client);
-            databases = new Appwrite.Databases(client);
-
-            // Verificar autenticação com timeout
-            let currentUser_temp;
-            try {
-                currentUser_temp = await Promise.race([
-                    account.get(),
-                    new Promise((_, reject) => 
-                        setTimeout(() => reject(new Error('Timeout na autenticação')), 5000)
-                    )
-                ]);
-            } catch (authError) {
-                console.error('Erro ao verificar autenticação:', authError.message);
-                throw authError;
-            }
-
-            currentUser = currentUser_temp;
-            
-            // Carregar álbum do usuário
-            await loadUserAlbum();
-            
-            // Atualizar interface
-            updateUI();
-            
-            // Renderizar álbum
-            renderAlbum();
-            
-            // Esconder loading
+            currentUser = await account.get();
+            await loadAlbum();
+            renderSlots();
+            updateStats();
             document.getElementById('loadingScreen').style.display = 'none';
-            
-            // Reset tentativas após sucesso
-            initializationAttempts = 0;
-            isInitializing = false;
-            
         } catch (error) {
-            console.error('Erro na inicialização (tentativa ' + initializationAttempts + '):', error);
-            isInitializing = false;
-
-            // Se não conseguir autenticar após 3 tentativas, redirecionar
-            if (initializationAttempts >= MAX_INIT_ATTEMPTS) {
-                console.log('Máximo de tentativas atingido. Redirecionando para login...');
-                // Adicionar um pequeno delay para evitar redirecionamento imediato
-                setTimeout(() => {
-                    window.location.replace('/login.html');
-                }, 500);
-            } else {
-                // Tentar novamente após 1 segundo
-                setTimeout(() => {
-                    initialize();
-                }, 1000);
-            }
+            console.error("Não logado:", error);
+            window.location.replace('/login.html');
         }
     }
 
-    // ============================================================
-    // CARREGAR ÁLBUM DO USUÁRIO
-    // ============================================================
-    async function loadUserAlbum() {
+    async function loadAlbum() {
         try {
-            userAlbum = await databases.getDocument(
-                APPWRITE_DB_ID,
-                APPWRITE_COLLECTION_ID,
-                currentUser.$id
-            );
-            ownedStickers = userAlbum.stickers || [];
+            const doc = await databases.getDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id);
+            ownedStickers = doc.stickers || [];
         } catch (error) {
-            // Criar novo álbum se não existir
-            console.log('Criando novo álbum para o usuário...');
-            try {
-                userAlbum = await databases.createDocument(
-                    APPWRITE_DB_ID,
-                    APPWRITE_COLLECTION_ID,
-                    currentUser.$id,
-                    {
-                        userId: currentUser.$id,
-                        stickers: [],
-                        createdAt: new Date().toISOString()
-                    }
-                );
-                ownedStickers = [];
-            } catch (createError) {
-                console.error('Erro ao criar álbum:', createError);
-                // Se não conseguir criar, usar um álbum vazio em memória
-                userAlbum = { stickers: [] };
-                ownedStickers = [];
-            }
+            console.log("Criando novo registro de álbum...");
+            await databases.createDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
+                userId: currentUser.$id,
+                stickers: []
+            });
+            ownedStickers = [];
         }
     }
 
-    // ============================================================
-    // ATUALIZAR INTERFACE
-    // ============================================================
-    function updateUI() {
-        // Nome do usuário
-        document.getElementById('userName').textContent = currentUser.name || 'Usuário';
+    function renderSlots() {
+        const left = document.getElementById('leftPage');
+        const right = document.getElementById('rightPage');
         
-        // Contagem de figurinhas
-        document.getElementById('stickerCount').textContent = ownedStickers.length;
-        
-        // Percentual de conclusão
-        const percent = Math.round((ownedStickers.length / 22) * 100);
-        document.getElementById('progressPercent').textContent = percent + '%';
-    }
+        // Limpar slots mas manter título
+        const titles = document.querySelectorAll('.page-title');
+        left.innerHTML = ''; left.appendChild(titles[0]);
+        right.innerHTML = ''; right.appendChild(titles[1]);
 
-    // ============================================================
-    // RENDERIZAR ÁLBUM
-    // ============================================================
-    function renderAlbum() {
-        const leftPage = document.getElementById('leftPage');
-        const rightPage = document.getElementById('rightPage');
-        
-        leftPage.innerHTML = '';
-        rightPage.innerHTML = '';
+        // Criar os 22 slots baseados na numeração
+        for(let i=1; i<=22; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'slot';
+            slot.id = `slot-${i}`;
+            slot.textContent = i;
 
-        for (let i = 1; i <= 22; i++) {
-            const slot = createStickerSlot(i);
+            // Verificar se este slot tem uma figurinha correspondente já colada
+            // Procuramos nos STICKERS_DATA qual código corresponde a este slot
+            const stickerCode = Object.keys(STICKERS_DATA).find(key => STICKERS_DATA[key].slot === i);
             
-            if (i <= 11) {
-                leftPage.appendChild(slot);
-            } else {
-                rightPage.appendChild(slot);
+            if(stickerCode && ownedStickers.includes(stickerCode)) {
+                slot.classList.add('filled');
+                slot.innerHTML = `<img src="${STICKERS_DATA[stickerCode].url}" class="sticker-img">`;
             }
+
+            if(i <= 11) left.appendChild(slot);
+            else right.appendChild(slot);
         }
     }
 
-    // ============================================================
-    // CRIAR SLOT DE FIGURINHA
-    // ============================================================
-    function createStickerSlot(number) {
-        const slot = document.createElement('div');
-        slot.className = 'sticker-slot';
-        slot.id = `slot-${number}`;
-        
-        const code = `FIG-${String(number).padStart(2, '0')}`;
-        
-        if (ownedStickers.includes(code)) {
-            const stickerData = STICKERS_DATA[code];
-            slot.classList.add('filled');
-            slot.innerHTML = `<img src="${stickerData.image}" class="sticker-img" alt="${stickerData.name}">`;
-        } else {
-            slot.textContent = number;
-        }
-        
-        return slot;
-    }
-
-    // ============================================================
-    // MODAL FUNCTIONS
-    // ============================================================
+    // ================= LÓGICA DE COLAR =================
     function openModal() {
-        document.getElementById('stickerModal').classList.add('active');
+        document.getElementById('modal').classList.add('active');
         document.getElementById('stickerCode').value = '';
-        document.getElementById('modalMessage').textContent = '';
+        document.getElementById('modalMsg').textContent = '';
         document.getElementById('stickerCode').focus();
     }
 
     function closeModal() {
-        document.getElementById('stickerModal').classList.remove('active');
-        document.getElementById('stickerCode').value = '';
-        document.getElementById('modalMessage').textContent = '';
+        document.getElementById('modal').classList.remove('active');
     }
 
-    // ============================================================
-    // RESGATAR FIGURINHA
-    // ============================================================
-    async function redeemSticker() {
-        const code = document.getElementById('stickerCode').value.toUpperCase().trim();
-        const messageEl = document.getElementById('modalMessage');
-        
-        // Validar código
-        if (!code) {
-            showMessage(messageEl, 'Por favor, digite um código', 'error');
+    async function confirmSticker() {
+        const input = document.getElementById('stickerCode');
+        const code = input.value.toUpperCase().trim();
+        const msg = document.getElementById('modalMsg');
+
+        // 1. Verificar se o código existe na constante STICKERS_DATA
+        if(!STICKERS_DATA[code]) {
+            msg.textContent = "❌ Código inválido! Verifique o código digitado.";
+            msg.style.color = "#991b1b";
             return;
         }
 
-        if (!STICKERS_DATA[code]) {
-            showMessage(messageEl, 'Código inválido! Use FIG-01 até FIG-22', 'error');
+        // 2. Verificar se já colou
+        if(ownedStickers.includes(code)) {
+            msg.textContent = "⚠️ Você já colou esta figurinha!";
+            msg.style.color = "#b45309";
             return;
         }
 
-        if (ownedStickers.includes(code)) {
-            showMessage(messageEl, 'Você já tem essa figurinha no álbum!', 'warning');
-            return;
-        }
-
+        // 3. Salvar no Appwrite
         try {
-            // Adicionar figurinha
-            ownedStickers.push(code);
+            msg.textContent = "⏳ Colando...";
+            msg.style.color = "#4b0082";
             
-            // Salvar no Appwrite
-            await databases.updateDocument(
-                APPWRITE_DB_ID,
-                APPWRITE_COLLECTION_ID,
-                currentUser.$id,
-                { stickers: ownedStickers }
-            );
+            const newList = [...ownedStickers, code];
+            await databases.updateDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
+                stickers: newList
+            });
 
-            // Animar figurinha
-            const slotNumber = STICKERS_DATA[code].id;
-            const slot = document.getElementById(`slot-${slotNumber}`);
+            ownedStickers = newList;
             
-            if (slot) {
-                const stickerData = STICKERS_DATA[code];
+            // 4. Animar na interface usando o slot definido na constante
+            const stickerInfo = STICKERS_DATA[code];
+            const slot = document.getElementById(`slot-${stickerInfo.slot}`);
+            
+            if(slot) {
                 slot.classList.add('filled');
-                slot.innerHTML = `<img src="${stickerData.image}" class="sticker-img" alt="${stickerData.name}">`;
-                slot.classList.add('success-pulse');
-                
-                // Reproduzir som (opcional)
-                playSound();
+                slot.innerHTML = `<img src="${stickerInfo.url}" class="sticker-img">`;
             }
+            
+            updateStats();
+            msg.textContent = "✅ FIGURINHA COLADA COM SUCESSO!";
+            msg.style.color = "#15803d";
+            
+            setTimeout(closeModal, 1500);
 
-            // Atualizar UI
-            updateUI();
-            
-            // Mostrar mensagem de sucesso
-            showMessage(messageEl, '✓ Figurinha colada com sucesso!', 'success');
-            
-            // Fechar modal após 1.5s
-            setTimeout(() => {
-                closeModal();
-            }, 1500);
-            
         } catch (error) {
-            console.error('Erro ao salvar figurinha:', error);
-            showMessage(messageEl, 'Erro ao salvar. Tente novamente.', 'error');
+            console.error(error);
+            msg.textContent = "❌ Erro ao salvar. Tente novamente.";
+            msg.style.color = "#991b1b";
         }
     }
 
-    // ============================================================
-    // FUNÇÕES AUXILIARES
-    // ============================================================
-    function showMessage(element, text, type) {
-        element.textContent = text;
-        element.className = `modal-message ${type}`;
-    }
-
-    function playSound() {
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
-        } catch (error) {
-            console.log('Som não disponível');
-        }
+    function updateStats() {
+        const count = ownedStickers.length;
+        document.getElementById('count').textContent = count;
+        document.getElementById('percent').textContent = Math.round((count/22)*100) + "%";
     }
 
     function logout() {
-        if (confirm('Tem certeza que deseja sair?')) {
-            account.deleteSession('current')
-                .then(() => {
-                    // Usar replace para evitar voltar com o botão voltar
-                    window.location.replace('/login.html');
-                })
-                .catch((error) => {
-                    console.error('Erro ao fazer logout:', error);
-                    // Mesmo com erro, redirecionar
-                    window.location.replace('/login.html');
-                });
-        }
+        account.deleteSession('current').then(() => window.location.replace('/login.html'));
     }
 
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', initialize);
-
-    // Fechar modal ao clicar fora
-    document.getElementById('stickerModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeModal();
-        }
-    });
-
-    // Enter para confirmar
-    document.getElementById('stickerCode').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            redeemSticker();
-        }
-    });
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 
 </body>
