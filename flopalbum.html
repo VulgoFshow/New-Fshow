@@ -7,106 +7,183 @@
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-/* ================= ÁLBUM ================= */
+/* =====================================================
+   ÁLBUM PREMIUM
+===================================================== */
 
 .album-container{
     width:100%;
-    height:auto;
-
     display:flex;
+    gap:35px;
 
     overflow-x:auto;
     overflow-y:hidden;
 
     scroll-snap-type:x mandatory;
 
-    gap:0;
-
-    padding:20px 0 40px;
+    padding:30px 25px 50px;
 
     scrollbar-width:none;
+
+    position:relative;
 }
 
 .album-container::-webkit-scrollbar{
     display:none;
 }
 
-/* PÁGINAS */
+/* =====================================================
+   PÁGINAS
+===================================================== */
 
 .page{
-    flex:0 0 100vw;
+    flex:0 0 92%;
 
-    min-height:calc(100vh - 180px);
+    min-height:820px;
 
-    padding:20px;
+    scroll-snap-align:center;
+
+    position:relative;
+
+    padding:28px;
+
+    border-radius:32px;
 
     display:grid;
-
     grid-template-columns:repeat(2,1fr);
 
-    gap:14px;
+    gap:18px;
 
     align-content:start;
 
-    scroll-snap-align:start;
+    overflow:hidden;
 
-    position:relative;
+    backdrop-filter:blur(10px);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.92),
+            rgba(245,245,245,.96)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.8);
+
+    box-shadow:
+        0 30px 60px rgba(0,0,0,.35),
+        0 10px 20px rgba(0,0,0,.15),
+        inset 0 0 0 1px rgba(255,255,255,.7),
+        inset 0 0 50px rgba(0,0,0,.03);
 }
 
-/* Fundo transparente mostrando a arte */
+/* brilho superior */
 
 .page::before{
     content:"";
 
     position:absolute;
 
-    inset:0;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:180px;
 
     background:
         linear-gradient(
-            rgba(255,255,255,.03),
-            rgba(255,255,255,.03)
+            rgba(255,255,255,.6),
+            transparent
         );
 
-    backdrop-filter:blur(1px);
-
-    z-index:-1;
+    pointer-events:none;
 }
+
+/* sombra lateral */
+
+.page::after{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    right:0;
+
+    width:40px;
+    height:100%;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(0,0,0,.08),
+            transparent
+        );
+
+    pointer-events:none;
+}
+
+/* =====================================================
+   CABEÇALHO DA PÁGINA
+===================================================== */
 
 .page-title{
     grid-column:span 2;
 
     text-align:center;
 
-    color:white;
-
-    font-size:24px;
+    font-size:28px;
 
     font-weight:900;
 
-    letter-spacing:2px;
+    letter-spacing:3px;
 
-    text-shadow:
-        0 2px 5px rgba(0,0,0,.8);
+    text-transform:uppercase;
 
-    margin-bottom:10px;
+    color:#2d2d2d;
+
+    padding-bottom:15px;
+
+    margin-bottom:8px;
+
+    border-bottom:4px solid rgba(0,0,0,.08);
+
+    position:relative;
 }
 
-/* ESPAÇOS */
+.page-title::after{
+    content:"";
+
+    position:absolute;
+
+    bottom:-4px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:120px;
+    height:4px;
+
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffd700,
+            #ffef85,
+            #ffd700
+        );
+}
+
+/* =====================================================
+   SLOT DAS FIGURINHAS
+===================================================== */
 
 .slot{
     aspect-ratio:2.5/3.5;
 
-    border-radius:12px;
-
-    border:3px dashed rgba(255,255,255,.55);
-
-    background:
-        rgba(255,255,255,.12);
-
-    backdrop-filter:blur(5px);
-
     position:relative;
+
+    border-radius:16px;
 
     overflow:hidden;
 
@@ -114,28 +191,74 @@
     align-items:center;
     justify-content:center;
 
-    transition:.3s;
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(240,240,240,.95),
+            rgba(225,225,225,.95)
+        );
+
+    border:3px dashed rgba(120,120,120,.35);
+
+    box-shadow:
+        inset 0 0 20px rgba(0,0,0,.05);
 }
 
+/* efeito hover */
+
 .slot:hover{
-    transform:translateY(-3px);
+    transform:
+        translateY(-4px)
+        scale(1.02);
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.18);
 }
+
+/* número */
 
 .slot::before{
     content:attr(data-number);
 
     position:absolute;
 
-    top:6px;
-    left:8px;
+    top:8px;
+    left:10px;
 
-    color:white;
+    font-size:13px;
 
-    font-size:12px;
-    font-weight:800;
+    font-weight:900;
 
-    text-shadow:0 1px 3px black;
+    color:#666;
+
+    z-index:5;
 }
+
+/* texto padrão */
+
+.slot::after{
+    content:"COLE A FIGURINHA";
+
+    position:absolute;
+
+    text-align:center;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    color:#9a9a9a;
+
+    letter-spacing:1px;
+}
+
+/* =====================================================
+   FIGURINHA COLADA
+===================================================== */
 
 .slot.filled{
     border:none;
@@ -143,42 +266,83 @@
     background:white;
 
     box-shadow:
-        0 8px 20px rgba(0,0,0,.35);
+        0 12px 25px rgba(0,0,0,.22),
+        0 3px 8px rgba(0,0,0,.15);
+}
+
+.slot.filled::after{
+    display:none;
+}
+
+/* brilho da figurinha */
+
+.slot.filled::before{
+    z-index:10;
+
+    color:white;
+
+    text-shadow:
+        0 2px 5px rgba(0,0,0,.8);
 }
 
 .sticker-img{
     width:100%;
     height:100%;
+
     object-fit:cover;
+
+    transition:transform .4s ease;
 }
 
-/* INDICADOR DE DESLIZAR */
+.slot.filled:hover .sticker-img{
+    transform:scale(1.05);
+}
 
-.page:first-child::after{
-    content:"➡ Deslize para a próxima página";
+/* =====================================================
+   INDICADOR DE DESLIZAR
+===================================================== */
+
+.page:first-child .page-title::before{
+    content:"← deslize →";
 
     position:absolute;
 
-    bottom:10px;
-    left:50%;
+    top:-18px;
+    right:0;
 
-    transform:translateX(-50%);
+    font-size:12px;
 
-    color:white;
+    letter-spacing:1px;
 
-    font-size:13px;
-    font-weight:700;
-
-    text-shadow:0 2px 4px black;
-
-    animation:seta 1.5s infinite;
+    color:#777;
 }
 
-@keyframes seta{
-    0%{transform:translateX(-50%);}
-    50%{transform:translateX(-40%);}
-    100%{transform:translateX(-50%);}
-}    </style>
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media(max-width:768px){
+
+    .album-container{
+        padding:18px;
+        gap:22px;
+    }
+
+    .page{
+        flex:0 0 92%;
+        min-height:auto;
+        padding:18px;
+        border-radius:24px;
+    }
+
+    .page-title{
+        font-size:20px;
+    }
+
+    .slot{
+        border-radius:12px;
+    }
+ </style>
 </head>
 <body>
 
