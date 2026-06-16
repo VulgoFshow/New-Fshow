@@ -5,18 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Álbum de Figurinhas</title>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6a07b3;
             --secondary: #00d2ff;
             --sticker-bg: rgba(255, 255, 255, 0.1);
             --sticker-border: rgba(255, 255, 255, 0.3);
+            --purple-dark: #8A2BE2;
+            --orange-vibrant: #FF8C00;
+            --transition: all 0.3s ease;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #1a1a1a;
             color: white;
             min-height: 100vh;
@@ -52,17 +56,19 @@
             z-index: 100;
         }
 
-        .user-info { display: flex; align-items: center; gap: 10px; }
         .btn {
-            padding: 8px 16px;
+            padding: 8px 20px;
             border-radius: 20px;
             border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.3s;
+            transition: var(--transition);
         }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-logout { background: #ff4d4d; color: white; }
+        .btn-primary { 
+            background: linear-gradient(45deg, var(--orange-vibrant), var(--purple-dark)); 
+            color: white; 
+        }
+        .btn-primary:hover { transform: scale(1.05); }
 
         /* Album Container */
         .album-container {
@@ -73,6 +79,7 @@
             padding: 20px;
             max-width: 1200px;
             width: 100%;
+            margin-top: 20px;
         }
 
         .page {
@@ -119,7 +126,116 @@
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
-        /* Modal */
+        /* Profile Widget Styles */
+        .fshow-profile-widget {
+            position: relative;
+            z-index: 999999 !important;
+        }
+
+        .fshow-profile-trigger {
+            width: 40px; 
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--purple-dark);
+            cursor: pointer;
+            overflow: hidden;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .fshow-profile-trigger:hover {
+            transform: scale(1.05);
+            border-color: var(--orange-vibrant);
+        }
+
+        .fshow-profile-trigger img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fshow-profile-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(20, 20, 20, 0.98);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(128, 0, 255, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            width: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            animation: fshowSlideDown 0.3s ease-out;
+        }
+
+        .fshow-profile-dropdown.fshow-active {
+            display: flex !important;
+        }
+
+        @keyframes fshowSlideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fshow-user-info {
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .fshow-user-name {
+            font-weight: 800;
+            font-size: 1rem;
+            background: linear-gradient(45deg, #FF8C00, #8A2BE2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2px;
+        }
+
+        .fshow-user-status {
+            font-size: 0.65rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .fshow-btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.06);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .fshow-btn:hover {
+            background: rgba(128, 0, 255, 0.2);
+            border-color: rgba(128, 0, 255, 0.5);
+        }
+
+        .fshow-btn-logout { color: #ff4d4d; }
+        .fshow-btn-logout:hover {
+            background: rgba(255, 77, 77, 0.1);
+            border-color: rgba(255, 77, 77, 0.3);
+        }
+
+        /* Sticker Modal */
         .modal {
             position: fixed;
             top: 0;
@@ -150,9 +266,9 @@
             background: #1a1a1a;
             color: white;
             box-sizing: border-box;
+            outline: none;
         }
 
-        /* Mobile Adjustments */
         @media (max-width: 900px) {
             .album-container { flex-direction: column; align-items: center; }
         }
@@ -163,24 +279,36 @@
 <div class="bg-overlay"></div>
 
 <header>
-    <div class="user-info">
-        <span id="userName">Carregando...</span>
-    </div>
     <div>
         <button class="btn btn-primary" onclick="openModal()">Colar Figurinha</button>
-        <button class="btn btn-logout" onclick="logout()">Sair</button>
+    </div>
+    
+    <!-- Profile Widget -->
+    <div class="fshow-profile-widget" id="fshowWidget">
+        <div class="fshow-profile-trigger" id="fshowTrigger">
+            <div id="fshowAvatarContainer" style="width:100%; height:100%;">
+                <img src="https://ui-avatars.com/api/?name=User&background=8000ff&color=fff" alt="Avatar">
+            </div>
+        </div>
+        <div class="fshow-profile-dropdown" id="fshowDropdown">
+            <div class="fshow-user-info">
+                <div class="fshow-user-name" id="fshowUserName">Carregando...</div>
+                <div class="fshow-user-status" id="fshowUserStatus">Membro</div>
+            </div>
+            <div id="fshowLoggedOptions" style="display: flex; flex-direction: column; gap: 12px;">
+                <label class="fshow-btn" style="cursor: pointer;">
+                    Trocar Foto
+                    <input type="file" id="fshowChangeAvatarInput" hidden accept="image/*">
+                </label>
+                <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">Sair</button>
+            </div>
+        </div>
     </div>
 </header>
 
 <div class="album-container">
-    <!-- Página Esquerda -->
-    <div class="page" id="leftPage">
-        <!-- 11 slots -->
-    </div>
-    <!-- Página Direita -->
-    <div class="page" id="rightPage">
-        <!-- 11 slots -->
-    </div>
+    <div class="page" id="leftPage"></div>
+    <div class="page" id="rightPage"></div>
 </div>
 
 <div class="modal" id="stickerModal">
@@ -205,45 +333,79 @@
 
     const account = new Appwrite.Account(client);
     const databases = new Appwrite.Databases(client);
+    const storage = new Appwrite.Storage(client);
 
-    const DATABASE_ID = "6a07b77b0016f7c90141"; 
-    const PROFILES_COLLECTION_ID = "profiles"; 
+    const DB_ID = "6a07b77b0016f7c90141"; 
+    const COL_ID = "profiles"; 
+    const BUCKET_ID = "6a07b91a000e61c9e4b3";
 
     let currentUser = null;
-    let userProfile = null;
+    let currentProfile = null;
 
-    // Configuração das figurinhas (Exemplo)
+    // Configuração das figurinhas
     const STICKERS_DATA = {};
     for(let i=1; i<=22; i++) {
         const id = i.toString().padStart(2, '0');
         STICKERS_DATA[`FIG-${id}`] = {
             id: i,
-            url: `https://picsum.photos/seed/sticker${i}/200/300` // Usando imagens placeholder
+            url: `https://picsum.photos/seed/sticker${i}/200/300`
         };
     }
 
-    /* ================= INICIALIZAÇÃO ================= */
+    /* ================= INICIALIZAÇÃO E PERFIL ================= */
     async function init() {
         try {
             currentUser = await account.get();
-            document.getElementById('userName').textContent = `Olá, ${currentUser.name}`;
             
-            // Buscar progresso do usuário
-            userProfile = await databases.getDocument(DATABASE_ID, PROFILES_COLLECTION_ID, currentUser.$id);
+            // Buscar perfil
+            try {
+                currentProfile = await databases.getDocument(DB_ID, COL_ID, currentUser.$id);
+            } catch (err) {
+                console.log("Perfil não encontrado, criando...");
+                currentProfile = await databases.createDocument(DB_ID, COL_ID, currentUser.$id, {
+                    nickname: currentUser.name,
+                    email: currentUser.email,
+                    stickers: []
+                });
+            }
+
+            updateProfileUI();
             renderAlbum();
         } catch (error) {
-            console.error("Erro ao carregar sessão:", error);
+            console.error("Não logado:", error);
             window.location.href = "login.html";
         }
     }
 
+    function updateProfileUI() {
+        const userNameEl = document.getElementById("fshowUserName");
+        const userStatusEl = document.getElementById("fshowUserStatus");
+        
+        userNameEl.textContent = currentProfile?.nickname || currentUser.name || "Usuário";
+        userStatusEl.textContent = currentUser.email || "Membro";
+
+        let avatarUrl = null;
+        if (currentProfile?.avatarFileId) {
+            avatarUrl = storage.getFileView(BUCKET_ID, currentProfile.avatarFileId);
+        } else if (currentUser.prefs?.avatar) {
+            avatarUrl = currentUser.prefs.avatar;
+        }
+
+        if (!avatarUrl) {
+            avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentProfile?.nickname || currentUser.name || "User")}&background=8000ff&color=fff`;
+        }
+        
+        document.getElementById("fshowAvatarContainer").innerHTML = `<img src="${avatarUrl}" alt="Avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+    }
+
+    /* ================= LÓGICA DO ÁLBUM ================= */
     function renderAlbum() {
         const leftPage = document.getElementById('leftPage');
         const rightPage = document.getElementById('rightPage');
         leftPage.innerHTML = '';
         rightPage.innerHTML = '';
 
-        const ownedStickers = userProfile.stickers || [];
+        const ownedStickers = currentProfile.stickers || [];
 
         for (let i = 1; i <= 22; i++) {
             const slot = document.createElement('div');
@@ -256,11 +418,8 @@
                 fillSlot(slot, STICKERS_DATA[stickerId].url);
             }
 
-            if (i <= 11) {
-                leftPage.appendChild(slot);
-            } else {
-                rightPage.appendChild(slot);
-            }
+            if (i <= 11) leftPage.appendChild(slot);
+            else rightPage.appendChild(slot);
         }
     }
 
@@ -269,7 +428,7 @@
         slot.classList.add('filled');
     }
 
-    /* ================= AÇÕES ================= */
+    /* ================= INTERAÇÕES ================= */
     function openModal() {
         document.getElementById('stickerModal').classList.add('active');
         document.getElementById('stickerCode').value = '';
@@ -290,33 +449,22 @@
             return;
         }
 
-        if (userProfile.stickers.includes(code)) {
+        if (currentProfile.stickers.includes(code)) {
             msg.textContent = "Você já tem essa figurinha!";
             msg.style.color = "#ffcc00";
             return;
         }
 
         try {
-            const updatedStickers = [...userProfile.stickers, code];
+            const updatedStickers = [...currentProfile.stickers, code];
+            await databases.updateDocument(DB_ID, COL_ID, currentUser.$id, { stickers: updatedStickers });
+            currentProfile.stickers = updatedStickers;
             
-            // Salvar no Appwrite
-            await databases.updateDocument(
-                DATABASE_ID,
-                PROFILES_COLLECTION_ID,
-                currentUser.$id,
-                { stickers: updatedStickers }
-            );
-
-            userProfile.stickers = updatedStickers;
-            
-            // Animação de colar
             const stickerInfo = STICKERS_DATA[code];
-            const slot = document.getElementById(`slot-${stickerInfo.id}`);
-            fillSlot(slot, stickerInfo.url);
+            fillSlot(document.getElementById(`slot-${stickerInfo.id}`), stickerInfo.url);
             
             msg.textContent = "Figurinha colada com sucesso!";
             msg.style.color = "#4dff4d";
-            
             setTimeout(closeModal, 1500);
         } catch (error) {
             msg.textContent = "Erro ao salvar: " + error.message;
@@ -324,14 +472,34 @@
         }
     }
 
-    async function logout() {
-        try {
-            await account.deleteSession('current');
-            window.location.href = "login.html";
-        } catch (error) {
-            alert("Erro ao sair");
+    // Widget Events
+    document.getElementById("fshowTrigger").addEventListener("click", (e) => {
+        e.stopPropagation();
+        document.getElementById("fshowDropdown").classList.toggle("fshow-active");
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!document.getElementById("fshowWidget").contains(e.target)) {
+            document.getElementById("fshowDropdown").classList.remove("fshow-active");
         }
-    }
+    });
+
+    document.getElementById("fshowLogoutBtn").addEventListener("click", async () => {
+        try {
+            await account.deleteSession("current");
+            window.location.href = "login.html";
+        } catch (e) { location.reload(); }
+    });
+
+    document.getElementById("fshowChangeAvatarInput").addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (!file || !currentUser) return;
+        try {
+            const uploaded = await storage.createFile(BUCKET_ID, Appwrite.ID.unique(), file);
+            await databases.updateDocument(DB_ID, COL_ID, currentUser.$id, { avatarFileId: uploaded.$id });
+            location.reload();
+        } catch (error) { alert("Erro ao atualizar foto."); }
+    });
 
     init();
 </script>
