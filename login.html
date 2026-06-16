@@ -405,7 +405,7 @@ input::placeholder {
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                         <path d="M3.99 12.69c-.18-.66-.27-1.35-.27-2.09 0-.74.09-1.45.26-2.09V5.07H2.18C.635 7.72 0 10.24 0 12.6c0 2.36.635 4.88 2.18 7.53l3.57-2.77c.9-1.05 1.4-2.4 1.4-3.84 0-.74-.09-1.45-.26-2.09v-2.84z" fill="#FBBC05"/>
-                        <path d="M12 4.75c1.77 0 3.29.61 4.53 1.6l3.36-3.36C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.57 2.77c.9-1.05 2.4-2.09 4.25-2.09z" fill="#EA4335"/>
+                        <path d="M12 4.75c1.77 0 3.29.61 4.53 1.6 l3.36-3.36C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.57 2.77c.9-1.05 2.4-2.09 4.25-2.09z" fill="#EA4335"/>
                     </svg>
                     Google
                 </button>
@@ -508,6 +508,47 @@ const AVATARS_BUCKET_ID = "6a07b91a000e61c9e4b3";
 const SITE_URL = "https://www.fshow.site/";
 
 let selectedAvatarFile = null;
+
+/* ================= REDIRECIONAMENTO DINÂMICO ================= */
+
+/**
+ * Determina para qual página o usuário deve ser enviado após o login.
+ * Prioriza o parâmetro 'redirect' na URL, depois o document.referrer (se for do mesmo site),
+ * e finalmente a index.html.
+ */
+function getRedirectUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectParam = urlParams.get('redirect');
+    
+    if (redirectParam) {
+        // Se for uma URL completa, garantir que é do mesmo domínio por segurança
+        if (redirectParam.startsWith('http')) {
+            try {
+                const targetUrl = new URL(redirectParam);
+                if (targetUrl.hostname === window.location.hostname) {
+                    return redirectParam;
+                }
+            } catch (e) {
+                console.error("URL de redirecionamento inválida");
+            }
+        } else {
+            // Se for um caminho relativo
+            return redirectParam.startsWith('/') ? redirectParam : '/' + redirectParam;
+        }
+    }
+    
+    // Se vier de outra página do site (que não seja a própria login.html)
+    if (document.referrer && 
+        document.referrer !== window.location.href && 
+        document.referrer.includes(window.location.hostname) &&
+        !document.referrer.includes('login.html')) {
+        return document.referrer;
+    }
+    
+    return SITE_URL + "index.html";
+}
+
+const REDIRECT_URL = getRedirectUrl();
 
 /* ================= FUNÇÕES AUXILIARES ================= */
 
@@ -619,7 +660,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Already Logged In Modal Actions
     document.getElementById("stayLoggedInBtn").onclick = () => {
-        window.location.href = SITE_URL + "index.html";
+        window.location.href = REDIRECT_URL;
     };
 
     document.getElementById("logoutAndSwitchBtn").onclick = async () => {
@@ -645,7 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
             await account.createEmailPasswordSession(email, pass);
             saveLoginTimestamp();
             showMsg("loginMessage", "Sucesso! Redirecionando...", "success");
-            setTimeout(() => window.location.href = SITE_URL + "index.html", 1000);
+            setTimeout(() => window.location.href = REDIRECT_URL, 1000);
         } catch (e) {
             showMsg("loginMessage", e.message, "error");
             document.getElementById("loginBtn").disabled = false;
@@ -658,7 +699,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             await account.createOAuth2Session(
                 "google", 
-                SITE_URL + "index.html", 
+                REDIRECT_URL, 
                 SITE_URL + "login.html"
             );
         } catch (e) {
@@ -671,7 +712,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             await account.createOAuth2Session(
                 "discord", 
-                SITE_URL + "index.html", 
+                REDIRECT_URL, 
                 SITE_URL + "login.html"
             );
         } catch (e) {
@@ -684,7 +725,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             await account.createOAuth2Session(
                 "spotify", 
-                SITE_URL + "index.html", 
+                REDIRECT_URL, 
                 SITE_URL + "login.html"
             );
         } catch (e) {
@@ -728,7 +769,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             saveLoginTimestamp();
             showMsg("signupMessage", "Conta criada com sucesso!", "success");
-            setTimeout(() => window.location.href = SITE_URL + "index.html", 1500);
+            setTimeout(() => window.location.href = REDIRECT_URL, 1500);
         } catch (e) {
             showMsg("signupMessage", e.message, "error");
             document.getElementById("signupBtn").disabled = false;
