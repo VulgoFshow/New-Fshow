@@ -7,304 +7,298 @@
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* ================= ÁLBUM ESTILO REVISTA ================= */
 
-        :root {
-            --primary: #6a07b3;
-            --secondary: #00d2ff;
-            --dark: #1a1a1a;
-            --light: #f4f4f4;
-            --gold: #ffd700;
-            --paper: #fff9e6;
-            --border-radius: 15px;
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+.album-container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background: #fdf8e7;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+    box-shadow:
+        0 25px 60px rgba(0,0,0,0.6),
+        inset 0 0 50px rgba(0,0,0,0.08);
+}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #121212;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: white;
-            overflow-x: hidden;
-        }
+/* Dobra central */
 
-        /* Background Overlay */
-        .bg-fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://i.ibb.co/JwbxBVdq/17020fb0-692a-11f1-9692-e5d4d6a13428.png') center/cover no-repeat;
-            z-index: -2;
-            filter: brightness(0.4) blur(3px);
-        }
+.album-container::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.25),
+        rgba(255,255,255,0.9),
+        rgba(0,0,0,0.25)
+    );
+    z-index: 10;
+}
 
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
+.page {
+    width: 50%;
+    padding: 25px;
+    display: grid;
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255,255,255,0.1);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+    /* 11 espaços = 2 colunas x 6 linhas */
+    grid-template-columns: repeat(2, 1fr);
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+    gap: 18px;
+    align-content: start;
+    position: relative;
+}
 
-        /* Header */
-        header {
-            width: 100%;
-            max-width: 1000px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
+/* Página esquerda */
 
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.page:first-child {
+    background:
+        linear-gradient(
+            to right,
+            rgba(0,0,0,0.03),
+            transparent
+        );
+}
 
-        .btn-main {
-            background: linear-gradient(135deg, var(--primary), #4b0082);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(106, 7, 179, 0.4);
-            transition: var(--transition);
-        }
+/* Página direita */
 
-        .btn-main:hover { transform: translateY(-3px) scale(1.05); }
+.page:last-child {
+    background:
+        linear-gradient(
+            to left,
+            rgba(0,0,0,0.03),
+            transparent
+        );
+}
 
-        /* Album Container (The Magazine) */
-        .album-container {
-            width: 95%;
-            max-width: 1100px;
-            margin: 20px auto;
-            background: var(--paper);
-            border-radius: 10px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            display: flex;
-            position: relative;
-            min-height: 700px;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
+.page-title {
+    grid-column: span 2;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 900;
+    color: #444;
+    border-bottom: 3px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-        /* Center Fold Shadow */
-        .album-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 100%;
-            background: linear-gradient(to right, 
-                rgba(0,0,0,0.1) 0%, 
-                rgba(0,0,0,0.2) 40%, 
-                rgba(255,255,255,0.5) 50%, 
-                rgba(0,0,0,0.2) 60%, 
-                rgba(0,0,0,0.1) 100%);
-            pointer-events: none;
-            z-index: 5;
-        }
+/* ================= ESPAÇOS DAS FIGURINHAS ================= */
 
-        .page {
-            flex: 1;
-            padding: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 20px;
-            align-content: start;
-            position: relative;
-        }
+.slot {
+    position: relative;
 
-        .page-title {
-            grid-column: 1 / -1;
-            color: #333;
-            font-size: 18px;
-            font-weight: 800;
-            text-transform: uppercase;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+    aspect-ratio: 2.5 / 3.5;
 
-        /* Sticker Slot */
-        .slot {
-            aspect-ratio: 2.5/3.5;
-            background: #e0e0e0;
-            border: 2px dashed #bbb;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 800;
-            color: #999;
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-        }
+    background:
+        repeating-linear-gradient(
+            45deg,
+            #ececec,
+            #ececec 10px,
+            #e2e2e2 10px,
+            #e2e2e2 20px
+        );
 
-        .slot.filled {
-            border: none;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            animation: glueSticker 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+    border: 3px dashed #bdbdbd;
+    border-radius: 10px;
 
-        @keyframes glueSticker {
-            0% { transform: scale(2) rotate(15deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        .sticker-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 6px;
-        }
+    overflow: hidden;
 
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
+    transition: all .3s ease;
+}
 
-        .modal.active { display: flex; }
+.slot:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0,0,0,.15);
+}
 
-        .modal-content {
-            background: white;
-            color: var(--dark);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(106, 7, 179, 0.5);
-        }
+.slot::before {
+    content: attr(data-number);
 
-        .modal-input {
-            width: 100%;
-            padding: 15px;
-            margin: 20px 0;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 18px;
-            text-align: center;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
+    position: absolute;
+    top: 5px;
+    left: 7px;
 
-        .modal-input:focus { outline: none; border-color: var(--primary); }
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(0,0,0,.45);
+}
 
-        /* Stats */
-        .stats-bar {
-            background: rgba(255,255,255,0.1);
-            padding: 10px 30px;
-            border-radius: 50px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            display: flex;
-            gap: 20px;
-        }
+.slot.filled {
+    background: white;
+    border: none;
 
-        .stats-bar span b { color: var(--gold); }
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.18),
+        inset 0 0 0 3px #fff;
+}
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .album-container { flex-direction: column; min-height: auto; }
-            .album-container::after { display: none; }
-            .page { padding: 20px; grid-template-columns: repeat(3, 1fr); }
-            .slot { font-size: 16px; }
-            header { flex-direction: column; gap: 15px; }
-        }
+.sticker-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+
+    .album-container {
+        flex-direction: row;
+        min-height: auto;
+    }
+
+    .page {
+        width: 50%;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .page-title {
+        font-size: 15px;
+        letter-spacing: 1px;
+    }
+
+    .slot {
+        border-radius: 6px;
+    }
+}
     </style>
 </head>
+```html
 <body>
 
 <div class="bg-fixed"></div>
 
 <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
-    <p style="margin-top: 20px;">Abrindo Álbum...</p>
+    <p style="margin-top:20px;">Abrindo Álbum...</p>
 </div>
 
 <header>
     <div class="logo">MY STICKER ALBUM</div>
+
     <div class="stats-bar">
         <span>Coladas: <b id="count">0</b>/22</span>
         <span>Progresso: <b id="percent">0%</b></span>
     </div>
-    <div style="display: flex; gap: 10px;">
-        <button class="btn-main" onclick="openModal()">COLAR FIGURINHA</button>
-        <button class="btn-main" style="background: #444;" onclick="logout()">SAIR</button>
+
+    <div style="display:flex;gap:10px;">
+        <button class="btn-main" onclick="openModal()">
+            COLAR FIGURINHA
+        </button>
+
+        <button class="btn-main" style="background:#444;" onclick="logout()">
+            SAIR
+        </button>
     </div>
 </header>
 
 <div class="album-container">
+
+    <!-- Página Esquerda -->
     <div class="page" id="leftPage">
-        <div class="page-title">Página Esquerda</div>
+
+        <div class="page-title">
+            Página 1
+        </div>
+
+        <div class="slot" data-number="01"></div>
+        <div class="slot" data-number="02"></div>
+        <div class="slot" data-number="03"></div>
+        <div class="slot" data-number="04"></div>
+        <div class="slot" data-number="05"></div>
+        <div class="slot" data-number="06"></div>
+        <div class="slot" data-number="07"></div>
+        <div class="slot" data-number="08"></div>
+        <div class="slot" data-number="09"></div>
+        <div class="slot" data-number="10"></div>
+        <div class="slot" data-number="11"></div>
+
     </div>
+
+    <!-- Página Direita -->
     <div class="page" id="rightPage">
-        <div class="page-title">Página Direita</div>
+
+        <div class="page-title">
+            Página 2
+        </div>
+
+        <div class="slot" data-number="12"></div>
+        <div class="slot" data-number="13"></div>
+        <div class="slot" data-number="14"></div>
+        <div class="slot" data-number="15"></div>
+        <div class="slot" data-number="16"></div>
+        <div class="slot" data-number="17"></div>
+        <div class="slot" data-number="18"></div>
+        <div class="slot" data-number="19"></div>
+        <div class="slot" data-number="20"></div>
+        <div class="slot" data-number="21"></div>
+        <div class="slot" data-number="22"></div>
+
     </div>
+
 </div>
 
+<!-- Modal -->
+
 <div class="modal" id="modal">
+
     <div class="modal-content">
+
         <h2>Nova Figurinha</h2>
+
         <p>Digite o código da figurinha para colar</p>
-        <input type="text" id="stickerCode" class="modal-input" placeholder="">
-        <div style="display: flex; gap: 10px;">
-            <button class="btn-main" style="flex: 1;" onclick="confirmSticker()">CONFIRMAR</button>
-            <button class="btn-main" style="flex: 1; background: #991b1b;" onclick="closeModal()">CANCELAR</button>
+
+        <input
+            type="text"
+            id="stickerCode"
+            class="modal-input"
+            placeholder="Ex: ABC123"
+        >
+
+        <div style="display:flex;gap:10px;margin-top:15px;">
+
+            <button
+                class="btn-main"
+                style="flex:1;"
+                onclick="confirmSticker()"
+            >
+                CONFIRMAR
+            </button>
+
+            <button
+                class="btn-main"
+                style="flex:1;background:#991b1b;"
+                onclick="closeModal()"
+            >
+                CANCELAR
+            </button>
+
         </div>
-        <p id="modalMsg" style="margin-top: 15px; font-weight: 600; font-size: 14px;"></p>
+
+        <p
+            id="modalMsg"
+            style="margin-top:15px;font-weight:600;font-size:14px;"
+        ></p>
+
     </div>
+
 </div>
+
+</body>
+```
 
 <script>
     // ================= CONFIGURAÇÕES APPWRITE =================
@@ -401,19 +395,23 @@ async function loadAlbum() {
 
         // Criar os 22 slots baseados na numeração
         for(let i=1; i<=22; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'slot';
-            slot.id = `slot-${i}`;
-            slot.textContent = i;
+const slot = document.createElement('div');
+slot.className = 'slot';
+slot.id = `slot-${i}`;
+slot.setAttribute('data-number', String(i).padStart(2, '0'));
 
-            // Verificar se este slot tem uma figurinha correspondente já colada
-            // Procuramos nos STICKERS_DATA qual código corresponde a este slot
             const stickerCode = Object.keys(STICKERS_DATA).find(key => STICKERS_DATA[key].slot === i);
             
             if(stickerCode && ownedStickers.includes(stickerCode)) {
-                slot.classList.add('filled');
-                slot.innerHTML = `<img src="${STICKERS_DATA[stickerCode].url}" class="sticker-img">`;
-            }
+slot.classList.add('filled');
+slot.innerHTML = `
+    <img
+        src="${STICKERS_DATA[stickerCode].url}"
+        class="sticker-img"
+        alt="${stickerCode}"
+        loading="lazy"
+    >
+`;
 
             if(i <= 11) left.appendChild(slot);
             else right.appendChild(slot);
