@@ -349,18 +349,26 @@
     let ownedStickers = [];
 
     // ================= INICIALIZAÇÃO =================
-    async function init() {
-        try {
-            currentUser = await account.get();
-            await loadAlbum();
-            renderSlots();
-            updateStats();
-            document.getElementById('loadingScreen').style.display = 'none';
-        } catch (error) {
-            console.error("Não logado:", error);
+async function init() {
+    try {
+        currentUser = await account.get();
+        await loadAlbum();
+        renderSlots();
+        updateStats();
+        document.getElementById('loadingScreen').style.display = 'none';
+    } catch (error) {
+        // Exibe o erro real no console do F12
+        console.error("Erro detalhado do Appwrite:", error);
+        
+        // Alerta na tela para você ver o código do erro (ex: 401, 403)
+        alert("Erro no login: " + error.message + " (Código: " + error.code + ")");
+        
+        // Aguarda 5 segundos antes de redirecionar para você conseguir ler
+        setTimeout(() => {
             window.location.replace('/login.html');
-        }
+        }, 5000);
     }
+}
 
     async function loadAlbum() {
         try {
