@@ -472,24 +472,30 @@
     let ownedStickers = [];
 
     // ================= INICIALIZAÇÃO =================
+        // ================= INICIALIZAÇÃO MELHORADA =================
     async function init() {
         try {
+            // 1. Tenta conectar no Appwrite
             currentUser = await account.get();
             await loadAlbum();
+        } catch (error) {
+            // 2. Se falhar, avisa no console, mas NÃO trava a tela!
+            console.warn("⚠️ Falha na conexão com Appwrite. Iniciando MODO DE TESTE visual.");
+            
+            // Cria dados falsos só para você conseguir visualizar a revista
+            currentUser = { $id: "user_teste", name: "Visitante" };
+            ownedStickers = ['P', 'FIG-05', 'FIG-12']; // Algumas figurinhas já coladas de exemplo
+        } finally {
+            // 3. Este bloco SEMPRE roda (dando erro ou não), tirando o carregamento da tela
             renderSlots();
             updateStats();
             document.getElementById('loadingScreen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.display = 'none';
             }, 500);
-        } catch (error) {
-            console.error("Erro detalhado do Appwrite:", error);
-            alert("Erro no login: Faça login novamente.");
-            setTimeout(() => {
-                window.location.replace('/login.html');
-            }, 2000);
         }
     }
+    
 
     async function loadAlbum() {
         try {
