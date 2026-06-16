@@ -3,529 +3,935 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Álbum de Figurinhas</title>
+    <title>Álbum de Figurinhas - Copa do Mundo</title>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --primary: #6a07b3;
-            --secondary: #00d2ff;
-            --sticker-bg: rgba(255, 255, 255, 0.1);
-            --sticker-border: rgba(255, 255, 255, 0.3);
-            --purple-dark: #8A2BE2;
-            --orange-vibrant: #FF8C00;
-            --transition: all 0.3s ease;
+            --primary: #1e40af;
+            --secondary: #fbbf24;
+            --accent: #ef4444;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            margin: 0;
-            padding: 0;
             font-family: 'Poppins', sans-serif;
-            background-color: #1a1a1a;
-            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 10px;
+            overflow-x: hidden;
         }
 
-        /* Background Image - Fixed 404 by adding a fallback color */
-        .bg-overlay {
+        /* Loading Screen */
+        .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #1a1a1a;
-            background-image: url('background.png');
-            background-size: cover;
-            background-position: center;
-            z-index: -1;
-            filter: brightness(0.6);
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
         }
 
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* Header */
         header {
             width: 100%;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.7);
+            max-width: 1200px;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-sizing: border-box;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
 
-        .btn {
-            padding: 8px 20px;
-            border-radius: 20px;
+        .header-title {
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .stat {
+            color: white;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, var(--secondary), #f59e0b);
+            color: white;
             border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: bold;
             transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .btn-primary { 
-            background: linear-gradient(45deg, var(--orange-vibrant), var(--purple-dark)); 
-            color: white; 
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
         }
-        .btn-primary:hover { transform: scale(1.05); }
+
+        .btn-add:active {
+            transform: translateY(0);
+        }
+
+        .user-info {
+            color: white;
+            text-align: right;
+            font-size: 12px;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 6px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
         /* Album Container */
-        .album-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-            max-width: 1200px;
+        .album-wrapper {
             width: 100%;
-            margin-top: 20px;
+            max-width: 1200px;
+            background: url('https://i.ibb.co/JwbxBVdq/17020fb0-692a-11f1-9692-e5d4d6a13428.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
         }
 
+        .album-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .album-content {
+            display: flex;
+            position: relative;
+            z-index: 2;
+            min-height: 600px;
+        }
+
+        /* Center Divider */
+        .album-divider {
+            width: 4px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8));
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Page Styles */
         .page {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            width: 100%;
-            max-width: 450px;
+            flex: 1;
+            padding: 40px 30px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 20px;
+            align-content: start;
         }
 
+        .page-left {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        }
+
+        .page-right {
+            background: linear-gradient(270deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+        }
+
+        /* Sticker Slot */
         .sticker-slot {
             aspect-ratio: 2/3;
-            background: var(--sticker-bg);
-            border: 2px dashed var(--sticker-border);
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
             border-radius: 8px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.2);
+            justify-content: center;
+            cursor: pointer;
             position: relative;
             overflow: hidden;
+            transition: var(--transition);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 18px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .sticker-slot:hover:not(.filled) {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
         }
 
         .sticker-slot.filled {
             border: none;
             background: white;
-            animation: glueSticker 0.5s ease-out;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+            animation: stickerGlue 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .sticker-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 6px;
         }
 
-        @keyframes glueSticker {
-            0% { transform: scale(1.5) rotate(15deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        @keyframes stickerGlue {
+            0% {
+                transform: scale(0.3) rotate(-25deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
         }
 
-        /* Profile Widget Styles */
-        .fshow-profile-widget {
-            position: relative;
-            z-index: 999999 !important;
-        }
-
-        .fshow-profile-trigger {
-            width: 40px; 
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--purple-dark);
-            cursor: pointer;
-            overflow: hidden;
-            background: #222;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-
-        .fshow-profile-trigger:hover {
-            transform: scale(1.05);
-            border-color: var(--orange-vibrant);
-        }
-
-        .fshow-profile-trigger img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .fshow-profile-dropdown {
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: rgba(20, 20, 20, 0.98);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(128, 0, 255, 0.3);
-            border-radius: 15px;
-            padding: 15px;
-            width: 220px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: none;
-            flex-direction: column;
-            gap: 12px;
-            animation: fshowSlideDown 0.3s ease-out;
-        }
-
-        .fshow-profile-dropdown.fshow-active {
-            display: flex !important;
-        }
-
-        @keyframes fshowSlideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fshow-user-info {
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .fshow-user-name {
-            font-weight: 800;
-            font-size: 1rem;
-            background: linear-gradient(45deg, #FF8C00, #8A2BE2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 2px;
-        }
-
-        .fshow-user-status {
-            font-size: 0.65rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .fshow-btn {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.06);
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .fshow-btn:hover {
-            background: rgba(128, 0, 255, 0.2);
-            border-color: rgba(128, 0, 255, 0.5);
-        }
-
-        .fshow-btn-logout { color: #ff4d4d; }
-        .fshow-btn-logout:hover {
-            background: rgba(255, 77, 77, 0.1);
-            border-color: rgba(255, 77, 77, 0.3);
-        }
-
-        /* Sticker Modal */
+        /* Modal */
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.7);
             display: none;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             z-index: 1000;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: #2a2a2a;
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-        .modal-content input {
-            width: 100%;
-            padding: 12px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #1a1a1a;
-            color: white;
-            box-sizing: border-box;
-            outline: none;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
         }
 
-        @media (max-width: 900px) {
-            .album-container { flex-direction: column; align-items: center; }
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-confirm {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary), #1e3a8a);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+        }
+
+        .btn-confirm:active {
+            transform: translateY(0);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: #e5e7eb;
+            color: var(--dark);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-cancel:hover {
+            background: #d1d5db;
+        }
+
+        .modal-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            min-height: 20px;
+        }
+
+        .modal-message.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .modal-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .modal-message.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .header-title {
+                font-size: 22px;
+            }
+
+            .header-stats {
+                gap: 20px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .album-content {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .album-divider {
+                width: 100%;
+                height: 2px;
+            }
+
+            .page {
+                padding: 30px 20px;
+                gap: 15px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-title {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 18px;
+            }
+
+            .header-stats {
+                gap: 15px;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            .stat-label {
+                font-size: 10px;
+            }
+
+            .btn-add {
+                padding: 10px 16px;
+                font-size: 12px;
+            }
+
+            .page {
+                padding: 20px 15px;
+                gap: 12px;
+            }
+
+            .sticker-slot {
+                font-size: 14px;
+            }
+
+            .modal-content {
+                padding: 25px 15px;
+                max-width: 90%;
+            }
+
+            .modal-title {
+                font-size: 18px;
+            }
+
+            .modal-subtitle {
+                font-size: 12px;
+            }
+
+            .modal-input {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Success Animation */
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .success-pulse {
+            animation: successPulse 0.6s ease-out;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            animation: slideInRight 0.3s ease-out;
+            max-width: 300px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid #10b981;
+            color: #065f46;
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+            color: #991b1b;
         }
     </style>
 </head>
 <body>
 
-<div class="bg-overlay"></div>
-
-<header>
-    <div>
-        <button class="btn btn-primary" onclick="openModal()">Colar Figurinha</button>
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <div style="text-align: center;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Carregando seu álbum...</div>
     </div>
-    
-    <!-- Profile Widget -->
-    <div class="fshow-profile-widget" id="fshowWidget">
-        <div class="fshow-profile-trigger" id="fshowTrigger">
-            <div id="fshowAvatarContainer" style="width:100%; height:100%;">
-                <img src="https://ui-avatars.com/api/?name=User&background=8000ff&color=fff" alt="Avatar">
-            </div>
+</div>
+
+<!-- Header -->
+<header>
+    <div class="header-title">🏆 Álbum de Figurinhas</div>
+    <div class="header-stats">
+        <div class="stat">
+            <div class="stat-value" id="stickerCount">0</div>
+            <div class="stat-label">Figurinhas</div>
         </div>
-        <div class="fshow-profile-dropdown" id="fshowDropdown">
-            <div class="fshow-user-info">
-                <div class="fshow-user-name" id="fshowUserName">Carregando...</div>
-                <div class="fshow-user-status" id="fshowUserStatus">Membro</div>
-            </div>
-            <div id="fshowLoggedOptions" style="display: flex; flex-direction: column; gap: 12px;">
-                <label class="fshow-btn" style="cursor: pointer;">
-                    Trocar Foto
-                    <input type="file" id="fshowChangeAvatarInput" hidden accept="image/*">
-                </label>
-                <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">Sair</button>
-            </div>
+        <div class="stat">
+            <div class="stat-value" id="progressPercent">0%</div>
+            <div class="stat-label">Completo</div>
         </div>
+    </div>
+    <button class="btn-add" onclick="openModal()">+ Colar Figurinha</button>
+    <div class="user-info">
+        <div class="user-name" id="userName">Usuário</div>
+        <button class="logout-btn" onclick="logout()">Sair</button>
     </div>
 </header>
 
-<div class="album-container">
-    <div class="page" id="leftPage"></div>
-    <div class="page" id="rightPage"></div>
+<!-- Album -->
+<div class="album-wrapper">
+    <div class="album-content">
+        <div class="page page-left" id="leftPage"></div>
+        <div class="album-divider"></div>
+        <div class="page page-right" id="rightPage"></div>
+    </div>
 </div>
 
+<!-- Modal -->
 <div class="modal" id="stickerModal">
     <div class="modal-content">
-        <h3>Colar Nova Figurinha</h3>
-        <p>Insira o código da figurinha (ex: FIG-01 até FIG-22)</p>
-        <input type="text" id="stickerCode" placeholder="Código da Figurinha">
-        <div style="display: flex; gap: 10px;">
-            <button class="btn btn-primary" style="flex: 1" onclick="redeemSticker()">Colar!</button>
-            <button class="btn" style="flex: 1; background: #444; color: white;" onclick="closeModal()">Cancelar</button>
+        <div class="modal-title">Colar Figurinha</div>
+        <div class="modal-subtitle">Digite o código da figurinha (FIG-01 até FIG-22)</div>
+        <input type="text" class="modal-input" id="stickerCode" placeholder="Ex: FIG-01" maxlength="6">
+        <div class="modal-buttons">
+            <button class="btn-confirm" onclick="redeemSticker()">Confirmar</button>
+            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
         </div>
-        <p id="modalMsg" style="margin-top: 10px; font-size: 0.9rem;"></p>
+        <div class="modal-message" id="modalMessage"></div>
     </div>
 </div>
 
 <script>
-    /* ================= DADOS DAS FIGURINHAS ================= */
-    // Placeholder data to avoid ReferenceError when rendering
-    const STICKERS_DATA = {};
-    for (let i = 1; i <= 22; i++) {
-        const id = `FIG-${i.toString().padStart(2, '0')}`;
-        STICKERS_DATA[id] = {
-            id: i,
-            url: `https://via.placeholder.com/200x300?text=FIG-${i}`
-        };
-    }
+    // ============================================================
+    // CONFIGURAÇÃO APPWRITE
+    // ============================================================
+    const APPWRITE_ENDPOINT = "https://nyc.cloud.appwrite.io/v1";
+    const APPWRITE_PROJECT_ID = "6a07b38c00004e1645ee";
+    const APPWRITE_DB_ID = "6a07b77b0016f7c90141";
+    const APPWRITE_COLLECTION_ID = "profiles";
 
-    /* ================= INTERAÇÕES (Movidas para o escopo global) ================= */
-    function openModal() {
-        const modal = document.getElementById('stickerModal');
-        if (modal) {
-            modal.classList.add('active');
-            document.getElementById('stickerCode').value = '';
-            document.getElementById('modalMsg').textContent = '';
-        }
-    }
+    // Dados das figurinhas
+    const STICKERS_DATA = {
+        'FIG-01': { id: 1, name: 'Figurinha 01', image: 'https://via.placeholder.com/200x300/FF6B6B/FFFFFF?text=FIG-01' },
+        'FIG-02': { id: 2, name: 'Figurinha 02', image: 'https://via.placeholder.com/200x300/4ECDC4/FFFFFF?text=FIG-02' },
+        'FIG-03': { id: 3, name: 'Figurinha 03', image: 'https://via.placeholder.com/200x300/45B7D1/FFFFFF?text=FIG-03' },
+        'FIG-04': { id: 4, name: 'Figurinha 04', image: 'https://via.placeholder.com/200x300/FFA502/FFFFFF?text=FIG-04' },
+        'FIG-05': { id: 5, name: 'Figurinha 05', image: 'https://via.placeholder.com/200x300/95E1D3/FFFFFF?text=FIG-05' },
+        'FIG-06': { id: 6, name: 'Figurinha 06', image: 'https://via.placeholder.com/200x300/F38181/FFFFFF?text=FIG-06' },
+        'FIG-07': { id: 7, name: 'Figurinha 07', image: 'https://via.placeholder.com/200x300/AA96DA/FFFFFF?text=FIG-07' },
+        'FIG-08': { id: 8, name: 'Figurinha 08', image: 'https://via.placeholder.com/200x300/FCBAD3/FFFFFF?text=FIG-08' },
+        'FIG-09': { id: 9, name: 'Figurinha 09', image: 'https://via.placeholder.com/200x300/A8D8EA/FFFFFF?text=FIG-09' },
+        'FIG-10': { id: 10, name: 'Figurinha 10', image: 'https://via.placeholder.com/200x300/AA96DA/FFFFFF?text=FIG-10' },
+        'FIG-11': { id: 11, name: 'Figurinha 11', image: 'https://via.placeholder.com/200x300/FCBAD3/FFFFFF?text=FIG-11' },
+        'FIG-12': { id: 12, name: 'Figurinha 12', image: 'https://via.placeholder.com/200x300/FFD3B6/FFFFFF?text=FIG-12' },
+        'FIG-13': { id: 13, name: 'Figurinha 13', image: 'https://via.placeholder.com/200x300/FFAAA5/FFFFFF?text=FIG-13' },
+        'FIG-14': { id: 14, name: 'Figurinha 14', image: 'https://via.placeholder.com/200x300/FF8B94/FFFFFF?text=FIG-14' },
+        'FIG-15': { id: 15, name: 'Figurinha 15', image: 'https://via.placeholder.com/200x300/A8E6CF/FFFFFF?text=FIG-15' },
+        'FIG-16': { id: 16, name: 'Figurinha 16', image: 'https://via.placeholder.com/200x300/FFD3B6/FFFFFF?text=FIG-16' },
+        'FIG-17': { id: 17, name: 'Figurinha 17', image: 'https://via.placeholder.com/200x300/FFAAA5/FFFFFF?text=FIG-17' },
+        'FIG-18': { id: 18, name: 'Figurinha 18', image: 'https://via.placeholder.com/200x300/FF8B94/FFFFFF?text=FIG-18' },
+        'FIG-19': { id: 19, name: 'Figurinha 19', image: 'https://via.placeholder.com/200x300/A8E6CF/FFFFFF?text=FIG-19' },
+        'FIG-20': { id: 20, name: 'Figurinha 20', image: 'https://via.placeholder.com/200x300/C7CEEA/FFFFFF?text=FIG-20' },
+        'FIG-21': { id: 21, name: 'Figurinha 21', image: 'https://via.placeholder.com/200x300/B5EAD7/FFFFFF?text=FIG-21' },
+        'FIG-22': { id: 22, name: 'Figurinha 22', image: 'https://via.placeholder.com/200x300/E0BBE4/FFFFFF?text=FIG-22' }
+    };
 
-    function closeModal() {
-        const modal = document.getElementById('stickerModal');
-        if (modal) {
-            modal.classList.remove('active');
-        }
-    }
-
-    /* ================= APPWRITE & LOGIC ================= */
+    // ============================================================
+    // VARIÁVEIS GLOBAIS
+    // ============================================================
+    let client, account, databases;
     let currentUser = null;
-    let currentProfile = { stickers: [] };
-    
-    // Global references for Appwrite services
-    let databases, account, storage;
-    const DB_ID = "6a07b77b0016f7c90141";
-    const COL_ID = "profiles";
-    const BUCKET_ID = "6a07b91a000e61c9e4b3";
+    let userAlbum = null;
+    let ownedStickers = [];
 
-    document.addEventListener("DOMContentLoaded", async function () {
-        const client = new Appwrite.Client();
-        client.setEndpoint("https://nyc.cloud.appwrite.io/v1").setProject("6a07b38c00004e1645ee");
-
-        account = new Appwrite.Account(client);
-        databases = new Appwrite.Databases(client);
-        storage = new Appwrite.Storage(client);
-
-        const trigger = document.getElementById("fshowTrigger");
-        const dropdown = document.getElementById("fshowDropdown");
-        const widget = document.getElementById("fshowWidget");
-        const avatarContainer = document.getElementById("fshowAvatarContainer");
-        const userName = document.getElementById("fshowUserName");
-        const userStatus = document.getElementById("fshowUserStatus");
-        const loggedOptions = document.getElementById("fshowLoggedOptions");
-        const avatarInput = document.getElementById("fshowChangeAvatarInput");
-        const logoutBtn = document.getElementById("fshowLogoutBtn");
-
-        if (!trigger || !dropdown || !widget) return;
-
-        // Dropdown Logic
-        trigger.addEventListener("click", (e) => {
-            e.stopPropagation();
-            dropdown.classList.toggle("fshow-active");
-        });
-
-        document.addEventListener("click", (e) => {
-            if (!widget.contains(e.target)) dropdown.classList.remove("fshow-active");
-        });
-
-        function updateAvatar(src) {
-            avatarContainer.innerHTML = `<img src="${src}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-        }
-
+    // ============================================================
+    // INICIALIZAÇÃO
+    // ============================================================
+    async function initialize() {
         try {
+            // Inicializar Appwrite
+            client = new Appwrite.Client();
+            client.setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
+            
+            account = new Appwrite.Account(client);
+            databases = new Appwrite.Databases(client);
+
+            // Verificar autenticação
             currentUser = await account.get();
-            if (loggedOptions) loggedOptions.style.display = "flex";
-
-            try {
-                currentProfile = await databases.getDocument(DB_ID, COL_ID, currentUser.$id);
-            } catch (err) {
-                console.log("Perfil não encontrado, usando padrão.");
-            }
-
-            if (userName) userName.textContent = currentProfile?.nickname || currentUser.name || "Usuário";
             
-            let avatarUrl = null;
-            if (currentProfile?.avatarFileId) {
-                avatarUrl = storage.getFileView(BUCKET_ID, currentProfile.avatarFileId);
-            } else if (currentUser.prefs?.avatar) {
-                avatarUrl = currentUser.prefs.avatar;
-            } else {
-                avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentProfile?.nickname || currentUser.name || "User")}&background=8000ff&color=fff`;
-            }
-            updateAvatar(avatarUrl);
+            // Carregar álbum do usuário
+            await loadUserAlbum();
             
-            // Initial render
+            // Atualizar interface
+            updateUI();
+            
+            // Renderizar álbum
             renderAlbum();
-
-        } catch (err) {
-            console.log("Visitante anônimo.");
-            renderAlbum(); // Render empty album for guests
+            
+            // Esconder loading
+            document.getElementById('loadingScreen').style.display = 'none';
+            
+        } catch (error) {
+            console.error('Erro na inicialização:', error);
+            // Redirecionar para login se não autenticado
+            window.location.href = '/login.html';
         }
+    }
 
-        // Logout
-        if (logoutBtn) {
-            logoutBtn.addEventListener("click", async () => {
-                try { await account.deleteSession("current"); } catch (e) {}
-                location.reload();
-            });
-        }
-
-        // Change Avatar
-        if (avatarInput) {
-            avatarInput.addEventListener("change", async (e) => {
-                const file = e.target.files[0];
-                if (!file || !currentUser) return;
-                try {
-                    trigger.style.opacity = "0.5";
-                    const uploaded = await storage.createFile(BUCKET_ID, Appwrite.ID.unique(), file);
-                    await databases.updateDocument(DB_ID, COL_ID, currentUser.$id, { avatarFileId: uploaded.$id });
-                    updateAvatar(storage.getFileView(BUCKET_ID, uploaded.$id));
-                    trigger.style.opacity = "1";
-                    alert("Foto atualizada!");
-                } catch (error) {
-                    alert("Erro ao atualizar foto.");
-                    trigger.style.opacity = "1";
+    // ============================================================
+    // CARREGAR ÁLBUM DO USUÁRIO
+    // ============================================================
+    async function loadUserAlbum() {
+        try {
+            userAlbum = await databases.getDocument(
+                APPWRITE_DB_ID,
+                APPWRITE_COLLECTION_ID,
+                currentUser.$id
+            );
+            ownedStickers = userAlbum.stickers || [];
+        } catch (error) {
+            // Criar novo álbum se não existir
+            userAlbum = await databases.createDocument(
+                APPWRITE_DB_ID,
+                APPWRITE_COLLECTION_ID,
+                currentUser.$id,
+                {
+                    userId: currentUser.$id,
+                    stickers: [],
+                    createdAt: new Date().toISOString()
                 }
-            });
+            );
+            ownedStickers = [];
         }
-    });
+    }
 
-    /* ================= LÓGICA DO ÁLBUM ================= */
+    // ============================================================
+    // ATUALIZAR INTERFACE
+    // ============================================================
+    function updateUI() {
+        // Nome do usuário
+        document.getElementById('userName').textContent = currentUser.name || 'Usuário';
+        
+        // Contagem de figurinhas
+        document.getElementById('stickerCount').textContent = ownedStickers.length;
+        
+        // Percentual de conclusão
+        const percent = Math.round((ownedStickers.length / 22) * 100);
+        document.getElementById('progressPercent').textContent = percent + '%';
+    }
+
+    // ============================================================
+    // RENDERIZAR ÁLBUM
+    // ============================================================
     function renderAlbum() {
         const leftPage = document.getElementById('leftPage');
         const rightPage = document.getElementById('rightPage');
-        if (!leftPage || !rightPage) return;
         
         leftPage.innerHTML = '';
         rightPage.innerHTML = '';
 
-        const ownedStickers = currentProfile?.stickers || [];
-
         for (let i = 1; i <= 22; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'sticker-slot';
-            slot.id = `slot-${i}`;
-            slot.textContent = i;
-
-            const stickerId = `FIG-${i.toString().padStart(2, '0')}`;
-            if (ownedStickers.includes(stickerId) && STICKERS_DATA[stickerId]) {
-                fillSlot(slot, STICKERS_DATA[stickerId].url);
+            const slot = createStickerSlot(i);
+            
+            if (i <= 11) {
+                leftPage.appendChild(slot);
+            } else {
+                rightPage.appendChild(slot);
             }
-
-            if (i <= 11) leftPage.appendChild(slot);
-            else rightPage.appendChild(slot);
         }
     }
 
-    function fillSlot(slot, url) {
-        slot.innerHTML = `<img src="${url}" class="sticker-img" alt="Figurinha">`;
-        slot.classList.add('filled');
+    // ============================================================
+    // CRIAR SLOT DE FIGURINHA
+    // ============================================================
+    function createStickerSlot(number) {
+        const slot = document.createElement('div');
+        slot.className = 'sticker-slot';
+        slot.id = `slot-${number}`;
+        
+        const code = `FIG-${String(number).padStart(2, '0')}`;
+        
+        if (ownedStickers.includes(code)) {
+            const stickerData = STICKERS_DATA[code];
+            slot.classList.add('filled');
+            slot.innerHTML = `<img src="${stickerData.image}" class="sticker-img" alt="${stickerData.name}">`;
+        } else {
+            slot.textContent = number;
+        }
+        
+        return slot;
     }
 
+    // ============================================================
+    // MODAL FUNCTIONS
+    // ============================================================
+    function openModal() {
+        document.getElementById('stickerModal').classList.add('active');
+        document.getElementById('stickerCode').value = '';
+        document.getElementById('modalMessage').textContent = '';
+        document.getElementById('stickerCode').focus();
+    }
+
+    function closeModal() {
+        document.getElementById('stickerModal').classList.remove('active');
+        document.getElementById('stickerCode').value = '';
+        document.getElementById('modalMessage').textContent = '';
+    }
+
+    // ============================================================
+    // RESGATAR FIGURINHA
+    // ============================================================
     async function redeemSticker() {
         const code = document.getElementById('stickerCode').value.toUpperCase().trim();
-        const msg = document.getElementById('modalMsg');
+        const messageEl = document.getElementById('modalMessage');
+        
+        // Validar código
+        if (!code) {
+            showMessage(messageEl, 'Por favor, digite um código', 'error');
+            return;
+        }
 
         if (!STICKERS_DATA[code]) {
-            msg.textContent = "Código inválido!";
-            msg.style.color = "#ff4d4d";
+            showMessage(messageEl, 'Código inválido! Use FIG-01 até FIG-22', 'error');
             return;
         }
 
-        if (!currentUser) {
-            msg.textContent = "Faça login para colar figurinhas!";
-            msg.style.color = "#ff4d4d";
-            return;
-        }
-
-        if (currentProfile.stickers.includes(code)) {
-            msg.textContent = "Você já tem essa figurinha!";
-            msg.style.color = "#ffcc00";
+        if (ownedStickers.includes(code)) {
+            showMessage(messageEl, 'Você já tem essa figurinha no álbum!', 'warning');
             return;
         }
 
         try {
-            const updatedStickers = [...currentProfile.stickers, code];
-            await databases.updateDocument(DB_ID, COL_ID, currentUser.$id, { stickers: updatedStickers });
-            currentProfile.stickers = updatedStickers;
+            // Adicionar figurinha
+            ownedStickers.push(code);
             
-            const stickerInfo = STICKERS_DATA[code];
-            fillSlot(document.getElementById(`slot-${stickerInfo.id}`), stickerInfo.url);
+            // Salvar no Appwrite
+            await databases.updateDocument(
+                APPWRITE_DB_ID,
+                APPWRITE_COLLECTION_ID,
+                currentUser.$id,
+                { stickers: ownedStickers }
+            );
+
+            // Animar figurinha
+            const slotNumber = STICKERS_DATA[code].id;
+            const slot = document.getElementById(`slot-${slotNumber}`);
             
-            msg.textContent = "Figurinha colada com sucesso!";
-            msg.style.color = "#4dff4d";
-            setTimeout(closeModal, 1500);
+            if (slot) {
+                const stickerData = STICKERS_DATA[code];
+                slot.classList.add('filled');
+                slot.innerHTML = `<img src="${stickerData.image}" class="sticker-img" alt="${stickerData.name}">`;
+                slot.classList.add('success-pulse');
+                
+                // Reproduzir som (opcional)
+                playSound();
+            }
+
+            // Atualizar UI
+            updateUI();
+            
+            // Mostrar mensagem de sucesso
+            showMessage(messageEl, '✓ Figurinha colada com sucesso!', 'success');
+            
+            // Fechar modal após 1.5s
+            setTimeout(() => {
+                closeModal();
+            }, 1500);
+            
         } catch (error) {
-            msg.textContent = "Erro ao salvar: " + error.message;
-            msg.style.color = "#ff4d4d";
+            console.error('Erro ao salvar figurinha:', error);
+            showMessage(messageEl, 'Erro ao salvar. Tente novamente.', 'error');
         }
     }
+
+    // ============================================================
+    // FUNÇÕES AUXILIARES
+    // ============================================================
+    function showMessage(element, text, type) {
+        element.textContent = text;
+        element.className = `modal-message ${type}`;
+    }
+
+    function playSound() {
+        // Criar som com Web Audio API
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        } catch (error) {
+            console.log('Som não disponível');
+        }
+    }
+
+    function logout() {
+        if (confirm('Tem certeza que deseja sair?')) {
+            account.deleteSession('current').then(() => {
+                window.location.href = '/login.html';
+            }).catch(() => {
+                window.location.href = '/login.html';
+            });
+        }
+    }
+
+    // ============================================================
+    // EVENT LISTENERS
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', initialize);
+
+    // Fechar modal ao clicar fora
+    document.getElementById('stickerModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    // Enter para confirmar
+    document.getElementById('stickerCode').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            redeemSticker();
+        }
+    });
 </script>
+
 </body>
 </html>
