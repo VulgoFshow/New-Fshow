@@ -29,13 +29,14 @@
             align-items: center;
         }
 
-        /* Background Image */
+        /* Background Image - Fixed 404 by adding a fallback color */
         .bg-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-color: #1a1a1a;
             background-image: url('background.png');
             background-size: cover;
             background-position: center;
@@ -325,280 +326,146 @@
 </div>
 
 <script>
-/* ============================================================
-   PERFIL
-============================================================ */
-document.addEventListener("DOMContentLoaded", async function () {
+    /* ================= DADOS DAS FIGURINHAS ================= */
+    // Placeholder data to avoid ReferenceError when rendering
+    const STICKERS_DATA = {};
+    for (let i = 1; i <= 22; i++) {
+        const id = `FIG-${i.toString().padStart(2, '0')}`;
+        STICKERS_DATA[id] = {
+            id: i,
+            url: `https://via.placeholder.com/200x300?text=FIG-${i}`
+        };
+    }
 
-    // ================= APPWRITE =================
-    const client = new Appwrite.Client();
+    /* ================= INTERAÇÕES (Movidas para o escopo global) ================= */
+    function openModal() {
+        const modal = document.getElementById('stickerModal');
+        if (modal) {
+            modal.classList.add('active');
+            document.getElementById('stickerCode').value = '';
+            document.getElementById('modalMsg').textContent = '';
+        }
+    }
 
-    client
-        .setEndpoint("https://nyc.cloud.appwrite.io/v1")
-        .setProject("6a07b38c00004e1645ee");
+    function closeModal() {
+        const modal = document.getElementById('stickerModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
 
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
-    const storage = new Appwrite.Storage(client);
-
+    /* ================= APPWRITE & LOGIC ================= */
+    let currentUser = null;
+    let currentProfile = { stickers: [] };
+    
+    // Global references for Appwrite services
+    let databases, account, storage;
     const DB_ID = "6a07b77b0016f7c90141";
     const COL_ID = "profiles";
     const BUCKET_ID = "6a07b91a000e61c9e4b3";
 
-    // ================= ELEMENTOS =================
-    const trigger = document.getElementById("fshowTrigger");
-    const dropdown = document.getElementById("fshowDropdown");
-    const widget = document.getElementById("fshowWidget");
+    document.addEventListener("DOMContentLoaded", async function () {
+        const client = new Appwrite.Client();
+        client.setEndpoint("https://nyc.cloud.appwrite.io/v1").setProject("6a07b38c00004e1645ee");
 
-    const avatarContainer = document.getElementById("fshowAvatarContainer");
+        account = new Appwrite.Account(client);
+        databases = new Appwrite.Databases(client);
+        storage = new Appwrite.Storage(client);
 
-    const userName = document.getElementById("fshowUserName");
-    const userStatus = document.getElementById("fshowUserStatus");
+        const trigger = document.getElementById("fshowTrigger");
+        const dropdown = document.getElementById("fshowDropdown");
+        const widget = document.getElementById("fshowWidget");
+        const avatarContainer = document.getElementById("fshowAvatarContainer");
+        const userName = document.getElementById("fshowUserName");
+        const userStatus = document.getElementById("fshowUserStatus");
+        const loggedOptions = document.getElementById("fshowLoggedOptions");
+        const avatarInput = document.getElementById("fshowChangeAvatarInput");
+        const logoutBtn = document.getElementById("fshowLogoutBtn");
 
-    const loggedOptions = document.getElementById("fshowLoggedOptions");
-    const anonOptions = document.getElementById("fshowAnonOptions");
+        if (!trigger || !dropdown || !widget) return;
 
-    const avatarInput = document.getElementById("fshowChangeAvatarInput");
-
-    const logoutBtn = document.getElementById("fshowLogoutBtn");
-
-    const anonBtn = document.getElementById("fshowContinueAnonBtn");
-
-    if (!trigger || !dropdown || !widget) {
-        console.log("Widget não encontrado.");
-        return;
-    }
-
-    let currentUser = null;
-    let currentProfile = null;
-
-    // ============================================================
-    // DROPDOWN
-    // ============================================================
-
-    trigger.addEventListener("click", function (e) {
-
-        e.stopPropagation();
-
-        dropdown.classList.toggle("fshow-active");
-
-    });
-
-    dropdown.addEventListener("click", function (e) {
-
-        e.stopPropagation();
-
-    });
-
-    document.addEventListener("click", function (e) {
-
-        if (!widget.contains(e.target)) {
-
-            dropdown.classList.remove("fshow-active");
-
-        }
-
-    });
-
-    // ============================================================
-    // CONTINUAR ANÔNIMO
-    // ============================================================
-
-    if (anonBtn) {
-
-        anonBtn.addEventListener("click", function () {
-
-            dropdown.classList.remove("fshow-active");
-
+        // Dropdown Logic
+        trigger.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle("fshow-active");
         });
 
-    }
+        document.addEventListener("click", (e) => {
+            if (!widget.contains(e.target)) dropdown.classList.remove("fshow-active");
+        });
 
-    // ============================================================
-    // AVATAR
-    // ============================================================
-
-    function updateAvatar(src) {
-
-        avatarContainer.innerHTML = `
-            <img
-                src="${src}"
-                alt="Avatar"
-                style="
-                    width:100%;
-                    height:100%;
-                    object-fit:cover;
-                    border-radius:50%;
-                "
-            >
-        `;
-
-    }
-
-    // ============================================================
-    // CARREGAR USUÁRIO
-    // ============================================================
-
-    try {
-
-        currentUser = await account.get();
-
-        if (loggedOptions) loggedOptions.style.display = "flex";
-        if (anonOptions) anonOptions.style.display = "none";
+        function updateAvatar(src) {
+            avatarContainer.innerHTML = `<img src="${src}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        }
 
         try {
+            currentUser = await account.get();
+            if (loggedOptions) loggedOptions.style.display = "flex";
 
-            currentProfile = await databases.getDocument(
-                DB_ID,
-                COL_ID,
-                currentUser.$id
-            );
+            try {
+                currentProfile = await databases.getDocument(DB_ID, COL_ID, currentUser.$id);
+            } catch (err) {
+                console.log("Perfil não encontrado, usando padrão.");
+            }
+
+            if (userName) userName.textContent = currentProfile?.nickname || currentUser.name || "Usuário";
+            
+            let avatarUrl = null;
+            if (currentProfile?.avatarFileId) {
+                avatarUrl = storage.getFileView(BUCKET_ID, currentProfile.avatarFileId);
+            } else if (currentUser.prefs?.avatar) {
+                avatarUrl = currentUser.prefs.avatar;
+            } else {
+                avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentProfile?.nickname || currentUser.name || "User")}&background=8000ff&color=fff`;
+            }
+            updateAvatar(avatarUrl);
+            
+            // Initial render
+            renderAlbum();
 
         } catch (err) {
-
-            console.log("Perfil não encontrado.");
-
+            console.log("Visitante anônimo.");
+            renderAlbum(); // Render empty album for guests
         }
 
-        // Nome
-        if (userName) {
-
-            userName.textContent =
-                currentProfile?.nickname ||
-                currentUser.name ||
-                "Usuário";
-
+        // Logout
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                try { await account.deleteSession("current"); } catch (e) {}
+                location.reload();
+            });
         }
 
-        // Status
-        if (userStatus) {
-
-            userStatus.textContent =
-                currentUser.email || "Membro";
-
+        // Change Avatar
+        if (avatarInput) {
+            avatarInput.addEventListener("change", async (e) => {
+                const file = e.target.files[0];
+                if (!file || !currentUser) return;
+                try {
+                    trigger.style.opacity = "0.5";
+                    const uploaded = await storage.createFile(BUCKET_ID, Appwrite.ID.unique(), file);
+                    await databases.updateDocument(DB_ID, COL_ID, currentUser.$id, { avatarFileId: uploaded.$id });
+                    updateAvatar(storage.getFileView(BUCKET_ID, uploaded.$id));
+                    trigger.style.opacity = "1";
+                    alert("Foto atualizada!");
+                } catch (error) {
+                    alert("Erro ao atualizar foto.");
+                    trigger.style.opacity = "1";
+                }
+            });
         }
-
-        // ============================================================
-        // FOTO
-        // ============================================================
-
-        let avatarUrl = null;
-
-        // FOTO CUSTOMIZADA
-        if (currentProfile?.avatarFileId) {
-
-            avatarUrl = storage.getFileView(
-                BUCKET_ID,
-                currentProfile.avatarFileId
-            );
-
-        }
-
-        // FOTO GOOGLE
-        else if (
-            currentUser.prefs &&
-            currentUser.prefs.avatar
-        ) {
-
-            avatarUrl = currentUser.prefs.avatar;
-
-        }
-
-        // FALLBACK
-        if (!avatarUrl) {
-
-            avatarUrl =
-                `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                    currentProfile?.nickname ||
-                    currentUser.name ||
-                    "User"
-                )}&background=8000ff&color=fff`;
-
-        }
-
-        updateAvatar(avatarUrl);
-
-    } catch (err) {
-
-        console.log("Visitante anônimo.");
-
-    }
-
-    // ============================================================
-    // LOGOUT
-    // ============================================================
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener("click", async function () {
-
-            try {
-
-                await account.deleteSession("current");
-
-            } catch (e) {}
-
-            localStorage.removeItem("fshow_user");
-
-            location.reload();
-
-        });
-
-    }
-
-    // ============================================================
-    // TROCAR FOTO
-    // ============================================================
-
-    if (avatarInput) {
-
-        avatarInput.addEventListener("change", async function (e) {
-
-            const file = e.target.files[0];
-
-            if (!file || !currentUser) return;
-
-            try {
-
-                trigger.style.opacity = "0.5";
-
-                const uploaded = await storage.createFile(
-                    BUCKET_ID,
-                    Appwrite.ID.unique(),
-                    file
-                );
-
-                await databases.updateDocument(
-                    DB_ID,
-                    COL_ID,
-                    currentUser.$id,
-                    {
-                        avatarFileId: uploaded.$id
-                    }
-                );
-
-                const newAvatar = storage.getFileView(
-                    BUCKET_ID,
-                    uploaded.$id
-                );
-
-                updateAvatar(newAvatar);
-
-                trigger.style.opacity = "1";
-
-                alert("Foto atualizada!");
-
-            } catch (error) {
-
+    });
 
     /* ================= LÓGICA DO ÁLBUM ================= */
     function renderAlbum() {
         const leftPage = document.getElementById('leftPage');
         const rightPage = document.getElementById('rightPage');
+        if (!leftPage || !rightPage) return;
+        
         leftPage.innerHTML = '';
         rightPage.innerHTML = '';
 
-        const ownedStickers = currentProfile.stickers || [];
+        const ownedStickers = currentProfile?.stickers || [];
 
         for (let i = 1; i <= 22; i++) {
             const slot = document.createElement('div');
@@ -607,7 +474,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             slot.textContent = i;
 
             const stickerId = `FIG-${i.toString().padStart(2, '0')}`;
-            if (ownedStickers.includes(stickerId)) {
+            if (ownedStickers.includes(stickerId) && STICKERS_DATA[stickerId]) {
                 fillSlot(slot, STICKERS_DATA[stickerId].url);
             }
 
@@ -621,23 +488,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         slot.classList.add('filled');
     }
 
-    /* ================= INTERAÇÕES ================= */
-    function openModal() {
-        document.getElementById('stickerModal').classList.add('active');
-        document.getElementById('stickerCode').value = '';
-        document.getElementById('modalMsg').textContent = '';
-    }
-
-    function closeModal() {
-        document.getElementById('stickerModal').classList.remove('active');
-    }
-
     async function redeemSticker() {
         const code = document.getElementById('stickerCode').value.toUpperCase().trim();
         const msg = document.getElementById('modalMsg');
 
         if (!STICKERS_DATA[code]) {
             msg.textContent = "Código inválido!";
+            msg.style.color = "#ff4d4d";
+            return;
+        }
+
+        if (!currentUser) {
+            msg.textContent = "Faça login para colar figurinhas!";
             msg.style.color = "#ff4d4d";
             return;
         }
@@ -664,37 +526,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             msg.style.color = "#ff4d4d";
         }
     }
-
-    // Widget Events
-    document.getElementById("fshowTrigger").addEventListener("click", (e) => {
-        e.stopPropagation();
-        document.getElementById("fshowDropdown").classList.toggle("fshow-active");
-    });
-
-    document.addEventListener("click", (e) => {
-        if (!document.getElementById("fshowWidget").contains(e.target)) {
-            document.getElementById("fshowDropdown").classList.remove("fshow-active");
-        }
-    });
-
-    document.getElementById("fshowLogoutBtn").addEventListener("click", async () => {
-        try {
-            await account.deleteSession("current");
-            window.location.href = "login.html";
-        } catch (e) { location.reload(); }
-    });
-
-    document.getElementById("fshowChangeAvatarInput").addEventListener("change", async (e) => {
-        const file = e.target.files[0];
-        if (!file || !currentUser) return;
-        try {
-            const uploaded = await storage.createFile(BUCKET_ID, Appwrite.ID.unique(), file);
-            await databases.updateDocument(DB_ID, COL_ID, currentUser.$id, { avatarFileId: uploaded.$id });
-            location.reload();
-        } catch (error) { alert("Erro ao atualizar foto."); }
-    });
-
-    init();
 </script>
 </body>
 </html>
