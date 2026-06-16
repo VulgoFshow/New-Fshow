@@ -149,14 +149,13 @@
             overflow-x: auto;
             overflow-y: hidden;
             scroll-snap-type: x mandatory;
-            padding: 120px 50px 80px; /* Espaço para o menu fixo */
+            padding: 120px 50px 80px;
             scrollbar-width: none;
             flex-grow: 1;
         }
 
         .album-container::-webkit-scrollbar { display: none; }
 
-        /* As páginas agora são transparentes para mostrar o fundo da revista */
         .page {
             flex: 0 0 90%;
             max-width: 1000px;
@@ -168,7 +167,6 @@
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 25px;
             align-content: start;
-            /* Fundo removido conforme solicitado */
             background: transparent;
             border: none;
             box-shadow: none;
@@ -189,7 +187,7 @@
         }
 
         /* =====================================================
-           SLOT DAS FIGURINHAS (ESPAÇOS VAZIOS)
+           SLOT DAS FIGURINHAS
         ===================================================== */
         .slot {
             aspect-ratio: 2.5 / 3.5;
@@ -199,13 +197,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            
-            /* Fundo sutil e borrado para dar contraste com a revista, 
-               mas não é mais aquele "bloquinho branco" sólido */
             background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(4px);
             border: 2px dashed var(--pastel-blue-dark);
-            
             box-shadow: inset 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.4s ease;
         }
@@ -256,7 +250,7 @@
             height: 100%;
             object-fit: cover;
             border-radius: 10px;
-            border: 4px solid white; /* Bordinha branca estilo polaroid/revista */
+            border: 4px solid white;
             transition: transform 0.3s ease;
         }
 
@@ -264,7 +258,7 @@
             transform: scale(1.05) rotate(2deg);
         }
 
-        /* ANIMAÇÃO DE COLAGEM (MÁGICA!) */
+        /* ANIMAÇÃO DE COLAGEM */
         .paste-anim {
             animation: stampIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             transform-origin: center center;
@@ -289,7 +283,7 @@
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(248, 200, 220, 0.6); /* Rosa pastel translúcido */
+            background: rgba(248, 200, 220, 0.6);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -408,11 +402,11 @@
 
     <div class="page" id="leftPage">
         <div class="page-title">Página 1</div>
-        </div>
+    </div>
 
     <div class="page" id="rightPage">
         <div class="page-title">Página 2</div>
-        </div>
+    </div>
 
 </div>
 
@@ -471,31 +465,32 @@
     let currentUser = null;
     let ownedStickers = [];
 
-    // ================= INICIALIZAÇÃO =================
-        // ================= INICIALIZAÇÃO MELHORADA =================
+    // ================= INICIALIZAÇÃO BLINDADA =================
     async function init() {
+        console.log("Iniciando carregamento...");
         try {
-            // 1. Tenta conectar no Appwrite
             currentUser = await account.get();
             await loadAlbum();
         } catch (error) {
-            // 2. Se falhar, avisa no console, mas NÃO trava a tela!
-            console.warn("⚠️ Falha na conexão com Appwrite. Iniciando MODO DE TESTE visual.");
-            
-            // Cria dados falsos só para você conseguir visualizar a revista
+            console.warn("⚠️ Conexão offline ou falhou. Ativando Modo de Teste Visual.");
             currentUser = { $id: "user_teste", name: "Visitante" };
-            ownedStickers = ['P', 'FIG-05', 'FIG-12']; // Algumas figurinhas já coladas de exemplo
+            ownedStickers = ['P', 'FIG-05', 'FIG-12']; 
         } finally {
-            // 3. Este bloco SEMPRE roda (dando erro ou não), tirando o carregamento da tela
-            renderSlots();
-            updateStats();
-            document.getElementById('loadingScreen').style.opacity = '0';
+            hideLoadingScreen();
+        }
+    }
+
+    function hideLoadingScreen() {
+        renderSlots();
+        updateStats();
+        const loader = document.getElementById('loadingScreen');
+        if(loader) {
+            loader.style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('loadingScreen').style.display = 'none';
+                loader.style.display = 'none';
             }, 500);
         }
     }
-    
 
     async function loadAlbum() {
         try {
@@ -570,4 +565,66 @@
         }
 
         if(ownedStickers.includes(code)) {
-       
+            alert("⚠️ Você já colou esta figurinha na revista!");
+            return;
+        }
+
+        closeModal();
+        
+        const stickerInfo = STICKERS_DATA[code];
+        const slot = document.getElementById(`slot-${stickerInfo.slot}`);
+        
+        if(slot) {
+            slot.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        }
+
+        try {
+            const newList = [...ownedStickers, code];
+            await databases.updateDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
+                stickers: newList
+            });
+
+            ownedStickers = newList;
+            updateStats();
+            
+            setTimeout(() => {
+                if(slot) {
+                    slot.classList.add('filled');
+                    slot.innerHTML = `<img src="${stickerInfo.url}" class="sticker-img paste-anim">`;
+                }
+            }, 600);
+
+        } catch (error) {
+            console.error(error);
+            alert("❌ Erro ao salvar a figurinha. Tente novamente.");
+        }
+    }
+
+    function updateStats() {
+        const count = ownedStickers.length;
+        document.getElementById('count').textContent = count;
+    }
+
+    function logout() {
+        account.deleteSession('current').then(() => window.location.replace('/login.html'));
+    }
+
+    // DISPARADOR SEGURO: Evita perder o gatilho se a página carregar rápido demais
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // TIMER DE SEGURANÇA (Garantia Absoluta): Destrói o loading após 3.5s se a conexão com o banco travar
+    setTimeout(() => {
+        const loader = document.getElementById('loadingScreen');
+        if (loader && loader.style.display !== 'none') {
+            console.warn("⏳ Tempo limite esgotado. Forçando abertura da página.");
+            hideLoadingScreen();
+        }
+    }, 3500);
+</script>
+
+</body>
+</html>
