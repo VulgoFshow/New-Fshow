@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Álbum de Figurinhas</title>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
+    <style>
+        :root {
+            --primary: #6a07b3;
+            --secondary: #00d2ff;
+            --sticker-bg: rgba(255, 255, 255, 0.1);
+            --sticker-border: rgba(255, 255, 255, 0.3);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Background Image */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            filter: brightness(0.6);
+        }
+
+        header {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-logout { background: #ff4d4d; color: white; }
+
+        /* Album Container */
+        .album-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .page {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sticker-slot {
+            aspect-ratio: 2/3;
+            background: var(--sticker-bg);
+            border: 2px dashed var(--sticker-border);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sticker-slot.filled {
+            border: none;
+            background: white;
+            animation: glueSticker 0.5s ease-out;
+        }
+
+        .sticker-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes glueSticker {
+            0% { transform: scale(1.5) rotate(15deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #2a2a2a;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #1a1a1a;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            .album-container { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-overlay"></div>
+
+<header>
+    <div class="user-info">
+        <span id="userName">Carregando...</span>
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="openModal()">Colar Figurinha</button>
+        <button class="btn btn-logout" onclick="logout()">Sair</button>
+    </div>
+</header>
+
+<div class="album-container">
+    <!-- Página Esquerda -->
+    <div class="page" id="leftPage">
+        <!-- 11 slots -->
+    </div>
+    <!-- Página Direita -->
+    <div class="page" id="rightPage">
+        <!-- 11 slots -->
+    </div>
+</div>
+
+<div class="modal" id="stickerModal">
+    <div class="modal-content">
+        <h3>Colar Nova Figurinha</h3>
+        <p>Insira o código da figurinha (ex: FIG-01 até FIG-22)</p>
+        <input type="text" id="stickerCode" placeholder="Código da Figurinha">
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary" style="flex: 1" onclick="redeemSticker()">Colar!</button>
+            <button class="btn" style="flex: 1; background: #444; color: white;" onclick="closeModal()">Cancelar</button>
+        </div>
+        <p id="modalMsg" style="margin-top: 10px; font-size: 0.9rem;"></p>
+    </div>
+</div>
+
+<script>
+    /* ================= APPWRITE CONFIG ================= */
+    const client = new Appwrite.Client();
+    client
+        .setEndpoint("https://nyc.cloud.appwrite.io/v1") 
+        .setProject("6a07b38c00004e1645ee");
+
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+
+    const DATABASE_ID = "6a07b77b0016f7c90141"; 
+    const PROFILES_COLLECTION_ID = "profiles"; 
+
+    let currentUser = null;
+    let userProfile = null;
+
+    // Configuração das figurinhas (Exemplo)
+    const STICKERS_DATA = {};
+    for(let i=1; i<=22; i++) {
+        const id = i.toString().padStart(2, '0');
+        STICKERS_DATA[`FIG-${id}`] = {
+            id: i,
+            url: `https://picsum.photos/seed/sticker${i}/200/300` // Usando imagens placeholder
+        };
+    }
+
+    /* ================= INICIALIZAÇÃO ================= */
+    async function init() {
+        try {
+            currentUser = await account.get();
+            document.getElementById('userName').textContent = `Olá, ${currentUser.name}`;
+            
+            // Buscar progresso do usuário
+            userProfile = await databases.getDocument(DATABASE_ID, PROFILES_COLLECTION_ID, currentUser.$id);
+            renderAlbum();
+        } catch (error) {
+            console.error("Erro ao carregar sessão:", error);
+            window.location.href = "login.html";
+        }
+    }
+
+    function renderAlbum() {
+        const leftPage = document.getElementById('leftPage');
+        const rightPage = document.getElementById('rightPage');
+        leftPage.innerHTML = '';
+        rightPage.innerHTML = '';
+
+        const ownedStickers = userProfile.stickers || [];
+
+        for (let i = 1; i <= 22; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'sticker-slot';
+            slot.id = `slot-${i}`;
+            slot.textContent = i;
+
+            const stickerId = `FIG-${i.toString().padStart(2, '0')}`;
+            if (ownedStickers.includes(stickerId)) {
+                fillSlot(slot, STICKERS_DATA[stickerId].url);
+            }
+
+            if (i <= 11) {
+                leftPage.appendChild(slot);
+            } else {
+                rightPage.appendChild(slot);
+            }
+        }
+    }
+
+    function fillSlot(slot, url) {
+        slot.innerHTML = `<img src="${url}" class="sticker-img" alt="Figurinha">`;
+        slot.classList.add('filled');
+    }
+
+    /* ================= AÇÕES ================= */
+    function openModal() {
+        document.getElementById('stickerModal').classList.add('active');
+        document.getElementById('stickerCode').value = '';
+        document.getElementById('modalMsg').textContent = '';
+    }
+
+    function closeModal() {
+        document.getElementById('stickerModal').classList.remove('active');
+    }
+
+    async function redeemSticker() {
+        const code = document.getElementById('stickerCode').value.toUpperCase().trim();
+        const msg = document.getElementById('modalMsg');
+
+        if (!STICKERS_DATA[code]) {
+            msg.textContent = "Código inválido!";
+            msg.style.color = "#ff4d4d";
+            return;
+        }
+
+        if (userProfile.stickers.includes(code)) {
+            msg.textContent = "Você já tem essa figurinha!";
+            msg.style.color = "#ffcc00";
+            return;
+        }
+
+        try {
+            const updatedStickers = [...userProfile.stickers, code];
+            
+            // Salvar no Appwrite
+            await databases.updateDocument(
+                DATABASE_ID,
+                PROFILES_COLLECTION_ID,
+                currentUser.$id,
+                { stickers: updatedStickers }
+            );
+
+            userProfile.stickers = updatedStickers;
+            
+            // Animação de colar
+            const stickerInfo = STICKERS_DATA[code];
+            const slot = document.getElementById(`slot-${stickerInfo.id}`);
+            fillSlot(slot, stickerInfo.url);
+            
+            msg.textContent = "Figurinha colada com sucesso!";
+            msg.style.color = "#4dff4d";
+            
+            setTimeout(closeModal, 1500);
+        } catch (error) {
+            msg.textContent = "Erro ao salvar: " + error.message;
+            msg.style.color = "#ff4d4d";
+        }
+    }
+
+    async function logout() {
+        try {
+            await account.deleteSession('current');
+            window.location.href = "login.html";
+        } catch (error) {
+            alert("Erro ao sair");
+        }
+    }
+
+    init();
+</script>
+</body>
+</html>
