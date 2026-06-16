@@ -3,26 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Álbum Virtual - Edição Premium</title>
+    <title>Meu Álbum Virtual - Edição Revista Pastel</title>
     <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         /* =====================================================
-           VARIÁVEIS E RESET
+           VARIÁVEIS (TEMA PASTEL)
         ===================================================== */
         :root {
-            --primary-color: #6a07b3;
-            --secondary-color: #00d2ff;
-            --gold-light: #ffef85;
-            --gold-main: #ffd700;
-            --gold-dark: #b8860b;
-            --bg-dark: #0f0c29;
-            --text-main: #2d2d2d;
-            --text-light: #9a9a9a;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --pastel-pink: #f8c8dc;
+            --pastel-pink-dark: #f4a6c1;
+            --pastel-blue: #aec6cf;
+            --pastel-blue-dark: #8db3e2;
+            --text-main: #5c6b73;
+            --text-light: #8ba1ab;
+            --glass-bg: rgba(255, 255, 255, 0.6);
         }
 
         * {
@@ -32,21 +28,20 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* =====================================================
+           FUNDO (REVISTA)
+        ===================================================== */
         body {
-            background: linear-gradient(135deg, var(--bg-dark), #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: white;
+            background-image: url('https://i.ibb.co/5XGKjxVC/file-000000007120720e86b11b00a56ecbc5-2.jpg');
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         /* =====================================================
@@ -55,7 +50,7 @@
         .loading-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark);
+            background: var(--pastel-pink);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -67,8 +62,8 @@
         .spinner {
             width: 60px;
             height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--gold-main);
+            border: 5px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
             border-radius: 50%;
             animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         }
@@ -76,79 +71,76 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* =====================================================
-           CABEÇALHO (DASHBOARD)
+           MENU SUPERIOR FIXO (ESTILO REVISTA)
         ===================================================== */
-        header {
-            background: rgba(15, 12, 41, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px 40px;
+        .magazine-top-bar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-weight: 900;
-            font-size: 24px;
-            background: linear-gradient(to right, var(--gold-light), var(--gold-main));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0px 4px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 25px;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
             border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 14px;
-            letter-spacing: 1px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid white;
+            z-index: 100;
+            width: max-content;
+            max-width: 95%;
         }
 
-        .stats-bar b { color: var(--gold-main); font-size: 16px; }
+        .stats-pill {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--pastel-blue-dark);
+            padding: 0 15px;
+            border-left: 2px dashed var(--pastel-pink);
+            border-right: 2px dashed var(--pastel-pink);
+            white-space: nowrap;
+        }
 
-        .btn-main {
-            background: linear-gradient(135deg, var(--gold-main), var(--gold-dark));
-            color: #111;
+        .stats-pill b {
+            color: var(--pastel-pink-dark);
+            font-size: 16px;
+        }
+
+        .btn-pastel {
+            background: var(--pastel-pink);
+            color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 50px;
             font-weight: 800;
             font-size: 13px;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
             text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(244, 166, 193, 0.4);
+            white-space: nowrap;
         }
 
-        .btn-main:hover {
+        .btn-pastel:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
+            background: var(--pastel-pink-dark);
+            box-shadow: 0 6px 15px rgba(244, 166, 193, 0.6);
         }
 
-        .btn-main:active { transform: translateY(1px); }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: white;
-            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3);
+        .btn-pastel.blue {
+            background: var(--pastel-blue);
+            box-shadow: 0 4px 10px rgba(141, 179, 226, 0.4);
         }
-        
-        .btn-danger:hover { box-shadow: 0 8px 20px rgba(255, 65, 108, 0.5); }
+
+        .btn-pastel.blue:hover {
+            background: var(--pastel-blue-dark);
+            box-shadow: 0 6px 15px rgba(141, 179, 226, 0.6);
+        }
 
         /* =====================================================
-           ÁLBUM CONTAINER E PÁGINAS
+           ÁLBUM (PÁGINAS TRANSPARENTES)
         ===================================================== */
         .album-container {
             width: 100%;
@@ -157,185 +149,138 @@
             overflow-x: auto;
             overflow-y: hidden;
             scroll-snap-type: x mandatory;
-            padding: 40px 50px 80px;
-            scrollbar-width: none; /* Firefox */
+            padding: 120px 50px 80px; /* Espaço para o menu fixo */
+            scrollbar-width: none;
             flex-grow: 1;
         }
 
-        .album-container::-webkit-scrollbar { display: none; } /* Chrome */
+        .album-container::-webkit-scrollbar { display: none; }
 
+        /* As páginas agora são transparentes para mostrar o fundo da revista */
         .page {
             flex: 0 0 90%;
             max-width: 1000px;
             margin: 0 auto;
-            min-height: 850px;
             scroll-snap-align: center;
             position: relative;
-            padding: 40px;
-            border-radius: 20px 40px 40px 20px;
+            padding: 20px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 25px;
             align-content: start;
-            
-            /* Efeito de Papel Premium / Vidro */
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-left: 5px solid #e0e0e0; /* Lombada da página */
-            
-            box-shadow: 
-                30px 30px 60px rgba(0,0,0,0.4),
-                inset 20px 0 30px rgba(0,0,0,0.05), /* Sombra da dobra */
-                inset -2px 0 10px rgba(255,255,255,0.8);
-            
-            transition: transform 0.4s ease;
+            /* Fundo removido conforme solicitado */
+            background: transparent;
+            border: none;
+            box-shadow: none;
         }
 
-        /* Indicador de Deslize */
-        .page:first-child::before {
-            content: "← DESLIZE PARA VER MAIS →";
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: rgba(255, 255, 255, 0.6);
-            animation: pulseText 2s infinite;
-        }
-
-        @keyframes pulseText {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* =====================================================
-           CABEÇALHO DA PÁGINA
-        ===================================================== */
         .page-title {
             grid-column: 1 / -1;
             text-align: center;
-            font-size: 32px;
+            font-size: 38px;
             font-weight: 900;
             letter-spacing: 5px;
             text-transform: uppercase;
-            color: var(--text-main);
+            color: white;
+            -webkit-text-stroke: 1.5px var(--pastel-pink-dark);
+            text-shadow: 3px 3px 0px var(--pastel-blue);
             padding-bottom: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .page-title::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 5px;
-            border-radius: 10px;
-            background: linear-gradient(90deg, transparent, var(--gold-main), transparent);
+            margin-bottom: 10px;
         }
 
         /* =====================================================
-           SLOT DAS FIGURINHAS
+           SLOT DAS FIGURINHAS (ESPAÇOS VAZIOS)
         ===================================================== */
         .slot {
             aspect-ratio: 2.5 / 3.5;
             position: relative;
-            border-radius: 8px; /* Bordas mais retas parecem cards reais */
+            border-radius: 10px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border: 2px dashed rgba(100, 100, 100, 0.4);
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: default;
+            
+            /* Fundo sutil e borrado para dar contraste com a revista, 
+               mas não é mais aquele "bloquinho branco" sólido */
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+            border: 2px dashed var(--pastel-blue-dark);
+            
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
         }
 
-        /* Número de Fundo */
         .slot::before {
             content: attr(data-number);
             position: absolute;
             font-size: 45px;
             font-weight: 900;
-            color: rgba(0, 0, 0, 0.05);
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 1px 1px 0 var(--pastel-blue);
             z-index: 1;
         }
 
-        /* Texto Padrão */
         .slot::after {
             content: "COLE AQUI";
             position: absolute;
             text-align: center;
             font-size: 11px;
             font-weight: 800;
-            color: rgba(0, 0, 0, 0.3);
+            color: var(--text-main);
+            background: rgba(255,255,255,0.7);
+            padding: 2px 8px;
+            border-radius: 10px;
             letter-spacing: 2px;
             z-index: 2;
+            bottom: 15px;
         }
 
         /* =====================================================
-           FIGURINHA COLADA (ESTADO PREENCHIDO)
+           FIGURINHA COLADA
         ===================================================== */
         .slot.filled {
             border: none;
-            background: white;
+            background: transparent;
             box-shadow: 
-                0 10px 20px rgba(0,0,0,0.2),
-                0 2px 5px rgba(0,0,0,0.1);
-            cursor: pointer;
+                0 15px 25px rgba(0,0,0,0.15),
+                0 5px 10px rgba(0,0,0,0.1);
         }
 
         .slot.filled::before, 
         .slot.filled::after {
-            display: none; /* Esconde os textos de fundo */
+            display: none;
         }
 
         .sticker-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
-            z-index: 5;
+            border-radius: 10px;
+            border: 4px solid white; /* Bordinha branca estilo polaroid/revista */
+            transition: transform 0.3s ease;
         }
 
-        /* Efeito de Holograma / Reflexo ao passar o mouse */
-        .slot.filled::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, 
-                rgba(255,255,255,0) 0%, 
-                rgba(255,255,255,0.6) 50%, 
-                rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            z-index: 10;
-            display: block; /* Reativa o after para o brilho */
-            pointer-events: none;
-            transition: none;
+        .slot.filled:hover .sticker-img {
+            transform: scale(1.05) rotate(2deg);
         }
 
-        .slot.filled:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 
-                0 20px 40px rgba(0,0,0,0.3),
-                0 0 20px rgba(255, 215, 0, 0.4);
-            z-index: 20;
+        /* ANIMAÇÃO DE COLAGEM (MÁGICA!) */
+        .paste-anim {
+            animation: stampIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform-origin: center center;
         }
 
-        .slot.filled:hover::after {
-            animation: shine 0.8s ease-in-out;
-        }
-
-        @keyframes shine {
-            100% { left: 200%; }
+        @keyframes stampIn {
+            0% { 
+                transform: scale(2.5) rotate(-20deg); 
+                opacity: 0; 
+                filter: drop-shadow(0 30px 30px rgba(0,0,0,0.4)); 
+            }
+            100% { 
+                transform: scale(1) rotate(0deg); 
+                opacity: 1; 
+                filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); 
+            }
         }
 
         /* =====================================================
@@ -344,7 +289,7 @@
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(248, 200, 220, 0.6); /* Rosa pastel translúcido */
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -361,14 +306,14 @@
         }
 
         .modal-content {
-            background: var(--glass-bg);
+            background: white;
             padding: 40px;
-            border-radius: 24px;
+            border-radius: 30px;
             width: 90%;
             max-width: 400px;
             text-align: center;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 4px solid var(--pastel-blue);
             transform: translateY(30px) scale(0.95);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -378,10 +323,10 @@
         }
 
         .modal-content h2 {
-            color: var(--text-main);
+            color: var(--pastel-pink-dark);
             font-weight: 800;
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 26px;
+            margin-bottom: 5px;
         }
 
         .modal-content p {
@@ -393,57 +338,51 @@
         .modal-input {
             width: 100%;
             padding: 15px 20px;
-            border: 2px solid rgba(0,0,0,0.1);
-            border-radius: 12px;
-            font-size: 18px;
+            border: 2px solid var(--pastel-blue);
+            border-radius: 15px;
+            font-size: 20px;
             font-weight: 700;
             text-align: center;
             text-transform: uppercase;
             outline: none;
             transition: all 0.3s ease;
-            background: rgba(255,255,255,0.9);
-            color: var(--primary-color);
+            color: var(--text-main);
             letter-spacing: 2px;
+            background: #fdfdfd;
         }
 
         .modal-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 15px rgba(106, 7, 179, 0.2);
+            border-color: var(--pastel-pink-dark);
+            box-shadow: 0 0 15px rgba(244, 166, 193, 0.4);
+            transform: scale(1.02);
         }
 
         /* =====================================================
            RESPONSIVIDADE (MOBILE)
         ===================================================== */
         @media(max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                padding: 20px;
+            .magazine-top-bar {
+                top: 15px;
+                padding: 10px 15px;
+                gap: 10px;
             }
-            
-            .stats-bar {
-                width: 100%;
-                justify-content: center;
+            .btn-pastel {
+                padding: 8px 12px;
+                font-size: 11px;
             }
-
             .album-container {
-                padding: 30px 15px;
-                gap: 20px;
+                padding: 100px 15px 40px;
             }
-
             .page {
                 flex: 0 0 95%;
-                padding: 25px 15px;
+                padding: 10px;
                 grid-template-columns: repeat(2, 1fr);
-                min-height: auto;
             }
-
             .page-title {
-                font-size: 22px;
+                font-size: 28px;
             }
-
             .slot::before {
-                font-size: 30px;
+                font-size: 35px;
             }
         }
     </style>
@@ -452,27 +391,18 @@
 
 <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
-    <p style="margin-top:20px; font-weight: 600; letter-spacing: 2px; color: #fff;">CARREGANDO ÁLBUM...</p>
+    <p style="margin-top:20px; font-weight: 700; letter-spacing: 2px; color: white;">CARREGANDO REVISTA...</p>
 </div>
 
-<header>
-    <div class="logo">MY STICKER ALBUM</div>
-
-    <div class="stats-bar">
-        <span>Coladas: <b id="count">0</b>/22</span>
-        <span>Progresso: <b id="percent">0%</b></span>
+<div class="magazine-top-bar">
+    <button class="btn-pastel" onclick="openModal()">Colar Figurinha</button>
+    
+    <div class="stats-pill">
+        Coladas: <b id="count">0</b>/22
     </div>
 
-    <div style="display:flex; gap:10px;">
-        <button class="btn-main" onclick="openModal()">
-            Colar Figurinha
-        </button>
-
-        <button class="btn-main btn-danger" onclick="logout()">
-            Sair
-        </button>
-    </div>
-</header>
+    <button class="btn-pastel blue" onclick="logout()">Sair</button>
+</div>
 
 <div class="album-container">
 
@@ -489,16 +419,14 @@
 <div class="modal" id="modal">
     <div class="modal-content">
         <h2>Nova Figurinha</h2>
-        <p>Digite o código para adicionar ao álbum</p>
+        <p>Digite o código para colar na revista</p>
 
         <input type="text" id="stickerCode" class="modal-input" placeholder="EX: FIG-02">
 
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="btn-main" style="flex:1;" onclick="confirmSticker()">Confirmar</button>
-            <button class="btn-main btn-danger" style="flex:1;" onclick="closeModal()">Cancelar</button>
+        <div style="display:flex; gap:10px; margin-top:25px;">
+            <button class="btn-pastel" style="flex:1;" onclick="confirmSticker()">Confirmar</button>
+            <button class="btn-pastel blue" style="flex:1;" onclick="closeModal()">Cancelar</button>
         </div>
-
-        <p id="modalMsg" style="margin-top:20px; font-weight:700; font-size:14px; margin-bottom: 0;"></p>
     </div>
 </div>
 
@@ -512,27 +440,27 @@
     // ================= CONSTANTES DAS FIGURINHAS =================
     const STICKERS_DATA = {
         'P': { slot: 1, url: 'https://i.ibb.co/DH4Hb5z7/Picsart-26-06-15-22-04-31-956.webp' },
-        'FIG-02': { slot: 2, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-02' },
-        'FIG-03': { slot: 3, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-03' },
-        'FIG-04': { slot: 4, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-04' },
-        'FIG-05': { slot: 5, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-05' },
-        'FIG-06': { slot: 6, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-06' },
-        'FIG-07': { slot: 7, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-07' },
-        'FIG-08': { slot: 8, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-08' },
-        'FIG-09': { slot: 9, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-09' },
-        'FIG-10': { slot: 10, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-10' },
-        'FIG-11': { slot: 11, url: 'https://via.placeholder.com/200x280/6a07b3/ffffff?text=FIG-11' },
-        'FIG-12': { slot: 12, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-12' },
-        'FIG-13': { slot: 13, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-13' },
-        'FIG-14': { slot: 14, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-14' },
-        'FIG-15': { slot: 15, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-15' },
-        'FIG-16': { slot: 16, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-16' },
-        'FIG-17': { slot: 17, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-17' },
-        'FIG-18': { slot: 18, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-18' },
-        'FIG-19': { slot: 19, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-19' },
-        'FIG-20': { slot: 20, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-20' },
-        'FIG-21': { slot: 21, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-21' },
-        'FIG-22': { slot: 22, url: 'https://via.placeholder.com/200x280/00d2ff/ffffff?text=FIG-22' }
+        'FIG-02': { slot: 2, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-02' },
+        'FIG-03': { slot: 3, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-03' },
+        'FIG-04': { slot: 4, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-04' },
+        'FIG-05': { slot: 5, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-05' },
+        'FIG-06': { slot: 6, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-06' },
+        'FIG-07': { slot: 7, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-07' },
+        'FIG-08': { slot: 8, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-08' },
+        'FIG-09': { slot: 9, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-09' },
+        'FIG-10': { slot: 10, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-10' },
+        'FIG-11': { slot: 11, url: 'https://via.placeholder.com/200x280/f4a6c1/ffffff?text=FIG-11' },
+        'FIG-12': { slot: 12, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-12' },
+        'FIG-13': { slot: 13, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-13' },
+        'FIG-14': { slot: 14, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-14' },
+        'FIG-15': { slot: 15, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-15' },
+        'FIG-16': { slot: 16, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-16' },
+        'FIG-17': { slot: 17, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-17' },
+        'FIG-18': { slot: 18, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-18' },
+        'FIG-19': { slot: 19, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-19' },
+        'FIG-20': { slot: 20, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-20' },
+        'FIG-21': { slot: 21, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-21' },
+        'FIG-22': { slot: 22, url: 'https://via.placeholder.com/200x280/8db3e2/ffffff?text=FIG-22' }
     };
 
     // ================= APPWRITE SETUP =================
@@ -556,10 +484,10 @@
             }, 500);
         } catch (error) {
             console.error("Erro detalhado do Appwrite:", error);
-            alert("Erro no login: " + error.message + " (Código: " + error.code + ")");
+            alert("Erro no login: Faça login novamente.");
             setTimeout(() => {
                 window.location.replace('/login.html');
-            }, 5000);
+            }, 2000);
         }
     }
 
@@ -568,7 +496,6 @@
             const doc = await databases.getDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id);
             ownedStickers = doc.stickers || [];
         } catch (error) {
-            console.log("Criando novo registro de álbum...");
             try {
                 await databases.createDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
                     userId: currentUser.$id,
@@ -599,7 +526,6 @@
 
             const stickerCode = Object.keys(STICKERS_DATA).find(key => STICKERS_DATA[key].slot === i);
             
-            // CORREÇÃO: Faltava fechar a chave desse IF no seu código original!
             if(stickerCode && ownedStickers.includes(stickerCode)) {
                 slot.classList.add('filled');
                 slot.innerHTML = `
@@ -617,11 +543,10 @@
         }
     }
 
-    // ================= LÓGICA DE COLAR =================
+    // ================= LÓGICA DE COLAR E ANIMAÇÃO =================
     function openModal() {
         document.getElementById('modal').classList.add('active');
         document.getElementById('stickerCode').value = '';
-        document.getElementById('modalMsg').textContent = '';
         document.getElementById('stickerCode').focus();
     }
 
@@ -632,64 +557,11 @@
     async function confirmSticker() {
         const input = document.getElementById('stickerCode');
         const code = input.value.toUpperCase().trim();
-        const msg = document.getElementById('modalMsg');
 
         if(!STICKERS_DATA[code]) {
-            msg.textContent = "❌ CÓDIGO INVÁLIDO!";
-            msg.style.color = "#ff4b2b";
+            alert("❌ Código inválido! Verifique o que você digitou.");
             return;
         }
 
         if(ownedStickers.includes(code)) {
-            msg.textContent = "⚠️ VOCÊ JÁ COLOU ESTA FIGURINHA!";
-            msg.style.color = "#b8860b";
-            return;
-        }
-
-        try {
-            msg.textContent = "⏳ COLANDO...";
-            msg.style.color = "var(--primary-color)";
-            
-            const newList = [...ownedStickers, code];
-            await databases.updateDocument(APPWRITE_DB_ID, APPWRITE_COLLECTION_ID, currentUser.$id, {
-                stickers: newList
-            });
-
-            ownedStickers = newList;
-            
-            const stickerInfo = STICKERS_DATA[code];
-            const slot = document.getElementById(`slot-${stickerInfo.slot}`);
-            
-            if(slot) {
-                slot.classList.add('filled');
-                slot.innerHTML = `<img src="${stickerInfo.url}" class="sticker-img">`;
-            }
-            
-            updateStats();
-            msg.textContent = "✅ FIGURINHA COLADA COM SUCESSO!";
-            msg.style.color = "#15803d";
-            
-            setTimeout(closeModal, 1500);
-
-        } catch (error) {
-            console.error(error);
-            msg.textContent = "❌ ERRO AO SALVAR. TENTE NOVAMENTE.";
-            msg.style.color = "#ff4b2b";
-        }
-    }
-
-    function updateStats() {
-        const count = ownedStickers.length;
-        document.getElementById('count').textContent = count;
-        document.getElementById('percent').textContent = Math.round((count/22)*100) + "%";
-    }
-
-    function logout() {
-        account.deleteSession('current').then(() => window.location.replace('/login.html'));
-    }
-
-    document.addEventListener('DOMContentLoaded', init);
-</script>
-
-</body>
-</html>
+       
