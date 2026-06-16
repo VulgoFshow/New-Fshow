@@ -279,7 +279,7 @@
 
         /* =====================================================
            MODAL
-        ===================================================== */
+        ==================================================== */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -465,18 +465,16 @@
     let currentUser = null;
     let ownedStickers = [];
 
-    // ================= INICIALIZAÇÃO BLINDADA =================
+    // ================= INICIALIZAÇÃO PROTEGIDA =================
     async function init() {
         console.log("Iniciando carregamento...");
         try {
             currentUser = await account.get();
             await loadAlbum();
+            hideLoadingScreen(); // Só remove a tela de carregamento se der tudo certo
         } catch (error) {
-            console.warn("⚠️ Conexão offline ou falhou. Ativando Modo de Teste Visual.");
-            currentUser = { $id: "user_teste", name: "Visitante" };
-            ownedStickers = ['P', 'FIG-05', 'FIG-12']; 
-        } finally {
-            hideLoadingScreen();
+            console.warn("⚠️ Usuário não autenticado. Redirecionando para a página de login.");
+            window.location.replace('/login.html'); // Envia direto para o login sem renderizar o modo teste
         }
     }
 
@@ -616,10 +614,10 @@
         init();
     }
 
-    // TIMER DE SEGURANÇA (Garantia Absoluta): Destrói o loading após 3.5s se a conexão com o banco travar
+    // TIMER DE SEGURANÇA: Só aciona o fallback se o usuário de fato estiver logado mas a conexão travar
     setTimeout(() => {
         const loader = document.getElementById('loadingScreen');
-        if (loader && loader.style.display !== 'none') {
+        if (loader && loader.style.display !== 'none' && currentUser) {
             console.warn("⏳ Tempo limite esgotado. Forçando abertura da página.");
             hideLoadingScreen();
         }
