@@ -355,9 +355,10 @@
     /* ================= INICIALIZAÇÃO E PERFIL ================= */
     async function init() {
         try {
+            // Verifica se há uma sessão ativa
             currentUser = await account.get();
             
-            // Buscar perfil
+            // Se chegou aqui, o usuário está logado. Buscar perfil:
             try {
                 currentProfile = await databases.getDocument(DB_ID, COL_ID, currentUser.$id);
             } catch (err) {
@@ -372,8 +373,10 @@
             updateProfileUI();
             renderAlbum();
         } catch (error) {
-            console.error("Não logado:", error);
-            window.location.href = "login.html";
+            console.error("Não logado ou erro na sessão:", error);
+            // Redireciona para o login passando a URL atual como parâmetro para retorno
+            const currentUrl = window.location.href;
+            window.location.href = `login.html?redirect=${encodeURIComponent(currentUrl)}`;
         }
     }
 
