@@ -91,7 +91,7 @@ body::before {
   height: 100%;
   z-index: -1; 
 
-  background-image: linear-gradient(rgba(120, 169, 214, 0.3), rgba(120, 169, 214, 0.3)), 
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
                     url('https://i.ibb.co/tpG8tM20/file-00000000c988720e9063fc508c30f7e7.png');
   background-position: center;
   background-repeat: no-repeat;
@@ -103,7 +103,7 @@ body::before {
     brightness(95%)  
     contrast(100%);       
   
-  animation: fadeIn 0.8s ease-out forwards;
+
 }
 
 @keyframes fadeIn {
@@ -141,7 +141,7 @@ h1 {
 .option {
   display: flex;
   background: var(--card-bg);
-  border: 2px solid #7a9a9f; /* Escurecido para bordas mais visíveis */
+  border: 2px solid #5a7a7f; /* Escurecido para bordas mais visíveis */
   box-shadow: var(--shadow-sm), inset 0 0 10px rgba(255,255,255,0.4);
   border-radius: var(--border-radius);
   margin-bottom: 7px;
@@ -1500,6 +1500,16 @@ botaoCaptcha.addEventListener("click", () => {
   }
 });
 
+function scrollParaFinal() {
+  setTimeout(() => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  }, 100);
+}
+
+document.querySelectorAll('input[name="vote"]').forEach(radio => {
+  radio.addEventListener("change", () => { scrollParaFinal(); });
+});
+
 (function init() {
   captchaClicado = false;
   updateBotoesEstado();
@@ -1636,13 +1646,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 COL_ID,
                 currentUser.$id
             );
+
         } catch (err) {
+
             console.log("Perfil não encontrado.");
 
         }
 
         // Nome
         if (userName) {
+
             userName.textContent =
                 currentProfile?.nickname ||
                 currentUser.name ||
@@ -1652,6 +1665,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Status
         if (userStatus) {
+
             userStatus.textContent =
                 currentUser.email || "Membro";
 
@@ -1678,9 +1692,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             currentUser.prefs &&
             currentUser.prefs.avatar
         ) {
+
             avatarUrl = currentUser.prefs.avatar;
+
         }
 
+        // FALLBACK
         if (!avatarUrl) {
 
             avatarUrl =
@@ -1689,9 +1706,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                     currentUser.name ||
                     "User"
                 )}&background=8000ff&color=fff`;
+
         }
+
         updateAvatar(avatarUrl);
+
     } catch (err) {
+
         console.log("Visitante anônimo.");
 
     }
@@ -1705,11 +1726,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         logoutBtn.addEventListener("click", async function () {
 
             try {
+
                 await account.deleteSession("current");
+
             } catch (e) {}
+
             localStorage.removeItem("fshow_user");
+
             location.reload();
+
         });
+
     }
 
     // ============================================================
@@ -1717,11 +1744,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ============================================================
 
     if (avatarInput) {
+
         avatarInput.addEventListener("change", async function (e) {
 
             const file = e.target.files[0];
+
             if (!file || !currentUser) return;
+
             try {
+
                 trigger.style.opacity = "0.5";
 
                 const uploaded = await storage.createFile(
@@ -1745,17 +1776,65 @@ document.addEventListener("DOMContentLoaded", async function () {
                 );
 
                 updateAvatar(newAvatar);
+
                 trigger.style.opacity = "1";
+
                 alert("Foto atualizada!");
 
             } catch (error) {
+
                 trigger.style.opacity = "1";
+
                 alert("Erro ao atualizar foto.");
+
                 console.error(error);
+
             }
+
         });
+
     }
+
 });
+
+/* ============================================================
+   TEMA ESCURO / CLARO
+============================================================ */
+(function () {
+
+    const toggle = document.getElementById("theme-toggle");
+
+    if (!toggle) return;
+
+    const saved = localStorage.getItem("fshow_theme");
+
+    if (saved === "dark") {
+
+        document.body.classList.add("dark-mode");
+        document.body.classList.remove("light-mode");
+
+        toggle.classList.remove("fa-moon");
+        toggle.classList.add("fa-sun");
+
+    }
+
+    toggle.addEventListener("click", function () {
+
+        const isDark = document.body.classList.toggle("dark-mode");
+
+        document.body.classList.toggle("light-mode", !isDark);
+
+        toggle.classList.toggle("fa-moon", !isDark);
+        toggle.classList.toggle("fa-sun", isDark);
+
+        localStorage.setItem(
+            "fshow_theme",
+            isDark ? "dark" : "light"
+        );
+
+    });
+
+})();
 </script>
 </body>
 </html>
