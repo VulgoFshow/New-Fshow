@@ -50,16 +50,17 @@
         position: fixed;
         top: 0; 
         left: 0; 
-        width: 100%; 
-        height: 100%;
-        background: url('https://i.ibb.co/nMzFNk1Q/imgi-8-Imagem-Home.png') no-repeat center center fixed;
+        width: 100vw; /* Usar vw/vh garante cobertura total da tela */
+        height: 100vh;
+        /* Foi removido o 'fixed' daqui para evitar conflito de renderização */
+        background: url('https://i.ibb.co/nMzFNk1Q/imgi-8-Imagem-Home.png') no-repeat center center;
         background-size: cover;
-        z-index: -1;
-        /* Garante que o fundo não bloqueie a renderização */
-        will-change: transform;
+        z-index: 0; /* Alterado de -1 para 0 para não sumir atrás do body */
     }
 
     .main-container {
+        position: relative; /* Adicionado para habilitar o uso do z-index */
+        z-index: 1; /* Garante que o conteúdo fique sempre acima da imagem */
         display: flex;
         flex-direction: column;
         align-items: center;
