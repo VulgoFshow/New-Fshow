@@ -900,18 +900,10 @@ button:disabled {
   </div>
 </label>
 
-
 <label class="option">
   <img src="https://i.ibb.co/GvHmFK1B/Millena.png" alt="Opção">
   <div class="option-content">
     <input type="radio" name="vote" value="Millena"> Millena
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://i.ibb.co/FbC5w9Q0/Perfeitz.png" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Perfeitz"> Perfeitz
   </div>
 </label>
 
@@ -980,7 +972,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "teste";
+  const TABLE_VOTACAO = "finalcorrida";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1; 
