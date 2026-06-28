@@ -6,27 +6,28 @@
     <title>Flappy Bird - Desafio Supremo</title>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --border-color: #30363d;
-            --primary-color: #2ea043;
-            --primary-hover: #3fb950;
-            --text-main: #c9d1d9;
+            --bg-color: #0a0e27;
+            --card-bg: #1a1f3a;
+            --border-color: #2d3561;
+            --primary-color: #00d4ff;
+            --primary-hover: #00f0ff;
+            --text-main: #b0c4de;
             --text-bright: #ffffff;
-            --accent-color: #58a6ff;
-            --danger-color: #f85149;
+            --accent-color: #ff006e;
+            --danger-color: #ff4757;
+            --success-color: #2ed573;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: var(--bg-color);
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
             color: var(--text-main);
             display: flex;
             justify-content: center;
@@ -34,6 +35,7 @@
             min-height: 100vh;
             padding: 20px;
             overflow-x: hidden;
+            font-weight: 500;
         }
 
         .container {
@@ -43,65 +45,83 @@
         }
 
         .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 30px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #252d4a 100%);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 35px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         h1 {
             color: var(--text-bright);
-            margin-bottom: 20px;
-            font-size: 2rem;
-            letter-spacing: -0.5px;
+            margin-bottom: 15px;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
         }
 
         p {
             margin-bottom: 20px;
-            line-height: 1.5;
-            color: #8b949e;
+            line-height: 1.6;
+            color: #8b95a5;
+            font-size: 15px;
         }
 
         input {
             width: 100%;
-            padding: 14px;
-            background: #010409;
-            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            background: rgba(10, 14, 39, 0.8);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             margin: 15px 0;
             font-size: 16px;
             color: var(--text-bright);
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s;
         }
 
         input:focus {
-            border-color: var(--accent-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            background: rgba(10, 14, 39, 0.95);
         }
 
         button {
-            background: var(--primary-color);
-            color: white;
+            background: linear-gradient(135deg, var(--primary-color), #00b8ff);
+            color: #0a0e27;
             border: none;
             padding: 14px 28px;
             border-radius: 12px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 600;
-            transition: all 0.2s;
+            font-weight: 700;
+            transition: all 0.3s;
             width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
         }
 
         button:hover:not(:disabled) {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, var(--primary-hover), #00d4ff);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
         }
 
         button:active:not(:disabled) {
-            transform: translateY(0);
+            transform: translateY(-1px);
         }
 
         button:disabled {
@@ -124,22 +144,33 @@
             display: flex;
             justify-content: space-between;
             width: 100%;
-            padding: 10px 15px;
-            background: rgba(0,0,0,0.3);
+            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 0, 110, 0.1));
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 700;
+            gap: 20px;
+        }
+
+        .info-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .info-item span {
-            color: var(--text-bright);
+            color: var(--primary-color);
+            font-size: 20px;
         }
 
         canvas {
-            background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 100%);
+            background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 50%, #c8e6c9 100%);
             border: 4px solid var(--primary-color);
             border-radius: 12px;
-            box-shadow: 0 0 20px rgba(46, 160, 67, 0.2);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.1);
             max-width: 100%;
             height: auto;
             display: block;
@@ -156,41 +187,49 @@
         }
 
         .control-btn {
-            padding: 15px 30px;
-            background: #30363d;
-            border-radius: 15px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--accent-color), #ff1744);
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 18px;
             user-select: none;
             cursor: pointer;
-            border: 1px solid #484f58;
+            border: 2px solid var(--accent-color);
             touch-action: manipulation;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.2s;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 0, 110, 0.3);
         }
 
         .control-btn:active {
-            background: #484f58;
+            background: linear-gradient(135deg, #ff1744, var(--accent-color));
             transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(255, 0, 110, 0.5);
         }
 
         #ranking {
             margin-top: 30px;
             text-align: left;
-            background: rgba(0,0,0,0.2);
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 0, 110, 0.05));
+            padding: 25px;
             border-radius: 16px;
+            border: 2px solid var(--border-color);
         }
 
         #ranking h2 {
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
             color: var(--text-bright);
             display: flex;
             align-items: center;
             gap: 10px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         #rankingList {
@@ -198,11 +237,17 @@
         }
 
         #rankingList li {
-            padding: 12px 0;
+            padding: 14px 0;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        #rankingList li:hover {
+            padding-left: 10px;
+            color: var(--primary-color);
         }
 
         #rankingList li:last-child {
@@ -210,37 +255,42 @@
         }
 
         .score-val {
-            color: var(--primary-hover);
-            font-weight: bold;
+            color: var(--success-color);
+            font-weight: 700;
+            font-size: 16px;
         }
 
         .warning-message {
-            background: rgba(248, 81, 73, 0.1);
-            border: 1px solid var(--danger-color);
-            color: var(--danger-color);
-            padding: 15px;
+            background: rgba(255, 71, 87, 0.15);
+            border: 2px solid var(--danger-color);
+            color: #ff8a92;
+            padding: 16px;
             border-radius: 12px;
             margin-bottom: 20px;
             font-size: 14px;
+            font-weight: 600;
         }
 
         .success-message {
-            background: rgba(46, 160, 67, 0.1);
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 15px;
+            background: rgba(46, 213, 115, 0.15);
+            border: 2px solid var(--success-color);
+            color: #5fea9f;
+            padding: 16px;
             border-radius: 12px;
             margin-bottom: 20px;
             font-size: 14px;
+            font-weight: 600;
         }
 
         .reset-button {
-            background: var(--accent-color);
+            background: linear-gradient(135deg, var(--accent-color), #ff1744);
             margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(255, 0, 110, 0.3);
         }
 
         .reset-button:hover {
-            background: #79c0ff;
+            background: linear-gradient(135deg, #ff1744, var(--accent-color));
+            box-shadow: 0 8px 30px rgba(255, 0, 110, 0.5);
         }
 
         @media (min-width: 768px) {
@@ -264,7 +314,7 @@
     <!-- Login Card -->
     <div id="loginCard" class="card hidden">
         <h1>🐦 Prova do Fazendeiro</h1>
-        <p>Você terá 60 segundos para passar pelo máximo de obstáculos.</p>
+        <p>Você terá 60 segundos para passar pelo máximo de obstáculos. Desvie dos canos e acumule pontos!</p>
         <input type="text" id="playerName" placeholder="Seu apelido de guerreiro" maxlength="30">
         <button id="startBtn" onclick="window.gameApp.startLogin()">Começar Desafio</button>
         <p id="loginLoadingStatus" style="margin-top: 20px; font-size: 12px; display: none;">Carregando...</p>
@@ -292,7 +342,7 @@
     <div id="resultCard" class="card hidden">
         <h1>Fim de Jogo!</h1>
         <p>Aguarde o resultado nos comentários.</p>
-        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Score: <span id="finalScore" style="color: var(--primary-hover);">0</span></h2>
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Score: <span id="finalScore" style="color: var(--success-color);">0</span></h2>
         
         <div id="alreadyPlayedMessage" class="warning-message hidden">
             ⚠️ Você já completou o desafio. Seu score foi registrado no ranking.
@@ -346,7 +396,7 @@
         pipeWidth: 50,
         pipeGap: 120,
         pipeSpacing: 200,
-        nextPipeX: 400,
+        nextPipeX: 200,
 
         isGameRunning: false,
         hasAlreadyPlayed: false,
@@ -469,7 +519,7 @@
             this.bird.velocity = 0;
             this.bird.y = 250;
             this.pipes = [];
-            this.nextPipeX = 400;
+            this.nextPipeX = 200;
 
             document.getElementById("score").textContent = "0";
             document.getElementById("timer").textContent = "60";
@@ -506,13 +556,17 @@
             this.bird.y += this.bird.velocity;
 
             // Limites do canvas - resetar em vez de finalizar
-            if (this.bird.y + this.bird.height > this.canvas.height) {
+            if (this.bird.y + this.bird.height > this.canvas.height - 20) {
                 this.resetBird();
+                this.pipes = [];
+                this.nextPipeX = 200;
                 return;
             }
 
             if (this.bird.y < 0) {
                 this.resetBird();
+                this.pipes = [];
+                this.nextPipeX = 200;
                 return;
             }
 
@@ -535,9 +589,8 @@
                 // Verificar colisão - resetar em vez de finalizar
                 if (this.checkCollision(this.pipes[i])) {
                     this.resetBird();
-                    // Limpar todos os canos para um novo ciclo
                     this.pipes = [];
-                    this.nextPipeX = 400;
+                    this.nextPipeX = 200;
                     return;
                 }
 
@@ -585,7 +638,8 @@
             // Limpar canvas com gradiente de céu
             const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
             gradient.addColorStop(0, "#87ceeb");
-            gradient.addColorStop(1, "#e0f6ff");
+            gradient.addColorStop(0.5, "#e0f6ff");
+            gradient.addColorStop(1, "#c8e6c9");
             this.ctx.fillStyle = gradient;
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -593,7 +647,12 @@
             this.ctx.fillStyle = "#8b7355";
             this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
 
-            // Desenhar pássaro
+            // Desenhar pássaro com sombra
+            this.ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+            this.ctx.shadowBlur = 10;
+            this.ctx.shadowOffsetX = 2;
+            this.ctx.shadowOffsetY = 2;
+
             this.ctx.fillStyle = "#ffd700";
             this.ctx.beginPath();
             this.ctx.arc(this.bird.x + this.bird.width / 2, this.bird.y + this.bird.height / 2, this.bird.width / 2, 0, Math.PI * 2);
@@ -605,13 +664,28 @@
             this.ctx.arc(this.bird.x + this.bird.width / 2 + 5, this.bird.y + this.bird.height / 2 - 3, 3, 0, Math.PI * 2);
             this.ctx.fill();
 
-            // Desenhar canos
-            this.ctx.fillStyle = "#2ea043";
+            // Resetar sombra
+            this.ctx.shadowColor = "transparent";
+
+            // Desenhar canos com gradiente
             this.pipes.forEach(pipe => {
+                const pipeGradient = this.ctx.createLinearGradient(pipe.x, 0, pipe.x + this.pipeWidth, 0);
+                pipeGradient.addColorStop(0, "#1b5e20");
+                pipeGradient.addColorStop(0.5, "#2e7d32");
+                pipeGradient.addColorStop(1, "#1b5e20");
+
+                this.ctx.fillStyle = pipeGradient;
+
                 // Cano superior
                 this.ctx.fillRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
                 // Cano inferior
                 this.ctx.fillRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
+
+                // Bordas dos canos
+                this.ctx.strokeStyle = "#0d3817";
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
+                this.ctx.strokeRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
             });
         },
 
@@ -657,7 +731,7 @@
         // Carregar ranking
         async loadRanking() {
             const list = document.getElementById("rankingList");
-            list.innerHTML = "<p style='text-align: center; color: #8b949e;'>Carregando ranking...</p>";
+            list.innerHTML = "<p style='text-align: center; color: #8b95a5;'>Carregando ranking...</p>";
 
             try {
                 const { data, error } = await this.supabaseClient
@@ -680,7 +754,7 @@
                         list.appendChild(li);
                     });
                 } else {
-                    list.innerHTML = "<li style='text-align: center; color: #8b949e;'>Nenhum score registrado ainda.</li>";
+                    list.innerHTML = "<li style='text-align: center; color: #8b95a5;'>Nenhum score registrado ainda.</li>";
                 }
             } catch (err) {
                 console.error("Erro ao carregar ranking:", err);
