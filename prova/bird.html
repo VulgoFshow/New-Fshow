@@ -723,37 +723,60 @@
             await this.loadRanking();
         },
 
+// Salvar score corrigido
         async saveScore() {
             try {
-                await this.supabaseClient.from("ranking_snake").insert([
-                    { nome: this.playerName, score: this.score, ip_address: this.playerIP }
+                console.log("Tentando salvar:", this.playerName, this.score, this.playerIP);
+                
+                const { data, error } = await this.supabaseClient.from("ranking_snake").insert([
+                    { 
+                        nome: this.playerName, 
+                        score: this.score,
+                        ip_address: this.playerIP
+                    }
                 ]);
-            } catch (err) {}
+
+                // SE houver erro do Supabase, forçamos o console a mostrar
+                if (error) throw error; 
+                
+                console.log("Score salvo com sucesso!", data);
+            } catch (err) {
+                console.error("ERRO GRAVE AO SALVAR SCORE NO SUPABASE:", err.message || err);
+                alert("Erro ao salvar sua pontuação no banco de dados.");
+            }
         },
 
+        // Carregar ranking corrigido
         async loadRanking() {
             const list = document.getElementById("rankingList");
-            list.innerHTML = "<p style='text-align: center; color: #8b95a5;'>Carregando ranking...</p>";
+            list.innerHTML = "<p style='text-align: center; color: #a99ec2;'>Carregando ranking...</p>";
+
             try {
                 const { data, error } = await this.supabaseClient
                     .from("ranking_snake")
                     .select("*")
                     .order("score", { ascending: false })
                     .limit(10);
+
                 if (error) throw error;
+
                 list.innerHTML = "";
                 if (data && data.length > 0) {
                     data.forEach((player, index) => {
                         const li = document.createElement("li");
                         const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-                        li.innerHTML = `<span>${medal}${player.nome}</span><span class="score-val">${player.score} pts</span>`;
+                        li.innerHTML = `
+                            <span>${medal}${player.nome}</span>
+                            <span class="score-val">${player.score} pts</span>
+                        `;
                         list.appendChild(li);
                     });
                 } else {
-                    list.innerHTML = "<li style='text-align: center; color: #8b95a5;'>Nenhum score registrado ainda.</li>";
+                    list.innerHTML = "<li style='text-align: center; color: #a99ec2;'>Nenhum score registrado ainda.</li>";
                 }
             } catch (err) {
-                list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking.</li>";
+                console.error("ERRO GRAVE AO CARREGAR RANKING:", err.message || err);
+                list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking. Verifique o console (F12).</li>";
             }
         },
 
