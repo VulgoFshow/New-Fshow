@@ -395,8 +395,9 @@
         pipes: [],
         pipeWidth: 50,
         pipeGap: 120,
-        pipeSpacing: 200,
-        nextPipeX: 200,
+        pipeSpacing: 250,
+        nextPipeX: 600,
+        pipeSpeed: 3,
 
         isGameRunning: false,
         hasAlreadyPlayed: false,
@@ -519,7 +520,7 @@
             this.bird.velocity = 0;
             this.bird.y = 250;
             this.pipes = [];
-            this.nextPipeX = 200;
+            this.nextPipeX = 600;
 
             document.getElementById("score").textContent = "0";
             document.getElementById("timer").textContent = "60";
@@ -559,19 +560,19 @@
             if (this.bird.y + this.bird.height > this.canvas.height - 20) {
                 this.resetBird();
                 this.pipes = [];
-                this.nextPipeX = 200;
+                this.nextPipeX = 600;
                 return;
             }
 
             if (this.bird.y < 0) {
                 this.resetBird();
                 this.pipes = [];
-                this.nextPipeX = 200;
+                this.nextPipeX = 600;
                 return;
             }
 
-            // Gerar novos canos
-            if (this.nextPipeX < this.canvas.width) {
+            // Gerar novos canos continuamente
+            if (this.nextPipeX < this.canvas.width + 100) {
                 const gapY = Math.random() * (this.canvas.height - this.pipeGap - 100) + 50;
                 this.pipes.push({
                     x: this.nextPipeX,
@@ -584,13 +585,13 @@
 
             // Atualizar canos
             for (let i = this.pipes.length - 1; i >= 0; i--) {
-                this.pipes[i].x -= 5;
+                this.pipes[i].x -= this.pipeSpeed;
 
                 // Verificar colisão - resetar em vez de finalizar
                 if (this.checkCollision(this.pipes[i])) {
                     this.resetBird();
                     this.pipes = [];
-                    this.nextPipeX = 200;
+                    this.nextPipeX = 600;
                     return;
                 }
 
