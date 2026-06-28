@@ -167,7 +167,7 @@
         }
 
         canvas {
-            background: linear-gradient(180deg, #87ceeb 0%, #e0f6ff 50%, #c8e6c9 100%);
+            background: linear-gradient(180deg, #5ec3ed 0%, #a2dcf0 60%, #c8e6c9 100%);
             border: 4px solid var(--primary-color);
             border-radius: 12px;
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.1);
@@ -270,17 +270,6 @@
             font-weight: 600;
         }
 
-        .success-message {
-            background: rgba(46, 213, 115, 0.15);
-            border: 2px solid var(--success-color);
-            color: #5fea9f;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
         .reset-button {
             background: linear-gradient(135deg, var(--accent-color), #ff1744);
             margin-top: 20px;
@@ -303,12 +292,14 @@
 
 <div class="container">
 
+    <!-- Loading Card -->
     <div id="loadingCard" class="card">
         <h1>🐦 Prova do Fazendeiro</h1>
         <p>Verificando acesso...</p>
         <p id="loadingStatus" style="margin-top: 20px; font-size: 12px;">Carregando...</p>
     </div>
 
+    <!-- Login Card -->
     <div id="loginCard" class="card hidden">
         <h1>🐦 Prova do Fazendeiro</h1>
         <p>Você terá 60 segundos para passar pelo máximo de obstáculos. Desvie dos canos e acumule pontos!</p>
@@ -317,6 +308,7 @@
         <p id="loginLoadingStatus" style="margin-top: 20px; font-size: 12px; display: none;">Carregando...</p>
     </div>
 
+    <!-- Game Card -->
     <div id="gameCard" class="card hidden">
         <div id="gameArea">
             <div id="info">
@@ -334,6 +326,7 @@
         </div>
     </div>
 
+    <!-- Result Card -->
     <div id="resultCard" class="card hidden">
         <h1>Fim de Jogo!</h1>
         <p>Aguarde o resultado nos comentários.</p>
@@ -357,13 +350,11 @@
 
 <script>
     window.gameApp = {
-        // Configurações Supabase
         SUPABASE_URL: "https://mmeqirvfbwvabfblovdx.supabase.co",
         SUPABASE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM",
         
         supabaseClient: null,
 
-        // Estado do Jogo
         playerName: "",
         playerIP: "",
         score: 0,
@@ -374,24 +365,27 @@
         canvas: null,
         ctx: null,
 
-        // Física do pássaro
+        // Física do pássaro aprimorada
         bird: {
-            x: 50,
+            x: 60,
             y: 250,
-            width: 30,
-            height: 30,
+            width: 32,
+            height: 24,
             velocity: 0,
-            gravity: 0.4,
-            jumpPower: -10
+            gravity: 0.35,   // Mais suave (era 0.4)
+            jumpPower: -8.5  // Pulo ajustado
         },
 
-        // Obstáculos
+        // Obstáculos ajustados
         pipes: [],
-        pipeWidth: 50,
-        pipeGap: 120,
+        pipeWidth: 55,
+        pipeGap: 175,        // Espaço MUITO maior entre os canos (era 120)
         pipeSpacing: 250,
         nextPipeX: 600,
         pipeSpeed: 3,
+
+        // Variável para animação de nuvens
+        cloudOffset: 0,
 
         isGameRunning: false,
         hasAlreadyPlayed: false,
@@ -419,7 +413,6 @@
                     this.showCard("loginCard");
                 }
             } catch (err) {
-                console.error("Erro ao inicializar app:", err);
                 this.showCard("loginCard");
             }
         },
@@ -430,7 +423,6 @@
                 const data = await response.json();
                 this.playerIP = data.ip;
             } catch (err) {
-                console.error("Erro ao obter IP:", err);
                 this.playerIP = "unknown";
             }
         },
@@ -442,17 +434,9 @@
                     .select("*")
                     .eq("ip_address", this.playerIP)
                     .limit(1);
-
-                if (error) {
-                    console.error("Erro ao verificar IP:", error);
-                    return false;
-                }
-
+                if (error) return false;
                 return data && data.length > 0;
-            } catch (err) {
-                console.error("Erro na verificação:", err);
-                return false;
-            }
+            } catch (err) { return false; }
         },
 
         async startLogin() {
@@ -505,10 +489,7 @@
             this.timerInterval = setInterval(() => {
                 this.timeLeft--;
                 document.getElementById("timer").textContent = this.timeLeft;
-
-                if (this.timeLeft <= 0) {
-                    this.finishGame();
-                }
+                if (this.timeLeft <= 0) this.finishGame();
             }, 1000);
 
             this.gameLoop = setInterval(() => {
@@ -525,31 +506,31 @@
         update() {
             if (!this.isGameRunning) return;
 
-            // Aplicar gravidade
+            // Gravidade
             this.bird.velocity += this.bird.gravity;
             this.bird.y += this.bird.velocity;
+            
+            // Animação das nuvens (parallax lento)
+            this.cloudOffset -= 0.5;
+            if(this.cloudOffset <= -this.canvas.width) this.cloudOffset = 0;
 
-            // Limites do canvas - resetar em vez de finalizar
-            if (this.bird.y + this.bird.height > this.canvas.height - 20) {
+            // Limites (chão = canvas.height - 25)
+            if (this.bird.y + this.bird.height/2 > this.canvas.height - 25) {
                 this.resetBird();
                 this.pipes = [];
                 this.nextPipeX = 600;
                 return;
             }
 
-            if (this.bird.y < 0) {
-                this.resetBird();
-                this.pipes = [];
-                this.nextPipeX = 600;
-                return;
+            if (this.bird.y < -30) {
+                this.bird.y = -30;
+                this.bird.velocity = 0;
             }
 
-            // CORREÇÃO PRINCIPAL: Decrementar o nextPipeX para simular a câmera andando
             this.nextPipeX -= this.pipeSpeed;
 
-            // Gerar novos canos continuamente
             if (this.nextPipeX < this.canvas.width + 100) {
-                const gapY = Math.random() * (this.canvas.height - this.pipeGap - 100) + 50;
+                const gapY = Math.random() * (this.canvas.height - this.pipeGap - 120) + 60;
                 this.pipes.push({
                     x: this.nextPipeX,
                     topHeight: gapY,
@@ -559,11 +540,9 @@
                 this.nextPipeX += this.pipeSpacing;
             }
 
-            // Atualizar canos
             for (let i = this.pipes.length - 1; i >= 0; i--) {
                 this.pipes[i].x -= this.pipeSpeed;
 
-                // Verificar colisão
                 if (this.checkCollision(this.pipes[i])) {
                     this.resetBird();
                     this.pipes = [];
@@ -571,84 +550,159 @@
                     return;
                 }
 
-                // Verificar se passou pelo cano
                 if (!this.pipes[i].scored && this.pipes[i].x + this.pipeWidth < this.bird.x) {
                     this.pipes[i].scored = true;
                     this.score++;
                     document.getElementById("score").textContent = this.score;
                 }
 
-                // Remover canos fora da tela
-                if (this.pipes[i].x + this.pipeWidth < 0) {
+                if (this.pipes[i].x + this.pipeWidth < -20) {
                     this.pipes.splice(i, 1);
                 }
             }
         },
 
         checkCollision(pipe) {
-            const birdLeft = this.bird.x;
-            const birdRight = this.bird.x + this.bird.width;
-            const birdTop = this.bird.y;
-            const birdBottom = this.bird.y + this.bird.height;
+            // Hitbox ligeiramente menor que a arte para ser justo
+            const margin = 4; 
+            const birdLeft = this.bird.x - this.bird.width/2 + margin;
+            const birdRight = this.bird.x + this.bird.width/2 - margin;
+            const birdTop = this.bird.y - this.bird.height/2 + margin;
+            const birdBottom = this.bird.y + this.bird.height/2 - margin;
 
-            const pipeLeft = pipe.x;
-            const pipeRight = pipe.x + this.pipeWidth;
+            // Borda do bocal é um pouco mais larga
+            const pipeLeft = pipe.x - 2;
+            const pipeRight = pipe.x + this.pipeWidth + 2;
 
             if (birdRight > pipeLeft && birdLeft < pipeRight) {
-                if (birdTop < pipe.topHeight) {
-                    return true;
-                }
-                if (birdBottom > pipe.bottomY) {
+                if (birdTop < pipe.topHeight || birdBottom > pipe.bottomY) {
                     return true;
                 }
             }
-
             return false;
         },
 
+        // Função auxiliar para desenhar nuvens
+        drawCloud(x, y, scale) {
+            this.ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, 20 * scale, 0, Math.PI * 2);
+            this.ctx.arc(x + 25 * scale, y - 10 * scale, 25 * scale, 0, Math.PI * 2);
+            this.ctx.arc(x + 50 * scale, y, 20 * scale, 0, Math.PI * 2);
+            this.ctx.fill();
+        },
+
         draw() {
+            // Fundo de Céu (Gradiente Moderno)
             const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-            gradient.addColorStop(0, "#87ceeb");
-            gradient.addColorStop(0.5, "#e0f6ff");
+            gradient.addColorStop(0, "#48b2e8");
+            gradient.addColorStop(0.6, "#95d9f5");
             gradient.addColorStop(1, "#c8e6c9");
             this.ctx.fillStyle = gradient;
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-            this.ctx.fillStyle = "#8b7355";
-            this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
-
-            this.ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-            this.ctx.shadowBlur = 10;
-            this.ctx.shadowOffsetX = 2;
-            this.ctx.shadowOffsetY = 2;
-
-            this.ctx.fillStyle = "#ffd700";
+            // Sol Desenhado
+            this.ctx.fillStyle = "rgba(255, 235, 100, 0.9)";
             this.ctx.beginPath();
-            this.ctx.arc(this.bird.x + this.bird.width / 2, this.bird.y + this.bird.height / 2, this.bird.width / 2, 0, Math.PI * 2);
+            this.ctx.arc(this.canvas.width - 60, 80, 40, 0, Math.PI * 2);
             this.ctx.fill();
 
-            this.ctx.fillStyle = "#000";
-            this.ctx.beginPath();
-            this.ctx.arc(this.bird.x + this.bird.width / 2 + 5, this.bird.y + this.bird.height / 2 - 3, 3, 0, Math.PI * 2);
-            this.ctx.fill();
+            // Nuvens Animadas (Parallax)
+            this.drawCloud(this.cloudOffset + 100, 100, 1);
+            this.drawCloud(this.cloudOffset + 350, 150, 0.8);
+            this.drawCloud(this.cloudOffset + this.canvas.width + 100, 100, 1);
+            this.drawCloud(this.cloudOffset + this.canvas.width + 350, 150, 0.8);
 
-            this.ctx.shadowColor = "transparent";
-
+            // Desenhar Canos (Estilo Flappy Clássico)
             this.pipes.forEach(pipe => {
+                // Gradiente para dar volume ao cano
                 const pipeGradient = this.ctx.createLinearGradient(pipe.x, 0, pipe.x + this.pipeWidth, 0);
-                pipeGradient.addColorStop(0, "#1b5e20");
-                pipeGradient.addColorStop(0.5, "#2e7d32");
-                pipeGradient.addColorStop(1, "#1b5e20");
+                pipeGradient.addColorStop(0, "#73bf2e");
+                pipeGradient.addColorStop(0.5, "#9de659");
+                pipeGradient.addColorStop(1, "#559118");
 
                 this.ctx.fillStyle = pipeGradient;
-                this.ctx.fillRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
-                this.ctx.fillRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
-
-                this.ctx.strokeStyle = "#0d3817";
+                this.ctx.strokeStyle = "#254009";
                 this.ctx.lineWidth = 2;
+
+                // Cano Superior (Corpo)
+                this.ctx.fillRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
                 this.ctx.strokeRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
+                
+                // Cano Inferior (Corpo)
+                this.ctx.fillRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
                 this.ctx.strokeRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
+
+                // Bocais dos Canos (Pontas mais grossas)
+                const capHeight = 24;
+                const capOverflow = 6;
+                
+                // Bocal Superior
+                this.ctx.fillRect(pipe.x - capOverflow/2, pipe.topHeight - capHeight, this.pipeWidth + capOverflow, capHeight);
+                this.ctx.strokeRect(pipe.x - capOverflow/2, pipe.topHeight - capHeight, this.pipeWidth + capOverflow, capHeight);
+                
+                // Bocal Inferior
+                this.ctx.fillRect(pipe.x - capOverflow/2, pipe.bottomY, this.pipeWidth + capOverflow, capHeight);
+                this.ctx.strokeRect(pipe.x - capOverflow/2, pipe.bottomY, this.pipeWidth + capOverflow, capHeight);
             });
+
+            // Chão Aprimorado (Grama e Terra)
+            const groundY = this.canvas.height - 25;
+            this.ctx.fillStyle = "#ded895"; // Cor da terra
+            this.ctx.fillRect(0, groundY, this.canvas.width, 25);
+            this.ctx.fillStyle = "#73bf2e"; // Cor da grama
+            this.ctx.fillRect(0, groundY, this.canvas.width, 10);
+            this.ctx.strokeStyle = "#254009";
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeRect(0, groundY, this.canvas.width, 10);
+
+            // Desenhar Pássaro Detalhado
+            this.ctx.save();
+            // Mover contexto para o centro do pássaro para rotacionar
+            this.ctx.translate(this.bird.x, this.bird.y);
+            
+            // Rotacionar com base na velocidade de queda/pulo
+            let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 6, (this.bird.velocity * 0.1)));
+            this.ctx.rotate(rotation);
+
+            // Corpo Amarelo
+            this.ctx.fillStyle = "#ffcc00";
+            this.ctx.beginPath();
+            this.ctx.ellipse(0, 0, this.bird.width/2, this.bird.height/2, 0, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.strokeStyle = "#c29a00";
+            this.ctx.lineWidth = 2;
+            this.ctx.stroke();
+
+            // Olho Branco e Pupila Preta
+            this.ctx.fillStyle = "#fff";
+            this.ctx.beginPath();
+            this.ctx.arc(6, -4, 6, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.stroke();
+            this.ctx.fillStyle = "#000";
+            this.ctx.beginPath();
+            this.ctx.arc(8, -4, 2.5, 0, Math.PI * 2);
+            this.ctx.fill();
+
+            // Bico Laranja
+            this.ctx.fillStyle = "#ff6600";
+            this.ctx.beginPath();
+            this.ctx.moveTo(10, 2);
+            this.ctx.lineTo(22, 4);
+            this.ctx.lineTo(10, 8);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+
+            // Asa
+            this.ctx.fillStyle = "#fff2a8";
+            this.ctx.beginPath();
+            this.ctx.ellipse(-4, 2, 8, 5, 0, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.stroke();
+
+            this.ctx.restore(); // Restaurar contexto
         },
 
         jump() {
@@ -659,15 +713,12 @@
         async finishGame() {
             if (!this.isGameRunning) return;
             this.isGameRunning = false;
-
             clearInterval(this.timerInterval);
             clearInterval(this.gameLoop);
-
             this.showCard("resultCard");
             document.getElementById("finalScore").textContent = this.score;
             document.getElementById("alreadyPlayedMessage").classList.add("hidden");
             document.getElementById("resetBtn").classList.add("hidden");
-
             await this.saveScore();
             await this.loadRanking();
         },
@@ -675,46 +726,33 @@
         async saveScore() {
             try {
                 await this.supabaseClient.from("ranking_snake").insert([
-                    { 
-                        nome: this.playerName, 
-                        score: this.score,
-                        ip_address: this.playerIP
-                    }
+                    { nome: this.playerName, score: this.score, ip_address: this.playerIP }
                 ]);
-            } catch (err) {
-                console.error("Erro ao salvar score:", err);
-            }
+            } catch (err) {}
         },
 
         async loadRanking() {
             const list = document.getElementById("rankingList");
             list.innerHTML = "<p style='text-align: center; color: #8b95a5;'>Carregando ranking...</p>";
-
             try {
                 const { data, error } = await this.supabaseClient
                     .from("ranking_snake")
                     .select("*")
                     .order("score", { ascending: false })
                     .limit(10);
-
                 if (error) throw error;
-
                 list.innerHTML = "";
                 if (data && data.length > 0) {
                     data.forEach((player, index) => {
                         const li = document.createElement("li");
                         const medal = index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : "";
-                        li.innerHTML = `
-                            <span>${medal}${player.nome}</span>
-                            <span class="score-val">${player.score} pts</span>
-                        `;
+                        li.innerHTML = `<span>${medal}${player.nome}</span><span class="score-val">${player.score} pts</span>`;
                         list.appendChild(li);
                     });
                 } else {
                     list.innerHTML = "<li style='text-align: center; color: #8b95a5;'>Nenhum score registrado ainda.</li>";
                 }
             } catch (err) {
-                console.error("Erro ao carregar ranking:", err);
                 list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking.</li>";
             }
         },
@@ -737,7 +775,6 @@
     });
 
     document.addEventListener("click", (e) => {
-        // CORREÇÃO: Impede que o clique no botão "Começar" faça o pássaro pular acidentalmente
         if (window.gameApp.isGameRunning && e.target.tagName !== 'BUTTON') {
             window.gameApp.jump();
         }
