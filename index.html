@@ -3,7 +3,7 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>FlopShow | Notícias, Reality Shows e Enquetes</title>  
+    <title>FlopShow, Mais Flop do que nunca</title>  
     <meta name="description" content="FlopShow: Acompanhe as principais notícias de reality shows, enquetes e coberturas completas.">
 
     <!-- Fonts & Icons -->
@@ -145,6 +145,32 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 .story-pair { display: flex; flex-shrink: 0; margin-right: 10px; }
 .story-pair .story-item { width: 66px; height: 66px; }
 .story-pair .story-item:last-child { margin-left: -20px; }
+
+.story-item.faz::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -32px;
+  width: 100px;
+  height: 110px;
+  background-image: url("https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.story-item.lamp::after {
+  content: "";
+  position: absolute;
+  top: -41px;
+  right: -5px;
+  width: 43px;
+  height: 110px;
+  background-image: url("https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
 /* ==================================== 
    DESTAQUES & CARROSSEL
@@ -854,31 +880,33 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     </div>
     <div class="gradient-line"></div>
 
-    <!-- Stories Restaurados -->
+    <!-- Stories -->
     <div class="stories-wrapper">
         <div class="stories-container">
-           <div class="story-item e"><img src="/fotos/pea/Alysson.webp" alt="Alysson"></div>
-            <div class="story-item e"><img src="/fotos/pea/Arthur.webp" alt="Arthur"></div>
-            <div class="story-item e"><img src="/fotos/pea/Braian.webp" alt="Braian"></div>
-            <div class="story-item e"><img src="/fotos/pea/Bryan.webp" alt="Bryan"></div>
-            <div class="story-item e"><img src="/fotos/pea/Dynamite.webp" alt="Dynamite"></div>
-            <div class="story-item fire"><img src="/fotos/pea/Gabi.webp" alt="Gabi"></div>
-            <div class="story-item e"><img src="/fotos/pea/Gabriel.webp" alt="Gabriel"></div>
-            <div class="story-item e"><img src="/fotos/pea/Grimes.webp" alt="Grimes"></div>
-            <div class="story-item fire"><img src="/fotos/pea/Joao.webp" alt="João"></div>
-            <div class="story-item e"><img src="/fotos/pea/Joaozin.webp" alt="Joãozin"></div>
-            <div class="story-item e"><img src="/fotos/pea/Koyuh.webp" alt="Koyuh"></div>
-            <div class="story-item e"><img src="/fotos/pea/Lana.webp" alt="Lana"></div>
-            <div class="story-item e"><img src="/fotos/pea/Lucas.webp" alt="Lucas"></div>
-            <div class="story-item e"><img src="/fotos/pea/Luddi.webp" alt="Luddi"></div>
-            <div class="story-item e"><img src="/fotos/pea/Mikael.webp" alt="Mikael"></div>
-            <div class="story-item fire"><img src="/fotos/pea/Mira.webp" alt="Mira"></div>
-            <div class="story-item e"><img src="/fotos/pea/Nick.webp" alt="Nick"></div>
-            <div class="story-item e"><img src="/fotos/pea/Paiva.webp" alt="Paiva"></div>
-            <div class="story-item e"><img src="/fotos/pea/Pedro.webp" alt="Pedro"></div>
-            <div class="story-item e"><img src="/fotos/pea/Rose.webp" alt="Rose"></div>
-            <div class="story-item fire"><img src="/fotos/pea/Simone.webp" alt="Simone"></div>
-            <div class="story-item e"><img src="/fotos/pea/Tety.webp" alt="Tety"></div>
+           <div class="story-item"><img src="https://i.postimg.cc/tTGZ43Ts/adriana.jpg" alt="Adriana"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/ZRzB58RB/arthur.jpg" alt="Arthur"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/B6fLnT6F/braian.jpg" alt="Braian"></div>
+            <div class="story-item fire"><img src="https://i.postimg.cc/FRXdHyRc/brunno.jpg" alt="Brunno"></div>
+            <div class="story-item fire"><img src="https://i.postimg.cc/26NbSQ6h/duda.jpg" alt="Duda"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/TwvL3Vwq/eueu.jpg" alt="Eueu"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/cHGgLRHB/fernanda.jpg" alt="Fernanda"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/B6fLnT6p/gabi.jpg" alt="Gabi"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/NMv9j6Mb/gabriel.jpg" alt="Gabriel"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/TwjyLKLb/joao.jpg" alt="João"></div>
+            <div class="story-item lamp"><img src="https://i.postimg.cc/4dvK7Y7p/joaopedro.jpg" alt="João Pedro"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/PxbLpCpz/koyuh.jpg" alt="Koyuh"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/26dqb1bG/lana.jpg" alt="Lana"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/k4P6gQ4X/livia.jpg" alt="Lívia"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/B658LjLh/lorenzo.jpg" alt="Lorenzo"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/50WY2B0j/Mikael.jpg" alt="Mikael"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/SsLX2n21/milton.jpg" alt="Milton"></div>
+            <div class="story-item faz"><img src="https://i.postimg.cc/sXCQgYXf/Paiva.jpg" alt="Paiva"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/sXPBQMQN/pedro.jpg" alt="Pedro"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/TwvL3VwR/pedrohenrique.jpg" alt="Pedro Henrique"></div>
+            <div class="story-item fire"><img src="https://i.postimg.cc/d1R7khkf/renata.jpg" alt="Renata"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/sXPBQMQ8/rose.jpg" alt="Rose"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/RFx6Z7FS/sarah.jpg" alt="Sarah"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/xCGkJXJB/simone.jpg" alt="Simone"></div>
         </div>
     </div>
     
@@ -895,7 +923,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     <div class="vote-card">
       <div class="vote-card-header">
         <div>
-          <div class="vote-title">Apuros - Quem você quer que VENÇA?</div>
+          <div class="vote-title">ROÇA - Quem você quer que FIQUE?</div>
         </div>
 
         <div style="text-align:right">
