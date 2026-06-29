@@ -372,14 +372,14 @@
             width: 32,
             height: 24,
             velocity: 0,
-            gravity: 0.35,   // Mais suave (era 0.4 )
-            jumpPower: -8.5  // Pulo ajustado
+            gravity: 0.35,
+            jumpPower: -8.5
         },
 
         // Obstáculos ajustados
         pipes: [],
         pipeWidth: 55,
-        pipeGap: 175,        // Espaço MUITO maior entre os canos (era 120)
+        pipeGap: 175,
         pipeSpacing: 250,
         nextPipeX: 600,
         pipeSpeed: 3,
@@ -419,7 +419,7 @@
 
         async getPlayerIP() {
             try {
-                const response = await fetch(\'https://api.ipify.org?format=json\' );
+                const response = await fetch('https://api.ipify.org?format=json');
                 const data = await response.json();
                 this.playerIP = data.ip;
             } catch (err) {
@@ -506,15 +506,12 @@
         update() {
             if (!this.isGameRunning) return;
 
-            // Gravidade
             this.bird.velocity += this.bird.gravity;
             this.bird.y += this.bird.velocity;
             
-            // Animação das nuvens (parallax lento)
             this.cloudOffset -= 0.5;
             if(this.cloudOffset <= -this.canvas.width) this.cloudOffset = 0;
 
-            // Limites (chão = canvas.height - 25)
             if (this.bird.y + this.bird.height/2 > this.canvas.height - 25) {
                 this.resetBird();
                 this.pipes = [];
@@ -563,14 +560,12 @@
         },
 
         checkCollision(pipe) {
-            // Hitbox ligeiramente menor que a arte para ser justo
             const margin = 4; 
             const birdLeft = this.bird.x - this.bird.width/2 + margin;
             const birdRight = this.bird.x + this.bird.width/2 - margin;
             const birdTop = this.bird.y - this.bird.height/2 + margin;
             const birdBottom = this.bird.y + this.bird.height/2 - margin;
 
-            // Borda do bocal é um pouco mais larga
             const pipeLeft = pipe.x - 2;
             const pipeRight = pipe.x + this.pipeWidth + 2;
 
@@ -582,7 +577,6 @@
             return false;
         },
 
-        // Função auxiliar para desenhar nuvens
         drawCloud(x, y, scale) {
             this.ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
             this.ctx.beginPath();
@@ -593,7 +587,6 @@
         },
 
         draw() {
-            // Fundo de Céu (Gradiente Moderno)
             const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
             gradient.addColorStop(0, "#48b2e8");
             gradient.addColorStop(0.6, "#95d9f5");
@@ -601,21 +594,17 @@
             this.ctx.fillStyle = gradient;
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-            // Sol Desenhado
             this.ctx.fillStyle = "rgba(255, 235, 100, 0.9)";
             this.ctx.beginPath();
             this.ctx.arc(this.canvas.width - 60, 80, 40, 0, Math.PI * 2);
             this.ctx.fill();
 
-            // Nuvens Animadas (Parallax)
             this.drawCloud(this.cloudOffset + 100, 100, 1);
             this.drawCloud(this.cloudOffset + 350, 150, 0.8);
             this.drawCloud(this.cloudOffset + this.canvas.width + 100, 100, 1);
             this.drawCloud(this.cloudOffset + this.canvas.width + 350, 150, 0.8);
 
-            // Desenhar Canos (Estilo Flappy Clássico)
             this.pipes.forEach(pipe => {
-                // Gradiente para dar volume ao cano
                 const pipeGradient = this.ctx.createLinearGradient(pipe.x, 0, pipe.x + this.pipeWidth, 0);
                 pipeGradient.addColorStop(0, "#73bf2e");
                 pipeGradient.addColorStop(0.5, "#9de659");
@@ -625,47 +614,37 @@
                 this.ctx.strokeStyle = "#254009";
                 this.ctx.lineWidth = 2;
 
-                // Cano Superior (Corpo)
                 this.ctx.fillRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
                 this.ctx.strokeRect(pipe.x, 0, this.pipeWidth, pipe.topHeight);
                 
-                // Cano Inferior (Corpo)
                 this.ctx.fillRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
                 this.ctx.strokeRect(pipe.x, pipe.bottomY, this.pipeWidth, this.canvas.height - pipe.bottomY);
 
-                // Bocais dos Canos (Pontas mais grossas)
                 const capHeight = 24;
                 const capOverflow = 6;
                 
-                // Bocal Superior
                 this.ctx.fillRect(pipe.x - capOverflow/2, pipe.topHeight - capHeight, this.pipeWidth + capOverflow, capHeight);
                 this.ctx.strokeRect(pipe.x - capOverflow/2, pipe.topHeight - capHeight, this.pipeWidth + capOverflow, capHeight);
                 
-                // Bocal Inferior
                 this.ctx.fillRect(pipe.x - capOverflow/2, pipe.bottomY, this.pipeWidth + capOverflow, capHeight);
                 this.ctx.strokeRect(pipe.x - capOverflow/2, pipe.bottomY, this.pipeWidth + capOverflow, capHeight);
             });
 
-            // Chão Aprimorado (Grama e Terra)
             const groundY = this.canvas.height - 25;
-            this.ctx.fillStyle = "#ded895"; // Cor da terra
+            this.ctx.fillStyle = "#ded895";
             this.ctx.fillRect(0, groundY, this.canvas.width, 25);
-            this.ctx.fillStyle = "#73bf2e"; // Cor da grama
+            this.ctx.fillStyle = "#73bf2e";
             this.ctx.fillRect(0, groundY, this.canvas.width, 10);
             this.ctx.strokeStyle = "#254009";
             this.ctx.lineWidth = 2;
             this.ctx.strokeRect(0, groundY, this.canvas.width, 10);
 
-            // Desenhar Pássaro Detalhado
             this.ctx.save();
-            // Mover contexto para o centro do pássaro para rotacionar
             this.ctx.translate(this.bird.x, this.bird.y);
             
-            // Rotacionar com base na velocidade de queda/pulo
             let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 6, (this.bird.velocity * 0.1)));
             this.ctx.rotate(rotation);
 
-            // Corpo Amarelo
             this.ctx.fillStyle = "#ffcc00";
             this.ctx.beginPath();
             this.ctx.ellipse(0, 0, this.bird.width/2, this.bird.height/2, 0, 0, Math.PI * 2);
@@ -674,7 +653,6 @@
             this.ctx.lineWidth = 2;
             this.ctx.stroke();
 
-            // Olho Branco e Pupila Preta
             this.ctx.fillStyle = "#fff";
             this.ctx.beginPath();
             this.ctx.arc(6, -4, 6, 0, Math.PI * 2);
@@ -685,7 +663,6 @@
             this.ctx.arc(8, -4, 2.5, 0, Math.PI * 2);
             this.ctx.fill();
 
-            // Bico Laranja
             this.ctx.fillStyle = "#ff6600";
             this.ctx.beginPath();
             this.ctx.moveTo(10, 2);
@@ -695,14 +672,13 @@
             this.ctx.fill();
             this.ctx.stroke();
 
-            // Asa
             this.ctx.fillStyle = "#fff2a8";
             this.ctx.beginPath();
             this.ctx.ellipse(-4, 2, 8, 5, 0, 0, Math.PI * 2);
             this.ctx.fill();
             this.ctx.stroke();
 
-            this.ctx.restore(); // Restaurar contexto
+            this.ctx.restore();
         },
 
         jump() {
@@ -723,11 +699,8 @@
             await this.loadRanking();
         },
 
-// Salvar score corrigido
         async saveScore() {
             try {
-                console.log("Tentando salvar:", this.playerName, this.score, this.playerIP);
-                
                 const { data, error } = await this.supabaseClient.from("ranking_snake").insert([
                     { 
                         nome: this.playerName, 
@@ -736,20 +709,16 @@
                     }
                 ]);
 
-                // SE houver erro do Supabase, forçamos o console a mostrar
                 if (error) throw error; 
-                
-                console.log("Score salvo com sucesso!", data);
             } catch (err) {
                 console.error("ERRO GRAVE AO SALVAR SCORE NO SUPABASE:", err.message || err);
                 alert("Erro ao salvar sua pontuação no banco de dados.");
             }
         },
 
-        // Carregar ranking corrigido
         async loadRanking() {
             const list = document.getElementById("rankingList");
-            list.innerHTML = "<p style=\'text-align: center; color: #a99ec2;\'>Carregando ranking...</p>";
+            list.innerHTML = "<p style='text-align: center; color: #a99ec2;'>Carregando ranking...</p>";
 
             try {
                 const { data, error } = await this.supabaseClient
@@ -772,11 +741,11 @@
                         list.appendChild(li);
                     });
                 } else {
-                    list.innerHTML = "<li style=\'text-align: center; color: #a99ec2;\'>Nenhum score registrado ainda.</li>";
+                    list.innerHTML = "<li style='text-align: center; color: #a99ec2;'>Nenhum score registrado ainda.</li>";
                 }
             } catch (err) {
                 console.error("ERRO GRAVE AO CARREGAR RANKING:", err.message || err);
-                list.innerHTML = "<li style=\'text-align: center; color: var(--danger-color);\'>Erro ao carregar o ranking. Verifique o console (F12).</li>";
+                list.innerHTML = "<li style='text-align: center; color: var(--danger-color);'>Erro ao carregar o ranking. Verifique o console (F12).</li>";
             }
         },
 
@@ -798,7 +767,7 @@
     });
 
     document.addEventListener("click", (e) => {
-        if (window.gameApp.isGameRunning && e.target.tagName !== \'BUTTON\') {
+        if (window.gameApp.isGameRunning && e.target.tagName !== 'BUTTON') {
             window.gameApp.jump();
         }
     });
