@@ -152,13 +152,13 @@
         <!-- Tela de Carregamento -->
         <div id="loadingCard" class="card">
             <h1>Carregando...</h1>
-            <p>Preparando o desafio Flappy Bird</p>
+            <p>Preparando o desafio Floppy Bird</p>
         </div>
 
         <!-- Tela de Login -->
         <div id="loginCard" class="card hidden">
-            <h1>Flappy Bird</h1>
-            <p>Digite seu nome para começar. <br>Apenas uma tentativa por IP!</p>
+            <h1>Floppy Bird</h1>
+            <p>Digite seu nome para começar. <br>Apenas uma tentativa por participante!</p>
             <input type="text" id="playerName" placeholder="Seu nome" maxlength="15">
             <button id="startBtn" onclick="window.gameApp.startLogin()">ENTRAR NO JOGO</button>
             <p id="loginLoadingStatus" class="hidden" style="margin-top:10px;">Verificando...</p>
@@ -183,7 +183,7 @@
             <div style="font-size: 48px; margin: 20px 0;" id="finalScore">0</div>
             <p>Sua pontuação final</p>
             
-            <h2 style="margin-top: 20px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">TOP 10 RANKING</h2>
+            <h2 style="margin-top: 20px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">RANKING</h2>
             <ul id="rankingList" class="ranking-list">
                 <!-- Preenchido via JS -->
             </ul>
@@ -195,8 +195,8 @@
     <script>
         window.gameApp = {
             // Configurações Supabase (Mantidas do original)
-            SUPABASE_URL: "https://kbskbmxficpuxwlwlkfq.supabase.co/rest/v1/",
-            SUPABASE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E",
+            SUPABASE_URL: "https://mmeqirvfbwvabfblovdx.supabase.co",
+            SUPABASE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tZXFpcnZmYnd2YWJmYmxvdmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NzYxMjEsImV4cCI6MjA4NDM1MjEyMX0.y5rLsjffuliqg72VqjitRX4NljkSUVddOyNUqRf0VgM",
             
             supabaseClient: null,
 
@@ -357,6 +357,14 @@
                 });
             },
 
+            resetBirdAndPipes() {
+                // Reseta apenas a posição do pássaro e os canos, mantendo o score e o tempo
+                this.bird.y = 150;
+                this.bird.velocity = 0;
+                this.pipes = [];
+                this.frameCounter = 0;
+            },
+
             update() {
                 if (!this.isGameRunning) return;
 
@@ -364,9 +372,9 @@
                 this.bird.velocity += this.bird.gravity;
                 this.bird.y += this.bird.velocity;
 
-                // Ground/Ceiling Collision
+                // Ground/Ceiling Collision - Agora reseta em vez de finalizar
                 if (this.bird.y + this.bird.height > this.canvas.height || this.bird.y < 0) {
-                    this.finishGame();
+                    this.resetBirdAndPipes();
                 }
 
                 // Pipe Logic
@@ -378,13 +386,14 @@
                     let p = this.pipes[i];
                     p.x -= 2;
 
-                    // Collision Detection
+                    // Collision Detection - Agora reseta em vez de finalizar
                     if (
                         this.bird.x < p.x + this.pipeWidth &&
                         this.bird.x + this.bird.width > p.x &&
                         (this.bird.y < p.top || this.bird.y + this.bird.height > this.canvas.height - p.bottom)
                     ) {
-                        this.finishGame();
+                        this.resetBirdAndPipes();
+                        return; // Sai do loop para evitar erros com pipes removidos
                     }
 
                     // Score point
