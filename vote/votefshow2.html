@@ -1138,18 +1138,16 @@ button:disabled {
   }
 
   function updateBotoesEstado() {
-    // BUG FIX: Se um voto estiver sendo processado, NADA deve reativar o botão
-    if (isProcessingVote) {
-      botaoVotar.disabled = true;
-      botaoVotar.classList.remove("active");
-      return;
-    }
-
     const restantes = getVotosRestantes();
     
+    // Se o captcha foi validado e há votos, tentamos liberar o botão
     if (captchaValidado && restantes > 0) {
-      botaoVotar.disabled = false;
-      botaoVotar.classList.add("active");
+      // Mas SÓ liberamos se NÃO estivermos processando um voto no momento
+      if (!isProcessingVote) {
+        botaoVotar.disabled = false;
+        botaoVotar.classList.add("active");
+        botaoVotar.textContent = "VOTAR";
+      }
     } else {
       botaoVotar.disabled = true;
       botaoVotar.classList.remove("active");
@@ -1483,3 +1481,4 @@ button:disabled {
 
     </script>
 </body>
+
