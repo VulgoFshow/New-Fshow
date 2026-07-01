@@ -716,64 +716,757 @@ button:disabled {
 
 </style>
 </head>
-<body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fshow - Votação</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<link rel="apple-touch-icon" sizes="57x57" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="60x60" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="72x72" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="76x76" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="114x114" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="144x144" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<meta name="theme-color" content="#8A2BE2">
+<meta name="msapplication-TileColor" content="#FF8C00">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="mask-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" color="#ff8c00">
+<link rel="manifest" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<meta name="msapplication-TileColor" content="#ff8c00">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<meta name="theme-color" content="#8a2be2">
   
+<style>
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --bg: #121212;
+  --card-bg: #2b2b2b;
+  --selected-bg: #3c3c3c;
+  --panel-bg: #2b2b2b;
+  --panel-border: rgba(255, 255, 255, 0.06);
+  --accent: #00b7b0;
+  --text: #fff;
+  --muted: #bdbdbd;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
+  --back: #0d0d0d;
+}
+
+/* ===== BASE ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", Arial, sans-serif;
+  color: var(--text);
+
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
+    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
+
+  background-attachment: fixed;
+  background-size: cover;
+  animation: fadeIn 0.7s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px 15px;
+  animation: slideUp 0.6s ease;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: left;
+  transition: color 0.3s ease;
+}
+
+/* ===== OPÇÕES (RADIO CARDS) ===== */
+.option {
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid #fff;
+  border-radius: var(--border-radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
+}
+
+.option:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.option.selected,
+.option:has(input[type="radio"]:checked) {
+  background: rgba(0, 183, 176, 0.2) !important;
+  border-color: var(--accent) !important;
+}
+
+.option.selected .option-content,
+.option:has(input[type="radio"]:checked) .option-content {
+  background: transparent !important;
+}
+
+.option img {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.option-content input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.option-content input[type="radio"]:hover {
+  transform: scale(1.1);
+}
+
+.option-content input[type="radio"]:checked {
+  border-color: var(--accent);
+}
+
+.option-content input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+  /* ===== SPINNER ===== */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== BOTÃO PRINCIPAL ===== */
+  button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius);
+  margin-top: 15px;
+  cursor: pointer;
+  background: #444;
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
+}
+
+button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ===== POPUP ===== */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1500;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity .25s ease;
+}
+
+.popup.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* ===== CONTAINER ===== */
+.captcha-box {
+  background: #1b1b1b;
+  width: 360px;
+  max-width: 95%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.45);
+  animation: fadeIn .3s ease;
+  color: #eee;
+}
+
+/* ===== CABEÇALHO ===== */
+.captcha-header {
+  background: #0f7b82;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.captcha-header span {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  flex: 1;
+  color: #fff;
+}
+
+.captcha-header img {
+  width: 62px;
+  height: 62px;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-left: 12px;
+}
+
+/* ===== GRID ===== */
+.captcha-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 10px;
+  background: #00000022;
+}
+
+.captcha-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #111;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: .15s;
+}
+
+.captcha-img:hover {
+  transform: scale(1.03);
+}
+
+.captcha-img.selected {
+  border-color: #fff;
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+
+/* ===== FOOTER ===== */
+.captcha-footer {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* ===== BOTÃO AVANÇAR ===== */
+.captcha-btn {
+  background: #e6e6e6;
+  color: #222;
+  padding: 10px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: .15s;
+}
+
+.captcha-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.captcha-btn:hover:not(:disabled) {
+  background: #fff;
+}
+
+/* ===== BOTÃO ICONE ===== */
+.captcha-icon-btn {
+  background: #2b2b2b;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .15s;
+}
+
+.captcha-icon-btn img {
+  width: 20px;
+  opacity: 0.8;
+}
+
+.captcha-icon-btn:hover {
+  background: #333;
+}
+
+/* ===== IMG ===== */
+.captcha-hand img {
+  width: 36px;
+  opacity: 0.85;
+}
+
+/* ===== PAGINAÇÃO ===== */
+
+.captcha-dots {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #222;
+  transition: background .15s;
+}
+
+.dot.white {
+  background: #ffffff !important;
+}
+
+.dot.green {
+  background: #4CAF50 !important;
+}
+
+.dot.active {
+  background: none !important;
+}
+
+/* ===== CONFIRMAÇÃO ===== */
+#fotoConfirm {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+#nomeConfirm {
+  background: #1F1F1F;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 14px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  margin: 0;
+}
+
+.success-msg {
+  background: rgba(0, 255, 150, 0.1);
+  border: 1px solid rgba(0, 255, 150, 0.4);
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: center;
+  color: #00ff99;
+  font-weight: 600;
+  margin-bottom: 18px;
+  animation: fadeIn 0.6s ease;
+}
+
+.success-msg::before {
+  content: "✔ ";
+  color: #00ff99;
+}
+
+.voltar {
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.voltar:hover {
+  background: #00c9b8;
+}
+
+#confirmTela {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  background: transparent;
+  min-height: 85vh;
+  animation: slideUp 0.6s ease forwards;
+}
+
+
+.confirm-card {
+  background: transparent;
+  border: 2px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.confirm-card .img-container {
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  background: rgba(0, 183, 176, 0.2); 
+  border: 1px solid rgba(0, 255, 255, 255);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#fotoConfirm {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+  .confirm-card .img-container {
+    height: auto; 
+  }
+}
+
+#botaoCaptcha {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 0 15px;
+  height: 70px;
+  max-width: 320px;
+  width: 320px;
+  margin: 20px auto 0;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: var(--shadow-sm);
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 400;
+  transition: var(--transition);
+}
+
+#botaoCaptcha:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 183, 176, 0.3);
+}
+
+.recaptcha-checkbox {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: #111;
+  border: 2px solid #444;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+#botaoCaptcha[aria-pressed="true"] .recaptcha-checkbox {
+  background: #00aaff;
+  border-color: #00aaff;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  stroke: white;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: none;
+}
+
+#botaoCaptcha[aria-pressed="true"] .checkmark {
+  display: block;
+}
+
+.recaptcha-label {
+  user-select: none;
+  line-height: 1;
+  flex-grow: 1;
+}
+
+.recaptcha-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: contain;
+  filter: brightness(0.7);
+  flex-shrink: 0;
+}
+
+#botaoCaptcha:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.bot-bait {
+  pointer-events: none;
+}
+
+.fade-in-element {
+  opacity: 0.6; 
+}
+
+.espacador { width: 100%; margin: 10px 0; }
+  
+/* =========================
+   DESKTOP / PC
+   ========================= */
+@media (min-width: 1024px) {
+
+  .container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .option {
+    flex-direction: column;
+    background: #2b2b2b;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+
+  .option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.55);
+  }
+
+  .option img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  .option-content {
+    background: #1f1f1f;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  .option-content input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  button {
+    max-width: 420px;
+    margin: 32px auto 0;
+    display: block;
+    font-size: 16px;
+  }
+
+  /* =========================
+     CONFIRMAÇÃO (SUCESSO)
+     ========================= */
+
+  #confirmTela {
+    padding-top: 60px;
+    min-height: auto;
+  }
+
+  .confirm-card {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 28px;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 15px 40px rgba(0,0,0,.6);
+  }
+
+  .confirm-card .img-container {
+    height: 280px;
+  }
+
+  #nomeConfirm {
+    font-size: 24px;
+    padding: 16px;
+  }
+
+  .success-msg {
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+
+  .voltar {
+    max-width: 420px;
+    margin: 20px auto 0;
+    display: block;
+  }
+}
+</style>
+</head>
+<body>
+
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que ENTRE no CDF?</h1>
+    <h1>Quem você quer que FIQUE <br> na F11?</h1>
     <div class="espacador"></div>
     
 <div class="options">
-  
-<label class="option">
-  <img src="https://i.ibb.co/FqYZgtjt/Picsart-26-05-04-22-52-34-444-2.jpg" alt="Opção 1">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Albert"> Albert
-  </div>
-</label>
 
-  <label class="option">
-  <img src="https://i.ibb.co/N65GsR8X/Picsart-26-05-04-22-52-54-541-2.jpg" alt="Opção 3">
+<label class="option">
+  <img src="https://i.postimg.cc/cHGgLRHB/fernanda.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Arthur"> Arthur
+    <input type="radio" name="vote" value="Fernanda"> Fernanda
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/XZYcndgm/Picsart-26-05-04-22-53-12-961-2.jpg" alt="Opção 1">
+  <img src="https://i.postimg.cc/PxbLpCpz/koyuh.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Gabi"> Gabi
-  </div>
-</label>
-  
-<label class="option">
-  <img src="https://i.ibb.co/7tCqrqR1/Picsart-26-05-04-22-53-46-434-2.jpg" alt="Opção 2">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Gêan"> Gêan
+    <input type="radio" name="vote" value="Koyuh"> Koyuh
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.ibb.co/jdJXcnC/Picsart-26-05-04-22-53-29-712-2.jpg" alt="Opção 3">
+  <img src="https://i.postimg.cc/50WY2B0j/Mikael.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Ludmila"> Ludmila
+    <input type="radio" name="vote" value="Mikael"> Mikael
   </div>
 </label>
-  
+
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
         <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l6 6 10-10"/></svg>
       </span>
       <span class="recaptcha-label">Não sou um robô</span>
-      <img class="recaptcha-icon" src="https://i.imgur.com/orZDpuE.png" alt="FCaptcha" style="width:40px;height:40px;border-radius:4px"/>
+      <img class="recaptcha-icon" src="https://i.ibb.co/gZZrBqq0/Chat-GPT-Image-16-de-mai-de-2026-13-55-49-1.png" alt="FCaptcha" style="width:50px;height:50px;border-radius:4px"/>
     </button>
 
     <button id="botaoVotar" disabled>VOTAR</button>
 
-    <div class="notice">Essa votação segue aberta até às 11:00</div>
-  </div>
+    <div class="notice">Essa votação segue aberta até às 19:00</div>
+</div>
   
 <!-- POPUP CAPTCHA -->
 <div id="popupCaptcha" class="popup">
@@ -805,10 +1498,11 @@ button:disabled {
      VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Essa votação segue aberta até às 11:00</div>
+    <div class="notice">Essa votação segue aberta até às 19:00</div>
     
   </div>
-</div>
+</div> 
+  
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
@@ -818,69 +1512,137 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "cdf1";
+  const TABLE_VOTACAO = "f11r3";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
+  const pesoVoto = 1;
 
-  const aberturaBR = new Date("2026-01-18T19:00:00");
-  const encerramentoBR = new Date("2026-05-04T11a:00:00");
+  // =================== HORÁRIOS ===================
 
-  // =================== HORA DO SERVIDOR (Via API Pública) ===================
-  async function getServerTime() {
-    try {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Sao_Paulo");
-      const data = await res.json();
-      return new Date(data.datetime);
-    } catch (e) {
-      console.error("Erro ao verificar horário:", e);
-      return new Date(); 
+// Horário de Brasília (-03:00)
+const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-01T19:00:00-03:00").getTime();
+
+
+// =================== HORA DO SERVIDOR ===================
+async function getServerTime() {
+  try {
+
+    const res = await fetch(
+      "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo",
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Falha ao buscar horário");
     }
-  }
 
-  function toSaoPauloDate(date) {
-    const spString = date.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-    return new Date(spString);
-  }
+    const data = await res.json();
 
-  function redirect(url) {
-  if (DEBUG) {
-    console.warn("REDIRECT BLOQUEADO →", url);
-    return;
+    const serverDate = new Date(
+      data.year,
+      data.month - 1,
+      data.day,
+      data.hour,
+      data.minute,
+      data.seconds
+    );
+
+    return serverDate.getTime();
+
+  } catch (e) {
+
+    console.error("Erro ao verificar horário:", e);
+
+    // fallback pro horário local
+    return Date.now();
   }
-  window.location.href = url;
 }
 
-  // =================== VERIFICAÇÃO DE HORÁRIO ===================
-  async function verificarHorarios() {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
 
-    if (agoraBR < aberturaBR) {
-      window.location.replace("aguarde.html");
-      return;
-    }
+// =================== REDIRECT ===================
 
-    if (agoraBR > encerramentoBR) {
-      window.location.replace("fechada.html");
-      return;
-    }
+function redirect(url) {
 
-    console.log("VOTAÇÃO ABERTA");
+  if (typeof DEBUG !== "undefined" && DEBUG) {
+
+    console.warn("REDIRECT BLOQUEADO →", url);
+
+    return;
   }
 
-  verificarHorarios();
+  window.location.replace(url);
+}
 
-  // =================== VERIFICAÇÃO PERIÓDICA DE HORÁRIO (A CADA 5 SEGUNDOS) ===================
-  setInterval(async () => {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
 
-    if (agoraBR > encerramentoBR) {
-      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
-      window.location.replace("fechada.html");
-    }
-  }, 5000);
+// =================== VERIFICAÇÃO DE HORÁRIO ===================
 
+async function verificarHorarios() {
+
+  const agoraBR = await getServerTime();
+
+  console.log("Agora:", new Date(agoraBR));
+  console.log("Abertura:", new Date(aberturaBR));
+  console.log("Encerramento:", new Date(encerramentoBR));
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+
+    console.warn("Votação ainda não abriu");
+
+    redirect("aguarde.html");
+
+    return;
+  }
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+
+    console.warn("Votação encerrada");
+
+    redirect("fechada.html");
+
+    return;
+  }
+
+  console.log("VOTAÇÃO ABERTA");
+}
+
+
+// Executa ao carregar
+verificarHorarios();
+
+
+// =================== VERIFICAÇÃO PERIÓDICA ===================
+
+setInterval(async () => {
+
+  const agoraBR = await getServerTime();
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+
+    console.warn("Ainda não abriu");
+
+    redirect("aguarde.html");
+
+    return;
+  }
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+
+    console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+
+    redirect("fechada.html");
+
+    return;
+  }
+
+}, 5000);
+  
   // =================== ELEMENTOS DOM ===================
   const votoTela = document.getElementById("votoTela");
   const confirmTela = document.getElementById("confirmTela");
@@ -896,11 +1658,30 @@ button:disabled {
   const refreshBtn = document.getElementById("captchaRefresh");
   const statusEl = document.getElementById("captchaStatus");
 
-  let captchaVisualLiberado = false;
-
-  // =================== CONTROLE DE VOTOS LOCAL ===================
+  
   let pendingVote = null;
+
   let captchaAberto = false;
+  let captchaClicado = false;
+  function updateBotoesEstado() {
+    const restantes = getVotosRestantes();
+    
+    if (captchaClicado && restantes > 0) {
+      botaoVotar.disabled = false;
+      botaoVotar.classList.add("active");
+    } else {
+      botaoVotar.disabled = true;
+      botaoVotar.classList.remove("active");
+    }
+
+    if (captchaClicado) {
+      botaoCaptcha.setAttribute("aria-pressed", "true");
+    } else {
+      botaoCaptcha.setAttribute("aria-pressed", "false");
+    }
+  }
+
+
 
   function hashTag(tag) {
     const secret = "CPTX_2025_FSHOW_🔥";
@@ -925,7 +1706,6 @@ button:disabled {
     localStorage.setItem("token", hashTag(String(n)));
   }
 
-  // =================== PROMPTS DO CAPTCHA ===================
   const prompts = [
     {
       label: "Clique nas imagens contendo algo que pode se locomover",
@@ -961,7 +1741,6 @@ button:disabled {
 
   let captchaCurrentPrompt = null;
 
-  // =================== FUNÇÕES DO CAPTCHA ===================
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -970,343 +1749,215 @@ button:disabled {
     return array;
   }
 
-  function generateCaptcha() {
-    captchaGrid.innerHTML = "";
-    statusEl.textContent = "";
-    verifyBtn.disabled = true;
-
-    captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    captchaInstruction.textContent = captchaCurrentPrompt.label;
-
-const ref = captchaCurrentPrompt.images.find(
-  i => i.tag === captchaCurrentPrompt.correctTag
-);
-
-if (ref) {
-  captchaRefImg.src = ref.src;
-  captchaRefImg.style.display = "block";
-} else {
-  captchaRefImg.style.display = "none";
-}
-
-    const correctImages = captchaCurrentPrompt.images.filter(i => i.tag === captchaCurrentPrompt.correctTag);
-    const wrongImages = captchaCurrentPrompt.images.filter(i => i.tag !== captchaCurrentPrompt.correctTag);
-
-    const correctCount = Math.min(Math.floor(Math.random() * 3) + 3, correctImages.length);
-    const selectedCorrect = shuffle([...correctImages]).slice(0, correctCount);
-    const selectedWrong = shuffle([...wrongImages]).slice(0, 9 - correctCount);
-
-    const allImages = shuffle([...selectedCorrect, ...selectedWrong]);
-
-    allImages.forEach(img => {
-      const imgEl = document.createElement("img");
-      imgEl.src = img.src;
-      imgEl.className = "captcha-img";
-      imgEl.dataset.hash = hashTag(img.tag);
-
-      imgEl.addEventListener("click", () => {
-        imgEl.classList.toggle("selected");
-        verifyBtn.disabled = !document.querySelectorAll(".captcha-img.selected").length;
-      });
-
-      captchaGrid.appendChild(imgEl);
-    });
-  }
-
   function abrirCaptcha() {
-    if (captchaAberto) return;
-    captchaAberto = true;
+    pendingVote = null;
     generateCaptcha();
-    popupCaptcha.classList.add("active");
-    botaoVotar.disabled = true;
+    popupCaptcha.style.display = "flex";
+    captchaAberto = true;
   }
 
   function fecharCaptcha() {
-    popupCaptcha.classList.remove("active");
+    popupCaptcha.style.display = "none";
     captchaAberto = false;
-    botaoVotar.disabled = getVotosRestantes() <= 0;
+    updateBotoesEstado();
+  }
+
+  function generateCaptcha() {
+    captchaCurrentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    captchaInstruction.textContent = captchaCurrentPrompt.label;
+    statusEl.textContent = "";
+    verifyBtn.disabled = true;
+    
+    const images = shuffle([...captchaCurrentPrompt.images]);
+    captchaGrid.innerHTML = "";
+    
+    images.forEach(imgData => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "captcha-item";
+      
+      const img = document.createElement("img");
+      img.src = imgData.src;
+      img.className = "captcha-img";
+      img.dataset.hash = hashTag(imgData.tag);
+      
+      wrapper.appendChild(img);
+      captchaGrid.appendChild(wrapper);
+      
+      wrapper.addEventListener("click", () => {
+        img.classList.toggle("selected");
+        const anySelected = !!document.querySelector(".captcha-img.selected");
+        verifyBtn.disabled = !anySelected;
+        verifyBtn.textContent = anySelected ? "Verificar" : "Avançar";
+      });
+    });
   }
 
   refreshBtn.addEventListener("click", () => {
-    statusEl.textContent = "";
-    document.querySelectorAll(".captcha-img").forEach(img => img.classList.remove("selected"));
-    verifyBtn.disabled = true;
     generateCaptcha();
   });
 
   verifyBtn.addEventListener("click", () => {
     const corretoHash = hashTag(captchaCurrentPrompt.correctTag);
     let sucesso = true;
-
     document.querySelectorAll(".captcha-img").forEach(img => {
       const isCorrect = img.dataset.hash == corretoHash;
       const isSelected = img.classList.contains("selected");
       if (isCorrect !== isSelected) sucesso = false;
     });
-
     if (!sucesso) {
       statusEl.textContent = "Incorreto. Tente novamente.";
       statusEl.style.color = "red";
       setTimeout(generateCaptcha, 1200);
       return;
     }
+    
+setVotosRestantes(VOTOS_POR_CAPTCHA);
+captchaClicado = true; 
+updateBotoesEstado();
 
-    setVotosRestantes(VOTOS_POR_CAPTCHA);
-    captchaVisualLiberado = true;
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.classList.add("active");
-
-    fecharCaptcha();
+fecharCaptcha();
 
     if (pendingVote) {
       const voto = pendingVote;
       pendingVote = null;
       setTimeout(() => submitVote(voto), 300);
     }
-  });
+  })
+  
+  
 
-  // =================== ENVIO DO VOTO ===================
+botaoVotar.addEventListener("click", () => {
+  const escolhido = document.querySelector('input[name="vote"]:checked');
+  
+  if (!escolhido) {
+    alert("Selecione alguém para votar!");
+    return;
+  }
+
+  if (!captchaClicado) {
+    alert("Clique no botão de CAPTCHA antes de votar!");
+    return;
+  }
+
+  if (getVotosRestantes() <= 0) {
+    alert("Resolva o CAPTCHA para liberar votos!");
+    return;
+  }
+
+  // BLOQUEIO IMEDIATO AQUI
+  botaoVotar.disabled = true;
+  botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+
+  submitVote(escolhido.value);
+});
+
 async function submitVote(participante) {
   try {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
-
+    const agoraBR = await getServerTime();
     if (agoraBR > encerramentoBR) {
-      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
-      window.location.replace("fechada.html");
+      alert("A votação foi encerrada!");
+      // Reativa se falhar por horário
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = "VOTAR";
       return;
     }
 
-    botaoVotar.disabled = true;
-    const prevText = botaoVotar.textContent;
-    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+    const inputEscolhido = document.querySelector('input[name="vote"]:checked');
+    if (!inputEscolhido) {
+       botaoVotar.disabled = false;
+       botaoVotar.textContent = "VOTAR";
+       return;
+    }
+
+    const cardPai = inputEscolhido.closest('.option');
+    const imagemVotada = cardPai.querySelector('img').src;
+
+    // Já está desativado pelo clique, mas garantimos aqui e salvamos o texto anterior
+    const prevText = "VOTAR";
     
-    // Time
-    await new Promise(resolve => setTimeout(resolve, 0));
+    const votos = [];
 
-    const { error } = await supabase
-      .from(TABLE_VOTACAO)
-      .insert([{ participante: participante }]);
+for (let i = 0; i < pesoVoto; i++) {
+votos.push({
+  participante: participante
+});
+}
 
+const { error } = await supabase
+  .from(TABLE_VOTACAO)
+  .insert(votos);
+    
     if (error) {
       console.error("Erro Supabase:", error);
+      let msgErro = error.message || JSON.stringify(error);
+      alert("ERRO NO SUPABASE:\n" + msgErro + "\n\n1. Verifique se a tabela 'cdf1' existe no seu banco.\n2. Verifique se o RLS permite inserção pública.");
       botaoVotar.disabled = false;
       botaoVotar.textContent = prevText;
-      redirect("erro.html");
       return;
     }
-
-    let restantes = getVotosRestantes() - 1;
-    setVotosRestantes(Math.max(restantes, 0));
     
-    suspeita = 0;
-    tentativasVoto = 0;
-    scrollsRecentes = 0;
-        
-    if (restantes <= 0) {
-      botaoCaptcha.setAttribute("aria-pressed", "false");
-      botaoVotar.classList.remove("active");
-      captchaVisualLiberado = false;
-    }
+setVotosRestantes(Math.max(getVotosRestantes() - 1, 0));
+captchaClicado = false;
+updateBotoesEstado();
 
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
-
-    if (fotos[participante]) {
-      fotoConfirm.src = fotos[participante];
-      fotoConfirm.style.display = "block";
-    } else {
-      fotoConfirm.style.display = "none";
-    }
-
+    
+    // Usamos a imagem capturada do card no momento do voto
+    fotoConfirm.src = imagemVotada;
+    fotoConfirm.style.display = "block";
+    
     botaoVotar.textContent = prevText;
     botaoVotar.disabled = false;
-
   } catch (e) {
-    console.error(e);
-    window.location.href = "erro.html";
+    alert("Erro inesperado: " + e.message);
+    botaoVotar.disabled = false;
+    botaoVotar.textContent = "VOTAR";
   }
 }
 
-  // =================== VOLTAR ===================
-  function voltarParaVotacao() {
-    confirmTela.style.display = "none";
-    votoTela.style.display = "block";
-    
-    document.querySelector('input[name="vote"]:checked').checked = false;
-    
-    captchaVisualLiberado = false;
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    botaoVotar.classList.remove("active");
-    botaoVotar.disabled = true;
-  }
+function voltarParaVotacao() {
+  confirmTela.style.display = "none";
+  votoTela.style.display = "block";
 
-  // =================== EVENTOS  ===================
-  botaoVotar.addEventListener("click", async () => {
-    const agoraServer = await getServerTime();
-    const agoraBR = toSaoPauloDate(agoraServer);
+  const checked = document.querySelector('input[name="vote"]:checked');
+  if (checked) checked.checked = false;
 
-    if (agoraBR > encerramentoBR) {
-      console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
-      alert("A votação foi encerrada!");
-      window.location.replace("fechada.html");
-      return;
-    }
+  captchaClicado = false; 
+  updateBotoesEstado();
+}
 
-    const escolhido = document.querySelector('input[name="vote"]:checked');
-    if (!escolhido) return alert("Selecione alguém para votar!");
-
-    if (getVotosRestantes() <= 0) {
-      pendingVote = escolhido.value;
-      abrirCaptcha();
-      return;
-    }
-
-    submitVote(escolhido.value);
-  });
-
-  // =================== VOTAR NOVAMENTE ===================
   botaoVotarNovamente.addEventListener("click", () => {
     voltarParaVotacao();
-  });
-
+  })
+  
+  updateBotoesEstado();
+  
 botaoCaptcha.addEventListener("click", () => {
-  if (captchaVisualLiberado) return;
   const restantes = getVotosRestantes();
-  if (restantes > 0) {
-    captchaVisualLiberado = true;
-    botaoCaptcha.setAttribute("aria-pressed", "true");
-    botaoVotar.disabled = false;
-    botaoVotar.classList.add("active");
-    return;
+  if (restantes <= 0) {
+    abrirCaptcha(); 
+  } else {
+    captchaClicado = true;
+    updateBotoesEstado();
   }
-  abrirCaptcha();
 });
 
-  // =================== Scroll ===================
 function scrollParaFinal() {
   setTimeout(() => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
-    });
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
   }, 100);
 }
 
 document.querySelectorAll('input[name="vote"]').forEach(radio => {
-  radio.addEventListener("change", () => {
-    scrollParaFinal();
-  });
+  radio.addEventListener("change", () => { scrollParaFinal(); });
 });
 
-
-  // =================== DETECÇÃO DE COMPORTAMENTO SUSPEITO ===================
-  let suspeita = 0;
-  const LIMITE_SUSPEITA = 10;
-  let ultimoClique = 0;
-  let ultimoMouseX = 0, ultimoMouseY = 0;
-  let ultimaTrocaAba = Date.now();
-  let scrollsRecentes = 0;
-  let tentativasVoto = 0;
-
-  function exigirCaptchaPorSuspeita() {
-    if (captchaAberto) return;
-    console.warn("Atividade suspeita — CAPTCHA exigido");
-    captchaVisualLiberado = false;
-    botaoCaptcha.setAttribute("aria-pressed", "false");
-    botaoVotar.disabled = true;
-    botaoVotar.classList.remove("active");
-    abrirCaptcha();
-  }
-
-document.addEventListener("click", (e) => {
-  if (e.target.closest('input, label')) return;
-
-  const agora = Date.now();
-  if (agora - ultimoClique < 20) suspeita++;
-  ultimoClique = agora;
-
-  if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-});
-
-  document.addEventListener("mousemove", (e) => {
-    const dx = Math.abs(e.clientX - ultimoMouseX);
-    const dy = Math.abs(e.clientY - ultimoMouseY);
-    if (dx > 600 || dy > 600) suspeita++;
-    ultimoMouseX = e.clientX;
-    ultimoMouseY = e.clientY;
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  document.addEventListener("wheel", () => {
-    scrollsRecentes++;
-      if (scrollsRecentes > 25) {
-      suspeita++;
-      scrollsRecentes = 0;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      const agora = Date.now();
-      if (agora - ultimaTrocaAba < 450) suspeita++;
-      ultimaTrocaAba = agora;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  botaoVotar.addEventListener("click", () => {
-    tentativasVoto++;
-    if (tentativasVoto > 3) {
-      suspeita++;
-      tentativasVoto = 0;
-    }
-    if (suspeita >= LIMITE_SUSPEITA) exigirCaptchaPorSuspeita();
-  });
-
-  verifyBtn.addEventListener("click", () => {
-    if (statusEl.textContent.includes("Incorreto")) return;
-    suspeita = 0;
-    tentativasVoto = 0;
-    scrollsRecentes = 0;
-  });
-
-  // =================== FOTOS DOS PARTICIPANTES ===================
-  const fotos = {
-    "Arthur": "https://i.ibb.co/N65GsR8X/Picsart-26-05-04-22-52-54-541-2.jpg",
-    "Albert": "https://i.ibb.co/FqYZgtjt/Picsart-26-05-04-22-52-34-444-2.jpg",
-    "Gêan": "https://i.ibb.co/7tCqrqR1/Picsart-26-05-04-22-53-46-434-2.jpg",
-    "Gabi": "https://i.ibb.co/XZYcndgm/Picsart-26-05-04-22-53-12-961-2.jpg",
-    "Ludmila": "https://i.ibb.co/jdJXcnC/Picsart-26-05-04-22-53-29-712-2.jpg",
-    "Sirleidy": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true",
-    "Ray": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true",
-    "Nick": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/nick.png?raw=true",
-    "Pedro": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true",
-    "Renata": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true",
-    "Braian": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true",
-    "João": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true",
-    "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true",
-    "Rose": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/rose.png?raw=true",
-    "Paiva": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true",
-    "Tety": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/tety.png?raw=true",
-    "João Lucas": "https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true"
-  };
-
-  const captchaRefImg = document.createElement("img");
-  captchaRefImg.id = "captcha-ref-img";
-  captchaRefImg.style.display = "none";
-  document.querySelector(".captcha-header").appendChild(captchaRefImg);
-
-  // =================== INICIALIZAÇÃO ===================
 (function init() {
-  captchaVisualLiberado = false;
-  botaoCaptcha.setAttribute("aria-pressed", "false");
-  botaoVotar.disabled = true;
-  botaoVotar.classList.remove("active");
+  captchaClicado = false;
+  updateBotoesEstado();
 })();
-
-</script></body>
-
+    </script>
+</body>
 </html>
