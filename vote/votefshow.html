@@ -716,26 +716,25 @@ button:disabled {
 <div class="options">
 
 <label class="option">
-  <img src="https://i.postimg.cc/ZRzB58RB/arthur.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/cHGgLRHB/fernanda.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Arthur"> Arthur
+    <input type="radio" name="vote" value="Fernanda"> Fernanda
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.postimg.cc/26NbSQ6h/duda.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/PxbLpCpz/koyuh.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Duda"> Duda
+    <input type="radio" name="vote" value="Koyuh"> Koyuh
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.postimg.cc/xCGkJXJB/simone.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/50WY2B0j/Mikael.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Simone"> Simone
+    <input type="radio" name="vote" value="Mikael"> Mikael
   </div>
 </label>
-
 
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -795,7 +794,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "f11r2";
+  const TABLE_VOTACAO = "f11r3";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -804,7 +803,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-06-30T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-01T19:00:00-03:00").getTime();
 
 
 // =================== HORA DO SERVIDOR ===================
