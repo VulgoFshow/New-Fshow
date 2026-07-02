@@ -865,7 +865,7 @@ const encerramentoBR = new Date("2026-07-02T19:00:00-03:00").getTime();
       localStorage.setItem('ac_blocked_until', until.toString());
       localStorage.setItem('ac_punishments', (count + 1).toString());
 
-      alert(`AUTOCLICK DETECTADO!\n\nVocê foi bloqueado por ${seconds} segundos.\nNão use ferramentas de automação.`);
+      alert(`Inconsistêmncia Detectada\n\nVocê foi bloqueado por ${seconds} segundos.\nPor favor,vote honestamente.`);
       this.checkStatus();
     },
 
@@ -881,7 +881,7 @@ const encerramentoBR = new Date("2026-07-02T19:00:00-03:00").getTime();
       const btn = document.getElementById("botaoVotar");
       if (btn) {
         btn.textContent = "VOTAR";
-        updateBotoesEstado(); // Chama a função original para restaurar estado correto
+        updateBotoesEstado(); 
       }
     },
 
