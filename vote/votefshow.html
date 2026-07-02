@@ -716,23 +716,23 @@ button:disabled {
 <div class="options">
 
 <label class="option">
-  <img src="https://i.postimg.cc/cHGgLRHB/fernanda.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/ZRzB58RB/arthur.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Fernanda"> Fernanda
+    <input type="radio" name="vote" value="Arthur"> Arthur
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.postimg.cc/PxbLpCpz/koyuh.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/k4P6gQ4X/livia.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Koyuh"> Koyuh
+    <input type="radio" name="vote" value="Lívia"> Lívia
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.postimg.cc/50WY2B0j/Mikael.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/sXPBQMQ8/rose.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Mikael"> Mikael
+    <input type="radio" name="vote" value="Rose"> Rose
   </div>
 </label>
 
@@ -794,17 +794,104 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "f11r3";
+  const TABLE_VOTACAO = "f11r4";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
 
-  // =================== HORÁRIOS ===================
+    // =================== HORÁRIOS ===================
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-01T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-02T19:00:00-03:00").getTime();
 
+
+  // =================== ANTI-AUTOCLICK LOGIC ===================
+  const AntiAutoclick = {
+    MIN_INTERVAL_MS: 400, 
+    PUNISHMENTS: [10, 30, 40, 60],
+    lastClickTime: 0,
+
+    init() {
+      if (!localStorage.getItem('ac_punishments')) localStorage.setItem('ac_punishments', '0');
+      if (!localStorage.getItem('ac_blocked_until')) localStorage.setItem('ac_blocked_until', '0');
+      this.checkStatus();
+    },
+
+    isBlocked() {
+      const until = parseInt(localStorage.getItem('ac_blocked_until') || '0');
+      return Date.now() < until;
+    },
+
+    getRemaining() {
+      const until = parseInt(localStorage.getItem('ac_blocked_until') || '0');
+      return Math.ceil((until - Date.now()) / 1000);
+    },
+
+    checkStatus() {
+      if (this.isBlocked()) {
+        this.disableVotingUI();
+        const timer = setInterval(() => {
+          const rem = this.getRemaining();
+          if (rem <= 0) {
+            clearInterval(timer);
+            this.enableVotingUI();
+          } else {
+            this.updateButtonText(`Bloqueado (${rem}s)`);
+          }
+        }, 1000);
+      }
+    },
+
+    registerClick() {
+      const now = Date.now();
+      if (this.isBlocked()) return true;
+
+      if (this.lastClickTime > 0 && (now - this.lastClickTime) < this.MIN_INTERVAL_MS) {
+        this.applyPunishment();
+        this.lastClickTime = now;
+        return true;
+      }
+
+      this.lastClickTime = now;
+      return false;
+    },
+
+    applyPunishment() {
+      let count = parseInt(localStorage.getItem('ac_punishments') || '0');
+      const seconds = this.PUNISHMENTS[Math.min(count, this.PUNISHMENTS.length - 1)];
+      const until = Date.now() + (seconds * 1000);
+
+      localStorage.setItem('ac_blocked_until', until.toString());
+      localStorage.setItem('ac_punishments', (count + 1).toString());
+
+      alert(`AUTOCLICK DETECTADO!\n\nVocê foi bloqueado por ${seconds} segundos.\nNão use ferramentas de automação.`);
+      this.checkStatus();
+    },
+
+    disableVotingUI() {
+      const btn = document.getElementById("botaoVotar");
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.remove("active");
+      }
+    },
+
+    enableVotingUI() {
+      const btn = document.getElementById("botaoVotar");
+      if (btn) {
+        btn.textContent = "VOTAR";
+        updateBotoesEstado(); // Chama a função original para restaurar estado correto
+      }
+    },
+
+    updateButtonText(txt) {
+      const btn = document.getElementById("botaoVotar");
+      if (btn) btn.textContent = txt;
+    }
+  };
+
+  AntiAutoclick.init();
 
 // =================== HORA DO SERVIDOR ===================
 async function getServerTime() {
@@ -946,6 +1033,12 @@ setInterval(async () => {
   let captchaAberto = false;
   let captchaClicado = false;
   function updateBotoesEstado() {
+    // Se estiver bloqueado pelo anti-autoclick, não habilita nada
+    if (AntiAutoclick.isBlocked()) {
+        AntiAutoclick.disableVotingUI();
+        return;
+    }
+
     const restantes = getVotosRestantes();
     
     if (captchaClicado && restantes > 0) {
@@ -1109,6 +1202,9 @@ fecharCaptcha();
   
 
 botaoVotar.addEventListener("click", () => {
+  // VERIFICAÇÃO ANTI-AUTOCLICK
+  if (AntiAutoclick.registerClick()) return;
+
   const escolhido = document.querySelector('input[name="vote"]:checked');
   
   if (!escolhido) {
@@ -1241,6 +1337,7 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   updateBotoesEstado();
 })();
     </script>
+
 </body>
 
 </body>
