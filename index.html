@@ -356,15 +356,15 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* ==================================== 
-   ESTILOS DO WIDGET DE PERFIL (INTEGRADO NO HEADER)
+   PERFIL 
    ==================================== */
 .fshow-profile-widget {
-    position: relative; /* Mudado de fixed para relative para caber no header */
+    position: relative; 
     font-family: 'Poppins', sans-serif;
 }
 
 .fshow-profile-trigger {
-    width: 40px; /* Reduzi um pouco para caber melhor no header */
+    width: 40px; 
     height: 40px;
     border-radius: 50%;
     border: 2px solid var(--purple-dark);
@@ -488,7 +488,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* =========================
-   BLOCO DE VOTAÇÃO - FSHOW
+   VOTAÇÃO
 ========================= */
 
 .vote-frame{
@@ -522,7 +522,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     border:1px solid rgba(255,255,255,.08);
 }
 
-/* efeitos decorativos */
+/* efeitos */
 
 .vote-mock::before{
     content:'';
@@ -825,6 +825,92 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     }
 
 }
+
+/* ADS */
+.banner-publicidade{
+    display:flex;
+    width:420px;
+    height:90px;
+    margin:1px auto; 
+    border:1px solid #bfbfbf;
+    background:#fff;
+    overflow:hidden;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.faixa-lateral{
+    width:34px;
+    background:#ffffff;
+    border-right:1px solid #d0d0d0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.faixa-lateral span{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    color:#666;
+    font-size:12px;
+    letter-spacing:.5px;
+}
+
+.banner{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:
+        radial-gradient(circle, rgba(255,255,255,.15) 1px, transparent 1px),
+        linear-gradient(45deg,#666,#4f4f4f,#6b6b6b,#555);
+    background-size:4px 4px,100% 100%;
+}
+
+.banner-texto{
+    position:relative;
+    z-index:1;
+    text-align:center;
+}
+
+.banner-texto{
+    display:none;
+}
+
+.banner-img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:2;
+}
+
+.banner p{
+    margin-top:8px;
+    color:#f2f2f2;
+    font-size:13px;
+    text-shadow:1px 1px 2px #000;
+}
+
+.banner-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin:20px 0;
+}
+
+.banner-link{
+    flex:1;
+    display:flex;
+    width:100%;
+    height:100%;
+    text-decoration:none;
+    color:inherit;
+}
+
 </style>
 </head>
     
@@ -910,6 +996,25 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
         </div>
     </div>
     
+<div class="banner-container">
+    <div class="banner-publicidade">
+        <div class="faixa-lateral">
+            <span>Publicidade</span>
+        </div>
+
+        <a href="https://discord.gg/G9pvv2N8y5" target="_blank" class="banner-link">
+            <div class="banner">
+                <img src="https://i.postimg.cc/4d2xHwGQ/Gemini-Generated-Image-p5ef1hp5ef1hp5ef.png" class="banner-img" alt="Publicidade">
+
+                <div class="banner-texto">
+                    <h2>ANUNCIE AQUI!</h2>
+                    <p>contatofshow7@gmail.com</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
         <!-- BLOCO DE VOTAÇÃO -->
 <div class="vote-frame">
   <div class="vote-mock">
