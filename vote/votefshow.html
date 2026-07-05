@@ -716,23 +716,51 @@ button:disabled {
 <div class="options">
 
 <label class="option">
-  <img src="https://i.postimg.cc/B658LjLh/lorenzo.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/B6fLnT6p/gabi.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Lorenzo"> Lorenzo
+    <input type="radio" name="vote" value="Gabi"> Gabi
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.postimg.cc/sXPBQMQN/pedro.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/NMv9j6Mb/gabriel.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Pedro"> Pedro
+    <input type="radio" name="vote" value="Gabriel"> Gabriel
   </div>
 </label>
 
 <label class="option">
-  <img src="https://i.postimg.cc/xCGkJXJB/simone.jpg" alt="Opção">
+  <img src="https://i.postimg.cc/4dvK7Y7p/joaopedro.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Simone"> Simone
+    <input type="radio" name="vote" value="João Pedro"> João Pedro
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.postimg.cc/PxbLpCpz/koyuh.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Koyuh"> Koyuh
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.postimg.cc/26dqb1bG/lana.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Lana"> Lana
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.postimg.cc/50WY2B0j/Mikael.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Mikael"> Mikael
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://i.postimg.cc/RFx6Z7FS/sarah.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Sarah"> Sarah
   </div>
 </label>
 
@@ -794,7 +822,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "f11r7";
+  const TABLE_VOTACAO = "f11re";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -803,7 +831,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-05T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-06T19:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
