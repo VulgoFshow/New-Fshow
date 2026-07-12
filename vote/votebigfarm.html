@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fshow - Votação</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<link rel="apple-touch-icon" sizes="57x57" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="60x60" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="72x72" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="76x76" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="114x114" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="144x144" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<meta name="theme-color" content="#8A2BE2">
+<meta name="msapplication-TileColor" content="#FF8C00">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+
+<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<link rel="mask-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" color="#ff8c00">
+<link rel="manifest" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<meta name="msapplication-TileColor" content="#ff8c00">
+<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
+<meta name="theme-color" content="#8a2be2">
+  
+<style>
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --bg: #121212;
+  --card-bg: #2b2b2b;
+  --selected-bg: #3c3c3c;
+  --panel-bg: #2b2b2b;
+  --panel-border: rgba(255, 255, 255, 0.06);
+  --accent: #00b7b0;
+  --text: #fff;
+  --muted: #bdbdbd;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
+  --back: #0d0d0d;
+}
+
+/* ===== BASE ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", Arial, sans-serif;
+  color: var(--text);
+
+  background:
+    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
+    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
+    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
+    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
+
+  background-attachment: fixed;
+  background-size: cover;
+  animation: fadeIn 0.7s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px 15px;
+  animation: slideUp 0.6s ease;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: left;
+  transition: color 0.3s ease;
+}
+
+/* ===== OPÇÕES (RADIO CARDS) ===== */
+.option {
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid #fff;
+  border-radius: var(--border-radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
+}
+
+.option:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.option.selected,
+.option:has(input[type="radio"]:checked) {
+  background: rgba(0, 183, 176, 0.2) !important;
+  border-color: var(--accent) !important;
+}
+
+.option.selected .option-content,
+.option:has(input[type="radio"]:checked) .option-content {
+  background: transparent !important;
+}
+
+.option img {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.option-content input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.option-content input[type="radio"]:hover {
+  transform: scale(1.1);
+}
+
+.option-content input[type="radio"]:checked {
+  border-color: var(--accent);
+}
+
+.option-content input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+  /* ===== SPINNER ===== */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== BOTÃO PRINCIPAL ===== */
+  button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius);
+  margin-top: 15px;
+  cursor: pointer;
+  background: #444;
+  color: var(--muted);
+  transition: var(--transition);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
+}
+
+button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notice {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ===== CONFIRMAÇÃO ===== */
+#fotoConfirm {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+#nomeConfirm {
+  background: #1F1F1F;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  padding: 14px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #ddd;
+  border-top: none;
+  margin: 0;
+}
+
+.success-msg {
+  background: rgba(0, 255, 150, 0.1);
+  border: 1px solid rgba(0, 255, 150, 0.4);
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: center;
+  color: #00ff99;
+  font-weight: 600;
+  margin-bottom: 18px;
+  animation: fadeIn 0.6s ease;
+}
+
+.success-msg::before {
+  content: "✔ ";
+  color: #00ff99;
+}
+
+.voltar {
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.voltar:hover {
+  background: #00c9b8;
+}
+
+#confirmTela {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  background: transparent;
+  min-height: 85vh;
+  animation: slideUp 0.6s ease forwards;
+}
+
+
+.confirm-card {
+  background: transparent;
+  border: 2px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.confirm-card .img-container {
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  background: rgba(0, 183, 176, 0.2); 
+  border: 1px solid rgba(0, 255, 255, 255);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#fotoConfirm {
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+  .confirm-card .img-container {
+    height: auto; 
+  }
+}
+
+.espacador { width: 100%; margin: 10px 0; }
+  
+/* =========================
+   DESKTOP / PC
+   ========================= */
+@media (min-width: 1024px) {
+
+  .container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .option {
+    flex-direction: column;
+    background: #2b2b2b;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+
+  .option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.55);
+  }
+
+  .option img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  .option-content {
+    background: #1f1f1f;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  .option-content input[type="radio"] {
+    margin-right: 10px;
+  }
+
+  button {
+    max-width: 420px;
+    margin: 32px auto 0;
+    display: block;
+    font-size: 16px;
+  }
+
+  /* =========================
+     CONFIRMAÇÃO (SUCESSO)
+     ========================= */
+
+  #confirmTela {
+    padding-top: 60px;
+    min-height: auto;
+  }
+
+  .confirm-card {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 28px;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 15px 40px rgba(0,0,0,.6);
+  }
+
+  .confirm-card .img-container {
+    height: 280px;
+  }
+
+  #nomeConfirm {
+    font-size: 24px;
+    padding: 16px;
+  }
+
+  .success-msg {
+    font-size: 15px;
+    padding: 14px 20px;
+  }
+
+  .voltar {
+    max-width: 420px;
+    margin: 20px auto 0;
+    display: block;
+  }
+}
+</style>
+</head>
+<body>
+
+  <div id="votoTela" class="container">
+<div class="espacador"></div>
+    
+    <h1>Quem você quer que FIQUE <br> na Big Farm?</h1>
+    <div class="espacador"></div>
+    
+<div class="options">
+
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Celso.png?raw=true" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Celso Escoliosi"> Celso Escoliosi
+  </div>
+</label>
+
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lucas.png?raw=true" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Lucas BemVaral"> Lucas BemVaral
+  </div>
+</label>
+  
+<label class="option">
+  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Sobrinha.png?raw=true" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Sobrinha Milena"> Sobrinha Milena
+  </div>
+</label>
+
+    </div>
+
+    <button id="botaoVotar" disabled>VOTAR</button>
+
+    <div class="notice">Essa votação segue aberta até às 19:00</div>
+</div>
+  
+  <div id="confirmTela">
+  <div class="confirm-card">
+    <div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
+    <p id="nomeConfirm"></p>
+    <button id="botaoVotarNovamente" class="voltar">
+     VOTAR NOVAMENTE
+    </button>
+    <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
+    <div class="notice">Essa votação segue aberta até às 19:00</div>
+    
+  </div>
+</div> 
+  
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+  // =================== CONFIG ===================
+
+  const SUPABASE_URL = "https://ntkaeaijugkjhqrbnavk.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50a2FlYWlqdWdramhxcmJuYXZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NjI1MTksImV4cCI6MjA5OTQzODUxOX0.PbMWZZm82S07CcpR9A6X2Rz5uznkgQXCRQ_l8lwiK2Y";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const TABLE_VOTACAO = "bfs1";
+  const DEBUG = false;
+  const pesoVoto = 1;
+
+    // =================== HORÁRIOS ===================
+
+// Horário de Brasília (-03:00)
+const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-13T23:30:00-03:00").getTime();
+
+
+// =================== HORA DO SERVIDOR ===================
+async function getServerTime() {
+  try {
+
+    const res = await fetch(
+      "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo",
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Falha ao buscar horário");
+    }
+
+    const data = await res.json();
+
+    const serverDate = new Date(
+      data.year,
+      data.month - 1,
+      data.day,
+      data.hour,
+      data.minute,
+      data.seconds
+    );
+
+    return serverDate.getTime();
+
+  } catch (e) {
+
+    console.error("Erro ao verificar horário:", e);
+
+    // fallback pro horário local
+    return Date.now();
+  }
+}
+
+
+// =================== REDIRECT ===================
+
+function redirect(url) {
+
+  if (typeof DEBUG !== "undefined" && DEBUG) {
+
+    console.warn("REDIRECT BLOQUEADO →", url);
+
+    return;
+  }
+
+  window.location.replace(url);
+}
+
+
+// =================== VERIFICAÇÃO DE HORÁRIO ===================
+
+async function verificarHorarios() {
+
+  const agoraBR = await getServerTime();
+
+  console.log("Agora:", new Date(agoraBR));
+  console.log("Abertura:", new Date(aberturaBR));
+  console.log("Encerramento:", new Date(encerramentoBR));
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+
+    console.warn("Votação ainda não abriu");
+
+    redirect("aguarde.html");
+
+    return;
+  }
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+
+    console.warn("Votação encerrada");
+
+    redirect("fechada.html");
+
+    return;
+  }
+
+  console.log("VOTAÇÃO ABERTA");
+}
+
+
+// Executa ao carregar
+verificarHorarios();
+
+
+// =================== VERIFICAÇÃO PERIÓDICA ===================
+
+setInterval(async () => {
+
+  const agoraBR = await getServerTime();
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+
+    console.warn("Ainda não abriu");
+
+    redirect("aguarde.html");
+
+    return;
+  }
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+
+    console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+
+    redirect("fechada.html");
+
+    return;
+  }
+
+}, 5000);
+  
+  // =================== ELEMENTOS DOM ===================
+  const votoTela = document.getElementById("votoTela");
+  const confirmTela = document.getElementById("confirmTela");
+  const nomeConfirm = document.getElementById("nomeConfirm");
+  const fotoConfirm = document.getElementById("fotoConfirm");
+  const botaoVotar = document.getElementById("botaoVotar");
+  const botaoVotarNovamente = document.getElementById("botaoVotarNovamente");
+
+  function updateBotoesEstado() {
+    const escolhido = document.querySelector('input[name="vote"]:checked');
+    
+    if (escolhido) {
+      botaoVotar.disabled = false;
+      botaoVotar.classList.add("active");
+    } else {
+      botaoVotar.disabled = true;
+      botaoVotar.classList.remove("active");
+    }
+  }
+
+botaoVotar.addEventListener("click", () => {
+  const escolhido = document.querySelector('input[name="vote"]:checked');
+  
+  if (!escolhido) {
+    alert("Selecione alguém para votar!");
+    return;
+  }
+
+  // BLOQUEIO IMEDIATO AQUI
+  botaoVotar.disabled = true;
+  botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+
+  submitVote(escolhido.value);
+});
+
+async function submitVote(participante) {
+  try {
+    const agoraBR = await getServerTime();
+    if (agoraBR > encerramentoBR) {
+      alert("A votação foi encerrada!");
+      // Reativa se falhar por horário
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = "VOTAR";
+      return;
+    }
+
+    const inputEscolhido = document.querySelector('input[name="vote"]:checked');
+    if (!inputEscolhido) {
+       botaoVotar.disabled = false;
+       botaoVotar.textContent = "VOTAR";
+       return;
+    }
+
+    const cardPai = inputEscolhido.closest('.option');
+    const imagemVotada = cardPai.querySelector('img').src;
+
+    // Já está desativado pelo clique, mas garantimos aqui e salvamos o texto anterior
+    const prevText = "VOTAR";
+    
+    const votos = [];
+
+for (let i = 0; i < pesoVoto; i++) {
+votos.push({
+  participante: participante
+});
+}
+
+const { error } = await supabase
+  .from(TABLE_VOTACAO)
+  .insert(votos);
+    
+    if (error) {
+      console.error("Erro Supabase:", error);
+      let msgErro = error.message || JSON.stringify(error);
+      alert("ERRO NO SUPABASE:\n" + msgErro);
+      botaoVotar.disabled = false;
+      botaoVotar.textContent = prevText;
+      return;
+    }
+    
+    votoTela.style.display = "none";
+    confirmTela.style.display = "flex";
+    nomeConfirm.textContent = participante;
+    
+    // Usamos a imagem capturada do card no momento do voto
+    fotoConfirm.src = imagemVotada;
+    fotoConfirm.style.display = "block";
+    
+    botaoVotar.textContent = prevText;
+    botaoVotar.disabled = false;
+  } catch (e) {
+    alert("Erro inesperado: " + e.message);
+    botaoVotar.disabled = false;
+    botaoVotar.textContent = "VOTAR";
+  }
+}
+
+function voltarParaVotacao() {
+  confirmTela.style.display = "none";
+  votoTela.style.display = "block";
+
+  const checked = document.querySelector('input[name="vote"]:checked');
+  if (checked) checked.checked = false;
+
+  updateBotoesEstado();
+}
+
+  botaoVotarNovamente.addEventListener("click", () => {
+    voltarParaVotacao();
+  })
+  
+  updateBotoesEstado();
+
+function scrollParaFinal() {
+  setTimeout(() => {
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+  }, 100);
+}
+
+document.querySelectorAll('input[name="vote"]').forEach(radio => {
+  radio.addEventListener("change", () => { 
+    updateBotoesEstado();
+    scrollParaFinal(); 
+  });
+});
+
+(function init() {
+  updateBotoesEstado();
+})();
+    </script>
+
+</body>
+</html>
