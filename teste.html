@@ -915,56 +915,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     width:100%;
     height:10px; /
 }
-.popup-embed {
-    position: fixed;
-
-    top: 15px;
-    left: 15px;
-
-    width: 420px;
-    height: 700px;
-
-    background: #fff;
-    border-radius: 14px;
-    overflow: hidden;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
-
-    z-index: 99999;
-
-    transform: translateX(-120%);
-    transition: transform .45s ease;
-}
-
-.popup-embed.ativo {
-    transform: translateX(0);
-}
-
-.popup-header {
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 12px;
-
-    background: #2d2d2d;
-    color: #fff;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.popup-content {
-    height: calc(100% - 40px);
-}
-
-.popup-content iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
 </style>
 </head>
     
@@ -1176,21 +1126,64 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     </main>
 </div>        
 <div style="height: 10px;"></div>
-    
-<div id="popup-embed" class="popup-embed">
+
+  <!-- O POPUP -->
+  <div id="popupVotacao">
     <div class="popup-header">
-        <span class="popup-title">Aviso</span>
-        <button class="popup-close" onclick="fecharPopup()">✕</button>
+      <span>Votação Oficial</span>
+      <button class="close-btn" onclick="fecharPopup()">×</button>
     </div>
 
-    <div class="popup-content">
-        <iframe
-            src="https://flopshow.site/vote/votebigfarm.html"
-            frameborder="0"
-            allowfullscreen>
-        </iframe>
+    <div class="popup-body">
+      <!-- TELA DE VOTO -->
+      <div id="votoTela">
+        <h1>Quem você quer que FIQUE na Big Farm?</h1>
+        
+        <div class="options">
+          <label class="option">
+            <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Celso.png?raw=true" alt="Celso">
+            <div class="option-content">
+              <input type="radio" name="vote" value="Celso Escoliosi">
+              <span>Celso</span>
+            </div>
+          </label>
+
+          <label class="option">
+            <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lucas.png?raw=true" alt="Lucas">
+            <div class="option-content">
+              <input type="radio" name="vote" value="Lucas BemVaral">
+              <span>Lucas</span>
+            </div>
+          </label>
+            
+          <label class="option">
+            <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Sobrinha.png?raw=true" alt="Milena">
+            <div class="option-content">
+              <input type="radio" name="vote" value="Sobrinha Milena">
+              <span>Milena</span>
+            </div>
+          </label>
+        </div>
+
+        <button id="botaoVotar" disabled>VOTAR</button>
+        <div class="notice">A votação encerra às 19:00</div>
+      </div>
+
+      <!-- TELA DE CONFIRMAÇÃO -->
+      <div id="confirmTela">
+        <div class="confirm-card">
+          <div class="img-confirm-container">
+            <img id="fotoConfirm" src="" alt="Voto"/>
+          </div>
+          <div class="confirm-content">
+            <div class="success-msg">Voto computado com sucesso!</div>
+            <p id="nomeConfirm"></p>
+            <button id="botaoVotarNovamente" class="voltar">VOTAR NOVAMENTE</button>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 <!-- HTML DA SIDEBAR -->
 <aside class="side-content">  
@@ -1259,6 +1252,395 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
         </div>
     </footer>
 
+      <style>
+    /* ===== BASE ===== */
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Arial, sans-serif;
+      color: #ffffff;
+      background: #0d0d0d;
+      min-height: 100vh;
+    }
+
+    /* ===== POPUP CONTAINER ===== */
+    #popupVotacao {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 700px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+      border-radius: 14px;
+      border: 1px solid #ffffff;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+      overflow: hidden;
+      animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideDown {
+      from { 
+        transform: translate(-50%, -120%); 
+        opacity: 0; 
+      }
+      to { 
+        transform: translate(-50%, 0); 
+        opacity: 1; 
+      }
+    }
+
+    /* ===== HEADER DO POPUP ===== */
+    .popup-header {
+      background: linear-gradient(90deg, rgba(0, 183, 176, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ffffff;
+    }
+
+    .popup-header span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #00b7b0;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 5px;
+      line-height: 1;
+      margin: 0;
+      width: auto;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .close-btn:hover { 
+      opacity: 1; 
+    }
+
+    /* ===== CONTEÚDO DO POPUP ===== */
+    .popup-body {
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 16px;
+      margin: 0 0 14px 0;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+
+    /* ===== GRID DE OPÇÕES (3 COLUNAS SEMPRE) ===== */
+    .options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .option {
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #242424 0%, #1f1f1f 100%);
+      border: 1px solid #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .option:hover {
+      border-color: #00b7b0;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 183, 176, 0.15);
+    }
+
+    .option.selected, .option:has(input[type="radio"]:checked) {
+      background: linear-gradient(135deg, rgba(0, 183, 176, 0.2) 0%, rgba(0, 183, 176, 0.1) 100%);
+      border-color: #00b7b0;
+      box-shadow: 0 0 15px rgba(0, 183, 176, 0.2);
+    }
+
+    .option img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid #ffffff;
+    }
+
+    .option-content {
+      padding: 12px 8px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      flex-grow: 1;
+    }
+
+    .option-content input[type="radio"] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #ffffff;
+      border-radius: 50%;
+      margin: 0;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .option-content input[type="radio"]:hover {
+      border-color: #00b7b0;
+      transform: scale(1.1);
+    }
+
+    .option-content input[type="radio"]:checked {
+      border-color: #00b7b0;
+      box-shadow: 0 0 8px rgba(0, 183, 176, 0.5);
+    }
+
+    .option-content input[type="radio"]:checked::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: #00b7b0;
+    }
+
+    /* ===== BOTÃO VOTAR ===== */
+    #botaoVotar {
+      width: 100%;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      border: 1px solid #ffffff;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #444;
+      color: #b0b0b0;
+      transition: all 0.2s;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    #botaoVotar.active {
+      background: #ff8c00;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(255, 140, 0, 0.3);
+      border-color: #ff8c00;
+    }
+
+    #botaoVotar:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .notice {
+      font-size: 10px;
+      color: #b0b0b0;
+      text-align: center;
+      margin-top: 10px;
+      opacity: 0.8;
+    }
+
+    /* ===== SPINNER ===== */
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin { 
+      to { transform: rotate(360deg); } 
+    }
+
+    /* ===== TELA DE CONFIRMAÇÃO (LAYOUT HORIZONTAL) ===== */
+    #confirmTela {
+      display: none;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0;
+      padding: 0;
+      text-align: left;
+    }
+
+    .confirm-card {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0;
+      border: 1px solid #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+    }
+
+    .img-confirm-container {
+      width: 50%;
+      min-width: 200px;
+      aspect-ratio: 1/1.2;
+      border-radius: 0;
+      overflow: hidden;
+      border: none;
+      border-right: 1px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(0, 183, 176, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+    }
+
+    #fotoConfirm {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .confirm-content {
+      width: 50%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .success-msg {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent;
+      border: 1px solid #ffffff;
+      border-radius: 8px;
+      padding: 12px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .success-msg::before {
+      content: "✓";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid #ffffff;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    #nomeConfirm {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .voltar {
+      background: #ff8c00;
+      color: #fff;
+      border: 1px solid #ff8c00;
+      padding: 14px 16px;
+      border-radius: 6px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      margin: 0;
+      width: 100%;
+    }
+
+    .voltar:hover {
+      background: #ff9900;
+      border-color: #ff9900;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 140, 0, 0.3);
+    }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 600px) {
+      #popupVotacao {
+        max-width: 95%;
+      }
+
+      .options {
+        gap: 8px;
+      }
+
+      .option img {
+        height: 120px;
+      }
+
+      .option-content {
+        padding: 10px 6px;
+        font-size: 12px;
+      }
+
+      .confirm-card {
+        flex-direction: column;
+      }
+
+      .img-confirm-container {
+        width: 100%;
+        min-width: auto;
+        aspect-ratio: 1/1;
+        border-right: none;
+        border-bottom: 1px solid #ffffff;
+      }
+
+      .confirm-content {
+        width: 100%;
+        padding: 16px;
+      }
+
+      #nomeConfirm {
+        font-size: 18px;
+      }
+
+      .success-msg {
+        font-size: 13px;
+      }
+    }
+  </style>
+    
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
     
 <script>
@@ -1475,7 +1857,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             currentUser.prefs &&
             currentUser.prefs.avatar
         ) {
-
             avatarUrl = currentUser.prefs.avatar;
 
         }
@@ -1489,13 +1870,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                     currentUser.name ||
                     "User"
                 )}&background=8000ff&color=fff`;
-
         }
-
         updateAvatar(avatarUrl);
-
     } catch (err) {
-
         console.log("Visitante anônimo.");
 
     }
@@ -1505,17 +1882,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ============================================================
 
     if (logoutBtn) {
-
         logoutBtn.addEventListener("click", async function () {
-
             try {
-
                 await account.deleteSession("current");
-
             } catch (e) {}
-
             localStorage.removeItem("fshow_user");
-
             location.reload();
 
         });
@@ -1527,17 +1898,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ============================================================
 
     if (avatarInput) {
-
         avatarInput.addEventListener("change", async function (e) {
-
-            const file = e.target.files[0];
-
+          const file = e.target.files[0];
             if (!file || !currentUser) return;
-
             try {
-
                 trigger.style.opacity = "0.5";
-
                 const uploaded = await storage.createFile(
                     BUCKET_ID,
                     Appwrite.ID.unique(),
@@ -1557,27 +1922,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                     BUCKET_ID,
                     uploaded.$id
                 );
-
                 updateAvatar(newAvatar);
-
                 trigger.style.opacity = "1";
-
                 alert("Foto atualizada!");
-
             } catch (error) {
 
                 trigger.style.opacity = "1";
-
                 alert("Erro ao atualizar foto.");
-
                 console.error(error);
-
             }
-
         });
-
     }
-
 });
 
 /* ============================================================
@@ -1618,19 +1973,106 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
 })();
-
-function abrirPopup() {
-    document.getElementById("popup-embed").classList.add("ativo");
-}
-
-function fecharPopup() {
-    document.getElementById("popup-embed").classList.remove("ativo");
-}
-
-// Abre automaticamente após 500 ms
-window.addEventListener("load", () => {
-    setTimeout(abrirPopup, 500);
-});
 </script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    // =================== CONFIG ===================
+    const SUPABASE_URL = "https://ntkaeaijugkjhqrbnavk.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50a2FlYWlqdWdramhxcmJuYXZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NjI1MTksImV4cCI6MjA5OTQzODUxOX0.PbMWZZm82S07CcpR9A6X2Rz5uznkgQXCRQ_l8lwiK2Y";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    const TABLE_VOTACAO = "bfs1";
+    const encerramentoBR = new Date("2026-07-13T21:00:00-03:00").getTime();
+
+    // =================== ELEMENTOS DOM ===================
+    const votoTela = document.getElementById("votoTela");
+    const confirmTela = document.getElementById("confirmTela");
+    const nomeConfirm = document.getElementById("nomeConfirm");
+    const fotoConfirm = document.getElementById("fotoConfirm");
+    const botaoVotar = document.getElementById("botaoVotar");
+    const botaoVotarNovamente = document.getElementById("botaoVotarNovamente");
+
+    // Flag para evitar múltiplos cliques
+    let votando = false;
+
+    window.fecharPopup = function() {
+      document.getElementById('popupVotacao').style.display = 'none';
+    };
+
+    function updateBotoesEstado() {
+      const escolhido = document.querySelector('input[name="vote"]:checked');
+      if (escolhido && !votando) {
+        botaoVotar.disabled = false;
+        botaoVotar.classList.add("active");
+      } else {
+        botaoVotar.disabled = true;
+        botaoVotar.classList.remove("active");
+      }
+    }
+
+    botaoVotar.addEventListener("click", async (e) => {
+      e.preventDefault();
+      
+      if (votando) return;
+      
+      const escolhido = document.querySelector('input[name="vote"]:checked');
+      if (!escolhido) return;
+
+      votando = true;
+      botaoVotar.disabled = true;
+      botaoVotar.innerHTML = '<span class="spinner"></span>...';
+
+      const cardPai = escolhido.closest('.option');
+      const imagemVotada = cardPai.querySelector('img').src;
+      const nomeVotado = escolhido.value;
+
+      try {
+        const { error } = await supabase
+          .from(TABLE_VOTACAO)
+          .insert([{ participante: nomeVotado }]);
+        
+        if (error) {
+          console.error("Erro Supabase:", error);
+          throw error;
+        }
+
+        // Transição instantânea
+        votoTela.style.display = "none";
+        confirmTela.style.display = "flex";
+        nomeConfirm.textContent = nomeVotado;
+        fotoConfirm.src = imagemVotada;
+        
+      } catch (e) {
+        console.error("Erro ao votar:", e);
+        alert("Erro ao votar: " + (e.message || "Tente novamente"));
+        votando = false;
+        botaoVotar.disabled = false;
+        botaoVotar.textContent = "VOTAR";
+        updateBotoesEstado();
+      }
+    });
+
+    botaoVotarNovamente.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      votando = false;
+      confirmTela.style.display = "none";
+      votoTela.style.display = "block";
+      
+      const checked = document.querySelector('input[name="vote"]:checked');
+      if (checked) checked.checked = false;
+      
+      botaoVotar.textContent = "VOTAR";
+      updateBotoesEstado();
+    });
+
+    document.querySelectorAll('input[name="vote"]').forEach(radio => {
+      radio.addEventListener("change", updateBotoesEstado);
+    });
+
+    // Inicialização
+    updateBotoesEstado();
+  </script>
 </body>
 </html>
