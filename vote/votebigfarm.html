@@ -6,54 +6,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
 <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="icon" type="image/png" sizes="96x96" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-
-<link rel="apple-touch-icon" sizes="57x57" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="60x60" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="72x72" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="76x76" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="114x114" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="120x120" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="144x144" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-
 <meta name="theme-color" content="#8A2BE2">
-<meta name="msapplication-TileColor" content="#FF8C00">
-<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="icon" type="image/png" sizes="512x512" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<link rel="mask-icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" color="#ff8c00">
-<link rel="manifest" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<meta name="msapplication-TileColor" content="#ff8c00">
-<meta name="msapplication-TileImage" content="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-<meta name="theme-color" content="#8a2be2">
   
 <style>
 /* ===== VARIÁVEIS GLOBAIS ===== */
 :root {
-  --bg: #121212;
-  --card-bg: #2b2b2b;
-  --selected-bg: #3c3c3c;
-  --panel-bg: #2b2b2b;
-  --panel-border: rgba(255, 255, 255, 0.06);
   --accent: #00b7b0;
   --text: #fff;
   --muted: #bdbdbd;
   --border-radius: 8px;
   --transition: all 0.3s ease;
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 25px rgba(13, 13, 13, 0.3);
-  --back: #0d0d0d;
 }
 
 /* ===== BASE ===== */
@@ -63,21 +25,15 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
   font-family: "Inter", Arial, sans-serif;
   color: var(--text);
-
-  background:
-    radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
-    radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
-    radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
-    linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
-
-  background-attachment: fixed;
-  background-size: cover;
-  animation: fadeIn 0.7s ease;
+  background: linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
+  overflow: hidden;
 }
 
 @keyframes fadeIn {
@@ -86,33 +42,38 @@ body {
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== LAYOUT (FORÇADO DESKTOP) ===== */
+/* ===== LAYOUT COMPACTO PARA IFRAME 16:9 ===== */
 .container {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 40px 12px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
   animation: slideUp 0.6s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 700;
-  margin-bottom: 32px;
+  margin: 0 0 8px 0;
   text-align: left;
-  transition: color 0.3s ease;
   line-height: 1.2;
+  flex-shrink: 0;
 }
 
-/* ===== OPÇÕES (GRID FORÇADO) ===== */
+/* ===== OPÇÕES (GRID COMPACTO) ===== */
 .options {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .option {
@@ -128,8 +89,8 @@ h1 {
 }
 
 .option:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.55);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.55);
   border-color: var(--accent);
 }
 
@@ -168,23 +129,24 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 6px;
+  padding: 6px 4px;
   width: 100%;
   background: #1f1f1f;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   transition: background 0.3s ease;
   text-align: center;
-  min-height: 50px;
-  gap: 6px;
+  min-height: 36px;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
 .option-content input[type="radio"] {
   appearance: none;
-  width: 18px;
-  height: 18px;
-  min-width: 18px;
-  min-height: 18px;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
   border: 2px solid var(--muted);
   border-radius: 50%;
   cursor: pointer;
@@ -214,18 +176,19 @@ h1 {
   word-break: break-word;
   overflow-wrap: break-word;
   white-space: normal;
+  min-width: 0;
 }
 
 /* ===== SPINNER ===== */
 .spinner {
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   border-top-color: #fff;
   animation: spin 0.8s linear infinite;
-  margin-right: 8px;
+  margin-right: 6px;
   vertical-align: middle;
 }
 
@@ -236,11 +199,8 @@ h1 {
 /* ===== BOTÃO PRINCIPAL ===== */
 button {
   width: 100%;
-  max-width: 420px;
-  margin: 20px auto 0;
-  display: block;
-  padding: 14px;
-  font-size: 16px;
+  padding: 10px;
+  font-size: 14px;
   font-weight: bold;
   border: none;
   border-radius: var(--border-radius);
@@ -248,10 +208,11 @@ button {
   background: #444;
   color: var(--muted);
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 183, 176, 0.3);
 }
 
@@ -266,22 +227,24 @@ button:disabled {
 }
 
 .notice {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--muted);
   text-align: center;
-  margin-top: 10px;
+  margin-top: 6px;
+  flex-shrink: 0;
 }
 
-/* ===== CONFIRMAÇÃO (FORÇADO DESKTOP) ===== */
+/* ===== CONFIRMAÇÃO ===== */
 #confirmTela {
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px 20px;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
   text-align: center;
   background: transparent;
-  min-height: auto;
   animation: slideUp 0.6s ease forwards;
 }
 
@@ -289,25 +252,28 @@ button:disabled {
   background: rgba(0,0,0,.35);
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 12px;
-  padding: 28px;
-  max-width: 620px;
+  padding: 12px;
   width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   overflow: hidden;
   box-shadow: 0 15px 40px rgba(0,0,0,.6);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .confirm-card .img-container {
   width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 8px 8px 0 0;
+  border-radius: 8px;
   overflow: hidden;
   background: rgba(0, 183, 176, 0.2); 
   border: 1px solid rgba(0, 255, 255, 0.1);
-  border-bottom: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  max-height: 200px;
 }
 
 #fotoConfirm {
@@ -321,13 +287,12 @@ button:disabled {
 #nomeConfirm {
   background: #1F1F1F;
   color: #fff;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
   text-align: center;
-  padding: 16px;
-  border-radius: 0 0 10px 10px;
+  padding: 8px;
+  border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.1);
-  border-top: none;
   margin: 0;
   word-break: break-word;
 }
@@ -336,12 +301,11 @@ button:disabled {
   background: rgba(0, 255, 150, 0.1);
   border: 1px solid rgba(0, 255, 150, 0.4);
   border-radius: 8px;
-  padding: 14px 20px;
+  padding: 8px 12px;
   text-align: center;
   color: #00ff99;
   font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 18px;
+  font-size: 12px;
   animation: fadeIn 0.6s ease;
 }
 
@@ -354,25 +318,19 @@ button:disabled {
   background: var(--accent);
   color: #fff;
   transition: background 0.3s ease;
-  max-width: 420px;
-  margin: 20px auto 0;
-  display: block;
+  padding: 10px;
+  font-size: 14px;
 }
 
 .voltar:hover {
   background: #00c9b8;
 }
-
-.espacador { width: 100%; margin: 10px 0; }
 </style>
 </head>
 <body>
 
   <div id="votoTela" class="container">
-    <div class="espacador"></div>
-    
-    <h1>Quem você quer que FIQUE <br> na Big Farm?</h1>
-    <div class="espacador"></div>
+    <h1>Quem quer que FIQUE?</h1>
     
     <div class="options">
       <label class="option">
@@ -381,7 +339,7 @@ button:disabled {
         </div>
         <div class="option-content">
           <input type="radio" name="vote" value="Celso Escoliosi">
-          <span class="option-label">Celso Escoliosi</span>
+          <span class="option-label">Celso</span>
         </div>
       </label>
 
@@ -391,7 +349,7 @@ button:disabled {
         </div>
         <div class="option-content">
           <input type="radio" name="vote" value="Lucas BemVaral">
-          <span class="option-label">Lucas BemVaral</span>
+          <span class="option-label">Lucas</span>
         </div>
       </label>
         
@@ -401,25 +359,21 @@ button:disabled {
         </div>
         <div class="option-content">
           <input type="radio" name="vote" value="Sobrinha Milena">
-          <span class="option-label">Sobrinha Milena</span>
+          <span class="option-label">Milena</span>
         </div>
       </label>
     </div>
 
     <button id="botaoVotar" disabled>VOTAR</button>
-
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
+    <div class="notice">Votação aberta até 19:00</div>
   </div>
   
   <div id="confirmTela">
     <div class="confirm-card">
       <div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
       <p id="nomeConfirm"></p>
-      <button id="botaoVotarNovamente" class="voltar">
-       VOTAR NOVAMENTE
-      </button>
-      <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-      <div class="notice">Essa votação segue aberta até às 19:00</div>
+      <div class="success-msg">Voto computado com sucesso!</div>
+      <button id="botaoVotarNovamente" class="voltar">VOTAR NOVAMENTE</button>
     </div>
   </div> 
   
@@ -516,7 +470,7 @@ button:disabled {
       return;
     }
     botaoVotar.disabled = true;
-    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando...';
     submitVote(escolhido.value);
   });
 
@@ -550,7 +504,7 @@ button:disabled {
       
       if (error) {
         console.error("Erro Supabase:", error);
-        alert("ERRO NO SUPABASE:\n" + (error.message || JSON.stringify(error)));
+        alert("ERRO:\n" + (error.message || JSON.stringify(error)));
         botaoVotar.disabled = false;
         botaoVotar.textContent = prevText;
         return;
@@ -573,7 +527,7 @@ button:disabled {
 
   function voltarParaVotacao() {
     confirmTela.style.display = "none";
-    votoTela.style.display = "block";
+    votoTela.style.display = "flex";
     const checked = document.querySelector('input[name="vote"]:checked');
     if (checked) checked.checked = false;
     updateBotoesEstado();
@@ -582,17 +536,10 @@ button:disabled {
   botaoVotarNovamente.addEventListener("click", () => {
     voltarParaVotacao();
   });
-  
-  function scrollParaFinal() {
-    setTimeout(() => {
-      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
-    }, 100);
-  }
 
   document.querySelectorAll('input[name="vote"]').forEach(radio => {
     radio.addEventListener("change", () => { 
       updateBotoesEstado();
-      scrollParaFinal(); 
     });
   });
 
