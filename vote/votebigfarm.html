@@ -90,37 +90,43 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== LAYOUT ===== */
+/* ===== LAYOUT (FORÇADO DESKTOP) ===== */
 .container {
-  max-width: 400px;
+  max-width: 1040px; /* Forçado desktop */
   margin: 0 auto;
-  padding: 20px 15px;
+  padding: 40px 20px; /* Forçado desktop */
   animation: slideUp 0.6s ease;
 }
 
 h1 {
-  font-size: 20px;
+  font-size: 28px; /* Forçado desktop */
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 32px; /* Forçado desktop */
   text-align: left;
   transition: color 0.3s ease;
 }
 
-/* ===== OPÇÕES (RADIO CARDS) ===== */
+/* ===== OPÇÕES (GRID FORÇADO) ===== */
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colunas sempre */
+  gap: 24px;
+}
+
 .option {
   display: flex;
-  background: var(--card-bg);
-  border: 1px solid #fff;
+  flex-direction: column; /* Forçado desktop: vertical */
+  background: #2b2b2b;
+  border: 1px solid rgba(255,255,255,0.15);
   border-radius: var(--border-radius);
-  margin-bottom: 12px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
 }
 
 .option:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.55);
   border-color: var(--accent);
 }
 
@@ -136,19 +142,21 @@ h1 {
 }
 
 .option img {
-  width: 150px;
-  height: auto;
+  width: 100%; /* Forçado desktop */
+  height: 200px; /* Forçado desktop */
   object-fit: cover;
-  flex-shrink: 0;
+  object-position: top;
+  display: block;
   transition: transform 0.4s ease;
 }
 
 .option-content {
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 14px 16px; /* Forçado desktop */
   width: 100%;
-  font-size: 18px;
+  background: #1f1f1f; /* Forçado desktop */
+  font-size: 17px; /* Forçado desktop */
   font-weight: 500;
   transition: background 0.3s ease;
 }
@@ -159,7 +167,7 @@ h1 {
   height: 20px;
   border: 2px solid var(--muted);
   border-radius: 50%;
-  margin-right: 8px;
+  margin-right: 10px; /* Forçado desktop */
   cursor: pointer;
   position: relative;
   transition: border-color 0.3s ease, transform 0.2s ease;
@@ -181,32 +189,34 @@ h1 {
   background: var(--accent);
 }
 
-  /* ===== SPINNER ===== */
-  .spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 0.8s linear infinite;
-    margin-right: 8px;
-    vertical-align: middle;
-  }
+/* ===== SPINNER ===== */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
-  /* ===== BOTÃO PRINCIPAL ===== */
-  button {
+/* ===== BOTÃO PRINCIPAL ===== */
+button {
   width: 100%;
+  max-width: 420px; /* Forçado desktop */
+  margin: 32px auto 0; /* Forçado desktop */
+  display: block; /* Forçado desktop */
   padding: 14px;
   font-size: 16px;
   font-weight: bold;
   border: none;
   border-radius: var(--border-radius);
-  margin-top: 15px;
   cursor: pointer;
   background: #444;
   color: var(--muted);
@@ -235,24 +245,59 @@ button:disabled {
   margin-top: 10px;
 }
 
-/* ===== CONFIRMAÇÃO ===== */
-#fotoConfirm {
+/* ===== CONFIRMAÇÃO (FORÇADO DESKTOP) ===== */
+#confirmTela {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px 20px; /* Forçado desktop */
+  text-align: center;
+  background: transparent;
+  min-height: auto; /* Forçado desktop */
+  animation: slideUp 0.6s ease forwards;
+}
+
+.confirm-card {
+  background: rgba(0,0,0,.35); /* Forçado desktop */
+  border: 1px solid rgba(255,255,255,.15); /* Forçado desktop */
+  border-radius: 12px;
+  padding: 28px; /* Forçado desktop */
+  max-width: 620px; /* Forçado desktop */
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0,0,0,.6); /* Forçado desktop */
+}
+
+.confirm-card .img-container {
+  width: 100%;
+  height: 280px; /* Forçado desktop */
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  background: rgba(0, 183, 176, 0.2); 
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#fotoConfirm {
+  height: auto;
   display: block;
+  object-fit: contain;
 }
 
 #nomeConfirm {
   background: #1F1F1F;
   color: #fff;
-  font-size: 20px;
+  font-size: 24px; /* Forçado desktop */
   font-weight: 700;
   text-align: center;
-  padding: 14px;
+  padding: 16px; /* Forçado desktop */
   border-radius: 0 0 10px 10px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255,255,255,0.1);
   border-top: none;
   margin: 0;
 }
@@ -261,10 +306,11 @@ button:disabled {
   background: rgba(0, 255, 150, 0.1);
   border: 1px solid rgba(0, 255, 150, 0.4);
   border-radius: 8px;
-  padding: 10px 15px;
+  padding: 14px 20px; /* Forçado desktop */
   text-align: center;
   color: #00ff99;
   font-weight: 600;
+  font-size: 15px; /* Forçado desktop */
   margin-bottom: 18px;
   animation: fadeIn 0.6s ease;
 }
@@ -278,224 +324,70 @@ button:disabled {
   background: var(--accent);
   color: #fff;
   transition: background 0.3s ease;
+  max-width: 420px; /* Forçado desktop */
+  margin: 20px auto 0; /* Forçado desktop */
+  display: block; /* Forçado desktop */
 }
 
 .voltar:hover {
   background: #00c9b8;
 }
 
-#confirmTela {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  text-align: center;
-  background: transparent;
-  min-height: 85vh;
-  animation: slideUp 0.6s ease forwards;
-}
-
-
-.confirm-card {
-  background: transparent;
-  border: 2px solid var(--panel-border);
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 450px;
-  width: 100%;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-.confirm-card .img-container {
-  width: 100%;
-  height: auto;
-  border-radius: 8px 8px 0 0;
-  overflow: hidden;
-  background: rgba(0, 183, 176, 0.2); 
-  border: 1px solid rgba(0, 255, 255, 255);
-  border-bottom: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#fotoConfirm {
-  height: auto;
-  display: block;
-  object-fit: contain;
-}
-
-@media (min-width: 1024px) {
-  .confirm-card .img-container {
-    height: auto; 
-  }
-}
-
 .espacador { width: 100%; margin: 10px 0; }
-  
-/* =========================
-   DESKTOP / PC
-   ========================= */
-@media (min-width: 1024px) {
-
-  .container {
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 40px 20px;
-  }
-
-  h1 {
-    font-size: 28px;
-    margin-bottom: 32px;
-    text-align: left;
-  }
-
-  .options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  .option {
-    flex-direction: column;
-    background: #2b2b2b;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: transform .25s ease, box-shadow .25s ease;
-  }
-
-  .option:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.55);
-  }
-
-  .option img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    object-position: top;
-    display: block;
-  }
-
-  .option-content {
-    background: #1f1f1f;
-    padding: 14px 16px;
-    font-size: 17px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-  }
-
-  .option-content input[type="radio"] {
-    margin-right: 10px;
-  }
-
-  button {
-    max-width: 420px;
-    margin: 32px auto 0;
-    display: block;
-    font-size: 16px;
-  }
-
-  /* =========================
-     CONFIRMAÇÃO (SUCESSO)
-     ========================= */
-
-  #confirmTela {
-    padding-top: 60px;
-    min-height: auto;
-  }
-
-  .confirm-card {
-    max-width: 620px;
-    margin: 0 auto;
-    padding: 28px;
-    background: rgba(0,0,0,.35);
-    border: 1px solid rgba(255,255,255,.15);
-    box-shadow: 0 15px 40px rgba(0,0,0,.6);
-  }
-
-  .confirm-card .img-container {
-    height: 280px;
-  }
-
-  #nomeConfirm {
-    font-size: 24px;
-    padding: 16px;
-  }
-
-  .success-msg {
-    font-size: 15px;
-    padding: 14px 20px;
-  }
-
-  .voltar {
-    max-width: 420px;
-    margin: 20px auto 0;
-    display: block;
-  }
-}
 </style>
 </head>
 <body>
 
   <div id="votoTela" class="container">
-<div class="espacador"></div>
+    <div class="espacador"></div>
     
     <h1>Quem você quer que FIQUE <br> na Big Farm?</h1>
     <div class="espacador"></div>
     
-<div class="options">
+    <div class="options">
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Celso.png?raw=true" alt="Opção">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Celso Escoliosi"> Celso Escoliosi
+        </div>
+      </label>
 
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Celso.png?raw=true" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Celso Escoliosi"> Celso Escoliosi
-  </div>
-</label>
-
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lucas.png?raw=true" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Lucas BemVaral"> Lucas BemVaral
-  </div>
-</label>
-  
-<label class="option">
-  <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Sobrinha.png?raw=true" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Sobrinha Milena"> Sobrinha Milena
-  </div>
-</label>
-
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lucas.png?raw=true" alt="Opção">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Lucas BemVaral"> Lucas BemVaral
+        </div>
+      </label>
+        
+      <label class="option">
+        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Sobrinha.png?raw=true" alt="Opção">
+        <div class="option-content">
+          <input type="radio" name="vote" value="Sobrinha Milena"> Sobrinha Milena
+        </div>
+      </label>
     </div>
 
     <button id="botaoVotar" disabled>VOTAR</button>
 
     <div class="notice">Essa votação segue aberta até às 19:00</div>
-</div>
+  </div>
   
   <div id="confirmTela">
-  <div class="confirm-card">
-    <div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
-    <p id="nomeConfirm"></p>
-    <button id="botaoVotarNovamente" class="voltar">
-     VOTAR NOVAMENTE
-    </button>
-    <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
-    
-  </div>
-</div> 
+    <div class="confirm-card">
+      <div class="img-container"><img id="fotoConfirm" src="" alt="Voto"/></div>
+      <p id="nomeConfirm"></p>
+      <button id="botaoVotarNovamente" class="voltar">
+       VOTAR NOVAMENTE
+      </button>
+      <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
+      <div class="notice">Essa votação segue aberta até às 19:00</div>
+    </div>
+  </div> 
   
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
   // =================== CONFIG ===================
-
   const SUPABASE_URL = "https://ntkaeaijugkjhqrbnavk.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50a2FlYWlqdWdramhxcmJuYXZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NjI1MTksImV4cCI6MjA5OTQzODUxOX0.PbMWZZm82S07CcpR9A6X2Rz5uznkgQXCRQ_l8lwiK2Y";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -504,131 +396,60 @@ button:disabled {
   const DEBUG = false;
   const pesoVoto = 1;
 
-    // =================== HORÁRIOS ===================
+  // =================== HORÁRIOS ===================
+  const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
+  const encerramentoBR = new Date("2026-07-13T21:00:00-03:00").getTime();
 
-// Horário de Brasília (-03:00)
-const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-13T21:00:00-03:00").getTime();
-
-
-// =================== HORA DO SERVIDOR ===================
-async function getServerTime() {
-  try {
-
-    const res = await fetch(
-      "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo",
-      {
-        cache: "no-store"
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Falha ao buscar horário");
+  // =================== HORA DO SERVIDOR ===================
+  async function getServerTime() {
+    try {
+      const res = await fetch(
+        "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo",
+        { cache: "no-store" }
+      );
+      if (!res.ok) throw new Error("Falha ao buscar horário");
+      const data = await res.json();
+      return new Date(data.year, data.month - 1, data.day, data.hour, data.minute, data.seconds).getTime();
+    } catch (e) {
+      console.error("Erro ao verificar horário:", e);
+      return Date.now();
     }
-
-    const data = await res.json();
-
-    const serverDate = new Date(
-      data.year,
-      data.month - 1,
-      data.day,
-      data.hour,
-      data.minute,
-      data.seconds
-    );
-
-    return serverDate.getTime();
-
-  } catch (e) {
-
-    console.error("Erro ao verificar horário:", e);
-
-    // fallback pro horário local
-    return Date.now();
-  }
-}
-
-
-// =================== REDIRECT ===================
-
-function redirect(url) {
-
-  if (typeof DEBUG !== "undefined" && DEBUG) {
-
-    console.warn("REDIRECT BLOQUEADO →", url);
-
-    return;
   }
 
-  window.location.replace(url);
-}
-
-
-// =================== VERIFICAÇÃO DE HORÁRIO ===================
-
-async function verificarHorarios() {
-
-  const agoraBR = await getServerTime();
-
-  console.log("Agora:", new Date(agoraBR));
-  console.log("Abertura:", new Date(aberturaBR));
-  console.log("Encerramento:", new Date(encerramentoBR));
-
-  // Antes da abertura
-  if (agoraBR < aberturaBR) {
-
-    console.warn("Votação ainda não abriu");
-
-    redirect("aguarde.html");
-
-    return;
+  // =================== REDIRECT ===================
+  function redirect(url) {
+    if (typeof DEBUG !== "undefined" && DEBUG) {
+      console.warn("REDIRECT BLOQUEADO →", url);
+      return;
+    }
+    window.location.replace(url);
   }
 
-  // Depois do encerramento
-  if (agoraBR > encerramentoBR) {
-
-    console.warn("Votação encerrada");
-
-    redirect("fechada.html");
-
-    return;
+  // =================== VERIFICAÇÃO DE HORÁRIO ===================
+  async function verificarHorarios() {
+    const agoraBR = await getServerTime();
+    if (agoraBR < aberturaBR) {
+      redirect("aguarde.html");
+      return;
+    }
+    if (agoraBR > encerramentoBR) {
+      redirect("fechada.html");
+      return;
+    }
   }
+  verificarHorarios();
 
-  console.log("VOTAÇÃO ABERTA");
-}
-
-
-// Executa ao carregar
-verificarHorarios();
-
-
-// =================== VERIFICAÇÃO PERIÓDICA ===================
-
-setInterval(async () => {
-
-  const agoraBR = await getServerTime();
-
-  // Antes da abertura
-  if (agoraBR < aberturaBR) {
-
-    console.warn("Ainda não abriu");
-
-    redirect("aguarde.html");
-
-    return;
-  }
-
-  // Depois do encerramento
-  if (agoraBR > encerramentoBR) {
-
-    console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
-
-    redirect("fechada.html");
-
-    return;
-  }
-
-}, 5000);
+  setInterval(async () => {
+    const agoraBR = await getServerTime();
+    if (agoraBR < aberturaBR) {
+      redirect("aguarde.html");
+      return;
+    }
+    if (agoraBR > encerramentoBR) {
+      redirect("fechada.html");
+      return;
+    }
+  }, 5000);
   
   // =================== ELEMENTOS DOM ===================
   const votoTela = document.getElementById("votoTela");
@@ -640,7 +461,6 @@ setInterval(async () => {
 
   function updateBotoesEstado() {
     const escolhido = document.querySelector('input[name="vote"]:checked');
-    
     if (escolhido) {
       botaoVotar.disabled = false;
       botaoVotar.classList.add("active");
@@ -650,116 +470,95 @@ setInterval(async () => {
     }
   }
 
-botaoVotar.addEventListener("click", () => {
-  const escolhido = document.querySelector('input[name="vote"]:checked');
-  
-  if (!escolhido) {
-    alert("Selecione alguém para votar!");
-    return;
-  }
+  botaoVotar.addEventListener("click", () => {
+    const escolhido = document.querySelector('input[name="vote"]:checked');
+    if (!escolhido) {
+      alert("Selecione alguém para votar!");
+      return;
+    }
+    botaoVotar.disabled = true;
+    botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+    submitVote(escolhido.value);
+  });
 
-  // BLOQUEIO IMEDIATO AQUI
-  botaoVotar.disabled = true;
-  botaoVotar.innerHTML = '<span class="spinner"></span>Enviando voto...';
+  async function submitVote(participante) {
+    try {
+      const agoraBR = await getServerTime();
+      if (agoraBR > encerramentoBR) {
+        alert("A votação foi encerrada!");
+        botaoVotar.disabled = false;
+        botaoVotar.textContent = "VOTAR";
+        return;
+      }
 
-  submitVote(escolhido.value);
-});
+      const inputEscolhido = document.querySelector('input[name="vote"]:checked');
+      if (!inputEscolhido) {
+         botaoVotar.disabled = false;
+         botaoVotar.textContent = "VOTAR";
+         return;
+      }
 
-async function submitVote(participante) {
-  try {
-    const agoraBR = await getServerTime();
-    if (agoraBR > encerramentoBR) {
-      alert("A votação foi encerrada!");
-      // Reativa se falhar por horário
+      const cardPai = inputEscolhido.closest('.option');
+      const imagemVotada = cardPai.querySelector('img').src;
+      const prevText = "VOTAR";
+      
+      const votos = [];
+      for (let i = 0; i < pesoVoto; i++) {
+        votos.push({ participante: participante });
+      }
+
+      const { error } = await supabase.from(TABLE_VOTACAO).insert(votos);
+      
+      if (error) {
+        console.error("Erro Supabase:", error);
+        alert("ERRO NO SUPABASE:\n" + (error.message || JSON.stringify(error)));
+        botaoVotar.disabled = false;
+        botaoVotar.textContent = prevText;
+        return;
+      }
+      
+      votoTela.style.display = "none";
+      confirmTela.style.display = "flex";
+      nomeConfirm.textContent = participante;
+      fotoConfirm.src = imagemVotada;
+      fotoConfirm.style.display = "block";
+      
+      botaoVotar.textContent = prevText;
+      botaoVotar.disabled = false;
+    } catch (e) {
+      alert("Erro inesperado: " + e.message);
       botaoVotar.disabled = false;
       botaoVotar.textContent = "VOTAR";
-      return;
     }
-
-    const inputEscolhido = document.querySelector('input[name="vote"]:checked');
-    if (!inputEscolhido) {
-       botaoVotar.disabled = false;
-       botaoVotar.textContent = "VOTAR";
-       return;
-    }
-
-    const cardPai = inputEscolhido.closest('.option');
-    const imagemVotada = cardPai.querySelector('img').src;
-
-    // Já está desativado pelo clique, mas garantimos aqui e salvamos o texto anterior
-    const prevText = "VOTAR";
-    
-    const votos = [];
-
-for (let i = 0; i < pesoVoto; i++) {
-votos.push({
-  participante: participante
-});
-}
-
-const { error } = await supabase
-  .from(TABLE_VOTACAO)
-  .insert(votos);
-    
-    if (error) {
-      console.error("Erro Supabase:", error);
-      let msgErro = error.message || JSON.stringify(error);
-      alert("ERRO NO SUPABASE:\n" + msgErro);
-      botaoVotar.disabled = false;
-      botaoVotar.textContent = prevText;
-      return;
-    }
-    
-    votoTela.style.display = "none";
-    confirmTela.style.display = "flex";
-    nomeConfirm.textContent = participante;
-    
-    // Usamos a imagem capturada do card no momento do voto
-    fotoConfirm.src = imagemVotada;
-    fotoConfirm.style.display = "block";
-    
-    botaoVotar.textContent = prevText;
-    botaoVotar.disabled = false;
-  } catch (e) {
-    alert("Erro inesperado: " + e.message);
-    botaoVotar.disabled = false;
-    botaoVotar.textContent = "VOTAR";
   }
-}
 
-function voltarParaVotacao() {
-  confirmTela.style.display = "none";
-  votoTela.style.display = "block";
-
-  const checked = document.querySelector('input[name="vote"]:checked');
-  if (checked) checked.checked = false;
-
-  updateBotoesEstado();
-}
+  function voltarParaVotacao() {
+    confirmTela.style.display = "none";
+    votoTela.style.display = "block";
+    const checked = document.querySelector('input[name="vote"]:checked');
+    if (checked) checked.checked = false;
+    updateBotoesEstado();
+  }
 
   botaoVotarNovamente.addEventListener("click", () => {
     voltarParaVotacao();
-  })
-  
-  updateBotoesEstado();
-
-function scrollParaFinal() {
-  setTimeout(() => {
-    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
-  }, 100);
-}
-
-document.querySelectorAll('input[name="vote"]').forEach(radio => {
-  radio.addEventListener("change", () => { 
-    updateBotoesEstado();
-    scrollParaFinal(); 
   });
-});
+  
+  function scrollParaFinal() {
+    setTimeout(() => {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    }, 100);
+  }
 
-(function init() {
+  document.querySelectorAll('input[name="vote"]').forEach(radio => {
+    radio.addEventListener("change", () => { 
+      updateBotoesEstado();
+      scrollParaFinal(); 
+    });
+  });
+
   updateBotoesEstado();
-})();
-    </script>
+</script>
 
 </body>
 </html>
