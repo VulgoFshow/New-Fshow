@@ -92,36 +92,39 @@ body {
 
 /* ===== LAYOUT (FORÇADO DESKTOP) ===== */
 .container {
-  max-width: 1040px; /* Forçado desktop */
+  max-width: 1040px;
   margin: 0 auto;
-  padding: 40px 20px; /* Forçado desktop */
+  padding: 40px 12px;
   animation: slideUp 0.6s ease;
 }
 
 h1 {
-  font-size: 28px; /* Forçado desktop */
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 32px; /* Forçado desktop */
+  margin-bottom: 32px;
   text-align: left;
   transition: color 0.3s ease;
+  line-height: 1.2;
 }
 
 /* ===== OPÇÕES (GRID FORÇADO) ===== */
 .options {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 colunas sempre */
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .option {
   display: flex;
-  flex-direction: column; /* Forçado desktop: vertical */
+  flex-direction: column;
   background: #2b2b2b;
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: var(--border-radius);
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.3s ease;
+  min-width: 0;
 }
 
 .option:hover {
@@ -141,11 +144,22 @@ h1 {
   background: transparent !important;
 }
 
+/* ===== IMAGEM COM ASPECT RATIO 1:1 ===== */
+.option-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: rgba(0, 183, 176, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .option img {
-  width: 100%; /* Forçado desktop */
-  height: 200px; /* Forçado desktop */
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: center;
   display: block;
   transition: transform 0.4s ease;
 }
@@ -153,24 +167,30 @@ h1 {
 .option-content {
   display: flex;
   align-items: center;
-  padding: 14px 16px; /* Forçado desktop */
+  justify-content: center;
+  padding: 8px 6px;
   width: 100%;
-  background: #1f1f1f; /* Forçado desktop */
-  font-size: 17px; /* Forçado desktop */
+  background: #1f1f1f;
+  font-size: 13px;
   font-weight: 500;
   transition: background 0.3s ease;
+  text-align: center;
+  min-height: 50px;
+  gap: 6px;
 }
 
 .option-content input[type="radio"] {
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
   border: 2px solid var(--muted);
   border-radius: 50%;
-  margin-right: 10px; /* Forçado desktop */
   cursor: pointer;
   position: relative;
   transition: border-color 0.3s ease, transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 .option-content input[type="radio"]:hover {
@@ -187,6 +207,13 @@ h1 {
   inset: 3px;
   border-radius: 50%;
   background: var(--accent);
+}
+
+.option-label {
+  flex: 1;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 /* ===== SPINNER ===== */
@@ -209,9 +236,9 @@ h1 {
 /* ===== BOTÃO PRINCIPAL ===== */
 button {
   width: 100%;
-  max-width: 420px; /* Forçado desktop */
-  margin: 32px auto 0; /* Forçado desktop */
-  display: block; /* Forçado desktop */
+  max-width: 420px;
+  margin: 20px auto 0;
+  display: block;
   padding: 14px;
   font-size: 16px;
   font-weight: bold;
@@ -251,28 +278,28 @@ button:disabled {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px 20px; /* Forçado desktop */
+  padding: 60px 20px 20px;
   text-align: center;
   background: transparent;
-  min-height: auto; /* Forçado desktop */
+  min-height: auto;
   animation: slideUp 0.6s ease forwards;
 }
 
 .confirm-card {
-  background: rgba(0,0,0,.35); /* Forçado desktop */
-  border: 1px solid rgba(255,255,255,.15); /* Forçado desktop */
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.15);
   border-radius: 12px;
-  padding: 28px; /* Forçado desktop */
-  max-width: 620px; /* Forçado desktop */
+  padding: 28px;
+  max-width: 620px;
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0,0,0,.6); /* Forçado desktop */
+  box-shadow: 0 15px 40px rgba(0,0,0,.6);
 }
 
 .confirm-card .img-container {
   width: 100%;
-  height: 280px; /* Forçado desktop */
+  aspect-ratio: 1 / 1;
   border-radius: 8px 8px 0 0;
   overflow: hidden;
   background: rgba(0, 183, 176, 0.2); 
@@ -284,33 +311,36 @@ button:disabled {
 }
 
 #fotoConfirm {
-  height: auto;
+  width: 100%;
+  height: 100%;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
 }
 
 #nomeConfirm {
   background: #1F1F1F;
   color: #fff;
-  font-size: 24px; /* Forçado desktop */
+  font-size: 24px;
   font-weight: 700;
   text-align: center;
-  padding: 16px; /* Forçado desktop */
+  padding: 16px;
   border-radius: 0 0 10px 10px;
   border: 1px solid rgba(255,255,255,0.1);
   border-top: none;
   margin: 0;
+  word-break: break-word;
 }
 
 .success-msg {
   background: rgba(0, 255, 150, 0.1);
   border: 1px solid rgba(0, 255, 150, 0.4);
   border-radius: 8px;
-  padding: 14px 20px; /* Forçado desktop */
+  padding: 14px 20px;
   text-align: center;
   color: #00ff99;
   font-weight: 600;
-  font-size: 15px; /* Forçado desktop */
+  font-size: 15px;
   margin-bottom: 18px;
   animation: fadeIn 0.6s ease;
 }
@@ -324,9 +354,9 @@ button:disabled {
   background: var(--accent);
   color: #fff;
   transition: background 0.3s ease;
-  max-width: 420px; /* Forçado desktop */
-  margin: 20px auto 0; /* Forçado desktop */
-  display: block; /* Forçado desktop */
+  max-width: 420px;
+  margin: 20px auto 0;
+  display: block;
 }
 
 .voltar:hover {
@@ -346,23 +376,32 @@ button:disabled {
     
     <div class="options">
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Celso.png?raw=true" alt="Opção">
+        <div class="option-img-wrapper">
+          <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Celso.png?raw=true" alt="Celso Escoliosi">
+        </div>
         <div class="option-content">
-          <input type="radio" name="vote" value="Celso Escoliosi"> Celso Escoliosi
+          <input type="radio" name="vote" value="Celso Escoliosi">
+          <span class="option-label">Celso Escoliosi</span>
         </div>
       </label>
 
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lucas.png?raw=true" alt="Opção">
+        <div class="option-img-wrapper">
+          <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lucas.png?raw=true" alt="Lucas BemVaral">
+        </div>
         <div class="option-content">
-          <input type="radio" name="vote" value="Lucas BemVaral"> Lucas BemVaral
+          <input type="radio" name="vote" value="Lucas BemVaral">
+          <span class="option-label">Lucas BemVaral</span>
         </div>
       </label>
         
       <label class="option">
-        <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Sobrinha.png?raw=true" alt="Opção">
+        <div class="option-img-wrapper">
+          <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Sobrinha.png?raw=true" alt="Sobrinha Milena">
+        </div>
         <div class="option-content">
-          <input type="radio" name="vote" value="Sobrinha Milena"> Sobrinha Milena
+          <input type="radio" name="vote" value="Sobrinha Milena">
+          <span class="option-label">Sobrinha Milena</span>
         </div>
       </label>
     </div>
