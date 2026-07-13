@@ -3,652 +3,1101 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Fshow | Portal Flop</title>  
-    <meta name="description" content="Central Flop">
+    <title>FlopShow, Mais Flop do que nunca</title>  
+    <meta name="description" content="FlopShow: Acompanhe as principais notícias de reality shows, enquetes e coberturas completas.">
 
-  <meta charset="UTF-8">
-  <link rel="preload"
-        href="https://fshow.site/css/index.css"
-        as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-
-  <noscript>
-    <link rel="stylesheet" href="https://fshow.site/css/index.css">
-  </noscript>
-
-<link rel="preload"
-      href="css/index.css"
-      as="style"
-      onload="this.rel='stylesheet'">
-
-<link rel="preload"
-      href="css/enquete.css"
-      as="style"
-      onload="this.rel='stylesheet'">
-
-  <noscript>
-    <link rel="stylesheet" href="/css/enquete.css">
-  </noscript>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <link rel="icon" href="/favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="/favicon.png">
-
+    <link rel="apple-touch-icon" href="/favicon.png">
 <style>
-body {
-  background: #ffffff;
-  margin: 0;
+/* ==================================== 
+   VARIÁVEIS E TEMA
+   ==================================== */
+:root {  
+    --orange-vibrant: #FF8C00;  
+    --purple-dark: #8A2BE2;  
+    --text-primary: #121212;  
+    --text-secondary: #555;
+    --text-light: #f0f0f0;  
+    --gradient-main: linear-gradient(90deg, var(--orange-vibrant) 0%, var(--purple-dark) 100%);  
+    --gradient-reversed: linear-gradient(90deg, var(--purple-dark) 0%, var(--orange-vibrant) 100%);  
+    --bg-page: #f9f9f9;  
+    --bg-card: #ffffff;
+    --header-bg: #121212;
+    --footer-bg: #121212;
+    --border-color: rgba(0,0,0,0.08);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* MODO ESCURO AJUSTADO */
+body.dark-mode {
+    --text-primary: #f5f5f5;
+    --text-secondary: #bbb;
+    --bg-page: #1e1e1e; 
+    --bg-card: #252525;
+    --header-bg: #0d0d0d;
+    --footer-bg: #0d0d0d;
+    --border-color: #444; 
+}
+
+* {  
+    margin: 0;  
+    padding: 0;  
+    box-sizing: border-box;  
+}
+
+body {  
+    background-color: var(--bg-page);  
+    color: var(--text-primary);  
+    line-height: 1.6;  
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+a { text-decoration: none; color: inherit; transition: var(--transition); }
+
+/* ==================================== 
+   BANNER ABAIXO DO HEADER
+   ==================================== */
+.top-banner-wrapper {
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-page);
+    display: flex;
+    justify-content: center;
+    padding: 0; 
+    margin: 0;
+    border-bottom: 1px solid var(--border-color);
+    line-height: 0; 
+}
+
+.top-banner-img {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    padding: 0;
+    transition: var(--transition);
+}
+
+@media (max-width: 768px) {
+    .top-banner-img {
+        max-height: 150px;
+    }
 }
 
 /* ==================================== 
-   STORIES 
+   STORIES RESTAURADOS
    ==================================== */
-
 .stories-wrapper {
   width: 100%;
-  background: var(--bg-page);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border-color);
   overflow: hidden;
 }
 
 .stories-container {
   display: flex;
   overflow-x: auto;
-  gap: 5px;
-  padding: 10px 0px;
+  gap: 12px;
+  padding: 0 5%;
   scrollbar-width: none;
-  scroll-behavior: smooth;
 }
 
-.stories-container::-webkit-scrollbar {
-  display: none;
-}
+.stories-container::-webkit-scrollbar { display: none; }
 
-/* ==================================== 
-   STORY SOLO
-   ==================================== */
-
-.story,
-.storye {
+.story-item {
   position: relative;
   flex-shrink: 0;
-  width: 84px;
-  height: 84px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  overflow: visible; 
-  transition: transform 0.25s ease;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border: none;
-  will-change: transform;
-}
-.storye {
-  filter: grayscale(100%);
+  padding: 3px;
+  background: var(--gradient-main);
+  transition: var(--transition);
 }
 
-.story:hover,
-.storye:hover {
-  transform: scale(1.08);
-}
+.story-item:hover { transform: scale(1.05); }
 
-.story img,
-.storye img {
+.story-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  border: 2px solid var(--bg-page);
 }
 
-/* ==================================== 
-   STORY DUPLA
-   ==================================== */
-
-.story-pair {
-  display: flex;
-  flex-shrink: 0;
-  position: relative;
-  transition: transform 0.35s cubic-bezier(.2,.8,.2,1);
+    .story-item.e img {
+  filter: grayscale(100%) brightness(0.9);
 }
-
-.story-pair:hover {
-  transform: translateY(-6px) scale(1.03);
-}
-
-/* círculos dentro da dupla */
-.story.left,
-.story.right {
-  width: 78px;
-  height: 78px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: none;
-}
-
-.story.right {
-  margin-left: -10px;
-}
-
-/* glow no hover */
-.story-pair:hover .left {
-  box-shadow: 0 0 16px rgba(0,255,200,0.6);
-}
-
-.story-pair:hover .right {
-  box-shadow: 0 0 16px rgba(255,80,255,0.6);
-}
-
-/* ==================================== 
-   BADGES (FUNCIONA EM SOLO E DUPLA)
-   ==================================== */
-
-/* FAZENDA */
-.story.faz::after,
-.story.cfaz::after {
-  content: "";
-  position: absolute;
-  top: -45px;
-  right: -30px;
-  width: 105px;
-  height: 95px;
-  background: url('https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png') no-repeat center/contain;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* ROÇA */
-.story.roça::after,
-.story.croça::after {
-  content: "🔥";
-  position: absolute;
-  top: -14px;
-  right: -10px;
-  font-size: 26px;
-  transform: rotate(-5deg);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* PAREDÃO */
-.story.paredao::after,
-.story.cparedao::after {
-  content: "🧱";
-  position: absolute;
-  top: -5px;
-  right: -8px;
-  font-size: 21px;
-  transform: rotate(-5deg);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* LÍDER */
-.story.lider::after,
-.story.clider::after {
-  content: "👑";
-  position: absolute;
-  top: -18px;
-  right: -9px;
-  font-size: 27px;
-  transform: rotate(37deg);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* ANJO */
-.story.anjo::after,
-.story.canjo::after {
-  content: "";
-  position: absolute;
-  top: -14px;
-  right: -11px;
-  width: 38px;
-  height: 50px;
-  background: url('https://i.ibb.co/VYX4Bcdj/10808601-m.png') no-repeat center/contain;
-  transform: rotate(16deg);
-  pointer-events: none;
-  z-index: 5;
-}
-
-
-/* FINAL */
-.story.final::after,
-.story.cfinal::after {
-  content: "🌟";
-  position: absolute;
-  top: -14px;
-  right: -10px;
-  font-size: 26px;
-  transform: rotate(-5deg);
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* LÂMPADA */
-.story.lamp::after,
-.story.clamp::after {
-  content: "";
-  position: absolute;
-  top: -18px;
-  right: -18px;
-  width: 60px;
-  height: 50px;
-  background: url('https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png') no-repeat center/contain;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* ÍCONE EXTRA */
-.story.inco::after,
-.story.cinco::after {
-  content: "";
-  position: absolute;
-  top: -8px;
-  right: -11px;
-  width: 43px;
-  height: 33px;
-  background: url('https://i.ibb.co/fd5gvrfZ/Chat-GPT-Image-26-de-out-de-2025-22-35-43-fotor-bg-remover-20251026223635.png') no-repeat center/contain;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* PODER (extra da dupla) */
-.story.cpower::after {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: 45px;
-  width: 38px;
-  height: 90px;
-  background: url('https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/pcf2/raiopower.png?raw=true') no-repeat center/contain;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* ==================================== 
-   RESPONSIVO
-   ==================================== */
-
-@media (max-width: 768px) {
-  .story,
-  .storye {
-    width: 70px;
-    height: 70px;
-  }
-
-  .story.left,
-  .story.right {
-    width: 66px;
-    height: 66px;
-  }
-
-  .story.right {
-    margin-left: -8px;
-  }
-
-  .story-pair:hover {
-    transform: translateY(-4px) scale(1.02);
-  }
-}
-</style>
     
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+.story-item.fire::after { content: "🔥"; position: absolute; top: -5px; right: -5px; font-size: 1.2rem; }
+.story-item.coroa::after { content: "👑"; position: absolute; top: -5px; right: -5px; font-size: 1.2rem; }
 
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">  
+.story-pair { display: flex; flex-shrink: 0; margin-right: 10px; }
+.story-pair .story-item { width: 66px; height: 66px; }
+.story-pair .story-item:last-child { margin-left: -20px; }
 
-<link rel="icon" href="/favicon.png" type="image/png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-
-<link rel="apple-touch-icon" sizes="57x57" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="60x60" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="72x72" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="114x114" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-
-<meta name="theme-color" content="#8A2BE2">
-<meta name="msapplication-TileColor" content="#FF8C00">
-<meta name="msapplication-TileImage" content="/favicon.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
-<link rel="mask-icon" href="/favicon.png" color="#ff8c00">
-<link rel="manifest" href="/favicon.png">
-<meta name="msapplication-TileColor" content="#ff8c00">
-<meta name="msapplication-TileImage" content="/favicon.png">
-<meta name="theme-color" content="#8a2be2">
-
-<title>Portal Flop – Notícias, Reality Shows, Enquetes e Cobertura Completa</title>
-
-<meta name="description" content="Portal Flop: Reality shows e comentários.">
-
-<link rel="canonical" href="https://www.fshow.site/">
-<meta name="robots" content="index, follow">
-
-<meta property="og:title" content="Portal Flop – Notícias e Reality Shows">
-<meta property="og:description" content="Cobertura completa, enquetes e notícias atualizadas.">
-<meta property="og:image" content="/favicon.png">
-<meta property="og:url" content="https://www.fshow.site/">
-<meta property="og:type" content="website">
-
-<meta name="twitter:card" content="/favicon.png">
-<meta name="twitter:title" content="Portal Flop – Reality Shows e Notícias">
-<meta name="twitter:description" content="Enquetes, coberturas ao vivo e notícias atualizadas.">
-<meta name="twitter:image" content="/favicon.png">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "NewsMediaOrganization",
-  "name": "Portal FShow",
-  "url": "https://www.fshow.site",
-  "logo": "/favicon.png",
-  "sameAs": [
-  ]
-}
-</script>
-
-<meta name="keywords" content="
-reality show, a fazenda 17, bbb 26, a casa do patrão, power couple brasil,
-votação, enquete, roça, paredão, prova do líder, prova do fazendeiro,
-eliminação, reality ao vivo, celebridades, mundo dos famosos, programa, audiência, record, sbt, globo,
-zona de risco, estrela da casa, batalha, eliminação, prova do lampião, prova do anjo, portal flop, fshow,
-Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, Flopei">
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
-
-<style>
-.link {
-  background: linear-gradient(90deg, #ff8c00, #7b2cff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-  text-decoration: none;
+.story-item.faz::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -32px;
+  width: 100px;
+  height: 110px;
+  background-image: url("https://i.ibb.co/93rGmxZt/Background-Eraser-20240907-212424658.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.link:hover {
-  filter: brightness(1.2);
+.story-item.lamp::after {
+  content: "";
+  position: absolute;
+  top: -41px;
+  right: -5px;
+  width: 43px;
+  height: 110px;
+  background-image: url("https://i.ibb.co/4RtNz4gc/Chat-GPT-Image-21-de-out-de-2025-11-33-57-fotor-bg-remover-20251021113422.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.espacador {
-  width: 100%;
-  height: 9px;
-  background: transparent;
-  pointer-events: none;
+/* ==================================== 
+   DESTAQUES & CARROSSEL
+   ==================================== */
+.section-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 30px 5% 20px;
 }
 
-/* Container do Perfil */
-.user-profile-wrapper {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-}
+.section-indicator { width: 5px; height: 35px; background: #ddd; border-radius: 3px; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; }
 
-.avatar-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid #8000ff;
-    padding: 0;
+.carousel-container {
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 15px;
     overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 100%;
+}
+
+.carousel-link {
+    min-width: 100%;
+    width: 100%;
+    flex: 0 0 100%;
+}
+.carousel-slide { width: 100%; height: 450px; position: relative; }
+.slide-image { width: 100%; height: 100%; object-fit: cover; }
+.slide-overlay { position: absolute; bottom: 20px; left: 20px; right: 20px; background: linear-gradient(90deg, rgba(255,140,0,0.9), rgba(138,43,226,0.8)); padding: 20px; border-radius: 12px; color: white; max-width: 400px; }
+.slide-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; }
+.carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.3); border: none; color: white; padding: 15px; cursor: pointer; border-radius: 50%; }
+.prev-control { left: 15px; }
+.next-control { right: 15px; }
+
+/* ==================================== 
+   GRID DE NOTÍCIAS
+   ==================================== */
+.news-grid { display: grid; grid-template-columns: 1fr; gap: 25px; padding: 0 5%; margin-top: 30px; }
+@media (min-width: 992px) { .news-grid { grid-template-columns: 2.5fr 1fr; } }
+.main-news { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.news-card { background: var(--bg-card); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: var(--transition); }
+.news-card:hover { transform: translateY(-5px); }
+.card-img { width: 100%; height: 180px; object-fit: cover; }
+.card-content { padding: 15px; }
+.card-tag { color: var(--purple-dark); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
+.card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; margin: 5px 0; }
+.sidebar { background: var(--bg-card); border-radius: 15px; padding: 20px; border: 1px solid var(--border-color); height: fit-content; }
+.sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--orange-vibrant); border-bottom: 2px solid var(--purple-dark); margin-bottom: 15px; }
+
+/* ==================================== 
+   FOOTER (ESTILO IMAGEM)
+   ==================================== */
+.footer { background: var(--footer-bg); color: white; padding: 50px 5% 30px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.1); }
+.footer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
+.footer-logo { height: 35px; width: auto; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; }
+.footer-section h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+.footer-section p { color: #aaa; font-size: 0.95rem; line-height: 1.6; }
+.footer-links-list { list-style: none; }
+.footer-links-list li { margin-bottom: 12px; }
+.footer-links-list a { color: #eee; font-size: 0.95rem; transition: var(--transition); }
+.footer-links-list a:hover { color: var(--orange-vibrant); padding-left: 5px; }
+.social-icons-footer { display: flex; gap: 15px; margin-top: 20px; }
+.social-icon-btn { width: 45px; height: 45px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 1.2rem; transition: var(--transition); }
+.social-icon-btn:hover { background: var(--orange-vibrant); transform: scale(1.1); }
+.footer-bottom { margin-top: 50px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.copyright-text { color: #666; font-size: 0.85rem; }
+
+/* Botão Flutuante */
+.floating-btn { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: white; color: #121212; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); font-size: 1.5rem; z-index: 1000; }
+
+/* COOKIE CONSENT */
+#cookie-consent { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--bg-card); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 5000; border: 1px solid var(--border-color); display: none; }
+
+/* MAIS FLOPADAS */
+.side-content {  
+    background-color: var(--bg-card); 
+    border-radius: 10px;  
+    padding: 20px;  
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);  
+    border: 1px solid var(--border-color); 
+    height: fit-content;
+    transition: background-color 0.3s, border-color 0.3s;
+}  
+
+.side-content h4 {  
+    font-family: 'Bebas Neue', sans-serif;  
+    font-size: 2.2em;  
+    color: var(--orange-vibrant);  
+    border-bottom: 3px solid var(--purple-dark);  
+    padding-bottom: 10px;  
+    margin-bottom: 20px;  
+}  
+
+.trend-item {  
+    display: flex;  
+    align-items: flex-start;  
+    padding: 15px 0;  
+    border-bottom: 1px dashed var(--border-color); 
+}  
+
+.trend-item:last-child { border-bottom: none; }
+
+.trend-number {  
+    font-family: 'Bebas Neue', sans-serif;  
+    font-size: 3em;  
+    font-weight: 900;  
+    margin-right: 15px;  
+    background: var(--gradient-main);  
+    -webkit-background-clip: text;  
+    -webkit-text-fill-color: transparent;  
+    line-height: 1;  
+}  
+
+.trend-item a {  
+    font-weight: 700;  
+    color: var(--text-primary); 
+    transition: color 0.3s;  
+}  
+
+.trend-item a:hover { color: var(--purple-dark); }
+
+</style>
+<style>
+    .header {
+    background: var(--header-bg);
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    height: 35px;
+    width: auto;
+}
+
+.brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: white;
+}
+
+.header-actions i {
+    font-size: 1.1rem;
     cursor: pointer;
-    background: #000;
-    transition: 0.3s;
-    box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+    transition: var(--transition);
 }
 
-.avatar-btn:hover {
-    transform: scale(1.1);
-    border-color: #ff8c00;
+.gradient-line {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
 }
 
-.avatar-btn img {
+/* ==================================== 
+   PERFIL 
+   ==================================== */
+.fshow-profile-widget {
+    position: relative; 
+    font-family: 'Poppins', sans-serif;
+}
+
+.fshow-profile-trigger {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--purple-dark);
+    cursor: pointer;
+    overflow: hidden;
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.fshow-profile-trigger:hover {
+    transform: scale(1.05);
+    border-color: var(--orange-vibrant);
+}
+
+.fshow-profile-trigger img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-/* Dropdown Menu */
-.profile-dropdown {
-    display: none;
+.fshow-profile-trigger .anon-icon {
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.fshow-profile-dropdown {
     position: absolute;
-    top: 60px;
+    top: 50px;
     right: 0;
-    width: 180px;
-    background: rgba(20, 20, 20, 0.95);
+    background: rgba(20, 20, 20, 0.98);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(128, 0, 255, 0.3);
     border-radius: 15px;
-    padding: 10px;
+    padding: 15px;
+    width: 220px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    animation: fadeIn 0.2s ease-out;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: fshowSlideDown 0.3s ease-out;
 }
 
-.profile-dropdown.active {
-    display: block;
+.fshow-profile-dropdown.fshow-active {
+    display: flex !important;
 }
 
-.dropdown-header {
-    padding: 5px 10px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    color: #ff8c00;
+@keyframes fshowSlideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fshow-user-info {
     text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-.dropdown-divider {
-    border: 0;
-    height: 1px;
-    background: rgba(255,255,255,0.1);
-    margin: 8px 0;
+.fshow-user-name {
+    font-weight: 800;
+    font-size: 1rem;
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2px;
 }
 
-.profile-dropdown button {
+.fshow-user-status {
+    font-size: 0.65rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.fshow-btn {
     width: 100%;
     padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.06);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.fshow-btn:hover {
+    background: rgba(128, 0, 255, 0.2);
+    border-color: rgba(128, 0, 255, 0.5);
+}
+
+.fshow-btn-primary {
+    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
+    border: none;
+}
+
+.fshow-btn-logout {
+    color: #ff4d4d;
+}
+
+.fshow-btn-logout:hover {
+    background: rgba(255, 77, 77, 0.1);
+    border-color: rgba(255, 77, 77, 0.3);
+}
+
+.fshow-profile-dropdown{
+    z-index: 999999 !important;
+}
+
+.fshow-profile-widget{
+    z-index: 999999 !important;
+}
+
+/* =========================
+   VOTAÇÃO
+========================= */
+
+.vote-frame{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding:30px 15px;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+.vote-mock{
+    width:100%;
+    max-width:430px;
+    border-radius:32px;
+    overflow:hidden;
+    position:relative;
+    
+    background:
+        linear-gradient(145deg,
+        #2d1146 0%,
+        #45106b 35%,
+        #5b1590 65%,
+        #7b1fa2 100%);
+        
+    box-shadow:
+        0 25px 60px rgba(91,21,144,.45),
+        0 10px 25px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+/* efeitos */
+
+.vote-mock::before{
+    content:'';
+    position:absolute;
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    background:radial-gradient(circle,
+        rgba(255,136,0,.35) 0%,
+        transparent 70%);
+    top:-120px;
+    right:-120px;
+    z-index:0;
+}
+
+.vote-mock::after{
+    content:'';
+    position:absolute;
+    width:240px;
+    height:240px;
+    border-radius:50%;
+    background:radial-gradient(circle,
+        rgba(255,98,0,.18) 0%,
+        transparent 70%);
+    bottom:-120px;
+    left:-100px;
+    z-index:0;
+}
+
+/* HERO */
+
+.vote-hero{
+    position:relative;
+    width:100%;
+    height:250px;
+    overflow:hidden;
+}
+
+.vote-hero img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .6s ease;
+}
+
+.vote-mock:hover .vote-hero img{
+    transform:scale(1.06);
+}
+
+/* overlay hero */
+
+.vote-hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(to top,
+        rgba(45,17,70,1) 0%,
+        rgba(45,17,70,.4) 50%,
+        rgba(0,0,0,.1) 100%);
+    z-index:1;
+}
+
+.vote-hero::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(135deg,
+        rgba(255,136,0,.18),
+        rgba(123,31,162,.15));
+    z-index:2;
+}
+
+/* CARD */
+
+.vote-card{
+    position:relative;
+    z-index:5;
+    padding:24px;
+}
+
+/* HEADER */
+
+.vote-card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    margin-bottom:26px;
+}
+
+.vote-title{
+    font-size:1.45rem;
+    font-weight:900;
+    line-height:1.1;
+    letter-spacing:-0.8px;
+    color:white;
+    text-transform:uppercase;
+    
+    text-shadow:
+        0 2px 10px rgba(0,0,0,.35);
+}
+
+/* STATUS */
+
+.vote-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    
+    padding:9px 14px;
+    border-radius:999px;
+
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
+}
+
+.vote-status span:last-child{
+    color:#fff !important;
+    font-size:12px !important;
+    letter-spacing:.5px;
+}
+
+/* bolinha */
+
+.vote-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00ff88;
+
+    box-shadow:
+        0 0 12px #00ff88,
+        0 0 24px rgba(0,255,136,.7);
+
+    animation:onlinePulse 1.8s infinite;
+}
+
+@keyframes onlinePulse{
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+    50%{
+        transform:scale(1.45);
+        opacity:.55;
+    }
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/* BOTÃO */
+
+.vote-btn{
+    width:100%;
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:18px 20px;
+    border-radius:24px;
+
+    text-decoration:none;
+    overflow:hidden;
+
+    transition:.28s ease;
+}
+
+/* gradiente principal */
+
+.vote-purple{
+    background:
+        linear-gradient(135deg,
+        #ff7a00 0%,
+        #b026ff 45%,
+        #7a00ff 100%);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 15px 30px rgba(122,0,255,.35),
+        0 5px 18px rgba(255,122,0,.18),
+        inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* brilho animado */
+
+.vote-purple::before{
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(120deg,
+        transparent 20%,
+        rgba(255,255,255,.22) 50%,
+        transparent 80%);
+
+    transform:translateX(-120%);
+    transition:1s;
+}
+
+.vote-purple:hover::before{
+    transform:translateX(120%);
+}
+
+/* hover */
+
+.vote-btn:hover{
+    transform:
+        translateY(-4px)
+        scale(1.015);
+
+    box-shadow:
+        0 20px 45px rgba(122,0,255,.45),
+        0 10px 25px rgba(255,122,0,.22);
+}
+
+.vote-btn:active{
+    transform:scale(.985);
+}
+
+/* texto botão */
+
+.vote-btn span{
+    position:relative;
+    z-index:3;
+
+    color:white;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.6px;
+}
+
+/* ícone */
+
+.vote-icon{
+    position:relative;
+    z-index:3;
+
+    width:46px;
+    height:46px;
+    border-radius:16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.18);
+
+    backdrop-filter:blur(12px);
+
+    font-size:21px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* RESPONSIVO */
+
+@media(max-width:480px){
+
+    .vote-frame{
+        padding:20px 10px;
+    }
+
+    .vote-hero{
+        height:220px;
+    }
+
+    .vote-card{
+        padding:20px;
+    }
+
+    .vote-title{
+        font-size:1.18rem;
+    }
+
+    .vote-btn{
+        padding:16px 18px;
+    }
+
+    .vote-btn span{
+        font-size:13px;
+    }
+
+    .vote-icon{
+        width:42px;
+        height:42px;
+        font-size:18px;
+    }
+
+}
+
+/* ADS */
+.banner-publicidade{
+    display:flex;
+    width:420px;
+    height:90px;
+    margin:1px auto; 
+    border:1px solid #bfbfbf;
+    background:#fff;
+    overflow:hidden;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.faixa-lateral{
+    width:34px;
+    background:#ffffff;
+    border-right:1px solid #d0d0d0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.faixa-lateral span{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    color:#666;
+    font-size:12px;
+    letter-spacing:.5px;
+}
+
+.banner{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:
+        radial-gradient(circle, rgba(255,255,255,.15) 1px, transparent 1px),
+        linear-gradient(45deg,#666,#4f4f4f,#6b6b6b,#555);
+    background-size:4px 4px,100% 100%;
+}
+
+.banner-texto{
+    position:relative;
+    z-index:1;
+    text-align:center;
+}
+
+.banner-texto{
+    display:none;
+}
+
+.banner-img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:2;
+}
+
+.banner p{
+    margin-top:8px;
+    color:#f2f2f2;
+    font-size:13px;
+    text-shadow:1px 1px 2px #000;
+}
+
+.banner-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin:20px 0;
+}
+
+.banner-link{
+    flex:1;
+    display:flex;
+    width:100%;
+    height:100%;
+    text-decoration:none;
+    color:inherit;
+}
+
+.espacador{
+    width:100%;
+    height:10px; /
+}
+
+.popup-embed {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+
+    width: min(500px, 92vw);
+    aspect-ratio: 16 / 9;
+
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+
+    box-shadow: 0 8px 30px rgba(0,0,0,.25);
+
+    z-index: 99999;
+
+    transform: translateX(-120%);
+    transition: transform .45s cubic-bezier(.25,.8,.25,1);
+}
+
+.popup-embed.ativo {
+    transform: translateX(0);
+}
+
+.popup-header {
+    height: 38px;
+    background: #2d2d2d;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 12px;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.popup-close {
     background: transparent;
     border: none;
     color: white;
-    text-align: left;
+
+    font-size: 18px;
     cursor: pointer;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    transition: 0.2s;
+
+    transition: .2s;
 }
 
-.profile-dropdown button:hover {
-    background: rgba(128, 0, 255, 0.2);
-    color: #ff8c00;
+.popup-close:hover {
+    color: #ff5b5b;
 }
+
+.popup-content {
+    height: calc(100% - 38px);
+}
+
+.popup-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 </style>
-
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YQHGZNCDWP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-YQHGZNCDWP');
-</script>
+</head>
     
-</head>  
-<body>  
+<body class="light-mode">
 
-<header class="header">  <div class="menu-toggle" onclick="toggleMenu()">  
-    <span></span>  
-    <span></span>  
-    <span></span>  
-</div>  
-  
-<div class="logo-container">   
-    <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo"> 
-    <span>PORTAL FLOP</span>  
-</div>  
+    <!-- Header -->
+<header class="header">
+    <div class="logo-container">
+        <img src="https://flopshow.site/favicon.png" alt="FlopShow" class="logo-img">
+        <span class="brand-name">FlopShow</span>
+    </div>
 
-<!-- Menu -->  
-<nav class="nav-menu" id="menu">  
-    <a href="index.html">Home</a>  
-    <a href="flop-news/flopnews.html">Notícias</a>  
-    <a href="snake.html">Snake</a>  
-    <a href="https://www.youtube.com/@VulgoFlopp">Vídeos</a>  
-    <a class="btn-action" href="#">Assinar Agora</a>  
-</nav>
+    <div class="header-actions">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-solid fa-moon" id="theme-toggle"></i>
+        
+        <!-- PERFIL -->
+        <div class="fshow-profile-widget" id="fshowWidget">
+            <div class="fshow-profile-trigger" id="fshowTrigger">
+                <div id="fshowAvatarContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                    <span class="anon-icon">👤</span>
+                </div>
+            </div>
+            
+            <div class="fshow-profile-dropdown" id="fshowDropdown">
+                <div class="fshow-user-info">
+                    <div class="fshow-user-name" id="fshowUserName">Anônimo</div>
+                    <div class="fshow-user-status" id="fshowUserStatus">Visitante</div>
+                </div>
+                
+                <div id="fshowLoggedOptions" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
+                    <label class="fshow-btn" for="fshowChangeAvatarInput">
+                        📸 Mudar Foto
+                    </label>
+                    <input type="file" id="fshowChangeAvatarInput" accept="image/*" style="display: none;">
+                    <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">
+                        🚪 Sair da Conta
+                    </button>
+                </div>
 
-<div class="user-profile-wrapper">
-    <button class="avatar-btn" id="avatarBtn">
-        <img id="headerAvatar" src="https://via.placeholder.com/150" alt="Perfil">
-    </button>
-
-    <div class="profile-dropdown" id="profileDropdown">
-        <div class="dropdown-header">
-            <span id="userName">Usuário</span>
+                <div id="fshowAnonOptions" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                    <a href="login.html" class="fshow-btn fshow-btn-primary">🔑 Fazer Login</a>
+                    <button class="fshow-btn" id="fshowContinueAnonBtn">👀 Continuar Anônimo</button>
+                </div>
+            </div>
         </div>
-        <hr class="dropdown-divider">
-        <button onclick="triggerPhotoUpdate()">📸 Mudar Foto</button>
-        <button onclick="switchAccount()">🔄 Trocar de Conta</button>
     </div>
-</div>
-
-<input type="file" id="updateAvatarInput" accept="image/*" style="display: none;">
 </header>
+<div class="gradient-line"></div>
 
-<div class="gradient-line"></div>  
-    <section class="hero-banner">  
-        <img src="https://i.ibb.co/hFFtTx63/capa.webp" alt="Banner">  
-<div class="gradient-line"></div>  
-    </section>
-  
- <!-- STORIES -->
-<div class="stories-wrapper">
-  <div class="stories-container">
-
-    <div class="storye">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ana.png?raw=true">
+    <div class="top-banner-wrapper">
+        <img src="https://flopshow.site/fotos/bannerfshow.png" alt="Banner FlopShow" class="top-banner-img">
     </div>
+    <div class="gradient-line"></div>
 
-    <div class="storye">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/arthurzago.png?raw=true">
-    </div>
-
-    <div class="story paredao">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/braian.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/brunno.png?raw=true">
-    </div>
-
-    <div class="storye">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/dynamite.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/flavia.png?raw=true">
-    </div>
-
-    <div class="story paredao">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaopedro.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joao.png?raw=true">
-    </div>
-
-    <div class="storye">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/joaolucas.png?raw=true">
-    </div>
-
-    <div class="storye">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/koyuh.png?raw=true">
-    </div>
-
-    <div class="storye">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/lucas.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/luddy.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ludmila.png?raw=true">
+    <!-- Stories -->
+    <div class="stories-wrapper">
+        <div class="stories-container">
+           <div class="story-item fire"><img src="https://i.postimg.cc/tTGZ43Ts/adriana.jpg" alt="Adriana"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/ZRzB58RB/arthur.jpg" alt="Arthur"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/B6fLnT6F/braian.jpg" alt="Braian"></div>
+            <div class="story-item faz"><img src="https://i.postimg.cc/FRXdHyRc/brunno.jpg" alt="Brunno"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/26NbSQ6h/duda.jpg" alt="Duda"></div>
+            <div class="story-item faz"><img src="https://i.postimg.cc/TwvL3Vwq/eueu.jpg" alt="Eueu"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/cHGgLRHB/fernanda.jpg" alt="Fernanda"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/B6fLnT6p/gabi.jpg" alt="Gabi"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/NMv9j6Mb/gabriel.jpg" alt="Gabriel"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/rFDzhJRF/Grimes.jpg" alt="Grimes"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/TwjyLKLb/joao.jpg" alt="João"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/PxbLpCpz/koyuh.jpg" alt="Koyuh"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/26dqb1bG/lana.jpg" alt="Lana"></div>
+            <div class="story-item fire"><img src="https://i.postimg.cc/k4P6gQ4X/livia.jpg" alt="Lívia"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/B658LjLh/lorenzo.jpg" alt="Lorenzo"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/50WY2B0j/Mikael.jpg" alt="Mikael"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/SsLX2n21/milton.jpg" alt="Milton"></div>
+            <div class="story-item fire"><img src="https://i.postimg.cc/zvcvzL6H/Nick.jpg" alt="Nick"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/TwvL3VwR/pedrohenrique.jpg" alt="Pedro Henrique"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/d1R7khkf/renata.jpg" alt="Renata"></div>
+            <div class="story-item fire"><img src="https://i.postimg.cc/sXPBQMQ8/rose.jpg" alt="Rose"></div>
+            <div class="story-item e"><img src="https://i.postimg.cc/RFx6Z7FS/sarah.jpg" alt="Sarah"></div>
+            <div class="story-item"><img src="https://i.postimg.cc/xCGkJXJB/simone.jpg" alt="Simone"></div>
+        </div>
     </div>
     
-    <div class="story anjo">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/renata.png?raw=true">
-    </div>
+<div class="banner-container">
+    <div class="banner-publicidade">
+        <div class="faixa-lateral">
+            <span>Publicidade</span>
+        </div>
 
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/maguel.png?raw=true">
-    </div>
+        <a href="https://discord.gg/G9pvv2N8y5" target="_blank" class="banner-link">
+            <div class="banner">
+                <img src="https://i.postimg.cc/4d2xHwGQ/Gemini-Generated-Image-p5ef1hp5ef1hp5ef.png" class="banner-img" alt="Publicidade">
 
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/manchinha.png?raw=true">
+                <div class="banner-texto">
+                    <h2>ANUNCIE AQUI!</h2>
+                    <p>contatofshow7@gmail.com</p>
+                </div>
+            </div>
+        </a>
     </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/mikael.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/nick.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/paiva.png?raw=true">
-    </div>
-      
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/pedro.png?raw=true">
-    </div>
-
-    <div class="story paredao">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/ray.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/rose.png?raw=true">
-    </div>
-
-    <div class="storye">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/sirleidy.png?raw=true">
-    </div>
-
-    <div class="story">
-      <img src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/bbbf6/tety.png?raw=true">
-    </div>
-
-    </div>
-  </div>
 </div>
-    
-      <!-- BLOCO DE VOTAÇÃO -->
+
+        <!-- BLOCO DE VOTAÇÃO -->
 <div class="vote-frame">
   <div class="vote-mock">
 
     <!-- HERO -->
     <div class="vote-hero">
-      <img src="https://i.ibb.co/wN3LWH80/Vote-em-Fshow-Site-20260329-212718-0000.png" alt="Berlinda">
+      <img src="https://i.ibb.co/0ymfrQ4d/roca-20260712-222729-0000.png" alt="Berlinda">
     </div>
 
     <!-- Card -->
     <div class="vote-card">
       <div class="vote-card-header">
         <div>
-          <div class="vote-title">Quem deve ser Eliminado do BBBF6?</div>
+          <div class="vote-title">ROÇA - Quem você quer que FIQUE?</div>
         </div>
 
         <div style="text-align:right">
@@ -660,334 +1109,544 @@ Portal Flop, Flop show, flop show, Fshow, central flop, Flopou, Portal Flopou, F
       </div>
         
       <!-- Botões -->
-<a href="vote/votounico.html" class="vote-btn vote-green" id="teamVote">
-  <span>VOTO ÚNICO</span>
-  <div class="vote-icon">👁️</div>
-</a>
-
-<div class="espacador"></div>
-
 <a href="vote/votefshow.html" class="vote-btn vote-purple" id="teamVote">
-  <span>VOTO DA TORCIDA</span>
+  <span>QUEM DEVE FICAR?</span>
   <div class="vote-icon">👥</div>
 </a>
       </div>
     </div>
   </div>
-</div>
-      
-<section class="container carousel-section">
-    <h2 class="section-title">✨ DESTAQUES FSHOW</h2>
-
-    <div class="carousel-container">
-        <div class="carousel-track">
-
-<!-- SLIDE 1 -->
-    <article class="carousel-slide">
-    <a href="#" class="carousel-slide-link">
-        <div class="slide-img-wrapper">
-            <img class="slide-image" src="https://github.com/VulgoFshow/New-Fshow/blob/main/fotos/f10/Jo%C3%A3o.jpg?raw=true" alt="João">
-        </div>
-
-        <div class="slide-content-overlay">
-            <p class="slide-tag">BREAKING</p>
-            <h3 class="slide-title">João é o campeão de "A Fazenda F0"!</h3>
-        </div>
-    </a>
-</article>
-
-<!-- SLIDE 2 -->
-<article class="carousel-slide">
-    <a href="https://www.wattpad.com/story/404341343-o-%C3%BAltimo-herdeiro" class="carousel-slide-link">
-        <div class="slide-img-wrapper">
-            <img class="slide-image" src="https://i.ibb.co/3mxb4rTz/LastHeir.png" alt="Lest Heir">
-        </div>
-
-        <div class="slide-content-overlay">
-            <p class="slide-tag">WATTPAD</p>
-            <h3 class="slide-title">Lest Heir – Capítulo 3 disponível!</h3>
-        </div>
-    </a>
-</article>
-
-<!-- SLIDE 3 -->
-<article class="carousel-slide current-slide">
-    <a href="flop-news/eliminacao-de-toninho-traz-previa-da-final.html" class="carousel-slide-link">
-        <div class="slide-img-wrapper">
-            <img class="slide-image" src="https://medias.itatiaia.com.br/dims4/default/36b4a05/2147483647/strip/false/crop/1471x1103+345+0/resize/1000x750!/quality/90/?url=https%3A%2F%2Fk2-prod-radio-itatiaia.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fff%2Fb3%2Fe04f7e654aa0b76d0c3e10b673c5%2Fduda-wendling-4.jpg" alt="roças">
-        </div>
-
-        <div class="slide-content-overlay">
-            <p class="slide-tag">A Fazenda 17</p>
-            <h3 class="slide-title">Duda - A catapulta que pode custar 2 milhões</h3>
-        </div>
-    </a>
-</article>
-</div>
-        
-        <button class="carousel-control prev-control">&#10094;</button>
-       <button class="carousel-control next-control">&#10095;</button>
-
-        <div class="carousel-indicators">
-            <span class="indicator active-indicator" data-slide="0"></span>
-            <span class="indicator" data-slide="1"></span>
-            <span class="indicator" data-slide="2"></span>
-        </div>
     </div>
+
+    <!-- Destaques -->
+    <div class="section-title-wrapper">
+        <div class="section-indicator"></div>
+        <h2 class="section-title">✨ DESTAQUES FLOP SHOW</h2>
+    </div>
+
+<section class="carousel-container">
+    <div class="carousel-track">
+
+        <a href="https://www.flopshow.site/vote/votebigfarm.html" class="carousel-link">
+            <article class="carousel-slide">
+                <img src="https://i.ibb.co/PzxMKj60/Picsart-26-07-11-16-43-45-436.jpg" alt="CDF" class="slide-image">
+                <div class="slide-overlay">
+                    <h3 class="slide-title">BFS - Vote na primeira Roça da temporada</h3>
+                </div>
+            </article>
+        </a>
+        
+        <a href="https://www.flopshow.site/flop-news/cdf11.html" class="carousel-link">
+            <article class="carousel-slide">
+                <img src="https://i.ibb.co/BK22phxP/cdf.png" alt="CDF" class="slide-image">
+                <div class="slide-overlay">
+                    <h3 class="slide-title">CDF - Veja o resumo da estreia</h3>
+                </div>
+            </article>
+        </a>
+
+        <a href="https://flopshow.site/bbb/paredoesbbbf6.html" class="carousel-link">
+            <article class="carousel-slide">
+                <img src="https://i.ibb.co/zWWCq4Mb/Gemini-Generated-Image-jts7cojts7cojts7-Photoroom.png" alt="BBB" class="slide-image">
+                <div class="slide-overlay">
+                    <h3 class="slide-title">Hora da verdade! Confira o resultado dos paredões.</h3>
+                </div>
+            </article>
+        </a>
+
+    </div>
+
+    <button class="carousel-control prev-control">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+
+    <button class="carousel-control next-control">
+        <i class="fas fa-chevron-right"></i>
+    </button>
 </section>
 
-    <h2 class="section-title">ÚLTIMAS DO FLOP</h2>  
-    <section class="news-grid">  
+<!-- Notícias -->
+<div class="news-grid">
+    <main class="main-news">
 
-        <div class="main-content">  
-       
-       <a href="flop-news/final.html" class="news-card-link">
-    <article class="news-card">  
-        <img class="card-img" src="https://i.ibb.co/HL932NpK/Final.jpg" alt="Notícia 2">  
-        <div class="card-content">  
-            <p class="card-category">A Grande Conquista 4</p>  
-            <h3>Eueu, Gean, Luddy e Mikael são os finalistas!</h3>  
-            <p style="font-size: 0.9em; color: var(--text-secondary);">
-                Vote na enquete! Quem será o campeão?
-            </p>  
-        </div>  
-    </article>  
-</a>
+        <a href="flop-news/final.html" class="news-link">
+            <article class="news-card">
+                <img src="https://i.ibb.co/HL932NpK/Final.jpg" alt="Final" class="card-img">
+                <div class="card-content">
+                    <span class="card-tag">Reality</span>
+                    <h3 class="card-title">Eueu, Gean, Luddy e Mikael são os finalistas!</h3>
+                </div>
+            </article>
+        </a>
 
- <a href="flop-news/finalistas2.html" class="news-card-link">
-    <article class="news-card">  
-        <img class="card-img" src="https://i.ibb.co/nMBCDdVZ/eueugean.jpg" alt="Eueu e Gean">  
-        <div class="card-content">  
-            <p class="card-category">A Grande Conquista 4</p>  
-            <h3>Eueu e Gean são os primeiros finalistas da temporada!</h3>  
-            <p style="font-size: 0.9em; color: var(--text-secondary);">
-                Sobreviventes da eliminação dupla, seguem para a grande final.
-            </p>  
-        </div>  
-    </article>  
-</a>
+        <a href="ads/planos.html" class="news-link">
+            <article class="news-card">
+                <img src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg" alt="Finalistas" class="card-img">
+                <div class="card-content">
+                    <span class="card-tag">Espaço Publicitário</span>
+                    <h3 class="card-title">Clique para anunciar aqui</h3>
+                </div>
+            </article>
+        </a>
 
-<a href="ads/planos.html" class="news-card-link">
-    <article class="news-card">  
-        <img class="card-img" src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg" alt="Anuncie aqui">  
-        <div class="card-content">  
-            <p class="card-category">ADS</p>  
-            <h3>Anuncie Aqui</h3>  
-        </div>  
-    </article>  
-</a>
-
-        </div>  
-
-        <aside class="side-content">  
-            <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
-            <div class="trend-item">  
-                <span class="trend-number">01</span>  
-                <a href="#">Vencedores do Comu Awards</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">02</span>  
-                <a href="#">Estreia do Reality do Nick</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">03</span>  
-                <a href="#">Início do Capítulo 4 de Last Heir</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">04</span>  
-                <a href="#">MegaFlop da semana</a>  
-            </div>  
-            <div class="trend-item">  
-                <span class="trend-number">05</span>  
-                <a href="#">Novo Fshow</a>  
-            </div>  
-        </aside>  
-    </section>  
-</div>  
-</div>
-</div>
+    </main>
+</div>        
+<div style="height: 10px;"></div>
     
-<footer class="footer">
-    <div class="footer-content">
-
-        <div class="footer-brand">
-  <div class="logo-container2">
-    <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Portal Flop">
-</div>
-            
-            <h2>Portal Flop</h2>
-            <p>Pìxeels Productions</p>
-        </div>
-
-        <div class="social-icons">
-            <a href="https://www.youtube.com/@VulgoFlopp" aria-label="Youtube">
-                <i class="fab fa-youtube"></i>
-            </a>
-            <a href="https://www.wattpad.com/user/FelipeLovee" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://x.com/Euu_Phillip" aria-label="Twitter / X">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="https://discord.gg/t56YN5sB" aria-label="Discord">
-                <i class="fab fa-discord"></i>
-            </a>
-        </div>
+<div id="popup-embed" class="popup-embed">
+    <div class="popup-header">
+        <span class="popup-title">Aviso</span>
+        <button class="popup-close" onclick="fecharPopup()">✕</button>
     </div>
-    
-  <div class="footer-links">
-    <a href="termos/sobre.html">Sobre</a>
-    <a href="termos/contato.html">Contato</a>
-    <a href="termos/termos.html">Termos de Uso</a>
-    <a href="termos/privacidade.html">Política de Privacidade</a>
-  </div>
 
-Criado por <a href="termos/ferlove.html" class="link">Fer Love</a>
-    
-  <div class="footer-copy">
-    © 2025 Fshow • Todos os direitos reservados
-  </div>
-</footer>
+    <div class="popup-content">
+        <iframe
+            src="https://flopshow.site/vote/votebigfarm.html"
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
 
-<script>
-function abrirSlideTop(){
-  document.getElementById("slideAdTop").classList.add("active");
-}
+<!-- HTML DA SIDEBAR -->
+<aside class="side-content">  
+    <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
+    <div class="trend-item">  
+        <span class="trend-number">01</span>  
+        <a href="#">Vencedores do Comu Awards</a>  
+    </div>  
+    <div class="trend-item">  
+        <span class="trend-number">02</span>  
+        <a href="#">Estreia do Reality do Nick</a>  
+    </div>  
+    <div class="trend-item">  
+        <span class="trend-number">03</span>  
+        <a href="#">Início do Capítulo 4 de Last Heir</a>  
+    </div>  
+    <div class="trend-item">  
+       
+        <span class="trend-number">04</span>  
+        <a href="#">Enquete da semana: quem merece ganhar?</a>  
+    </div>  
+</aside>
 
-function fecharSlideTop(){
-  document.getElementById("slideAdTop").classList.remove("active");
-}
-
-setTimeout(abrirSlideTop, 1000);
-</script>
-
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const track = document.querySelector(".carousel-track");
-    const slides = Array.from(document.querySelectorAll(".carousel-slide"));
-    const nextBtn = document.querySelector(".next-control");
-    const prevBtn = document.querySelector(".prev-control");
-    const indicators = document.querySelectorAll(".indicator");
-
-    let currentIndex = 0;
-    const totalSlides = slides.length;
-
-    function updateCarousel(index) {
-
-        if (index < 0) index = totalSlides - 1;
-        if (index >= totalSlides) index = 0;
-
-        currentIndex = index;
-
-        const slideWidth = slides[0].offsetWidth;
-        track.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
-
-        slides.forEach(slide => slide.classList.remove("current-slide"));
-        slides[currentIndex].classList.add("current-slide");
-
-        indicators.forEach(ind => ind.classList.remove("active-indicator"));
-        indicators[currentIndex].classList.add("active-indicator");
-    }
-
-    nextBtn.addEventListener("click", () => {
-        updateCarousel(currentIndex + 1);
-    });
-
-    prevBtn.addEventListener("click", () => {
-        updateCarousel(currentIndex - 1);
-    });
-
-    indicators.forEach(indicator => {
-        indicator.addEventListener("click", () => {
-            const slideIndex = parseInt(indicator.getAttribute("data-slide"));
-            updateCarousel(slideIndex);
-        });
-    });
-
-    window.addEventListener("resize", () => {
-        updateCarousel(currentIndex);
-    });
-
-});
-</script>
-
-<script>
-document.getElementById('avatarBtn').onclick = (e) => {
-    e.stopPropagation();
-    document.getElementById('profileDropdown').classList.toggle('active');
-};
-
-window.onclick = () => {
-    document.getElementById('profileDropdown').classList.remove('active');
-};
-
-async function switchAccount() {
-    try {
-        await auth.signOut();
-        window.location.href = "login.html";
-    } catch (error) {
-        console.error("Erro ao sair:", error);
-    }
-}
-
-function triggerPhotoUpdate() {
-    document.getElementById('updateAvatarInput').click();
-}
-
-auth.onAuthStateChanged(async (user) => {
-    const avatarImg = document.getElementById('headerAvatar');
-    const nameTxt = document.getElementById('userName');
-    const anonPhoto = "https://cdn-icons-png.flaticon.com/512/12225/12225881.png";
-
-    if (user) {
-        try {
-            const profileDoc = await db.collection("profiles").doc(user.uid).get();
-            
-            if (profileDoc.exists) {
-                const data = profileDoc.data();
-                avatarImg.src = data.profilePictureURL || anonPhoto;
-                nameTxt.textContent = data.nickname || "Usuário";
-            } else {
-                avatarImg.src = anonPhoto;
-                nameTxt.textContent = "Usuário";
-            }
-        } catch (error) {
-            console.error("Erro ao carregar perfil:", error);
-            avatarImg.src = anonPhoto;
-        }
-    } else {
-        avatarImg.src = anonPhoto;
-        nameTxt.textContent = "Fazer Login";
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-header">
+            <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo" class="footer-logo">
+            <span class="brand-name">FLOP SHOW</span>
+        </div>
         
-        document.querySelector('.avatar-btn').style.borderColor = "rgba(255,255,255,0.3)";
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>SOBRE</h4>
+                <p>Sua fonte de notícias, enquetes e cobertura completa de reality shows brasileiros.</p>
+            </div>
+            <div class="footer-section">
+                <h4>NAVEGAÇÃO</h4>
+                <ul class="footer-links-list">
+                    <li><a href="#">Notícias</a></li>
+                    <li><a href="#">Enquetes</a></li>
+                    <li><a href="#">Categorias</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>LEGAL</h4>
+                <ul class="footer-links-list">
+                    <li><a href="termos/privacidade.html">Política de Privacidade</a></li>
+                    <li><a href="termos/termos.html">Termos de Uso</a></li>
+                    <li><a href="termos/contato.html">Contato</a></li>
+                    <li><a href="termos/contato.html">Sobre Nós</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>REDES SOCIAIS</h4>
+                <div class="social-icons-footer">
+                    <a href="https://x.com/Euu_Phillip" class="social-icon-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/vulgoflopp?igsh=MWhycmQxOTZnNnI1eQ==" class="social-icon-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="https://youtube.com/@vulgoflopp?si=PYen993T6KsYhKgd" class="social-icon-btn"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright-text">© 2026 FlopShow • Pixeels Productions</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
+    
+<script>
+/* ============================================================
+   CARROSSEL
+============================================================ */
+const track = document.querySelector('.carousel-track');
+const slides = document.querySelectorAll('.carousel-link');
+const nextBtn = document.querySelector('.next-control');
+const prevBtn = document.querySelector('.prev-control');
+
+let currentIndex = 0;
+
+function updateCarousel() {
+    if (!track) return;
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+}
+
+if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+        currentIndex++;
+
+        if (currentIndex >= slides.length) {
+            currentIndex = 0;
+        }
+
+        updateCarousel();
+    });
+}
+
+if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+        currentIndex--;
+
+        if (currentIndex < 0) {
+            currentIndex = slides.length - 1;
+        }
+
+        updateCarousel();
+    });
+}
+
+/* ============================================================
+   PERFIL
+============================================================ */
+document.addEventListener("DOMContentLoaded", async function () {
+
+    // ================= APPWRITE =================
+    const client = new Appwrite.Client();
+
+    client
+        .setEndpoint("https://nyc.cloud.appwrite.io/v1")
+        .setProject("6a07b38c00004e1645ee");
+
+    const account = new Appwrite.Account(client);
+    const databases = new Appwrite.Databases(client);
+    const storage = new Appwrite.Storage(client);
+
+    const DB_ID = "6a07b77b0016f7c90141";
+    const COL_ID = "profiles";
+    const BUCKET_ID = "6a07b91a000e61c9e4b3";
+
+    // ================= ELEMENTOS =================
+    const trigger = document.getElementById("fshowTrigger");
+    const dropdown = document.getElementById("fshowDropdown");
+    const widget = document.getElementById("fshowWidget");
+
+    const avatarContainer = document.getElementById("fshowAvatarContainer");
+
+    const userName = document.getElementById("fshowUserName");
+    const userStatus = document.getElementById("fshowUserStatus");
+
+    const loggedOptions = document.getElementById("fshowLoggedOptions");
+    const anonOptions = document.getElementById("fshowAnonOptions");
+
+    const avatarInput = document.getElementById("fshowChangeAvatarInput");
+
+    const logoutBtn = document.getElementById("fshowLogoutBtn");
+
+    const anonBtn = document.getElementById("fshowContinueAnonBtn");
+
+    if (!trigger || !dropdown || !widget) {
+        console.log("Widget não encontrado.");
+        return;
     }
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    // ============================================================
+    // DROPDOWN
+    // ============================================================
+
+    trigger.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        dropdown.classList.toggle("fshow-active");
+
+    });
+
+    dropdown.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+    });
+
+    document.addEventListener("click", function (e) {
+
+        if (!widget.contains(e.target)) {
+
+            dropdown.classList.remove("fshow-active");
+
+        }
+
+    });
+
+    // ============================================================
+    // CONTINUAR ANÔNIMO
+    // ============================================================
+
+    if (anonBtn) {
+
+        anonBtn.addEventListener("click", function () {
+
+            dropdown.classList.remove("fshow-active");
+
+        });
+
+    }
+
+    // ============================================================
+    // AVATAR
+    // ============================================================
+
+    function updateAvatar(src) {
+
+        avatarContainer.innerHTML = `
+            <img
+                src="${src}"
+                alt="Avatar"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                "
+            >
+        `;
+
+    }
+
+    // ============================================================
+    // CARREGAR USUÁRIO
+    // ============================================================
+
+    try {
+
+        currentUser = await account.get();
+
+        if (loggedOptions) loggedOptions.style.display = "flex";
+        if (anonOptions) anonOptions.style.display = "none";
+
+        try {
+
+            currentProfile = await databases.getDocument(
+                DB_ID,
+                COL_ID,
+                currentUser.$id
+            );
+
+        } catch (err) {
+
+            console.log("Perfil não encontrado.");
+
+        }
+
+        // Nome
+        if (userName) {
+
+            userName.textContent =
+                currentProfile?.nickname ||
+                currentUser.name ||
+                "Usuário";
+
+        }
+
+        // Status
+        if (userStatus) {
+
+            userStatus.textContent =
+                currentUser.email || "Membro";
+
+        }
+
+        // ============================================================
+        // FOTO
+        // ============================================================
+
+        let avatarUrl = null;
+
+        // FOTO CUSTOMIZADA
+        if (currentProfile?.avatarFileId) {
+
+            avatarUrl = storage.getFileView(
+                BUCKET_ID,
+                currentProfile.avatarFileId
+            );
+
+        }
+
+        // FOTO GOOGLE
+        else if (
+            currentUser.prefs &&
+            currentUser.prefs.avatar
+        ) {
+
+            avatarUrl = currentUser.prefs.avatar;
+
+        }
+
+        // FALLBACK
+        if (!avatarUrl) {
+
+            avatarUrl =
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    currentProfile?.nickname ||
+                    currentUser.name ||
+                    "User"
+                )}&background=8000ff&color=fff`;
+
+        }
+
+        updateAvatar(avatarUrl);
+
+    } catch (err) {
+
+        console.log("Visitante anônimo.");
+
+    }
+
+    // ============================================================
+    // LOGOUT
+    // ============================================================
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener("click", async function () {
+
+            try {
+
+                await account.deleteSession("current");
+
+            } catch (e) {}
+
+            localStorage.removeItem("fshow_user");
+
+            location.reload();
+
+        });
+
+    }
+
+    // ============================================================
+    // TROCAR FOTO
+    // ============================================================
+
+    if (avatarInput) {
+
+        avatarInput.addEventListener("change", async function (e) {
+
+            const file = e.target.files[0];
+
+            if (!file || !currentUser) return;
+
+            try {
+
+                trigger.style.opacity = "0.5";
+
+                const uploaded = await storage.createFile(
+                    BUCKET_ID,
+                    Appwrite.ID.unique(),
+                    file
+                );
+
+                await databases.updateDocument(
+                    DB_ID,
+                    COL_ID,
+                    currentUser.$id,
+                    {
+                        avatarFileId: uploaded.$id
+                    }
+                );
+
+                const newAvatar = storage.getFileView(
+                    BUCKET_ID,
+                    uploaded.$id
+                );
+
+                updateAvatar(newAvatar);
+
+                trigger.style.opacity = "1";
+
+                alert("Foto atualizada!");
+
+            } catch (error) {
+
+                trigger.style.opacity = "1";
+
+                alert("Erro ao atualizar foto.");
+
+                console.error(error);
+
+            }
+
+        });
+
+    }
+
 });
 
-const dropdown = document.getElementById('profileDropdown');
-dropdown.innerHTML = `
-    <div class="dropdown-header"><span>Visitante</span></div>
-    <hr class="dropdown-divider">
-    <button onclick="window.location.href='/login.html'">✨ Criar Conta / Entrar</button>
-`;
+/* ============================================================
+   TEMA ESCURO / CLARO
+============================================================ */
+(function () {
 
-document.getElementById('updateAvatarInput').onchange = async (e) => {
-    const file = e.target.files[0];
-    const user = auth.currentUser;
+    const toggle = document.getElementById("theme-toggle");
 
-    if (file && user) {
-        try {
-            const photoURL = await uploadProfilePicture(file, user.uid);
-            await saveProfilePictureURL(user.uid, photoURL);
-            
-            document.getElementById('headerAvatar').src = photoURL;
-            alert("Foto atualizada com sucesso!");
-        } catch (error) {
-            alert("Erro ao atualizar foto: " + error.message);
-        }
+    if (!toggle) return;
+
+    const saved = localStorage.getItem("fshow_theme");
+
+    if (saved === "dark") {
+
+        document.body.classList.add("dark-mode");
+        document.body.classList.remove("light-mode");
+
+        toggle.classList.remove("fa-moon");
+        toggle.classList.add("fa-sun");
+
     }
-};
+
+    toggle.addEventListener("click", function () {
+
+        const isDark = document.body.classList.toggle("dark-mode");
+
+        document.body.classList.toggle("light-mode", !isDark);
+
+        toggle.classList.toggle("fa-moon", !isDark);
+        toggle.classList.toggle("fa-sun", isDark);
+
+        localStorage.setItem(
+            "fshow_theme",
+            isDark ? "dark" : "light"
+        );
+
+    });
+
+})();
+
+function abrirPopup() {
+    document.getElementById("popup-embed").classList.add("ativo");
+}
+
+function fecharPopup() {
+    document.getElementById("popup-embed").classList.remove("ativo");
+}
+
+// Abre automaticamente após 500 ms
+window.addEventListener("load", () => {
+    setTimeout(abrirPopup, 500);
+});
 </script>
-  
-</body>  
+</body>
 </html>
