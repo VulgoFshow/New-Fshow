@@ -15,9 +15,6 @@
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon.png">
 <style>
-/* ==================================== 
-   VARIÁVEIS E TEMA
-   ==================================== */
 :root {  
     --orange-vibrant: #FF8C00;  
     --purple-dark: #8A2BE2;  
@@ -1252,7 +1249,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
         </div>
     </footer>
 
-      <style>
+  <style>
     /* ===== BASE ===== */
     *, *::before, *::after { 
       box-sizing: border-box; 
@@ -1615,28 +1612,35 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
       }
 
       .confirm-card {
-        flex-direction: column;
+        flex-direction: row;
       }
 
       .img-confirm-container {
-        width: 100%;
+        width: 40%;
         min-width: auto;
-        aspect-ratio: 1/1;
-        border-right: none;
-        border-bottom: 1px solid #ffffff;
+        aspect-ratio: 1/1.2;
+        border-right: 1px solid #ffffff;
+        border-bottom: none;
       }
 
       .confirm-content {
-        width: 100%;
-        padding: 16px;
+        width: 60%;
+        padding: 12px;
+        gap: 8px;
       }
 
       #nomeConfirm {
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .success-msg {
-        font-size: 13px;
+        font-size: 12px;
+        padding: 8px;
+      }
+
+      .voltar {
+        padding: 10px 12px;
+        font-size: 11px;
       }
     }
   </style>
