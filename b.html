@@ -2,273 +2,478 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Fshow - Resultados da Votação</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-
-  <link rel="icon" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" type="image/png">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png">
-  <meta name="theme-color" content="#8A2BE2">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resultados da Votação</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-    /* ===== VARIÁVEIS GLOBAIS ===== */
     :root {
-      --bg: #121212;
-      --card-bg: #2b2b2b;
-      --accent: #00b7b0;
-      --text: #fff;
-      --muted: #bdbdbd;
-      --border-radius: 8px;
-      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+      --bg-dark: #0f0f1a;
+      --card-bg: #1a1a2e;
+      --accent: #6c5ce7;
+      --text: #e2e8f0;
+      --text-light: #94a3b8;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --danger: #e17055;
+      --eliminated: #e74c3c;
     }
-
-    /* ===== BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; }
-
-    body {
+    * {
       margin: 0;
       padding: 0;
-      font-family: "Inter", Arial, sans-serif;
+      box-sizing: border-box;
+    }
+    body {
+      background: linear-gradient(135deg, #0f0f1a 0%, #16213e 100%);
       color: var(--text);
-      background:
-        radial-gradient(circle at 10% 20%, rgba(0, 183, 176, 0.32), transparent 55%),
-        radial-gradient(circle at 85% 75%, rgba(0, 110, 255, 0.28), transparent 60%),
-        radial-gradient(circle at 50% -20%, rgba(200, 0, 255, 0.25), transparent 70%),
-        linear-gradient(145deg, #0a0b0d, #101218 45%, #060708);
-      background-attachment: fixed;
-      background-size: cover;
-    }
-
-    /* ===== LAYOUT ===== */
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
       padding: 20px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      box-shadow: var(--shadow-md);
-    }
-
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 5px;
-    }
-
-    .total-votos {
-      text-align: center;
-      color: var(--accent);
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 30px;
-    }
-
-    /* ===== CARDS DE RESULTADO ===== */
-    .result-card {
-      display: flex;
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      margin-bottom: 15px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      animation: fadeIn 0.5s ease forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; transform: translateY(0); }
-      from { opacity: 0; transform: translateY(10px); }
-    }
-
-    .result-card img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      object-position: top;
-      background: #1a1a1a;
-    }
-
-    .result-info {
-      padding: 15px;
-      flex-grow: 1;
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
     }
-
-    .result-header {
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(108, 92, 231, 0.2);
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .chart-container {
+      position: relative;
+      height: 420px;
+      margin: 20px 0;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .stat-item {
+      background: rgba(108, 92, 231, 0.15);
+      padding: 15px;
+      border-radius: 14px;
+      text-align: center;
+      border: 1px solid rgba(108, 92, 231, 0.3);
+    }
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #a29bfe;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    .results-list {
+      margin-top: 25px;
+    }
+    .result-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+      border-left: 4px solid transparent;
     }
-
-    .nome { font-size: 18px; font-weight: bold; }
-    
-    .porcentagem { 
-      font-size: 20px; 
-      font-weight: 900; 
-      color: var(--accent); 
+    .result-item:hover {
+      background: rgba(108, 92, 231, 0.15);
+      border-left-color: var(--accent);
     }
-
-    .votos-qtd {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 8px;
+    .result-item.eliminado {
+      background: rgba(231, 76, 60, 0.15);
+      border-left-color: var(--eliminated);
+      color: var(--eliminated);
     }
-
-    /* ===== BARRA DE PROGRESSO ===== */
+    .result-item.eliminado:hover {
+      background: rgba(231, 76, 60, 0.25);
+    }
+    .result-item.eliminado .bar {
+      background: linear-gradient(90deg, #e74c3c, #c0392b) !important;
+    }
+    .rank {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #a29bfe;
+      width: 32px;
+    }
+    .name {
+      flex: 1;
+      text-align: left;
+      margin-left: 12px;
+      font-weight: 600;
+    }
+    .percentage {
+      font-weight: 700;
+      color: #fff;
+    }
     .bar-container {
-      width: 100%;
-      height: 8px;
-      background: #444;
-      border-radius: 4px;
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      margin: 0 15px;
       overflow: hidden;
     }
-
-    .bar-fill {
+    .bar {
       height: 100%;
-      background: var(--accent);
-      width: 0%; /* Será preenchido via JS */
-      transition: width 1s ease-in-out;
+      background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+      border-radius: 3px;
+      transition: width 0.8s ease;
     }
-
+    .winner-badge {
+      background: linear-gradient(45deg, #f39c12, #f1c40f);
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+    .eliminated-badge {
+      background: var(--eliminated);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
     .loading {
       text-align: center;
       padding: 40px;
-      font-size: 18px;
-      color: var(--muted);
+      color: var(--text-light);
     }
-
-    /* Adiciona cores diferentes pro pódio (opcional, deixa mais visual) */
-    .result-card:nth-child(1) .bar-fill, .result-card:nth-child(1) .porcentagem { color: #00ff99; background-color: #00ff99;}
-    .result-card:nth-child(2) .bar-fill, .result-card:nth-child(2) .porcentagem { color: #00b7b0; background-color: #00b7b0;}
-    .result-card:nth-child(3) .bar-fill, .result-card:nth-child(3) .porcentagem { color: #ff8c00; background-color: #ff8c00;}
+    .refresh-info {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    .refresh-info i {
+      color: #a29bfe;
+      margin-right: 6px;
+    }
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(108, 92, 231, 0.2);
+      color: #a29bfe;
+      border: 1px solid rgba(108, 92, 231, 0.4);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 20px auto 0;
+      width: fit-content;
+    }
+    .copy-btn:hover {
+      background: rgba(108, 92, 231, 0.3);
+      transform: translateY(-2px);
+    }
+    .copy-btn i {
+      font-size: 1.1rem;
+    }
+    .copy-btn.copied {
+      background: rgba(0, 184, 148, 0.3);
+      color: #00b894;
+      border-color: rgba(0, 184, 148, 0.5);
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .card { padding: 20px; }
+      .chart-container { height: 300px; }
+      .result-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .bar-container { width: 100%; }
+      .copy-btn { font-size: 0.9rem; padding: 8px 14px; }
+    }
   </style>
 </head>
 <body>
-
+  <h1>Torcida</h1>
   <div class="container">
-    <h1>Resultados Oficiais</h1>
-    <div id="totalVotosContainer" class="total-votos">Carregando dados...</div>
-    
-    <div id="resultadosLista">
-      <div class="loading">Buscando votos no servidor...</div>
+    <header>
+      <h1>Resultado Parcial</h1>
+      <p class="subtitle">Acompanhe a votação em tempo real</p>
+    </header>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+  <input
+    type="text"
+    id="tableInput"
+    placeholder="Digite o nome da table (ex: f3roça8)"
+    style="
+      flex:1;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(108,92,231,.4);
+      background:#0f0f1a;
+      color:#e2e8f0;
+      font-size:1rem;
+      outline:none;
+    "
+  />
+
+  <button
+    id="loadTableBtn"
+    style="
+      padding:12px 18px;
+      border-radius:12px;
+      border:none;
+      background:linear-gradient(90deg,#6c5ce7,#a29bfe);
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+    "
+  >
+    Carregar resultados
+  </button>
     </div>
+    
+    <div class="card">
+      <div class="chart-container">
+        <canvas id="grafico"></canvas>
+      </div>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="totalVotos">0</div>
+          <div class="stat-label">Total de Votos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="participantes">0</div>
+          <div class="stat-label">Participantes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="lider">—</div>
+          <div class="stat-label">Líder Atual</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="margin-bottom: 15px; font-size: 1.4rem; color: #a29bfe;">Ranking</h2>
+      <div id="resultados" class="results-list">
+        <div class="loading">Carregando resultados...</div>
+      </div>
+    </div>
+    <button class="copy-btn" id="copyBtn">
+      <i class="fas fa-copy"></i>
+      <span>Copiar Resultados</span>
+    </button>
+    <p class="refresh-info">
+      <i class="fas fa-sync-alt"></i>
+      Atualizando a cada segundo
+    </p>
   </div>
+  
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js";
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+  const supabaseUrl = "https://ntkaeaijugkjhqrbnavk.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50a2FlYWlqdWdramhxcmJuYXZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NjI1MTksImV4cCI6MjA5OTQzODUxOX0.PbMWZZm82S07CcpR9A6X2Rz5uznkgQXCRQ_l8lwiK2Y";
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // =================== CONFIG ===================
-    const SUPABASE_URL = "https://ntkaeaijugkjhqrbnavk.supabase.co";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50a2FlYWlqdWdramhxcmJuYXZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NjI1MTksImV4cCI6MjA5OTQzODUxOX0.PbMWZZm82S07CcpR9A6X2Rz5uznkgQXCRQ_l8lwiK2Y";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-    const TABLE_VOTACAO = "bfs1";
+  /* ================= CONFIGURAÇÃO ================= */
+  const TIPO_VOTACAO = "FICAR"; 
+  const NUM_ELIMINADOS = 1;       
+  /* ================================================ */
 
-    // Informações visuais dos participantes para a tela de resultados
-    const participantes = {
-      "Celso Escoliosi": { img: "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Celso.png?raw=true" },
-      "Lucas BemVaral": { img: "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Lucas.png?raw=true" },
-      "Sobrinha Milena": { img: "https://github.com/VulgoFshow/New-Fshow/blob/main/bigsims/Sobrinha.png?raw=true" }
-    };
+  const ctx = document.getElementById("grafico").getContext("2d");
+  const chart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+        backgroundColor: [
+          "#6c5ce7", "#a29bfe", "#fd79a8", "#fdcb6e",
+          "#00b894", "#55efc4", "#74b9ff", "#e17055"
+        ],
+        borderWidth: 3,
+        borderColor: "#1a1a2e",
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "68%",
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed;
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = ((value / total) * 100).toFixed(2);
+              return `${context.label}: ${value} votos (${percentage}%)`;
+            }
+          }
+        }
+      },
+      animation: { animateRotate: true, duration: 1200 }
+    }
+  });
 
-    async function buscarResultados() {
-      try {
-        // Busca todos os participantes votados na tabela
-        // Nota: O Supabase retorna por padrão até 1000 linhas. 
-        // Se a votação passar de 1000 votos, será necessário paginação.
-        const { data, error } = await supabase
-          .from(TABLE_VOTACAO)
-          .select('participante');
+  function atualizarGrafico(labels, dados) {
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = dados;
+    chart.update();
+  }
 
-        if (error) throw error;
+  async function carregarTodosVotos() {
+    if (!tableAtual) return [];
 
-        processarVotos(data);
+    const limite = 1000;
+    let pagina = 0;
+    let votos = [];
+    let continuar = true;
 
-      } catch (e) {
-        console.error("Erro ao buscar resultados:", e);
-        document.getElementById("resultadosLista").innerHTML = 
-          `<div class="loading" style="color:#ff4d4d;">Erro ao carregar os resultados.</div>`;
+    while (continuar) {
+      const { data, error } = await supabase
+        .from(tableAtual)
+        .select("participante")
+        .range(pagina * limite, (pagina + 1) * limite - 1);
+
+      if (error) {
+        console.error(error);
+        return [];
+      }
+
+      if (!data || data.length === 0) continuar = false;
+      else {
+        votos = votos.concat(data);
+        pagina++;
+        if (data.length < limite) continuar = false;
       }
     }
 
-    function processarVotos(votos) {
-      const totalVotos = votos.length;
-      const contagem = {
-        "Celso Escoliosi": 0,
-        "Lucas BemVaral": 0,
-        "Sobrinha Milena": 0
-      };
+    return votos;
+  }
 
-      // Conta os votos para cada um
-      votos.forEach(voto => {
-        if(contagem[voto.participante] !== undefined) {
-          contagem[voto.participante]++;
-        }
-      });
+  let ultimoRanking = [];
+  let tableAtual = null;
 
-      // Transforma em array para poder ordenar do mais votado pro menos votado
-      const resultadosArray = Object.keys(contagem).map(nome => {
-        const qtdVotos = contagem[nome];
-        // Calcula porcentagem com 2 casas decimais
-        const porcentagem = totalVotos > 0 ? ((qtdVotos / totalVotos) * 100) : 0;
-        
-        return {
-          nome: nome,
-          votos: qtdVotos,
-          porcentagem: porcentagem.toFixed(2), // Garante o 00,00%
-          img: participantes[nome].img
-        };
-      });
+  async function carregarVotos() {
+    const data = await carregarTodosVotos();
+    if (!data.length) return;
 
-      // Ordena de forma decrescente (quem tem mais votos fica em 1º)
-      resultadosArray.sort((a, b) => b.votos - a.votos);
+    const contagem = {};
+    let total = 0;
 
-      renderizarTela(resultadosArray, totalVotos);
-    }
+    data.forEach(v => {
+      const nome = v.participante?.trim();
+      if (nome) {
+        contagem[nome] = (contagem[nome] || 0) + 1;
+        total++;
+      }
+    });
 
-    function renderizarTela(resultadosArray, totalVotos) {
-      // Atualiza o total
-      document.getElementById("totalVotosContainer").innerHTML = `Total de Votos: ${totalVotos.toLocaleString('pt-BR')}`;
-      
-      const lista = document.getElementById("resultadosLista");
-      lista.innerHTML = ""; // Limpa o "loading"
+    const ordenado = Object.entries(contagem).sort((a, b) => b[1] - a[1]);
 
-      // Cria os cards dinamicamente
-      resultadosArray.forEach((item, index) => {
-        // Atraso sutil na animação para criar um efeito em cascata
-        const animDelay = index * 0.15; 
-        
-        const cardHtml = `
-          <div class="result-card" style="animation-delay: ${animDelay}s;">
-            <img src="${item.img}" alt="${item.nome}">
-            <div class="result-info">
-              <div class="result-header">
-                <span class="nome">${item.nome}</span>
-                <span class="porcentagem">${item.porcentagem}%</span>
-              </div>
-              <div class="votos-qtd">${item.votos} voto(s)</div>
-              <div class="bar-container">
-                <div class="bar-fill" style="width: 0%;" data-target="${item.porcentagem}%"></div>
-              </div>
-            </div>
+    atualizarGrafico(
+      ordenado.map(v => v[0]),
+      ordenado.map(v => v[1])
+    );
+
+    document.getElementById("totalVotos").textContent = total;
+    document.getElementById("participantes").textContent = ordenado.length;
+    document.getElementById("lider").textContent = ordenado[0][0];
+
+    const resultadosDiv = document.getElementById("resultados");
+
+    resultadosDiv.innerHTML = ordenado.map((item, i) => {
+      const nome = item[0];
+      const votos = item[1];
+      const perc = ((votos / total) * 100).toFixed(2);
+
+      let eliminado = false;
+
+      if (TIPO_VOTACAO === "ELIMINAR") {
+        eliminado = i === 0;
+      } else {
+        eliminado = (i + 1) > ordenado.length - NUM_ELIMINADOS;
+      }
+
+      return `
+        <div class="result-item ${eliminado ? "eliminado" : ""}">
+          <div class="rank">${i + 1}º</div>
+          <div class="name">
+            ${nome}
+            ${eliminado ? `<span class="eliminated-badge">ELIMINADO</span>` : ""}
           </div>
-        `;
-        lista.innerHTML += cardHtml;
-      });
+          <div class="bar-container">
+            <div class="bar" style="width:${perc}%"></div>
+          </div>
+          <div class="percentage">${perc}%</div>
+        </div>
+      `;
+    }).join("");
 
-      // Animação suave para as barras de progresso (gatilho após um pequeno intervalo)
-      setTimeout(() => {
-        document.querySelectorAll('.bar-fill').forEach(bar => {
-          bar.style.width = bar.getAttribute('data-target');
-        });
-      }, 100);
-    }
+    ultimoRanking = ordenado.map((item, i) => {
+      const nome = item[0];
+      const votos = item[1];
+      const perc = ((votos / total) * 100).toFixed(2);
 
-    // Inicializa
-    buscarResultados();
-  </script>
-</body>
-</html>
+      let eliminado =
+        TIPO_VOTACAO === "ELIMINAR"
+          ? i === 0
+          : (i + 1) > ordenado.length - NUM_ELIMINADOS;
+
+      return `${i + 1}º ${nome} - ${votos} votos (${perc}%) ${eliminado ? "[ELIMINADO]" : ""}`;
+    });
+  }
+
+  setInterval(() => {
+    if (tableAtual) carregarVotos();
+  }, 1000);
+
+  document.getElementById("loadTableBtn").addEventListener("click", () => {
+    const valor = document.getElementById("tableInput").value.trim();
+    if (!valor) return alert("Digite o nome da table.");
+    tableAtual = valor;
+    carregarVotos();
+  });
+</script>
+
+
+
+
