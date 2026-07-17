@@ -716,26 +716,33 @@ button:disabled {
 <div class="options">
 
   <label class="option">
-  <img src="https://i.ibb.co/q3RM72VV/photo-output.png" alt="Opção">
+  <img src="https://i.ibb.co/twrjKm5b/photo-output-3.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Bryan"> Bryan
+    <input type="radio" name="vote" value="Ana Paula"> Ana Paula
   </div>
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/QjrGFjx5/photo-output-1.png" alt="Opção">
+  <img src="https://i.ibb.co/v44mMPqk/photo-output-4.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Cícero"> Cícero
+    <input type="radio" name="vote" value="Braian"> Braian
   </div>
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/nNWLm4yj/photo-output-2.png" alt="Opção">
+  <img src="https://i.ibb.co/Cp3Sgxvq/photo-output-5.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Mikael"> Mikael
+    <input type="radio" name="vote" value="Júlia"> Júlia
   </div>
 </label>
 
+    <label class="option">
+  <img src="https://i.ibb.co/gZWtzhhT/photo-output-6.png" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Luan"> Luan
+  </div>
+    </label>
+  
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -794,7 +801,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "c4";
+  const TABLE_VOTACAO = "c5";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -803,7 +810,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-17T15:26:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-18T15:26:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
