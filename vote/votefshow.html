@@ -710,29 +710,37 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que FIQUE <br> na F11?</h1>
+    <h1>Quem você quer que VENÇA <br> a F11?</h1>
     <div class="espacador"></div>
     
 <div class="options">
 
+  
+  <label class="option">
+  <img src="https://i.postimg.cc/xCGkJXJB/simone.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Arthur"> Arthur
+  </div>
+  </label>
+  
   <label class="option">
   <img src="https://i.postimg.cc/FRXdHyRc/bbrunno.jpg" alt="Opção">
   <div class="option-content">
     <input type="radio" name="vote" value="Brunno"> Brunno
   </div>
 </label>
+
+  <label class="option">
+  <img src="https://i.postimg.cc/B6fLnT6p/gabi.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Gabi"> Gabi
+  </div>
+  </label>
   
   <label class="option">
   <img src="https://i.postimg.cc/k4P6gQ4X/livia.jpg" alt="Opção">
   <div class="option-content">
     <input type="radio" name="vote" value="Lívia"> Lívia
-  </div>
-</label>
-  
-  <label class="option">
-  <img src="https://i.postimg.cc/xCGkJXJB/simone.jpg" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Simone"> Simone
   </div>
 </label>
 
@@ -794,7 +802,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "f11r16";
+  const TABLE_VOTACAO = "f11final";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -803,7 +811,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-17T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-19T19:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
