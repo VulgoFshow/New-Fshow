@@ -716,6 +716,13 @@ button:disabled {
 <div class="options">
 
   <label class="option">
+  <img src="https://i.ibb.co/b0rfNHS/photo-output-20.png" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Bittchy"> Bittchy
+  </div>
+</label>
+  
+  <label class="option">
   <img src="https://i.ibb.co/v44mMPqk/photo-output-4.png" alt="Opção">
   <div class="option-content">
     <input type="radio" name="vote" value="Braian"> Braian
@@ -723,16 +730,9 @@ button:disabled {
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/Fk90Jb75/Design-sem-nome.png" alt="Opção">
+  <img src="https://i.ibb.co/d4jQv3L8/photo-output-14.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Gabi"> Gabi
-  </div>
-</label>
-  
-  <label class="option">
-  <img src="https://i.ibb.co/L43Xq1K/photo-output-16.png" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Simone"> Simone
+    <input type="radio" name="vote" value="Brunno"> Brunno
   </div>
 </label>
   
@@ -794,7 +794,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "c7";
+  const TABLE_VOTACAO = "c8";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -803,7 +803,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-20T18:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-21T18:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
