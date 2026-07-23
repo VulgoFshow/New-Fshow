@@ -723,16 +723,23 @@ button:disabled {
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/b5w2B73N/photo-output.png" alt="Opção">
+  <img src="https://i.ibb.co/YTLNdj19/photo-output-1.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Dani"> Dani
+    <input type="radio" name="vote" value="Kristhyan"> Kristhyan
+  </div>
+</label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/JW230t5K/Design-sem-nome-2.png" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Luca"> Luca
   </div>
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/YTLNdj19/photo-output-1.png" alt="Opção">
+  <img src="https://i.ibb.co/vG3x5cD/photo-output-8.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Kristhyan"> Kristhyan
+    <input type="radio" name="vote" value="Luddi"> Luddi
   </div>
 </label>
   
@@ -747,7 +754,7 @@ button:disabled {
 
     <button id="botaoVotar" disabled>VOTAR</button>
 
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
+    <div class="notice">Essa votação segue aberta até às 18:00</div>
 </div>
   
 <!-- POPUP CAPTCHA -->
@@ -780,7 +787,7 @@ button:disabled {
      VOTAR NOVAMENTE
     </button>
     <div class="success-msg" style="margin-top: 15px;">Voto computado com sucesso!</div>
-    <div class="notice">Essa votação segue aberta até às 19:00</div>
+    <div class="notice">Essa votação segue aberta até às 18:00</div>
     
   </div>
 </div> 
@@ -794,7 +801,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "c9";
+  const TABLE_VOTACAO = "c10";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -803,7 +810,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-22T18:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-23T18:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
