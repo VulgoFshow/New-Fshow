@@ -710,24 +710,38 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que FIQUE?</h1>
+    <h1>Quem você quer que VENÇA?</h1>
     <div class="espacador"></div>
     
 <div class="options">
 
   <label class="option">
-  <img src="https://i.ibb.co/YTLNdj19/photo-output-1.png" alt="Opção">
+  <img src="https://i.ibb.co/DPQYLcKT/photo-output-1.webp" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Kristhyan"> Kristhyan
+    <input type="radio" name="vote" value="Brunno"> Brunno
+  </div>
+</label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/F4f8JZFW/photo-output.webp" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Bittchy"> Bittchy
   </div>
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/JW230t5K/Design-sem-nome-2.png" alt="Opção">
+  <img src="https://i.ibb.co/xrBkzfJ/photo-output-2.webp" alt="Opção">
   <div class="option-content">
     <input type="radio" name="vote" value="Luca"> Luca
   </div>
   </label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/MkkXWbKS/photo-output-3.webp" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Kristhyan"> Kristhyan
+  </div>
+</label>
   
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -787,7 +801,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "c14";
+  const TABLE_VOTACAO = "c15";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -796,7 +810,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-27T17:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-28T19:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
