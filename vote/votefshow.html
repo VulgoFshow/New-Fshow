@@ -710,39 +710,32 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que VENÇA <br> a F11?</h1>
+    <h1>Quem você quer que FIQUE <br> no Passivas em Apuros?</h1>
     <div class="espacador"></div>
     
 <div class="options">
 
   
   <label class="option">
-  <img src="https://i.postimg.cc/xCGkJXJB/simone.jpg" alt="Opção">
+  <img src="https://i.ibb.co/Y7MnB9WQ/Picsart-26-07-29-21-50-31-701.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Arthur"> Arthur
+    <input type="radio" name="vote" value="Ana Paula"> Ana Paula
   </div>
   </label>
   
   <label class="option">
-  <img src="https://i.postimg.cc/FRXdHyRc/bbrunno.jpg" alt="Opção">
+  <img src="https://i.ibb.co/1GMytsrb/Picsart-26-07-29-21-51-15-590.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Brunno"> Brunno
+    <input type="radio" name="vote" value="Pedro"> Pedro
   </div>
 </label>
 
   <label class="option">
-  <img src="https://i.postimg.cc/B6fLnT6p/gabi.jpg" alt="Opção">
+  <img src="https://i.ibb.co/Z6LXxCs4/Picsart-26-07-29-21-51-00-297.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Gabi"> Gabi
+    <input type="radio" name="vote" value="Rochinha"> Rochinha
   </div>
   </label>
-  
-  <label class="option">
-  <img src="https://i.postimg.cc/k4P6gQ4X/livia.jpg" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Lívia"> Lívia
-  </div>
-</label>
 
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -802,7 +795,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "f11final";
+  const TABLE_VOTACAO = "ap1";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -811,7 +804,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-19T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-07-30T19:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
