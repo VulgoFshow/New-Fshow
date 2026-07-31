@@ -1,0 +1,169 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-live: var(--live);
+  --color-live-foreground: var(--live-foreground);
+  --font-display: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  /* FlopTv — dark, neon streaming vibe */
+  --radius: 0.75rem;
+  --background: oklch(0.15 0.02 280);
+  --foreground: oklch(0.98 0.01 280);
+  --card: oklch(0.19 0.025 280);
+  --card-foreground: oklch(0.98 0.01 280);
+  --popover: oklch(0.19 0.025 280);
+  --popover-foreground: oklch(0.98 0.01 280);
+  --primary: oklch(0.72 0.24 340);
+  --primary-foreground: oklch(0.15 0.02 280);
+  --secondary: oklch(0.25 0.04 280);
+  --secondary-foreground: oklch(0.98 0.01 280);
+  --muted: oklch(0.24 0.03 280);
+  --muted-foreground: oklch(0.7 0.03 280);
+  --accent: oklch(0.75 0.2 200);
+  --accent-foreground: oklch(0.15 0.02 280);
+  --destructive: oklch(0.65 0.24 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.28 0.03 280);
+  --input: oklch(0.24 0.03 280);
+  --ring: oklch(0.72 0.24 340);
+  --live: oklch(0.65 0.26 25);
+  --live-foreground: oklch(0.98 0 0);
+  --chart-1: oklch(0.72 0.24 340);
+  --chart-2: oklch(0.75 0.2 200);
+  --chart-3: oklch(0.78 0.18 130);
+  --chart-4: oklch(0.8 0.18 70);
+  --chart-5: oklch(0.65 0.24 25);
+  --sidebar: oklch(0.15 0.02 280);
+  --sidebar-foreground: oklch(0.98 0.01 280);
+  --sidebar-primary: oklch(0.72 0.24 340);
+  --sidebar-primary-foreground: oklch(0.15 0.02 280);
+  --sidebar-accent: oklch(0.24 0.03 280);
+  --sidebar-accent-foreground: oklch(0.98 0.01 280);
+  --sidebar-border: oklch(0.28 0.03 280);
+  --sidebar-ring: oklch(0.72 0.24 340);
+
+  --gradient-brand: linear-gradient(135deg, oklch(0.72 0.24 340), oklch(0.65 0.24 300));
+  --gradient-live: linear-gradient(135deg, oklch(0.65 0.26 25), oklch(0.72 0.24 340));
+  --shadow-glow: 0 0 40px oklch(0.72 0.24 340 / 0.35);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(circle at 20% 0%, oklch(0.72 0.24 340 / 0.15), transparent 50%),
+      radial-gradient(circle at 80% 100%, oklch(0.65 0.24 300 / 0.12), transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+  }
+}
+
+@utility bg-gradient-brand {
+  background-image: var(--gradient-brand);
+}
+@utility bg-gradient-live {
+  background-image: var(--gradient-live);
+}
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+@utility animate-live-pulse {
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+/* ---- GC (gerador de caracteres) ---- */
+@keyframes gc-slide-in { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes gc-slide-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-60px); } }
+@keyframes gc-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes gc-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes gc-zoom-in { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+@keyframes gc-zoom-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.85); } }
+@keyframes gc-up-in { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes gc-up-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(40px); } }
+@keyframes gc-wipe-in { from { clip-path: inset(0 100% 0 0); opacity: 1; } to { clip-path: inset(0 0 0 0); opacity: 1; } }
+@keyframes gc-wipe-out { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 100%); } }
+
+.gc-anim-slide-in { animation: gc-slide-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.gc-anim-slide-out { animation: gc-slide-out 0.4s ease-in both; }
+.gc-anim-fade-in { animation: gc-fade-in 0.5s ease-out both; }
+.gc-anim-fade-out { animation: gc-fade-out 0.4s ease-in both; }
+.gc-anim-zoom-in { animation: gc-zoom-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.gc-anim-zoom-out { animation: gc-zoom-out 0.35s ease-in both; }
+.gc-anim-up-in { animation: gc-up-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.gc-anim-up-out { animation: gc-up-out 0.4s ease-in both; }
+.gc-anim-wipe-in { animation: gc-wipe-in 0.55s cubic-bezier(0.65, 0, 0.35, 1) both; }
+.gc-anim-wipe-out { animation: gc-wipe-out 0.45s cubic-bezier(0.65, 0, 0.35, 1) both; }
+
+/* ---- Likes flutuantes ---- */
+@keyframes like-float {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.6) rotate(var(--like-rot, 0deg)); }
+  15% { opacity: 1; transform: translate(-50%, -10px) scale(1.15) rotate(var(--like-rot, 0deg)); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--like-drift, 0px)), -180px) scale(0.9) rotate(var(--like-rot, 0deg)); }
+}
+.animate-like-float { animation: like-float 1.1s ease-out forwards; }
+
+@keyframes gc-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-gc-ticker { animation: gc-ticker 12s linear infinite; }
