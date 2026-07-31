@@ -498,8 +498,6 @@ button:disabled {
 }
 
 #fotoConfirm {
-  width: 100%;
-  height: auto;
   display: block;
   object-fit: contain;
 }
@@ -710,36 +708,63 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que VENÇA?</h1>
+    <h1>Quem você quer que ENTRE?</h1>
     <div class="espacador"></div>
     
 <div class="options">
-
   <label class="option">
-  <img src="https://i.ibb.co/DPQYLcKT/photo-output-1.webp" alt="Opção">
+  <img src="https://i.ibb.co/wrFMjGcX/Picsart-26-07-31-19-36-35-492.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Brunno"> Brunno
+    <input type="radio" name="vote" value="Prazerudo"> Prazerudo
   </div>
 </label>
 
   <label class="option">
-  <img src="https://i.ibb.co/F4f8JZFW/photo-output.webp" alt="Opção">
+  <img src="https://i.ibb.co/7xZyzdx6/Picsart-26-07-31-19-36-48-934.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Bittchy"> Bittchy
+    <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/xrBkzfJ/photo-output-2.webp" alt="Opção">
+  <img src="https://i.ibb.co/KzjHQqn4/Picsart-26-07-31-19-37-21-647.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Luca"> Luca
+    <input type="radio" name="vote" value="Tety"> Tety
   </div>
   </label>
 
   <label class="option">
-  <img src="https://i.ibb.co/MkkXWbKS/photo-output-3.webp" alt="Opção">
+  <img src="https://i.ibb.co/GfFZ4SzY/Picsart-26-07-31-19-37-11-510.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Renata"> Renata
+    <input type="radio" name="vote" value="Leonardo"> Leonardo
+  </div>
+</label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/jZhBWK3n/Picsart-26-07-31-19-37-44-204.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Dona Jura"> Dona Jura
+  </div>
+</label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/fzdLbVHb/Picsart-26-07-31-19-37-33-190.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Sol"> Sol
+  </div>
+</label>
+  
+  <label class="option">
+  <img src="https://i.ibb.co/xKXHTF8P/Picsart-26-07-31-19-38-16-422.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Mikael"> Mikael
+  </div>
+  </label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/G4Bn7myz/Picsart-26-07-31-19-38-05-742.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Bubuzinho"> Bubuzinho
   </div>
 </label>
   
@@ -801,16 +826,16 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "c15";
+  const TABLE_VOTACAO = "rpaiol";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
 
     // =================== HORÁRIOS ===================
 
-// Horário de Brasília (-03:00)
-const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-07-26T19:00:00-03:00").getTime();
+  // Horário de Brasília (-03:00)
+  const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
+  const encerramentoBR = new Date("2026-08-01T18:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
@@ -899,125 +924,114 @@ const encerramentoBR = new Date("2026-07-26T19:00:00-03:00").getTime();
   };
 
   AntiAutoclick.init();
+  
+// =================== HORA DO SERVIDOR (ROBUSTA) ===================
 
-// =================== HORA DO SERVIDOR ===================
-async function getServerTime() {
-  try {
+let timeOffset = 0;
+let sincronizado = false;
 
-    const res = await fetch(
-      "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo",
-      {
-        cache: "no-store"
+async function sincronizarHorario() {
+  // Lista de APIs para redundância
+  const endpoints = [
+    { url: "https://worldtimeapi.org/api/timezone/America/Sao_Paulo", type: "worldtime" },
+    { url: "https://timeapi.io/api/Time/current/zone?timeZone=America/Sao_Paulo", type: "timeapi" },
+    { url: SUPABASE_URL, type: "supabase" } // Usar o próprio servidor do banco como fonte de tempo
+  ];
+
+  for (const endpoint of endpoints) {
+    try {
+      const t1 = Date.now();
+      const res = await fetch(endpoint.url, { 
+        method: endpoint.type === "supabase" ? "HEAD" : "GET",
+        cache: "no-store" 
+      });
+
+      if (!res.ok && endpoint.type !== "supabase") continue;
+
+      let serverTime;
+      if (endpoint.type === "worldtime") {
+        const data = await res.json();
+        serverTime = new Date(data.datetime).getTime();
+      } else if (endpoint.type === "timeapi") {
+        const data = await res.json();
+        serverTime = new Date(data.dateTime).getTime();
+      } else if (endpoint.type === "supabase") {
+        const dateStr = res.headers.get("date");
+        if (dateStr) serverTime = new Date(dateStr).getTime();
       }
-    );
 
-    if (!res.ok) {
-      throw new Error("Falha ao buscar horário");
+      if (serverTime) {
+        const t2 = Date.now();
+        const latencia = (t2 - t1) / 2;
+        timeOffset = (serverTime + latencia) - t2;
+        sincronizado = true;
+        if (DEBUG) console.log(`Sincronizado via ${endpoint.type}. Offset: ${timeOffset}ms`);
+        return;
+      }
+    } catch (e) {
+      console.warn(`Falha ao sincronizar com ${endpoint.type}:`, e);
     }
-
-    const data = await res.json();
-
-    const serverDate = new Date(
-      data.year,
-      data.month - 1,
-      data.day,
-      data.hour,
-      data.minute,
-      data.seconds
-    );
-
-    return serverDate.getTime();
-
-  } catch (e) {
-
-    console.error("Erro ao verificar horário:", e);
-
-    // fallback pro horário local
-    return Date.now();
   }
+
+  console.error("Todas as fontes de tempo falharam.");
 }
 
+function getHorarioSincronizado() {
+  return Date.now() + timeOffset;
+}
+
+window.getServerTime = async function() {
+  if (!sincronizado) await sincronizarHorario();
+  return getHorarioSincronizado();
+};
 
 // =================== REDIRECT ===================
 
 function redirect(url) {
-
   if (typeof DEBUG !== "undefined" && DEBUG) {
-
     console.warn("REDIRECT BLOQUEADO →", url);
-
     return;
   }
-
   window.location.replace(url);
 }
 
-
 // =================== VERIFICAÇÃO DE HORÁRIO ===================
 
-async function verificarHorarios() {
+async function iniciarSistemaDeVotacao() {
+  await sincronizarHorario();
 
-  const agoraBR = await getServerTime();
+  function verificar() {
+    const agoraBR = getHorarioSincronizado();
 
-  console.log("Agora:", new Date(agoraBR));
-  console.log("Abertura:", new Date(aberturaBR));
-  console.log("Encerramento:", new Date(encerramentoBR));
+    if (agoraBR < aberturaBR) {
+      console.warn("Votação ainda não abriu");
+      redirect("aguarde.html");
+      return;
+    }
 
-  // Antes da abertura
-  if (agoraBR < aberturaBR) {
-
-    console.warn("Votação ainda não abriu");
-
-    redirect("aguarde.html");
-
-    return;
+    if (agoraBR > encerramentoBR) {
+      console.warn("Votação encerrada");
+      // Desabilita UI antes do redirect
+      const btn = document.getElementById("botaoVotar");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "ENCERRADA";
+      }
+      redirect("fechada.html");
+      return;
+    }
+    
+    if (typeof DEBUG !== "undefined" && DEBUG) {
+      console.log("VOTAÇÃO ABERTA - Horário Sincronizado:", new Date(agoraBR));
+    }
   }
 
-  // Depois do encerramento
-  if (agoraBR > encerramentoBR) {
-
-    console.warn("Votação encerrada");
-
-    redirect("fechada.html");
-
-    return;
-  }
-
-  console.log("VOTAÇÃO ABERTA");
+  verificar();
+  setInterval(verificar, 2000);
+  setInterval(sincronizarHorario, 60000); // Sincroniza a cada 1 minuto para precisão total
 }
 
-
-// Executa ao carregar
-verificarHorarios();
-
-
-// =================== VERIFICAÇÃO PERIÓDICA ===================
-
-setInterval(async () => {
-
-  const agoraBR = await getServerTime();
-
-  // Antes da abertura
-  if (agoraBR < aberturaBR) {
-
-    console.warn("Ainda não abriu");
-
-    redirect("aguarde.html");
-
-    return;
-  }
-
-  // Depois do encerramento
-  if (agoraBR > encerramentoBR) {
-
-    console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
-
-    redirect("fechada.html");
-
-    return;
-  }
-
-}, 5000);
+iniciarSistemaDeVotacao();
   
   // =================== ELEMENTOS DOM ===================
   const votoTela = document.getElementById("votoTela");
@@ -1040,14 +1054,12 @@ setInterval(async () => {
   let captchaAberto = false;
   let captchaClicado = false;
   function updateBotoesEstado() {
-    // Se estiver bloqueado pelo anti-autoclick, não habilita nada
     if (AntiAutoclick.isBlocked()) {
         AntiAutoclick.disableVotingUI();
         return;
     }
 
     const restantes = getVotosRestantes();
-    
     if (captchaClicado && restantes > 0) {
       botaoVotar.disabled = false;
       botaoVotar.classList.add("active");
@@ -1238,12 +1250,12 @@ botaoVotar.addEventListener("click", () => {
 
 async function submitVote(participante) {
   try {
-    const agoraBR = await getServerTime();
+    const agoraBR = await window.getServerTime();
     if (agoraBR > encerramentoBR) {
       alert("A votação foi encerrada!");
-      // Reativa se falhar por horário
-      botaoVotar.disabled = false;
-      botaoVotar.textContent = "VOTAR";
+      botaoVotar.disabled = true;
+      botaoVotar.textContent = "ENCERRADA";
+      redirect("fechada.html");
       return;
     }
 
@@ -1257,7 +1269,6 @@ async function submitVote(participante) {
     const cardPai = inputEscolhido.closest('.option');
     const imagemVotada = cardPai.querySelector('img').src;
 
-    // Já está desativado pelo clique, mas garantimos aqui e salvamos o texto anterior
     const prevText = "VOTAR";
     
     const votos = [];
@@ -1274,8 +1285,7 @@ const { error } = await supabase
     
     if (error) {
       console.error("Erro Supabase:", error);
-      let msgErro = error.message || JSON.stringify(error);
-      alert("ERRO NO SUPABASE:\n" + msgErro + "\n\n1. Verifique se a tabela 'cdf1' existe no seu banco.\n2. Verifique se o RLS permite inserção pública.");
+      alert("Erro ao computar voto. Tente novamente.");
       botaoVotar.disabled = false;
       botaoVotar.textContent = prevText;
       return;
@@ -1289,7 +1299,6 @@ updateBotoesEstado();
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
     
-    // Usamos a imagem capturada do card no momento do voto
     fotoConfirm.src = imagemVotada;
     fotoConfirm.style.display = "block";
     
@@ -1344,8 +1353,6 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
   updateBotoesEstado();
 })();
     </script>
-
-</body>
 
 </body>
 </html>
