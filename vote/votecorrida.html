@@ -708,65 +708,30 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que ENTRE?</h1>
+    <h1>Quem você quer que VENÇA? <br> O Corrida 3?</h1>
     <div class="espacador"></div>
     
 <div class="options">
   <label class="option">
-  <img src="https://i.ibb.co/wrFMjGcX/Picsart-26-07-31-19-36-35-492.jpg" alt="Opção">
+  <img src="https://i.ibb.co/27XVsj89/Picsart-26-08-10-20-52-55-694.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Prazerudo"> Prazerudo
+    <input type="radio" name="vote" value="Brunno"> Brunno
   </div>
 </label>
 
   <label class="option">
-  <img src="https://i.ibb.co/7xZyzdx6/Picsart-26-07-31-19-36-48-934.jpg" alt="Opção">
+  <img src="https://i.ibb.co/QvGD9rr8/Picsart-26-08-10-20-55-36-567.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Alysson"> Alysson
+    <input type="radio" name="vote" value="Lívia"> Lívia
   </div>
 </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/GfFZ4SzY/Picsart-26-07-31-19-37-11-510.jpg" alt="Opção">
+  <img src="https://i.ibb.co/wNrMpQBc/Picsart-26-08-10-20-53-20-176.png" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Tety"> Tety
+    <input type="radio" name="vote" value="Quim"> Quim
   </div>
   </label>
-
-  <label class="option">
-  <img src="https://i.ibb.co/KzjHQqn4/Picsart-26-07-31-19-37-21-647.jpg" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Leonardo"> Leonardo
-  </div>
-</label>
-
-  <label class="option">
-  <img src="https://i.ibb.co/fzdLbVHb/Picsart-26-07-31-19-37-33-190.jpg" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Dona Jura"> Dona Jura
-  </div>
-</label>
-
-  <label class="option">
-  <img src="https://i.ibb.co/jZhBWK3n/Picsart-26-07-31-19-37-44-204.jpg" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Sol"> Sol
-  </div>
-</label>
-  
-  <label class="option">
-  <img src="https://i.ibb.co/G4Bn7myz/Picsart-26-07-31-19-38-05-742.jpg" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Mikael"> Mikael
-  </div>
-  </label>
-
-  <label class="option">
-  <img src="https://i.ibb.co/xKXHTF8P/Picsart-26-07-31-19-38-16-422.jpg" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Bubuzinho"> Bubuzinho
-  </div>
-</label>
   
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
@@ -826,7 +791,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtic2tibXhmaWNwdXh3bHdsa2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjY3MjYsImV4cCI6MjA5NzkwMjcyNn0.Was5NDt1Ch0WR0HWQrd59ERXeZWRklqrdHR8Z7x-F1E";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "rpaiol";
+  const TABLE_VOTACAO = "finalcorrida3";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -835,7 +800,7 @@ button:disabled {
 
   // Horário de Brasília (-03:00)
   const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-  const encerramentoBR = new Date("2026-08-01T18:00:00-03:00").getTime();
+  const encerramentoBR = new Date("2026-08-11T19:00:00-03:00").getTime();
 
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
