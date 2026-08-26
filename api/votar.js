@@ -7,7 +7,6 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
 
-  // Só aceita POST
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Método não permitido"
@@ -16,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
 
-    const { table, participante } = req.body;
+    const { table, participante } = req.body || {};
 
     // ==============================
     // VALIDAR DADOS
@@ -28,9 +27,8 @@ export default async function handler(req, res) {
       });
     }
 
-
     // ==============================
-    // CONSULTAR CONTROLE DA VOTAÇÃO
+    // CONSULTAR CONTROLE
     // ==============================
 
     const { data: controle, error: controleError } =
@@ -39,7 +37,6 @@ export default async function handler(req, res) {
         .select("modo")
         .eq("id", 1)
         .single();
-
 
     if (controleError) {
 
@@ -53,9 +50,8 @@ export default async function handler(req, res) {
       });
     }
 
-
     // ==============================
-    // VOTAÇÃO FECHADA MANUALMENTE
+    // VOTAÇÃO FECHADA
     // ==============================
 
     if (controle.modo === "fechada") {
@@ -66,9 +62,8 @@ export default async function handler(req, res) {
 
     }
 
-
     // ==============================
-    // INSERIR VOTO
+    // REGISTRAR VOTO
     // ==============================
 
     const { error } = await supabase
@@ -78,7 +73,6 @@ export default async function handler(req, res) {
           participante: participante
         }
       ]);
-
 
     if (error) {
 
@@ -90,18 +84,11 @@ export default async function handler(req, res) {
       return res.status(500).json({
         error: "Erro ao registrar o voto"
       });
-
     }
-
-
-    // ==============================
-    // SUCESSO
-    // ==============================
 
     return res.status(200).json({
       success: true
     });
-
 
   } catch (error) {
 
@@ -113,6 +100,5 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: "Erro interno do servidor"
     });
-
   }
 }
