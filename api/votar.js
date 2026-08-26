@@ -1,33 +1,31 @@
 import { createClient } from "@supabase/supabase-js";
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 export default async function handler(req, res) {
-  // Aceita apenas POST
+  // Só aceita POST
   if (req.method !== "POST") {
     return res.status(405).json({
-      sucesso: false,
-      erro: "Método não permitido"
+      error: "Método não permitido"
     });
   }
 
   try {
-    const { participante } = req.body;
+    const { table, participante } = req.body;
 
-    // Apenas pega o participante enviado pelo frontend
-    if (!participante) {
+    // Verifica se os dados foram enviados
+    if (!table || !participante) {
       return res.status(400).json({
-        sucesso: false,
-        erro: "Participante não informado"
+        error: "Dados incompletos"
       });
     }
 
-    // Informações do Supabase ficam somente no servidor
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
+    // Insere o voto no Supabase
     const { error } = await supabase
-      .from("cdbnc")
+      .from(table)
       .insert([
         {
           participante: participante
@@ -38,21 +36,19 @@ export default async function handler(req, res) {
       console.error("Erro Supabase:", error);
 
       return res.status(500).json({
-        sucesso: false,
-        erro: "Erro ao registrar voto"
+        error: "Erro ao registrar o voto"
       });
     }
 
     return res.status(200).json({
-      sucesso: true
+      success: true
     });
 
   } catch (error) {
-    console.error("Erro interno:", error);
+    console.error("Erro no backend:", error);
 
     return res.status(500).json({
-      sucesso: false,
-      erro: "Erro interno do servidor"
+      error: "Erro interno do servidor"
     });
   }
 }
