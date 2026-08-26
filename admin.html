@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Controle da Votação</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      color: #222;
+    }
+
+    .painel {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px;
+      padding: 30px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.12);
+    }
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .status {
+      margin: 25px 0;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      background: #f5f5f5;
+    }
+
+    .status-label {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
+    .status-value {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .automatico {
+      color: #555;
+    }
+
+    .aberta {
+      color: #16803c;
+    }
+
+    .fechada {
+      color: #d62828;
+    }
+
+    .botoes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .btn-abrir {
+      background: #16803c;
+      color: white;
+    }
+
+    .btn-fechar {
+      background: #d62828;
+      color: white;
+    }
+
+    .btn-auto {
+      background: #555;
+      color: white;
+    }
+
+    .atualizado {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .mensagem {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      min-height: 20px;
+    }
+
+    .login {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .login input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .login button {
+      background: #222;
+      color: white;
+    }
+
+    #painelControle {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="painel">
+
+    <!-- LOGIN -->
+
+    <div id="login">
+
+      <h1>🔐 Controle</h1>
+
+      <div class="login">
+
+        <input
+          type="password"
+          id="senha"
+          placeholder="Senha do painel"
+        >
+
+        <button id="entrar">
+          ENTRAR
+        </button>
+
+      </div>
+
+      <div
+        id="erroLogin"
+        class="mensagem"
+      ></div>
+
+    </div>
+
+
+    <!-- PAINEL -->
+
+    <div id="painelControle">
+
+      <h1>Controle da Votação</h1>
+
+      <div class="status">
+
+        <div class="status-label">
+          STATUS ATUAL
+        </div>
+
+        <div
+          id="status"
+          class="status-value"
+        >
+          Carregando...
+        </div>
+
+      </div>
+
+
+      <div class="botoes">
+
+        <button
+          class="btn-abrir"
+          id="abrir"
+        >
+          🟢 ABRIR VOTAÇÃO
+        </button>
+
+        <button
+          class="btn-fechar"
+          id="fechar"
+        >
+          🔴 FECHAR VOTAÇÃO
+        </button>
+
+        <button
+          class="btn-auto"
+          id="automatico"
+        >
+          ⚙️ MODO AUTOMÁTICO
+        </button>
+
+      </div>
+
+
+      <div
+        id="mensagem"
+        class="mensagem"
+      ></div>
+
+
+      <div
+        id="atualizado"
+        class="atualizado"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+  let senhaPainel = "";
+
+
+  // ==========================================
+  // ELEMENTOS
+  // ==========================================
+
+  const login = document.getElementById("login");
+  const painelControle =
+    document.getElementById("painelControle");
+
+  const senhaInput =
+    document.getElementById("senha");
+
+  const entrar =
+    document.getElementById("entrar");
+
+  const erroLogin =
+    document.getElementById("erroLogin");
+
+  const status =
+    document.getElementById("status");
+
+  const mensagem =
+    document.getElementById("mensagem");
+
+  const atualizado =
+    document.getElementById("atualizado");
+
+  const botaoAbrir =
+    document.getElementById("abrir");
+
+  const botaoFechar =
+    document.getElementById("fechar");
+
+  const botaoAutomatico =
+    document.getElementById("automatico");
+
+
+  // ==========================================
+  // ENTRAR
+  // ==========================================
+
+  entrar.addEventListener("click", async () => {
+
+    const senha = senhaInput.value.trim();
+
+    if (!senha) {
+
+      erroLogin.textContent =
+        "Digite a senha.";
+
+      return;
+    }
+
+    entrar.disabled = true;
+    entrar.textContent = "VERIFICANDO...";
+
+    try {
+
+      const response = await fetch(
+        "/api/controle-votacao"
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+
+        throw new Error(
+          "Não foi possível conectar ao servidor."
+        );
+
+      }
+
+      // A senha só é guardada na memória
+      senhaPainel = senha;
+
+      login.style.display = "none";
+      painelControle.style.display = "block";
+
+      atualizarInterface(data);
+
+    } catch (error) {
+
+      erroLogin.textContent =
+        error.message;
+
+    } finally {
+
+      entrar.disabled = false;
+      entrar.textContent = "ENTRAR";
+    }
+
+  });
+
+
+  // ==========================================
+  // ATUALIZAR INTERFACE
+  // ==========================================
+
+  function atualizarInterface(data) {
+
+    let texto = "";
+    let classe = "";
+
+    if (data.modo === "aberta") {
+
+      texto = "🟢 ABERTA";
+      classe = "aberta";
+
+    } else if (data.modo === "fechada") {
+
+      texto = "🔴 FECHADA";
+      classe = "fechada";
+
+    } else {
+
+      texto = "⚙️ AUTOMÁTICO";
+      classe = "automatico";
+
+    }
+
+    status.textContent = texto;
+
+    status.className =
+      "status-value " + classe;
+
+    if (data.atualizadoEm) {
+
+      const dataFormatada =
+        new Date(data.atualizadoEm)
+          .toLocaleString("pt-BR");
+
+      atualizado.textContent =
+        "Última alteração: " +
+        dataFormatada;
+    }
+
+  }
+
+
+  // ==========================================
+  // ALTERAR MODO
+  // ==========================================
+
+  async function alterarModo(modo) {
+
+    mensagem.textContent = "";
+    botaoAbrir.disabled = true;
+    botaoFechar.disabled = true;
+    botaoAutomatico.disabled = true;
+
+    try {
+
+      const response = await fetch(
+        "/api/controle-votacao",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            modo: modo,
+            senha: senhaPainel
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+
+        if (response.status === 401) {
+
+          throw new Error(
+            "Senha incorreta ou sessão expirada."
+          );
+
+        }
+
+        throw new Error(
+          data.error ||
+          "Erro ao alterar votação."
+        );
+      }
+
+      atualizarInterface(data);
+
+      mensagem.textContent =
+        "✓ Alteração realizada com sucesso.";
+
+      mensagem.style.color = "#16803c";
+
+    } catch (error) {
+
+      mensagem.textContent =
+        error.message;
+
+      mensagem.style.color = "#d62828";
+
+    } finally {
+
+      botaoAbrir.disabled = false;
+      botaoFechar.disabled = false;
+      botaoAutomatico.disabled = false;
+    }
+
+  }
+
+
+  // ==========================================
+  // BOTÕES
+  // ==========================================
+
+  botaoAbrir.addEventListener(
+    "click",
+    () => alterarModo("aberta")
+  );
+
+  botaoFechar.addEventListener(
+    "click",
+    () => alterarModo("fechada")
+  );
+
+  botaoAutomatico.addEventListener(
+    "click",
+    () => alterarModo("automatico")
+  );
+
+
+  // ==========================================
+  // ENTER NO CAMPO DE SENHA
+  // ==========================================
+
+  senhaInput.addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key === "Enter") {
+        entrar.click();
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
