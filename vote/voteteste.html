@@ -798,7 +798,6 @@ button:disabled {
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
 const encerramentoBR = new Date("2026-08-26T19:00:00-03:00").getTime();
 
-
   // =================== ANTI-AUTOCLICK LOGIC ===================
   const AntiAutoclick = {
     MIN_INTERVAL_MS: 400, 
@@ -934,9 +933,65 @@ function redirect(url) {
   window.location.replace(url);
 }
 
+  // =================== STATUS DA VOTAÇÃO ===================
+async function getStatusVotacao() {
+
+  try {
+    const response = await fetch(
+      "/api/controle-votacao",
+      {
+        method: "GET",
+        cache: "no-store"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Falha ao consultar controle da votação");
+    }
+
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error(data.error || "Erro ao consultar votação");
+    }
+
+    return data.modo;
+  } catch (error) {
+
+    console.error("Erro ao consultar status:", error);
+    return "automatico";
+  }
+}
+  
 // =================== VERIFICAÇÃO DE HORÁRIO ===================
 
 async function verificarHorarios() {
+
+  const modo = await getStatusVotacao();
+
+  console.log("Modo da votação:", modo);
+
+  // ==========================================
+  // FECHAMENTO MANUAL
+  // ==========================================
+
+  if (modo === "fechada") {
+    console.warn("VOTAÇÃO FECHADA MANUALMENTE");
+    redirect("fechada.html");
+    return;
+  }
+
+  // ==========================================
+  // ABRIR MANUAL
+  // ==========================================
+
+  if (modo === "aberta") {
+    console.log("VOTAÇÃO ABERTA MANUALMENTE");
+    return;
+  }
+
+  // ==========================================
+  // AUTOMÁTICO
+  // ==========================================
 
   const agoraBR = await getServerTime();
 
@@ -946,48 +1001,77 @@ async function verificarHorarios() {
 
   // Antes da abertura
   if (agoraBR < aberturaBR) {
-
     console.warn("Votação ainda não abriu");
-
-    redirect("aguarde.html");
-
-    return;
-  }
-
-  // Depois do encerramento
-  if (agoraBR > encerramentoBR) {
-
-    console.warn("Votação encerrada");
-
-    redirect("fechada.html");
-
-    return;
-  }
-  
-  console.log("VOTAÇÃO ABERTA");
-}
-
-verificarHorarios();
-
-
-// =================== VERIFICAÇÃO PERIÓDICA ===================
-
-setInterval(async () => {
-  const agoraBR = await getServerTime();
-
-  // Aberta
-  if (agoraBR < aberturaBR) {
-    console.warn("Ainda não abriu");
     redirect("aguarde.html");
     return;
   }
 
   // Encerrada
   if (agoraBR > encerramentoBR) {
-    console.warn("VOTAÇÃO ENCERRADA - REDIRECIONANDO");
+    console.warn("Votação encerrada");
     redirect("fechada.html");
     return;
   }
+
+  console.log("VOTAÇÃO ABERTA");
+}
+
+verificarHorarios();
+
+// =================== VERIFICAÇÃO PERIÓDICA ===================
+
+setInterval(async () => {
+  const modo = await getStatusVotacao();
+
+  // ==========================================
+  // FECHADA MANUALMENTE
+  // ==========================================
+
+  if (modo === "fechada") {
+    console.warn(
+      "VOTAÇÃO FECHADA MANUALMENTE"
+    );
+    redirect("fechada.html");
+    return;
+  }
+
+  // ==========================================
+  // ABERTA MANUALMENTE
+  // ==========================================
+
+  if (modo === "aberta") {
+    console.log(
+      "VOTAÇÃO ABERTA MANUALMENTE"
+    );
+    return;
+  }
+
+  // ==========================================
+  // AUTOMÁTICO
+  // ==========================================
+  const agoraBR = await getServerTime();
+
+
+  // Antes da abertura
+  if (agoraBR < aberturaBR) {
+    console.warn(
+      "VOTAÇÃO AINDA NÃO ABRIU"
+    );
+    redirect("aguarde.html");
+    return;
+  }
+
+
+  // Depois do encerramento
+  if (agoraBR > encerramentoBR) {
+    console.warn(
+      "VOTAÇÃO ENCERRADA"
+    );
+
+    redirect("fechada.html");
+    return;
+  }
+
 }, 5000);
   
   // =================== ELEMENTOS DOM ===================
