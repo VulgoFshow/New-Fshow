@@ -15,7 +15,9 @@ export default async function handler(req, res) {
 
   try {
 
-    const { table, participante } = req.body || {};
+console.log("BODY RECEBIDO:", req.body);
+
+const { table, participante } = req.body || {};
 
     // ==============================
     // VALIDAR DADOS
