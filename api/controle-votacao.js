@@ -5,6 +5,8 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+const PAINEL_SENHA = process.env.PAINEL_SENHA;
+
 export default async function handler(req, res) {
 
   // ==============================
@@ -22,6 +24,7 @@ export default async function handler(req, res) {
         .single();
 
       if (error) {
+
         console.error("Erro ao consultar controle:", error);
 
         return res.status(500).json({
@@ -56,9 +59,18 @@ export default async function handler(req, res) {
 
     try {
 
-      const { modo } = req.body || {};
+      const { modo, senha } = req.body || {};
 
-      // Só aceita estes três valores
+      // Verifica senha
+      if (!PAINEL_SENHA || senha !== PAINEL_SENHA) {
+
+        return res.status(401).json({
+          success: false,
+          error: "Não autorizado."
+        });
+      }
+
+      // Verifica modo
       if (!["automatico", "aberta", "fechada"].includes(modo)) {
 
         return res.status(400).json({
@@ -104,10 +116,6 @@ export default async function handler(req, res) {
     }
   }
 
-
-  // ==============================
-  // MÉTODO NÃO PERMITIDO
-  // ==============================
 
   return res.status(405).json({
     success: false,
