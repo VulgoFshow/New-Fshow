@@ -95,7 +95,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 /* STORIES*/
 .stories-wrapper {
   width: 100%;
-  padding: 15px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
 }
@@ -469,6 +469,8 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 .fshow-profile-widget{
     z-index: 999999 !important;
 }
+
+<script type="module" src="/fshow-profile-firebase.js"></script>
 
 /* VOTAÇÃO */
 .vote-frame{
@@ -871,7 +873,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
         <i class="fa-solid fa-magnifying-glass"></i>
         <i class="fa-solid fa-moon" id="theme-toggle"></i>
         
-        <!-- PERFIL -->
+<!-- PERFIL -->
         <div class="fshow-profile-widget" id="fshowWidget">
             <div class="fshow-profile-trigger" id="fshowTrigger">
                 <div id="fshowAvatarContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
@@ -903,6 +905,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
         </div>
     </div>
 </header>
+
 <div class="gradient-line"></div>
 
     <div class="top-banner-wrapper">
@@ -1125,9 +1128,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
     
 <script>
-/* ============================================================
-   CARROSSEL
-============================================================ */
+/* CARROSSEL */
 const track = document.querySelector('.carousel-track');
 const slides = document.querySelectorAll('.carousel-link');
 const nextBtn = document.querySelector('.next-control');
@@ -1164,7 +1165,7 @@ if (prevBtn) {
     });
 }
 </script>
-    
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
@@ -1225,17 +1226,28 @@ function fallbackAvatar(name, email = "") {
     return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-function updateAvatar(src, alt = "Avatar") {
+function updateAvatar(src, alt = "Avatar", fallbackSrc = null) {
     const avatarContainer = byId("fshowAvatarContainer");
-    if (!avatarContainer) return;
+    if (!avatarContainer || !src) return;
     avatarContainer.replaceChildren();
+    avatarContainer.style.overflow = "hidden";
+    avatarContainer.style.borderRadius = "50%";
     const image = document.createElement("img");
-    image.src = src;
+    image.src = String(src);
     image.alt = alt;
     image.width = 160;
     image.height = 160;
-    image.loading = "lazy";
-    image.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:50%;";
+    image.loading = "eager";
+    image.decoding = "async";
+    image.referrerPolicy = "no-referrer";
+    image.style.cssText = "display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;";
+    image.addEventListener("error", () => {
+        if (fallbackSrc && image.src !== fallbackSrc) {
+            image.src = fallbackSrc;
+        } else {
+            avatarContainer.textContent = "👤";
+        }
+    }, { once: true });
     avatarContainer.appendChild(image);
 }
 
@@ -1257,6 +1269,7 @@ function setAvatarBusy(busy) {
 }
 
 function notify(message) {
+    // Usa um feedback existente quando o projeto oferecer um, sem exigir markup extra.
     const feedback = byId("fshowProfileMessage");
     if (feedback) {
         feedback.textContent = message;
@@ -1289,13 +1302,15 @@ async function renderUser(user) {
     const profile = await loadProfile(user);
     const displayName = profile.nickname || user.displayName || "Usuário";
     const email = user.email || "Membro";
-    const avatarUrl = profile.avatarUrl || user.photoURL || fallbackAvatar(displayName, email);
+    // Aceita os nomes usados por versões anteriores e prioriza a foto do Auth.
+    const avatarUrl = user.photoURL || profile.avatarUrl || profile.photoURL || profile.avatar || null;
+    const fallback = fallbackAvatar(displayName, email);
 
     const userName = byId("fshowUserName");
     const userStatus = byId("fshowUserStatus");
     if (userName) userName.textContent = displayName;
     if (userStatus) userStatus.textContent = email;
-    updateAvatar(avatarUrl, `Avatar de ${displayName}`);
+    updateAvatar(avatarUrl || fallback, `Avatar de ${displayName}`, fallback);
 }
 
 function setupDropdown() {
@@ -1366,7 +1381,7 @@ function setupAvatarUpload(currentUserRef) {
                 email: user.email || "",
                 updatedAt: serverTimestamp()
             }, { merge: true });
-            updateAvatar(avatarUrl, `Avatar de ${user.displayName || "usuário"}`);
+            updateAvatar(avatarUrl, `Avatar de ${user.displayName || "usuário"}`, fallbackAvatar(user.displayName, user.email));
             notify("Foto atualizada!");
         } catch (error) {
             console.error("Erro ao atualizar avatar:", error);
@@ -1400,7 +1415,8 @@ function bootProfile() {
             const name = user.displayName || "Usuário";
             if (byId("fshowUserName")) byId("fshowUserName").textContent = name;
             if (byId("fshowUserStatus")) byId("fshowUserStatus").textContent = user.email || "Membro";
-            updateAvatar(user.photoURL || fallbackAvatar(name, user.email), `Avatar de ${name}`);
+            const fallback = fallbackAvatar(name, user.email);
+            updateAvatar(user.photoURL || fallback, `Avatar de ${name}`, fallback);
         }
     });
 }
@@ -1410,33 +1426,6 @@ if (document.readyState === "loading") {
 } else {
     bootProfile();
 }
-
-
-/* TEMA ESCURO / CLARO */
-(function () {
-    const toggle = document.getElementById("theme-toggle");
-    if (!toggle) return;
-    const saved = localStorage.getItem("fshow_theme");
-    if (saved === "dark") {
-        document.body.classList.add("dark-mode");
-        document.body.classList.remove("light-mode");
-        toggle.classList.remove("fa-moon");
-        toggle.classList.add("fa-sun");
-
-    }
-
-    toggle.addEventListener("click", function () {
-        const isDark = document.body.classList.toggle("dark-mode");
-        document.body.classList.toggle("light-mode", !isDark);
-        toggle.classList.toggle("fa-moon", !isDark);
-        toggle.classList.toggle("fa-sun", isDark);
-        localStorage.setItem(
-            "fshow_theme",
-            isDark ? "dark" : "light"
-        );
-    });
-})();
-    
 </script>
 </body>
 </html>
