@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fshow - Login & Cadastro</title>
+    <title>Fshow — Login e Cadastro</title>
     
-    <!-- Appwrite SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/appwrite@11.0.0"></script>
-
     <meta name="theme-color" content="#8A2BE2">
     
 <style>
@@ -192,16 +189,13 @@ input::placeholder {
     transform: translateY(-2px);
 }
 
-.btn-google { grid-column: span 2; }
-
-.btn-discord {
-    background: rgba(88, 101, 242, 0.2);
-    border-color: rgba(88, 101, 242, 0.4);
+.btn-google {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.btn-spotify {
-    background: rgba(30, 215, 96, 0.15);
-    border-color: rgba(30, 215, 96, 0.3);
+.btn-apple {
+    background: rgba(0, 0, 0, 0.45);
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 .divider {
@@ -386,11 +380,11 @@ input::placeholder {
             <div id="loginMessage" class="message"></div>
             <div class="field">
                 <label>E-mail</label>
-                <input type="email" id="loginEmail" placeholder="exemplo@gmail.com" required>
+                <input type="email" id="loginEmail" autocomplete="email" placeholder="exemplo@gmail.com" required>
             </div>
             <div class="field">
                 <label>Senha</label>
-                <input type="password" id="loginPassword" placeholder="Sua senha" required>
+                <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Sua senha" required>
             </div>
             <div style="text-align: right;">
                 <a href="#" id="forgotPasswordLink" style="color: #ff8c00; font-size: 0.8rem; text-decoration: none;">Esqueceu a senha?</a>
@@ -409,17 +403,11 @@ input::placeholder {
                     </svg>
                     Google
                 </button>
-                <button type="button" class="btn-social btn-discord" id="discordLoginBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z"/>
+                <button type="button" class="btn-social btn-apple" id="appleLoginBtn" aria-label="Entrar com Apple">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.1.8 1.21-.25 2.37-.94 3.66-.84 1.56.13 2.74.74 3.51 1.83-3.22 1.93-2.46 6.18.5 7.37-.59 1.55-1.36 3.09-2.77 3.82zM12.03 7.25C11.88 4.95 13.75 3.05 16 2.87c.31 2.66-2.4 4.65-3.97 4.38z"/>
                     </svg>
-                    Discord
-                </button>
-                <button type="button" class="btn-social btn-spotify" id="spotifyLoginBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.508 17.302c-.216.354-.675.466-1.028.249-2.863-1.748-6.468-2.144-10.714-1.175-.404.093-.812-.162-.905-.566-.093-.404.162-.812.566-.905 4.643-1.062 8.625-.61 11.832 1.346.353.217.465.676.249 1.029zm1.472-3.257c-.272.441-.846.58-1.287.308-3.277-2.013-8.272-2.597-12.147-1.42-.497.151-1.023-.129-1.174-.626-.151-.497.129-1.023.626-1.174 4.425-1.343 9.943-.687 13.675 1.605.441.272.58.846.308 1.287zm.126-3.414C15.012 8.214 8.248 7.989 4.332 9.178c-.604.183-1.25-.167-1.433-.771-.183-.604.167-1.25.771-1.433 4.492-1.363 12.001-1.096 16.746 1.72.544.323.722 1.025.399 1.569-.323.544-1.025.722-1.569.399z"/>
-                    </svg>
-                    Spotify
+                    Apple
                 </button>
             </div>
         </form>
@@ -435,19 +423,19 @@ input::placeholder {
             </div>
             <div class="field">
                 <label>Nome de Usuário</label>
-                <input type="text" id="signupNickname" placeholder="Seu apelido" required>
+                <input type="text" id="signupNickname" maxlength="30" autocomplete="nickname" placeholder="Seu apelido" required>
             </div>
             <div class="field">
                 <label>E-mail</label>
-                <input type="email" id="signupEmail" placeholder="exemplo@gmail.com" required>
+                <input type="email" id="signupEmail" autocomplete="email" placeholder="exemplo@gmail.com" required>
             </div>
             <div class="field">
                 <label>Senha</label>
-                <input type="password" id="signupPassword" placeholder="Mínimo 6 caracteres" required>
+                <input type="password" id="signupPassword" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password" required>
             </div>
             <div class="field">
                 <label>Confirmar Senha</label>
-                <input type="password" id="signupPasswordConfirm" placeholder="Confirme sua senha" required>
+                <input type="password" id="signupPasswordConfirm" autocomplete="new-password" placeholder="Confirme sua senha" required>
             </div>
             <button type="button" class="btn-submit" id="signupBtn">CRIAR CONTA</button>
         </form>
@@ -488,317 +476,265 @@ input::placeholder {
     </div>
 </div>
 
-<script>
-/* ================= APPWRITE CONFIG ================= */
-const client = new Appwrite.Client();
+<script type="module">
+const firebaseConfig = {
+  apiKey: "AIzaSyAiTujI-MKe7E7Zl6yMl9VBqtQBeb0GWNM",
+  authDomain: "login-flopshow.firebaseapp.com",
+  projectId: "login-flopshow",
+  storageBucket: "login-flopshow.firebasestorage.app",
+  messagingSenderId: "844646669048",
+  appId: "1:844646669048:web:f985b1e0c2544844f3b90d",
+  measurementId: "G-GZ7ZX0Z9JL"
+};
 
-client
-    .setEndpoint("https://nyc.cloud.appwrite.io/v1") 
-    .setProject("6a07b38c00004e1645ee");
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import {
+        getAuth,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        sendPasswordResetEmail,
+        signInWithPopup,
+        GoogleAuthProvider,
+        OAuthProvider,
+        updateProfile,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-const account = new Appwrite.Account(client);
-const databases = new Appwrite.Databases(client);
-const storage = new Appwrite.Storage(client);
-const avatars = new Appwrite.Avatars(client);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: "select_account" });
+    const appleProvider = new OAuthProvider('apple.com');
 
-const DATABASE_ID = "6a07b77b0016f7c90141"; 
-const PROFILES_COLLECTION_ID = "profiles"; 
-const AVATARS_BUCKET_ID = "6a07b91a000e61c9e4b3";
+    const SITE_URL = `${window.location.origin}/`;
+    let selectedAvatarFile = null;
 
-const SITE_URL = "https://www.fshow.site/";
-
-let selectedAvatarFile = null;
-
-/* ================= REDIRECIONAMENTO DINÂMICO ================= */
-
-/**
- * Determina para qual página o usuário deve ser enviado após o login.
- * Prioriza o parâmetro 'redirect' na URL, depois o document.referrer (se for do mesmo site),
- * e finalmente a index.html.
- */
-function getRedirectUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectParam = urlParams.get('redirect');
-    
-    if (redirectParam) {
-        // Se for uma URL completa, garantir que é do mesmo domínio por segurança
-        if (redirectParam.startsWith('http')) {
+    function getRedirectUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect');
+        if (redirect) {
             try {
-                const targetUrl = new URL(redirectParam);
-                if (targetUrl.hostname === window.location.hostname) {
-                    return redirectParam;
-                }
-            } catch (e) {
-                console.error("URL de redirecionamento inválida");
-            }
-        } else {
-            // Se for um caminho relativo
-            return redirectParam.startsWith('/') ? redirectParam : '/' + redirectParam;
+                const target = new URL(redirect, window.location.origin);
+                if (target.origin === window.location.origin) return target.href;
+            } catch (_) {}
         }
+        if (document.referrer && document.referrer !== window.location.href) {
+            try {
+                const ref = new URL(document.referrer);
+                if (ref.origin === window.location.origin && !ref.pathname.endsWith('login.html')) {
+                    return ref.href;
+                }
+            } catch (_) {}
+        }
+        return `${SITE_URL}index.html`;
     }
-    
-    // Se vier de outra página do site (que não seja a própria login.html)
-    if (document.referrer && 
-        document.referrer !== window.location.href && 
-        document.referrer.includes(window.location.hostname) &&
-        !document.referrer.includes('login.html')) {
-        return document.referrer;
-    }
-    
-    return SITE_URL + "index.html";
-}
 
-const REDIRECT_URL = getRedirectUrl();
+    const REDIRECT_URL = getRedirectUrl();
 
-/* ================= FUNÇÕES AUXILIARES ================= */
-
-function showMsg(id, text, type) {
-    const el = document.getElementById(id);
-    if (el) {
+    function showMsg(id, text, type) {
+        const el = document.getElementById(id);
+        if (!el) return;
         el.textContent = text;
         el.className = `message active ${type}`;
-        setTimeout(() => el.classList.remove('active'), 5000);
+        window.clearTimeout(el._hideTimer);
+        el._hideTimer = window.setTimeout(() => el.classList.remove('active'), 6000);
     }
-}
 
-function toggleTabs(tab) {
-    document.querySelectorAll("form").forEach(f => f.classList.remove("active"));
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.getElementById(`${tab}-form`).classList.add("active");
-    document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add("active");
-}
-
-function saveLoginTimestamp() {
-    localStorage.setItem("lastLoginTime", Date.now().toString());
-}
-
-async function uploadProfilePicture(file, userId) {
-    try {
-        const progressEl = document.getElementById('uploadProgress');
-        progressEl.classList.add('active');
-        progressEl.textContent = 'Enviando foto...';
-
-        const uploadedFile = await storage.createFile(
-            AVATARS_BUCKET_ID,
-            Appwrite.ID.unique(),
-            file
-        );
-
-        await databases.updateDocument(
-            DATABASE_ID,
-            PROFILES_COLLECTION_ID,
-            userId,
-            { avatarFileId: uploadedFile.$id }
-        );
-
-        progressEl.textContent = 'Foto enviada!';
-        setTimeout(() => progressEl.classList.remove('active'), 2000);
-        return uploadedFile.$id;
-    } catch (error) {
-        console.error("Erro ao fazer upload da foto de perfil:", error);
-        throw error;
-    }
-}
-
-async function checkSession() {
-    try {
-        const user = await account.get();
-        if (user) {
-            // User is logged in, show the popup
-            document.getElementById("loggedInName").textContent = user.name || "Usuário";
-            document.getElementById("loggedInEmail").textContent = user.email;
-            
-            // Try to get avatar
-            try {
-                const profile = await databases.getDocument(DATABASE_ID, PROFILES_COLLECTION_ID, user.$id);
-                if (profile && profile.avatarFileId) {
-                    const avatarUrl = storage.getFileView(AVATARS_BUCKET_ID, profile.avatarFileId);
-                    document.getElementById("loggedInAvatar").innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
-                } else {
-                    // Fallback to initials if no custom avatar
-                    const avatarInitials = avatars.getInitials(user.name);
-                    document.getElementById("loggedInAvatar").innerHTML = `<img src="${avatarInitials}" alt="Avatar">`;
-                }
-            } catch (e) {
-                // Fallback to initials if profile document doesn't exist yet
-                const avatarInitials = avatars.getInitials(user.name);
-                document.getElementById("loggedInAvatar").innerHTML = `<img src="${avatarInitials}" alt="Avatar">`;
-            }
-
-            document.getElementById("alreadyLoggedInModal").classList.add("active");
-        }
-    } catch (error) {
-        // No active session, stay on login page
-        console.log("Nenhuma sessão ativa encontrada.");
-    }
-}
-
-/* ================= EVENT LISTENERS ================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // Check if user is already logged in
-    checkSession();
-
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.onclick = () => toggleTabs(btn.dataset.tab);
-    });
-
-    document.getElementById("avatar").onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (!file.type.startsWith('image/')) return showMsg("signupMessage", "Selecione uma imagem válida", "error");
-
-        selectedAvatarFile = file;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const preview = document.getElementById("profilePicturePreview");
-            preview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+    function firebaseError(error) {
+        const messages = {
+            'auth/invalid-credential': 'E-mail ou senha incorretos.',
+            'auth/invalid-email': 'Informe um e-mail válido.',
+            'auth/email-already-in-use': 'Este e-mail já está cadastrado.',
+            'auth/weak-password': 'A senha precisa ter pelo menos 6 caracteres.',
+            'auth/popup-closed-by-user': 'A janela de login foi fechada.',
+            'auth/popup-blocked': 'O navegador bloqueou a janela de login. Permita pop-ups e tente novamente.',
+            'auth/too-many-requests': 'Muitas tentativas. Aguarde alguns minutos e tente novamente.',
+            'auth/network-request-failed': 'Falha de conexão. Verifique sua internet e tente novamente.'
         };
-        reader.readAsDataURL(file);
-    };
+        return messages[error?.code] || 'Não foi possível concluir a operação. Tente novamente.';
+    }
 
-    // Already Logged In Modal Actions
-    document.getElementById("stayLoggedInBtn").onclick = () => {
-        window.location.href = REDIRECT_URL;
-    };
+    function setBusy(button, busy, label) {
+        button.disabled = busy;
+        button.innerHTML = busy ? `<span class="spinner"></span>${label}` : button.dataset.label;
+    }
 
-    document.getElementById("logoutAndSwitchBtn").onclick = async () => {
-        try {
-            await account.deleteSession('current');
-            document.getElementById("alreadyLoggedInModal").classList.remove("active");
-        } catch (e) {
-            showMsg("loginMessage", "Erro ao sair: " + e.message, "error");
+    function saveLoginTimestamp() {
+        localStorage.setItem('lastLoginTime', Date.now().toString());
+    }
+
+    function initials(name, email = '') {
+        const text = (name || email || 'U').trim();
+        return text.split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+    }
+
+    function renderAvatar(element, user) {
+        const photo = user.photoURL;
+        if (photo) {
+            element.innerHTML = `<img src="${photo}" alt="Foto de ${user.displayName || 'usuário'}">`;
+        } else {
+            element.textContent = initials(user.displayName, user.email);
         }
-    };
+    }
 
-    // ===== LOGIN E-MAIL/SENHA =====
-    document.getElementById("loginBtn").onclick = async () => {
-        const email = document.getElementById("loginEmail").value;
-        const pass = document.getElementById("loginPassword").value;
-        if (!email || !pass) return showMsg("loginMessage", "Preencha tudo", "error");
+    function toggleTabs(tab) {
+        document.querySelectorAll('form').forEach(form => form.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(button => button.classList.remove('active'));
+        document.getElementById(`${tab}-form`).classList.add('active');
+        document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+    }
 
-        try {
-            const loginBtn = document.getElementById("loginBtn");
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '<span class="spinner"></span>Entrando...';
+    function resetButton(button, label) {
+        button.disabled = false;
+        button.dataset.label = label;
+        button.textContent = label;
+    }
 
-            await account.createEmailPasswordSession(email, pass);
-            saveLoginTimestamp();
-            showMsg("loginMessage", "Sucesso! Redirecionando...", "success");
-            setTimeout(() => window.location.href = REDIRECT_URL, 1000);
-        } catch (e) {
-            showMsg("loginMessage", e.message, "error");
-            document.getElementById("loginBtn").disabled = false;
-            document.getElementById("loginBtn").textContent = "FAZER LOGIN";
-        }
-    };
+    async function showExistingUser(user) {
+        document.getElementById('loggedInName').textContent = user.displayName || 'Usuário';
+        document.getElementById('loggedInEmail').textContent = user.email || 'Conta social';
+        renderAvatar(document.getElementById('loggedInAvatar'), user);
+        document.getElementById('alreadyLoggedInModal').classList.add('active');
+    }
 
-    // ===== LOGIN GOOGLE =====
-    document.getElementById("googleLoginBtn").onclick = async () => {
-        try {
-            await account.createOAuth2Session(
-                "google", 
-                REDIRECT_URL, 
-                SITE_URL + "login.html"
-            );
-        } catch (e) {
-            showMsg("loginMessage", "Erro no login Google: " + e.message, "error");
-        }
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.btn-submit').forEach(button => {
+            button.dataset.label = button.textContent.trim();
+        });
 
-    // ===== LOGIN DISCORD =====
-    document.getElementById("discordLoginBtn").onclick = async () => {
-        try {
-            await account.createOAuth2Session(
-                "discord", 
-                REDIRECT_URL, 
-                SITE_URL + "login.html"
-            );
-        } catch (e) {
-            showMsg("loginMessage", "Erro no login Discord: " + e.message, "error");
-        }
-    };
+        onAuthStateChanged(auth, user => {
+            if (user) showExistingUser(user);
+        });
 
-    // ===== LOGIN SPOTIFY =====
-    document.getElementById("spotifyLoginBtn").onclick = async () => {
-        try {
-            await account.createOAuth2Session(
-                "spotify", 
-                REDIRECT_URL, 
-                SITE_URL + "login.html"
-            );
-        } catch (e) {
-            showMsg("loginMessage", "Erro no login Spotify: " + e.message, "error");
-        }
-    };
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => toggleTabs(button.dataset.tab));
+        });
 
-    // ===== CADASTRO (SIGNUP) =====
-    document.getElementById("signupBtn").onclick = async () => {
-        const nick = document.getElementById("signupNickname").value;
-        const email = document.getElementById("signupEmail").value;
-        const pass = document.getElementById("signupPassword").value;
-        const confirm = document.getElementById("signupPasswordConfirm").value;
-
-        if (!nick || !email || !pass || !confirm) return showMsg("signupMessage", "Preencha tudo", "error");
-        if (pass !== confirm) return showMsg("signupMessage", "Senhas não batem", "error");
-        if (pass.length < 6) return showMsg("signupMessage", "Senha muito curta", "error");
-
-        try {
-            const signupBtn = document.getElementById("signupBtn");
-            signupBtn.disabled = true;
-            signupBtn.innerHTML = '<span class="spinner"></span>Criando...';
-
-            // 1. Criar conta
-            const user = await account.create(Appwrite.ID.unique(), email, pass, nick);
-            
-            // 2. Login automático
-            await account.createEmailPasswordSession(email, pass);
-            
-            // 3. Criar documento de perfil no banco de dados
-            await databases.createDocument(DATABASE_ID, PROFILES_COLLECTION_ID, user.$id, {
-                nickname: nick,
-                email: email,
-                createdAt: new Date().toISOString()
-            });
-
-            // 4. Upload da foto se houver
-            if (selectedAvatarFile) {
-                await uploadProfilePicture(selectedAvatarFile, user.$id);
+        document.getElementById('avatar').addEventListener('change', event => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                event.target.value = '';
+                return showMsg('signupMessage', 'Selecione uma imagem válida.', 'error');
             }
+            if (file.size > 5 * 1024 * 1024) {
+                event.target.value = '';
+                return showMsg('signupMessage', 'A foto deve ter no máximo 5 MB.', 'error');
+            }
+            selectedAvatarFile = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('profilePicturePreview').innerHTML = `<img src="${e.target.result}" alt="Prévia da foto">`;
+            };
+            reader.readAsDataURL(file);
+        });
 
-            saveLoginTimestamp();
-            showMsg("signupMessage", "Conta criada com sucesso!", "success");
-            setTimeout(() => window.location.href = REDIRECT_URL, 1500);
-        } catch (e) {
-            showMsg("signupMessage", e.message, "error");
-            document.getElementById("signupBtn").disabled = false;
-            document.getElementById("signupBtn").textContent = "CRIAR CONTA";
-        }
-    };
+        document.getElementById('stayLoggedInBtn').addEventListener('click', () => {
+            window.location.href = REDIRECT_URL;
+        });
 
-    // Forgot Password Logic
-    document.getElementById("forgotPasswordLink").onclick = (e) => {
-        e.preventDefault();
-        document.getElementById("forgotPasswordModal").classList.add("active");
-    };
+        document.getElementById('logoutAndSwitchBtn').addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                document.getElementById('alreadyLoggedInModal').classList.remove('active');
+                showMsg('loginMessage', 'Você saiu da conta.', 'info');
+            } catch (error) {
+                showMsg('loginMessage', firebaseError(error), 'error');
+            }
+        });
 
-    document.getElementById("closeForgotModal").onclick = () => {
-        document.getElementById("forgotPasswordModal").classList.remove("active");
-    };
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            if (!email || !password) return showMsg('loginMessage', 'Preencha e-mail e senha.', 'error');
+            const button = document.getElementById('loginBtn');
+            setBusy(button, true, 'Entrando...');
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                saveLoginTimestamp();
+                showMsg('loginMessage', 'Login realizado. Redirecionando...', 'success');
+                window.setTimeout(() => { window.location.href = REDIRECT_URL; }, 700);
+            } catch (error) {
+                showMsg('loginMessage', firebaseError(error), 'error');
+                resetButton(button, 'FAZER LOGIN');
+            }
+        });
 
-    document.getElementById("sendResetEmailBtn").onclick = async () => {
-        const email = document.getElementById("forgotPasswordEmail").value;
-        if (!email) return showMsg("forgotPasswordMessage", "Informe o e-mail", "error");
+        document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                saveLoginTimestamp();
+                window.location.href = REDIRECT_URL;
+            } catch (error) {
+                showMsg('loginMessage', firebaseError(error), 'error');
+            }
+        });
 
-        try {
-            await account.createRecovery(email, SITE_URL + "reset-password.html");
-            showMsg("forgotPasswordMessage", "E-mail de recuperação enviado!", "success");
-        } catch (e) {
-            showMsg("forgotPasswordMessage", e.message, "error");
-        }
-    };
-});
+        document.getElementById('appleLoginBtn').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, appleProvider);
+                saveLoginTimestamp();
+                window.location.href = REDIRECT_URL;
+            } catch (error) {
+                showMsg('loginMessage', firebaseError(error), 'error');
+            }
+        });
+
+        document.getElementById('signupBtn').addEventListener('click', async () => {
+            const nickname = document.getElementById('signupNickname').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('signupPasswordConfirm').value;
+            if (!nickname || !email || !password || !confirm) return showMsg('signupMessage', 'Preencha todos os campos.', 'error');
+            if (nickname.length < 3 || nickname.length > 30) return showMsg('signupMessage', 'O apelido deve ter entre 3 e 30 caracteres.', 'error');
+            if (password.length < 6) return showMsg('signupMessage', 'A senha precisa ter pelo menos 6 caracteres.', 'error');
+            if (password !== confirm) return showMsg('signupMessage', 'As senhas não conferem.', 'error');
+
+            const button = document.getElementById('signupBtn');
+            setBusy(button, true, 'Criando...');
+            try {
+                const credential = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(credential.user, { displayName: nickname });
+                saveLoginTimestamp();
+                showMsg('signupMessage', 'Conta criada com sucesso. Redirecionando...', 'success');
+                window.setTimeout(() => { window.location.href = REDIRECT_URL; }, 800);
+            } catch (error) {
+                showMsg('signupMessage', firebaseError(error), 'error');
+                resetButton(button, 'CRIAR CONTA');
+            }
+        });
+
+        document.getElementById('forgotPasswordLink').addEventListener('click', event => {
+            event.preventDefault();
+            document.getElementById('forgotPasswordModal').classList.add('active');
+        });
+
+        document.getElementById('closeForgotModal').addEventListener('click', () => {
+            document.getElementById('forgotPasswordModal').classList.remove('active');
+        });
+
+        document.getElementById('sendResetEmailBtn').addEventListener('click', async () => {
+            const email = document.getElementById('forgotPasswordEmail').value.trim().toLowerCase();
+            if (!email) return showMsg('forgotPasswordMessage', 'Informe o e-mail da conta.', 'error');
+            const button = document.getElementById('sendResetEmailBtn');
+            setBusy(button, true, 'Enviando...');
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showMsg('forgotPasswordMessage', 'Se existir uma conta para esse e-mail, o link foi enviado.', 'success');
+            } catch (error) {
+                showMsg('forgotPasswordMessage', firebaseError(error), 'error');
+            } finally {
+                resetButton(button, 'ENVIAR LINK');
+            }
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', event => {
+                if (event.target === modal && modal.id === 'forgotPasswordModal') modal.classList.remove('active');
+            });
+        });
+    });
 </script>
 </body>
 </html>
