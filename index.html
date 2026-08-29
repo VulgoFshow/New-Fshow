@@ -18,9 +18,6 @@
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon.png">
 <style>
-/* ==================================== 
-   VARIÁVEIS E TEMA
-   ==================================== */
 :root {  
     --orange-vibrant: #FF8C00;  
     --purple-dark: #8A2BE2;  
@@ -37,7 +34,7 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* MODO ESCURO AJUSTADO */
+/* MODO ESCURO  */
 body.dark-mode {
     --text-primary: #f5f5f5;
     --text-secondary: #bbb;
@@ -64,9 +61,7 @@ body {
 
 a { text-decoration: none; color: inherit; transition: var(--transition); }
 
-/* ==================================== 
-   BANNER ABAIXO DO HEADER
-   ==================================== */
+/* BANNER */
 .top-banner-wrapper {
     width: 100%;
     overflow: hidden;
@@ -97,9 +92,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     }
 }
 
-/* ==================================== 
-   STORIES RESTAURADOS
-   ==================================== */
+/* STORIES*/
 .stories-wrapper {
   width: 100%;
   padding: 15px 0;
@@ -137,8 +130,8 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
   border-radius: 50%;
   border: 2px solid var(--bg-page);
 }
-
-    .story-item.e img {
+    
+.story-item.e img {
   filter: grayscale(100%) brightness(0.9);
 }
     
@@ -175,9 +168,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
   background-position: center;
 }
 
-/* ==================================== 
-   DESTAQUES & CARROSSEL
-   ==================================== */
+/* DESTAQUES & CARROSSEL */
 .section-title-wrapper {
     display: flex;
     align-items: center;
@@ -208,6 +199,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     width: 100%;
     flex: 0 0 100%;
 }
+    
 .carousel-slide { width: 100%; height: 450px; position: relative; }
 .slide-image { width: 100%; height: 100%; object-fit: cover; }
 .slide-overlay { position: absolute; bottom: 20px; left: 20px; right: 20px; background: linear-gradient(90deg, rgba(255,140,0,0.9), rgba(138,43,226,0.8)); padding: 20px; border-radius: 12px; color: white; max-width: 400px; }
@@ -216,9 +208,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 .prev-control { left: 15px; }
 .next-control { right: 15px; }
 
-/* ==================================== 
-   GRID DE NOTÍCIAS
-   ==================================== */
+/* GRID */
 .news-grid { display: grid; grid-template-columns: 1fr; gap: 25px; padding: 0 5%; margin-top: 30px; }
 @media (min-width: 992px) { .news-grid { grid-template-columns: 2.5fr 1fr; } }
 .main-news { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
@@ -231,9 +221,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 .sidebar { background: var(--bg-card); border-radius: 15px; padding: 20px; border: 1px solid var(--border-color); height: fit-content; }
 .sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--orange-vibrant); border-bottom: 2px solid var(--purple-dark); margin-bottom: 15px; }
 
-/* ==================================== 
-   FOOTER (ESTILO IMAGEM)
-   ==================================== */
+/* FOOTER */
 .footer { background: var(--footer-bg); color: white; padding: 50px 5% 30px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.1); }
 .footer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
 .footer-logo { height: 35px; width: auto; }
@@ -249,11 +237,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 .social-icon-btn:hover { background: var(--orange-vibrant); transform: scale(1.1); }
 .footer-bottom { margin-top: 50px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
 .copyright-text { color: #666; font-size: 0.85rem; }
-
-/* Botão Flutuante */
 .floating-btn { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: white; color: #121212; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); font-size: 1.5rem; z-index: 1000; }
-
-/* COOKIE CONSENT */
 #cookie-consent { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--bg-card); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 5000; border: 1px solid var(--border-color); display: none; }
 
 /* MAIS FLOPADAS */
@@ -304,7 +288,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 .trend-item a:hover { color: var(--purple-dark); }
 
-</style>
 <style>
     .header {
     background: var(--header-bg);
@@ -358,9 +341,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
 }
 
-/* ==================================== 
-   PERFIL 
-   ==================================== */
+/* PERFIL */
 .fshow-profile-widget {
     position: relative; 
     font-family: 'Poppins', sans-serif;
@@ -490,10 +471,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     z-index: 999999 !important;
 }
 
-/* =========================
-   VOTAÇÃO
-========================= */
-
+/* VOTAÇÃO */
 .vote-frame{
     width:100%;
     display:flex;
@@ -509,24 +487,20 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     border-radius:32px;
     overflow:hidden;
     position:relative;
-    
     background:
         linear-gradient(145deg,
         #2d1146 0%,
         #45106b 35%,
         #5b1590 65%,
         #7b1fa2 100%);
-        
     box-shadow:
         0 25px 60px rgba(91,21,144,.45),
         0 10px 25px rgba(0,0,0,.35),
         inset 0 1px 0 rgba(255,255,255,.08);
-
     border:1px solid rgba(255,255,255,.08);
 }
 
 /* efeitos */
-
 .vote-mock::before{
     content:'';
     position:absolute;
@@ -556,7 +530,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* HERO */
-
 .vote-hero{
     position:relative;
     width:100%;
@@ -577,7 +550,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* overlay hero */
-
 .vote-hero::before{
     content:'';
     position:absolute;
@@ -602,7 +574,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* CARD */
-
 .vote-card{
     position:relative;
     z-index:5;
@@ -610,7 +581,6 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* HEADER */
-
 .vote-card-header{
     display:flex;
     justify-content:space-between;
@@ -626,24 +596,19 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     letter-spacing:-0.8px;
     color:white;
     text-transform:uppercase;
-    
     text-shadow:
         0 2px 10px rgba(0,0,0,.35);
 }
 
 /* STATUS */
-
 .vote-status{
     display:flex;
     align-items:center;
     gap:8px;
-    
     padding:9px 14px;
     border-radius:999px;
-
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.12);
-
     backdrop-filter:blur(12px);
 }
 
@@ -654,17 +619,14 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* bolinha */
-
 .vote-dot{
     width:10px;
     height:10px;
     border-radius:50%;
     background:#00ff88;
-
     box-shadow:
         0 0 12px #00ff88,
         0 0 24px rgba(0,255,136,.7);
-
     animation:onlinePulse 1.8s infinite;
 }
 
@@ -684,54 +646,43 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* BOTÃO */
-
 .vote-btn{
     width:100%;
     position:relative;
-
     display:flex;
     align-items:center;
     justify-content:space-between;
-
     padding:18px 20px;
     border-radius:24px;
-
     text-decoration:none;
     overflow:hidden;
-
     transition:.28s ease;
 }
 
-/* gradiente principal */
-
+/* gradiente */
 .vote-purple{
     background:
         linear-gradient(135deg,
         #ff7a00 0%,
         #b026ff 45%,
         #7a00ff 100%);
-
     border:1px solid rgba(255,255,255,.12);
-
     box-shadow:
         0 15px 30px rgba(122,0,255,.35),
         0 5px 18px rgba(255,122,0,.18),
         inset 0 1px 0 rgba(255,255,255,.15);
 }
 
-/* brilho animado */
-
+/* brilho */
 .vote-purple::before{
     content:'';
     position:absolute;
     inset:0;
-
     background:
         linear-gradient(120deg,
         transparent 20%,
         rgba(255,255,255,.22) 50%,
         transparent 80%);
-
     transform:translateX(-120%);
     transition:1s;
 }
@@ -741,12 +692,10 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* hover */
-
 .vote-btn:hover{
     transform:
         translateY(-4px)
         scale(1.015);
-
     box-shadow:
         0 20px 45px rgba(122,0,255,.45),
         0 10px 25px rgba(255,122,0,.22);
@@ -757,11 +706,9 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* texto botão */
-
 .vote-btn span{
     position:relative;
     z-index:3;
-
     color:white;
     font-size:15px;
     font-weight:900;
@@ -769,32 +716,24 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 }
 
 /* ícone */
-
 .vote-icon{
     position:relative;
     z-index:3;
-
     width:46px;
     height:46px;
     border-radius:16px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     background:rgba(255,255,255,.16);
     border:1px solid rgba(255,255,255,.18);
-
     backdrop-filter:blur(12px);
-
     font-size:21px;
-
     box-shadow:
         inset 0 1px 0 rgba(255,255,255,.15);
 }
 
 /* RESPONSIVO */
-
 @media(max-width:480px){
 
     .vote-frame{
@@ -918,12 +857,10 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
     width:100%;
     height:10px; /
 }
-
 </style>
 </head>
-    
 <body class="light-mode">
-
+    
     <!-- Header -->
 <header class="header">
     <div class="logo-container">
@@ -984,7 +921,7 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
             <div class="story-item e"><img src="https://i.ibb.co/YFN7vHnH/Design-sem-nome-3.png" alt="Lorenzo"></div>
             <div class="story-item e"><img src="https://i.ibb.co/4nMfVL3h/Design-sem-nome-4.png" alt="Luan"></div>
             <div class="story-item e"><img src="https://i.ibb.co/PvRkfcVY/Design-sem-nome-5.png" alt="Luddy"></div>
-             <div class="story-item e"><img src="https://i.ibb.co/WNhwf7rQ/N-o-lembrp.png" alt="Ludmila"></div>
+            <div class="story-item e"><img src="https://i.ibb.co/WNhwf7rQ/N-o-lembrp.png" alt="Ludmila"></div>
             <div class="story-item e"><img src="https://i.ibb.co/MxK2DhGX/Design-sem-nome-7.png" alt="Mikael"></div>
             <div class="story-item fire"><img src="https://i.ibb.co/39g3dYKp/Design-sem-nome-8.png" alt="Quim"></div>
             <div class="story-item e"><img src="https://i.ibb.co/Z1dCFZjP/Design-sem-nome-9.png" alt="Ryan"></div>
@@ -1227,324 +1164,280 @@ if (prevBtn) {
         updateCarousel();
     });
 }
+</script>
+    
+<script type="module" src="/fshow-profile-firebase.js">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
-/* ============================================================
-   PERFIL
-============================================================ */
-document.addEventListener("DOMContentLoaded", async function () {
+const firebaseConfig = {
+  apiKey: "AIzaSyAiTujI-MKe7E7Zl6yMl9VBqtQBeb0GWNM",
+  authDomain: "login-flopshow.firebaseapp.com",
+  projectId: "login-flopshow",
+  storageBucket: "login-flopshow.firebasestorage.app",
+  messagingSenderId: "844646669048",
+  appId: "1:844646669048:web:f985b1e0c2544844f3b90d",
+  measurementId: "G-GZ7ZX0Z9JL"
+};
 
-    // ================= APPWRITE =================
-    const client = new Appwrite.Client();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-    client
-        .setEndpoint("https://nyc.cloud.appwrite.io/v1")
-        .setProject("6a07b38c00004e1645ee");
+const PROFILE_COLLECTION = "profiles";
+const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
 
-    const account = new Appwrite.Account(client);
-    const databases = new Appwrite.Databases(client);
-    const storage = new Appwrite.Storage(client);
+function byId(id) {
+    return document.getElementById(id);
+}
 
-    const DB_ID = "6a07b77b0016f7c90141";
-    const COL_ID = "profiles";
-    const BUCKET_ID = "6a07b91a000e61c9e4b3";
+function getInitials(name, email = "") {
+    const value = (name || email || "U").trim();
+    return value
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(part => part.charAt(0))
+        .join("")
+        .toUpperCase();
+}
 
-    // ================= ELEMENTOS =================
-    const trigger = document.getElementById("fshowTrigger");
-    const dropdown = document.getElementById("fshowDropdown");
-    const widget = document.getElementById("fshowWidget");
+function fallbackAvatar(name, email = "") {
+    const initials = getInitials(name, email);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" rx="80" fill="#8000ff"/><text x="80" y="92" text-anchor="middle" font-family="Arial,sans-serif" font-size="58" font-weight="700" fill="white">${initials}</text></svg>`;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
 
-    const avatarContainer = document.getElementById("fshowAvatarContainer");
+function updateAvatar(src, alt = "Avatar") {
+    const avatarContainer = byId("fshowAvatarContainer");
+    if (!avatarContainer) return;
+    avatarContainer.replaceChildren();
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = alt;
+    image.width = 160;
+    image.height = 160;
+    image.loading = "lazy";
+    image.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:50%;";
+    avatarContainer.appendChild(image);
+}
 
-    const userName = document.getElementById("fshowUserName");
-    const userStatus = document.getElementById("fshowUserStatus");
+function setAuthVisibility(isLoggedIn) {
+    const loggedOptions = byId("fshowLoggedOptions");
+    const anonOptions = byId("fshowAnonOptions");
+    if (loggedOptions) loggedOptions.style.display = isLoggedIn ? "flex" : "none";
+    if (anonOptions) anonOptions.style.display = isLoggedIn ? "none" : "flex";
+}
 
-    const loggedOptions = document.getElementById("fshowLoggedOptions");
-    const anonOptions = document.getElementById("fshowAnonOptions");
+function setAvatarBusy(busy) {
+    const trigger = byId("fshowTrigger");
+    const input = byId("fshowChangeAvatarInput");
+    if (trigger) {
+        trigger.style.opacity = busy ? "0.5" : "1";
+        trigger.style.pointerEvents = busy ? "none" : "";
+    }
+    if (input) input.disabled = busy;
+}
 
-    const avatarInput = document.getElementById("fshowChangeAvatarInput");
+function notify(message) {
+    const feedback = byId("fshowProfileMessage");
+    if (feedback) {
+        feedback.textContent = message;
+        feedback.hidden = false;
+        window.clearTimeout(feedback._hideTimer);
+        feedback._hideTimer = window.setTimeout(() => { feedback.hidden = true; }, 4000);
+        return;
+    }
+    window.alert(message);
+}
 
-    const logoutBtn = document.getElementById("fshowLogoutBtn");
+function friendlyError(error) {
+    const messages = {
+        "storage/unauthorized": "Você não tem permissão para alterar este avatar.",
+        "storage/canceled": "O envio da foto foi cancelado.",
+        "storage/quota-exceeded": "O limite de armazenamento foi atingido.",
+        "permission-denied": "Você não tem permissão para acessar este perfil.",
+        "unavailable": "O Firebase está temporariamente indisponível."
+    };
+    return messages[error?.code] || "Não foi possível atualizar o perfil. Tente novamente.";
+}
 
-    const anonBtn = document.getElementById("fshowContinueAnonBtn");
+async function loadProfile(user) {
+    const profileRef = doc(db, PROFILE_COLLECTION, user.uid);
+    const snapshot = await getDoc(profileRef);
+    return snapshot.exists() ? snapshot.data() : {};
+}
 
-    if (!trigger || !dropdown || !widget) {
-        console.log("Widget não encontrado.");
+async function renderUser(user) {
+    const profile = await loadProfile(user);
+    const displayName = profile.nickname || user.displayName || "Usuário";
+    const email = user.email || "Membro";
+    const avatarUrl = profile.avatarUrl || user.photoURL || fallbackAvatar(displayName, email);
+
+    const userName = byId("fshowUserName");
+    const userStatus = byId("fshowUserStatus");
+    if (userName) userName.textContent = displayName;
+    if (userStatus) userStatus.textContent = email;
+    updateAvatar(avatarUrl, `Avatar de ${displayName}`);
+}
+
+function setupDropdown() {
+    const trigger = byId("fshowTrigger");
+    const dropdown = byId("fshowDropdown");
+    const widget = byId("fshowWidget");
+    if (!trigger || !dropdown || !widget) return false;
+
+    trigger.addEventListener("click", event => {
+        event.stopPropagation();
+        dropdown.classList.toggle("fshow-active");
+    });
+    dropdown.addEventListener("click", event => event.stopPropagation());
+    document.addEventListener("click", event => {
+        if (!widget.contains(event.target)) dropdown.classList.remove("fshow-active");
+    });
+
+    const anonBtn = byId("fshowContinueAnonBtn");
+    if (anonBtn) {
+        anonBtn.addEventListener("click", () => dropdown.classList.remove("fshow-active"));
+    }
+    return true;
+}
+
+function setupLogout() {
+    const logoutBtn = byId("fshowLogoutBtn");
+    if (!logoutBtn) return;
+    logoutBtn.addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+            byId("fshowDropdown")?.classList.remove("fshow-active");
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            notify(friendlyError(error));
+        }
+    });
+}
+
+function setupAvatarUpload(currentUserRef) {
+    const avatarInput = byId("fshowChangeAvatarInput");
+    const trigger = byId("fshowTrigger");
+    if (!avatarInput) return;
+
+    avatarInput.addEventListener("change", async event => {
+        const file = event.target.files?.[0];
+        event.target.value = "";
+        const user = currentUserRef.value;
+        if (!file || !user) return;
+
+        if (!file.type.startsWith("image/")) {
+            notify("Selecione um arquivo de imagem válido.");
+            return;
+        }
+        if (file.size > MAX_AVATAR_SIZE) {
+            notify("A foto deve ter no máximo 5 MB.");
+            return;
+        }
+
+        setAvatarBusy(true);
+        try {
+            const avatarRef = ref(storage, `profiles/${user.uid}/avatar-${Date.now()}`);
+            await uploadBytes(avatarRef, file, { contentType: file.type, cacheControl: "public,max-age=3600" });
+            const avatarUrl = await getDownloadURL(avatarRef);
+            await updateProfile(user, { photoURL: avatarUrl });
+            await setDoc(doc(db, PROFILE_COLLECTION, user.uid), {
+                avatarUrl,
+                email: user.email || "",
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+            updateAvatar(avatarUrl, `Avatar de ${user.displayName || "usuário"}`);
+            notify("Foto atualizada!");
+        } catch (error) {
+            console.error("Erro ao atualizar avatar:", error);
+            notify(friendlyError(error));
+        } finally {
+            setAvatarBusy(false);
+            if (trigger) trigger.style.opacity = "1";
+        }
+    });
+}
+
+function bootProfile() {
+    if (!setupDropdown()) {
+        console.info("Widget de perfil não encontrado.");
         return;
     }
 
-    let currentUser = null;
-    let currentProfile = null;
+    setupLogout();
+    const currentUserRef = { value: null };
+    setupAvatarUpload(currentUserRef);
 
-    // ============================================================
-    // DROPDOWN
-    // ============================================================
-
-    trigger.addEventListener("click", function (e) {
-
-        e.stopPropagation();
-
-        dropdown.classList.toggle("fshow-active");
-
-    });
-
-    dropdown.addEventListener("click", function (e) {
-
-        e.stopPropagation();
-
-    });
-
-    document.addEventListener("click", function (e) {
-
-        if (!widget.contains(e.target)) {
-
-            dropdown.classList.remove("fshow-active");
-
-        }
-
-    });
-
-    // ============================================================
-    // CONTINUAR ANÔNIMO
-    // ============================================================
-
-    if (anonBtn) {
-
-        anonBtn.addEventListener("click", function () {
-
-            dropdown.classList.remove("fshow-active");
-
-        });
-
-    }
-
-    // ============================================================
-    // AVATAR
-    // ============================================================
-
-    function updateAvatar(src) {
-
-        avatarContainer.innerHTML = `
-            <img
-                src="${src}"
-                alt="Avatar"
-                style="
-                    width:100%;
-                    height:100%;
-                    object-fit:cover;
-                    border-radius:50%;
-                "
-            >
-        `;
-
-    }
-
-    // ============================================================
-    // CARREGAR USUÁRIO
-    // ============================================================
-
-    try {
-
-        currentUser = await account.get();
-
-        if (loggedOptions) loggedOptions.style.display = "flex";
-        if (anonOptions) anonOptions.style.display = "none";
+    onAuthStateChanged(auth, async user => {
+        currentUserRef.value = user;
+        setAuthVisibility(Boolean(user));
+        if (!user) return;
 
         try {
-
-            currentProfile = await databases.getDocument(
-                DB_ID,
-                COL_ID,
-                currentUser.$id
-            );
-
-        } catch (err) {
-
-            console.log("Perfil não encontrado.");
-
+            await renderUser(user);
+        } catch (error) {
+            console.error("Erro ao carregar o perfil:", error);
+            const name = user.displayName || "Usuário";
+            if (byId("fshowUserName")) byId("fshowUserName").textContent = name;
+            if (byId("fshowUserStatus")) byId("fshowUserStatus").textContent = user.email || "Membro";
+            updateAvatar(user.photoURL || fallbackAvatar(name, user.email), `Avatar de ${name}`);
         }
+    });
+}
 
-        // Nome
-        if (userName) {
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootProfile, { once: true });
+} else {
+    bootProfile();
+}
 
-            userName.textContent =
-                currentProfile?.nickname ||
-                currentUser.name ||
-                "Usuário";
 
-        }
-
-        // Status
-        if (userStatus) {
-
-            userStatus.textContent =
-                currentUser.email || "Membro";
-
-        }
-
-        // ============================================================
-        // FOTO
-        // ============================================================
-
-        let avatarUrl = null;
-
-        // FOTO CUSTOMIZADA
-        if (currentProfile?.avatarFileId) {
-
-            avatarUrl = storage.getFileView(
-                BUCKET_ID,
-                currentProfile.avatarFileId
-            );
-
-        }
-
-        // FOTO GOOGLE
-        else if (
-            currentUser.prefs &&
-            currentUser.prefs.avatar
-        ) {
-
-            avatarUrl = currentUser.prefs.avatar;
-
-        }
-
-        // FALLBACK
-        if (!avatarUrl) {
-
-            avatarUrl =
-                `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                    currentProfile?.nickname ||
-                    currentUser.name ||
-                    "User"
-                )}&background=8000ff&color=fff`;
-
-        }
-
-        updateAvatar(avatarUrl);
-
-    } catch (err) {
-
-        console.log("Visitante anônimo.");
-
-    }
-
-    // ============================================================
-    // LOGOUT
-    // ============================================================
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener("click", async function () {
-
-            try {
-
-                await account.deleteSession("current");
-
-            } catch (e) {}
-
-            localStorage.removeItem("fshow_user");
-
-            location.reload();
-
-        });
-
-    }
-
-    // ============================================================
-    // TROCAR FOTO
-    // ============================================================
-
-    if (avatarInput) {
-
-        avatarInput.addEventListener("change", async function (e) {
-
-            const file = e.target.files[0];
-
-            if (!file || !currentUser) return;
-
-            try {
-
-                trigger.style.opacity = "0.5";
-
-                const uploaded = await storage.createFile(
-                    BUCKET_ID,
-                    Appwrite.ID.unique(),
-                    file
-                );
-
-                await databases.updateDocument(
-                    DB_ID,
-                    COL_ID,
-                    currentUser.$id,
-                    {
-                        avatarFileId: uploaded.$id
-                    }
-                );
-
-                const newAvatar = storage.getFileView(
-                    BUCKET_ID,
-                    uploaded.$id
-                );
-
-                updateAvatar(newAvatar);
-
-                trigger.style.opacity = "1";
-
-                alert("Foto atualizada!");
-
-            } catch (error) {
-
-                trigger.style.opacity = "1";
-
-                alert("Erro ao atualizar foto.");
-
-                console.error(error);
-
-            }
-
-        });
-
-    }
-
-});
-
-/* ============================================================
-   TEMA ESCURO / CLARO
-============================================================ */
+/* TEMA ESCURO / CLARO */
 (function () {
-
     const toggle = document.getElementById("theme-toggle");
-
     if (!toggle) return;
-
     const saved = localStorage.getItem("fshow_theme");
-
     if (saved === "dark") {
-
         document.body.classList.add("dark-mode");
         document.body.classList.remove("light-mode");
-
         toggle.classList.remove("fa-moon");
         toggle.classList.add("fa-sun");
 
     }
 
     toggle.addEventListener("click", function () {
-
         const isDark = document.body.classList.toggle("dark-mode");
-
         document.body.classList.toggle("light-mode", !isDark);
-
         toggle.classList.toggle("fa-moon", !isDark);
         toggle.classList.toggle("fa-sun", isDark);
-
         localStorage.setItem(
             "fshow_theme",
             isDark ? "dark" : "light"
         );
-
     });
-
 })();
+    
 </script>
 </body>
 </html>
