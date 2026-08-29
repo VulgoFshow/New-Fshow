@@ -786,10 +786,6 @@ button:disabled {
   
 
 <script>
-/* ===== VOTO ÚNICO — IDENTIFICADOR DO DISPOSITIVO =====
-   O identificador é apenas um sinal auxiliar. A garantia de voto único
-   precisa ser feita no backend, usando também o IP observado pelo servidor.
-*/
 (function () {
   const KEY = "fshow_device_id_v1";
   let id = localStorage.getItem(KEY);
@@ -816,7 +812,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-08-26T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-08-29T19:00:00-03:00").getTime();
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
   const AntiAutoclick = {
