@@ -1155,16 +1155,19 @@ setInterval(async () => {
 
   async function verificarAcessoUnico() {
     try {
-      const response = await fetch("/api/votar", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        cache: "no-store",
-        body: JSON.stringify({
-          action: "verificar-acesso",
-          table: TABLE_VOTACAO,
-          deviceId: window.FSHOW_DEVICE_ID
-        })
-      });
+const response = await fetch("/api/votar", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    action: "votar",
+    table: TABLE_VOTACAO,
+    participante: participante,
+    captchaToken: captchaToken, 
+    deviceId: window.FSHOW_DEVICE_ID 
+  })
+});
 
       const data = await response.json();
 
