@@ -710,33 +710,59 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que VENÇA <br> o Corrida das Blogueiras?</h1>
+    <h1>Quem você quer que ENTRE <br> no BBBF7?</h1>
     <div class="espacador"></div>
-    
 <div class="options">
 
-  
   <label class="option">
-  <img src="https://i.ibb.co/PGqCNWdN/Bjo-o.png" alt="Opção">
+  <img src="https://i.ibb.co/qYbrvBNN/Emanuel.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="João"> João
+    <input type="radio" name="vote" value="Emanuel"> Emanuel
   </div>
   </label>
   
   <label class="option">
-  <img src="https://i.ibb.co/TDk6BNZS/Bl-via.png" alt="Opção">
+  <img src="https://i.ibb.co/VYgmK85R/Kai.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Lívia"> Lívia
+    <input type="radio" name="vote" value="Kai"> Kai
   </div>
 </label>
 
   <label class="option">
-  <img src="https://i.ibb.co/fzwGwMwZ/Bludmila.png" alt="Opção">
+  <img src="https://i.ibb.co/Y4tqjrnt/Leo.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Ludmila"> Ludmila
+    <input type="radio" name="vote" value="Leo"> Leo
   </div>
   </label>
 
+    <label class="option">
+  <img src="https://i.ibb.co/j9YSvRSG/Mira.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Mira"> Mira
+  </div>
+  </label>
+  
+  <label class="option">
+  <img src="https://i.ibb.co/Xf71bGRv/Paulo.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Paulo"> Paulo
+  </div>
+</label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/r2rjWDPK/Paulo-Erick.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Paulo Erick"> Paulo Erick
+  </div>
+  </label>
+
+  <label class="option">
+  <img src="https://i.ibb.co/8gwrSvWx/Tety.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Tety"> Tety
+  </div>
+  </label>
+  
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -787,18 +813,15 @@ button:disabled {
 </div> 
   
 <script type="module">
-
   // =================== CONFIG ===================
-  const TABLE_VOTACAO = "testador";
+  const TABLE_VOTACAO = "bf7cv";
   const DEBUG = false;
 
     // =================== HORÁRIOS ===================
-
-// Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-08-30T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-08-31T19:00:00-03:00").getTime();
 
-  // =================== ANTI-AUTOCLICK LOGIC ===================
+  // =================== ANTI-AUTOCLICK  ===================
   const AntiAutoclick = {
     MIN_INTERVAL_MS: 400, 
     PUNISHMENTS: [10, 30, 40, 60],
@@ -885,7 +908,7 @@ const encerramentoBR = new Date("2026-08-30T19:00:00-03:00").getTime();
 
   AntiAutoclick.init();
 
-// =================== HORA DO SERVIDOR ===================
+// =================== HORA  ===================
 async function getServerTime() {
   try {
 
