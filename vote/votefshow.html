@@ -1383,14 +1383,31 @@ body: JSON.stringify({
 })
 });
 
-const resultado = await response.json();
+let resultado;
 
-if (!response.ok) {
-  console.error("Erro no backend:", resultado);
+try {
+  resultado = await response.json();
+} catch (jsonError) {
+  resultado = {
+    success: false,
+    error: `Resposta inválida do servidor (HTTP ${response.status})`
+  };
+}
+
+// HTTP 200 não garante que o voto foi gravado.
+// A API também precisa confirmar explicitamente success: true.
+if (!response.ok || resultado.success !== true) {
+  console.error("Erro ao registrar voto:", {
+    status: response.status,
+    statusText: response.statusText,
+    resposta: resultado,
+    participante,
+    tabela: TABLE_VOTACAO
+  });
 
   alert(
     "ERRO AO REGISTRAR O VOTO:\n" +
-    (resultado.error || "Erro desconhecido") +
+    (resultado.error || resultado.message || `Falha no servidor (HTTP ${response.status})`) +
     "\n\nTabela: " +
     TABLE_VOTACAO
   );
