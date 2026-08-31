@@ -1,5 +1,5 @@
-import crypto from "crypto";
 import { createClient } from "@supabase/supabase-js";
+import crypto from "node:crypto";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -8,7 +8,8 @@ const supabase = createClient(
 
 const CAPTCHA_SECRET = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const CAPTCHA_TTL_MS = 5 * 60 * 1000;
-const TABLE_VOTACAO = "testador";
+// Deve ser exatamente a mesma tabela usada no painel do Supabase e no frontend.
+const TABLE_VOTACAO = "bf7cv";
 
 function decodificarToken(token) {
   if (typeof token !== "string" || !token.trim()) {
@@ -134,8 +135,17 @@ export default async function handler(req, res) {
       });
     }
 
-    // Não aceite nome de tabela livre vindo do navegador.
-    const table = TABLE_VOTACAO;
+    // O frontend envia o valor do seu const TABLE_VOTACAO.
+    // Aceitamos apenas nomes de tabela SQL simples, sem schema, aspas ou comandos.
+    const table = String(body.table || "").trim();
+    const nomeTabelaValido = /^[A-Za-z_][A-Za-z0-9_]*$/.test(table);
+
+    if (!nomeTabelaValido) {
+      return res.status(400).json({
+        success: false,
+        error: "Nome de tabela ausente ou inválido"
+      });
+    }
 
     const { data: controle, error: controleError } = await supabase
       .from("controle_votacao")
@@ -156,19 +166,31 @@ export default async function handler(req, res) {
       });
     }
 
-    const { error } = await supabase
+    const { data: votoInserido, error } = await supabase
       .from(table)
-      .insert([{ participante }]);
+      .insert([{ participante }])
+      .select("participante")
+      .single();
 
-    if (error) {
-      console.error("Erro Supabase:", error);
+    if (error || !votoInserido) {
+      console.error("Erro Supabase ao inserir voto:", {
+        code: error?.code,
+        message: error?.message,
+        details: error?.details,
+        hint: error?.hint,
+        tabela: table,
+        participante
+      });
+
       return res.status(500).json({
-        error: "Erro ao registrar o voto"
+        success: false,
+        error: error?.message || "O Supabase não confirmou a gravação do voto"
       });
     }
 
     return res.status(200).json({
-      success: true
+      success: true,
+      participante: votoInserido.participante
     });
   } catch (error) {
     console.error("Erro no backend:", error);
