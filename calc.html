@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Votação</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculadora {
+            width: 100%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.25);
+        }
+
+        .titulo {
+            text-align: center;
+            color: #222;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #777;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+
+        .secao {
+            margin-bottom: 25px;
+        }
+
+        .secao-titulo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .campo {
+            margin-bottom: 15px;
+        }
+
+        .campo label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 7px;
+        }
+
+        .campo input {
+            width: 100%;
+            height: 50px;
+            border: 2px solid #e2e2e2;
+            border-radius: 12px;
+            padding: 0 15px;
+            font-size: 18px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .campo input:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106,17,203,.1);
+        }
+
+        .pesos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .peso-box {
+            background: #f7f7f9;
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .peso-box input {
+            background: #fff;
+        }
+
+        .soma-pesos {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            background: #eef8f0;
+            color: #218838;
+        }
+
+        .resultado {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .resultado-label {
+            font-size: 14px;
+            opacity: .85;
+            margin-bottom: 8px;
+        }
+
+        .resultado-numero {
+            font-size: 52px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .detalhes {
+            margin-top: 20px;
+            background: rgba(255,255,255,.12);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: left;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .botao {
+            width: 100%;
+            height: 52px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 12px;
+            background: #222;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .botao:hover {
+            background: #000;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 500px) {
+            .calculadora {
+                padding: 25px 20px;
+            }
+
+            .titulo {
+                font-size: 25px;
+            }
+
+            .pesos {
+                grid-template-columns: 1fr;
+            }
+
+            .resultado-numero {
+                font-size: 44px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="calculadora">
+
+    <h1 class="titulo">Calculadora de Votação</h1>
+
+    <p class="subtitulo">
+        Média ponderada entre voto único e voto sem limites
+    </p>
+
+
+    <!-- PERCENTUAIS -->
+
+    <div class="secao">
+
+        <div class="secao-titulo">
+            📊 Percentuais das votações
+        </div>
+
+        <div class="campo">
+
+            <label for="votoUnico">
+                Votação de Voto Único (%)
+            </label>
+
+            <input
+                type="number"
+                id="votoUnico"
+                placeholder="Ex.: 42,50"
+                step="0.01"
+                min="0"
+                max="100"
+                oninput="calcular()"
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label for="semLimites">
+                Votação de Voto Sem Limites (%)
+            </label>
+
+            <input
+                type="number"
+                id="semLimites"
+                placeholder="Ex.: 57,30"
+                step="0.01"
+                min="0"
+                max="100"
+                oninput="calcular()"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- PESOS -->
+
+    <div class="secao">
+
+        <div class="secao-titulo">
+            ⚖️ Peso de cada votação
+        </div>
+
+        <div class="pesos">
+
+            <div class="peso-box">
+
+                <div class="campo">
+
+                    <label for="pesoUnico">
+                        Peso — Voto Único (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="pesoUnico"
+                        value="65"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        oninput="alterarPeso('unico')"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="peso-box">
+
+                <div class="campo">
+
+                    <label for="pesoSemLimites">
+                        Peso — Sem Limites (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="pesoSemLimites"
+                        value="35"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                        oninput="alterarPeso('semLimites')"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="soma-pesos">
+            Soma dos pesos: <span id="somaPesos">100,00%</span>
+        </div>
+
+    </div>
+
+
+    <!-- RESULTADO -->
+
+    <div class="resultado">
+
+        <div class="resultado-label">
+            RESULTADO FINAL
+        </div>
+
+        <div class="resultado-numero">
+            <span id="resultado">0,00</span>%
+        </div>
+
+
+        <div class="detalhes">
+
+            <div>
+                <strong>Voto Único:</strong>
+                <span id="detalheUnico">0,00%</span>
+            </div>
+
+            <div>
+                <strong>Sem Limites:</strong>
+                <span id="detalheSemLimites">0,00%</span>
+            </div>
+
+            <div>
+                <strong>Peso Único:</strong>
+                <span id="detalhePesoUnico">65,00%</span>
+            </div>
+
+            <div>
+                <strong>Peso Sem Limites:</strong>
+                <span id="detalhePesoSemLimites">35,00%</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button class="botao" onclick="limpar()">
+        Limpar calculadora
+    </button>
+
+</div>
+
+
+<script>
+
+function valor(id) {
+
+    let numero = parseFloat(
+        document.getElementById(id).value
+    );
+
+    return isNaN(numero) ? 0 : numero;
+
+}
+
+
+function formatar(numero) {
+
+    return numero.toLocaleString("pt-BR", {
+
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+
+    });
+
+}
+
+
+/*
+==================================================
+ALTERAÇÃO AUTOMÁTICA DOS PESOS
+==================================================
+
+Os dois pesos SEMPRE somam 100%.
+
+Exemplo:
+
+65 / 35
+
+Se o usuário colocar:
+
+70 no Voto Único
+
+automaticamente:
+
+30 no Sem Limites
+
+Se colocar:
+
+20 no Sem Limites
+
+automaticamente:
+
+80 no Voto Único
+*/
+
+function alterarPeso(tipo) {
+
+    const pesoUnico =
+        document.getElementById("pesoUnico");
+
+    const pesoSemLimites =
+        document.getElementById("pesoSemLimites");
+
+
+    if (tipo === "unico") {
+
+        let valorUnico =
+            parseFloat(pesoUnico.value);
+
+        if (isNaN(valorUnico)) {
+            valorUnico = 0;
+        }
+
+        // Impede ultrapassar 100%
+        valorUnico = Math.max(
+            0,
+            Math.min(100, valorUnico)
+        );
+
+        pesoUnico.value = valorUnico;
+
+        // O outro peso recebe o restante
+        pesoSemLimites.value =
+            (100 - valorUnico).toFixed(2);
+
+    }
+
+
+    if (tipo === "semLimites") {
+
+        let valorSem =
+            parseFloat(pesoSemLimites.value);
+
+        if (isNaN(valorSem)) {
+            valorSem = 0;
+        }
+
+        // Impede ultrapassar 100%
+        valorSem = Math.max(
+            0,
+            Math.min(100, valorSem)
+        );
+
+        pesoSemLimites.value =
+            valorSem;
+
+        // O outro peso recebe o restante
+        pesoUnico.value =
+            (100 - valorSem).toFixed(2);
+
+    }
+
+
+    calcular();
+
+}
+
+
+/*
+==================================================
+CÁLCULO
+==================================================
+*/
+
+function calcular() {
+
+    const votoUnico =
+        valor("votoUnico");
+
+    const semLimites =
+        valor("semLimites");
+
+    const pesoUnico =
+        valor("pesoUnico");
+
+    const pesoSemLimites =
+        valor("pesoSemLimites");
+
+
+    /*
+        Média ponderada:
+
+        (Voto Único × Peso Único)
+        +
+        (Sem Limites × Peso Sem Limites)
+
+        Como os pesos sempre totalizam 100,
+        dividimos por 100.
+    */
+
+    const resultado =
+        (
+            (votoUnico * pesoUnico) +
+            (semLimites * pesoSemLimites)
+        ) / 100;
+
+
+    // Resultado
+    document.getElementById("resultado").textContent =
+        formatar(resultado);
+
+
+    // Soma dos pesos
+    document.getElementById("somaPesos").textContent =
+        formatar(pesoUnico + pesoSemLimites) + "%";
+
+
+    // Detalhes
+    document.getElementById("detalheUnico").textContent =
+        formatar(votoUnico) + "%";
+
+    document.getElementById("detalheSemLimites").textContent =
+        formatar(semLimites) + "%";
+
+    document.getElementById("detalhePesoUnico").textContent =
+        formatar(pesoUnico) + "%";
+
+    document.getElementById("detalhePesoSemLimites").textContent =
+        formatar(pesoSemLimites) + "%";
+
+}
+
+
+/*
+==================================================
+LIMPAR
+==================================================
+*/
+
+function limpar() {
+
+    document.getElementById("votoUnico").value = "";
+
+    document.getElementById("semLimites").value = "";
+
+    document.getElementById("pesoUnico").value = "65";
+
+    document.getElementById("pesoSemLimites").value = "35";
+
+    calcular();
+
+}
+
+
+// Inicialização
+calcular();
+
+</script>
+
+</body>
+</html>
