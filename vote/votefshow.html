@@ -1217,11 +1217,6 @@ async function generateCaptcha() {
 
   document.querySelectorAll(".captcha-img.selected").forEach(img => {
     selecionadas.push(Number(img.dataset.id));
-    setVotosRestantes(resultado.votosLiberados);
-    localStorage.setItem("captchaToken", captchaToken);
-captchaClicado = true;
-updateBotoesEstado();
-fecharCaptcha();
   });
 
   if (!selecionadas.length) {
@@ -1266,6 +1261,8 @@ fecharCaptcha();
 
     // CAPTCHA aprovado
     setVotosRestantes(resultado.votosLiberados);
+
+    localStorage.setItem("captchaToken", captchaToken);
 
     captchaClicado = true;
 
