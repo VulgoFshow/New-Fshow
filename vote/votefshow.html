@@ -1217,6 +1217,11 @@ async function generateCaptcha() {
 
   document.querySelectorAll(".captcha-img.selected").forEach(img => {
     selecionadas.push(Number(img.dataset.id));
+    setVotosRestantes(resultado.votosLiberados);
+    localStorage.setItem("captchaToken", captchaToken);
+captchaClicado = true;
+updateBotoesEstado();
+fecharCaptcha();
   });
 
   if (!selecionadas.length) {
@@ -1327,7 +1332,7 @@ async function submitVote(participante) {
       body: JSON.stringify({
         action: "votar",
         participante: participante,
-        captchaToken: captchaToken // Envia o token validado para comprovação server-side
+        captchaToken: captchaToken
       })
     });
 
@@ -1335,16 +1340,26 @@ async function submitVote(participante) {
 
     if (!response.ok || resultado.success !== true) {
       alert("ERRO AO REGISTRAR O VOTO:\n" + (resultado.error || "Falha na validação"));
+      
+      if (response.status === 403 || response.status === 400) {
+        localStorage.removeItem("captchaToken");
+        setVotosRestantes(0);
+        captchaToken = null;
+        captchaClicado = false;
+      }
+
       botaoVotar.disabled = false;
       botaoVotar.textContent = prevText;
       return;
     }
 
-    // Atualiza interface com os votos restantes retornados diretamente pelo servidor
     setVotosRestantes(resultado.votosRestantes);
     
     if (resultado.votosRestantes <= 0) {
       captchaClicado = false;
+      
+      localStorage.removeItem("captchaToken");
+      captchaToken = null;
     }
 
     updateBotoesEstado();
@@ -1363,7 +1378,6 @@ async function submitVote(participante) {
     botaoVotar.textContent = "VOTAR";
   }
 }
-  
 
 function voltarParaVotacao() {
   confirmTela.style.display = "none";
@@ -1404,8 +1418,17 @@ document.querySelectorAll('input[name="vote"]').forEach(radio => {
 
 (function init() {
   captchaClicado = false;
+
+  const tokenSalvo = localStorage.getItem("captchaToken");
+  if (tokenSalvo && getVotosRestantes() > 0) {
+    captchaToken = tokenSalvo;
+  } else {
+    localStorage.removeItem("captchaToken");
+    captchaToken = null;
+  }
+
   updateBotoesEstado();
 })();
-    </script>
+</script>
 </body>
 </html>
