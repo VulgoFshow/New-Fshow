@@ -793,16 +793,15 @@ button:disabled {
 </div> 
   
 <script type="module">
-  // =================== CONFIG ===================
+ // =================== CONFIG ===================
   const TABLE_VOTACAO = "bf7p3";
   const DEBUG = false;
 
-    // =================== HORÁRIOS ===================
+ // =================== HORÁRIOS ===================
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-09-09T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-09-09T21:00:00-03:00").getTime();
 
-  // =================== ANTI-AUTOCLICK  ===================
-  const AntiAutoclick = {
+    const AntiAutoclick = {
     MIN_INTERVAL_MS: 400, 
     PUNISHMENTS: [10, 30, 40, 60],
     lastClickTime: 0,
@@ -888,7 +887,6 @@ const encerramentoBR = new Date("2026-09-09T19:00:00-03:00").getTime();
 
   AntiAutoclick.init();
 
-// =================== HORA  ===================
 async function getServerTime() {
   try {
 
@@ -924,8 +922,6 @@ async function getServerTime() {
   }
 }
 
-
-// =================== REDIRECT ===================
 function redirect(url) {
 
   if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -936,8 +932,7 @@ function redirect(url) {
   window.location.replace(url);
 }
 
-  // =================== STATUS DA VOTAÇÃO ===================
-async function getStatusVotacao() {
+  async function getStatusVotacao() {
 
   try {
     const response = await fetch(
@@ -965,17 +960,12 @@ async function getStatusVotacao() {
   }
 }
   
-// =================== VERIFICAÇÃO DE HORÁRIO ===================
-
+// Horário
 async function verificarHorarios() {
 
   const modo = await getStatusVotacao();
 
   console.log("Modo da votação:", modo);
-
-  // ==========================================
-  // FECHAMENTO MANUAL
-  // ==========================================
 
   if (modo === "fechada") {
     console.warn("VOTAÇÃO FECHADA MANUALMENTE");
@@ -983,23 +973,18 @@ async function verificarHorarios() {
     return;
   }
 
-  // ==========================================
-  // ABRIR MANUAL
-  // ==========================================
-
   if (modo === "aberta") {
     console.log("VOTAÇÃO ABERTA MANUALMENTE");
     return;
   }
 
-  // AUTOMÁTICO
   const agoraBR = await getServerTime();
 
   console.log("Agora:", new Date(agoraBR));
   console.log("Abertura:", new Date(aberturaBR));
   console.log("Encerramento:", new Date(encerramentoBR));
 
-  // Antes da abertura
+  // Antes
   if (agoraBR < aberturaBR) {
     console.warn("Votação ainda não abriu");
     redirect("aguarde.html");
@@ -1022,7 +1007,6 @@ verificarHorarios();
 setInterval(async () => {
   const modo = await getStatusVotacao();
 
-  // FECHADA MANUALMENTE
   if (modo === "fechada") {
     console.warn(
       "Votação Fechada Manualmente"
@@ -1031,17 +1015,14 @@ setInterval(async () => {
     return;
   }
 
-  // ABERTA MANUALMENTE
   if (modo === "aberta") {
     console.log(
       "Votação Aberta Manualmente"
     );
     return;
   }
-
-  // AUTOMÁTICO
+  
   const agoraBR = await getServerTime();
-
 
   // Antes da abertura
   if (agoraBR < aberturaBR) {
@@ -1078,7 +1059,6 @@ setInterval(async () => {
   const verifyBtn = document.getElementById("captchaConfirm");
   const refreshBtn = document.getElementById("captchaRefresh");
   const statusEl = document.getElementById("captchaStatus");
-
   
   let pendingVote = null;
 
@@ -1110,8 +1090,6 @@ setInterval(async () => {
     }
   }
 
-
-
   function hashTag(tag) {
     const secret = "CPTX_2025_FSHOW_🔥";
     let h = 0;
@@ -1134,7 +1112,6 @@ setInterval(async () => {
     localStorage.setItem("votosRestantes", String(n));
     localStorage.setItem("token", hashTag(String(n)));
   }
-
 
   function abrirCaptcha() {
     pendingVote = null;
@@ -1259,7 +1236,7 @@ async function generateCaptcha() {
       return;
     }
 
-    // CAPTCHA aprovado
+    // Captcha aprovado
     setVotosRestantes(resultado.votosLiberados);
 
     localStorage.setItem("captchaToken", captchaToken);
@@ -1321,6 +1298,14 @@ async function submitVote(participante) {
   try {
     const prevText = "VOTAR";
 
+    const radioSelecionado = Array.from(
+      document.querySelectorAll('input[name="vote"]')
+    ).find(radio => radio.value === participante);
+    const imagemSelecionada = radioSelecionado
+      ?.closest(".option")
+      ?.querySelector("img")
+      ?.src;
+
     const response = await fetch("/api/votar", {
       method: "POST",
       headers: {
@@ -1364,7 +1349,7 @@ async function submitVote(participante) {
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
-    fotoConfirm.src = imagemVotada;
+    fotoConfirm.src = imagemSelecionada || "";
     fotoConfirm.style.display = "block";
 
     botaoVotar.textContent = prevText;
