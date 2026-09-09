@@ -798,7 +798,7 @@ button:disabled {
 
     // =================== HORÁRIOS ===================
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-09-04T19:00:00-03:00").getTime();
+const encerramentoBR = new Date("2026-09-09T19:00:00-03:00").getTime();
 
   // =================== ANTI-AUTOCLICK  ===================
   const AntiAutoclick = {
@@ -991,10 +991,7 @@ async function verificarHorarios() {
     return;
   }
 
-  // ==========================================
   // AUTOMÁTICO
-  // ==========================================
-
   const agoraBR = await getServerTime();
 
   console.log("Agora:", new Date(agoraBR));
@@ -1020,37 +1017,28 @@ async function verificarHorarios() {
 
 verificarHorarios();
 
-// =================== VERIFICAÇÃO PERIÓDICA ===================
-
+// VERIFICAÇÃO  
 setInterval(async () => {
   const modo = await getStatusVotacao();
 
-  // ==========================================
   // FECHADA MANUALMENTE
-  // ==========================================
-
   if (modo === "fechada") {
     console.warn(
-      "VOTAÇÃO FECHADA MANUALMENTE"
+      "Votação Fechada Manualmente"
     );
     redirect("fechada.html");
     return;
   }
 
-  // ==========================================
   // ABERTA MANUALMENTE
-  // ==========================================
-
   if (modo === "aberta") {
     console.log(
-      "VOTAÇÃO ABERTA MANUALMENTE"
+      "Votação Aberta Manualmente"
     );
     return;
   }
 
-  // ==========================================
   // AUTOMÁTICO
-  // ==========================================
   const agoraBR = await getServerTime();
 
 
@@ -1062,8 +1050,7 @@ setInterval(async () => {
     redirect("aguarde.html");
     return;
   }
-
-
+  
   // Depois do encerramento
   if (agoraBR > encerramentoBR) {
     console.warn(
@@ -1076,7 +1063,7 @@ setInterval(async () => {
 
 }, 5000);
   
-  // =================== ELEMENTOS DOM ===================
+  // DOM 
   const votoTela = document.getElementById("votoTela");
   const confirmTela = document.getElementById("confirmTela");
   const nomeConfirm = document.getElementById("nomeConfirm");
@@ -1329,84 +1316,44 @@ botaoVotar.addEventListener("click", () => {
 
 async function submitVote(participante) {
   try {
-    const agoraBR = await getServerTime();
-    if (agoraBR > encerramentoBR) {
-      alert("A votação foi encerrada!");
+    const prevText = "VOTAR";
 
+    const response = await fetch("/api/votar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "votar",
+        participante: participante,
+        captchaToken: captchaToken // Envia o token validado para comprovação server-side
+      })
+    });
+
+    const resultado = await response.json();
+
+    if (!response.ok || resultado.success !== true) {
+      alert("ERRO AO REGISTRAR O VOTO:\n" + (resultado.error || "Falha na validação"));
       botaoVotar.disabled = false;
-      botaoVotar.textContent = "VOTAR";
+      botaoVotar.textContent = prevText;
       return;
     }
 
-    const inputEscolhido = document.querySelector('input[name="vote"]:checked');
-    if (!inputEscolhido) {
-       botaoVotar.disabled = false;
-       botaoVotar.textContent = "VOTAR";
-       return;
+    // Atualiza interface com os votos restantes retornados diretamente pelo servidor
+    setVotosRestantes(resultado.votosRestantes);
+    
+    if (resultado.votosRestantes <= 0) {
+      captchaClicado = false;
     }
 
-    const cardPai = inputEscolhido.closest('.option');
-    const imagemVotada = cardPai.querySelector('img').src;
-
-    const prevText = "VOTAR";
-
-const response = await fetch("/api/votar", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-body: JSON.stringify({
-  action: "votar",
-  table: TABLE_VOTACAO,
-  participante: participante
-})
-});
-
-let resultado;
-
-try {
-  resultado = await response.json();
-} catch (jsonError) {
-  resultado = {
-    success: false,
-    error: `Resposta inválida do servidor (HTTP ${response.status})`
-  };
-}
-
-// HTTP 200 não garante que o voto foi gravado.
-// A API também precisa confirmar explicitamente success: true.
-if (!response.ok || resultado.success !== true) {
-  console.error("Erro ao registrar voto:", {
-    status: response.status,
-    statusText: response.statusText,
-    resposta: resultado,
-    participante,
-    tabela: TABLE_VOTACAO
-  });
-
-  alert(
-    "ERRO AO REGISTRAR O VOTO:\n" +
-    (resultado.error || resultado.message || `Falha no servidor (HTTP ${response.status})`) +
-    "\n\nTabela: " +
-    TABLE_VOTACAO
-  );
-
-  botaoVotar.disabled = false;
-  botaoVotar.textContent = prevText;
-  return;
-}
-    
-setVotosRestantes(Math.max(getVotosRestantes() - 1, 0));
-captchaClicado = false;
-updateBotoesEstado();
+    updateBotoesEstado();
 
     votoTela.style.display = "none";
     confirmTela.style.display = "flex";
     nomeConfirm.textContent = participante;
-    
     fotoConfirm.src = imagemVotada;
     fotoConfirm.style.display = "block";
-    
+
     botaoVotar.textContent = prevText;
     botaoVotar.disabled = false;
   } catch (e) {
@@ -1415,6 +1362,7 @@ updateBotoesEstado();
     botaoVotar.textContent = "VOTAR";
   }
 }
+  
 
 function voltarParaVotacao() {
   confirmTela.style.display = "none";
