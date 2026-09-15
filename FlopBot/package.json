@@ -1,0 +1,14 @@
+{
+  "name": "flopbot",
+  "version": "1.0.0",
+  "description": "FlopBot, saiba onde e quando assistir!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.24.0",
+    "dotenv": "^17.2.2",
+    "playwright": "^1.55.0"
+  }
+}
