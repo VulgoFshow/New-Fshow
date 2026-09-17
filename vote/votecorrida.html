@@ -710,31 +710,38 @@ button:disabled {
   <div id="votoTela" class="container">
 <div class="espacador"></div>
     
-    <h1>Quem você quer que VENÇA? <br> O Corrida 3?</h1>
+    <h1>Quem você quer que VENÇA <br> o Corrida 4?</h1>
     <div class="espacador"></div>
-    
 <div class="options">
-  <label class="option">
-  <img src="https://i.ibb.co/27XVsj89/Picsart-26-08-10-20-52-55-694.png" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Brunno"> Brunno
-  </div>
-</label>
 
   <label class="option">
-  <img src="https://i.ibb.co/QvGD9rr8/Picsart-26-08-10-20-55-36-567.png" alt="Opção">
+  <img src="https://i.ibb.co/1t08FVfM/alysson.jpg" alt="Opção">
   <div class="option-content">
-    <input type="radio" name="vote" value="Lívia"> Lívia
-  </div>
-</label>
-  
-  <label class="option">
-  <img src="https://i.ibb.co/wNrMpQBc/Picsart-26-08-10-20-53-20-176.png" alt="Opção">
-  <div class="option-content">
-    <input type="radio" name="vote" value="Quim"> Quim
+    <input type="radio" name="vote" value="Alysson"> Alysson
   </div>
   </label>
+  
+  <label class="option">
+  <img src="https://i.ibb.co/fzT0hC4d/luddy.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Luddy"> Luddy
+  </div>
+</label>
 
+  <label class="option">
+  <img src="https://i.ibb.co/s9kHnSpc/mikael.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Mikael"> Mikael
+  </div>
+  </label>
+  
+  <label class="option">
+  <img src="https://i.ibb.co/4RskY712/simone.jpg" alt="Opção">
+  <div class="option-content">
+    <input type="radio" name="vote" value="Simone"> Simone
+  </div>
+  </label>
+  
     </div>
     <button id="botaoCaptcha" aria-pressed="false" type="button" aria-label="Não sou um robô">
       <span class="recaptcha-checkbox" aria-hidden="true">
@@ -793,7 +800,7 @@ button:disabled {
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJldXFjYXJqdnZqam13b2VkdnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzUxODQsImV4cCI6MjA4NDQxMTE4NH0.RxFRnk7zqPCJcIcF99BdPYLPRFtMR99diu4lU9pENJ4";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const TABLE_VOTACAO = "finalcorrida3";
+  const TABLE_VOTACAO = "corrida4";
   const VOTOS_POR_CAPTCHA = 10;
   const DEBUG = false;
   const pesoVoto = 1;
@@ -802,8 +809,7 @@ button:disabled {
 
 // Horário de Brasília (-03:00)
 const aberturaBR = new Date("2026-01-18T19:00:00-03:00").getTime();
-const encerramentoBR = new Date("2026-08-12T19:00:00-03:00").getTime();
-
+const encerramentoBR = new Date("2026-09-18T19:00:00-03:00").getTime();
 
   // =================== ANTI-AUTOCLICK LOGIC ===================
   const AntiAutoclick = {
