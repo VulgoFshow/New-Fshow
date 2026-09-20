@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fshow — Login e Cadastro</title>
+    <title>Flopshow — Login e Cadastro</title>
     
     <meta name="theme-color" content="#8A2BE2">
     
@@ -367,9 +367,8 @@ input::placeholder {
 <body>
 
 <div class="main-wrapper">
-    <h1 class="logo-fshow">FSHOW</h1>
-
     <div class="auth-card">
+          <h1 class="logo-fshow">Floshow</h1>
         <div class="tab-control">
             <button class="tab-btn active" type="button" data-tab="login">Entrar</button>
             <button class="tab-btn" type="button" data-tab="signup">Criar Conta</button>
@@ -476,265 +475,400 @@ input::placeholder {
     </div>
 </div>
 
-<script type="module">
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyAiTujI-MKe7E7Zl6yMl9VBqtQBeb0GWNM",
   authDomain: "login-flopshow.firebaseapp.com",
   projectId: "login-flopshow",
-  storageBucket: "login-flopshow.firebasestorage.app",
   messagingSenderId: "844646669048",
   appId: "1:844646669048:web:f985b1e0c2544844f3b90d",
-  measurementId: "G-GZ7ZX0Z9JL"
+  measurementId: "G-GZ7ZX0Z9JL",
 };
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import {
-        getAuth,
-        onAuthStateChanged,
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        sendPasswordResetEmail,
-        signInWithPopup,
-        GoogleAuthProvider,
-        OAuthProvider,
-        updateProfile,
-        signOut
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signInWithPopup,
+  GoogleAuthProvider,
+  OAuthProvider,
+  updateProfile,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
+const appleProvider = new OAuthProvider("apple.com");
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const googleProvider = new GoogleAuthProvider();
-    googleProvider.setCustomParameters({ prompt: "select_account" });
-    const appleProvider = new OAuthProvider('apple.com');
+const SITE_URL = `${window.location.origin}/`;
+let selectedAvatarFile = null;
 
-    const SITE_URL = `${window.location.origin}/`;
-    let selectedAvatarFile = null;
+function getRedirectUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get("redirect");
+  if (redirect) {
+    try {
+      const target = new URL(redirect, window.location.origin);
+      if (target.origin === window.location.origin) return target.href;
+    } catch (_) {}
+  }
+  if (document.referrer && document.referrer !== window.location.href) {
+    try {
+      const ref = new URL(document.referrer);
+      if (
+        ref.origin === window.location.origin &&
+        !ref.pathname.endsWith("login.html")
+      ) {
+        return ref.href;
+      }
+    } catch (_) {}
+  }
+  return `${SITE_URL}index.html`;
+}
 
-    function getRedirectUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const redirect = params.get('redirect');
-        if (redirect) {
-            try {
-                const target = new URL(redirect, window.location.origin);
-                if (target.origin === window.location.origin) return target.href;
-            } catch (_) {}
-        }
-        if (document.referrer && document.referrer !== window.location.href) {
-            try {
-                const ref = new URL(document.referrer);
-                if (ref.origin === window.location.origin && !ref.pathname.endsWith('login.html')) {
-                    return ref.href;
-                }
-            } catch (_) {}
-        }
-        return `${SITE_URL}index.html`;
+const REDIRECT_URL = getRedirectUrl();
+
+function showMsg(id, text, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = `message active ${type}`;
+  window.clearTimeout(el._hideTimer);
+  el._hideTimer = window.setTimeout(() => el.classList.remove("active"), 6000);
+}
+
+function firebaseError(error) {
+  const messages = {
+    "auth/invalid-credential": "E-mail ou senha incorretos.",
+    "auth/invalid-email": "Informe um e-mail válido.",
+    "auth/email-already-in-use": "Este e-mail já está cadastrado.",
+    "auth/weak-password": "A senha precisa ter pelo menos 6 caracteres.",
+    "auth/popup-closed-by-user": "A janela de login foi fechada.",
+    "auth/popup-blocked":
+      "O navegador bloqueou a janela de login. Permita pop-ups e tente novamente.",
+    "auth/too-many-requests":
+      "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
+    "auth/network-request-failed":
+      "Falha de conexão. Verifique sua internet e tente novamente.",
+    "cloudinary/config-missing":
+      "Configure o Cloud Name do Cloudinary no script.",
+    "cloudinary/upload-failed":
+      "Não foi possível salvar a foto. Verifique o Cloud Name e o Upload Preset.",
+    "cloudinary/invalid-file": "Selecione uma imagem válida para enviar.",
+  };
+  const code = error?.code || error?.message;
+  return (
+    messages[code] || "Não foi possível concluir a operação. Tente novamente."
+  );
+}
+
+function setBusy(button, busy, label) {
+  button.disabled = busy;
+  button.innerHTML = busy
+    ? `<span class="spinner"></span>${label}`
+    : button.dataset.label;
+}
+
+function saveLoginTimestamp() {
+  localStorage.setItem("lastLoginTime", Date.now().toString());
+}
+
+function initials(name, email = "") {
+  const text = (name || email || "U").trim();
+  return text
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
+function renderAvatar(element, user) {
+  const photo = user.photoURL;
+  if (photo) {
+    element.innerHTML = `<img src="${photo}" alt="Foto de ${user.displayName || "usuário"}">`;
+  } else {
+    element.textContent = initials(user.displayName, user.email);
+  }
+}
+
+function toggleTabs(tab) {
+  document
+    .querySelectorAll("form")
+    .forEach((form) => form.classList.remove("active"));
+  document
+    .querySelectorAll(".tab-btn")
+    .forEach((button) => button.classList.remove("active"));
+  document.getElementById(`${tab}-form`).classList.add("active");
+  document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add("active");
+}
+
+function resetButton(button, label) {
+  button.disabled = false;
+  button.dataset.label = label;
+  button.textContent = label;
+}
+
+async function showExistingUser(user) {
+  document.getElementById("loggedInName").textContent =
+    user.displayName || "Usuário";
+  document.getElementById("loggedInEmail").textContent =
+    user.email || "Conta social";
+  renderAvatar(document.getElementById("loggedInAvatar"), user);
+  document.getElementById("alreadyLoggedInModal").classList.add("active");
+}
+
+const CLOUDINARY_CLOUD_NAME = "zs1iw8qd";
+const CLOUDINARY_UPLOAD_PRESET = "flopshow_profiles";
+const CLOUDINARY_UPLOAD_FOLDER = "flopshow/profiles";
+
+async function uploadToCloudinary(file) {
+  if (!file) return null;
+
+  if (
+    !CLOUDINARY_CLOUD_NAME ||
+    CLOUDINARY_CLOUD_NAME === "SEU_CLOUD_NAME" ||
+    !CLOUDINARY_UPLOAD_PRESET
+  ) {
+    throw new Error("cloudinary/config-missing");
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  formData.append("folder", CLOUDINARY_UPLOAD_FOLDER);
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${encodeURIComponent(CLOUDINARY_CLOUD_NAME)}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
+
+  let result = null;
+  try {
+    result = await response.json();
+  } catch {
+    // Mantém a mensagem amigável abaixo quando a API não retornar JSON.
+  }
+
+  if (!response.ok || !result?.secure_url) {
+    console.error("Cloudinary upload error:", result);
+    throw new Error("cloudinary/upload-failed");
+  }
+
+  return result.secure_url;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".btn-submit").forEach((button) => {
+    button.dataset.label = button.textContent.trim();
+  });
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) showExistingUser(user);
+  });
+
+  document.querySelectorAll(".tab-btn").forEach((button) => {
+    button.addEventListener("click", () => toggleTabs(button.dataset.tab));
+  });
+
+  document.getElementById("avatar").addEventListener("change", (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      event.target.value = "";
+      return showMsg("signupMessage", "Selecione uma imagem válida.", "error");
     }
-
-    const REDIRECT_URL = getRedirectUrl();
-
-    function showMsg(id, text, type) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.textContent = text;
-        el.className = `message active ${type}`;
-        window.clearTimeout(el._hideTimer);
-        el._hideTimer = window.setTimeout(() => el.classList.remove('active'), 6000);
+    if (file.size > 5 * 1024 * 1024) {
+      event.target.value = "";
+      return showMsg(
+        "signupMessage",
+        "A foto deve ter no máximo 5 MB.",
+        "error",
+      );
     }
+    selectedAvatarFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById("profilePicturePreview").innerHTML =
+        `<img src="${e.target.result}" alt="Prévia da foto">`;
+    };
+    reader.readAsDataURL(file);
+  });
 
-    function firebaseError(error) {
-        const messages = {
-            'auth/invalid-credential': 'E-mail ou senha incorretos.',
-            'auth/invalid-email': 'Informe um e-mail válido.',
-            'auth/email-already-in-use': 'Este e-mail já está cadastrado.',
-            'auth/weak-password': 'A senha precisa ter pelo menos 6 caracteres.',
-            'auth/popup-closed-by-user': 'A janela de login foi fechada.',
-            'auth/popup-blocked': 'O navegador bloqueou a janela de login. Permita pop-ups e tente novamente.',
-            'auth/too-many-requests': 'Muitas tentativas. Aguarde alguns minutos e tente novamente.',
-            'auth/network-request-failed': 'Falha de conexão. Verifique sua internet e tente novamente.'
-        };
-        return messages[error?.code] || 'Não foi possível concluir a operação. Tente novamente.';
-    }
+  document.getElementById("stayLoggedInBtn").addEventListener("click", () => {
+    window.location.href = REDIRECT_URL;
+  });
 
-    function setBusy(button, busy, label) {
-        button.disabled = busy;
-        button.innerHTML = busy ? `<span class="spinner"></span>${label}` : button.dataset.label;
-    }
-
-    function saveLoginTimestamp() {
-        localStorage.setItem('lastLoginTime', Date.now().toString());
-    }
-
-    function initials(name, email = '') {
-        const text = (name || email || 'U').trim();
-        return text.split(/\s+/).slice(0, 2).map(part => part[0]).join('').toUpperCase();
-    }
-
-    function renderAvatar(element, user) {
-        const photo = user.photoURL;
-        if (photo) {
-            element.innerHTML = `<img src="${photo}" alt="Foto de ${user.displayName || 'usuário'}">`;
-        } else {
-            element.textContent = initials(user.displayName, user.email);
-        }
-    }
-
-    function toggleTabs(tab) {
-        document.querySelectorAll('form').forEach(form => form.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(button => button.classList.remove('active'));
-        document.getElementById(`${tab}-form`).classList.add('active');
-        document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
-    }
-
-    function resetButton(button, label) {
-        button.disabled = false;
-        button.dataset.label = label;
-        button.textContent = label;
-    }
-
-    async function showExistingUser(user) {
-        document.getElementById('loggedInName').textContent = user.displayName || 'Usuário';
-        document.getElementById('loggedInEmail').textContent = user.email || 'Conta social';
-        renderAvatar(document.getElementById('loggedInAvatar'), user);
-        document.getElementById('alreadyLoggedInModal').classList.add('active');
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.btn-submit').forEach(button => {
-            button.dataset.label = button.textContent.trim();
-        });
-
-        onAuthStateChanged(auth, user => {
-            if (user) showExistingUser(user);
-        });
-
-        document.querySelectorAll('.tab-btn').forEach(button => {
-            button.addEventListener('click', () => toggleTabs(button.dataset.tab));
-        });
-
-        document.getElementById('avatar').addEventListener('change', event => {
-            const file = event.target.files?.[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                event.target.value = '';
-                return showMsg('signupMessage', 'Selecione uma imagem válida.', 'error');
-            }
-            if (file.size > 5 * 1024 * 1024) {
-                event.target.value = '';
-                return showMsg('signupMessage', 'A foto deve ter no máximo 5 MB.', 'error');
-            }
-            selectedAvatarFile = file;
-            const reader = new FileReader();
-            reader.onload = e => {
-                document.getElementById('profilePicturePreview').innerHTML = `<img src="${e.target.result}" alt="Prévia da foto">`;
-            };
-            reader.readAsDataURL(file);
-        });
-
-        document.getElementById('stayLoggedInBtn').addEventListener('click', () => {
-            window.location.href = REDIRECT_URL;
-        });
-
-        document.getElementById('logoutAndSwitchBtn').addEventListener('click', async () => {
-            try {
-                await signOut(auth);
-                document.getElementById('alreadyLoggedInModal').classList.remove('active');
-                showMsg('loginMessage', 'Você saiu da conta.', 'info');
-            } catch (error) {
-                showMsg('loginMessage', firebaseError(error), 'error');
-            }
-        });
-
-        document.getElementById('loginBtn').addEventListener('click', async () => {
-            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-            const password = document.getElementById('loginPassword').value;
-            if (!email || !password) return showMsg('loginMessage', 'Preencha e-mail e senha.', 'error');
-            const button = document.getElementById('loginBtn');
-            setBusy(button, true, 'Entrando...');
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                saveLoginTimestamp();
-                showMsg('loginMessage', 'Login realizado. Redirecionando...', 'success');
-                window.setTimeout(() => { window.location.href = REDIRECT_URL; }, 700);
-            } catch (error) {
-                showMsg('loginMessage', firebaseError(error), 'error');
-                resetButton(button, 'FAZER LOGIN');
-            }
-        });
-
-        document.getElementById('googleLoginBtn').addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-                saveLoginTimestamp();
-                window.location.href = REDIRECT_URL;
-            } catch (error) {
-                showMsg('loginMessage', firebaseError(error), 'error');
-            }
-        });
-
-        document.getElementById('appleLoginBtn').addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, appleProvider);
-                saveLoginTimestamp();
-                window.location.href = REDIRECT_URL;
-            } catch (error) {
-                showMsg('loginMessage', firebaseError(error), 'error');
-            }
-        });
-
-        document.getElementById('signupBtn').addEventListener('click', async () => {
-            const nickname = document.getElementById('signupNickname').value.trim();
-            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
-            const password = document.getElementById('signupPassword').value;
-            const confirm = document.getElementById('signupPasswordConfirm').value;
-            if (!nickname || !email || !password || !confirm) return showMsg('signupMessage', 'Preencha todos os campos.', 'error');
-            if (nickname.length < 3 || nickname.length > 30) return showMsg('signupMessage', 'O apelido deve ter entre 3 e 30 caracteres.', 'error');
-            if (password.length < 6) return showMsg('signupMessage', 'A senha precisa ter pelo menos 6 caracteres.', 'error');
-            if (password !== confirm) return showMsg('signupMessage', 'As senhas não conferem.', 'error');
-
-            const button = document.getElementById('signupBtn');
-            setBusy(button, true, 'Criando...');
-            try {
-                const credential = await createUserWithEmailAndPassword(auth, email, password);
-                await updateProfile(credential.user, { displayName: nickname });
-                saveLoginTimestamp();
-                showMsg('signupMessage', 'Conta criada com sucesso. Redirecionando...', 'success');
-                window.setTimeout(() => { window.location.href = REDIRECT_URL; }, 800);
-            } catch (error) {
-                showMsg('signupMessage', firebaseError(error), 'error');
-                resetButton(button, 'CRIAR CONTA');
-            }
-        });
-
-        document.getElementById('forgotPasswordLink').addEventListener('click', event => {
-            event.preventDefault();
-            document.getElementById('forgotPasswordModal').classList.add('active');
-        });
-
-        document.getElementById('closeForgotModal').addEventListener('click', () => {
-            document.getElementById('forgotPasswordModal').classList.remove('active');
-        });
-
-        document.getElementById('sendResetEmailBtn').addEventListener('click', async () => {
-            const email = document.getElementById('forgotPasswordEmail').value.trim().toLowerCase();
-            if (!email) return showMsg('forgotPasswordMessage', 'Informe o e-mail da conta.', 'error');
-            const button = document.getElementById('sendResetEmailBtn');
-            setBusy(button, true, 'Enviando...');
-            try {
-                await sendPasswordResetEmail(auth, email);
-                showMsg('forgotPasswordMessage', 'Se existir uma conta para esse e-mail, o link foi enviado.', 'success');
-            } catch (error) {
-                showMsg('forgotPasswordMessage', firebaseError(error), 'error');
-            } finally {
-                resetButton(button, 'ENVIAR LINK');
-            }
-        });
-
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', event => {
-                if (event.target === modal && modal.id === 'forgotPasswordModal') modal.classList.remove('active');
-            });
-        });
+  document
+    .getElementById("logoutAndSwitchBtn")
+    .addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        document
+          .getElementById("alreadyLoggedInModal")
+          .classList.remove("active");
+        showMsg("loginMessage", "Você saiu da conta.", "info");
+      } catch (error) {
+        showMsg("loginMessage", firebaseError(error), "error");
+      }
     });
+
+  document.getElementById("loginBtn").addEventListener("click", async () => {
+    const email = document
+      .getElementById("loginEmail")
+      .value.trim()
+      .toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+    if (!email || !password)
+      return showMsg("loginMessage", "Preencha e-mail e senha.", "error");
+    const button = document.getElementById("loginBtn");
+    setBusy(button, true, "Entrando...");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      saveLoginTimestamp();
+      showMsg("loginMessage", "Login realizado. Redirecionando...", "success");
+      window.setTimeout(() => {
+        window.location.href = REDIRECT_URL;
+      }, 700);
+    } catch (error) {
+      showMsg("loginMessage", firebaseError(error), "error");
+      resetButton(button, "FAZER LOGIN");
+    }
+  });
+
+  document
+    .getElementById("googleLoginBtn")
+    .addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, googleProvider);
+        saveLoginTimestamp();
+        window.location.href = REDIRECT_URL;
+      } catch (error) {
+        showMsg("loginMessage", firebaseError(error), "error");
+      }
+    });
+
+  document
+    .getElementById("appleLoginBtn")
+    .addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, appleProvider);
+        saveLoginTimestamp();
+        window.location.href = REDIRECT_URL;
+      } catch (error) {
+        showMsg("loginMessage", firebaseError(error), "error");
+      }
+    });
+
+  document.getElementById("signupBtn").addEventListener("click", async () => {
+    const nickname = document.getElementById("signupNickname").value.trim();
+    const email = document
+      .getElementById("signupEmail")
+      .value.trim()
+      .toLowerCase();
+    const password = document.getElementById("signupPassword").value;
+    const confirm = document.getElementById("signupPasswordConfirm").value;
+    if (!nickname || !email || !password || !confirm)
+      return showMsg("signupMessage", "Preencha todos os campos.", "error");
+    if (nickname.length < 3 || nickname.length > 30)
+      return showMsg(
+        "signupMessage",
+        "O apelido deve ter entre 3 e 30 caracteres.",
+        "error",
+      );
+    if (password.length < 6)
+      return showMsg(
+        "signupMessage",
+        "A senha precisa ter pelo menos 6 caracteres.",
+        "error",
+      );
+    if (password !== confirm)
+      return showMsg("signupMessage", "As senhas não conferem.", "error");
+
+    const button = document.getElementById("signupBtn");
+    setBusy(button, true, "Criando...");
+    try {
+      const credential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      const avatarUrl = await uploadToCloudinary(selectedAvatarFile);
+      await updateProfile(credential.user, {
+        displayName: nickname,
+        ...(avatarUrl ? { photoURL: avatarUrl } : {}),
+      });
+      await credential.user.reload();
+      saveLoginTimestamp();
+      showMsg(
+        "signupMessage",
+        "Conta criada com sucesso. Redirecionando...",
+        "success",
+      );
+      window.setTimeout(() => {
+        window.location.href = REDIRECT_URL;
+      }, 800);
+    } catch (error) {
+      showMsg("signupMessage", firebaseError(error), "error");
+      resetButton(button, "CRIAR CONTA");
+    }
+  });
+
+  document
+    .getElementById("forgotPasswordLink")
+    .addEventListener("click", (event) => {
+      event.preventDefault();
+      document.getElementById("forgotPasswordModal").classList.add("active");
+    });
+
+  document.getElementById("closeForgotModal").addEventListener("click", () => {
+    document.getElementById("forgotPasswordModal").classList.remove("active");
+  });
+
+  document
+    .getElementById("sendResetEmailBtn")
+    .addEventListener("click", async () => {
+      const email = document
+        .getElementById("forgotPasswordEmail")
+        .value.trim()
+        .toLowerCase();
+      if (!email)
+        return showMsg(
+          "forgotPasswordMessage",
+          "Informe o e-mail da conta.",
+          "error",
+        );
+      const button = document.getElementById("sendResetEmailBtn");
+      setBusy(button, true, "Enviando...");
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMsg(
+          "forgotPasswordMessage",
+          "Se existir uma conta para esse e-mail, o link foi enviado.",
+          "success",
+        );
+      } catch (error) {
+        showMsg("forgotPasswordMessage", firebaseError(error), "error");
+      } finally {
+        resetButton(button, "ENVIAR LINK");
+      }
+    });
+
+  document.querySelectorAll(".modal").forEach((modal) => {
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal && modal.id === "forgotPasswordModal")
+        modal.classList.remove("active");
+    });
+  });
+});
 </script>
 </body>
 </html>
