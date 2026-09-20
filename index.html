@@ -5,91 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <title>FlopShow, Mais Flop do que nunca</title>  
     <meta name="description" content="FlopShow: Acompanhe as principais notícias de reality shows, enquetes e coberturas completas.">
-
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1374651770967206"
      crossorigin="anonymous"></script>
     
-    <!-- Fonts & Icons -->
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+    <meta name="theme-color" content="#8A2BE2">
+    <meta name="msapplication-TileColor" content="#FF8C00">
+    <meta name="msapplication-TileImage" content="/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+    <link rel="mask-icon" href="/favicon.png" color="#ff8c00">
+    <link rel="manifest" href="/favicon.png">
+    <meta name="msapplication-TileColor" content="#ff8c00">
+    <meta name="msapplication-TileImage" content="/favicon.png">
+    <meta name="theme-color" content="#8a2be2">
+    <input type="text" name="website_verification" id="honeypot" style="display:none !important;" tabindex="-1" autocomplete="off">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
     <link rel="icon" href="/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/favicon.png">
+    <link rel="stylesheet" href="/flopshow-search.css">
+    <script src="/flopshow-search.js" defer></script>
+
 <style>
-:root {  
-    --orange-vibrant: #FF8C00;  
-    --purple-dark: #8A2BE2;  
-    --text-primary: #121212;  
-    --text-secondary: #555;
-    --text-light: #f0f0f0;  
-    --gradient-main: linear-gradient(90deg, var(--orange-vibrant) 0%, var(--purple-dark) 100%);  
-    --gradient-reversed: linear-gradient(90deg, var(--purple-dark) 0%, var(--orange-vibrant) 100%);  
-    --bg-page: #f9f9f9;  
-    --bg-card: #ffffff;
-    --header-bg: #121212;
-    --footer-bg: #121212;
-    --border-color: rgba(0,0,0,0.08);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+:root {
+  --orange-vibrant: #ff8c00;
+  --purple-dark: #8a2be2;
+  --text-primary: #121212;
+  --text-secondary: #555;
+  --text-light: #f0f0f0;
+  --gradient-main: linear-gradient(
+    90deg,
+    var(--orange-vibrant) 0%,
+    var(--purple-dark) 100%
+  );
+  --gradient-reversed: linear-gradient(
+    90deg,
+    var(--purple-dark) 0%,
+    var(--orange-vibrant) 100%
+  );
+  --bg-page: #f9f9f9;
+  --bg-card: #ffffff;
+  --header-bg: #121212;
+  --footer-bg: #121212;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* MODO ESCURO  */
 body.dark-mode {
-    --text-primary: #f5f5f5;
-    --text-secondary: #bbb;
-    --bg-page: #1e1e1e; 
-    --bg-card: #252525;
-    --header-bg: #0d0d0d;
-    --footer-bg: #0d0d0d;
-    --border-color: #444; 
+  --text-primary: #f5f5f5;
+  --text-secondary: #bbb;
+  --bg-page: #1e1e1e;
+  --bg-card: #252525;
+  --header-bg: #0d0d0d;
+  --footer-bg: #0d0d0d;
+  --border-color: #444;
 }
 
-* {  
-    margin: 0;  
-    padding: 0;  
-    box-sizing: border-box;  
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body {  
-    background-color: var(--bg-page);  
-    color: var(--text-primary);  
-    line-height: 1.6;  
-    font-family: 'Poppins', sans-serif;
-    transition: background-color 0.4s ease, color 0.4s ease;
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-family: "Poppins", sans-serif;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
 }
 
-a { text-decoration: none; color: inherit; transition: var(--transition); }
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
 
 /* BANNER */
 .top-banner-wrapper {
-    width: 100%;
-    overflow: hidden;
-    background: var(--bg-page);
-    display: flex;
-    justify-content: center;
-    padding: 0; 
-    margin: 0;
-    border-bottom: 1px solid var(--border-color);
-    line-height: 0; 
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-page);
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+  line-height: 0;
 }
 
 .top-banner-img {
-    width: 100%;
-    max-width: 1200px;
-    height: auto;
-    max-height: 250px;
-    object-fit: cover;
-    display: block;
-    margin: 0;
-    padding: 0;
-    transition: var(--transition);
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  max-height: 250px;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  padding: 0;
+  transition: var(--transition);
 }
 
 @media (max-width: 768px) {
-    .top-banner-img {
-        max-height: 150px;
-    }
+  .top-banner-img {
+    max-height: 150px;
+  }
 }
 
 /* STORIES*/
@@ -108,7 +150,9 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
   scrollbar-width: none;
 }
 
-.stories-container::-webkit-scrollbar { display: none; }
+.stories-container::-webkit-scrollbar {
+  display: none;
+}
 
 .story-item {
   position: relative;
@@ -121,7 +165,9 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
   transition: var(--transition);
 }
 
-.story-item:hover { transform: scale(1.05); }
+.story-item:hover {
+  transform: scale(1.05);
+}
 
 .story-item img {
   width: 100%;
@@ -130,17 +176,38 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
   border-radius: 50%;
   border: 2px solid var(--bg-page);
 }
-    
+
 .story-item.e img {
   filter: grayscale(100%) brightness(0.9);
 }
-    
-.story-item.fire::after { content: "🔥"; position: absolute; top: -5px; right: -5px; font-size: 1.2rem; }
-.story-item.coroa::after { content: "👑"; position: absolute; top: -5px; right: -5px; font-size: 1.2rem; }
 
-.story-pair { display: flex; flex-shrink: 0; margin-right: 10px; }
-.story-pair .story-item { width: 66px; height: 66px; }
-.story-pair .story-item:last-child { margin-left: -20px; }
+.story-item.fire::after {
+  content: "🔥";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 1.2rem;
+}
+.story-item.coroa::after {
+  content: "👑";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 1.2rem;
+}
+
+.story-pair {
+  display: flex;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+.story-pair .story-item {
+  width: 66px;
+  height: 66px;
+}
+.story-pair .story-item:last-child {
+  margin-left: -20px;
+}
 
 .story-item.faz::after {
   content: "";
@@ -170,960 +237,1770 @@ a { text-decoration: none; color: inherit; transition: var(--transition); }
 
 /* DESTAQUES & CARROSSEL */
 .section-title-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin: 30px 5% 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 30px 5% 20px;
 }
 
-.section-indicator { width: 5px; height: 35px; background: #ddd; border-radius: 3px; }
-.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; }
+.section-indicator {
+  width: 5px;
+  height: 35px;
+  background: #ddd;
+  border-radius: 3px;
+}
+.section-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.2rem;
+}
 
 .carousel-container {
-    width: 90%;
-    margin: 0 auto;
-    border-radius: 15px;
-    overflow: hidden;
-    position: relative;
-    border: 1px solid var(--border-color);
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border-color);
 }
 
 .carousel-track {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: 100%;
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 100%;
 }
 
 .carousel-link {
-    min-width: 100%;
-    width: 100%;
-    flex: 0 0 100%;
+  min-width: 100%;
+  width: 100%;
+  flex: 0 0 100%;
 }
-    
-.carousel-slide { width: 100%; height: 450px; position: relative; }
-.slide-image { width: 100%; height: 100%; object-fit: cover; }
-.slide-overlay { position: absolute; bottom: 20px; left: 20px; right: 20px; background: linear-gradient(90deg, rgba(255,140,0,0.9), rgba(138,43,226,0.8)); padding: 20px; border-radius: 12px; color: white; max-width: 400px; }
-.slide-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; }
-.carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.3); border: none; color: white; padding: 15px; cursor: pointer; border-radius: 50%; }
-.prev-control { left: 15px; }
-.next-control { right: 15px; }
+
+.carousel-slide {
+  width: 100%;
+  height: 450px;
+  position: relative;
+}
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.slide-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 140, 0, 0.9),
+    rgba(138, 43, 226, 0.8)
+  );
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+  max-width: 400px;
+}
+.slide-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.6rem;
+}
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: white;
+  padding: 15px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.prev-control {
+  left: 15px;
+}
+.next-control {
+  right: 15px;
+}
 
 /* GRID */
-.news-grid { display: grid; grid-template-columns: 1fr; gap: 25px; padding: 0 5%; margin-top: 30px; }
-@media (min-width: 992px) { .news-grid { grid-template-columns: 2.5fr 1fr; } }
-.main-news { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-.news-card { background: var(--bg-card); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: var(--transition); }
-.news-card:hover { transform: translateY(-5px); }
-.card-img { width: 100%; height: 180px; object-fit: cover; }
-.card-content { padding: 15px; }
-.card-tag { color: var(--purple-dark); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
-.card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; margin: 5px 0; }
-.sidebar { background: var(--bg-card); border-radius: 15px; padding: 20px; border: 1px solid var(--border-color); height: fit-content; }
-.sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--orange-vibrant); border-bottom: 2px solid var(--purple-dark); margin-bottom: 15px; }
+.news-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+  padding: 0 5%;
+  margin-top: 30px;
+}
+@media (min-width: 992px) {
+  .news-grid {
+    grid-template-columns: 2.5fr 1fr;
+  }
+}
+.main-news {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.news-card {
+  background: var(--bg-card);
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+.news-card:hover {
+  transform: translateY(-5px);
+}
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.card-content {
+  padding: 15px;
+}
+.card-tag {
+  color: var(--purple-dark);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+.card-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.4rem;
+  margin: 5px 0;
+}
+.sidebar {
+  background: var(--bg-card);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  height: fit-content;
+}
+.sidebar-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.8rem;
+  color: var(--orange-vibrant);
+  border-bottom: 2px solid var(--purple-dark);
+  margin-bottom: 15px;
+}
 
 /* FOOTER */
-.footer { background: var(--footer-bg); color: white; padding: 50px 5% 30px; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.1); }
-.footer-header { display: flex; align-items: center; gap: 12px; margin-bottom: 30px; }
-.footer-logo { height: 35px; width: auto; }
-.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; }
-.footer-section h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
-.footer-section p { color: #aaa; font-size: 0.95rem; line-height: 1.6; }
-.footer-links-list { list-style: none; }
-.footer-links-list li { margin-bottom: 12px; }
-.footer-links-list a { color: #eee; font-size: 0.95rem; transition: var(--transition); }
-.footer-links-list a:hover { color: var(--orange-vibrant); padding-left: 5px; }
-.social-icons-footer { display: flex; gap: 15px; margin-top: 20px; }
-.social-icon-btn { width: 45px; height: 45px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 1.2rem; transition: var(--transition); }
-.social-icon-btn:hover { background: var(--orange-vibrant); transform: scale(1.1); }
-.footer-bottom { margin-top: 50px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-.copyright-text { color: #666; font-size: 0.85rem; }
-.floating-btn { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: white; color: #121212; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); font-size: 1.5rem; z-index: 1000; }
-#cookie-consent { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--bg-card); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 5000; border: 1px solid var(--border-color); display: none; }
+.footer {
+  background: var(--footer-bg);
+  color: white;
+  padding: 50px 5% 30px;
+  margin-top: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.footer-logo {
+  height: 35px;
+  width: auto;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  text-align: left;
+}
+.footer-section h4 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.footer-section p {
+  color: #aaa;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.footer-links-list {
+  list-style: none;
+}
+.footer-links-list li {
+  margin-bottom: 12px;
+}
+.footer-links-list a {
+  color: #eee;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+.footer-links-list a:hover {
+  color: var(--orange-vibrant);
+  padding-left: 5px;
+}
+.social-icons-footer {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+.social-icon-btn {
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+.social-icon-btn:hover {
+  background: var(--orange-vibrant);
+  transform: scale(1.1);
+}
+.footer-bottom {
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.copyright-text {
+  color: #666;
+  font-size: 0.85rem;
+}
+.floating-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  background: white;
+  color: #121212;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  font-size: 1.5rem;
+  z-index: 1000;
+}
+#cookie-consent {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 5000;
+  border: 1px solid var(--border-color);
+  display: none;
+}
 
 /* MAIS FLOPADAS */
-.side-content {  
-    background-color: var(--bg-card); 
-    border-radius: 10px;  
-    padding: 20px;  
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);  
-    border: 1px solid var(--border-color); 
-    height: fit-content;
-    transition: background-color 0.3s, border-color 0.3s;
-}  
+.side-content {
+  background-color: var(--bg-card);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  height: fit-content;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
+}
 
-.side-content h4 {  
-    font-family: 'Bebas Neue', sans-serif;  
-    font-size: 2.2em;  
-    color: var(--orange-vibrant);  
-    border-bottom: 3px solid var(--purple-dark);  
-    padding-bottom: 10px;  
-    margin-bottom: 20px;  
-}  
+.side-content h4 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2.2em;
+  color: var(--orange-vibrant);
+  border-bottom: 3px solid var(--purple-dark);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
 
-.trend-item {  
-    display: flex;  
-    align-items: flex-start;  
-    padding: 15px 0;  
-    border-bottom: 1px dashed var(--border-color); 
-}  
+.trend-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px 0;
+  border-bottom: 1px dashed var(--border-color);
+}
 
-.trend-item:last-child { border-bottom: none; }
+.trend-item:last-child {
+  border-bottom: none;
+}
 
-.trend-number {  
-    font-family: 'Bebas Neue', sans-serif;  
-    font-size: 3em;  
-    font-weight: 900;  
-    margin-right: 15px;  
-    background: var(--gradient-main);  
-    -webkit-background-clip: text;  
-    -webkit-text-fill-color: transparent;  
-    line-height: 1;  
-}  
+.trend-number {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 3em;
+  font-weight: 900;
+  margin-right: 15px;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
 
-.trend-item a {  
-    font-weight: 700;  
-    color: var(--text-primary); 
-    transition: color 0.3s;  
-}  
+.trend-item a {
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.3s;
+}
 
-.trend-item a:hover { color: var(--purple-dark); }
+.trend-item a:hover {
+  color: var(--purple-dark);
+}
 
-    .header {
-    background: var(--header-bg);
-    height: 70px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5%;
-    position: sticky;
-    top: 0;
-    z-index: 2000;
+.header {
+  background: var(--header-bg);
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  position: sticky;
+  top: 0;
+  z-index: 2000;
 }
 
 .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .logo-img {
-    height: 35px;
-    width: auto;
+  height: 35px;
+  width: auto;
 }
 
 .brand-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-    background: linear-gradient(90deg, #FF8C00, #8A2BE2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #ff8c00, #8a2be2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
 }
 
 .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    color: white;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: white;
 }
 
 .header-actions i {
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: var(--transition);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .gradient-line {
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #FF8C00, #8A2BE2, #FF8C00);
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #ff8c00, #8a2be2, #ff8c00);
 }
 
 /* PERFIL */
 .fshow-profile-widget {
-    position: relative; 
-    font-family: 'Poppins', sans-serif;
+  position: relative;
+  font-family: "Poppins", sans-serif;
 }
 
 .fshow-profile-trigger {
-    width: 40px; 
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid var(--purple-dark);
-    cursor: pointer;
-    overflow: hidden;
-    background: #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--purple-dark);
+  cursor: pointer;
+  overflow: hidden;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .fshow-profile-trigger:hover {
-    transform: scale(1.05);
-    border-color: var(--orange-vibrant);
+  transform: scale(1.05);
+  border-color: var(--orange-vibrant);
 }
 
 .fshow-profile-trigger img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .fshow-profile-trigger .anon-icon {
-    font-size: 1.2rem;
-    color: #888;
+  font-size: 1.2rem;
+  color: #888;
 }
 
 .fshow-profile-dropdown {
-    position: absolute;
-    top: 50px;
-    right: 0;
-    background: rgba(20, 20, 20, 0.98);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(128, 0, 255, 0.3);
-    border-radius: 15px;
-    padding: 15px;
-    width: 220px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    display: none;
-    flex-direction: column;
-    gap: 12px;
-    animation: fshowSlideDown 0.3s ease-out;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: rgba(20, 20, 20, 0.98);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(128, 0, 255, 0.3);
+  border-radius: 15px;
+  padding: 15px;
+  width: 220px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  animation: fshowSlideDown 0.3s ease-out;
 }
 
 .fshow-profile-dropdown.fshow-active {
-    display: flex !important;
+  display: flex !important;
 }
 
 @keyframes fshowSlideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fshow-user-info {
-    text-align: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .fshow-user-name {
-    font-weight: 800;
-    font-size: 1rem;
-    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 2px;
+  font-weight: 800;
+  font-size: 1rem;
+  background: linear-gradient(45deg, #ff8c00, #8a2be2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2px;
 }
 
 .fshow-user-status {
-    font-size: 0.65rem;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .fshow-btn {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.06);
-    color: white;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
 }
 
 .fshow-btn:hover {
-    background: rgba(128, 0, 255, 0.2);
-    border-color: rgba(128, 0, 255, 0.5);
+  background: rgba(128, 0, 255, 0.2);
+  border-color: rgba(128, 0, 255, 0.5);
 }
 
 .fshow-btn-primary {
-    background: linear-gradient(45deg, #FF8C00, #8A2BE2);
-    border: none;
+  background: linear-gradient(45deg, #ff8c00, #8a2be2);
+  border: none;
 }
 
 .fshow-btn-logout {
-    color: #ff4d4d;
+  color: #ff4d4d;
 }
 
 .fshow-btn-logout:hover {
-    background: rgba(255, 77, 77, 0.1);
-    border-color: rgba(255, 77, 77, 0.3);
+  background: rgba(255, 77, 77, 0.1);
+  border-color: rgba(255, 77, 77, 0.3);
 }
 
-.fshow-profile-dropdown{
-    z-index: 999999 !important;
+.fshow-profile-dropdown {
+  z-index: 999999 !important;
 }
 
-.fshow-profile-widget{
-    z-index: 999999 !important;
+.fshow-profile-widget {
+  z-index: 999999 !important;
 }
-
-<script type="module" src="/fshow-profile-firebase.js"></script>
 
 /* VOTAÇÃO */
-.vote-frame{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    padding:30px 15px;
-    box-sizing:border-box;
-    font-family:'Inter',sans-serif;
+.vote-frame {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 30px 15px;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 
-.vote-mock{
-    width:100%;
-    max-width:430px;
-    border-radius:32px;
-    overflow:hidden;
-    position:relative;
-    background:
-        linear-gradient(145deg,
-        #2d1146 0%,
-        #45106b 35%,
-        #5b1590 65%,
-        #7b1fa2 100%);
-    box-shadow:
-        0 25px 60px rgba(91,21,144,.45),
-        0 10px 25px rgba(0,0,0,.35),
-        inset 0 1px 0 rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.08);
+.vote-mock {
+  width: 100%;
+  max-width: 430px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(
+    145deg,
+    #2d1146 0%,
+    #45106b 35%,
+    #5b1590 65%,
+    #7b1fa2 100%
+  );
+  box-shadow:
+    0 25px 60px rgba(91, 21, 144, 0.45),
+    0 10px 25px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* efeitos */
-.vote-mock::before{
-    content:'';
-    position:absolute;
-    width:280px;
-    height:280px;
-    border-radius:50%;
-    background:radial-gradient(circle,
-        rgba(255,136,0,.35) 0%,
-        transparent 70%);
-    top:-120px;
-    right:-120px;
-    z-index:0;
+.vote-mock::before {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 136, 0, 0.35) 0%,
+    transparent 70%
+  );
+  top: -120px;
+  right: -120px;
+  z-index: 0;
 }
 
-.vote-mock::after{
-    content:'';
-    position:absolute;
-    width:240px;
-    height:240px;
-    border-radius:50%;
-    background:radial-gradient(circle,
-        rgba(255,98,0,.18) 0%,
-        transparent 70%);
-    bottom:-120px;
-    left:-100px;
-    z-index:0;
+.vote-mock::after {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 98, 0, 0.18) 0%,
+    transparent 70%
+  );
+  bottom: -120px;
+  left: -100px;
+  z-index: 0;
 }
 
 /* HERO */
-.vote-hero{
-    position:relative;
-    width:100%;
-    height:250px;
-    overflow:hidden;
+.vote-hero {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
 }
 
-.vote-hero img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-    transition:transform .6s ease;
+.vote-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
 }
 
-.vote-mock:hover .vote-hero img{
-    transform:scale(1.06);
+.vote-mock:hover .vote-hero img {
+  transform: scale(1.06);
 }
 
 /* overlay hero */
-.vote-hero::before{
-    content:'';
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(to top,
-        rgba(45,17,70,1) 0%,
-        rgba(45,17,70,.4) 50%,
-        rgba(0,0,0,.1) 100%);
-    z-index:1;
+.vote-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(45, 17, 70, 1) 0%,
+    rgba(45, 17, 70, 0.4) 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  z-index: 1;
 }
 
-.vote-hero::after{
-    content:'';
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(135deg,
-        rgba(255,136,0,.18),
-        rgba(123,31,162,.15));
-    z-index:2;
+.vote-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 136, 0, 0.18),
+    rgba(123, 31, 162, 0.15)
+  );
+  z-index: 2;
 }
 
 /* CARD */
-.vote-card{
-    position:relative;
-    z-index:5;
-    padding:24px;
+.vote-card {
+  position: relative;
+  z-index: 5;
+  padding: 24px;
 }
 
 /* HEADER */
-.vote-card-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:15px;
-    margin-bottom:26px;
+.vote-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 26px;
 }
 
-.vote-title{
-    font-size:1.45rem;
-    font-weight:900;
-    line-height:1.1;
-    letter-spacing:-0.8px;
-    color:white;
-    text-transform:uppercase;
-    text-shadow:
-        0 2px 10px rgba(0,0,0,.35);
+.vote-title {
+  font-size: 1.45rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.8px;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 /* STATUS */
-.vote-status{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:9px 14px;
-    border-radius:999px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.12);
-    backdrop-filter:blur(12px);
+.vote-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
 }
 
-.vote-status span:last-child{
-    color:#fff !important;
-    font-size:12px !important;
-    letter-spacing:.5px;
+.vote-status span:last-child {
+  color: #fff !important;
+  font-size: 12px !important;
+  letter-spacing: 0.5px;
 }
 
 /* bolinha */
-.vote-dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#00ff88;
-    box-shadow:
-        0 0 12px #00ff88,
-        0 0 24px rgba(0,255,136,.7);
-    animation:onlinePulse 1.8s infinite;
+.vote-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow:
+    0 0 12px #00ff88,
+    0 0 24px rgba(0, 255, 136, 0.7);
+  animation: onlinePulse 1.8s infinite;
 }
 
-@keyframes onlinePulse{
-    0%{
-        transform:scale(1);
-        opacity:1;
-    }
-    50%{
-        transform:scale(1.45);
-        opacity:.55;
-    }
-    100%{
-        transform:scale(1);
-        opacity:1;
-    }
+@keyframes onlinePulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.45);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* BOTÃO */
-.vote-btn{
-    width:100%;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:18px 20px;
-    border-radius:24px;
-    text-decoration:none;
-    overflow:hidden;
-    transition:.28s ease;
+.vote-btn {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-radius: 24px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: 0.28s ease;
 }
 
 /* gradiente */
-.vote-purple{
-    background:
-        linear-gradient(135deg,
-        #ff7a00 0%,
-        #b026ff 45%,
-        #7a00ff 100%);
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:
-        0 15px 30px rgba(122,0,255,.35),
-        0 5px 18px rgba(255,122,0,.18),
-        inset 0 1px 0 rgba(255,255,255,.15);
+.vote-purple {
+  background: linear-gradient(135deg, #ff7a00 0%, #b026ff 45%, #7a00ff 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 15px 30px rgba(122, 0, 255, 0.35),
+    0 5px 18px rgba(255, 122, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* brilho */
-.vote-purple::before{
-    content:'';
-    position:absolute;
-    inset:0;
-    background:
-        linear-gradient(120deg,
-        transparent 20%,
-        rgba(255,255,255,.22) 50%,
-        transparent 80%);
-    transform:translateX(-120%);
-    transition:1s;
+.vote-purple::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 80%
+  );
+  transform: translateX(-120%);
+  transition: 1s;
 }
 
-.vote-purple:hover::before{
-    transform:translateX(120%);
+.vote-purple:hover::before {
+  transform: translateX(120%);
 }
 
 /* hover */
-.vote-btn:hover{
-    transform:
-        translateY(-4px)
-        scale(1.015);
-    box-shadow:
-        0 20px 45px rgba(122,0,255,.45),
-        0 10px 25px rgba(255,122,0,.22);
+.vote-btn:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow:
+    0 20px 45px rgba(122, 0, 255, 0.45),
+    0 10px 25px rgba(255, 122, 0, 0.22);
 }
 
-.vote-btn:active{
-    transform:scale(.985);
+.vote-btn:active {
+  transform: scale(0.985);
 }
 
 /* texto botão */
-.vote-btn span{
-    position:relative;
-    z-index:3;
-    color:white;
-    font-size:15px;
-    font-weight:900;
-    letter-spacing:.6px;
+.vote-btn span {
+  position: relative;
+  z-index: 3;
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
 }
 
 /* ícone */
-.vote-icon{
-    position:relative;
-    z-index:3;
-    width:46px;
-    height:46px;
-    border-radius:16px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(255,255,255,.16);
-    border:1px solid rgba(255,255,255,.18);
-    backdrop-filter:blur(12px);
-    font-size:21px;
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.15);
+.vote-icon {
+  position: relative;
+  z-index: 3;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  font-size: 21px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* RESPONSIVO */
-@media(max-width:480px){
+@media (max-width: 480px) {
+  .vote-frame {
+    padding: 20px 10px;
+  }
 
-    .vote-frame{
-        padding:20px 10px;
-    }
+  .vote-hero {
+    height: 220px;
+  }
 
-    .vote-hero{
-        height:220px;
-    }
+  .vote-card {
+    padding: 20px;
+  }
 
-    .vote-card{
-        padding:20px;
-    }
+  .vote-title {
+    font-size: 1.18rem;
+  }
 
-    .vote-title{
-        font-size:1.18rem;
-    }
+  .vote-btn {
+    padding: 16px 18px;
+  }
 
-    .vote-btn{
-        padding:16px 18px;
-    }
+  .vote-btn span {
+    font-size: 13px;
+  }
 
-    .vote-btn span{
-        font-size:13px;
-    }
-
-    .vote-icon{
-        width:42px;
-        height:42px;
-        font-size:18px;
-    }
-
+  .vote-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
 }
 
 /* ADS */
-.banner-publicidade{
-    display:flex;
-    width:420px;
-    height:90px;
-    margin:1px auto; 
-    border:1px solid #bfbfbf;
-    background:#fff;
-    overflow:hidden;
-    font-family:Arial, Helvetica, sans-serif;
+.banner-publicidade {
+  display: flex;
+  width: 420px;
+  height: 90px;
+  margin: 1px auto;
+  border: 1px solid #bfbfbf;
+  background: #fff;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.faixa-lateral{
-    width:34px;
-    background:#ffffff;
-    border-right:1px solid #d0d0d0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.faixa-lateral {
+  width: 34px;
+  background: #ffffff;
+  border-right: 1px solid #d0d0d0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.faixa-lateral span{
-    writing-mode:vertical-rl;
-    transform:rotate(180deg);
-    color:#666;
-    font-size:12px;
-    letter-spacing:.5px;
+.faixa-lateral span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: #666;
+  font-size: 12px;
+  letter-spacing: 0.5px;
 }
 
-.banner{
-    position:relative;
-    width:100%;
-    height:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.banner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    background:
-        radial-gradient(circle, rgba(255,255,255,.15) 1px, transparent 1px),
-        linear-gradient(45deg,#666,#4f4f4f,#6b6b6b,#555);
-    background-size:4px 4px,100% 100%;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(45deg, #666, #4f4f4f, #6b6b6b, #555);
+  background-size:
+    4px 4px,
+    100% 100%;
 }
 
-.banner-texto{
-    position:relative;
-    z-index:1;
-    text-align:center;
+.banner-texto {
+  position: relative;
+  z-index: 1;
+  text-align: center;
 }
 
-.banner-texto{
-    display:none;
+.banner-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
 }
 
-.banner-img{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:2;
+.banner p {
+  margin-top: 8px;
+  color: #f2f2f2;
+  font-size: 13px;
+  text-shadow: 1px 1px 2px #000;
 }
 
-.banner p{
-    margin-top:8px;
-    color:#f2f2f2;
-    font-size:13px;
-    text-shadow:1px 1px 2px #000;
+.banner-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
 }
 
-.banner-container{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    margin:20px 0;
+.banner-link {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
 }
 
-.banner-link{
-    flex:1;
-    display:flex;
-    width:100%;
-    height:100%;
-    text-decoration:none;
-    color:inherit;
+.espacador {
+  width: 100%;
+  height: 10px;
 }
 
-.espacador{
-    width:100%;
-    height:10px;
+:root {
+  --content-max: 1440px;
+  --content-gutter: clamp(20px, 4vw, 64px);
+  --surface-soft: color-mix(in srgb, var(--bg-card) 88%, var(--bg-page));
+  --shadow-card: 0 12px 32px rgba(18, 18, 18, 0.08);
+  --shadow-card-hover: 0 20px 44px rgba(18, 18, 18, 0.14);
+  --focus-ring: 0 0 0 3px rgba(255, 140, 0, 0.28);
 }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+.fshow-profile-trigger,
+.social-icon-btn,
+.carousel-control,
+.floating-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.header,
+.stories-container,
+.section-title-wrapper,
+.news-grid,
+.footer > * {
+  width: min(100%, var(--content-max));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  width: 100%;
+  padding-left: var(--content-gutter);
+  padding-right: var(--content-gutter);
+}
+
+.top-banner-wrapper {
+  background: linear-gradient(180deg, var(--bg-page), var(--surface-soft));
+}
+
+.top-banner-img {
+  width: min(100%, var(--content-max));
+  max-height: 300px;
+  object-position: center;
+}
+
+.stories-wrapper {
+  background: var(--surface-soft);
+  box-shadow: inset 0 -1px 0 var(--border-color);
+}
+
+.stories-container {
+  gap: 16px;
+  padding: 4px var(--content-gutter);
+}
+
+.story-item {
+  width: 84px;
+  height: 84px;
+  box-shadow: 0 5px 16px rgba(18, 18, 18, 0.12);
+}
+
+.section-title-wrapper {
+  margin-top: clamp(38px, 5vw, 68px);
+  margin-bottom: 24px;
+  padding: 0 var(--content-gutter);
+}
+
+.section-indicator {
+  width: 6px;
+  height: 42px;
+  background: var(--gradient-main);
+}
+
+.section-title {
+  font-size: clamp(2rem, 3vw, 3rem);
+  letter-spacing: 0.02em;
+}
+
+.carousel-container {
+  width: min(calc(100% - (var(--content-gutter) * 2)), var(--content-max));
+  box-shadow: var(--shadow-card);
+}
+
+.carousel-slide {
+  height: clamp(360px, 40vw, 560px);
+}
+
+.slide-overlay {
+  bottom: clamp(18px, 3vw, 36px);
+  left: clamp(18px, 3vw, 36px);
+  padding: clamp(18px, 2.5vw, 30px);
+  max-width: min(520px, calc(100% - 36px));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+.slide-title {
+  font-size: clamp(1.5rem, 2.5vw, 2.35rem);
+}
+
+.carousel-control {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(18, 18, 18, 0.56);
+  backdrop-filter: blur(8px);
+}
+
+.carousel-control:hover {
+  background: var(--orange-vibrant);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.news-grid {
+  grid-template-columns: minmax(0, 2.25fr) minmax(280px, 0.85fr);
+  gap: clamp(28px, 4vw, 56px);
+  padding-left: var(--content-gutter);
+  padding-right: var(--content-gutter);
+  margin-top: clamp(34px, 5vw, 64px);
+}
+
+.main-news {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.news-card,
+.sidebar,
+.side-content {
+  box-shadow: var(--shadow-card);
+}
+
+.news-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: color-mix(in srgb, var(--purple-dark) 38%, var(--border-color));
+}
+
+.card-img {
+  height: clamp(180px, 14vw, 230px);
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.card-title {
+  line-height: 1.12;
+}
+
+.sidebar,
+.side-content {
+  position: sticky;
+  top: 94px;
+}
+
+.footer {
+  padding-left: var(--content-gutter);
+  padding-right: var(--content-gutter);
+}
+
+.footer-grid {
+  gap: clamp(28px, 4vw, 64px);
+}
+
+.banner-container {
+  padding: 0 var(--content-gutter);
+}
+
+.banner-publicidade {
+  width: min(100%, 760px);
+  height: clamp(90px, 10vw, 140px);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 1180px) {
+  .main-news {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar,
+  .side-content {
+    position: static;
+  }
+}
+
+@media (max-width: 680px) {
+  :root {
+    --content-gutter: 16px;
+  }
+
+  .header {
+    height: 64px;
+  }
+
+  .brand-name {
+    font-size: 1.55rem;
+  }
+
+  .header-actions {
+    gap: 12px;
+  }
+
+  .main-news {
+    grid-template-columns: 1fr;
+  }
+
+  .carousel-container {
+    width: calc(100% - 32px);
+  }
+
+  .carousel-slide {
+    height: 360px;
+  }
+
+  .slide-overlay {
+    right: 16px;
+    max-width: none;
+  }
+
+  .floating-btn {
+    right: 16px;
+    bottom: 16px;
+    width: 54px;
+    height: 54px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Loading */
+.lazy-image {
+  position: relative;
+  background: linear-gradient(
+    110deg,
+    var(--surface-soft, #eeeeee) 8%,
+    #ffffff 18%,
+    var(--surface-soft, #eeeeee) 33%
+  );
+  background-size: 220% 100%;
+  animation: lazyImageShimmer 1.35s linear infinite;
+  color: transparent;
+  transition:
+    opacity 0.42s ease,
+    filter 0.42s ease;
+}
+
+.lazy-image.is-loaded {
+  animation: none;
+  background: transparent;
+  color: inherit;
+}
+
+.lazy-image.has-error {
+  animation: none;
+  background: linear-gradient(135deg, #f1f1f1, #dedede);
+  filter: grayscale(1);
+}
+
+body.dark-mode .lazy-image {
+  background: linear-gradient(110deg, #292929 8%, #454545 18%, #292929 33%);
+  background-size: 220% 100%;
+}
+
+@keyframes lazyImageShimmer {
+  to {
+    background-position-x: -20%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lazy-image {
+    animation: none;
+  }
+}
+
 </style>
 </head>
 <body class="light-mode">
-    
-    <!-- Header -->
-<header class="header">
+
+  <!-- Header -->
+  <header class="header">
     <div class="logo-container">
-        <img src="https://flopshow.site/favicon.png" alt="FlopShow" class="logo-img">
-        <span class="brand-name">FlopShow</span>
+      <img
+        src="https://flopshow.site/favicon.png"
+        alt="FlopShow"
+        class="logo-img eager-image"
+        loading="eager"
+        decoding="async"
+        data-eager-image
+      />
+      <span class="brand-name">FlopShow</span>
     </div>
 
     <div class="header-actions">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <i class="fa-solid fa-moon" id="theme-toggle"></i>
-        
-<!-- PERFIL -->
-        <div class="fshow-profile-widget" id="fshowWidget">
-            <div class="fshow-profile-trigger" id="fshowTrigger">
-                <div id="fshowAvatarContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
-                    <span class="anon-icon">👤</span>
-                </div>
-            </div>
-            
-            <div class="fshow-profile-dropdown" id="fshowDropdown">
-                <div class="fshow-user-info">
-                    <div class="fshow-user-name" id="fshowUserName">Anônimo</div>
-                    <div class="fshow-user-status" id="fshowUserStatus">Visitante</div>
-                </div>
-                
-                <div id="fshowLoggedOptions" style="display: none; flex-direction: column; gap: 10px; width: 100%;">
-                    <label class="fshow-btn" for="fshowChangeAvatarInput">
-                        📸 Mudar Foto
-                    </label>
-                    <input type="file" id="fshowChangeAvatarInput" accept="image/*" style="display: none;">
-                    <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">
-                        🚪 Sair da Conta
-                    </button>
-                </div>
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <i class="fa-solid fa-moon" id="theme-toggle"></i>
 
-                <div id="fshowAnonOptions" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-                    <a href="login.html" class="fshow-btn fshow-btn-primary">🔑 Fazer Login</a>
-                    <button class="fshow-btn" id="fshowContinueAnonBtn">👀 Continuar Anônimo</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<div class="gradient-line"></div>
-
-    <div class="top-banner-wrapper">
-        <img src="https://flopshow.site/fotos/bannerfshow.png" alt="Banner FlopShow" class="top-banner-img">
-    </div>
-    <div class="gradient-line"></div>
-
-    <!-- Stories -->
-    <div class="stories-wrapper">
-        <div class="stories-container">
-           <div class="story-item fire"><img src="https://i.ibb.co/67124mYW/Design-sem-nome.png" alt="Brunno"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/w52J7HG/Design-sem-nome-6.png" alt="Isabelly"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/wFwp82LP/Design-sem-nome-1.png" alt="Leonardo"></div>
-            <div class="story-item fire"><img src="https://i.ibb.co/3mhtZhM4/Design-sem-nome-2.png" alt="Livi"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/YFN7vHnH/Design-sem-nome-3.png" alt="Lorenzo"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/4nMfVL3h/Design-sem-nome-4.png" alt="Luan"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/PvRkfcVY/Design-sem-nome-5.png" alt="Luddy"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/WNhwf7rQ/N-o-lembrp.png" alt="Ludmila"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/MxK2DhGX/Design-sem-nome-7.png" alt="Mikael"></div>
-            <div class="story-item fire"><img src="https://i.ibb.co/39g3dYKp/Design-sem-nome-8.png" alt="Quim"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/Z1dCFZjP/Design-sem-nome-9.png" alt="Ryan"></div>
-            <div class="story-item e"><img src="https://i.ibb.co/QScxyDs/VAI-SE-FUDER.png" alt="Teca"></div>
-        </div>
-    </div>
-    
-<div class="banner-container">
-    <div class="banner-publicidade">
-        <div class="faixa-lateral">
-            <span>Publicidade</span>
+      <!-- PERFIL -->
+      <div class="fshow-profile-widget" id="fshowWidget">
+        <div class="fshow-profile-trigger" id="fshowTrigger">
+          <div
+            id="fshowAvatarContainer"
+            style="
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <span class="anon-icon">👤</span>
+          </div>
         </div>
 
-        <a href="https://discord.gg/G9pvv2N8y5" target="_blank" class="banner-link">
-            <div class="banner">
-                <img src="https://i.postimg.cc/4d2xHwGQ/Gemini-Generated-Image-p5ef1hp5ef1hp5ef.png" class="banner-img" alt="Publicidade">
+        <div class="fshow-profile-dropdown" id="fshowDropdown">
+          <div class="fshow-user-info">
+            <div class="fshow-user-name" id="fshowUserName">Anônimo</div>
+            <div class="fshow-user-status" id="fshowUserStatus">Visitante</div>
+          </div>
 
-                <div class="banner-texto">
-                    <h2>ANUNCIE AQUI!</h2>
-                    <p>contatofshow7@gmail.com</p>
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
-  <!-- BLOCO DE VOTAÇÃO -->
-<div class="vote-frame">
-  <div class="vote-mock">
+          <div
+            id="fshowLoggedOptions"
+            style="
+              display: none;
+              flex-direction: column;
+              gap: 10px;
+              width: 100%;
+            "
+          >
+            <label class="fshow-btn" for="fshowChangeAvatarInput">
+              📸 Mudar Foto
+            </label>
+            <input
+              type="file"
+              id="fshowChangeAvatarInput"
+              accept="image/*"
+              style="display: none"
+            />
+            <button class="fshow-btn fshow-btn-logout" id="fshowLogoutBtn">
+              🚪 Sair da Conta
+            </button>
+          </div>
 
-    <!-- HERO -->
-    <div class="vote-hero">
-      <img src="https://i.ibb.co/SwPNXDRH/20260810-210755-0000.webp" alt="Berlinda">
-    </div>
-
-    <!-- Card -->
-    <div class="vote-card">
-      <div class="vote-card-header">
-        <div>
-          <div class="vote-title">CORRIDA 3 - Quem você quer que VENÇA?</div>
-        </div>
-
-        <div style="text-align:right">
-          <div class="vote-status">
-            <span class="vote-dot"></span>
-            <span style="font-weight:600;color:#374151;font-size:13px">ABERTA</span>
+          <div
+            id="fshowAnonOptions"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              width: 100%;
+            "
+          >
+            <a href="login.html" class="fshow-btn fshow-btn-primary"
+              >🔑 Fazer Login</a
+            >
+            <button class="fshow-btn" id="fshowContinueAnonBtn">
+              👀 Continuar Anônimo
+            </button>
           </div>
         </div>
       </div>
-        
-      <!-- Botões -->
-<a href="vote/votecorrida.html" class="vote-btn vote-purple" id="teamVote">
-  <span>QUEM DEVE VENCER?</span>
-  <div class="vote-icon">👥</div>
-</a>
+    </div>
+  </header>
+
+  <div class="top-banner-wrapper">
+    <img
+      src="https://flopshow.site/fotos/bannerfshow.png"
+      alt="Banner"
+      class="top-banner-img lazy-image"
+      loading="lazy"
+      decoding="async"
+      data-lazy-image
+    />
+  </div>
+  <div class="gradient-line"></div>
+
+  <!-- Stories -->
+  <div class="stories-wrapper">
+    <div class="stories-container">
+      <div class="story-item fire">
+        <img
+          src="https://i.ibb.co/67124mYW/Design-sem-nome.png"
+          alt="Brunno"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/w52J7HG/Design-sem-nome-6.png"
+          alt="Isabelly"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/wFwp82LP/Design-sem-nome-1.png"
+          alt="Leonardo"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item fire">
+        <img
+          src="https://i.ibb.co/3mhtZhM4/Design-sem-nome-2.png"
+          alt="Livi"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/YFN7vHnH/Design-sem-nome-3.png"
+          alt="Lorenzo"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/4nMfVL3h/Design-sem-nome-4.png"
+          alt="Luan"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/PvRkfcVY/Design-sem-nome-5.png"
+          alt="Luddy"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/WNhwf7rQ/N-o-lembrp.png"
+          alt="Ludmila"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/MxK2DhGX/Design-sem-nome-7.png"
+          alt="Mikael"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item fire">
+        <img
+          src="https://i.ibb.co/39g3dYKp/Design-sem-nome-8.png"
+          alt="Quim"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/Z1dCFZjP/Design-sem-nome-9.png"
+          alt="Ryan"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
+      <div class="story-item e">
+        <img
+          src="https://i.ibb.co/QScxyDs/VAI-SE-FUDER.png"
+          alt="Teca"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
       </div>
     </div>
   </div>
 
+  <div class="banner-container">
+    <div class="banner-publicidade">
+      <div class="faixa-lateral">
+        <span>Publicidade</span>
+      </div>
 
-    <!-- Destaques -->
-    <div class="section-title-wrapper">
-        <div class="section-indicator"></div>
-        <h2 class="section-title">✨ DESTAQUES FLOP SHOW</h2>
+      <a
+        href="https://discord.gg/G9pvv2N8y5"
+        target="_blank"
+        class="banner-link"
+      >
+        <div class="banner">
+          <img
+            src="https://i.postimg.cc/4d2xHwGQ/Gemini-Generated-Image-p5ef1hp5ef1hp5ef.png"
+            class="banner-img lazy-image"
+            alt="Publicidade"
+            loading="lazy"
+            decoding="async"
+            data-lazy-image
+          />
+
+        </div>
+      </a>
     </div>
+  </div>
+  
+  <!-- BLOCO DE VOTAÇÃO -->
+  <div class="vote-frame">
+    <div class="vote-mock">
+      <!-- HERO -->
+      <div class="vote-hero">
+        <img
+          src="https://i.ibb.co/SwPNXDRH/20260810-210755-0000.webp"
+          alt="Berlinda"
+          class="lazy-image"
+          loading="lazy"
+          decoding="async"
+          data-lazy-image
+        />
+      </div>
 
-<section class="carousel-container">
+      <!-- Card -->
+      <div class="vote-card">
+        <div class="vote-card-header">
+          <div>
+            <div class="vote-title">CORRIDA 3 - Quem você quer que VENÇA?</div>
+          </div>
+
+          <div style="text-align: right">
+            <div class="vote-status">
+              <span class="vote-dot"></span>
+              <span style="font-weight: 600; color: #374151; font-size: 13px"
+                >ABERTA</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <a
+          href="vote/votecorrida.html"
+          class="vote-btn vote-purple"
+          id="teamVote"
+        >
+          <span>QUEM DEVE VENCER?</span>
+          <div class="vote-icon">👥</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Destaques -->
+  <div class="section-title-wrapper">
+    <div class="section-indicator"></div>
+    <h2 class="section-title">✨ DESTAQUES FLOP SHOW</h2>
+  </div>
+
+  <section class="carousel-container">
     <div class="carousel-track">
+      <a
+        href="https://www.flopshow.site/vote/votebigfarm.html"
+        class="carousel-link"
+      >
+        <article class="carousel-slide">
+          <img
+            src="https://i.ibb.co/PzxMKj60/Picsart-26-07-11-16-43-45-436.jpg"
+            alt="CDF"
+            class="slide-image lazy-image"
+            loading="lazy"
+            decoding="async"
+            data-lazy-image
+          />
+          <div class="slide-overlay">
+            <h3 class="slide-title">
+              BFS - Vote na primeira Roça da temporada
+            </h3>
+          </div>
+        </article>
+      </a>
 
-        <a href="https://www.flopshow.site/vote/votebigfarm.html" class="carousel-link">
-            <article class="carousel-slide">
-                <img src="https://i.ibb.co/PzxMKj60/Picsart-26-07-11-16-43-45-436.jpg" alt="CDF" class="slide-image">
-                <div class="slide-overlay">
-                    <h3 class="slide-title">BFS - Vote na primeira Roça da temporada</h3>
-                </div>
-            </article>
-        </a>
-        
-        <a href="https://www.flopshow.site/flop-news/cdf11.html" class="carousel-link">
-            <article class="carousel-slide">
-                <img src="https://i.ibb.co/BK22phxP/cdf.png" alt="CDF" class="slide-image">
-                <div class="slide-overlay">
-                    <h3 class="slide-title">CDF - Veja o resumo da estreia</h3>
-                </div>
-            </article>
-        </a>
+      <a
+        href="https://www.flopshow.site/flop-news/cdf11.html"
+        class="carousel-link"
+      >
+        <article class="carousel-slide">
+          <img
+            src="https://i.ibb.co/BK22phxP/cdf.png"
+            alt="CDF"
+            class="slide-image lazy-image"
+            loading="lazy"
+            decoding="async"
+            data-lazy-image
+          />
+          <div class="slide-overlay">
+            <h3 class="slide-title">CDF - Veja o resumo da estreia</h3>
+          </div>
+        </article>
+      </a>
 
-        <a href="https://flopshow.site/bbb/paredoesbbbf6.html" class="carousel-link">
-            <article class="carousel-slide">
-                <img src="https://i.ibb.co/zWWCq4Mb/Gemini-Generated-Image-jts7cojts7cojts7-Photoroom.png" alt="BBB" class="slide-image">
-                <div class="slide-overlay">
-                    <h3 class="slide-title">Hora da verdade! Confira o resultado dos paredões.</h3>
-                </div>
-            </article>
-        </a>
-
+      <a
+        href="https://flopshow.site/bbb/paredoesbbbf6.html"
+        class="carousel-link"
+      >
+        <article class="carousel-slide">
+          <img
+            src="https://i.ibb.co/zWWCq4Mb/Gemini-Generated-Image-jts7cojts7cojts7-Photoroom.png"
+            alt="BBB"
+            class="slide-image lazy-image"
+            loading="lazy"
+            decoding="async"
+            data-lazy-image
+          />
+          <div class="slide-overlay">
+            <h3 class="slide-title">
+              Hora da verdade! Confira o resultado dos paredões.
+            </h3>
+          </div>
+        </article>
+      </a>
     </div>
 
     <button class="carousel-control prev-control">
-        <i class="fas fa-chevron-left"></i>
+      <i class="fas fa-chevron-left"></i>
     </button>
 
     <button class="carousel-control next-control">
-        <i class="fas fa-chevron-right"></i>
+      <i class="fas fa-chevron-right"></i>
     </button>
-</section>
+  </section>
 
-<!-- Notícias -->
-<div class="news-grid">
+  <!-- Notícias -->
+  <div class="news-grid">
     <main class="main-news">
+      <a href="flop-news/final.html" class="news-link">
+        <article class="news-card">
+          <img
+            src="https://i.ibb.co/HL932NpK/Final.jpg"
+            alt="Final"
+            class="card-img lazy-image"
+            loading="lazy"
+            decoding="async"
+            data-lazy-image
+          />
+          <div class="card-content">
+            <span class="card-tag">Reality</span>
+            <h3 class="card-title">
+              Eueu, Gean, Luddy e Mikael são os finalistas!
+            </h3>
+          </div>
+        </article>
+      </a>
 
-        <a href="flop-news/final.html" class="news-link">
-            <article class="news-card">
-                <img src="https://i.ibb.co/HL932NpK/Final.jpg" alt="Final" class="card-img">
-                <div class="card-content">
-                    <span class="card-tag">Reality</span>
-                    <h3 class="card-title">Eueu, Gean, Luddy e Mikael são os finalistas!</h3>
-                </div>
-            </article>
-        </a>
+      <a href="ads/planos.html" class="news-link">
+        <article class="news-card">
+          <img
+            src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg"
+            alt="Finalistas"
+            class="card-img lazy-image"
+            loading="lazy"
+            decoding="async"
+            data-lazy-image
+          />
+          <div class="card-content">
+            <span class="card-tag">Espaço Publicitário</span>
+            <h3 class="card-title">Clique para anunciar aqui</h3>
+          </div>
+        </article>
+      </a>
 
-        <a href="ads/planos.html" class="news-link">
-            <article class="news-card">
-                <img src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg" alt="Finalistas" class="card-img">
-                <div class="card-content">
-                    <span class="card-tag">Espaço Publicitário</span>
-                    <h3 class="card-title">Clique para anunciar aqui</h3>
-                </div>
-            </article>
-        </a>
-
+          <a href="ads/planos.html" class="news-link">
+        <article class="news-card">
+          <img
+            src="https://i.ibb.co/sdBgqwpg/retangulo-Ad.jpg"
+            alt="Finalistas"
+            class="card-img lazy-image"
+            loading="lazy"
+            decoding="async"
+            data-lazy-image
+          />
+          <div class="card-content">
+            <span class="card-tag">Espaço Publicitário</span>
+            <h3 class="card-title">Clique para anunciar aqui</h3>
+          </div>
+        </article>
+      </a>
     </main>
-</div>        
-<div style="height: 10px;"></div>
-    
-<!-- HTML DA SIDEBAR -->
-<aside class="side-content">  
-    <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>  
-    <div class="trend-item">  
-        <span class="trend-number">01</span>  
-        <a href="#">Vencedores do Comu Awards</a>  
-    </div>  
-    <div class="trend-item">  
-        <span class="trend-number">02</span>  
-        <a href="#">Estreia do Reality do Nick</a>  
-    </div>  
-    <div class="trend-item">  
-        <span class="trend-number">03</span>  
-        <a href="#">Início do Capítulo 4 de Last Heir</a>  
-    </div>  
-    <div class="trend-item">  
-       
-        <span class="trend-number">04</span>  
-        <a href="#">Enquete da semana: quem merece ganhar?</a>  
-    </div>  
-</aside>
+  </div>
+  <div style="height: 10px"></div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-header">
-            <img src="https://i.ibb.co/0Vv5RSLg/Logo-Fshow2.png" alt="Logo" class="footer-logo">
-            <span class="brand-name">FLOP SHOW</span>
-        </div>
-        
-        <div class="footer-grid">
-            <div class="footer-section">
-                <h4>SOBRE</h4>
-                <p>Sua fonte de notícias, enquetes e cobertura completa de reality shows brasileiros.</p>
-            </div>
-            <div class="footer-section">
-                <h4>NAVEGAÇÃO</h4>
-                <ul class="footer-links-list">
-                    <li><a href="#">Notícias</a></li>
-                    <li><a href="#">Enquetes</a></li>
-                    <li><a href="#">Categorias</a></li>
-                    <li><a href="#">Contato</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>LEGAL</h4>
-                <ul class="footer-links-list">
-                    <li><a href="termos/privacidade.html">Política de Privacidade</a></li>
-                    <li><a href="termos/termos.html">Termos de Uso</a></li>
-                    <li><a href="termos/contato.html">Contato</a></li>
-                    <li><a href="termos/contato.html">Sobre Nós</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>REDES SOCIAIS</h4>
-                <div class="social-icons-footer">
-                    <a href="https://x.com/Euu_Phillip" class="social-icon-btn"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.instagram.com/vulgoflopp?igsh=MWhycmQxOTZnNnI1eQ==" class="social-icon-btn"><i class="fab fa-instagram"></i></a>
-                    <a href="https://youtube.com/@vulgoflopp?si=PYen993T6KsYhKgd" class="social-icon-btn"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
+  <!-- HTML DA SIDEBAR -->
+  <aside class="side-content">
+    <h4>🔥 MAIS FLOPADAS DA SEMANA</h4>
+    <div class="trend-item">
+      <span class="trend-number">01</span>
+      <a href="#">Vencedores do Comu Awards</a>
+    </div>
+    <div class="trend-item">
+      <span class="trend-number">02</span>
+      <a href="#">Estreia do Reality do Nick</a>
+    </div>
+    <div class="trend-item">
+      <span class="trend-number">03</span>
+      <a href="#">Início do Capítulo 4 de Last Heir</a>
+    </div>
+    <div class="trend-item">
+      <span class="trend-number">04</span>
+      <a href="#">Enquete da semana: quem merece ganhar?</a>
+    </div>
+    </div>
+  </aside>
 
-        <div class="footer-bottom">
-            <div class="copyright-text">© 2026 FlopShow • Pixeels Productions</div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-header">
+      <img
+        src="https://flopshow.site/favicon.png"
+        alt="Logo"
+        class="footer-logo lazy-image"
+        loading="lazy"
+        decoding="async"
+        data-lazy-image
+      />
+      <span class="brand-name">FLOP SHOW</span>
+    </div>
+
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h4>SOBRE</h4>
+        <p>
+          Sua fonte de notícias, enquetes e cobertura completa de reality shows
+          brasileiros.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>NAVEGAÇÃO</h4>
+        <ul class="footer-links-list">
+          <li><a href="#">Notícias</a></li>
+          <li><a href="#">Enquetes</a></li>
+          <li><a href="#">Categorias</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>LEGAL</h4>
+        <ul class="footer-links-list">
+          <li><a href="termos/privacidade.html">Política de Privacidade</a></li>
+          <li><a href="termos/termos.html">Termos de Uso</a></li>
+          <li><a href="termos/contato.html">Contato</a></li>
+          <li><a href="termos/contato.html">Sobre Nós</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>REDES SOCIAIS</h4>
+        <div class="social-icons-footer">
+          <a href="https://x.com/Euu_Phillip" class="social-icon-btn"
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/vulgoflopp?igsh=MWhycmQxOTZnNnI1eQ=="
+            class="social-icon-btn"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a
+            href="https://youtube.com/@vulgoflopp?si=PYen993T6KsYhKgd"
+            class="social-icon-btn"
+            ><i class="fab fa-youtube"></i
+          ></a>
         </div>
-    </footer>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="copyright-text">© 2026 FlopShow • Pixeels Productions</div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const images = document.querySelectorAll("img[data-lazy-image]");
+
+      const finishLoading = (image) => {
+        image.classList.add("is-loaded");
+        image.classList.remove("is-loading");
+      };
+
+      images.forEach((image) => {
+        image.classList.add("is-loading");
+        image.addEventListener("load", () => finishLoading(image), {
+          once: true,
+        });
+        image.addEventListener(
+          "error",
+          () => {
+            image.classList.add("is-loaded", "has-error");
+            image.classList.remove("is-loading");
+          },
+          { once: true },
+        );
+
+        if (image.complete) {
+          image.naturalWidth > 0
+            ? finishLoading(image)
+            : image.classList.add("has-error");
+        }
+      });
+    })();
+  </script>
+</body>
 
     <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1"></script>
     
@@ -1269,7 +2146,6 @@ function setAvatarBusy(busy) {
 }
 
 function notify(message) {
-    // Usa um feedback existente quando o projeto oferecer um, sem exigir markup extra.
     const feedback = byId("fshowProfileMessage");
     if (feedback) {
         feedback.textContent = message;
